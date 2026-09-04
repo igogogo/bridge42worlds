@@ -45,6 +45,7 @@ CACHE = DATA / "links-cache.jsonl"
 OUT = DATA / "links.json"
 TOP = 8                 # сколько кандидатов вектор отдаёт модели на проверку
 FLOOR = 0.50            # пол по косинусу: ниже — уже соседняя тема (bge-m3 лежит узко)
+FLOOR_WEAK = 0.42       # второй заход для якорей, которым не нашлось ничего: помечаем weak
 KEEP = 3                # сколько ссылок остаётся у одного якоря после проверки
 MODEL = os.environ.get("ELNINO_LLM_MODEL", "deepseek-v4-pro")
 
@@ -66,18 +67,26 @@ Rules:
 
 
 # ---------------------------------------------------------------- якоря
+def _aslug(title):
+    """Тот же slug считает панель (js/enso.js, aslug): менять только вместе."""
+    return re.sub(r"[^a-z0-9]+", "_", str(title).lower()).strip("_")[:48]
+
+
 def anchors():
     D = json.loads((DATA / "latest.json").read_text(encoding="utf-8"))
     gl = (json.loads((DATA / "glossary.json").read_text(encoding="utf-8")) or {}).get("en") or {}
     ref = json.loads((DATA / "regions-ref.json").read_text(encoding="utf-8"))
     out = []
 
+    # ЯКОРЬ — ИМЯ РИСКА, НЕ НОМЕР. Список рисков сортируется по уровню и меняется от прогона к
+    # прогону; ссылка по номеру после появления нового риска уезжала на чужую карточку.
+    # Имя (rid) живёт, пока живёт правило. Тревоги без имени — по slug заголовка.
     for i, r in enumerate(D.get("risks") or []):
-        out.append({"id": f"risk:{i}", "label": r["title"], "kind": "risk",
+        out.append({"id": "risk:" + (r.get("id") or str(i)), "label": r["title"], "kind": "risk",
                     "text": " ".join([r["title"], r.get("plain") or "", r.get("evidence") or "",
                                       "What to watch: " + (r.get("watch") or "")])})
     for i, a in enumerate(D.get("alerts") or []):
-        out.append({"id": f"alert:{i}", "label": a["title"], "kind": "alert:" + (a.get("kind") or "climate"),
+        out.append({"id": "alert:" + _aslug(a["title"]), "label": a["title"], "kind": "alert:" + (a.get("kind") or "climate"),
                     "text": a["title"] + ". " + (a.get("detail") or "")})
     for r in (ref.get("regions") or []):
         seasons = " ".join((v or {}).get("note") or "" for v in (r.get("seasons") or {}).values())
@@ -155,8 +164,14 @@ def works(limit_ids=None):
         if got:
             title, abstract = got[0], got[1]
         title = title or d.get("original_title") or ""
+        # НАШ заголовок и НАША строка, а не только авторские. Владелец 04.09: цель — чтобы
+        # на дашборде контекстно появлялись разобранные НАМИ работы; значит и показывать надо
+        # то, что мы про них написали, а не пересказ титульного листа.
+        pop_en = ((d.get("popular") or {}).get("en") or {})
         rows.append({"id": d.get("id") or base, "folder": p.parent.name, "date": p.parent.parent.name,
                      "title": " ".join(title.split()),
+                     "our_title": (pop_en.get("title") or "").strip(),
+                     "oneliner": (pop_en.get("oneliner") or "").strip(),
                      "text": (" ".join(title.split()) + ". " + abstract)[:2400],
                      "primary": d.get("primary_category") or ""})
         if limit_ids and len(rows) >= limit_ids:
@@ -184,6 +199,14 @@ def candidates(A, W, anc, wks):
     for i, a in enumerate(anc):
         order = np.argsort(-sim[i])[:TOP]
         picks = [{"w": wks[j], "score": round(float(sim[i][j]), 3)} for j in order if sim[i][j] >= FLOOR]
+        # ВТОРОЙ ЗАХОД С НИЗКИМ ПОРОГОМ. Из 87 якорей ссылки нашлись у сорока: пул в сто
+        # работ мал, и половине якорей нечего предложить выше 0.50. Вместо пустоты берём
+        # лучших кандидатов выше FLOOR_WEAK и помечаем weak — решает по-прежнему модель,
+        # она отбрасывает натяжки так же строго. На панели такая ссылка подписана честно:
+        # «более далёкое совпадение».
+        if not picks:
+            picks = [{"w": wks[j], "score": round(float(sim[i][j]), 3), "weak": True}
+                     for j in order[:KEEP] if sim[i][j] >= FLOOR_WEAK]
         if picks:
             out[a["id"]] = picks
     return out
@@ -223,7 +246,10 @@ def verify(anc_by_id, cands, quiet=False):
             if not c:
                 continue
             keep.append({"id": c["w"]["id"], "date": c["w"]["date"], "folder": c["w"]["folder"],
-                         "title": c["w"]["title"], "score": c["score"],
+                         "title": c["w"]["title"],
+                         "our_title": c["w"].get("our_title") or "",
+                         "oneliner": c["w"].get("oneliner") or "",
+                         "score": c["score"], "weak": bool(c.get("weak")),
                          "why": (k.get("why") or "").strip()[:180], "kind": k.get("kind") or "background"})
         if keep:
             out[aid] = keep
@@ -264,7 +290,7 @@ def main():
     anc_by_id = {x["id"]: x for x in anc}
     links = verify(anc_by_id, cands)
     payload = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "model": MODEL,
-               "floor": FLOOR, "top": TOP, "keep": KEEP,
+               "floor": FLOOR, "floor_weak": FLOOR_WEAK, "top": TOP, "keep": KEEP,
                "n_works": len(wks), "n_anchors": len(anc), "anchors": links,
                "note": "vector finds what is about the same thing; the model decides whether it belongs next to the "
                        "statement. A link means 'this is what the research says about this', not 'this is the source "

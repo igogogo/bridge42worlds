@@ -206,6 +206,21 @@ def series_watch(ds, label, analog_years=None):
     seq45 = _cross_year(anom, ycur, idx, 45)
     out["tail45"] = {"dates": [(last - timedelta(days=44 - i)).isoformat() for i in range(45)],
                      "anom": [None if not np.isfinite(v) else round(float(v), 3) for v in seq45]}
+    # ТЕ ЖЕ СОРОК ПЯТЬ ДНЕЙ У ПРОШЛЫХ СОБЫТИЙ И У ПРОШЛОГО ГОДА. Владелец 04.09: «у риска
+    # про мировой океан на графике нечего показать для прошлых значимых событий; проверь все
+    # рисковые карточки — где уместно, покажи прошлый год, где уместно, важные годы события».
+    # Считается для ЛЮБОГО ряда, а не только для Niño 3.4: данные по годам у нас есть на всех
+    # трёх, раньше просто не брали. Сравнение по календарю — тот же день года.
+    tails = {}
+    for y in (ANALOGS + [ycur - 1]):
+        if y not in anom:
+            continue
+        seq = _cross_year(anom, y, idx, 45)
+        vals = [None if not np.isfinite(v) else round(float(v), 3) for v in seq]
+        if any(v is not None for v in vals):
+            tails[str(y)] = vals
+    if tails:
+        out["tail45_analogs"] = tails
     sp = []
     for j in range(45):
         e = idx - (44 - j)
@@ -436,23 +451,122 @@ def oni_watch(oni, psl):
             out["analogs_after"][y] = after
     out["psl_current"] = psl.get(ycur)
     out["psl_analogs"] = {y: psl.get(y) for y in ANALOGS}
+    # Весь месячный ряд ERSST — он нужен блоку «воздух», чтобы искать опережение объёма воды
+    # и задержку слоёв атмосферы перебором сдвигов. В latest.json не уходит: слишком длинный
+    # для панели и там не нужен (см. чистку в конце run()).
+    out["psl_raw"] = psl
     return out
 
 
-def _m_daily(w, name):
-    return {"name": name, "unit": "°C", "step": "day",
-            "dates": w["tail45"]["dates"], "values": w["tail45"]["anom"],
-            "flags": w["records"].get("flags45")}
+def roni_watch(roni, ONI):
+    """RONI текущего года против аналогов, пики событий, и разница ONI − RONI по сезонам."""
+    seasons = ["DJF", "JFM", "FMA", "MAM", "AMJ", "MJJ", "JJA", "JAS", "ASO", "SON", "OND", "NDJ"]
+    by = {}
+    for sn, y, v in roni:
+        by.setdefault(y, {})[sn] = v
+    if not by:
+        return {}
+    ycur = max(by)
+    cur = by[ycur]
+    last_season = [sn for sn in seasons if sn in cur][-1]
+    peaks = {}
+    for y in ANALOGS:
+        vals = [by.get(y, {}).get(sn) for sn in seasons[6:]] + [by.get(y + 1, {}).get(sn) for sn in seasons[:3]]
+        vals = [v for v in vals if v is not None]
+        peaks[y] = max(vals) if vals else None
+    oni_cur = (ONI or {}).get("current") or {}
+    gap = {sn: round(oni_cur[sn] - cur[sn], 2) for sn in seasons if sn in cur and oni_cur.get(sn) is not None}
+    return {"year": ycur, "current": {sn: cur.get(sn) for sn in seasons}, "last_season": last_season,
+            "last": cur.get(last_season),
+            "analogs": {y: {sn: by.get(y, {}).get(sn) for sn in seasons} for y in ANALOGS if y in by},
+            "analogs_same_season": {y: by.get(y, {}).get(last_season) for y in ANALOGS},
+            "analog_event_peak": peaks,
+            "oni_event_peak": (ONI or {}).get("analog_event_peak"),
+            "gap": gap, "gap_last": gap.get(last_season),
+            "src": "NOAA CPC RONI.ascii.txt",
+            "note": ("RONI is the Niño 3.4 anomaly minus the mean anomaly of the whole tropics (20°S–20°N). "
+                     "NOAA switched its classification to it in February 2026 because a warm tropical ocean "
+                     "makes the plain ONI overstate how strongly the atmosphere is being pushed. The gap "
+                     "between the two is the warm background this event runs on.")}
+
+
+def _m_daily(w, name, analogs=None):
+    analogs = analogs or w.get("tail45_analogs")
+    """Ряд для карточки риска + ТЕ ЖЕ ДНИ прошлых сильных событий.
+
+    Владелец 04.09: «желательно, чтобы все карточки рисков справа показывали графики со
+    сравнением с событиями, как и везде, а то опять же не с чем сравнивать». Сравнение идёт
+    по календарю: тот же день года у 1997-98 и 2015-16, а не «через столько-то недель от
+    начала» — иначе сезонный ход путает картину.
+    """
+    m = {"name": name, "unit": "°C", "step": "day",
+         "dates": w["tail45"]["dates"], "values": w["tail45"]["anom"],
+         "flags": w["records"].get("flags45")}
+    if analogs:
+        m["analogs"] = analogs
+    return m
+
+
+def _daily_analogs(N34, days=45):
+    """Те же последние 45 дней у прошлых сильных событий — по дню года, а не по фазе.
+
+    Ряды аналогов уже посчитаны для сцены «Against analogues» и лежат по дням года, так что
+    здесь остаётся вырезать то же окно. Сравнение по календарю: сезонный ход у всех один и
+    тот же, и разница в линиях — это разница событий, а не времени года."""
+    out, day = {}, N34.get("day")
+    if not day:
+        return out
+    for y, a in (N34.get("analogs") or {}).items():
+        ser = a.get("series") or []
+        if len(ser) >= day:
+            vv = ser[max(0, day - days):day]
+            if any(v is not None for v in vv):
+                out[str(y)] = vv
+    return out
 
 
 def _m_weekly(NW, key, name):
     ser = NW["series"][-20:]
-    return {"name": name, "unit": "°C", "step": "week",
-            "dates": [r["date"] for r in ser], "values": [r[key] for r in ser]}
+    m = {"name": name, "unit": "°C", "step": "week",
+         "dates": [r["date"] for r in ser], "values": [r[key] for r in ser]}
+    # недельные ряды аналогов уже посчитаны для вкладки «Weekly vs strongest» — берём их же
+    out = {}
+    for y, rows in (NW.get("analog_series") or {}).items():
+        vv = [r.get(key) for r in rows][-len(ser):]
+        if any(v is not None for v in vv):
+            out[y] = vv
+    if out:
+        m["analogs"] = out
+    return m
 
 
-def _m_series(vals, name, unit, step, dates=None):
-    return {"name": name, "unit": unit, "step": step, "dates": dates, "values": vals}
+def _m_series(vals, name, unit, step, dates=None, analogs=None, levels=None):
+    m = {"name": name, "unit": unit, "step": step, "dates": dates, "values": vals}
+    if analogs:
+        m["analogs"] = analogs
+    if levels:
+        # планки: уровень, которого этот же показатель достигал у прошлых событий или
+        # порог правила — чтобы число на карточке не висело в пустоте (владелец 04.09)
+        m["levels"] = levels
+    return m
+
+
+def _weekly_expr(NW, fn, n=20):
+    """Тот же расчёт по недельным рядам прошлых событий: контрасты и разности зон.
+
+    Без этого карточки вроде «восточная часть греется» показывали одну нашу линию и
+    сравнивать её было не с чем (владелец 04.09)."""
+    out = {}
+    for y, rows in (NW.get("analog_series") or {}).items():
+        vv = []
+        for r in rows[-n:]:
+            try:
+                vv.append(fn(r))
+            except (TypeError, KeyError):
+                vv.append(None)
+        if any(v is not None for v in vv):
+            out[y] = vv
+    return out
 
 
 def _next_year_risks(W, ONI, cur_year=None):
@@ -491,7 +605,11 @@ def _next_year_risks(W, ONI, cur_year=None):
             "measured up to that point. On the same arithmetic, next year is the one to plan for, not this one.",
             "annual land+ocean mean once the peak passes; the first months of next year already carry the signal",
             _m_series([ann[y] for y in sorted(ann)][-30:], "Land+ocean, annual mean", "°C", "year",
-                      [str(y) for y in sorted(ann)][-30:]), "climate"))
+                      [str(y) for y in sorted(ann)][-30:],
+                      # планки: каким был год ПОСЛЕ каждого прошлого события — ровно то, чем
+                      # этот риск и меряется (владелец 04.09: «важные года события подписать»)
+                      levels={str(y): ann[y + 1] for y in ANALOGS if (y + 1) in ann}),
+            "climate"))
 
     # 2. разворот в Ла-Нинью на второй год
     after = ONI.get("analogs_after") or {}
@@ -519,7 +637,9 @@ def _next_year_risks(W, ONI, cur_year=None):
     # 3. воздух догоняет воду — уже есть отдельным риском, здесь про горизонт
     lag = tw["level30"]["det"]
     out.append((
-        "The impacts of this peak land mostly next year",
+        # Экспертиза 04.09, п. 3.10(6): трёхмесячный лаг доказан для ГЛОБАЛЬНОЙ температуры
+        # (r ≈ 0.7); у региональных последствий свои задержки. Заголовок — про то, что измерено.
+        "Global temperature in 2027 is likely to run above 2026; regional impacts follow their own lags",
         3, "6–18 months",
         f"Land+ocean is {lag:+.2f} °C above trend now, while the ocean heat that drives it is still rising; "
         "in the analogues the air-temperature records, the harvest failures and the price effects all came in "
@@ -583,14 +703,26 @@ def models_vs_todate(IRI, td):
                      "colder than the part already lived")}
 
 
-def risks(W, N34, NW, ONI, IRI=None):
+def _slug(title):
+    """Запасное имя риска, когда правило его не задало: из английского заголовка."""
+    return "".join(c if c.isalnum() else "_" for c in title.lower()).strip("_")[:48]
+
+
+def risks(W, N34, NW, ONI, IRI=None, AIR=None):
     """Реестр рисков. У каждого: уровень 1-5, горизонт, что видно в данных,
     что это значит по-человечески, за чем следить, и ряд, по которому риск живёт.
     Тексты по-английски: дашборд на сайте английский (владелец 03.09)."""
     R = []
 
-    def add(title, level, horizon, evidence, plain, watch, metric=None, kind="climate"):
-        R.append({"title": title, "level": level, "horizon": horizon, "evidence": evidence,
+    def add(title, level, horizon, evidence, plain, watch, metric=None, kind="climate", rid=None):
+        # У РИСКА ЕСТЬ ИМЯ, НЕ ЗАВИСЯЩЕЕ ОТ ЗАГОЛОВКА. Журнал значений (tools/enso/journal.py)
+        # ведёт историю уровня по каждому риску, а заголовок — это текст: его переписывают, а
+        # 3 сентября его ещё и перевели с русского на английский — и вся история риска
+        # обрывается на ровном месте. `rid` задаётся правилом и живёт, пока живёт правило.
+        # Где правило одно, а состояния разные («очень сильное» / «развивается»), rid общий:
+        # это один и тот же риск в двух состояниях, и уровень между ними должен идти подряд.
+        R.append({"id": rid or _slug(title),
+                  "title": title, "level": level, "horizon": horizon, "evidence": evidence,
                   "plain": plain, "watch": watch, "metric": metric, "kind": kind})
 
     n34 = W["sst_nino34"]; sw = W["sst_world"]; tw = W["t2_world"]
@@ -606,15 +738,17 @@ def risks(W, N34, NW, ONI, IRI=None):
             "happened this early in the year.",
             f"the NOAA weekly index; the official ONI is now {ONI['current'][ONI['last_season']]:+.2f} ({ONI['last_season']}), "
             "the “very strong” category starts at +2.0 on the three-month average",
-            metric=_m_weekly(NW, "n34a", "Niño 3.4, NOAA weekly"))
+            metric=_m_weekly(NW, "n34a", "Niño 3.4, NOAA weekly"), rid="event_strength")
     elif lat["n34a"] >= 1.0:
         add("El Niño is developing", 3, "now", f"Niño 3.4 {lat['n34a']:+.1f} °C",
             "The warm phase is here, but it has not reached “very strong” yet.", "the NOAA weekly index",
-            metric=_m_weekly(NW, "n34a", "Niño 3.4, NOAA weekly"))
+            metric=_m_weekly(NW, "n34a", "Niño 3.4, NOAA weekly"), rid="event_strength")
 
     # 2. пик впереди
     pe = N34["peak_estimate"]
-    add("The strongest part is still ahead", 4, "8–16 weeks",
+    # Экспертиза 04.09, п. 3.10(4): опережение объёма воды в полгода при r 0.49 хватает на
+    # «событию есть чем расти», но не на «пик впереди». Заголовок — по тому, что измерено.
+    add("The event has room to grow: the fuel is charged and the analogues peaked in winter", 4, "8–16 weeks",
         f"Past analogues peaked in {pe['typical_peak_window']}. Adding their gain from the same date gives "
         f"{pe['additive_low']:+.1f} … {pe['additive_high']:+.1f} °C, above the record of the series {pe['hist_ceiling']:+.2f}.",
         "Every past event of this strength peaked in winter, November to January. It is the end of summer now, so "
@@ -622,7 +756,7 @@ def risks(W, N34, NW, ONI, IRI=None):
         "the ocean has shown at this time of year, and past events are no guide here. The real question is when the "
         "growth stops.",
         "if the weekly Niño 3.4 stops rising before November, the event has reached its plateau earlier than the analogues",
-        metric=_m_daily(n34, "Niño 3.4, daily anomaly"))
+        metric=_m_daily(n34, "Niño 3.4, daily anomaly", _daily_analogs(N34)), rid="peak_ahead")
 
     # 3. восточный тип
     if NW["east_minus_central"] > 1.0:
@@ -634,7 +768,10 @@ def risks(W, N34, NW, ONI, IRI=None):
             "downpours and floods to the coast of South America and droughts to Indonesia and Australia.",
             "the difference staying above 1 °C through September and October",
             metric=_m_series(diff_series, "Niño 1+2 minus Niño 4", "°C", "week",
-                             [r["date"] for r in NW["series"][-20:]]))
+                             [r["date"] for r in NW["series"][-20:]],
+                             analogs=_weekly_expr(NW, lambda r: (r["n12a"] - r["n4a"])
+                                                  if r.get("n12a") is not None and r.get("n4a") is not None else None)),
+            rid="east_pacific")
 
     # 4. океан в рекордной серии
     if sw["records"]["streak"] >= 14 or sw["records"]["last30"] >= 20:
@@ -644,7 +781,7 @@ def risks(W, N34, NW, ONI, IRI=None):
             f"On each of the last {sw['records']['streak']} days the ocean, averaged over the planet, was warmer than on "
             "the same day of any year since 1982. Not one hot day, but an unbroken stretch.",
             "the first day below the record without a change of season is the first sign of a turn",
-            metric=_m_daily(sw, "World ocean, daily anomaly"))
+            metric=_m_daily(sw, "World ocean, daily anomaly"), rid="world_ocean_record_streak")
 
     # 5. скорость изменения
     for key, name in (("sst_nino34", "Niño 3.4"), ("sst_world", "world ocean"), ("t2_world", "land+ocean")):
@@ -658,7 +795,7 @@ def risks(W, N34, NW, ONI, IRI=None):
                 f"{100 - sl['pct'] if fast else sl['pct']:.0f} % of years.",
                 "a change of sign in the acceleration marks the start of a plateau",
                 metric=_m_series(W[key]["slope14_path"], f"{name}: 14-day slope", "°C", "day",
-                                 W[key]["tail45"]["dates"]))
+                                 W[key]["tail45"]["dates"]), rid=f"fast_{key}")
 
     # 6. CUSUM — новый уровень
     for key, name in (("sst_nino34", "Niño 3.4"), ("sst_world", "world ocean"), ("t2_world", "land+ocean")):
@@ -670,7 +807,9 @@ def risks(W, N34, NW, ONI, IRI=None):
                 f"The series did not jump and come back; it rose and stayed. The gauge that accumulates the excess over the "
                 f"spring level crossed its threshold {c['first_alarm_days_ago']} days ago and has only grown since.",
                 "if the accumulated gauge starts to fall, the regime is letting go",
-                metric=_m_series(c["path"][-60:], f"{name}: accumulated shift (CUSUM)", "σ", "day"))
+                metric=_m_series(c["path"][-60:], f"{name}: accumulated shift (CUSUM)", "σ", "day",
+                             # планка — сам порог правила: видно, насколько его перешли
+                             levels={"threshold": c["threshold"]}), rid=f"new_level_{key}")
 
     # 7. суша отстаёт от океана
     lag_gap = sw["level30"]["det"] - tw["level30"]["det"]
@@ -682,7 +821,7 @@ def risks(W, N34, NW, ONI, IRI=None):
             "caught up with the water in about a month, and the warmest year after an El Niño is usually the next one. "
             "So the air-temperature records are still ahead.",
             "land+ocean rising above the seasonal norm in October to December",
-            metric=_m_daily(tw, "Land+ocean, daily anomaly"))
+            metric=_m_daily(tw, "Land+ocean, daily anomaly"), rid="air_lags_water")
 
     # 8. свежесть данных
     for key in ("sst_nino34", "sst_world", "t2_world"):
@@ -691,7 +830,7 @@ def risks(W, N34, NW, ONI, IRI=None):
                 f"last point {W[key]['last_date']}, {W[key]['days_stale']} days ago",
                 f"The daily series is {W[key]['days_stale']} days behind: the source publishes with a delay. While it is "
                 "silent, the watchdog sees the past on this series; the NOAA weekly data is fresher and shows everything.",
-                "a source update", kind="data")
+                "a source update", kind="data", rid=f"stale_{key}")
 
     # 9. самые тёплые 30 дней
     for key, name in (("sst_world", "world ocean"), ("t2_world", "land+ocean")):
@@ -702,7 +841,7 @@ def risks(W, N34, NW, ONI, IRI=None):
                 f"For these same dates none of the {l['of']} years was warmer. Even after subtracting the general warming, "
                 f"{l['det']:+.2f} degrees remain above it: that is what the event itself adds.",
                 "whether the lead holds after the change of season",
-                metric=_m_daily(W[key], f"{name}, daily anomaly"))
+                metric=_m_daily(W[key], f"{name}, daily anomaly"), rid=f"warmest30_{key}")
 
     # 10. модели прогноза против реальности
     if IRI and IRI.get("against_observed"):
@@ -718,7 +857,7 @@ def risks(W, N34, NW, ONI, IRI=None):
                 f"({ao['max']:+.2f}).",
                 "None of the models collected by IRI expected this level already. When reality overtakes every model at "
                 "once, the winter forecasts should be read as a lower bound.",
-                "the next IRI issue: whether the models lift their peak above reality", metric=metric)
+                "the next IRI issue: whether the models lift their peak above reality", metric=metric, rid="reality_above_models")
         elif ao["share_below"] >= 35:
             add("Some forecast models are already below reality", 4 if ao["share_below"] >= 50 else 3, "now",
                 f"{len(ao['below'])} of {ao['n']} models gave less for {ao['season']} than the already reached "
@@ -727,37 +866,134 @@ def risks(W, N34, NW, ONI, IRI=None):
                 f"Of {ao['n']} models, {len(ao['below'])} have already fallen behind what the ocean showed this week. "
                 "They are not “wrong about the future”; they are not keeping up with the present. Their winter "
                 "forecasts are most likely too low.",
-                "the next IRI issue: how many models catch up", metric=metric)
+                "the next IRI issue: how many models catch up", metric=metric, rid="models_below_reality")
         if rv and rv.get("combined_peak_prev") is not None and rv["combined_peak_cur"] - rv["combined_peak_prev"] >= 0.2:
             add("The models are revising the forecast upward for the second month running", 3, "until the next issue",
                 f"Since the {rv['prev_issued']} issue {rv['n_up']} of {rv['n']} models raised their peak, {rv['n_down']} lowered it; "
                 f"combined peak {rv['combined_peak_prev']:+.2f} → {rv['combined_peak_cur']:+.2f} °C.",
                 "When almost all models move their forecast in the same direction, the event is outrunning them. The shift "
                 "itself is a signal: the next issue will probably be higher again.",
-                "the IRI issue around the 19th", metric=metric)
+                "the IRI issue around the 19th", metric=metric, rid="models_revise_up")
 
     # ---- 11. следующий год: чем прошлые события кончались ПОСЛЕ пика
     nxt = _next_year_risks(W, ONI, cur_year=W["t2_world"].get("year"))
     for r in nxt:
         add(*r[:6], metric=r[6], kind=r[7])
 
+    # ---- 12. атмосфера, топливо и слои: правила лежат в air.py, рядом с их данными
+    if AIR and not AIR.get("error"):
+        try:
+            import air as AR
+            for r in AR.risks(AIR, lat["n34a"]):
+                add(*r[:6], metric=r[6], kind=r[7], rid=r[8])
+        except Exception as e:                                   # noqa: BLE001
+            add("Atmospheric rules failed", 2, "now", str(e)[:160],
+                "The air block did not produce its risks; the numbers themselves are on the panel.",
+                "the next update", kind="data", rid="air_rules_failed")
+
+    return _finish(R)
+
+
+def _finish(R):
     R.sort(key=lambda r: -r["level"])
     load = sum(r["level"] ** 1.5 for r in R if r["kind"] == "climate")
     idx = int(round(100 * (1 - np.exp(-load / 25.0))))
     return R, idx
 
 
+# ------------------------------------------------------------------ MJO
+def mjo_block(omi, days=90):
+    """OMI от PSL → фаза и амплитуда по дням. Kiladis et al. 2014: PC1 OMI ≈ RMM2, PC2 ≈ −RMM1,
+    поэтому угол берём от (−PC2, PC1) — тот же круг фаз, что у BoM."""
+    import math
+    if not omi:
+        return None
+    keys = sorted(omi)[-days:]
+    rows = []
+    for k in keys:
+        pc1, pc2, amp = omi[k]
+        ang = math.degrees(math.atan2(pc1, -pc2)) % 360
+        phase = int(((ang - 180) % 360) // 45) + 1
+        rows.append({"d": k, "pc1": round(pc1, 2), "pc2": round(pc2, 2), "amp": round(amp, 2), "phase": phase})
+    last = rows[-1]
+    # доля последних 15 дней в фазах 6–8 при амплитуде ≥ 1 — «окно для всплесков»
+    recent = rows[-15:]
+    west = sum(1 for r in recent if r["amp"] >= 1 and r["phase"] in (6, 7, 8))
+    return {"dates": [r["d"] for r in rows], "phase": [r["phase"] for r in rows], "amp": [r["amp"] for r in rows],
+            "pc1": [r["pc1"] for r in rows], "pc2": [r["pc2"] for r in rows],
+            "last": last, "active": last["amp"] >= 1.0, "days_in_6_8_of_15": west,
+            "burst_window": last["amp"] >= 1.0 and last["phase"] in (5, 6, 7, 8),
+            "src": "NOAA PSL ROMI (real-time OMI from CPC OLR), daily",
+            "note": ("The Madden–Julian Oscillation is a pulse of cloud and wind that circles the tropics every "
+                     "30–60 days. Phases 6–8 put its westerly winds over the western Pacific, and that is where "
+                     "the wind bursts that feed an El Niño cluster. Amplitude below 1 means no organised pulse.")}
+
+
+def mjo_risks(M, WIND):
+    out = []
+    if M.get("burst_window"):
+        e = (WIND or {}).get("era5") or {}
+        out.append((
+            "The MJO is in the phases that launch wind bursts", 2, "next two weeks",
+            f"OMI phase {M['last']['phase']}, amplitude {M['last']['amp']} on {M['last']['d']}; "
+            f"{M['days_in_6_8_of_15']} of the last 15 days in phases 6–8. Westerly anomaly over 130°E–180° "
+            f"in the last week {e.get('mean7')} m/s against a burst threshold of {e.get('threshold')}.",
+            "When the pulse sits over the western Pacific the trade winds there give way for a week or two. "
+            "That is the trigger: a burst now would send another Kelvin wave east and add to the peak two to "
+            "three months later.",
+            "the daily wind over 130°E–180°: five days above the threshold makes a burst",
+            {"name": "MJO amplitude, daily", "unit": "", "step": "day", "dates": M["dates"], "values": M["amp"]},
+            "climate", "mjo_burst_window"))
+    return out
+
+
 def run(fetch=True):
     if fetch:
         status, stamp = S.fetch_all()
     else:
-        status, stamp = {k: (S.LAST / (k + (".json" if v[1] == "cr_json" else (".csv" if v[1] == "fao_csv" else ".txt"))), True, "")
+        status, stamp = {k: (S.LAST / (k + S.ext_of(v[1])), True, "")
                          for k, v in S.SOURCES.items()}, "cached"
     ds = {k: S.read_cr_json(status[k][0]) for k in ("t2_world", "t2_nh", "t2_sh", "sst_world", "sst_nino34")}
+    # OISST НАПРЯМУЮ (экспертиза 04.09, п. 3.1). Суточные боксы с сетки NOAA через ERDDAP,
+    # задержка сутки; хвост NRT вшивается в ряды climatereanalyzer ДО всех правил, так что
+    # рекорды, CUSUM, аналоги и «дней назад» считаются по свежему ряду. Смещение между
+    # нашим боксом и их рядом меряется на перекрытии и показывается на панели.
+    try:
+        import oisst as OI
+        OIS = OI.build(cr_nino34=ds["sst_nino34"], cr_world=ds["sst_world"])
+    except Exception as e:                                       # noqa: BLE001
+        OIS = {"error": str(e)[:200]}
     W = {k: series_watch(ds[k], S.LABELS[k], analog_years=ANALOGS if k == "sst_nino34" else None) for k in ds}
+    for k in ("sst_nino34", "sst_world"):
+        if ds[k].get("prelim_from"):
+            W[k]["prelim_from"] = ds[k]["prelim_from"]
+            W[k]["splice_offset"] = ds[k].get("splice_offset")
+            W[k]["tail_source"] = "NOAA OISST v2.1 NRT via ERDDAP, spliced"
     N34 = nino34_analogs(ds["sst_nino34"])
+    # ЧТО БЫЛО У ПРОШЛЫХ СОБЫТИЙ ПОСЛЕ ЭТОГО ЖЕ ДНЯ — ряд на год вперёд для сцены «Динамика»
+    # (владелец 04.09: «продли вправо, чтобы видно было развитие ещё на год»). Данных из
+    # будущего нет ни у кого; вправо уходит чужой опыт, и он подписан как чужой.
+    try:
+        _day = N34.get("day") or 0
+        fwd = {}
+        for _y, _a in (N34.get("analogs") or {}).items():
+            _seq = (_a.get("series") or []) + (_a.get("next") or [])
+            if len(_seq) > _day:
+                fwd[str(_y)] = _seq[_day:_day + 365]
+        if fwd:
+            W["sst_nino34"]["analog_forward"] = fwd
+    except Exception:                                            # noqa: BLE001
+        pass
     NW = noaa_weekly_watch(S.read_noaa_weekly(status["noaa_weekly"][0]))
     ONI = oni_watch(S.read_oni(status["oni"][0]), S.read_psl_monthly(status["psl_nino34_monthly"][0]))
+    # RONI РЯДОМ С ONI (экспертиза 04.09, п. 3.5): с февраля 2026 NOAA классифицирует события по
+    # относительному индексу; на тёплом фоне он ниже ONI на десятые. Считаем то же, что для ONI:
+    # текущий год, аналоги на тех же сезонах, пики событий.
+    try:
+        if status.get("roni", (None,))[0]:
+            ONI["roni"] = roni_watch(S.read_roni(status["roni"][0]), ONI)
+    except Exception as e:                                       # noqa: BLE001
+        ONI["roni"] = {"error": str(e)[:160]}
     # IRI: плюм моделей, три последних выпуска; при сбое сети — из сохранённых файлов
     try:
         psl_cur = ONI.get("psl_current") or []
@@ -797,8 +1033,52 @@ def run(fetch=True):
                 IRI["last_full_season"] = full
         if IRI.get("todate"):
             IRI["todate"]["parts"] = td["parts"]
+        # ГДЕ МЫ СТОИМ НА ШКАЛЕ ПЛЮМА, честно по каждому сезону. Точка на прожитом целиком,
+        # полоса — на прожитом наполовину: остаток сезона неизвестен, и его границы берём
+        # из разброса живых моделей (владелец 04.09). Плюс сводное по живым: сломанные
+        # модели в среднее не входят вовсе.
+        try:
+            import models as MD3
+            IRI["live"] = MD3.live(IRI, IRI.get("classes") or {})
+            # ГОД СЕЗОНА, А НЕ ТРИ БУКВЫ. Подписи в плюме повторяются каждый год, и первая
+            # версия радостно нашла «прожитый целиком» JFM — январь-март ЭТОГО года, тогда
+            # как столбец JFM в августовском выпуске означает следующий. Берём настоящий год
+            # каждого столбца (та же функция, что чинила сравнение моделей) и оставляем
+            # только сезоны, которые уже НАЧАЛИСЬ в этом году.
+            # ПРОЖИТЫЕ СЕЗОНЫ, А НЕ ТОЛЬКО ТЕ, ЧТО РИСУЮТ МОДЕЛИ. Владелец 04.09: «нужно ещё
+            # назад периоды показать, JJA и JAS; на JAS мы сейчас в большей степени, а не на
+            # ASO». Плюм августовского выпуска начинает прогноз с ASO, где прожит ОДИН месяц
+            # из трёх, — а JAS прожит на два из трёх, и это куда более твёрдая опора. JJA
+            # прожит целиком и вовсе не является столбцом плюма. Поэтому кандидатов берём
+            # не из плюма, а из календаря: три последних сезона, которые уже начались.
+            mnow = int(NW["date"][5:7])
+            tds = []
+            for lab, mons in SEASON_MONTHS.items():
+                if not mons or mons[0] > mnow or mons[0] < mnow - 2:
+                    continue
+                t = season_todate(NW, lab, yr)
+                if t:
+                    tds.append(t)
+            tds.sort(key=lambda t: SEASON_MONTHS[t["season"]][0])
+            # Коридор для неизмеренных месяцев: с ближайшего сезона, который модели дают.
+            ss = IRI.get("seasons") or []
+            fi = next((i for i, lab in enumerate(ss)
+                       if any(v is not None for v in [(m.get("values") or [None] * (i + 1))[i]
+                                                      for m in (IRI.get("models") or {}).values()
+                                                      if m.get("section") in ("dyn", "stat") and m.get("values")
+                                                      and len(m["values"]) > i])), None)
+            td_fi = next((t for t in tds if fi is not None and t["season"] == ss[fi]), None)
+            mrange = MD3._monthly_range(td_fi, IRI["live"], fi)
+            IRI["position"] = MD3.position(IRI, tds, IRI["live"], mrange)
+            IRI["position_note"] = ("Where we stand is read off the seasons we have actually lived, "
+                                    "not off the first season the models publish: the plume starts at "
+                                    + (ss[fi] if fi is not None else "?") + ", but by then only "
+                                    + str((td_fi or {}).get("months_done", "?")) + " of its 3 months are measured. "
+                                    "For seasons the models do not publish (JJA, JAS) the spread of the unmeasured "
+                                    "months is BORROWED from the nearest forecast season — an assumption, not a measurement.")
+        except Exception as e:                                   # noqa: BLE001
+            IRI["live_error"] = str(e)[:200]
 
-    RR, ridx = risks(W, N34, NW, ONI, IRI if IRI and "error" not in IRI else None)
     # Блок F: индекс FAO (живой ряд) и регионы (справочник × сила события). Любая беда здесь
     # не должна ронять остальное: блок пустой с причиной, страница живёт.
     import food as FD
@@ -813,10 +1093,119 @@ def run(fetch=True):
                        record_weekly=(NW.get("hist_max") or {}).get("n34a"))
     except Exception as e:                                       # noqa: BLE001
         REG = {"error": str(e)[:200]}
+    # Блок «воздух»: атмосфера, топливо, слои и цены поимённо (владелец 04.09). Любая беда
+    # здесь не должна ронять остальное — блок пустой с причиной, панель живёт.
+    try:
+        import air as AIR
+        parsed = {}
+        for key in ("soi", "olr", "u850_west", "u850_centre", "u850_east"):
+            if status.get(key, (None,))[0]:
+                parsed[key] = S.read_cpc_table(status[key][0])
+        for key in ("wwv", "t300"):
+            if status.get(key, (None,))[0]:
+                parsed[key] = S.read_pmel(status[key][0])
+        for key in ("uah_tlt", "uah_tmt", "uah_ttp", "uah_tls"):
+            if status.get(key, (None,))[0]:
+                parsed[key] = S.read_uah(status[key][0])
+        if status.get("wb_pink", (None,))[0]:
+            parsed["wb_pink"] = S.read_pink(status["wb_pink"][0])
+        onset = (FOOD or {}).get("overlay", {}).get("onset") if isinstance(FOOD, dict) else None
+        # ДЛИННЫЙ месячный ряд Niño 3.4, а не наш недельный огрызок: опережение и задержки
+        # ищутся перебором сдвигов, и на пятнадцати месяцах перебор бессмыслен — берём
+        # ERSST от PSL, он с 1948 года. Первая версия молча возвращала «задержка неизвестна».
+        n34m = {}
+        for y, vals in (ONI.get("psl_raw") or {}).items():
+            for mi, v in enumerate(vals, 1):
+                if v is not None and v == v:
+                    n34m[f"{y}-{mi:02d}"] = float(v)
+        AIRB = AIR.build(parsed, n34m or (NW.get("monthly") or {}), onset)
+        # пути товаров от начала события — свои и у прошлых событий (владелец 04.09, вечер)
+        try:
+            an_on = {y: (v or {}).get("onset") for y, v in (((FOOD or {}).get("overlay") or {}).get("analogs") or {}).items()}
+            # 1982-й: индекса FAO тогда ещё не было, а Pink Sheet идёт с 1960-го — месяц начала берём из ONI
+            for _y in ANALOGS:
+                if str(_y) not in an_on and _y not in an_on:
+                    _on = FD._onset_month((ONI.get("analogs") or {}).get(_y), _y)
+                    if _on:
+                        an_on[str(_y)] = _on
+            AIRB["onset_paths"] = AIR.onset_paths(parsed.get("wb_pink"), onset, an_on)
+        except Exception as e:                                   # noqa: BLE001
+            AIRB["onset_paths"] = {"error": str(e)[:160]}
+    except Exception as e:                                       # noqa: BLE001
+        AIRB = {"error": str(e)[:200]}
+
+    # ПОД ПОВЕРХНОСТЬЮ, ВЕТЕР ПО ДНЯМ, ЗАЛИВ, ФОН (экспертиза 04.09, пп. 3.2–3.8). Каждый блок
+    # падает сам по себе: ошибка сети в одном не должна ронять панель.
+    try:
+        import subsurface as SB
+        SUB = {"tao": SB.tao(), "godas": SB.godas()}
+    except Exception as e:                                       # noqa: BLE001
+        SUB = {"error": str(e)[:200]}
+    try:
+        import wind as WN
+        WIND = WN.build()
+    except Exception as e:                                       # noqa: BLE001
+        WIND = {"error": str(e)[:200]}
+    try:
+        import gulf as GF
+        kw = S.read_json(status["kuwait_era5"][0]) if status.get("kuwait_era5", (None,))[0] else None
+        GULF = GF.build(((OIS or {}).get("boxes") or {}).get("gulf"), kw, parsed.get("wb_pink"), onset)
+    except Exception as e:                                       # noqa: BLE001
+        GULF = {"error": str(e)[:200]}
+    try:
+        import background as BG
+        bparsed = {}
+        for d_ in (700, 2000):
+            rows = []
+            for q_ in S.OHC_QUARTERS:
+                key = f"ohc_{d_}_{q_}"
+                if status.get(key, (None,))[0]:
+                    rows += S.read_ohc(status[key][0])
+            if rows:
+                bparsed[f"ohc_{d_}"] = sorted(rows)
+        for key in ("mei", "dmi"):
+            if status.get(key, (None,))[0]:
+                bparsed[key] = S.read_psl_monthly(status[key][0])
+        BACK = BG.build(bparsed, ONI)
+    except Exception as e:                                       # noqa: BLE001
+        BACK = {"error": str(e)[:200]}
+    try:
+        OMI = mjo_block(S.read_omi(status["omi"][0])) if status.get("omi", (None,))[0] else None
+    except Exception as e:                                       # noqa: BLE001
+        OMI = {"error": str(e)[:200]}
+
+    RR, ridx = risks(W, N34, NW, ONI, IRI if IRI and "error" not in IRI else None, AIRB)
+    # правила новых блоков — тем же форматом, что у воздуха; индекс пересчитывается после
+    extra = []
+    for mod, blk in (("subsurface", SUB), ("wind", WIND), ("gulf", GULF), ("background", BACK)):
+        if not blk or blk.get("error"):
+            continue
+        try:
+            m = __import__(mod)
+            extra += list(m.risks(blk)) if hasattr(m, "risks") else []
+        except Exception as e:                                   # noqa: BLE001
+            extra.append((f"{mod} rules failed", 2, "now", str(e)[:160],
+                          "This block did not produce its risks; its numbers are on the panel.",
+                          "the next update", None, "data", f"{mod}_rules_failed"))
+    if OMI and not OMI.get("error"):
+        extra += mjo_risks(OMI, WIND)
+    for r in extra:
+        RR.append({"id": r[8] if len(r) > 8 else _slug(r[0]), "title": r[0], "level": r[1], "horizon": r[2],
+                   "evidence": r[3], "plain": r[4], "watch": r[5], "metric": r[6], "kind": r[7]})
+    RR, ridx = _finish(RR)
+    # Сопоставимое ядро индекса — сегодня и у прошлых событий на тот же день года
+    # (владелец 04.09: «риск-индекс посчитать для других событий, по годам хотя бы основных»).
+    try:
+        import history_index as HX
+        CORE = HX.build(NW, N34, roni=ONI.get("roni"))
+    except Exception as e:                                       # noqa: BLE001
+        CORE = {"error": str(e)[:200]}
     out = {"generated": date.today().isoformat(), "stamp": stamp,
            "sources": {k: {"fresh": v[1], "error": v[2], "label": S.LABELS[k]} for k, v in status.items()},
            "watch": W, "nino34": N34, "noaa": NW, "oni": ONI, "iri": IRI, "risks": RR, "risk_index": ridx,
-           "food": FOOD, "regions": REG}
+           "food": FOOD, "regions": REG, "air": AIRB, "risk_core": CORE,
+           "oisst": OIS, "subsurface": SUB, "wind": WIND, "gulf": GULF, "background": BACK, "mjo": OMI}
+    ONI.pop("psl_raw", None)          # служебный длинный ряд наружу не отдаём
     return out
 
 

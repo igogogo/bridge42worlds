@@ -8,7 +8,7 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/css/style.css?v=321f73c4a2">
+<link rel="stylesheet" href="/css/style.css?v=87406f6ceb">
 <style>
   /* ПАНЕЛЬ, А НЕ СТРАНИЦА (владелец 03.09: «одностраничный, без прокруток, это панель, на
      ней всё должно быть динамическое»), с правками второго разбора:
@@ -30,14 +30,18 @@
     --lv5:#7A1F1F; --lv4:#A8432B; --lv3:#C9843A; --lv2:#8F8A81; --lv1:#B9B4AB;
     --band:#B9B4AB; --grid:color-mix(in srgb, var(--ink) 12%, transparent);
     --a1982:#7D5B8F; --a1997:#B06A8F; --a2015:#C07B53; --a2023:#D08A2B;
-    --rail:286px; --rail2:310px; --dockh:78px;
+    /* прошлый год — не событие, поэтому нейтральный серый, а не цвет аналога */
+    --a2025:#8A8F98; --a2024:#8A8F98;
+    --rail:286px; --rail2:310px; --dockh:34px;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){ --nino:#D4735C; --nina:#7C9BCB; --ok:#7BAA88; --band:#5c5a55;
-      --lv2:#6f6c66; --lv1:#4f4d49; --a1982:#A98BBB; --a1997:#D39BB9; --a2015:#E0A07E; --a2023:#E8B45C; }
+      --lv2:#6f6c66; --lv1:#4f4d49; --a1982:#A98BBB; --a1997:#D39BB9; --a2015:#E0A07E; --a2023:#E8B45C;
+      --a2025:#9AA0AA; --a2024:#9AA0AA; }
   }
   [data-theme="dark"]{ --nino:#D4735C; --nina:#7C9BCB; --ok:#7BAA88; --band:#5c5a55;
-      --lv2:#6f6c66; --lv1:#4f4d49; --a1982:#A98BBB; --a1997:#D39BB9; --a2015:#E0A07E; --a2023:#E8B45C; }
+      --lv2:#6f6c66; --lv1:#4f4d49; --a1982:#A98BBB; --a1997:#D39BB9; --a2015:#E0A07E; --a2023:#E8B45C;
+      --a2025:#9AA0AA; --a2024:#9AA0AA; }
 
   html,body{height:100%;overflow:hidden;overscroll-behavior:none}
   /* Общий стиль сайта держит body в читательской колонке (max-width 700px) — панели нужен
@@ -45,41 +49,87 @@
   body{background:var(--bg);color:var(--text);max-width:none;width:100%;margin:0;padding:0}
   .langs-row,.nav-live{display:none !important}
 
-  .panel{display:grid;grid-template-rows:auto auto minmax(0,1fr) var(--dockh);height:100dvh;gap:7px;
+  /* Строки сетки: шапка, сцена, подвал, строка обновлений. Когда строка обновлений уехала
+     из шапки вниз, порядок строк остался прежним — и она попала в неявную пятую строку,
+     налезая на подвал. Описываем ровно те четыре, что есть. */
+  /* Строки назначаем ПОИМЕННО, а не по порядку детей: sitenav.js вставляет в панель свой
+     пустой ряд языков, он забирал строку сетки, и строка обновлений уезжала в неявную
+     пятую — поверх подвала. Теперь у каждого своя строка, и чужая вставка ничего не
+     сдвигает. */
+  /* Строка подвала — auto, а не фиксированная: подвал теперь несёт две строки (подсказку
+     и обновления), и жёсткая высота обрезала вторую. Неподвижность подвала держится не
+     высотой строки сетки, а его собственным min-height и обрезкой текста в три строки —
+     то есть он по-прежнему не прыгает при смене подсказки. */
+  /* КОЛОНКА, А НЕ СЕТКА ИЗ ЧЕТЫРЁХ СТРОК. Сетка требовала, чтобы детей было ровно столько,
+     сколько строк, — а sitenav.js добавляет в панель свой ряд, и строки разъезжались: под
+     сценой оставалось сорок пикселей пустоты, которых никто не просил (владелец 04.09:
+     «поле где графики фиксированной высоты, можно же сделать больше, прям до нижней
+     строчки, а то на ноуте много пустого места»). Колонке всё равно, сколько детей:
+     шапка и подвал занимают своё, сцена забирает ВСЁ остальное до самого низа. */
+  .panel{display:flex;flex-direction:column;height:100dvh;gap:7px;
     padding:8px 10px calc(8px + env(safe-area-inset-bottom));box-sizing:border-box}
+  .panel > .mid{flex:1 1 auto;min-height:0}
+  .panel > .top-bar,.panel > .dock,.panel > .langs-row{flex:0 0 auto}
 
   /* ── шапка ────────────────────────────────────────────────────────────────── */
-  .top-bar{display:flex;align-items:center;gap:10px;padding:0;margin:0;max-width:none;min-width:0;
-    flex-wrap:nowrap;height:32px;flex-shrink:0}
+  /* justify-content:flex-start — против общего стиля сайта, где шапка распределяет элементы
+     поровну (там это нужно, чтобы гамбургер не висел посреди). Пока ряд вкладок занимал всю
+     свободную ширину, это не было видно; стоило вкладкам уехать на свою строку — логотип,
+     гамбургер, ночной режим и заголовок разъехались по всей ширине. */
+  /* Отступ слева тот же, что у текста внутри карточек (плитка + её padding), — тогда
+     логотип, вкладки и слово STATE стоят на одной вертикали, а не вразнобой
+     (владелец 04.09: «всё должно быть выровнено по рамке, где state»). */
+  .top-bar{display:flex;align-items:center;justify-content:flex-start;gap:10px;padding:0 0 0 23px;margin:0;
+    max-width:none;min-width:0;flex-wrap:wrap;row-gap:5px;height:auto;min-height:32px;flex-shrink:0}
   .logo{font-family:var(--font-display);font-size:14px;color:var(--soft);text-decoration:none;white-space:nowrap}
   .logo:hover{color:var(--accent)}
   .p-title{font-family:var(--font-display);font-size:clamp(15px,1.9vw,19px);font-weight:600;white-space:nowrap}
   .p-title b{color:var(--nino);font-weight:600}
   .theme-toggle{background:none;border:1px solid var(--line, var(--hair));color:var(--soft);
     border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:12px;flex-shrink:0}
-  .tabs{display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;min-width:0;flex:1}
+  /* ВКЛАДКИ — ВСЕГДА ОТДЕЛЬНОЙ СТРОКОЙ, И БЕЗ ПРОКРУТКИ. Владелец 04.09: «верхнее меню тоже
+     надо пониже отдельной строкой, где state, risk и так далее, чтобы без прокруток или в две
+     строки». В одной строке с логотипом, гамбургером, ночным режимом и заголовком девяти
+     кнопкам места не остаётся ни на каком экране: они уезжали вбок, и половину меню было не
+     достать. Теперь шапка переносится, вкладки идут во всю ширину под ней и при нехватке
+     места переходят на вторую строку — прокрутки нет нигде. */
+  /* Вкладки начинаются там же, где основное поле со сценой: слева от него — колонка
+     состояния, и меню, начинающееся от её края, читалось как её часть (владелец 04.09:
+     «раз меню переехало на свою строку, пусть начинается не от state, а от поля основного
+     с графиками»). Отступ считается из ширины колонки, поэтому меняется вместе с ней. */
+  .tabs{display:flex;gap:4px;flex-wrap:wrap;row-gap:4px;overflow:visible;min-width:0;
+    flex:1 0 100%;order:9;margin-inline-start:calc(var(--rail) + 8px - 23px + 10px);
+    padding-bottom:3px}   /* отбивка от рамки сцены: меню не должно лежать на ней */
   .tabs::-webkit-scrollbar{display:none}
-  .tab{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--muted);background:none;
+  /* Чётче: цвет основного текста вместо приглушённого и чуть плотнее начертание —
+     меню должно читаться с первого взгляда (владелец 04.09). */
+  .tab{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--text);font-weight:500;background:none;
     border:1px solid var(--line, var(--hair));border-radius:999px;padding:5px 12px;
     cursor:pointer;white-space:nowrap;transition:color .15s,background .15s,border-color .15s}
   .tab:hover{color:var(--ochre)}
   .tab.on{color:var(--ochre);border-color:color-mix(in srgb, var(--ochre) 45%, var(--hair));
     background:color-mix(in srgb, var(--ochre) 10%, transparent)}
-  /* Переключатель «сейчас / что изменилось» — тот же орган, но отдельно от вкладок сцены. */
-  .tab.delta{flex-shrink:0;border-style:dashed}
-  .tab.delta.on{border-style:solid;color:var(--nino);border-color:color-mix(in srgb, var(--nino) 50%, var(--hair));
-    background:color-mix(in srgb, var(--nino) 10%, transparent)}
+  /* Вердикт — не такая вкладка, как остальные: это ответ на вопрос «ну и что?», и он должен
+     бросаться в глаза первым (владелец 04.09: «ссылку на вердикт отдельным пунктом и поярче,
+     может инверсно»). Инверсия: заливка цветом события, текст на ней светлый. */
+  .tab.verdict{background:var(--nino);color:var(--surface);border-color:var(--nino);font-weight:600;
+    margin-inline-end:8px}
+  .tab.verdict:hover{background:color-mix(in srgb, var(--nino) 82%, var(--ink));color:var(--surface)}
+  .tab.verdict.on{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+  /* Кнопки «сейчас / что изменилось» больше нет: сравнение переехало на кирпичи. */
 
   /* ── строка обновления и источников (наверху, а не в подвале) ─────────────── */
-  .p-meta{display:flex;align-items:center;gap:4px 16px;flex-wrap:wrap;font-family:var(--mono);
+  /* Строка обновлений живёт в шапке справа: прижата авто-отступом, в одну строку,
+     при нехватке места прокручивается вбок, а не ломает шапку. */
+  .p-meta{display:flex;align-items:center;gap:4px 14px;flex-wrap:nowrap;font-family:var(--mono);
+    margin-inline-start:auto;justify-content:flex-end;min-width:0;max-width:62%;
+    overflow-x:auto;scrollbar-width:none;
     font-size:10.5px;color:var(--soft);padding:0 2px;min-height:16px}
   .p-meta > span{white-space:nowrap}
   .p-meta b{font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-size:9.5px}
   .p-meta i{font-style:normal;opacity:.75}
   .p-meta .bad, .p-meta .bad b{color:var(--nino)}
-  .p-meta .dots{display:inline-flex;gap:4px;margin-inline-start:auto}
-  .p-meta .dots i{width:9px;height:9px;border-radius:50%;background:var(--ok);display:block;cursor:help}
-  .p-meta .dots i.bad{background:var(--nino)}
+  .p-meta::-webkit-scrollbar{display:none}
 
   /* ── средняя часть ───────────────────────────────────────────────────────── */
   .mid{display:grid;grid-template-columns:var(--rail) minmax(0,1fr) var(--rail2);gap:8px;min-height:0}
@@ -134,7 +184,11 @@
   .lk-n{font-size:10.5px;color:var(--soft);line-height:1.45;margin-top:5px}
   .new{font-family:var(--mono);font-size:9px;color:var(--ochre)}
 
-  .gauge-row{display:flex;gap:11px;align-items:center}
+  /* Индекс риска — по центру сверху, текст под ним (владелец 04.09). Раньше круг стоял
+     слева, а справа шла колонка мелких строк: цифра терялась, а мелкая подпись под шкалой
+     не читалась вовсе — её убрали. */
+  .gauge-row{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+  .gauge-row .g-side{width:100%}
   .gauge{--v:0;--c:var(--ok);width:74px;height:74px;border-radius:50%;position:relative;flex-shrink:0;
     background:conic-gradient(var(--c) calc(var(--v)*1%), color-mix(in srgb, var(--ink) 9%, transparent) 0);
     display:grid;place-items:center;cursor:help}
@@ -164,7 +218,38 @@
     min-width:0;flex:1 1 320px;text-wrap:balance}
   .seg{display:flex;gap:3px;flex-shrink:0;flex-wrap:wrap}
   .seg.sub{padding:0 0 2px}
-  .seg button{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--soft);
+  /* Планшет цепочки данных и страница «About» (владелец 04.09, ночь) */
+  .chain{position:relative;flex:1;min-height:0;overflow:auto}
+  .chain-edges{position:absolute;left:0;top:0;pointer-events:none;z-index:0}
+  .chain-cols{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 22px;padding:4px 2px 10px}
+  .chain-h{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ochre);margin:0 0 8px;line-height:1.4}
+  .chain-h span{display:block;text-transform:none;letter-spacing:0;font-family:var(--font-body, inherit);font-size:11px;color:var(--soft);margin-top:2px}
+  .chain-node{border:1px solid var(--line, var(--hair));border-radius:9px;padding:7px 9px;margin-bottom:8px;background:var(--surface);cursor:pointer;
+    transition:opacity .15s ease, border-color .15s ease}
+  .chain-node.dim{opacity:.32}
+  .chain-node.lit{border-color:color-mix(in srgb, var(--ochre) 55%, var(--hair))}
+  .chain-node.on{border-color:var(--ochre);box-shadow:0 0 0 2px color-mix(in srgb, var(--ochre) 25%, transparent)}
+  .chain-node .cn-h{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text)}
+  .chain-node .cn-h b{font-weight:600;overflow-wrap:anywhere;min-width:0}
+  .chain-node{min-width:0;overflow-wrap:anywhere}
+  .chain-col{min-width:0}
+  .chain-node .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);flex:none}
+  .chain-node .dot.bad{background:var(--ochre)}
+  .chain-node .dot.off{background:var(--soft);opacity:.5}
+  .chain-node .cn-s{font-size:11px;color:var(--muted);line-height:1.4;margin-top:2px}
+  .chain-node .cn-m{font-family:var(--mono);font-size:9.5px;color:var(--soft);margin-top:4px}
+  .chain-node .cn-m a{color:var(--cyan);text-decoration:none}
+  .about{max-width:70ch;display:flex;flex-direction:column;gap:14px;padding:2px 2px 12px}
+  .about h3{font-family:var(--font-display);font-size:15px;margin:0 0 4px;color:var(--text)}
+  .about p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+  @media (max-width:900px){ .chain-cols{grid-template-columns:1fr 1fr} .chain-edges{display:none} }
+  @media (max-width:560px){ .chain-cols{grid-template-columns:1fr} }
+  /* Экспертиза 04.09: ссылки в справочных врезках (телесвязь, импорт) и подписи «цитата, не замер» */
+  .gl-i a{color:var(--cyan);text-decoration:none;border-bottom:1px solid color-mix(in srgb, var(--cyan) 40%, transparent)}
+  .gl-i a:hover{border-bottom-color:var(--cyan)}
+  .kpi .kv small br{display:none}
+  /* Подменю сцены читается наравне с верхним меню: цвет основного текста, не приглушённый. */
+  .seg button{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--text);font-weight:500;
     background:none;border:1px solid var(--line, var(--hair));border-radius:999px;padding:3px 9px;cursor:pointer;white-space:nowrap}
   .seg button:hover{color:var(--ochre)}
   .seg button.on{color:var(--ochre);border-color:color-mix(in srgb, var(--ochre) 50%, var(--hair));
@@ -176,6 +261,10 @@
   .plot svg{display:block;width:100%;height:100%}
   .plot svg text{font-family:var(--mono);font-size:11px;fill:var(--soft)}
   .plot svg text.tt{font-size:12px;font-weight:600;fill:var(--text)}
+  /* Выбранный элемент легенды: подчёркнут и ярче — видно, что именно высвечено. */
+  .plot svg g.pick text{cursor:pointer}
+  .plot svg g.pick:hover text{fill:var(--ochre)}
+  .plot svg g.pick.on text{fill:var(--ochre);font-weight:600}
   .cap{font-size:11.5px;color:var(--soft);line-height:1.5;flex-shrink:0}
   .tbl-inline{max-height:38%;overflow:auto;flex-shrink:0;border-top:1px solid var(--line, var(--hair));padding-top:4px}
 
@@ -221,11 +310,26 @@
   .tally span{font-family:var(--mono);font-size:10.5px;padding:3px 8px;border-radius:999px;border:1px solid var(--line, var(--hair));color:var(--muted)}
   .tally i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-inline-end:5px;vertical-align:-1px}
 
-  table.regions td:first-child{white-space:nowrap}
+  /* РАСКЛАДКА ЖЁСТКАЯ. Пока ширины выпрашивались у содержимого, «что делать» получала
+     остаток и шла по слову в строке. Теперь доли назначены: имя региона, уровни и колонка
+     действий — явно, сезоны делят остаток поровну (их число задаётся данными). */
+  table.regions{table-layout:fixed}
+  table.regions th:first-child{width:16%}
+  table.regions th.vul{width:7%}
+  table.regions td:first-child{overflow-wrap:anywhere}
   table.regions td .sub{font-size:10.5px;color:var(--soft);margin-top:1px;max-width:22ch;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  table.regions td.act{font-size:11px;line-height:1.4;color:var(--muted);max-width:30ch}
-  .imp{display:inline-block;font-family:var(--mono);font-size:10px;padding:1px 6px;border-radius:4px;white-space:nowrap;
+  /* «Что делать» — самая длинная колонка, поэтому ширину ей назначаем, а не выпрашиваем:
+     без этого раскладка отдавала ей минимум, и строки шли по слову. */
+  table.regions th.act{width:34%}
+  table.regions td.act{font-size:11px;line-height:1.4;color:var(--muted)}
+  /* Три сценария живут в одной колонке: три отдельные съедали ширину у «что делать». */
+  table.e th.lvls{white-space:nowrap;text-align:center;letter-spacing:.04em;width:9%}
+  table.e th.lvls .sc{cursor:pointer;padding:0 3px;opacity:.5}
+  table.e th.lvls .sc.on{opacity:1;color:var(--ochre)}
+  table.e td.lvls{white-space:nowrap;text-align:center;padding-inline:6px}
+  table.e td.lvls .lvl{margin-inline:1px;cursor:pointer}
+  .imp{display:inline-block;font-family:var(--mono);font-size:10px;padding:1px 6px;border-radius:4px;
     color:var(--c);background:color-mix(in srgb, var(--c) 12%, transparent);border:1px solid color-mix(in srgb, var(--c) 38%, transparent)}
   .imp small{font-size:9px;opacity:.8;margin-inline-start:3px}
   .vbar{display:inline-flex;gap:2px}
@@ -252,28 +356,122 @@
   .lead b{color:var(--text);font-weight:600}
 
   /* ── подвал: НЕПОДВИЖНАЯ высота в три строки ─────────────────────────────── */
-  .dock{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;
+  .dock{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:1fr auto;gap:2px 12px;align-items:center;
     border:1px solid var(--line, var(--hair));border-radius:11px;background:var(--surface);
-    padding:8px 14px;height:var(--dockh);box-sizing:border-box;overflow:hidden}
+    padding:8px 14px;min-height:var(--dockh);box-sizing:border-box;overflow:hidden}
   .dock .dtxt{font-size:12.5px;line-height:1.5;min-width:0;max-height:100%;overflow:hidden;
     display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
   .dock .dtxt b{font-family:var(--font-display);font-size:13.5px;margin-inline-end:6px}
   .dock .dtxt .hint{color:var(--soft);font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase}
   .dock .dtxt .s{font-family:var(--mono);font-size:10px;color:var(--soft);display:block;margin-top:1px}
 
+  /* ── журнал значений на кирпиче ───────────────────────────────────────────
+     Три строки под числом: изменение к прошлому ЗНАЧЕНИЮ (не к прошлому прогону),
+     изменение от начала события и подпись «источник · дата данных» с кнопкой истории. */
+  .kj{margin-top:5px;display:flex;flex-direction:column;gap:1px;font-family:var(--mono);font-size:10px}
+  .kj .jr{color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .kj .jr b{font-weight:600}
+  .kj .up{color:var(--nino)}
+  .kj .dn{color:var(--nina)}
+  .kj .same{color:var(--soft)}
+  .kj .jsrc{color:var(--soft);opacity:.85;display:flex;align-items:flex-start;gap:6px;
+    flex-wrap:wrap;line-height:1.35}
+  /* Источник ужимается, кнопка истории — никогда. Без min-width:0 длинная подпись
+     источника не давала себя сжать, и кнопку выдавливало за край с overflow:hidden —
+     она была в разметке, но нажать её было нельзя (владелец 04.09: «кнопки history
+     где-то не нажимаются, например daily OISST»). */
+  .kj .jsrc span{flex:1 1 auto;min-width:0}   /* переносится целиком, без многоточия */
+  .jh{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--muted);background:none;border:1px solid var(--line, var(--hair));border-radius:999px;
+    padding:1px 6px;cursor:pointer;flex-shrink:0}
+  .jh:hover{color:var(--ochre);border-color:color-mix(in srgb, var(--ochre) 45%, var(--hair))}
+  /* таблица истории внутри карточки */
+  .htab{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;margin-top:6px}
+  .htab td{padding:2px 0;border-bottom:1px solid color-mix(in srgb, var(--ink) 6%, transparent)}
+  .htab td.v{text-align:right;font-variant-numeric:tabular-nums}
+  .htab td.a{text-align:right;width:52px}
+  .htab tr:last-child td{border-bottom:0}
+  .hmore{font-family:var(--mono);font-size:10px;color:var(--ochre);background:none;border:0;
+    cursor:pointer;padding:4px 0 0}
+
   /* Карточка-абзац у курсора: то же содержимое, но рядом с тем, на что смотрят. */
-  .tip{position:fixed;z-index:60;max-width:min(390px,80vw);max-height:min(300px,42vh);overflow:hidden;
-    pointer-events:none;opacity:0;
+  /* КАРТОЧКУ МОЖНО ТРОГАТЬ. Раньше стояло pointer-events:none и закрытие по уходу
+     курсора: в карточке есть ссылки на разобранные работы, и дойти до них было нельзя
+     (владелец 04.09). Теперь курсор в неё доходит, есть крестик, Esc и прикалывание. */
+  /* Карточка выше всего на панели. Шапка сайта (.top-bar) держит z-index 90 — она липкая
+     и должна перекрывать содержимое при прокрутке; но подсказка от строки источников
+     всплывала прямо под ней и пряталась за ряд вкладок (владелец 04.09). Ставим её
+     заведомо выше всех слоёв панели. */
+  /* СКРЫТАЯ КАРТОЧКА НЕ ДОЛЖНА ЛОВИТЬ КЛИКИ. Владелец 04.09 (вечер): «опять старая проблема —
+     часть кнопок подменю не нажимается». Спрятанная карточка оставалась прозрачной, но живой
+     (pointer-events:auto при opacity:0): невидимый прямоугольник 330×320 висел там, где её
+     показали в последний раз, — над кнопками подменю, — и съедал клики. Теперь спрятанная
+     карточка не существует для мыши вовсе. */
+  .tip{position:fixed;z-index:200;max-width:min(330px,62vw);max-height:min(320px,44vh);overflow:auto;
+    pointer-events:none;visibility:hidden;opacity:0;
     transform:translateY(3px);transition:opacity .12s ease, transform .12s ease;
     background:var(--surface);border:1px solid var(--line, var(--hair));border-radius:11px;
     padding:10px 13px;font-size:12.5px;line-height:1.55;color:var(--text);
     box-shadow:0 10px 30px color-mix(in srgb, var(--ink) 22%, transparent)}
-  .tip.on{opacity:1;transform:none}
-  .tip b{font-family:var(--font-display);font-size:13.5px;display:block;margin-bottom:3px}
+  .tip.on{opacity:1;transform:none;pointer-events:auto;visibility:visible}
+  .tip.pin{border-color:color-mix(in srgb, var(--ochre) 55%, var(--hair))}
+  .tip b{font-family:var(--font-display);font-size:13.5px;display:block;margin-bottom:3px;padding-inline-end:18px}
+  .tip .x{position:absolute;top:6px;inset-inline-end:8px;background:none;border:0;cursor:pointer;
+    color:var(--soft);font-size:14px;line-height:1;padding:2px 4px}
+  .tip .x:hover{color:var(--nino)}
+  .tip a{color:var(--ochre)}
   .tip .s{font-family:var(--mono);font-size:10px;color:var(--soft);display:block;margin-top:5px}
+  .tip .s div{margin-top:2px}
+  .tip .s a{color:var(--cyan);text-decoration:none;border-bottom:1px solid color-mix(in srgb, var(--cyan) 45%, transparent)}
+  .tip{overflow-x:hidden;overflow-wrap:anywhere;word-break:break-word}
+  select.rsel{font-family:var(--mono);font-size:11.5px;padding:3px 8px;border:1px solid var(--line, var(--hair));border-radius:8px;
+    background:var(--surface);color:var(--text);max-width:100%}
 
+  /* Код зоны Ниньо: рамка и моноширинный шрифт, чтобы «3.4» не читалось как температура. */
+  /* Кнопка перехода: из вердикта на сцену, где живёт число. */
+  /* Полоска сравнения ядра индекса между событиями. */
+  .jbar{display:block;height:5px;border-radius:3px;background:var(--nino);width:var(--w,0%);opacity:.7;margin-top:3px}
+  /* Ссылка-переход в конце карточки тревоги. */
+  .cgo{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--ochre);cursor:pointer;margin-top:6px;display:inline-block}
+  .cgo:hover{text-decoration:underline}
+  .vgo{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--ochre);background:none;border:1px solid color-mix(in srgb, var(--ochre) 35%, var(--hair));
+    border-radius:999px;padding:2px 8px;cursor:pointer;margin-inline-end:6px;margin-top:4px}
+  .vgo:hover{border-color:var(--ochre);background:color-mix(in srgb, var(--ochre) 10%, transparent)}
+  .zn{display:inline-block;font-family:var(--mono);font-size:.92em;letter-spacing:.02em;
+    border:1px solid color-mix(in srgb, var(--ochre) 45%, var(--hair));border-radius:4px;
+    padding:0 4px;white-space:nowrap;text-decoration:none;
+    background:color-mix(in srgb, var(--ochre) 8%, transparent)}
+  .zn:hover{color:var(--ochre);border-color:var(--ochre)}
+  /* Ссылка на разобранную работу: третья форма набора — скошенная плашка. Такая же, как в
+     статьях, чтобы «наша работа» выглядела одинаково во всём проекте. */
+  .lk.wk-chip{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.04em;
+    border:1px solid color-mix(in srgb, var(--ochre) 45%, var(--hair));border-radius:3px 8px 3px 8px;
+    padding:1px 7px;white-space:nowrap;color:var(--ochre);
+    background:color-mix(in srgb, var(--ochre) 9%, transparent);text-decoration:none;cursor:help}
+  .lk.wk-chip:hover{border-color:var(--ochre);background:color-mix(in srgb, var(--ochre) 16%, transparent)}
+  .lk-i .lk-one{color:var(--text);display:block;margin:2px 0 3px}
+  .wk-num{font-family:var(--mono);border:1px solid color-mix(in srgb, var(--ochre) 35%, var(--hair));
+    border-radius:2px 6px 2px 6px;padding:0 4px}
+  /* Модель: прямоугольная плашка холодного цвета — форма другая, чем у зоны, и цвет несёт
+     класс: справляется, отстаёт, сломана. */
+  .mn{display:inline-block;font-family:var(--mono);font-size:.9em;letter-spacing:.02em;
+    border:1px solid color-mix(in srgb, var(--nina) 45%, var(--hair));border-radius:2px;
+    padding:0 4px;white-space:nowrap;text-decoration:none;
+    background:color-mix(in srgb, var(--nina) 7%, transparent)}
+  .mn:hover{border-color:var(--nina);color:var(--nina)}
+  .mn.lag{border-color:color-mix(in srgb, var(--lv3) 55%, var(--hair));
+    background:color-mix(in srgb, var(--lv3) 8%, transparent)}
+  .mn.broke{border-color:color-mix(in srgb, var(--lv5) 55%, var(--hair));
+    background:color-mix(in srgb, var(--lv5) 8%, transparent)}
+
+  /* Пунктирное подчёркивание — обещание подсказки; знак вопроса у курсора оставляем только
+     там, где подчёркнуто. Владелец 04.09: «стрелка с вопросиком появляется везде» — это были
+     плашки и строки источников, у которых своя рамка вместо подчёркивания. */
   [data-term],[data-src]{text-decoration:underline dotted color-mix(in srgb, var(--ochre) 55%, transparent);
     text-underline-offset:3px;cursor:help}
+  .zn[data-term],.mn[data-src],.kj .jsrc [data-src],.p-meta [data-src]{text-decoration:none;cursor:default}
   [data-term]:hover,[data-src]:hover{color:var(--ochre)}
   .p-meta [data-src]{text-decoration:none}
   .p-meta [data-src]:hover{color:var(--ochre)}
@@ -286,14 +484,47 @@
     .col.rail{display:none}
     .col.rail.show{display:flex}
     .stage.hide{display:none}
-    .p-meta{font-size:9.5px;gap:2px 10px}
+    /* ВКЛАДКИ ВТОРОЙ СТРОКОЙ. Владелец 04.09: «съехало меню из-за появления ссылки на
+       проект, надо второй строкой». В шапке слева стоят логотип, гамбургер от общего меню
+       сайта и ночной режим — на 375 пикселях им остаётся полторы сотни, и семь вкладок
+       уезжали в горизонтальную прокрутку: восемьсот пикселей в окне на сто сорок девять.
+       Теперь шапка переносится, вкладки занимают всю ширину отдельной строкой. */
+    .top-bar{flex-wrap:wrap;height:auto;row-gap:4px;padding-bottom:2px}
+    /* Колонок на телефоне нет — отступ под них снимаем; строка обновлений становится
+       отдельной строкой шапки, ей там свободно (владелец 04.09). */
+    .tabs{width:100%;margin-inline-start:0}
+    .p-meta{max-width:100%;flex:1 0 100%;order:8;justify-content:flex-start;margin-inline-start:0}
+    /* На телефоне подвал берёт столько, сколько нужно ему, а сцена ужимается: жёсткая
+       высота подвала обрезала строку обновлений, а она последняя и потому первой уходила
+       за экран. */
+    /* на телефоне порядок тот же, отдельных правил раскладке не нужно */
+    .dock{height:auto;min-height:0;padding:6px 10px}
+    .p-meta{font-size:9.5px;gap:2px 10px;flex-wrap:wrap;justify-content:flex-start}
     .p-title{display:none}
     .stage-head{flex-direction:column;align-items:flex-start;gap:6px}
     .stage-h{font-size:15px;flex:none;width:100%}
-    .stage-body{overflow:auto}
+    /* НИЧЕГО НЕ ЕЗДИТ ВБОК. Сцена прокручивалась горизонтально (518 пикселей в 366), потому
+       что ряд кирпичей стоял в две колонки и не влезал. По вертикали листать нормально, а
+       вбок — нет: половина числа за краем экрана читается как ошибка вёрстки. */
+    .stage-body{overflow-y:auto;overflow-x:hidden}
+    .stage-body > *{max-width:100%;min-width:0}
     .plot{min-height:220px}
-    .kpis{grid-template-columns:1fr 1fr}
-    .tip{display:none}                 /* на касании карточка у пальца мешает — работает подвал */
+    .kpis{grid-template-columns:1fr}
+    .kpi{min-width:0}
+    table.regions{table-layout:auto}
+    table.regions th.act,table.regions td.act{width:auto;max-width:none}
+    /* На касании карточка теперь и есть единственный способ прочитать пояснение: подвал
+       больше ничего не показывает, а карточка прикалывается по тапу и закрывается крестиком. */
+    .tip{max-width:min(88vw,340px)}
+  }
+  /* Совсем узкие экраны: подписи и таблицы ужимаются ещё на шаг, но по-прежнему целиком. */
+  @media (max-width:430px){
+    .logo{font-size:12.5px;padding-inline-start:2px}
+    .tab{font-size:11px;padding:4px 9px}
+    .seg button{font-size:10.5px}
+    table.e{font-size:11px}
+    table.e td, table.e th{padding:4px 5px}
+    .dock .dtxt{-webkit-line-clamp:4}
   }
   @media (max-width:560px){
     .panel{padding:6px 7px calc(6px + env(safe-area-inset-bottom))}
@@ -306,13 +537,21 @@
 <div class="panel" id="panel">
   <header class="top-bar" id="bar">
     <a class="logo" href="/">bridge42worlds</a>
-    <div class="p-title" id="ptitle">El Niño <b>2026–2027</b></div>
-    <nav class="tabs" id="tabs"></nav>
-    <button type="button" class="tab delta" id="deltaBtn">now</button>
+    <!-- Ночной режим стоит СРАЗУ ПОСЛЕ ЛОГОТИПА, и это не случайно: sitenav.js вставляет
+         гамбургер в logo.nextSibling, то есть между ними, и в готовой шапке порядок
+         получается логотип → гамбургер → ночной режим (владелец 04.09). -->
     <button type="button" class="theme-toggle" id="theme-toggle" title="Theme">◐</button>
+    <div class="p-title" id="ptitle">El Niño <b>2026–2027</b></div>
+    <!-- Даты источников стоят в первой строке справа: там для них есть место, а вниз за
+         ними больше ходить не надо. Порядок в потоке важен: они ДО вкладок, иначе окажутся
+         на второй строке вместе с ними. -->
+    <div class="p-meta" id="pmeta"></div>
+    <nav class="tabs" id="tabs"></nav>
+    <!-- В ШАПКЕ БОЛЬШЕ НИЧЕГО. Строка обновлений стояла здесь справа и при узком окне
+         наезжала на вкладки, физически перекрывая «Regions & food» и ряд подвкладок —
+         кнопки переставали нажиматься (владелец 04.09). Она уехала под подвал: там ей
+         самое место, потому что дата и источник каждого числа и так живут в подсказках. -->
   </header>
-
-  <div class="p-meta" id="pmeta"></div>
 
   <div class="mid" id="mid">
     <div class="col rail" id="railL"></div>
@@ -320,9 +559,12 @@
     <div class="col rail" id="railR"></div>
   </div>
 
-  <footer class="dock" id="dock">
-    <div class="dtxt" id="dtxt"><span class="hint">Point at anything underlined — definition, source and date appear here.</span></div>
-  </footer>
+  <!-- Строка обновлений живёт ВНУТРИ подвала, а не отдельной строкой сетки: как отдельная
+       она то забирала чужую строку, то налезала на подвал, стоило любой вставке появиться
+       в панели. Внутри — одна коробка, и наложиться ей не на что. -->
+  <!-- Подвала больше нет вовсе: подсказка живёт у курсора, а даты источников уехали
+       наверх, вровень по правому краю шапки (владелец 04.09). Ни одной строки, ради которой
+       надо смотреть вниз, на панели не осталось. -->
 </div>
 <div class="tip" id="tip"></div>
 
@@ -346,7 +588,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=12"></script>
-<script src="/js/sitenav.js?v=4ec05c36e3"></script>
+<script src="/js/enso.js?v=56039919bb"></script>
+<script src="/js/sitenav.js?v=cf6fd79772"></script>
 </body>
 </html>

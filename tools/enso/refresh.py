@@ -127,6 +127,18 @@ def main(fetch=True, llm=True):
         cur["alerts"].append({"level": "WATCH", "kind": "food", "title": "Price alerts failed",
                               "detail": str(e)[:160]})
     try:
+        import air as AR2
+        cur["alerts"] += AR2.alerts(cur.get("air"))
+    except Exception as e:                                       # noqa: BLE001
+        cur["alerts"].append({"level": "WATCH", "kind": "food", "title": "Commodity alerts failed",
+                              "detail": str(e)[:160]})
+    # Новые блоки (экспертиза 04.09): под поверхностью, ветер, Залив — их тревоги тем же списком.
+    try:
+        cur["alerts"] += new_block_alerts(cur)
+    except Exception as e:                                       # noqa: BLE001
+        cur["alerts"].append({"level": "WATCH", "kind": "climate", "title": "New-block alerts failed",
+                              "detail": str(e)[:160]})
+    try:
         import models as MD2
         iri = cur.get("iri") if isinstance(cur.get("iri"), dict) else {}
         cur["alerts"] += MD2.alerts(iri, iri.get("breakdown") or {})
@@ -154,6 +166,15 @@ def main(fetch=True, llm=True):
         json.dumps(cur, ensure_ascii=False, default=str), encoding="utf-8")
     (ROOT / "history.json").write_text(json.dumps(history(sorted(SNAP.glob("*.json"))), ensure_ascii=False),
                                        encoding="utf-8")
+    # ЖУРНАЛ ЗНАЧЕНИЙ — здесь же, а не отдельной командой. Панель показывает на каждом кирпиче
+    # «что изменилось с прошлого ЗНАЧЕНИЯ»; если журнал собирать руками, он однажды отстанет
+    # от снимков, и стрелки начнут врать молча. Собирается по всем снимкам, поэтому порядок
+    # важен: сначала записали свежий снимок, потом журнал.
+    try:
+        import journal as JR
+        JR.build()
+    except Exception as e:                                       # noqa: BLE001
+        print("  журнал значений не собрался:", str(e)[:160])
     stale = [k for k, v in cur["sources"].items() if not v["fresh"]]
     print("готово:", cur["stamp"], "| индекс риска", cur["risk_index"],
           "| рисков", len(cur["risks"]), "| несвежих источников", len(stale), stale or "")
@@ -170,6 +191,32 @@ def main(fetch=True, llm=True):
             print("  модель недоступна:", s["error"])
     return cur
 
+
+
+def new_block_alerts(cur):
+    """Сторож по новым рядам: всплеск ветра идёт сейчас; подповерхностная аномалия выше +5;
+    Залив выше порога стресса; хвост NRT разошёлся с climatereanalyzer сильнее 0.1."""
+    A = []
+    e = ((cur.get("wind") or {}).get("era5") or {})
+    if e.get("active"):
+        ev = e["events"][-1]
+        A.append({"level": "WATCH", "kind": "climate", "title": "A westerly wind burst is under way over the western Pacific",
+                  "detail": f"since {ev['start']}, {ev['days']} days, peak anomaly {ev['peak']} m/s against a threshold of {e.get('threshold')}; a burst launches a Kelvin wave that reaches the coast in two to three months"})
+    t = (cur.get("subsurface") or {}).get("tao") or {}
+    w = t.get("warmest") or {}
+    if w.get("value") is not None and w["value"] >= 5.0:
+        A.append({"level": "SHOUT" if w["value"] >= 8 else "WATCH", "kind": "climate",
+                  "title": f"Water {w['value']:+.1f} °C above normal at {w['depth']} m depth, {w['station']}",
+                  "detail": f"TAO mooring, five-day mean to {w.get('date')}: the warm layer that will surface is already measured"})
+    g = (cur.get("gulf") or {}).get("sea") or {}
+    if g.get("last_sst") is not None and g["last_sst"] >= 35.0:
+        A.append({"level": "WATCH", "kind": "climate", "title": f"The Gulf is at {g['last_sst']:.1f} °C, above the desalination stress line",
+                  "detail": f"box 24–30°N 48–56°E on {g.get('last_date')}, anomaly {g.get('last_anom'):+.2f} °C"})
+    ch = ((cur.get("oisst") or {}).get("check") or {}).get("nino34") or {}
+    if ch.get("offset") is not None and abs(ch["offset"]) >= 0.1:
+        A.append({"level": "WATCH", "kind": "data", "title": "Our Niño 3.4 box and climatereanalyzer disagree by more than 0.1 °C",
+                  "detail": f"mean offset {ch['offset']:+.3f} °C over {ch['n_days']} overlapping days (sd {ch['sd']}); the spliced tail carries this offset"})
+    return A
 
 
 def compact(d):

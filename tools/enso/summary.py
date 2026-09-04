@@ -99,7 +99,72 @@ def facts_from(cur):
                    "plain": r.get("plain")} for r in cur["risks"]],
         "what_changed": cur.get("diff", []),
         "IRI_forecast_models": _iri_facts(cur.get("iri")),
+        # Атмосфера, топливо и цены поимённо: без них модель писала сводку по одному океану
+        # и не могла сказать ни про сцепку, ни про запас тепла под поверхностью.
+        "atmosphere_and_fuel": _air_facts(cur.get("air")),
+        # Экспертиза 04.09: под поверхностью, ветер по дням, RONI, Залив, фон — без них модель
+        # не могла сказать ни про тепло на глубине, ни про всплески, ни про относительный индекс.
+        "subsurface_and_wind": _deep_facts(cur),
     }
+
+
+def _deep_facts(cur):
+    out = {}
+    t = ((cur.get("subsurface") or {}).get("tao") or {})
+    if t and not t.get("error"):
+        out["moorings"] = {"live": t.get("n_live"), "warmest_anomaly": t.get("warmest"),
+                           "thermocline_20C_depth_m": {"west": t.get("d20_west"), "east": t.get("d20_east")},
+                           "data_until": t.get("last_date")}
+    g = ((cur.get("subsurface") or {}).get("godas") or {})
+    if g and not g.get("error"):
+        hc = g.get("heat_content") or {}
+        out["reanalysis_section"] = {"month": g.get("month"), "max_anomaly": g.get("max_anom"),
+                                     "upper_300m_heat_index_c": (hc.get("values") or [None])[-1]}
+    e = ((cur.get("wind") or {}).get("era5") or {})
+    if e and not e.get("error"):
+        out["westerly_wind_bursts"] = {"events_last_120_days": e.get("events"), "active_now": e.get("active"),
+                                       "last_week_anomaly_ms": e.get("mean7"), "threshold_ms": e.get("threshold")}
+    m = cur.get("mjo") or {}
+    if m and not m.get("error"):
+        out["mjo"] = {"phase": (m.get("last") or {}).get("phase"), "amplitude": (m.get("last") or {}).get("amp"),
+                      "in_burst_window": m.get("burst_window")}
+    r = ((cur.get("oni") or {}).get("roni") or {})
+    if r and not r.get("error"):
+        out["RONI"] = {"last_season": r.get("last_season"), "value": r.get("last"), "oni_minus_roni": r.get("gap_last"),
+                       "analogues_same_season": r.get("analogs_same_season"), "event_peaks": r.get("analog_event_peak")}
+    gf = (cur.get("gulf") or {})
+    if gf and not gf.get("error"):
+        sea = gf.get("sea") or {}; kw = gf.get("kuwait") or {}
+        out["kuwait_and_gulf"] = {"gulf_sst": sea.get("last_sst"), "gulf_anomaly": sea.get("last_anom"),
+                                  "days_over_35C_of_120": sea.get("days_over_35"),
+                                  "kuwait_tmax_anomaly_30d": kw.get("tmax_anom_30d"), "hot_days_45C": kw.get("hot_days"),
+                                  "rain_since_1_sep_mm": kw.get("rain_season_mm")}
+    b = cur.get("background") or {}
+    if b and not b.get("error"):
+        out["background"] = {"ocean_heat_0_2000m": (b.get("ohc_2000") or {}).get("last"),
+                             "ohc_record": (b.get("ohc_2000") or {}).get("record"),
+                             "indian_ocean_dipole": (b.get("dmi") or {}).get("last"),
+                             "mei_v2": (b.get("mei") or {}).get("last")}
+    return out
+
+
+def _air_facts(A):
+    if not A or A.get("error"):
+        return {"no_data": (A or {}).get("error", "air block not loaded")}
+    C, F, L = A.get("coupling") or {}, A.get("fuel") or {}, A.get("layers") or {}
+    out = {
+        "coupling": {"verdict": C.get("verdict"), "signs_in_place": C.get("score"), "of": C.get("of"),
+                     "values_in_sigma": {p["key"]: p["value"] for p in C.get("parts", [])}},
+        "warm_water_volume": {"date": F.get("date"), "share_of_record_percent": F.get("share_of_record"),
+                              "peak_month": F.get("peak_date"), "months_since_peak": F.get("months_since_peak"),
+                              "leads_surface_by_months": (F.get("lead") or {}).get("lag"),
+                              "discharging": F.get("discharging")},
+        "satellite_layers": {x["key"]: {"tropics_c": x["tropics"], "lag_months": x["lag"], "r": x["r"]}
+                             for x in L.get("items", [])},
+    }
+    cm = (A.get("commodities") or {}).get("items") or []
+    out["commodity_prices_since_event_began"] = {c["name"]: c["since_onset_pct"] for c in cm[:6]}
+    return out
 
 
 def _iri_facts(iri):

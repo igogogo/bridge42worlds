@@ -158,7 +158,15 @@ def classify(iri, oni, observed_weekly):
         if below_now and cls != "broke":
             cls = "broke"
             since = since or (iri or {}).get("issued")
+        # Одного «ниже в большинстве выпусков» мало: модель могла догнать. Рядом с классом —
+        # ошибка двух последних проверяемых выпусков, с знаком и величиной (экспертиза 04.09).
+        last2 = [{"issue": e["issue"], "season": e["season"], "err": e["err"]} for e in short[-2:]]
+        trend = None
+        if len(last2) == 2:
+            trend = "catching up" if last2[1]["err"] > last2[0]["err"] + 0.1 else (
+                "falling further" if last2[1]["err"] < last2[0]["err"] - 0.1 else "steady")
         classes[name] = {"cls": cls, "since": since, "errors": short[-8:], "below_now": below_now,
+                         "last2": last2, "trend": trend,
                          "n_checked": len(short),
                          "mean_err": round(sum(e["err"] for e in short) / len(short), 2) if short else None,
                          "section": (cur_m or {}).get("section")}
@@ -254,3 +262,137 @@ def alerts(iri, bd):
             f"weekly Niño 3.4 {ao['observed_weekly']:+.1f} °C against a model maximum of {ao['max']:+.2f} "
             f"for {ao['season']} — read the winter numbers of the plume as a lower bound")
     return A
+
+
+# ---------------------------------------------------------------- живые модели
+#
+# Владелец 04.09: «мы показываем средние по моделям — а те, что поломались, нам не нужны;
+# либо у них веса очень слабые. Нам нужны модели, которые шли с нами вместе, по ним и
+# рисуем среднее. А то мы показываем, что всё хорошо, а это не так».
+#
+# ПОЧЕМУ ЭТО НЕ ПРИДИРКА. Опубликованное сводное по плюму — среднее по ВСЕМ моделям, включая
+# те, что уже показали заниженный прогноз на прожитых сезонах. Одиннадцать из двадцати шести
+# сломаны, шесть отстают: их числа тянут сводное вниз, и панель успокаивает там, где данные
+# тревожат. Здесь среднее взвешенное: сломанная модель не участвует вовсе, отстающая входит
+# с малым весом, непроверенная — с половинным (у неё нет истории, а не хорошая история).
+WEIGHTS = {"ok": 1.0, "lag": 0.4, "none": 0.6, "broke": 0.0}
+
+
+def _pct(sorted_vals, p):
+    """Процентиль по готовому отсортированному списку, линейной интерполяцией."""
+    if not sorted_vals:
+        return None
+    if len(sorted_vals) == 1:
+        return sorted_vals[0]
+    i = (len(sorted_vals) - 1) * p / 100.0
+    lo, hi = int(i), min(int(i) + 1, len(sorted_vals) - 1)
+    return sorted_vals[lo] + (sorted_vals[hi] - sorted_vals[lo]) * (i - lo)
+
+
+def live(iri, classes):
+    """Сводное и разброс ПО ЖИВЫМ моделям, по каждому сезону выпуска."""
+    seasons = iri.get("seasons") or []
+    rows = []
+    for nm, m in (iri.get("models") or {}).items():
+        if m.get("section") not in ("dyn", "stat") or not m.get("values"):
+            continue
+        cls = (classes.get(nm) or {}).get("cls") or "none"
+        rows.append((nm, cls, WEIGHTS.get(cls, 0.6), m["values"]))
+    mean, rms, lo, hi, n = [], [], [], [], []
+    for i in range(len(seasons)):
+        vals = [(r[3][i], r[2]) for r in rows
+                if r[2] > 0 and i < len(r[3]) and r[3][i] is not None]
+        if not vals:
+            mean.append(None); rms.append(None); lo.append(None); hi.append(None); n.append(0)
+            continue
+        wsum = sum(w for _, w in vals)
+        mean.append(round(sum(v * w for v, w in vals) / wsum, 2))
+        # СРЕДНЕКВАДРАТИЧНАЯ, А НЕ СРЕДНЯЯ. Владелец 04.09: «лучше среднеквадратичную брать,
+        # чем среднюю: если большая какая-то — это очень важно, это не среднее». Обычное
+        # среднее гасит одиночный сильный прогноз, а нас как раз он и должен тревожить:
+        # событие уже идёт по верхнему краю пучка. Квадрат даёт большим значениям больший
+        # вес, знак берём у взвешенного среднего — иначе при разнознаковых прогнозах
+        # (какими они бывают в конце ряда) корень вернул бы бессмысленный плюс.
+        sq = (sum(v * v * w for v, w in vals) / wsum) ** .5
+        rms.append(round(sq if mean[-1] >= 0 else -sq, 2))
+        xs = sorted(v for v, _ in vals)
+        lo.append(round(_pct(xs, 10), 2))
+        hi.append(round(_pct(xs, 90), 2))
+        n.append(len(vals))
+    used = [r for r in rows if r[2] > 0]
+    out_of = [{"name": r[0], "cls": r[1], "since": (classes.get(r[0]) or {}).get("since")}
+              for r in rows if r[2] == 0]
+    return {"seasons": seasons, "mean": mean, "rms": rms, "lo": lo, "hi": hi, "n": n,
+            "n_live": len(used), "n_all": len(rows),
+            "weights": WEIGHTS, "excluded": sorted(out_of, key=lambda x: x["name"]),
+            "by_class": {c: sum(1 for r in rows if r[1] == c) for c in ("ok", "lag", "none", "broke")},
+            "note": ("Root-mean-square over the models that kept up with reality (the mean is kept "
+                     "alongside for reference): squaring gives the strong forecasts the weight they "
+                     "deserve, because a single model calling a much larger peak is news, not noise. "
+                     "Weighted mean over the models that kept up with reality: broken ones are out "
+                     "entirely, chronic laggards enter with a small weight, unverified ones with half. "
+                     "The published plume average counts all of them equally.")}
+
+
+def _monthly_range(td_fi, live_stats, i_fi):
+    """Какой месячной аномалии требуют края пучка живых моделей на ближайшем прогнозном сезоне.
+
+    Модель даёт СРЕДНЕЕ за три месяца. Если часть месяцев уже измерена, то из значения модели
+    вычитается измеренное, и остаток делится на число неизмеренных месяцев — получается,
+    какой должна быть каждая оставшаяся неделя, чтобы модель оказалась права. Этот же коридор
+    и переносим на сезоны, которых модели не публикуют (JJA, JAS): у них неизвестен ровно
+    один-два месяца, и брать их не из воздуха, а из того же пучка — честнее всего.
+    """
+    lo = (live_stats.get("lo") or [])[i_fi] if i_fi is not None else None
+    hi = (live_stats.get("hi") or [])[i_fi] if i_fi is not None else None
+    if lo is None or hi is None or not td_fi:
+        return None
+    done, val = td_fi["months_done"], td_fi["value"]
+    u = 3 - done
+    if u <= 0:
+        return None
+    s = val * done
+    return ((3 * lo - s) / u, (3 * hi - s) / u)
+
+
+def position(iri, td_list, live_stats, month_range=None):
+    """Где мы САМИ стоим на шкале плюма — точкой там, где сезон прожит, полосой там, где нет.
+
+    Владелец 04.09: «ASO — это среднее, а сейчас начало сентября; сравнивать надо с прожитым
+    сезоном, и не точкой, а диапазоном — шире, по разбросу моделей».
+
+    Прожитая часть сезона — это факт: среднее уже измеренных месяцев. Оставшиеся месяцы
+    неизвестны, и границы для них берём из разброса ЖИВЫХ моделей на этот же сезон (p10…p90):
+    нижняя граница — если остаток пойдёт по нижнему краю пучка, верхняя — по верхнему.
+    Поэтому у сезона с одним прожитым месяцем полоса шире, чем у сезона с двумя, а у
+    полностью прожитого её нет вовсе.
+    """
+    seasons = iri.get("seasons") or []
+    out = []
+    for td in td_list or []:
+        if not td:
+            continue
+        # Сезон, прожитый нами, может вообще не быть столбцом плюма (JJA в августовском
+        # выпуске): рисуем его слева от прогнозной части, поэтому индекс тут не обязателен.
+        i = seasons.index(td["season"]) if td["season"] in seasons else None
+        done, val = td["months_done"], td["value"]
+        rec = {"season": td["season"], "i": i, "months_done": done, "months": 3,
+               "todate": val, "complete": done >= 3}
+        if done >= 3:
+            rec["lo"] = rec["hi"] = val
+        else:
+            s = val * done
+            mlo = (live_stats.get("lo") or [None] * len(seasons))[i] if i is not None else None
+            mhi = (live_stats.get("hi") or [None] * len(seasons))[i] if i is not None else None
+            if mlo is None or mhi is None:
+                # Сезона нет в прогнозах моделей (JJA, JAS: плюм начинает с ASO) — берём
+                # коридор для оставшихся месяцев с ближайшего сезона, который они дают.
+                if not month_range:
+                    continue
+                mlo, mhi = month_range
+                rec["rest_via"] = "the nearest forecast season"
+            rec["lo"] = round((s + (3 - done) * mlo) / 3, 2)
+            rec["hi"] = round((s + (3 - done) * mhi) / 3, 2)
+            rec["rest_from"] = [round(mlo, 2), round(mhi, 2)]
+        out.append(rec)
+    return out

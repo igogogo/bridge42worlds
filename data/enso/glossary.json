@@ -1,179 +1,329 @@
 {
-  "_": "Glossary of the El Niño dashboard. Each entry: a one- or two-sentence definition → why it matters here → source. Keys match data-term in enso.html and js/enso.js. English only (owner, 2026-09-03).",
-  "en": {
-    "elnino": {
-      "name": "El Niño",
-      "def": "A periodic warming of the water in the central and eastern tropical Pacific. It comes every 2 to 7 years, lasts about a year, and usually peaks in the northern-hemisphere winter.",
-      "why": "It changes the weather on half the planet: droughts in Australia, Indonesia and southern Africa, downpours in Peru and East Africa, a weak monsoon in India.",
-      "src": "NOAA Climate Prediction Center, ENSO FAQ"
-    },
-    "lanina": {
-      "name": "La Niña",
-      "def": "The opposite phase: water in the same patches is colder than normal. The weather effects are roughly mirrored.",
-      "why": "A strong El Niño is often followed by La Niña; that is the next story the watchdog will follow once the event turns.",
-      "src": "NOAA CPC"
-    },
-    "nino34": {
-      "name": "Niño 3.4",
-      "def": "A patch of the Pacific between 5°S and 5°N, 170°W to 120°W. The temperature anomaly of its water is the main measure of El Niño.",
-      "why": "All thresholds, weak / moderate / strong / very strong, are set on Niño 3.4: +0.5 / +1.0 / +1.5 / +2.0 °C.",
-      "src": "NOAA CPC, weekly indices wksst9120"
-    },
-    "nino12": {
-      "name": "Niño 1+2",
-      "def": "The coastal patch off Peru and Ecuador (0 to 10°S, 90 to 80°W). The easternmost of the four.",
-      "why": "It warms first in an eastern-type event. When Niño 1+2 cools fast while Niño 3.4 is still warm, the coastal phase is ending.",
-      "src": "NOAA CPC"
-    },
-    "nino3": {
-      "name": "Niño 3",
-      "def": "The eastern part of the equatorial band, 150°W to 90°W.",
-      "why": "Niño 3 is right now above anything measured since 1981, and that is what raised the alert.",
-      "src": "NOAA CPC"
-    },
-    "nino4": {
-      "name": "Niño 4",
-      "def": "The central-western part, 160°E to 150°W.",
-      "why": "The difference “Niño 1+2 minus Niño 4” shows the type of the event: eastern (warm edge by the Americas) or central.",
-      "src": "NOAA CPC"
-    },
-    "oni": {
-      "name": "ONI",
-      "def": "The Oceanic Niño Index, NOAA's official measure: the Niño 3.4 anomaly averaged over three consecutive months, from ERSST monthly data.",
-      "why": "An event is officially very strong when ONI ≥ +2.0. A three-month mean is always lower and later than the weekly value, so ONI catches up.",
-      "src": "NOAA CPC, oni.ascii.txt"
-    },
-    "soi": {
-      "name": "SOI",
-      "def": "The Southern Oscillation Index: the pressure difference between Tahiti and Darwin. The atmospheric side of the same phenomenon.",
-      "why": "A negative SOI confirms El Niño from the atmosphere; if the ocean is warm but SOI does not fall, the event has not “caught”.",
-      "src": "NOAA CPC, data/indices/soi"
-    },
-    "type": {
-      "name": "Eastern and central type",
-      "def": "Eastern (canonical): the warmest water is off the coast of South America. Central (Modoki): the focus is shifted towards the date line.",
-      "why": "Their consequences differ: the eastern type hits Peru and Ecuador harder with rain and gives the more classic droughts in Australia and Indonesia.",
-      "src": "Ashok et al., 2007; NOAA CPC"
-    },
-    "anomaly": {
-      "name": "Anomaly and the 1991–2020 climatology",
-      "def": "An anomaly is the departure from the norm for the same day of the year. The norm (climatology) is the 1991–2020 mean, taken from the source files themselves.",
-      "why": "“+2.6 °C” here always means “2.6 degrees warmer than usual for this date”, not an absolute temperature.",
-      "src": "climatereanalyzer.org, climatology fields in the JSON"
-    },
-    "trend": {
-      "name": "Trend and “above trend”",
-      "def": "The ocean warms year on year. “Above trend” is the anomaly after subtracting the linear warming across years.",
-      "why": "Without this any recent year beats the old ones through warming rather than through the event. Every “this year against others” comparison is made above trend.",
-      "src": "computed in tools/enso/watch.py"
-    },
-    "rank": {
-      "name": "Rank",
-      "def": "The position of the current value among the same calendar days of all years in the series. “1 of 45” means above all of them.",
-      "why": "A rank is more honest than a mean: it says “this has not happened” without assumptions about the distribution.",
-      "src": "computed in tools/enso/watch.py"
-    },
-    "percentile": {
-      "name": "Percentile",
-      "def": "“98th percentile” means it happens in only 2 % of years at this time of year.",
-      "why": "Slope and noise are compared with the same windows of the same season, so a percentile means “unusual for this time of year”, not “unusual in general”.",
-      "src": "computed in tools/enso/watch.py"
-    },
-    "cusum": {
-      "name": "CUSUM",
-      "def": "A gauge that accumulates excess: every day the sum grows by how far the series is above the level at the start of the window, in units of the series' spread. Threshold 5.",
-      "why": "It catches “rose and stayed” rather than a spike. When CUSUM turns down, the regime is letting go earlier than a mean would show.",
-      "src": "Page, 1954; computed in tools/enso/watch.py, 180-day window"
-    },
-    "analog": {
-      "name": "Analogue forecast",
-      "def": "To today's level we add the change of every past year over the same two weeks. The result is a distribution of outcomes.",
-      "why": "No climate model: only “how the series moved at this time of year before”. Honest and explainable; horizon 14 days.",
-      "src": "computed in tools/enso/watch.py"
-    },
-    "p10p50p90": {
-      "name": "p10 / p50 / p90",
-      "def": "Three marks of a distribution: below p10 happens in 10 % of cases, p50 is the middle, above p90 in 10 %.",
-      "why": "Read it as “from … to …, most likely around p50”.",
-      "src": "computed in tools/enso/watch.py"
-    },
-    "plume": {
-      "name": "IRI model plume",
-      "def": "A digest of Niño 3.4 forecasts from two dozen centres worldwide for nine seasons ahead, published by IRI (Columbia University) around the 19th of every month.",
-      "why": "The only open place where the forecasts of all models stand side by side. We parse the SVG figure, accuracy ±0.05 °C.",
-      "src": "iri.columbia.edu, ENSO forecast plume"
-    },
-    "dynstat": {
-      "name": "Dynamical and statistical models",
-      "def": "Dynamical models compute the physics of ocean and atmosphere (ECMWF, NASA, UKMO…). Statistical ones look for patterns in past data, neural networks included.",
-      "why": "In strong events the statistical models usually fall behind first: their history simply contains no such levels.",
-      "src": "IRI, plume description"
-    },
-    "lead": {
-      "name": "Forecast lead",
-      "def": "How many months before the target season the forecast was made. Lead 1 is one month ahead, lead 6 half a year.",
-      "why": "A model that errs at lead 6 is normal; at lead 1 it is not. The “keeping up / lagging” assessment looks at leads 1 to 3.",
-      "src": "IRI"
-    },
-    "seasons": {
-      "name": "Three-letter seasons",
-      "def": "ASO is August-September-October, NDJ is November-December-January, and so on: three months by their first letters.",
-      "why": "Both ONI and the forecasts are computed on rolling three-month windows; that damps the monthly noise.",
-      "src": "NOAA CPC"
-    },
-    "teleconnection": {
-      "name": "Teleconnection",
-      "def": "A stable statistical link between the state of the Pacific and the weather in a distant region, through a rearrangement of the atmospheric circulation.",
-      "why": "Teleconnections are typical, not guaranteed: the page must say “usually”, never “will”.",
-      "src": "NOAA CPC, maps of typical impacts"
-    },
-    "importer": {
-      "name": "Net food importer",
-      "def": "A country that brings in more food than it sends out. Dependence is measured by the share of imports in grain consumption.",
-      "why": "For a net importer El Niño strikes not through its own harvest but through prices and availability on the world market.",
-      "src": "FAO, World Bank"
-    },
-    "fao": {
-      "name": "FAO Food Price Index",
-      "def": "A monthly index of world food prices (2014–16 = 100) and five groups: cereals, oils, meat, dairy, sugar.",
-      "why": "The only live food series available without registration. Lag: one month.",
-      "src": "fao.org, Food Price Index"
-    },
-    "riskindex": {
-      "name": "Risk index 0–100",
-      "def": "A saturating sum of risk levels 1 to 5: 100·(1 − exp(−Σ level^1.5 / 25)).",
-      "why": "It grows with the number and strength of risks and cannot exceed 100. This is our scale, not an official one.",
-      "src": "computed in tools/enso/watch.py"
-    },
-    "oisst": {
-      "name": "OISST v2.1",
-      "def": "NOAA's daily sea-surface temperature from satellites and buoys, since 1981, on a 0.25° grid.",
-      "why": "It lags by one to three weeks: the watchdog is blind on it for that long, and the NOAA weekly data closes the gap.",
-      "src": "climatereanalyzer.org → NOAA OISST"
-    },
-    "era5": {
-      "name": "ERA5",
-      "def": "The ECMWF reanalysis: air temperature at 2 m over land and ocean, since 1940.",
-      "why": "It gives “land+ocean”, what people feel as heat, as opposed to the temperature of the water.",
-      "src": "climatereanalyzer.org → ECMWF ERA5"
-    },
-    "weekly": {
-      "name": "NOAA weekly",
-      "def": "Anomalies of the four Niño regions, published every Wednesday for the previous week.",
-      "why": "Always fresher than the daily OISST; where they disagree, the page trusts the weekly and says so.",
-      "src": "NOAA CPC, wksst9120.for"
-    },
-    "shout": {
-      "name": "The turning-point watchdog",
-      "def": "A set of rules, not a model: above the historical maximum, a reversal of growth at a high level, a fall of 0.3 or more in two weeks, ONI crossing +2.0, reality above every model: SHOUT; everything else: WATCH.",
-      "why": "The rules are checkable: each compares a fresh number with the record of the series, the previous snapshot, or the same season in history. The model does not invent them.",
-      "src": "tools/enso/alerts.py"
-    },
-    "summary": {
-      "name": "Model summary",
-      "def": "DeepSeek receives only the digest of the block's facts, numbers, ranks and alerts, and answers in strict JSON. Not one number from outside.",
-      "why": "The summary is an interpretation, not a source: every number in it must be in the digest. Without a key the page shows a rule-based digest, marked as such.",
-      "src": "tools/enso/summary.py"
-    }
+ "_": "Glossary of the El Niño dashboard. Each entry: a one- or two-sentence definition → why it matters here → source. Keys match data-term in enso.html and js/enso.js. English only (owner, 2026-09-03).",
+ "en": {
+  "elnino": {
+   "name": "El Niño",
+   "def": "A periodic warming of the water in the central and eastern tropical Pacific. It comes every 2 to 7 years, lasts about a year, and usually peaks in the northern-hemisphere winter.",
+   "why": "It changes the weather on half the planet: droughts in Australia, Indonesia and southern Africa, downpours in Peru and East Africa, a weak monsoon in India.",
+   "src": "NOAA Climate Prediction Center, ENSO FAQ"
+  },
+  "lanina": {
+   "name": "La Niña",
+   "def": "The opposite phase: water in the same patches is colder than normal. The weather effects are roughly mirrored.",
+   "why": "A strong El Niño is often followed by La Niña; that is the next story the watchdog will follow once the event turns.",
+   "src": "NOAA CPC"
+  },
+  "nino34": {
+   "name": "Niño 3.4",
+   "def": "A patch of the Pacific between 5°S and 5°N, 170°W to 120°W. The temperature anomaly of its water is the main measure of El Niño.",
+   "why": "All thresholds, weak / moderate / strong / very strong, are set on Niño 3.4: +0.5 / +1.0 / +1.5 / +2.0 °C.",
+   "src": "NOAA CPC, weekly indices wksst9120"
+  },
+  "nino12": {
+   "name": "Niño 1+2",
+   "def": "The coastal patch off Peru and Ecuador (0 to 10°S, 90 to 80°W). The easternmost of the four.",
+   "why": "It warms first in an eastern-type event. When Niño 1+2 cools fast while Niño 3.4 is still warm, the coastal phase is ending.",
+   "src": "NOAA CPC"
+  },
+  "nino3": {
+   "name": "Niño 3",
+   "def": "The eastern part of the equatorial band, 150°W to 90°W.",
+   "why": "Niño 3 is right now above anything measured since 1981, and that is what raised the alert.",
+   "src": "NOAA CPC"
+  },
+  "nino4": {
+   "name": "Niño 4",
+   "def": "The central-western part, 160°E to 150°W.",
+   "why": "The difference “Niño 1+2 minus Niño 4” shows the type of the event: eastern (warm edge by the Americas) or central.",
+   "src": "NOAA CPC"
+  },
+  "oni": {
+   "name": "ONI",
+   "def": "The Oceanic Niño Index, NOAA's official measure: the Niño 3.4 anomaly averaged over three consecutive months, from ERSST monthly data.",
+   "why": "An event is officially very strong when ONI ≥ +2.0. A three-month mean is always lower and later than the weekly value, so ONI catches up.",
+   "src": "NOAA CPC, oni.ascii.txt"
+  },
+  "soi": {
+   "name": "SOI",
+   "def": "The Southern Oscillation Index: the pressure difference between Tahiti and Darwin. The atmospheric side of the same phenomenon.",
+   "why": "A negative SOI confirms El Niño from the atmosphere; if the ocean is warm but SOI does not fall, the event has not “caught”.",
+   "src": "NOAA CPC, data/indices/soi"
+  },
+  "type": {
+   "name": "Eastern and central type",
+   "def": "Eastern (canonical): the warmest water is off the coast of South America. Central (Modoki): the focus is shifted towards the date line.",
+   "why": "Their consequences differ: the eastern type hits Peru and Ecuador harder with rain and gives the more classic droughts in Australia and Indonesia.",
+   "src": "Ashok et al., 2007; NOAA CPC"
+  },
+  "anomaly": {
+   "name": "Anomaly and the 1991–2020 climatology",
+   "def": "An anomaly is the departure from the norm for the same day of the year. The norm (climatology) is the 1991–2020 mean, taken from the source files themselves.",
+   "why": "“+2.6 °C” here always means “2.6 degrees warmer than usual for this date”, not an absolute temperature.",
+   "src": "climatereanalyzer.org, climatology fields in the JSON"
+  },
+  "trend": {
+   "name": "Trend and “above trend”",
+   "def": "The ocean warms year on year. “Above trend” is the anomaly after subtracting the linear warming across years.",
+   "why": "Without this any recent year beats the old ones through warming rather than through the event. Every “this year against others” comparison is made above trend.",
+   "src": "computed in tools/enso/watch.py"
+  },
+  "rank": {
+   "name": "Rank",
+   "def": "The position of the current value among the same calendar days of all years in the series. “1 of 45” means above all of them.",
+   "why": "A rank is more honest than a mean: it says “this has not happened” without assumptions about the distribution.",
+   "src": "computed in tools/enso/watch.py"
+  },
+  "percentile": {
+   "name": "Percentile",
+   "def": "“98th percentile” means it happens in only 2 % of years at this time of year.",
+   "why": "Slope and noise are compared with the same windows of the same season, so a percentile means “unusual for this time of year”, not “unusual in general”.",
+   "src": "computed in tools/enso/watch.py"
+  },
+  "cusum": {
+   "name": "CUSUM",
+   "def": "A gauge that accumulates excess: every day the sum grows by how far the series is above the level at the start of the window, in units of the series' spread. Threshold 5.",
+   "why": "It catches “rose and stayed” rather than a spike. When CUSUM turns down, the regime is letting go earlier than a mean would show.",
+   "src": "Page, 1954; computed in tools/enso/watch.py, 180-day window"
+  },
+  "analog": {
+   "name": "Analogue forecast",
+   "def": "To today's level we add the change of every past year over the same two weeks. The result is a distribution of outcomes.",
+   "why": "No climate model: only “how the series moved at this time of year before”. Honest and explainable; horizon 14 days.",
+   "src": "computed in tools/enso/watch.py"
+  },
+  "p10p50p90": {
+   "name": "p10 / p50 / p90",
+   "def": "Three marks of a distribution: below p10 happens in 10 % of cases, p50 is the middle, above p90 in 10 %.",
+   "why": "Read it as “from … to …, most likely around p50”.",
+   "src": "computed in tools/enso/watch.py"
+  },
+  "plume": {
+   "name": "IRI model plume",
+   "def": "A digest of Niño 3.4 forecasts from two dozen centres worldwide for nine seasons ahead, published by IRI (Columbia University) around the 19th of every month.",
+   "why": "The only open place where the forecasts of all models stand side by side. We parse the SVG figure, accuracy ±0.05 °C.",
+   "src": "iri.columbia.edu, ENSO forecast plume"
+  },
+  "dynstat": {
+   "name": "Dynamical and statistical models",
+   "def": "Dynamical models compute the physics of ocean and atmosphere (ECMWF, NASA, UKMO…). Statistical ones look for patterns in past data, neural networks included.",
+   "why": "In strong events the statistical models usually fall behind first: their history simply contains no such levels.",
+   "src": "IRI, plume description"
+  },
+  "lead": {
+   "name": "Forecast lead",
+   "def": "How many months before the target season the forecast was made. Lead 1 is one month ahead, lead 6 half a year.",
+   "why": "A model that errs at lead 6 is normal; at lead 1 it is not. The “keeping up / lagging” assessment looks at leads 1 to 3.",
+   "src": "IRI"
+  },
+  "seasons": {
+   "name": "Three-letter seasons",
+   "def": "ASO is August-September-October, NDJ is November-December-January, and so on: three months by their first letters.",
+   "why": "Both ONI and the forecasts are computed on rolling three-month windows; that damps the monthly noise.",
+   "src": "NOAA CPC"
+  },
+  "teleconnection": {
+   "name": "Teleconnection",
+   "def": "A stable statistical link between the state of the Pacific and the weather in a distant region, through a rearrangement of the atmospheric circulation.",
+   "why": "Teleconnections are typical, not guaranteed: the page must say “usually”, never “will”.",
+   "src": "NOAA CPC, maps of typical impacts"
+  },
+  "importer": {
+   "name": "Net food importer",
+   "def": "A country that brings in more food than it sends out. Dependence is measured by the share of imports in grain consumption.",
+   "why": "For a net importer El Niño strikes not through its own harvest but through prices and availability on the world market.",
+   "src": "FAO, World Bank"
+  },
+  "fao": {
+   "name": "FAO Food Price Index",
+   "def": "A monthly index of world food prices (2014–16 = 100) and five groups: cereals, oils, meat, dairy, sugar.",
+   "why": "The only live food series available without registration. Lag: one month.",
+   "src": "fao.org, Food Price Index"
+  },
+  "riskindex": {
+   "name": "Risk index 0–100",
+   "def": "A saturating sum of risk levels 1 to 5: 100·(1 − exp(−Σ level^1.5 / 25)).",
+   "why": "It grows with the number and strength of risks and cannot exceed 100. This is our scale, not an official one.",
+   "src": "computed in tools/enso/watch.py"
+  },
+  "oisst": {
+   "name": "OISST v2.1",
+   "def": "NOAA's daily sea-surface temperature from satellites and buoys, since 1981, on a 0.25° grid.",
+   "why": "It lags by one to three weeks: the watchdog is blind on it for that long, and the NOAA weekly data closes the gap.",
+   "src": "climatereanalyzer.org → NOAA OISST"
+  },
+  "era5": {
+   "name": "ERA5",
+   "def": "The ECMWF reanalysis: air temperature at 2 m over land and ocean, since 1940.",
+   "why": "It gives “land+ocean”, what people feel as heat, as opposed to the temperature of the water.",
+   "src": "climatereanalyzer.org → ECMWF ERA5"
+  },
+  "weekly": {
+   "name": "NOAA weekly",
+   "def": "Anomalies of the four Niño regions, published every Wednesday for the previous week.",
+   "why": "Always fresher than the daily OISST; where they disagree, the page trusts the weekly and says so.",
+   "src": "NOAA CPC, wksst9120.for"
+  },
+  "shout": {
+   "name": "The turning-point watchdog",
+   "def": "A set of rules, not a model: above the historical maximum, a reversal of growth at a high level, a fall of 0.3 or more in two weeks, ONI crossing +2.0, reality above every model: SHOUT; everything else: WATCH.",
+   "why": "The rules are checkable: each compares a fresh number with the record of the series, the previous snapshot, or the same season in history. The model does not invent them.",
+   "src": "tools/enso/alerts.py"
+  },
+  "summary": {
+   "name": "Model summary",
+   "def": "DeepSeek receives only the digest of the block's facts, numbers, ranks and alerts, and answers in strict JSON. Not one number from outside.",
+   "why": "The summary is an interpretation, not a source: every number in it must be in the digest. Without a key the page shows a rule-based digest, marked as such.",
+   "src": "tools/enso/summary.py"
+  },
+  "wwv": {
+   "name": "Warm water volume",
+   "def": "The volume of water warmer than 20 °C in the upper 300 m of the equatorial Pacific, between 120°E and 80°W. Measured by moored buoys and floats, published monthly by NOAA PMEL.",
+   "why": "It is the fuel gauge of an El Nino: the heat piles up below the surface before it shows up on top. On our own series it leads the surface index by about half a year, so it answers the question the models can only guess at - whether the event still has something to grow on.",
+   "src": "NOAA PMEL / TAO-TRITON"
+  },
+  "t300": {
+   "name": "Upper 300 m temperature",
+   "def": "The average temperature anomaly of the top 300 metres of the equatorial Pacific. The same stored heat as the warm water volume, expressed as a temperature instead of a volume.",
+   "why": "Easier to compare with the surface numbers on the rest of this panel: both are in degrees.",
+   "src": "NOAA PMEL / TAO-TRITON"
+  },
+  "olr": {
+   "name": "Outgoing longwave radiation",
+   "def": "How much heat the planet radiates to space over a given patch of ocean, here 5N-5S, 160E-160W. Tall clouds are cold on top, so they radiate less: a NEGATIVE anomaly means the cloud tower has moved in.",
+   "why": "This is where the ocean hands the event over to the atmosphere. When convection shifts to the date line, the jet streams shift with it, and that is what carries El Nino to harvests on the other side of the planet.",
+   "src": "NOAA CPC"
+  },
+  "u850": {
+   "name": "Trade wind at 850 hPa",
+   "def": "The east-west wind at about 1.5 km altitude, averaged over 5N-5S in three longitude bands. Normally it blows from the east; a negative anomaly means the trades have weakened or reversed to westerlies.",
+   "why": "Weakened trades let the warm pool slide east and trigger the Kelvin waves that carry it. It is both a symptom of the event and one of its engines.",
+   "src": "NOAA CPC"
+  },
+  "coupling": {
+   "name": "Coupling",
+   "def": "Whether the atmosphere is answering the ocean. We count three signs: pressure across the Pacific (SOI), convection at the date line (OLR) and the trade winds - each in standard deviations, each called in place below -0.5.",
+   "why": "A warm patch of water with no atmospheric response stays a warm patch of water. The distant impacts - drought, floods, harvests - travel through the air, not through the sea.",
+   "src": "our own rule over NOAA CPC series"
+  },
+  "tlt": {
+   "name": "Satellite layers",
+   "def": "Temperature of four floors of the atmosphere measured from satellites: lower troposphere, mid troposphere, tropopause and lower stratosphere (UAH v6.1, monthly).",
+   "why": "The ocean heats the air with a delay, and the delay is measured here against our own Nino 3.4 series rather than taken from a textbook. It explains why the warmest months of the record tend to arrive after the peak of an El Nino, not during it.",
+   "src": "UAH, University of Alabama in Huntsville"
+  },
+  "pinksheet": {
+   "name": "Pink Sheet",
+   "def": "The World Bank's monthly table of world commodity prices - grains, oils, sugar, fertilisers, energy - free and without registration.",
+   "why": "The FAO index is one number for all food. El Nino does not hit food in general: it hits palm oil, rice and fishmeal by name, each through its own country and its own season.",
+   "src": "World Bank"
+  },
+  "cpc": {
+   "name": "NOAA CPC",
+   "def": "The Climate Prediction Center of the American weather service. It publishes the weekly Nino indices, the official ONI, the Southern Oscillation Index and the tropical wind and convection indices.",
+   "why": "Most of the numbers on this panel that are not our own arithmetic come from here. It is the reference source for ENSO: when forecasters argue, they argue about CPC data.",
+   "src": "NOAA Climate Prediction Center"
+  },
+  "pmel": {
+   "name": "NOAA PMEL / TAO",
+   "def": "The Pacific Marine Environmental Laboratory and its array of moored buoys along the equator, TAO/TRITON. It measures the ocean below the surface, down to 500 m.",
+   "why": "The subsurface is where an El Nino is charged before it shows on top. Without these buoys the warm water volume - the fuel gauge on this panel - would not exist.",
+   "src": "NOAA PMEL"
+  },
+  "uah": {
+   "name": "UAH satellite record",
+   "def": "The University of Alabama in Huntsville processes microwave sounder data into monthly temperatures of four atmospheric layers, from the lower troposphere to the lower stratosphere, since December 1978.",
+   "why": "Thermometers hang near the ground; satellites weigh the whole air column. That is how we see the event climb through the atmosphere with a delay of months.",
+   "src": "UAH v6.1"
+  },
+  "iri": {
+   "name": "IRI",
+   "def": "The International Research Institute for Climate and Society at Columbia University. Every month it collects the ENSO forecasts of two dozen modelling centres into one figure - the plume.",
+   "why": "It is the only place where all the models are shown side by side on one scale. We read that figure and check every model against what the ocean actually did.",
+   "src": "IRI/CCSR Columbia University"
+  },
+  "ersst": {
+   "name": "ERSST",
+   "def": "Extended Reconstructed Sea Surface Temperature - the monthly reconstruction of ocean temperature back to 1854, on which the official ONI is computed.",
+   "why": "It is what makes today comparable with 1877: the same method applied to ships' buckets, buoys and satellites alike.",
+   "src": "NOAA ERSST v6"
+  },
+  "giews": {
+   "name": "FAO GIEWS",
+   "def": "The Global Information and Early Warning System on food and agriculture at the FAO. It watches harvests and food prices country by country and issues alerts.",
+   "why": "The regional impacts on this panel lean on its alerts: it is the body that says out loud when a harvest is in trouble.",
+   "src": "FAO GIEWS"
+  },
+  "roni": {
+   "name": "RONI, the relative ONI",
+   "def": "The ONI minus the mean sea-surface anomaly of the whole tropics, 20°S–20°N, over the same three months. NOAA CPC has classified El Niño and La Niña by it since February 2026.",
+   "why": "When the whole tropical ocean is warm, the plain ONI overstates how hard the atmosphere is being pushed; the atmosphere answers to the contrast, not to the absolute. The gap between ONI and RONI is the warm background this event runs on.",
+   "src": "NOAA CPC, RONI.ascii.txt; L'Heureux et al. 2024"
+  },
+  "wwb": {
+   "name": "Westerly wind burst",
+   "def": "A week or so of westerly wind anomalies over the western equatorial Pacific, where the trade winds normally blow from the east. Here: at least two sigma above normal for five days or longer, averaged over six points between 130°E and 180°.",
+   "why": "A burst pushes warm water down and east as a Kelvin wave; two to three months later that water surfaces off South America and the event steps up. Bursts are how an El Niño is fed.",
+   "src": "ERA5 10 m wind via Open-Meteo; TAO moorings for the check"
+  },
+  "mjo": {
+   "name": "Madden–Julian Oscillation",
+   "def": "A pulse of cloud and wind that travels east around the tropics every 30–60 days. Its position is given as one of eight phases; its strength as an amplitude, with 1 the line between organised and not.",
+   "why": "Phases 6–8 put the pulse's westerlies over the western Pacific, and that is when wind bursts cluster. The MJO does not cause an El Niño, but it times the pushes.",
+   "src": "NOAA PSL OMI index (Kiladis et al. 2014)"
+  },
+  "iod": {
+   "name": "Indian Ocean Dipole",
+   "def": "The sea-surface temperature of the western tropical Indian Ocean minus the eastern; the Dipole Mode Index, DMI. Positive means a warm west and a cool east off Sumatra.",
+   "why": "A positive dipole with an El Niño is the classic recipe for a weak Indian monsoon and a dry southern Australian autumn, and for a wet East Africa. For the Gulf it is the second index after ENSO for winter rain.",
+   "src": "HadISST via NOAA PSL, monthly since 1870"
+  },
+  "d20": {
+   "name": "Depth of the 20 °C isotherm",
+   "def": "How deep you have to go before the water is colder than 20 °C. A stand-in for the thermocline, the boundary between the warm surface layer and the cold deep.",
+   "why": "It needs no climatology: in the eastern Pacific it is normally shallow, and when the warm layer arrives with a Kelvin wave it deepens by tens of metres. That is the event seen from below.",
+   "src": "TAO/TRITON moorings, our interpolation"
+  },
+  "tao": {
+   "name": "TAO/TRITON moorings",
+   "def": "A line of buoys across the equatorial Pacific, run by NOAA PMEL and JAMSTEC, measuring temperature at a dozen depths, wind and currents every day since the 1980s.",
+   "why": "They are the raw measurement under the surface: satellites see the skin, the moorings see the heat that has not surfaced yet. Each mooring's anomaly here is against its own thirty-year record.",
+   "src": "NOAA PMEL via CoastWatch ERDDAP"
+  },
+  "godas": {
+   "name": "GODAS",
+   "def": "NCEP's Global Ocean Data Assimilation System: a reanalysis that blends moorings, floats and satellites into a continuous three-dimensional field of the ocean, monthly, on a 1° by ⅓° grid with 40 depth levels.",
+   "why": "It fills the gaps between the moorings and gives the equatorial section as one picture. It lags about six weeks and smooths extremes; the moorings are the check on it.",
+   "src": "NCEP via NOAA PSL OPeNDAP"
+  },
+  "ohc": {
+   "name": "Ocean heat content",
+   "def": "The heat stored in the upper ocean, 0–700 m or 0–2000 m, as an anomaly from the 1955–2006 mean, in units of 10²² joules. NOAA NCEI computes it from Argo floats and ship data every three months.",
+   "why": "It is the reservoir the event draws on. A record reservoir means the statistical models, trained on a cooler ocean, are reading a different system than the one they learned.",
+   "src": "NOAA NCEI, 3-monthly"
+  },
+  "eei": {
+   "name": "Earth's energy imbalance",
+   "def": "The difference between the sunlight the planet absorbs and the heat it radiates back, measured from satellites (CERES). Positive means the planet is gaining heat.",
+   "why": "It more than doubled in two decades and was at a record in 2025 — about twice what the CMIP6 models expected. Quoted from the literature here, not measured by us: the CERES series sits behind an ordering tool.",
+   "src": "Mauritsen et al., AGU Advances 2025; NASA CERES"
+  },
+  "mei": {
+   "name": "Multivariate ENSO Index",
+   "def": "One index built from five fields together: sea-level pressure, surface wind, sea and air temperature, and cloudiness over the tropical Pacific. Bimonthly, in standard deviations.",
+   "why": "An independent check on our three-sign coupling score: if MEI is high the ocean and the atmosphere are moving together, whatever any single index says.",
+   "src": "NOAA PSL, MEI v2"
+  },
+  "nrt": {
+   "name": "OISST NRT",
+   "def": "The preliminary version of NOAA's daily quarter-degree sea-surface temperature grid, available one day behind; the final version follows about two weeks later and revises the last days by a few hundredths.",
+   "why": "It is why the daily Niño boxes on this panel are one day old rather than three weeks. The spliced days are marked preliminary and re-pulled every update until the final values arrive.",
+   "src": "NOAA NCEI via CoastWatch ERDDAP"
+  },
+  "gulfbox": {
+   "name": "Persian Gulf box",
+   "def": "The sea between 24–30°N and 48–56°E on the same NOAA grid, averaged over sea cells only, with its own 1991–2020 climatology.",
+   "why": "Above about 35 °C desalination intakes, coral and fisheries are under stress; the Gulf is shallow and heats fast. It is the one El Niño-adjacent number on this panel that is measured at Kuwait's coast.",
+   "src": "NOAA OISST NRT via ERDDAP, our box mean"
   }
+ }
 }

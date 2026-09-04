@@ -1,0 +1,607 @@
+{
+ "_": "Справочник цепочки данных панели El Niño: источники → сборщики → что считаем сами → куда уходит. Читает js/enso.js (вкладка Data chain). Даты свежести подставляются из latest.json и journal.json на лету; здесь только описания. Пишется руками, по-английски (панель английская). Владелец 04.09 (ночь): «планшет описания потоков данных: источники со ссылками и подсказкой, когда последний раз обновлялся; уровень наших состояний, рисков, KPI — всё, что считаем сами, с пояснениями».",
+ "layers": [
+  {
+   "id": "src",
+   "title": "Sources",
+   "note": "Open, machine-readable, pulled directly. A green dot means the source answered on the last update; the date is when its data last changed, not when we asked."
+  },
+  {
+   "id": "collect",
+   "title": "Collectors",
+   "note": "One Python module per family of sources. Raw copies are kept verbatim with their date; climatologies are built once and cached."
+  },
+  {
+   "id": "state",
+   "title": "What we compute",
+   "note": "Derived states, indices and rules. Each carries the date of the data it was computed from."
+  },
+  {
+   "id": "out",
+   "title": "Where it goes",
+   "note": "Files the panel reads, the verdict, the journal, the links to parsed papers, and the site page itself."
+  }
+ ],
+ "nodes": [
+  {
+   "id": "s_cr",
+   "layer": "src",
+   "name": "climatereanalyzer.org",
+   "sub": "OISST daily Niño 3.4 & world ocean, ERA5 2 m land+ocean, since 1982",
+   "cadence": "daily, 1–3 weeks behind",
+   "url": "https://climatereanalyzer.org/clim/sst_daily/",
+   "src_keys": [
+    "sst_nino34",
+    "sst_world",
+    "t2_world"
+   ],
+   "jkey": "n34_daily",
+   "def": "The long daily history the records, CUSUM and analogues are computed on. Its last three weeks are now replaced by the NOAA grid directly.",
+   "why": "Only source of the full 1982–today daily series without building it ourselves."
+  },
+  {
+   "id": "s_nrt",
+   "layer": "src",
+   "name": "NOAA OISST NRT via ERDDAP",
+   "sub": "quarter-degree SST grid, preliminary, one day behind",
+   "cadence": "daily, −1 d",
+   "url": "https://coastwatch.pfeg.noaa.gov/erddap/griddap/ncdcOisst21NrtAgg_LonPM180.html",
+   "live": "oisst_nino34",
+   "def": "Box means for Niño 1+2, 3, 3.4, 4, the Persian Gulf and the world ocean, computed by us on the grid with cos(latitude) weights.",
+   "why": "Takes the panel from three weeks behind to one day behind; the final grid revises the last days by hundredths."
+  },
+  {
+   "id": "s_wk",
+   "layer": "src",
+   "name": "NOAA CPC weekly Niño indices",
+   "sub": "wksst9120.for",
+   "cadence": "weekly, Mondays",
+   "url": "https://www.cpc.ncep.noaa.gov/data/indices/wksst9120.for",
+   "src_keys": [
+    "noaa_weekly"
+   ],
+   "jkey": "n34_weekly",
+   "def": "Niño 1+2, 3, 3.4, 4 weekly anomalies against 1991–2020, since 1990.",
+   "why": "The reference the models are judged against; fresher than the daily final grid."
+  },
+  {
+   "id": "s_oni",
+   "layer": "src",
+   "name": "NOAA CPC ONI and RONI",
+   "sub": "oni.ascii.txt, RONI.ascii.txt",
+   "cadence": "monthly",
+   "url": "https://www.cpc.ncep.noaa.gov/data/indices/",
+   "src_keys": [
+    "oni",
+    "roni"
+   ],
+   "jkey": "oni",
+   "def": "The official three-month index since 1950 and its relative version, which subtracts the tropical mean.",
+   "why": "ONI classifies the event; RONI is what NOAA uses since February 2026 and what makes the comparison across decades fair."
+  },
+  {
+   "id": "s_psl",
+   "layer": "src",
+   "name": "NOAA PSL Niño 3.4 monthly (ERSST)",
+   "sub": "nina34.anom.data",
+   "cadence": "monthly",
+   "url": "https://psl.noaa.gov/data/correlation/nina34.anom.data",
+   "src_keys": [
+    "psl_nino34_monthly"
+   ],
+   "def": "Monthly Niño 3.4 anomaly since 1948.",
+   "why": "Long enough to measure the lead of the warm water volume and the lag of the atmosphere by trying every shift."
+  },
+  {
+   "id": "s_iri",
+   "layer": "src",
+   "name": "IRI / CPC model plume",
+   "sub": "figure read by our parser, three issues kept",
+   "cadence": "monthly, ~19th",
+   "url": "https://iri.columbia.edu/our-expertise/climate/forecasts/enso/current/",
+   "live": "iri",
+   "def": "Two dozen dynamical and statistical models, their seasonal Niño 3.4 forecasts.",
+   "why": "The only place the forecasts sit side by side; a change of figure layout breaks the parser loudly, on purpose."
+  },
+  {
+   "id": "s_cpc",
+   "layer": "src",
+   "name": "NOAA CPC atmospheric indices",
+   "sub": "SOI, OLR, 850 hPa wind west / centre / east",
+   "cadence": "monthly",
+   "url": "https://www.cpc.ncep.noaa.gov/data/indices/",
+   "src_keys": [
+    "soi",
+    "olr",
+    "u850_west",
+    "u850_centre",
+    "u850_east"
+   ],
+   "jkey": "soi",
+   "def": "Standardised monthly anomalies of pressure, convection and trade wind.",
+   "why": "Whether the atmosphere is answering the ocean: the coupling score is three of these."
+  },
+  {
+   "id": "s_pmel",
+   "layer": "src",
+   "name": "NOAA PMEL warm water volume",
+   "sub": "wwv.dat, t300.dat",
+   "cadence": "monthly, ~10th",
+   "url": "https://www.pmel.noaa.gov/tao/wwv/data/",
+   "src_keys": [
+    "wwv",
+    "t300"
+   ],
+   "jkey": "wwv",
+   "def": "Volume of water warmer than 20 °C in the upper 300 m of the equatorial Pacific, since 1980.",
+   "why": "The fuel gauge: it leads the surface by about half a year on our own series."
+  },
+  {
+   "id": "s_tao",
+   "layer": "src",
+   "name": "TAO/TRITON moorings via ERDDAP",
+   "sub": "daily temperature by depth and surface wind, eight equatorial moorings",
+   "cadence": "daily, −2 d",
+   "url": "https://coastwatch.pfeg.noaa.gov/erddap/tabledap/pmelTaoDyT.html",
+   "live": "tao",
+   "def": "The raw measurement under the surface: a dozen depths every day since the 1990s. No currents in 2026.",
+   "why": "The heat that has not surfaced yet, measured directly; the thermocline depth needs no climatology."
+  },
+  {
+   "id": "s_godas",
+   "layer": "src",
+   "name": "GODAS reanalysis via PSL OPeNDAP",
+   "sub": "potential temperature, 1°×⅓°, 40 levels, monthly",
+   "cadence": "monthly, ~6 weeks behind",
+   "url": "https://psl.noaa.gov/data/gridded/data.godas.html",
+   "live": "godas",
+   "def": "A model that assimilates moorings, floats and satellites into one continuous field.",
+   "why": "Fills the gaps between moorings; gives the CPC upper-ocean heat content index on our climatology."
+  },
+  {
+   "id": "s_era5",
+   "layer": "src",
+   "name": "ERA5 10 m wind via Open-Meteo",
+   "sub": "hourly at six equatorial points 130°E–180°",
+   "cadence": "daily, −1 d",
+   "url": "https://open-meteo.com/en/docs/historical-weather-api",
+   "live": "wind",
+   "def": "Zonal wind at the surface, daily means from hourly values; 850 hPa is not offered.",
+   "why": "Westerly wind bursts feed an El Niño; NCEP's daily reanalysis files are frozen at March 2026."
+  },
+  {
+   "id": "s_kw",
+   "layer": "src",
+   "name": "ERA5 at Kuwait via Open-Meteo",
+   "sub": "daily max/min temperature and precipitation, 29.37°N 47.98°E",
+   "cadence": "daily, 1–3 d behind",
+   "url": "https://open-meteo.com/en/docs/historical-weather-api",
+   "src_keys": [
+    "kuwait_era5"
+   ],
+   "live": "kuwait",
+   "def": "One point of the reanalysis for the audience's own city, with its own 1991–2020 normal.",
+   "why": "The regional tab must measure something here, not only quote the literature."
+  },
+  {
+   "id": "s_omi",
+   "layer": "src",
+   "name": "NOAA PSL ROMI",
+   "sub": "real-time MJO index from CPC OLR",
+   "cadence": "daily, ~4 d behind",
+   "url": "https://psl.noaa.gov/mjo/mjoindex/",
+   "src_keys": [
+    "omi"
+   ],
+   "jkey": "mjo_amp",
+   "def": "Phase and amplitude of the Madden–Julian Oscillation.",
+   "why": "Phases 6–8 are when wind bursts cluster: the timing of the pushes."
+  },
+  {
+   "id": "s_mei",
+   "layer": "src",
+   "name": "NOAA PSL MEI v2 and DMI",
+   "sub": "multivariate ENSO index; Indian Ocean Dipole (HadISST)",
+   "cadence": "monthly",
+   "url": "https://psl.noaa.gov/enso/mei/",
+   "src_keys": [
+    "mei",
+    "dmi"
+   ],
+   "jkey": "dmi",
+   "def": "Five fields in one index; and the west-minus-east contrast of the Indian Ocean.",
+   "why": "An independent check on the coupling score; and the second index for the Gulf and the monsoon."
+  },
+  {
+   "id": "s_uah",
+   "layer": "src",
+   "name": "UAH satellite layers v6.1",
+   "sub": "lower / mid troposphere, tropopause, lower stratosphere",
+   "cadence": "monthly, first days",
+   "url": "https://www.nsstc.uah.edu/data/msu/v6.1/",
+   "src_keys": [
+    "uah_tlt",
+    "uah_tmt",
+    "uah_ttp",
+    "uah_tls"
+   ],
+   "jkey": "tlt_tropics",
+   "def": "Tropical temperature of four atmospheric floors from satellites.",
+   "why": "How the event climbs the atmosphere, with a measured delay of three months."
+  },
+  {
+   "id": "s_ohc",
+   "layer": "src",
+   "name": "NOAA NCEI ocean heat content",
+   "sub": "0–700 m and 0–2000 m, eight quarterly files",
+   "cadence": "quarterly",
+   "url": "https://www.ncei.noaa.gov/access/global-ocean-heat-content/",
+   "jkey": "ohc_2000",
+   "def": "Heat stored in the upper ocean since 1955, in 10²² J.",
+   "why": "The reservoir the event draws on: the background the statistical models never trained on."
+  },
+  {
+   "id": "s_fao",
+   "layer": "src",
+   "name": "FAO Food Price Index",
+   "sub": "index and five groups, 2014–16 = 100",
+   "cadence": "monthly, first Friday",
+   "url": "https://www.fao.org/worldfoodsituation/foodpricesindex/en/",
+   "src_keys": [
+    "fao_fpi"
+   ],
+   "jkey": "food_index",
+   "def": "The one world food price number, since 1990.",
+   "why": "Where the event reaches people; the aggregate falls for reasons outside the weather, which is why commodities are shown by name."
+  },
+  {
+   "id": "s_pink",
+   "layer": "src",
+   "name": "World Bank Pink Sheet",
+   "sub": "monthly prices of twelve commodities, since 1960",
+   "cadence": "monthly, ~3rd",
+   "url": "https://www.worldbank.org/en/research/commodity-markets",
+   "src_keys": [
+    "wb_pink"
+   ],
+   "jkey": "price_palm_oil",
+   "def": "Palm oil, rice, cocoa, fishmeal, urea and others, by name.",
+   "why": "El Niño does not hit “food”; it hits these."
+  },
+  {
+   "id": "c_sources",
+   "layer": "collect",
+   "name": "tools/enso/sources.py",
+   "sub": "fetch, verify, keep raw copies; readers for every format",
+   "def": "Pulls every text, CSV, XLSX and JSON source with a browser user agent, stores the raw file under its date, falls back to the last good copy and says so.",
+   "why": "If a parser breaks in a month there is something to compare with.",
+   "in": [
+    "s_cr",
+    "s_wk",
+    "s_oni",
+    "s_psl",
+    "s_cpc",
+    "s_pmel",
+    "s_uah",
+    "s_fao",
+    "s_pink",
+    "s_omi",
+    "s_mei",
+    "s_ohc",
+    "s_kw"
+   ]
+  },
+  {
+   "id": "c_oisst",
+   "layer": "collect",
+   "name": "tools/enso/oisst.py",
+   "sub": "box means on the NOAA grid, own climatologies, splice",
+   "def": "Box means for six boxes, 1991–2020 daily climatology per box from the final grid, the strongest past events and last year on the same days; the NRT tail is spliced into the long series with the offset measured on the overlap.",
+   "why": "Freshness without losing the forty-year history.",
+   "in": [
+    "s_nrt",
+    "s_cr"
+   ]
+  },
+  {
+   "id": "c_sub",
+   "layer": "collect",
+   "name": "tools/enso/subsurface.py",
+   "sub": "moorings by day, reanalysis section by month",
+   "def": "Profiles interpolated to fifteen standard depths; anomaly against each mooring's own record; 20 °C isotherm; the GODAS equatorial section and the 0–300 m heat index on our climatology.",
+   "why": "The event seen from below.",
+   "in": [
+    "s_tao",
+    "s_godas"
+   ]
+  },
+  {
+   "id": "c_wind",
+   "layer": "collect",
+   "name": "tools/enso/wind.py",
+   "sub": "daily zonal wind, burst detector",
+   "def": "Daily mean of the zonal 10 m wind over six points, climatology and sigma by day of year, bursts as two sigma for five days; moorings as the check.",
+   "why": "Bursts are how an El Niño is fed.",
+   "in": [
+    "s_era5",
+    "s_tao"
+   ]
+  },
+  {
+   "id": "c_iri",
+   "layer": "collect",
+   "name": "tools/enso/iri_plume.py + models.py",
+   "sub": "read the plume, verify each model",
+   "def": "Reads the figure into numbers, keeps every issue, verifies each model's past forecasts against the official ONI, classes it, computes the live-model centre and the position in the season.",
+   "why": "“The models say” versus “the models that were right say”.",
+   "in": [
+    "s_iri",
+    "s_oni",
+    "s_wk"
+   ]
+  },
+  {
+   "id": "c_air",
+   "layer": "collect",
+   "name": "tools/enso/air.py",
+   "sub": "coupling, fuel, layers, commodities",
+   "def": "Three atmospheric signs, the warm water volume and its measured lead, the four satellite floors and their lag, prices by name since the onset.",
+   "why": "The air, the fuel and the price side of the event in one block.",
+   "in": [
+    "s_cpc",
+    "s_pmel",
+    "s_uah",
+    "s_pink",
+    "s_psl"
+   ]
+  },
+  {
+   "id": "c_gulf",
+   "layer": "collect",
+   "name": "tools/enso/gulf.py + background.py",
+   "sub": "the Gulf and Kuwait; background and calendar",
+   "def": "Sea off the coast, weather at the point, winter references, the import chain; ocean heat content, MEI, DMI, the energy imbalance as a quote, the release calendar.",
+   "why": "The region measured, and the state of the whole system.",
+   "in": [
+    "s_kw",
+    "s_nrt",
+    "s_ohc",
+    "s_mei",
+    "s_pink"
+   ]
+  },
+  {
+   "id": "t_daily",
+   "layer": "state",
+   "name": "Daily series watch",
+   "sub": "level, slope, noise, records, CUSUM, 14-day analogue forecast",
+   "jkey": "n34_daily",
+   "def": "For Niño 3.4, the world ocean and land+ocean: the last 30 days against the same window of every year, rank, above-trend, the run of daily records, CUSUM against the level at the start of the window, and a 14-day analogue forecast with p10–p90.",
+   "why": "Tells a spike from a new level, and says how unusual today is for this time of year.",
+   "in": [
+    "c_oisst",
+    "c_sources"
+   ],
+   "code": "watch.series_watch"
+  },
+  {
+   "id": "t_weekly",
+   "layer": "state",
+   "name": "Weekly indices and event type",
+   "sub": "four Niño boxes, east−centre contrast, changes over 4 and 8 weeks",
+   "jkey": "n34_weekly",
+   "def": "The NOAA weekly indices with their history, the same weeks of the strongest past events, the record of the series and the east-minus-centre contrast that names the event type.",
+   "why": "The reference frame for everything else.",
+   "in": [
+    "c_sources"
+   ],
+   "code": "watch.noaa_weekly_watch"
+  },
+  {
+   "id": "t_oni",
+   "layer": "state",
+   "name": "ONI and RONI",
+   "sub": "this year against the same seasons of past events; peaks",
+   "jkey": "roni",
+   "def": "Season by season against 1982, 1997, 2015, 2023; the peak of each past event; and RONI alongside with the ONI−RONI gap.",
+   "why": "The official view, and the warm background subtracted.",
+   "in": [
+    "c_sources"
+   ],
+   "code": "watch.oni_watch, watch.roni_watch"
+  },
+  {
+   "id": "t_models",
+   "layer": "state",
+   "name": "Model scoreboard, live centre, position",
+   "sub": "classes, RMS over live models, season-to-date, revisions",
+   "jkey": "live_mean",
+   "def": "Each model classed as keeping up, lagging or broken from its verified errors; a weighted centre over the live ones (mean and RMS); where we stand in each season with the lived part as fact and the rest from the live spread; how the plume moved between issues.",
+   "why": "Reality against the forecasts, and the forecasts against their own record.",
+   "in": [
+    "c_iri"
+   ],
+   "code": "models.classify, models.live, models.position"
+  },
+  {
+   "id": "t_air",
+   "layer": "state",
+   "name": "Coupling, fuel, layers",
+   "sub": "3 signs; WWV share of record and lead; lag per floor",
+   "jkey": "coupling_score",
+   "def": "Coupling score of three signs; the warm water volume as a share of its record, its peak and whether it is discharging, its lead measured by trying every shift; each atmospheric floor's lag and correlation.",
+   "why": "Whether the event can travel, how much it has to grow, how far it has climbed.",
+   "in": [
+    "c_air"
+   ],
+   "code": "air.coupling, air.fuel, air.layers"
+  },
+  {
+   "id": "t_sub",
+   "layer": "state",
+   "name": "Below the surface",
+   "sub": "warmest layer, 20 °C isotherm east/west, heat index 0–300 m",
+   "jkey": "subsurface_warmest",
+   "def": "The warmest anomaly among the moorings and its depth, the thermocline depth by mooring with the past events on the same days, the reanalysis section and the heat index with its levels in past events.",
+   "why": "The heat that will surface, measured now.",
+   "in": [
+    "c_sub"
+   ],
+   "code": "subsurface.tao, subsurface.godas"
+  },
+  {
+   "id": "t_wind",
+   "layer": "state",
+   "name": "Wind bursts and MJO",
+   "sub": "events in 120 days, active or not; phase and amplitude",
+   "jkey": "wind_week",
+   "def": "The list of westerly bursts with dates and peaks, whether one is under way, the days since the last; the MJO phase and amplitude and whether the burst window is open.",
+   "why": "The trigger and its timing.",
+   "in": [
+    "c_wind",
+    "c_sources"
+   ],
+   "code": "wind.era5, watch.mjo_block"
+  },
+  {
+   "id": "t_food",
+   "layer": "state",
+   "name": "Food: index, groups, since onset, by commodity",
+   "sub": "FAO overlay from the onset month; commodity paths; prices by name",
+   "jkey": "food_index",
+   "def": "The FAO index as a percentage of the onset month against the past events, its projections along their paths; each commodity's path from the onset month this time and in past events; the table of prices by name.",
+   "why": "Where the event reaches people, without pretending the aggregate is the weather.",
+   "in": [
+    "c_sources",
+    "c_air"
+   ],
+   "code": "food.analyze, air.commodities, air.onset_paths"
+  },
+  {
+   "id": "t_regions",
+   "layer": "state",
+   "name": "Regions and scenarios",
+   "sub": "17 regions × seasons; thresholds from live-model peaks",
+   "jkey": "scenario",
+   "def": "Typical impacts by season from the literature, food vulnerability, level 1–5 per region under three scenarios whose thresholds come from the peaks of the live models.",
+   "why": "What it means where you live; the Gulf is the first region measured directly.",
+   "in": [
+    "c_iri",
+    "c_gulf"
+   ],
+   "code": "regions.build, gulf.build"
+  },
+  {
+   "id": "t_risks",
+   "layer": "state",
+   "name": "Risks, index, alerts",
+   "sub": "rules over every block; saturating index; watchdog",
+   "jkey": "risk_index",
+   "def": "Each rule produces a risk with a level, horizon, evidence, plain meaning, what to watch and its series with the past events; the index is 100·(1−e^(−Σlevel^1.5/25)) over climate risks; alerts fire on records, turns and breaks.",
+   "why": "The board and the one number, computed the same way every day.",
+   "in": [
+    "t_daily",
+    "t_weekly",
+    "t_oni",
+    "t_models",
+    "t_air",
+    "t_sub",
+    "t_wind",
+    "t_food",
+    "t_regions"
+   ],
+   "code": "watch.risks, air.risks, subsurface.risks, wind.risks, gulf.risks, background.risks, alerts.detect"
+  },
+  {
+   "id": "t_core",
+   "layer": "state",
+   "name": "Comparable core",
+   "sub": "four rules for every year; second scale by RONI",
+   "def": "Only the rules that exist for 1982 too; and the RONI scale that subtracts the warm background.",
+   "why": "Core against core is a fair comparison; core against the full index is not.",
+   "in": [
+    "t_weekly",
+    "t_oni"
+   ],
+   "code": "history_index.build"
+  },
+  {
+   "id": "t_bg",
+   "layer": "state",
+   "name": "Background and calendar",
+   "sub": "ocean heat, energy imbalance (quoted), next releases",
+   "jkey": "ohc_2000",
+   "def": "The heat content series and whether they are at a record; the imbalance from the literature, labelled as such; the next release date of every source from its stated schedule.",
+   "why": "The state the whole system is in, and when to expect what.",
+   "in": [
+    "c_gulf"
+   ],
+   "code": "background.build"
+  },
+  {
+   "id": "o_json",
+   "layer": "out",
+   "name": "data/enso/latest.json",
+   "sub": "one file the panel reads; snapshot kept per update",
+   "def": "Everything above in one JSON, plus a compact copy of the previous update for the change arrows.",
+   "why": "The site is not rebuilt: updating the panel is updating this file.",
+   "in": [
+    "t_risks",
+    "t_core",
+    "t_bg"
+   ],
+   "code": "refresh.main"
+  },
+  {
+   "id": "o_journal",
+   "layer": "out",
+   "name": "data/enso/journal.json",
+   "sub": "changes of every value, with two dates",
+   "def": "Seventy metrics and every risk level: a record appears when the data changed, not when we refreshed; each carries the data date and the date we saw it.",
+   "why": "The history button on every brick, and “since the event began”.",
+   "in": [
+    "o_json"
+   ],
+   "code": "journal.build"
+  },
+  {
+   "id": "o_verdict",
+   "layer": "out",
+   "name": "Verdict",
+   "sub": "written by DeepSeek V4 Pro from the facts, supervised by Fable",
+   "def": "A language model reads a digest of the numbers on this page and writes the verdict, the turning point, the outlook, what to watch and the caveats; a second model reads it against the same numbers before it goes out; a person decides the publication.",
+   "why": "Interpretation, kept honest by the numbers it must cite.",
+   "in": [
+    "o_json"
+   ],
+   "code": "summary.summarize"
+  },
+  {
+   "id": "o_links",
+   "layer": "out",
+   "name": "data/enso/links.json",
+   "sub": "parsed papers attached to statements",
+   "def": "For every risk, alert, region and term: candidates by meaning from our archive of parsed papers, then a model decides whether each belongs next to the statement.",
+   "why": "“What the research says about this”, not “where this number comes from”.",
+   "in": [
+    "o_json"
+   ],
+   "code": "links.py"
+  },
+  {
+   "id": "o_page",
+   "layer": "out",
+   "name": "The panel page",
+   "sub": "bridge42worlds.academy/enso.html — js/enso.js draws everything from the files",
+   "def": "Nine tabs, twenty kinds of chart, tooltips with source and date on every number, deep links to every scene.",
+   "why": "The reader's side of all of the above.",
+   "in": [
+    "o_json",
+    "o_journal",
+    "o_links",
+    "o_verdict"
+   ],
+   "code": "enso.html, js/enso.js"
+  }
+ ]
+}
