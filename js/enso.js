@@ -2918,7 +2918,7 @@
      (дуга, кольцо, полоса, искра, стрелка); ниже — мозаика из всех графиков панели, каждый
      в своём маленьком окне, с подсказкой сжатого смысла; щелчок ведёт в его раздел.
      Открывается на весь экран. Графики — те же функции, что и на своих сценах: одна правда. */
-  function plainText(h) { return String(h == null ? '' : h).replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function plainText(h) { return String(h == null ? '' : h).replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim(); }
   function ovKpi(kn, big, small, vis, go, pay) {
     var d = el('div', 'ov-kpi');
     /* Подсказка — чистым текстом: имя показателя приходит с плашкой зоны, а подсказка

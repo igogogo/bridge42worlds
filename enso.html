@@ -108,7 +108,8 @@
     border:1px solid currentColor;font:italic 600 8.5px Georgia,serif;line-height:1;margin-inline-start:6px;opacity:.55;
     cursor:help;vertical-align:1px}
   .ti:hover{opacity:1}
-  .tab.on .ti,.seg button.on .ti{opacity:.85}   /* отбивка от рамки сцены: меню не должно лежать на ней */
+  .tab.on .ti,.seg button.on .ti{opacity:.85}
+  @media (max-width:560px){ .tab .ti{display:none} }   /* на телефоне меню и так в пять строк */   /* отбивка от рамки сцены: меню не должно лежать на ней */
   .tabs::-webkit-scrollbar{display:none}
   /* Чётче: цвет основного текста вместо приглушённого и чуть плотнее начертание —
      меню должно читаться с первого взгляда (владелец 04.09). */
@@ -665,7 +666,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=83d0a6b7d4"></script>
+<script src="/js/enso.js?v=caee10c6a7"></script>
 <script src="/js/sitenav.js?v=cf6fd79772"></script>
 </body>
 </html>
