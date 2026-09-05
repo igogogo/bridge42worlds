@@ -4908,15 +4908,23 @@ def generate_status_page():
     updated = datetime.now(_tz.utc).strftime("%Y-%m-%d %H:%M")
     html = f'''<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Status — bridge42worlds</title>
-<style>body{{font-family:system-ui,Arial,sans-serif;max-width:760px;margin:0 auto;padding:30px 18px;color:#2c2c2c}}
-h1{{font-size:22px}}h2{{font-size:15px;margin:24px 0 8px;color:#555}}
-.cards{{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}}
-.card{{flex:1;min-width:120px;background:#f6f6f6;border-radius:10px;padding:12px 14px}}
-.card b{{font-size:24px;display:block}}.card span{{color:#888;font-size:13px}}
+<link rel="stylesheet" href="/css/style.css?v={asset_ver()}"><link rel="icon" href="/favicon.ico" sizes="any">
+<style>
+/* Статус — в стиле сайта, а не системным шрифтом на белом (аудит 05.09): цвета и шрифты
+   из общих токенов, шапка с меню, карточки как на панели El Niño. */
+body{{max-width:860px}}
+h1{{font-size:24px;margin:6px 0 2px}}h2{{font-size:13px;margin:26px 0 8px;font-family:var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--soft)}}
+.st-upd{{color:var(--soft);font-size:12.5px;font-family:var(--mono);margin:0 0 6px}}
+.cards{{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}}
+.card{{flex:1;min-width:130px;background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:10px 12px}}
+.card b{{font-size:24px;display:block;font-family:var(--serif);font-weight:600;font-variant-numeric:tabular-nums}}.card span{{color:var(--soft);font-size:12px;font-family:var(--mono)}}
 table{{border-collapse:collapse;font-size:13px;width:100%}}
+.top-bar{{max-width:none}}.langs-row{{display:none}}
 .ico-svg{{width:1em;height:1em;vertical-align:-.08em;opacity:.55}}</style></head><body>
+<div class="top-bar"><a href="/lang/en/index.html" class="logo">bridge42worlds</a>
+<button type="button" class="theme-toggle" aria-label="Theme" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">◐</button></div>
 <h1><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="6.5" y1="19" x2="6.5" y2="13"/><line x1="12" y1="19" x2="12" y2="8.5"/><line x1="17.5" y1="19" x2="17.5" y2="11"/><line x1="4" y1="19.5" x2="20" y2="19.5"/></svg> System status</h1>
-<p style="color:#888;font-size:13px">Updated {updated} UTC · refreshed automatically by the daily pipeline</p>
+<p class="st-upd">Updated {updated} UTC · refreshed automatically by the daily pipeline</p>
 <div class="cards">
 <div class="card"><b>{total}</b><span>articles</span></div>
 <div class="card"><b>{authors_n}</b><span>authors</span></div>
@@ -4934,6 +4942,7 @@ table{{border-collapse:collapse;font-size:13px;width:100%}}
 {km_html}
 <h2>Integrity</h2>{warn}
 <h2>Concept graph connectivity</h2>{connectivity_html}
+<script src="/js/icons.js?v={asset_ver()}"></script><script src="/js/course-i18n.js?v={asset_ver()}"></script><script src="/js/sitenav.js?v={asset_ver()}"></script>
 </body></html>'''
     _write_text_retry(Path("status.html"), html)
     print(f"  📊 status.html ({total} статей, {authors_n} авторов)")
