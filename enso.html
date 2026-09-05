@@ -309,11 +309,18 @@
   /* График — главный житель сцены: не меньше половины её высоты, что бы ни делали подписи. */
   .plot{flex:1 1 55%;min-height:170px;display:block;position:relative}
   /* значок даты данных (владелец 05.09) */
-  .dcal{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:4px;color:var(--soft);
-    border:1px solid color-mix(in srgb, var(--ink) 14%, transparent);background:var(--surface);cursor:help;flex:none}
-  .dcal:hover{color:var(--ochre);border-color:var(--ochre)}
-  .dcal-wrap{position:absolute;right:6px;bottom:6px;z-index:2}
-  .kj .jsrc .dcal{margin-inline-start:4px;align-self:flex-end}
+  /* Значок — всегда в правом нижнем углу плашки и без подложки (владелец 05.09). Плашки
+     становятся опорой для абсолютного позиционирования, а нижняя строка получает запас
+     справа, чтобы кнопка history не легла под значок. */
+  .dcal{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;color:var(--soft);opacity:.75;
+    cursor:help;flex:none;position:absolute;inset-inline-end:5px;bottom:5px;z-index:2}
+  .dcal:hover{color:var(--ochre);opacity:1}
+  .dcal-wrap{position:absolute;inset-inline-end:0;bottom:0;width:0;height:0;z-index:2}
+  .dcal-wrap .dcal{inset-inline-end:6px;bottom:6px}
+  .kpi,.card,.risk,.ov-kpi{position:relative}
+  .kj .jsrc{padding-inline-end:18px}
+  .risk .rf{padding-inline-end:22px}
+  .ov-kpi .km{padding-inline-end:16px}
   .plot svg{display:block;width:100%;height:100%}
   .plot svg text{font-family:var(--mono);font-size:11px;fill:var(--soft)}
   .plot svg text.tt{font-size:12px;font-weight:600;fill:var(--text)}
@@ -614,6 +621,23 @@
     .panel{padding:6px 7px calc(6px + env(safe-area-inset-bottom))}
     .dock{padding:7px 10px}
   }
+  /* ── живое: пульс «где мы сейчас», дыхание живых точек, ореол высокого индекса ──
+     Владелец 05.09: «панель визуально динамичней — точка мигает концентрическими кругами,
+     где-то помигать, где-то переливаться; это геймификация». Всё выключается системной
+     настройкой prefers-reduced-motion ниже. */
+  @keyframes b42-ring{0%{transform:scale(1);opacity:.85}100%{transform:scale(4.2);opacity:0}}
+  @keyframes b42-breathe{0%,100%{opacity:1}50%{opacity:.35}}
+  @keyframes b42-glow{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb, var(--lv5) 60%, transparent)}70%{box-shadow:0 0 0 7px transparent}}
+  @keyframes b42-halo{0%{box-shadow:0 0 0 0 color-mix(in srgb, var(--c) 45%, transparent)}100%{box-shadow:0 0 0 16px transparent}}
+  @keyframes b42-stroke{0%,100%{stroke-width:1.8;stroke-opacity:1}50%{stroke-width:3.4;stroke-opacity:.55}}
+  svg .ring{fill:none;stroke-width:1.4;transform-box:fill-box;transform-origin:center;animation:b42-ring 2.6s cubic-bezier(.15,.55,.35,1) infinite;pointer-events:none}
+  svg .ring.r2{animation-delay:1.3s}
+  .ov-p svg .ring{stroke-width:1;animation-name:b42-ring-s}
+  @keyframes b42-ring-s{0%{transform:scale(1);opacity:.7}100%{transform:scale(3);opacity:0}}
+  svg rect.breathe{animation:b42-stroke 3s ease-in-out infinite}
+  .gauge.hot::after{content:"";position:absolute;inset:-1px;border-radius:50%;animation:b42-halo 2.8s ease-out infinite;pointer-events:none}
+  .alert-card.lv-shout .ch b{animation:b42-glow 2.8s ease-in-out infinite}
+  .chain-node .dot:not(.bad):not(.off),.ref .ref-t .dot:not(.bad):not(.off){animation:b42-breathe 3.2s ease-in-out infinite}
   @media (prefers-reduced-motion: reduce){ *{transition:none !important;animation:none !important} }
 </style>
 </head>
@@ -672,7 +696,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=dbb185a538"></script>
+<script src="/js/enso.js?v=7326d77281"></script>
 <script src="/js/sitenav.js?v=cf6fd79772"></script>
 </body>
 </html>

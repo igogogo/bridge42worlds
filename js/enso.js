@@ -312,6 +312,16 @@
   }
   /* Колонка легенды шире и с запасом: подписи справа выезжали за поле (владелец 05.09:
      «сделай отступ резервный, не жмись»). */
+  /* ЖИВАЯ ТОЧКА «ГДЕ МЫ СЕЙЧАС». Владелец 05.09: «пусть мигает, концентрические круги,
+     чтобы красиво». Сама точка стоит на месте — читать значение по ней должно быть можно;
+     от неё расходятся два кольца со сдвигом по фазе (CSS, transform на fill-box, поэтому
+     работает и внутри масштабируемого svg; при prefers-reduced-motion гаснет вся анимация). */
+  function nowDot(x, y, color, r) {
+    r = r || 4.5;
+    var c = 'cx="' + (+x).toFixed(1) + '" cy="' + (+y).toFixed(1) + '" r="' + r + '"';
+    return '<circle class="ring" ' + c + ' style="stroke:' + color + '"/><circle class="ring r2" ' + c + ' style="stroke:' + color + '"/>' +
+      '<circle class="now-dot" ' + c + ' style="fill:' + color + '"/>';
+  }
   function legendW(w) { return w < 560 ? 0 : Math.min(240, Math.round(w * 0.27)); }
   function topPad(w) { return legendW(w) ? 26 : 42; }
   /* КЛИКАБЕЛЬНАЯ ЛЕГЕНДА. Владелец 04.09: «все линии тоже нужно дать легенду по моделям,
@@ -409,6 +419,7 @@
       s += '<text x="' + (Lp + 3) + '" y="' + (Y(pv) - 3).toFixed(0) + '" style="fill:var(--soft)">was ' + fnum(pv) + ' at ' + esc(prevStamp()) + '</text>';
     }
     var x0 = X(n - 1), x1 = X(n - 1 + 14);
+    if (fin(rec[n - 1])) s += nowDot(x0, Y(rec[n - 1]), 'var(--nino)', 4);
     s += '<polygon points="' + x0.toFixed(1) + ',' + Y(f.from).toFixed(1) + ' ' + x1.toFixed(1) + ',' + Y(f.p90).toFixed(1) + ' ' + x1.toFixed(1) + ',' + Y(f.p10).toFixed(1) + '" style="fill:var(--nino)" opacity=".18"/>';
     s += poly([[x0, Y(f.from)], [x1, Y(f.p50)]], 'var(--nino)', 1.6, 1, '5 3');
     s += '<text x="' + (x1 + 4).toFixed(0) + '" y="' + (Y(f.p90) + 3).toFixed(0) + '">' + fnum(f.p90) + '</text>';
@@ -476,7 +487,7 @@
       leg.push([R ? (y + '→' + (parseInt(y, 10) + 1) + ': peak ' + fnum(a.peak)) : y, 'var(--a' + y + ')', 1.6, dashOf(yi + 1), y]);
     });
     s += segs(N.current_series.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.6, pickOp('now'));
-    s += '<circle cx="' + X(N.day).toFixed(1) + '" cy="' + Y(N.current_day).toFixed(1) + '" r="4.5" style="fill:var(--nino)"/>';
+    s += nowDot(X(N.day), Y(N.current_day), 'var(--nino)', 4.5);
     var pe = N.peak_estimate;
     // Черта рекорда и её подпись держатся внутри ОСНОВНОГО поля: справа теперь стоят
     // мини-панели, и подпись налезала прямо на них (владелец 04.09).
@@ -581,7 +592,7 @@
     });
     s += segs(ser.map(function (r, i) { return [X(i), fin(r[key]) ? Y(r[key]) : NaN]; }), 'var(--text)', 2.6, pickOp('now'));
     var li = n - 1;
-    s += '<circle cx="' + X(li).toFixed(1) + '" cy="' + Y(ser[li][key]).toFixed(1) + '" r="4" style="fill:var(--nino)"/>';
+    s += nowDot(X(li), Y(ser[li][key]), 'var(--nino)', 4);
     var leg = [['now ' + fnum(ser[li][key], 1), 'var(--text)', 2.6, '', 'now']];
     ana.forEach(function (a) {
       var v = a.values[a.values.length - 1];
@@ -633,7 +644,7 @@
       s += '<line x1="' + (x - cap).toFixed(1) + '" y1="' + Y(v).toFixed(1) + '" x2="' + (x + cap).toFixed(1) +
         '" y2="' + Y(v).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1.6" opacity=".8"/>';
     });
-    s += '<circle cx="' + x.toFixed(1) + '" cy="' + Y(p.todate).toFixed(1) + '" r="4.5" style="fill:var(--nino)"/>';
+    s += nowDot(x, Y(p.todate), 'var(--nino)', 4.5);
     s += '<text x="' + (x + cap + 4).toFixed(1) + '" y="' + (Y(p.todate) + 3.5).toFixed(1) + '" font-size="9" style="fill:var(--nino)">' +
       p.months_done + '/3 lived, ' + fnum(p.todate) + '</text>';
     return s;
@@ -974,6 +985,7 @@
     list.forEach(function (r, i) { if (n < 14 || i % Math.ceil(n / 12) === 0) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + esc(r.date.slice(5)) + '</text>'; });
     s += poly(list.map(function (r, i) { return [X(i), Y(r.risk_index)]; }), 'var(--nino)', 2.2);
     list.forEach(function (r, i) { s += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(r.risk_index).toFixed(1) + '" r="3" style="fill:' + (r.shout ? 'var(--lv5)' : 'var(--nino)') + '"/>'; });
+    if (list.length) { var lr = list[list.length - 1]; s += nowDot(X(list.length - 1), Y(lr.risk_index), lr.shout ? 'var(--lv5)' : 'var(--nino)', 3.5); }
     s += poly(list.map(function (r, i) { return [X(i), fin(r.n_below) && r.n_models ? Tp + (1 - r.n_below / r.n_models) * ph : NaN]; }), 'var(--nina)', 1.4, 1, '4 3');
     s += legend([['risk index 0–100', 'var(--nino)', 2.2], ['a SHOUT alert', 'var(--lv5)', 'dot'], ['models below reality, %', 'var(--nina)', 1.4, '4 3']], W, H, R, Tp);
     return s + '</svg>';
@@ -1054,7 +1066,7 @@
         def: 'Now ' + fnum(v, 1) + ' °C. On the same week of ' + cmpYear + ': ' + fnum(then, 1) + ' °C; the peak of that event was ' + fnum(peak, 1) + ' °C. ' +
           (fin(then) ? (v > then ? 'This event is ' + fnum(v - then, 1) + ' °C warmer at the same point of the calendar.' : 'This event is ' + fnum(v - then, 1) + ' °C against it.') : ''),
         src: 'NOAA CPC weekly indices, wksst9120', date: NW.date };
-      s += '<g data-src="' + esc(JSON.stringify(pay)) + '"><rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + h.toFixed(1) + '" style="fill:' + col + ';stroke:' + col + '" fill-opacity=".3" stroke-width="1.8" rx="3"/>';
+      s += '<g data-src="' + esc(JSON.stringify(pay)) + '"><rect' + (b[0] === 'nino34' ? ' class="breathe"' : '') + ' x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + h.toFixed(1) + '" style="fill:' + col + ';stroke:' + col + '" fill-opacity=".3" stroke-width="1.8" rx="3"/>';
       /* Боксы Niño 4, 3.4 и 3 перекрываются по долготе — подписи ярусами: 4 выше, 3.4 по
          центру, 3 ниже; у Niño 1+2 бокс узкий — подписи слева от него. */
       var tier = { nino4: -0.3, nino34: 0, nino3: 0.3 }[b[0]] || 0;
@@ -1125,7 +1137,7 @@
     Sr.months.forEach(function (m, i) { if (m.slice(5) === '01') s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + esc(m.slice(0, 4)) + '</text>'; else if (m.slice(5) === '07' && W > 520) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle" opacity=".55">Jul</text>'; });
     keys.forEach(function (k, ki) { s += segs(Sr.months.map(function (m, i) { var v = (Sr.groups[k[0]] || [])[i]; return [X(i), fin(v) ? Y(v) : NaN]; }), k[1], 1.2, pickOp(k[0], .8), dashOf(ki + 1)); });
     s += segs(Sr.months.map(function (m, i) { return [X(i), fin(Sr.index[i]) ? Y(Sr.index[i]) : NaN]; }), 'var(--text)', 2.6, pickOp('index'));
-    s += '<circle cx="' + X(n - 1).toFixed(1) + '" cy="' + Y(Sr.index[n - 1]).toFixed(1) + '" r="3.5" style="fill:var(--text)"/>';
+    s += nowDot(X(n - 1), Y(Sr.index[n - 1]), 'var(--text)', 3.5);
     s += legend([['index ' + fnum(Sr.index[n - 1], 1, false), 'var(--text)', 2.6, '', 'index']]
       .concat(keys.map(function (k, ki) { return [k[0] + ' ' + fnum((Sr.groups[k[0]] || [])[n - 1], 1, false), k[1], 1.4, dashOf(ki + 1), k[0]]; })), W, H, R, Tp);
     return s + '</svg>';
@@ -1264,7 +1276,7 @@
     if (legM.length > 1) s += legendAt(legM, Lp + 8, Tp + 12);
     if (m.flags && m.flags.length === n) vals.forEach(function (v, i) { if (m.flags[i] && fin(v)) s += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(v).toFixed(1) + '" r="2.2" style="fill:var(--nino)"/>'; });
     var li = n - 1; while (li > 0 && !fin(vals[li])) li--;
-    s += '<circle cx="' + X(li).toFixed(1) + '" cy="' + Y(vals[li]).toFixed(1) + '" r="4" style="fill:var(--nino)"/>';
+    s += nowDot(X(li), Y(vals[li]), 'var(--nino)', 4);
     s += '<text x="' + (X(li) + 7).toFixed(0) + '" y="' + (Y(vals[li]) + 4).toFixed(0) + '" class="tt">' + fnum(Math.abs(vals[li]) < 0.005 ? 0 : vals[li]) + (m.unit && m.unit.length <= 4 ? ' ' + esc(m.unit) : '') + '</text>';
     return s + '</svg>';
   }
@@ -1465,7 +1477,7 @@
     var k1 = el('div', 'card kpi-card');
     // Подпись шкалы стоит СНАРУЖИ круга: внутри она не помещалась и обрезалась
     // (владелец 03.09: «в кружок текст не поместился, вынеси его»).
-    k1.innerHTML = '<div class="gauge-row"><div class="gauge" data-term="riskindex" style="--v:' + idx + ';--c:' + gc + '"><div class="gv">' + idx + '</div></div>' +
+    k1.innerHTML = '<div class="gauge-row"><div class="gauge' + (idx >= 70 ? ' hot' : '') + '" data-term="riskindex" style="--v:' + idx + ';--c:' + gc + '"><div class="gv">' + idx + '</div></div>' +
       '<div class="g-side">' + '<button type="button" class="vgo" data-view="verdict">read the verdict →</button>' + '<b>' + zone('nino34') + ' ' + fnum(NW.latest.n34a, 1) + ' °C</b>' +
       'rank ' + N.all_years_rank + ' of all years on the same 30 days. ' + term('oni', 'ONI') + ' ' + fnum(ONI.current[ls]) + ' (' + esc(ls) + ').' +
       '' + kmeta('risk_index') +
@@ -2050,7 +2062,7 @@
     }
     s += segs(ser.months.map(function (m, i) { return [X(i), fin(ser.values[i]) ? Y(ser.values[i] / 1e14) : NaN]; }), 'var(--text)', 2.6, pickOp('wwv'));
     var li = n - 1;
-    s += '<circle cx="' + X(li).toFixed(1) + '" cy="' + Y(ser.values[li] / 1e14).toFixed(1) + '" r="4" style="fill:var(--text)"/>';
+    s += nowDot(X(li), Y(ser.values[li] / 1e14), 'var(--text)', 4);
     s += legend([['warm water volume ' + fnum(ser.values[li] / 1e14) + '·10¹⁴', 'var(--text)', 2.6, '', 'wwv'],
       ['Niño 3.4, −' + lag + ' months', 'var(--nino)', 1.8, '5 3', 'n34']], W, H, R, Tp);
     return s + '</svg>';
@@ -2235,7 +2247,7 @@
             '<div class="kv" style="color:' + (now ? 'var(--nino)' : 'var(--text)') + '">' + x.core + '<small>core</small></div>' +
             '<div class="km">' + zone('nino34') + ' ' + fnum(x.n34, 1) + (x.peak != null ? ', that event peaked at ' + fnum(x.peak, 1) : '') + '</div>' +
             '<div class="kj"><div class="jr"><span class="jbar" style="--w:' + Math.round(100 * x.core / mx) + '%"></span></div>' +
-            '<div class="jsrc"><span>' + esc((x.date || '')) + '</span></div></div></div>';
+            '<div class="jsrc"><span>' + esc((x.date || '')) + '</span>' + dateBadge(null, now ? 'our core index, on this event' : 'our core index, on the ' + x.label + ' event', x.date || '', 'core ' + (now ? 'today' : x.label)) + '</div></div></div>';
         }).join('');
         body.appendChild(cw);
         body.appendChild(el('div', 'cap', esc(CORE.note)));
@@ -2245,7 +2257,7 @@
         if (RS && fin(RS.now)) {
           var rw = el('div', 'kpis');
           rw.innerHTML = '<div class="kpi"><div class="kn">' + term('roni', 'RONI') + ', ' + esc(RS.season) + ' this year</div><div class="kv" style="color:var(--nino)">' + fnum(RS.now) + '<small>rank ' + (RS.rank || '—') + ' of ' + (RS.of || '—') + '</small></div><div class="km">ONI − RONI = ' + fnum(RS.gap_now) + ': the warm background subtracted</div>' + kmeta('roni') + '</div>' +
-            Object.keys(RS.analogs || {}).map(function (y) { return '<div class="kpi"><div class="kn">' + esc(RS.season) + ' ' + y + '</div><div class="kv">' + fnum(RS.analogs[y]) + '</div><div class="km">event peak by RONI ' + fnum((RS.event_peaks || {})[y]) + ', by ONI ' + fnum((RS.oni_event_peaks || {})[y]) + '</div></div>'; }).join('');
+            Object.keys(RS.analogs || {}).map(function (y) { return '<div class="kpi"><div class="kn">' + esc(RS.season) + ' ' + y + '</div><div class="kv">' + fnum(RS.analogs[y]) + '</div><div class="km">event peak by RONI ' + fnum((RS.event_peaks || {})[y]) + ', by ONI ' + fnum((RS.oni_event_peaks || {})[y]) + '</div>' + dateBadge(null, 'NOAA CPC, RONI', esc(RS.season) + ' ' + y, 'RONI ' + y) + '</div>'; }).join('');
           body.appendChild(rw);
           body.appendChild(el('div', 'cap', esc(RS.note)));
         }
@@ -2662,7 +2674,7 @@
       s += '<rect x="' + Lp + '" y="' + Tp + '" width="' + pw + '" height="' + ph.toFixed(1) + '" rx="5" style="fill:var(--ink)" opacity=".03"/>';
       [vmax - pad, vmin + pad, 0].forEach(function (g) { if (g >= vmin && g <= vmax) s += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (Lp + pw) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".6"/><text x="' + (Lp - 5) + '" y="' + (Y(g) + 3).toFixed(1) + '" text-anchor="end" font-size="9">' + fnum(g, 0, false) + '</text>'; });
       s += segs(o.values.map(function (v, i) { return [X(i), Y(v)]; }), 'var(--nino)', 1.8);
-      s += '<circle cx="' + X(n - 1).toFixed(1) + '" cy="' + Y(o.values[n - 1]).toFixed(1) + '" r="3.5" style="fill:var(--nino)"/>';
+      s += nowDot(X(n - 1), Y(o.values[n - 1]), 'var(--nino)', 3.5);
       var seenDec = {};
       o.years.forEach(function (y, i) { var dec = Math.floor(y); if (dec % 10 === 0 && !seenDec[dec]) { seenDec[dec] = 1; s += '<text x="' + X(i).toFixed(0) + '" y="' + (Tp + ph + 12) + '" text-anchor="middle" font-size="9">' + dec + '</text>'; } });
       var lx = Lp + pw + 10, ly = Tp + 12;
@@ -2964,13 +2976,14 @@
      в своём маленьком окне, с подсказкой сжатого смысла; щелчок ведёт в его раздел.
      Открывается на весь экран. Графики — те же функции, что и на своих сценах: одна правда. */
   function plainText(h) { return String(h == null ? '' : h).replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim(); }
-  function ovKpi(kn, big, small, vis, go, pay) {
+  function ovKpi(kn, big, small, vis, go, pay, jk) {
     var d = el('div', 'ov-kpi');
     /* Подсказка — чистым текстом: имя показателя приходит с плашкой зоны, а подсказка
        экранирует разметку и показывала «/span» (владелец 05.09). */
     d.setAttribute('data-src', JSON.stringify(pay || { name: plainText(kn), def: plainText(big) + ' — ' + plainText(small), why: 'Click to open the section.' }));
-    d.innerHTML = '<div class="kn">' + kn + '</div><div class="ov-row"><div class="kv">' + big + '</div><div class="ov-vis">' + (vis || '') + '</div></div><div class="km">' + small + '</div>';
-    d.addEventListener('click', function () { S.full = false; S.view = go[0]; if (go[1]) S.sub[go[0]] = go[1]; S.risk = null; render(); });
+    d.innerHTML = '<div class="kn">' + kn + '</div><div class="ov-row"><div class="kv">' + big + '</div><div class="ov-vis">' + (vis || '') + '</div></div><div class="km">' + small + '</div>' +
+      (jk ? '<span class="dcal-wrap">' + (typeof jk === 'string' ? dateBadge(jk) : dateBadge(null, jk[0], jk[1])) + '</span>' : '');
+    d.addEventListener('click', function (ev) { if (ev.target.closest('.dcal')) return; S.full = false; S.view = go[0]; if (go[1]) S.sub[go[0]] = go[1]; S.risk = null; render(); });
     return d;
   }
   function arcGauge(v, max, color) {
@@ -3061,17 +3074,17 @@
     var c4 = (NW.chg4w || {}).n34a, b34 = (O.boxes || {}).nino34 || {}, TAO = SB.tao || {}, WD = (D.wind || {}).era5 || {};
     var sh = (D.alerts || []).filter(function (a) { return a.level === 'SHOUT'; }).length, wt = (D.alerts || []).length - sh;
     var core = (CORE.items || []), coreNow = core.filter(function (x) { return x.year === 'now'; })[0], core97 = core.filter(function (x) { return x.year === '1997'; })[0];
-    strip.appendChild(ovKpi(term('riskindex', 'risk index'), D.risk_index + '<small>of 100</small>', (D.risks || []).length + ' risks, ' + sh + ' shout · ' + wt + ' watch', arcGauge(D.risk_index, 100, 'var(--nino)'), ['trend', 'index']));
-    strip.appendChild(ovKpi(zone('nino34') + ' weekly', fnum(NW.latest.n34a, 1) + '<small>°C</small>', '4 weeks ' + arrow(c4, 1) + ' · ' + esc(NW.date), spark({ values: NW.series.slice(-26).map(function (r) { return r.n34a; }) }, 60, 26), ['now', 'weekly']));
-    if (fin(b34.last_anom)) strip.appendChild(ovKpi(zone('nino34') + ' daily box', fnum(b34.last_anom) + '<small>°C</small>', '30 days ' + arrow(b34.chg30, 2) + ' · ' + esc(b34.last_date), spark({ values: b34.anom }, 60, 26), ['ocean', 'surface']));
-    strip.appendChild(ovKpi(term('oni', 'ONI') + ' · ' + term('roni', 'RONI'), fnum(ONI.current[ONI.last_season]) + '<small>' + esc(ONI.last_season) + '</small>', 'RONI ' + fnum((ONI.roni || {}).last) + ' — the gap is the warm background', twoBars(ONI.current[ONI.last_season] || 0, (ONI.roni || {}).last || 0, 'ONI', 'RONI', 'var(--nino)'), ['now', 'analogs']));
-    if (IRI) strip.appendChild(ovKpi('models', (tally.broke || 0) + '<small>broken of ' + ((tally.ok || 0) + (tally.lag || 0) + (tally.broke || 0)) + '</small>', 'live RMS ' + fnum(liveNow(IRI, 'rms')) + ' · published ' + fnum((IRI.against_observed || {}).mean), donut([[tally.ok || 0, 'var(--nina)'], [tally.lag || 0, 'var(--lv3)'], [tally.broke || 0, 'var(--lv5)']]), ['models', 'plume']));
-    if (A.fuel) strip.appendChild(ovKpi(term('wwv', 'fuel'), A.fuel.share_of_record + '<small>% of record</small>', (A.fuel.discharging ? 'being spent' : 'not spent yet') + ' · leads by ' + (A.fuel.lead || {}).lag + ' mo', barFill(A.fuel.share_of_record, 'var(--ochre)'), ['air', 'fuel']));
-    if (TAO.warmest) strip.appendChild(ovKpi(term('tao', 'under the surface'), fnum(TAO.warmest.value, 1) + '<small>°C at ' + TAO.warmest.depth + ' m</small>', esc(TAO.warmest.station) + ' · D20 east ' + TAO.d20_east + ' m', barFill(Math.min(100, TAO.warmest.value * 8), 'var(--nino)'), ['ocean', 'moorings']));
-    if (WD.dates) strip.appendChild(ovKpi(term('wwb', 'wind bursts'), (WD.events || []).length + '<small>in 120 d</small>', (WD.active ? 'one under way' : 'last ' + WD.days_since_last + ' d ago') + ' · week ' + fnum(WD.mean7, 1) + ' m/s', spark({ values: WD.anom.slice(-60) }, 60, 26), ['air', 'wind']));
-    if (FO) strip.appendChild(ovKpi(term('fao', 'food index'), fnum(FO.index, 1, false) + '<small>' + esc(FO.last_month) + '</small>', 'year ' + arrow(FO.yoy_pct, 1) + ' % · month ' + arrow(FO.mom, 1), spark({ values: FO.series.index.slice(-24) }, 60, 26), ['food', 'prices']));
-    if (coreNow && core97) strip.appendChild(ovKpi('core vs 1997', coreNow.core + '<small>vs ' + core97.core + '</small>', 'comparable rules only; by RONI 1997 is still ahead', twoBars(coreNow.core, core97.core, 'now', '1997', 'var(--nino)'), ['trend', 'index']));
-    if (G.sea && fin(G.sea.last_sst)) strip.appendChild(ovKpi(term('gulfbox', 'the Gulf'), fnum(G.sea.last_sst, 1, false) + '<small>°C</small>', 'anomaly ' + fnum(Math.abs(G.sea.last_anom) < .005 ? 0 : G.sea.last_anom) + ' · ' + (G.sea.days_over_35 || 0) + ' d above 35', barFill((G.sea.last_sst - 20) * 100 / 16, 'var(--ochre)'), ['regions', 'place']));
+    strip.appendChild(ovKpi(term('riskindex', 'risk index'), D.risk_index + '<small>of 100</small>', (D.risks || []).length + ' risks, ' + sh + ' shout · ' + wt + ' watch', arcGauge(D.risk_index, 100, 'var(--nino)'), ['trend', 'index'], null, 'risk_index'));
+    strip.appendChild(ovKpi(zone('nino34') + ' weekly', fnum(NW.latest.n34a, 1) + '<small>°C</small>', '4 weeks ' + arrow(c4, 1) + ' · ' + esc(NW.date), spark({ values: NW.series.slice(-26).map(function (r) { return r.n34a; }) }, 60, 26), ['now', 'weekly'], null, 'n34_weekly'));
+    if (fin(b34.last_anom)) strip.appendChild(ovKpi(zone('nino34') + ' daily box', fnum(b34.last_anom) + '<small>°C</small>', '30 days ' + arrow(b34.chg30, 2) + ' · ' + esc(b34.last_date), spark({ values: b34.anom }, 60, 26), ['ocean', 'surface'], null, 'n34_box'));
+    strip.appendChild(ovKpi(term('oni', 'ONI') + ' · ' + term('roni', 'RONI'), fnum(ONI.current[ONI.last_season]) + '<small>' + esc(ONI.last_season) + '</small>', 'RONI ' + fnum((ONI.roni || {}).last) + ' — the gap is the warm background', twoBars(ONI.current[ONI.last_season] || 0, (ONI.roni || {}).last || 0, 'ONI', 'RONI', 'var(--nino)'), ['now', 'analogs'], null, 'oni'));
+    if (IRI) strip.appendChild(ovKpi('models', (tally.broke || 0) + '<small>broken of ' + ((tally.ok || 0) + (tally.lag || 0) + (tally.broke || 0)) + '</small>', 'live RMS ' + fnum(liveNow(IRI, 'rms')) + ' · published ' + fnum((IRI.against_observed || {}).mean), donut([[tally.ok || 0, 'var(--nina)'], [tally.lag || 0, 'var(--lv3)'], [tally.broke || 0, 'var(--lv5)']]), ['models', 'plume'], null, 'models_broke'));
+    if (A.fuel) strip.appendChild(ovKpi(term('wwv', 'fuel'), A.fuel.share_of_record + '<small>% of record</small>', (A.fuel.discharging ? 'being spent' : 'not spent yet') + ' · leads by ' + (A.fuel.lead || {}).lag + ' mo', barFill(A.fuel.share_of_record, 'var(--ochre)'), ['air', 'fuel'], null, 'wwv'));
+    if (TAO.warmest) strip.appendChild(ovKpi(term('tao', 'under the surface'), fnum(TAO.warmest.value, 1) + '<small>°C at ' + TAO.warmest.depth + ' m</small>', esc(TAO.warmest.station) + ' · D20 east ' + TAO.d20_east + ' m', barFill(Math.min(100, TAO.warmest.value * 8), 'var(--nino)'), ['ocean', 'moorings'], null, 'subsurface_warmest'));
+    if (WD.dates) strip.appendChild(ovKpi(term('wwb', 'wind bursts'), (WD.events || []).length + '<small>in 120 d</small>', (WD.active ? 'one under way' : 'last ' + WD.days_since_last + ' d ago') + ' · week ' + fnum(WD.mean7, 1) + ' m/s', spark({ values: WD.anom.slice(-60) }, 60, 26), ['air', 'wind'], null, 'wind_week'));
+    if (FO) strip.appendChild(ovKpi(term('fao', 'food index'), fnum(FO.index, 1, false) + '<small>' + esc(FO.last_month) + '</small>', 'year ' + arrow(FO.yoy_pct, 1) + ' % · month ' + arrow(FO.mom, 1), spark({ values: FO.series.index.slice(-24) }, 60, 26), ['food', 'prices'], null, 'food_index'));
+    if (coreNow && core97) strip.appendChild(ovKpi('core vs 1997', coreNow.core + '<small>vs ' + core97.core + '</small>', 'comparable rules only; by RONI 1997 is still ahead', twoBars(coreNow.core, core97.core, 'now', '1997', 'var(--nino)'), ['trend', 'index'], null, ['our core index', coreNow.date || '']));
+    if (G.sea && fin(G.sea.last_sst)) strip.appendChild(ovKpi(term('gulfbox', 'the Gulf'), fnum(G.sea.last_sst, 1, false) + '<small>°C</small>', 'anomaly ' + fnum(Math.abs(G.sea.last_anom) < .005 ? 0 : G.sea.last_anom) + ' · ' + (G.sea.days_over_35 || 0) + ' d above 35', barFill((G.sea.last_sst - 20) * 100 / 16, 'var(--ochre)'), ['regions', 'place'], null, 'gulf_sst'));
     body.appendChild(strip);
     var tiles = ovTiles();
     var grid = el('div', 'ov-grid');
