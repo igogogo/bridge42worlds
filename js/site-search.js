@@ -41,9 +41,33 @@
         if (loading) return loading;
         loading = fetch('/lang/' + LANG + '/search-index.json')
             .then(function (r) { return r.ok ? r.json() : []; })
+            .then(mergeConcepts)
             .then(function (rows) { index = rows || []; return index; })
             .catch(function () { index = []; return index; });
         return loading;
+    }
+
+    /* ПОНЯТИЯ В ПОИСКЕ. В search-index.json лежат 368 тегов и 175 законов, а реестр
+       понятий — 3617 имён (аудит 05.09: «3d printing» в шапке не находился). Словарь имён
+       search.js и так тянет на каждой странице (window._conceptsNamesP) — доливаем его в
+       индекс как строки группы «понятия» с пометкой k:'con', чтобы адрес вёл в /concepts/.
+       Тег или закон с тем же id остаётся как был: у него есть своя страница и счётчик. */
+    function mergeConcepts(rows) {
+        rows = rows || [];
+        var P = window._conceptsNamesP;
+        if (!P || typeof P.then !== 'function') return rows;
+        return P.then(function (m) {
+            var have = {};
+            rows.forEach(function (r) { if (r.t === 'tag' || r.t === 'law') have[r.id] = 1; });
+            var add = [];
+            Object.keys(m || {}).forEach(function (id) {
+                if (have[id]) return;
+                var nm = m[id] && (m[id].name || m[id].n);
+                if (!nm) return;
+                add.push({ t: 'tag', k: 'con', id: id, n: nm, c: 0 });
+            });
+            return rows.concat(add);
+        }, function () { return rows; });
     }
 
     /* Имя файла учёного — ровно то же правило, что у генератора (author_slug в gen_base.py):
@@ -60,7 +84,7 @@
        а в файле это лишние сорок с лишним килобайт повторяющихся префиксов. */
     function urlFor(row) {
         var base = '/lang/' + LANG + '/';
-        if (row.t === 'tag') return base + 'tags/' + row.id + '.html';
+        if (row.t === 'tag') return base + (row.k === 'con' ? 'concepts/' : 'tags/') + row.id + '.html';
         if (row.t === 'law') return base + 'laws/' + row.id + '.html';
         if (row.t === 'sci') return base + 'scientists/' + authorSlug(row.id) + '.html';
         if (row.t === 'sec') return base + 'sections/' + row.id.replace(/[./]/g, '_') + '.html';
@@ -291,4 +315,56 @@
         types: TYPES,
         _loadIndex: loadIndex        // для проверок: даёт дождаться загрузки индекса
     };
+})();
+
+/* РЕЕСТР ПОНЯТИЙ: МГНОВЕННЫЙ ФИЛЬТР. На /concepts/ пятьдесят свёрнутых групп и 3,6 тысячи
+   имён — найти нужное можно было только через общий поиск. Поле над группами фильтрует
+   имена на месте: группы без совпадений прячутся, с совпадениями — раскрываются
+   (аудит 05.09, владелец: «переосмысление страниц понятий, как там с поиском»). */
+(function () {
+    if (!/\/concepts\/(index\.html)?$/.test(location.pathname)) return;
+    var first = document.querySelector('details');
+    if (!first || document.querySelector('.cx-find')) return;
+    var L = (document.documentElement.lang || 'en').slice(0, 2);
+    var PH = { ru: 'Найти понятие…', en: 'Find a concept…', es: 'Buscar un concepto…',
+               ar: 'ابحث عن مفهوم…', fr: 'Trouver un concept…' }[L] || 'Find a concept…';
+    var FOUND = { ru: 'найдено', en: 'found', es: 'encontrados', ar: 'تم العثور', fr: 'trouvés' }[L] || 'found';
+    var wrap = document.createElement('div');
+    wrap.className = 'cx-find-row';
+    var inp = document.createElement('input');
+    inp.type = 'search'; inp.className = 'search-box cx-find'; inp.placeholder = PH;
+    inp.setAttribute('aria-label', PH); inp.autocomplete = 'off';
+    var cnt = document.createElement('span');
+    cnt.className = 'cx-count';
+    wrap.appendChild(inp); wrap.appendChild(cnt);
+    first.parentNode.insertBefore(wrap, first);
+    var groups = Array.prototype.slice.call(document.querySelectorAll('details'));
+    var items = [];
+    groups.forEach(function (d) {
+        Array.prototype.forEach.call(d.querySelectorAll('.related-tags a'), function (a) {
+            var id = (a.getAttribute('href') || '').split('/').pop().replace(/\.html$/, '');
+            items.push({ a: a, d: d, k: (a.textContent + ' ' + id.replace(/_/g, ' ')).toLowerCase() });
+        });
+        d.dataset.cxOpen = d.open ? '1' : '';
+    });
+    var timer = null;
+    function apply() {
+        var q = inp.value.trim().toLowerCase();
+        if (q.length < 2) {
+            items.forEach(function (it) { it.a.hidden = false; });
+            groups.forEach(function (d) { d.hidden = false; d.open = !!d.dataset.cxOpen; });
+            cnt.textContent = '';
+            return;
+        }
+        var hit = {}, n = 0;
+        items.forEach(function (it) {
+            var ok = it.k.indexOf(q) !== -1;
+            it.a.hidden = !ok;
+            if (ok) { n++; hit[groups.indexOf(it.d)] = 1; }
+        });
+        groups.forEach(function (d, i) { d.hidden = !hit[i]; if (hit[i]) d.open = true; });
+        cnt.textContent = n + ' ' + FOUND;
+    }
+    inp.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(apply, 120); });
+    inp.addEventListener('keydown', function (e) { if (e.key === 'Escape') { inp.value = ''; apply(); } });
 })();

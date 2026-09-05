@@ -66,24 +66,50 @@ def esc(s):
     return html.escape(str(s or ""), quote=True)
 
 
+_TITLES = {}     # id → заголовок статьи на языке текущей сборки (см. build)
+
+
+def _titles_for(lang):
+    """Заголовки статей на языке страницы из lang/<lang>/articles-index.json. В formulas.json
+    заголовки и пояснения только русские — на английской странице они утекали как есть
+    (аудит 05.09). Нет перевода — показываем номер arXiv, а не русский текст."""
+    if lang == "ru":
+        return {}
+    p = ROOT / "lang" / lang / "articles-index.json"
+    try:
+        return {a["id"]: a.get("title") or "" for a in json.loads(p.read_text(encoding="utf-8"))}
+    except Exception:                                            # noqa: BLE001
+        return {}
+
+
 def card(key, f, lang, loc, big=False):
     """Карточка формулы. Латех отдаём как есть в .formula-render — его рендерит KaTeX
     на странице, тем же вызовом, что в статьях (см. templates/article.html)."""
     arts = f.get("articles") or []
+
+    def title_of(a):
+        if lang == "ru":
+            return a["title"]
+        return _TITLES.get(a["id"]) or ("arXiv:" + a["id"])
+
     links = "".join(
-        f'<a class="fx-art" href="/lang/{lang}/archive/{esc(a["date"])}/{esc(a["id"])}/">{esc(a["title"][:60])}</a>'
+        f'<a class="fx-art" href="/lang/{lang}/archive/{esc(a["date"])}/{esc(a["id"])}/">{esc(title_of(a)[:60])}</a>'
         for a in arts[:6])
     n = f.get("n", len(arts))
     badge = f'<span class="fx-n">{n} {esc(loc["art"])}</span>' if n > 1 else ""
+    # пояснение к формуле пока есть только по-русски — на других языках его не показываем
+    mean = f'<div class="fx-mean">{esc(f.get("meaning", ""))}</div>' if lang == "ru" else ""
     return (f'<article class="fx-card{" fx-big" if big else ""}">'
             f'<div class="formula-render">{esc(f.get("latex", ""))}</div>'
             f'{badge}'
-            f'<div class="fx-mean">{esc(f.get("meaning", ""))}</div>'
+            f'{mean}'
             f'<div class="fx-arts">{links}</div></article>')
 
 
 def build(lang, formulas):
     loc = L10N.get(lang, L10N["en"])
+    global _TITLES
+    _TITLES = _titles_for(lang)
     items = sorted(formulas.items(), key=lambda x: (-x[1].get("n", 0), x[0]))
     bridges = [(k, v) for k, v in items if v.get("n", 0) > 1]
     rest = [(k, v) for k, v in items if v.get("n", 0) <= 1]
@@ -102,7 +128,8 @@ def build(lang, formulas):
                      f'<span class="fx-n">{len(lst)}</span></summary>'
                      + "".join(card(k, v, lang, loc) for k, v in lst[:24]) + "</details>")
 
-    body = (f'<p class="fx-lead">{esc(loc["lead"])}</p>'
+    # лид уже стоит подзаголовком страницы (tags_subtitle) — второй раз не повторяем
+    body = (f'<p class="fx-lead" hidden>{esc(loc["lead"])}</p>'
             f'<h2>{esc(loc["bridges"])} <small>— {esc(loc["bridges_note"])}</small></h2>'
             f'<div class="fx-grid fx-grid-big">' + "".join(card(k, v, lang, loc, big=True) for k, v in bridges) + "</div>"
             f'<h2>{esc(loc["symbols"])}</h2><div class="fx-syms">{sym_html}</div>'

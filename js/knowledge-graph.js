@@ -433,3 +433,25 @@
         if (window.__kgRebuild) window.__kgRebuild();
     };
 })();
+
+
+/* ГРАФ НА ТЕЛЕФОНЕ: ПАНЕЛЬ ФИЛЬТРОВ СВЁРНУТА. На 375px три поля поиска, два ряда
+   флажков и наборы занимали весь первый экран, холст начинался ниже сгиба (аудит 05.09,
+   владелец: «удобство работы с графом, особенно на мобильной»). На узком экране панель
+   заворачивается в details (стили .kg-controls-wrap уже есть в css/style.css), закрытую
+   по умолчанию; на широком — как было. */
+(function () {
+    if (window.innerWidth >= 700) return;
+    var ctl = document.querySelector('.kg-controls');
+    if (!ctl || ctl.closest('.kg-controls-wrap')) return;
+    var L = (document.documentElement.lang || 'en').slice(0, 2);
+    var label = { ru: 'Фильтры и наборы', en: 'Filters & presets', es: 'Filtros y ajustes',
+                  ar: 'المرشحات والإعدادات', fr: 'Filtres et préréglages' }[L] || 'Filters & presets';
+    var d = document.createElement('details');
+    d.className = 'kg-controls-wrap';
+    var sm = document.createElement('summary');
+    sm.textContent = label;
+    d.appendChild(sm);
+    ctl.parentNode.insertBefore(d, ctl);
+    d.appendChild(ctl);
+})();

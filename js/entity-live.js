@@ -186,6 +186,41 @@
         drawStats();
     }
 
+    /* РЯДОМ ПО СМЫСЛУ. Воркер отдаёт связи понятия из D1 (/api/concept: таблица
+       concept_links, связи считает недельный конвейер), а страница показывала только три
+       имени в мини-графе. Один запрос на пару килобайт — и под заголовком ряд плашек:
+       имя и вес связи (аудит 05.09, владелец: «переосмысление страниц понятий»). */
+    function nearConcepts() {
+        if (kind !== 'concept') return;
+        var head = document.querySelector('.tag-header');
+        if (!head || head.querySelector('.cx-near')) return;
+        var L = (document.documentElement.lang || 'en').slice(0, 2);
+        var LAB = { ru: 'Рядом по смыслу', en: 'Related concepts', es: 'Conceptos cercanos',
+                    ar: 'مفاهيم قريبة', fr: 'Concepts proches' }[L] || 'Related concepts';
+        var TIP = { ru: 'вес связи', en: 'link weight', es: 'peso del vínculo',
+                    ar: 'وزن الرابط', fr: 'poids du lien' }[L] || 'link weight';
+        fetch(API + '/api/concept?id=' + encodeURIComponent(key) + '&lang=' + L)
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (d) {
+                var rows = (d && d.related) || [];
+                rows = rows.filter(function (x) { return x && x.id && x.id !== key && (x.kind || 'concept') !== 'formula'; }).slice(0, 8);
+                if (!rows.length) return;
+                var html = rows.map(function (x) {
+                    var nm = x.name || x.id.replace(/_/g, ' ');
+                    return '<a href="/lang/' + L + '/concepts/' + encodeURIComponent(x.id) + '.html" title="' + TIP + ' ' + (+x.w || 0).toFixed(2) + '">' +
+                        nm.replace(/&/g, '&amp;').replace(/</g, '&lt;') +
+                        (x.n ? ' <em>' + x.n + '</em>' : '') + '</a>';
+                }).join('');
+                var div = document.createElement('div');
+                div.className = 'related-tags cx-near';
+                div.innerHTML = '<span class="cx-lab">' + LAB + '</span>' + html;
+                var anchor = head.querySelector('.related-tags');
+                if (anchor) anchor.insertAdjacentElement('afterend', div);
+                else head.appendChild(div);
+            }).catch(function () {});
+    }
+    nearConcepts();
+
     // Перерисовка по требованию — search.js зовёт при смене уровня или сбросе поиска.
     window.B42EntityLive = function () { page = 0; done = false; boot(); };
 

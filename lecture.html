@@ -164,13 +164,25 @@
   ]).then(function (res) {
     var idx = res[0], L = B42Lang.pick(res[1]) || res[1].ru;
     document.title = L.title + ' — bridge42worlds';
+    /* Список лекций и подписи навигации — на языке страницы: index.json держит ветки
+       ru/en/es/ar/fr, а раньше бралась только общая русская (аудит 05.09: английская
+       лекция с русским оглавлением). */
+    var LG = window.B42_LANG || 'ru';
+    var LX = (idx[LG] && idx[LG].lectures) || idx.lectures;
+    var NAV = ({ ru: ['← открытые вопросы', 'дерево знаний', 'открытые вопросы'],
+                 en: ['← open questions', 'knowledge tree', 'open questions'],
+                 es: ['← preguntas abiertas', 'árbol del conocimiento', 'preguntas abiertas'],
+                 ar: ['← أسئلة مفتوحة', 'شجرة المعرفة', 'أسئلة مفتوحة'],
+                 fr: ['← questions ouvertes', 'arbre des savoirs', 'questions ouvertes'] })[LG] ||
+              ['← open questions', 'knowledge tree', 'open questions'];
+    var LQ = LG === 'ru' ? '' : '?lang=' + LG;
 
     // навигация по лекциям цикла
     var nav = el('div', 'l-nav');
-    nav.appendChild(el('span', null, '<a href="/frontier.html">← открытые вопросы</a>'));
-    idx.lectures.forEach(function (x, i) {
+    nav.appendChild(el('span', null, '<a href="/frontier.html' + LQ + '">' + NAV[0] + '</a>'));
+    LX.forEach(function (x, i) {
       var a = el('a', x.id === id ? 'cur' : null, (i + 1) + '. ' + x.title);
-      a.href = '/lecture.html?l=' + x.id;
+      a.href = '/lecture.html?l=' + x.id + (LG === 'ru' ? '' : '&lang=' + LG);
       nav.appendChild(a);
     });
     root.appendChild(nav);
@@ -244,9 +256,9 @@
     }
 
     main.appendChild(el('div', 'foot-nav',
-      '<a href="/learn.html">дерево знаний</a><a href="/frontier.html">открытые вопросы</a>' +
-      idx.lectures.filter(function (x) { return x.id !== id; })
-        .map(function (x) { return '<a href="/lecture.html?l=' + x.id + '">' + x.title + '</a>'; }).join('')));
+      '<a href="/learn.html' + LQ + '">' + NAV[1] + '</a><a href="/frontier.html' + LQ + '">' + NAV[2] + '</a>' +
+      LX.filter(function (x) { return x.id !== id; })
+        .map(function (x) { return '<a href="/lecture.html?l=' + x.id + (LG === 'ru' ? '' : '&lang=' + LG) + '">' + x.title + '</a>'; }).join('')));
 
     (function tex(n) {
       if (window.renderMathInElement) {

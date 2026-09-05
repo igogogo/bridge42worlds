@@ -5045,3 +5045,22 @@ body.graph-page { max-width: none; }
 .wk-card .wk-x { position: absolute; top: 5px; inset-inline-end: 7px; border: 0; background: none;
     color: var(--soft, #888); cursor: pointer; font-size: 15px; line-height: 1; padding: 2px 4px; }
 .wk-card .wk-x:hover { color: var(--accent, #b06a3b); }
+
+/* ── аудит 05.09 ──────────────────────────────────────────────────────────────
+   Таблицы на inside.html (обёртка .tw) на телефоне выезжали за экран на 45px —
+   прокрутка внутри обёртки, страница не растягивается. */
+.tw { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+.tw table { min-width: 420px; }
+/* Разделы: строки таблицы держат код и имя в одной ячейке (colspan=2), а в шапке
+   «arXiv code» висел над пустотой — подпись прячем, ячейку оставляем, чтобы колонка
+   «Articles» не съехала. */
+.sections-table thead th:nth-child(2) { visibility: hidden; }
+
+/* понятия: фильтр реестра и ряд «рядом по смыслу» (аудит 05.09) */
+.cx-find-row { display: flex; align-items: center; gap: 10px; margin: 6px 0 14px; max-width: var(--w-text); }
+.cx-find { flex: 1 1 auto; min-width: 0; }
+.cx-count { font-family: var(--mono); font-size: 11px; color: var(--soft); white-space: nowrap; }
+.cx-near { margin-top: 8px; }
+.cx-near .cx-lab { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--soft); margin-inline-end: 6px; align-self: center; }
+.cx-near a em { font-style: normal; font-family: var(--mono); font-size: 10px; opacity: .6; margin-inline-start: 4px; }

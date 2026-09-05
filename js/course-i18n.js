@@ -366,6 +366,10 @@
     function mountSwitcher() {
         var bar = document.querySelector('.top-bar, .topnav, .bar');
         if (!bar || document.getElementById('course-langs')) return;
+        /* Общая шапка (js/sitenav.js) сама ставит ряд языков под шапкой на всех верхних
+           страницах; второй переключатель здесь давал две полосы RU EN ES AR FR подряд
+           (аудит 05.09: learn, course, research, reference…). */
+        if (document.querySelector('script[src*="sitenav"]')) return;
         var wrap = document.createElement('div');
         wrap.className = 'langs';
         wrap.id = 'course-langs';
@@ -395,8 +399,22 @@
         });
     }
 
+    /* Кнопка темы на учебных страницах статична («◐»); на остальном сайте — луна/солнце
+       из js/icons.js. Подменяем значок, поведение кнопки не трогаем. */
+    function unifyThemeIcon() {
+        var I = window.B42Icons;                       // js/icons.js; b42ic() живёт в search.js, которого тут нет
+        if (!I || !I.moon || !I.sun) return;
+        function ic() { return document.documentElement.getAttribute('data-theme') === 'dark' ? I.sun(18) : I.moon(18); }
+        Array.prototype.forEach.call(document.querySelectorAll('button.theme-toggle'), function (b) {
+            if (b.querySelector('svg')) return;
+            b.innerHTML = ic();
+            b.addEventListener('click', function () { setTimeout(function () { b.innerHTML = ic(); }, 0); });
+        });
+    }
+
     function start() {
         mountSwitcher();
+        unifyThemeIcon();
         fixHomeLink();
         if (LANG === 'ru') return;
         translate(document.body);

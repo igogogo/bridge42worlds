@@ -1988,3 +1988,4 @@ window.B42G = {frame: function () { return frame; }, view: view,
                    draw();
                }};
 })();
+
