@@ -2082,6 +2082,10 @@ html[dir="rtl"] .fb-title-row { justify-content: flex-start; }
 /* Шапка: ☰ вплотную к названию сайта, поиск/календарь и остальной кластер — вправо
    (юзер 2026-07-23). ☰ теперь прямой ребёнок .brand-row/.top-bar, см. collapseNavOverflow(). */
 .brand-row > .nav-more, .top-bar > .nav-more { margin-inline-start: 2px; flex-shrink: 0; }
+/* Оптическое выравнивание гамбургера по оси названия: геометрические центры совпадают, но
+   зрительный центр строчных букв лежит ниже центра строки, и три чёрточки читались как
+   «выше названия» (юзер 2026-09-05, «и это, видимо, везде по сайту»). */
+.brand-row > .nav-more .ico-svg, .top-bar > .nav-more .ico-svg { transform: translateY(1.5px); }
 .brand-row > .hdr-icons, .top-bar > .header-right { margin-inline-start: auto; }
 .nav-express-toggle { cursor: pointer; font-family: var(--mono); font-size: 12px; white-space: nowrap; }
 .nav-express-toggle.on { color: var(--link); }
@@ -5004,3 +5008,40 @@ body.graph-page { max-width: none; }
 @keyframes nav-live-pulse { 0% { box-shadow: 0 0 0 0 rgba(168, 67, 43, .45); } 70% { box-shadow: 0 0 0 7px rgba(168, 67, 43, 0); } 100% { box-shadow: 0 0 0 0 rgba(168, 67, 43, 0); } }
 @media (prefers-reduced-motion: reduce) { .nav-live i { animation: none; } }
 @media (max-width: 520px) { .nav-live { padding: 4px 8px; margin-inline-start: 2px; } .nav-live .long { display: none; } .nav-live .short { display: inline; } }
+
+/* ── ССЫЛКА НА РАБОТУ: ПЛАШКА И КАРТОЧКА У КУРСОРА ───────────────────────────────
+   Владелец 04.09: «ссылки на работы тоже отдельно как-то рамочкой или шрифтом, чтобы было
+   чётко видно» и «по наведению допустим резюме, там наша какая-то часть, и ссылка на нашу
+   карточку». Форма третья, не как у зон Ниньо (пилюля) и не как у моделей (прямоугольник):
+   у работы скошенная плашка с моноширинным номером — её не спутать ни с числом, ни с
+   термином. Поведение задаёт js/workcard.js, здесь только вид. */
+[data-work], .km-arxiv {
+    display: inline-block; font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: .92em; line-height: 1.35; letter-spacing: .01em;
+    border: 1px solid color-mix(in srgb, var(--accent, #b06a3b) 40%, var(--border, #ddd));
+    border-radius: 3px 8px 3px 8px; padding: 0 6px; white-space: nowrap;
+    background: color-mix(in srgb, var(--accent, #b06a3b) 6%, transparent);
+    text-decoration: none; cursor: pointer;
+}
+[data-work]:hover, .km-arxiv:hover {
+    border-color: var(--accent, #b06a3b); color: var(--accent, #b06a3b);
+}
+
+.wk-card {
+    position: fixed; z-index: 300; max-width: min(340px, 74vw); opacity: 0; visibility: hidden;
+    background: var(--bg-card, #fff); color: var(--text, #222);
+    border: 1px solid color-mix(in srgb, var(--accent, #b06a3b) 45%, var(--border, #ddd));
+    border-radius: 10px; padding: 10px 13px; font-size: 13px; line-height: 1.5;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .18); transition: opacity .12s ease;
+}
+.wk-card.on { opacity: 1; visibility: visible; }
+.wk-card .wk-t { font-weight: 600; margin-bottom: 4px; padding-inline-end: 16px; }
+.wk-card .wk-s { color: var(--muted, #666); }
+.wk-card .wk-m { font-family: var(--font-mono, ui-monospace, monospace); font-size: 11px;
+    color: var(--soft, #888); margin-top: 6px; }
+.wk-card .wk-go { display: inline-block; margin-top: 8px; font-size: 12px;
+    color: var(--accent, #b06a3b); text-decoration: none; }
+.wk-card .wk-go:hover { text-decoration: underline; }
+.wk-card .wk-x { position: absolute; top: 5px; inset-inline-end: 7px; border: 0; background: none;
+    color: var(--soft, #888); cursor: pointer; font-size: 15px; line-height: 1; padding: 2px 4px; }
+.wk-card .wk-x:hover { color: var(--accent, #b06a3b); }
