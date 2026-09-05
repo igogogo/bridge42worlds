@@ -99,9 +99,16 @@
      с графиками»). Отступ считается из ширины колонки, поэтому меняется вместе с ней. */
   /* Ширина строки — 100 % МИНУС отступ слева: иначе с ростом числа вкладок строка не
      переносилась, а уезжала за правый край (владелец 05.09, четырнадцать вкладок). */
+  /* Меню стало большим — выравниваем влево, по оси названия вверху (владелец 05.09). */
   .tabs{display:flex;gap:4px;flex-wrap:wrap;row-gap:4px;overflow:visible;min-width:0;
-    flex:0 0 calc(100% - (var(--rail) - 5px));order:9;margin-inline-start:calc(var(--rail) + 8px - 23px + 10px);
-    padding-bottom:3px}   /* отбивка от рамки сцены: меню не должно лежать на ней */
+    flex:0 0 100%;order:9;margin-inline-start:0;
+    padding-bottom:3px}
+  /* значок «i» с подсказкой у пунктов меню и подменю */
+  .ti{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:50%;
+    border:1px solid currentColor;font:italic 600 8.5px Georgia,serif;line-height:1;margin-inline-start:6px;opacity:.55;
+    cursor:help;vertical-align:1px}
+  .ti:hover{opacity:1}
+  .tab.on .ti,.seg button.on .ti{opacity:.85}   /* отбивка от рамки сцены: меню не должно лежать на ней */
   .tabs::-webkit-scrollbar{display:none}
   /* Чётче: цвет основного текста вместо приглушённого и чуть плотнее начертание —
      меню должно читаться с первого взгляда (владелец 04.09). */
@@ -658,7 +665,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=00bbc7a1d0"></script>
+<script src="/js/enso.js?v=83d0a6b7d4"></script>
 <script src="/js/sitenav.js?v=cf6fd79772"></script>
 </body>
 </html>

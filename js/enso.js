@@ -1374,10 +1374,12 @@
          приглушённый цвет; вердикт — контрастный чёрно-белый. У каждой — подсказка,
          что это (владелец 05.09). */
       var svc = v[0] === 'how' || v[0] === 'chain' || v[0] === 'about' || v[0] === 'refs';
-      var b = el('button', 'tab' + (v[0] === 'verdict' ? ' verdict' : '') + (svc ? ' svc' : '') + (S.view === v[0] ? ' on' : ''), esc(v[1]));
+      /* Подсказка к пункту меню — на значке «i» справа от текста, а не на самой кнопке
+         (владелец 05.09: «для меню неудобно тултипы — пусть будет небольшая иконка i»). */
+      var b = el('button', 'tab' + (v[0] === 'verdict' ? ' verdict' : '') + (svc ? ' svc' : '') + (S.view === v[0] ? ' on' : ''),
+        esc(v[1]) + (T.tabHelp[v[0]] ? '<i class="ti" data-src="' + esc(JSON.stringify({ name: v[1], def: T.tabHelp[v[0]] })) + '">i</i>' : ''));
       b.type = 'button';
-      b.setAttribute('data-src', JSON.stringify({ name: v[1], def: T.tabHelp[v[0]] || '' }));
-      b.onclick = function () { S.view = v[0]; S.risk = null; render(); };
+      b.onclick = function (e) { if (e.target.closest && e.target.closest('.ti')) return; S.view = v[0]; S.risk = null; render(); };
       host.appendChild(b);
     });
     var t = $('deltaBtn');
@@ -1546,8 +1548,8 @@
     if (segs2 && segs2.length) {
       var seg = el('div', 'seg');
       segs2.forEach(function (b) {
-        var btn = el('button', b.on ? 'on' : '', esc(b.label)); btn.type = 'button'; btn.onclick = b.click;
-        if (b.help) btn.setAttribute('data-src', JSON.stringify({ name: b.label, def: b.help }));
+        var btn = el('button', b.on ? 'on' : '', esc(b.label) + (b.help ? '<i class="ti" data-src="' + esc(JSON.stringify({ name: b.label, def: b.help })) + '">i</i>' : '')); btn.type = 'button';
+        btn.onclick = function (e) { if (e.target.closest && e.target.closest('.ti')) return; b.click(e); };
         seg.appendChild(btn);
       });
       head.appendChild(seg);
@@ -2916,9 +2918,12 @@
      (дуга, кольцо, полоса, искра, стрелка); ниже — мозаика из всех графиков панели, каждый
      в своём маленьком окне, с подсказкой сжатого смысла; щелчок ведёт в его раздел.
      Открывается на весь экран. Графики — те же функции, что и на своих сценах: одна правда. */
+  function plainText(h) { return String(h == null ? '' : h).replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim(); }
   function ovKpi(kn, big, small, vis, go, pay) {
     var d = el('div', 'ov-kpi');
-    d.setAttribute('data-src', JSON.stringify(pay || { name: kn, def: small }));
+    /* Подсказка — чистым текстом: имя показателя приходит с плашкой зоны, а подсказка
+       экранирует разметку и показывала «/span» (владелец 05.09). */
+    d.setAttribute('data-src', JSON.stringify(pay || { name: plainText(kn), def: plainText(big) + ' — ' + plainText(small), why: 'Click to open the section.' }));
     d.innerHTML = '<div class="kn">' + kn + '</div><div class="ov-row"><div class="kv">' + big + '</div><div class="ov-vis">' + (vis || '') + '</div></div><div class="km">' + small + '</div>';
     d.addEventListener('click', function () { S.full = false; S.view = go[0]; if (go[1]) S.sub[go[0]] = go[1]; S.risk = null; render(); });
     return d;
