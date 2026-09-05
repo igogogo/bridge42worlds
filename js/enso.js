@@ -321,9 +321,10 @@
   function legend(items, w, h, R, top) {
     var s = '', i;
     if (R > 0) {
-      var ly = top + 4;
+      var ly = top + 4, maxCh = Math.max(8, Math.floor((R - 40) / 6.3));
       for (i = 0; i < items.length; i++) {
-        var it = items[i];
+        var it = items[i].slice();
+        if (it[0] && it[0].length > maxCh) it[0] = it[0].slice(0, maxCh - 1) + '…';   // не вылезать за поле (владелец 05.09)
         var tag = it[4] ? ' data-pick="' + esc(it[4]) + '" class="pick' + (S.pick === it[4] ? ' on' : '') + '"' : '';
         if (tag) s += '<g' + tag + '>';
         if (it[2] === 'dot') s += '<circle cx="' + (w - R + 18) + '" cy="' + (ly + 4) + '" r="4" style="fill:' + it[1] + '"/>';
@@ -770,18 +771,18 @@
     }
     // счёт «сколько ниже прожитого» ушёл в фишки под графиком: на графике он налезал на полосу
     var LVn = IRI.live || {}, tally2 = IRI.class_tally || {};
-    var leg = [['root mean square, live models ' + (LVn.n_live || '—') + ' of ' + (LVn.n_all || '—'), 'var(--ochre)', 3.2, '', 'rms'],
+    var leg = [['RMS, live ' + (LVn.n_live || '—') + ' of ' + (LVn.n_all || '—'), 'var(--ochre)', 3.2, '', 'rms'],
       ['their plain mean', 'var(--ochre)', 1, '2 3', 'mean'],
-      ['published average, all ' + (LVn.n_all || '—'), 'var(--soft)', 1.1, '3 3', 'pub'],
-      [(strongest ? 'strongest live model: ' + strongest + ' ' + fnum(strongestPeak) : 'strongest model'), 'var(--lv4)', 2, null, strongest || ''],
+      ['published, all ' + (LVn.n_all || '—'), 'var(--soft)', 1.1, '3 3', 'pub'],
+      [(strongest ? 'strongest: ' + strongest + ' ' + fnum(strongestPeak) : 'strongest model'), 'var(--lv4)', 2, null, strongest || ''],
       ['previous issue' + (hist.length > 1 ? ' (' + hist[1].issued + ')' : ''), 'var(--soft)', 1.6, '5 4', 'prev'],
       ['keeping up ' + (tally2.ok || 0), 'var(--nina)', 1.4, null, 'ok'],
       ['lagging ' + (tally2.lag || 0), 'var(--lv3)', 1.4, null, 'lag'],
       ['broken ' + (tally2.broke || 0), 'var(--lv5)', 1.4, null, 'broke'],
       [esc(ao.season) + ' so far ' + fnum(ref), 'var(--nino)', 1, '4 3'], ['below the lived part', 'var(--lv5)', 'dot']];
     if (IRI.last_full_season) leg.push([esc(IRI.last_full_season.season) + ' lived in full', 'var(--ok)', 1, '2 4']);
-    leg.push(['lived part of a season: the dot', 'var(--nino)', 'dot']);
-    leg.push(['where its mean can still end: the bar', 'var(--nino)', 4]);
+    leg.push(['lived part of a season: dot', 'var(--nino)', 'dot']);
+    leg.push(['where its mean can end: bar', 'var(--nino)', 4]);
     if (S.model) leg.unshift([S.model, 'var(--ochre)', 2.6]);
     s += legend(leg, W, H, R, Tp);
     return s + '</svg>';
@@ -915,9 +916,9 @@
       s2 += '<text class="tt" x="' + Lp + '" y="' + (top + 10) + '">' + esc(r.issued) + ' issue' + (ri === 0 ? ' — the newest' : '') + '</text>';
       if (RCs && ri === 0) {
         var CLt = ((S.D.iri || {}).class_tally) || {};
-        s2 += legend([['root mean square, live', 'var(--ochre)', 2.8, '', 'rms'],
+        s2 += legend([['RMS, live models', 'var(--ochre)', 2.8, '', 'rms'],
           ['their plain mean', 'var(--ochre)', 1, '2 3', 'mean'],
-          ['published average, all', 'var(--soft)', 1.2, '3 3', 'pub'],
+          ['published, all', 'var(--soft)', 1.2, '3 3', 'pub'],
           ['each model', 'var(--soft)', 1],
           ['live spread', 'var(--ochre)', 6],
           ['where we stand', 'var(--nino)', 3],
@@ -1172,7 +1173,7 @@
       '<text x="' + (X(here) + 3).toFixed(0) + '" y="' + (Tp + 22) + '" style="fill:var(--nino)">today</text>';
     s += legend(series.map(function (r, ri) { return [r[0], r[2], r[3], ri ? dashOf(ri) : '', r[4]]; })
       .concat(pp.map(function (p) { return [p.year + ' path repeated', p.color, 1.8, '4 4', 'rep' + p.year]; }))
-      .concat(pp.length ? [['the band: same path × strength (up to ×' + Math.max.apply(null, pp.map(function (p) { return p.f; })).toFixed(1) + ')', 'var(--soft)', 1, '1 3']] : []), W, H, R, Tp);
+      .concat(pp.length ? [['band: path × strength ≤' + Math.max.apply(null, pp.map(function (p) { return p.f; })).toFixed(1), 'var(--soft)', 1, '1 3']] : []), W, H, R, Tp);
     return s + '</svg>';
   }
 
@@ -2046,7 +2047,7 @@
     var li = n - 1;
     s += '<circle cx="' + X(li).toFixed(1) + '" cy="' + Y(ser.values[li] / 1e14).toFixed(1) + '" r="4" style="fill:var(--text)"/>';
     s += legend([['warm water volume ' + fnum(ser.values[li] / 1e14) + '·10¹⁴', 'var(--text)', 2.6, '', 'wwv'],
-      ['Niño 3.4, shifted ' + lag + ' months back', 'var(--nino)', 1.8, '5 3', 'n34']], W, H, R, Tp);
+      ['Niño 3.4, −' + lag + ' months', 'var(--nino)', 1.8, '5 3', 'n34']], W, H, R, Tp);
     return s + '</svg>';
   }
 
@@ -2096,7 +2097,7 @@
       s += '<text x="' + lx + '" y="' + ly + '" class="tt" font-size="11">' + esc(x.title) + '</text>';
       s += '<text x="' + lx + '" y="' + (ly + 13) + '" font-size="10" style="fill:var(--text)">now ' + fnum(x.tropics) + ' \u00b0C</text>';
       s += '<text x="' + lx + '" y="' + (ly + 25) + '" font-size="9" style="fill:var(--soft)">' +
-        (x.lag == null ? 'no measurable delay' : 'follows the ocean by ' + x.lag + ' mo, r ' + x.r) + '</text>';
+        (x.lag == null ? 'no measurable delay' : 'lags ' + x.lag + ' mo, r ' + x.r) + '</text>';
       var ry = ly + 38, kk = 0;
       ['1997', '2015', '2023'].forEach(function (y) {
         if (!fin(AE[y])) return;
