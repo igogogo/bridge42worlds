@@ -5064,3 +5064,47 @@ body.graph-page { max-width: none; }
 .cx-near .cx-lab { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
   color: var(--soft); margin-inline-end: 6px; align-self: center; }
 .cx-near a em { font-style: normal; font-family: var(--mono); font-size: 10px; opacity: .6; margin-inline-start: 4px; }
+
+/* ── аналитика как дашборд (05.09) ─────────────────────────────────────────── */
+body.an-wide { max-width: 1180px; }
+body.an-wide #analytics { max-width: none; }
+body.an-wide .top-bar, body.an-wide .langs-row { max-width: 1180px; }
+.an-tabs { flex-wrap: wrap; }
+.an-tab .ti { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; margin-inline-start: 6px;
+  border-radius: 50%; border: 1px solid currentColor; font-family: var(--serif); font-style: italic; font-size: 10px; line-height: 1;
+  opacity: .55; cursor: help; vertical-align: 1px; }
+.an-tab .ti:hover { opacity: 1; }
+.anv { position: relative; margin: 6px 0 18px; }
+.anv-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 8px; margin-bottom: 12px; }
+.anv-kpi { position: relative; border: 1px solid var(--hair); border-radius: 10px; padding: 7px 10px; background: var(--card-bg, transparent);
+  cursor: pointer; min-width: 0; }
+.anv-kpi:hover { border-color: var(--ochre); }
+.anv-kpi .kn { font-family: var(--mono); font-size: 9.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--soft); }
+.anv-kpi .kv { font-family: var(--serif); font-size: 22px; line-height: 1.1; margin: 3px 0 2px; font-variant-numeric: tabular-nums; color: var(--ink); }
+.anv-kpi .km { font-size: 11px; color: var(--muted); line-height: 1.4; }
+.anv-kpi .km a { color: var(--link); text-decoration: none; }
+.anv-spark { display: block; width: 100%; height: 26px; }
+.anv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.anv-tile { border: 1px solid var(--hair); border-radius: 10px; padding: 7px 8px 6px; background: var(--card-bg, transparent); cursor: pointer;
+  min-width: 0; display: flex; flex-direction: column; gap: 4px; transition: border-color .15s, box-shadow .15s; }
+.anv-tile:hover { border-color: var(--ochre); box-shadow: 0 6px 18px -12px color-mix(in srgb, var(--ink) 40%, transparent); }
+.anv-tile .anv-t { font-family: var(--mono); font-size: 11px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.anv-tile canvas { display: block; width: 100%; height: 140px; border-radius: 6px; background: color-mix(in srgb, var(--ink) 3%, transparent); }
+.anv-tile .anv-c { font-size: 11px; color: var(--muted); line-height: 1.35; }
+.anv-date { position: absolute; right: 2px; bottom: -16px; font-family: var(--mono); font-size: 10px; color: var(--soft); display: inline-flex;
+  align-items: center; gap: 4px; cursor: help; }
+@media (max-width: 640px) { .anv-tile canvas { height: 120px; } .anv-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); } }
+
+/* ШАПКА НА ТЕЛЕФОНЕ — В ОДНУ СТРОКУ. На 375px правая группа (переключатель экспресса,
+   тема) переносилась под логотип, и между строками зияла пустая полоса (аудит 05.09).
+   Строка не переносится; чтобы всё вошло, плашка El Niño оставляет только живую точку
+   (имя — в подсказке), группы прижаты друг к другу. */
+@media (max-width: 640px) {
+  .top-bar { flex-wrap: nowrap; gap: 6px; }
+  .top-bar > .brand-row { flex: 1 1 auto; min-width: 0; gap: 6px; }
+  .top-bar > .header-right { flex: none; margin-inline-start: 0; }
+  .brand-row > .hdr-icons { margin-inline-start: 2px; }
+  .nav-live { padding: 4px 7px; margin-inline-start: 0; gap: 0; }
+  .nav-live .short, .nav-live .long { display: none; }
+  .hdr-onerow { display: none; }
+}

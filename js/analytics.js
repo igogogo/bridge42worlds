@@ -484,19 +484,59 @@
                  sphere: V.sphere, mobius: V.mobius, matrix: V.matrix,
                  tree: V2.tree, spectrum: V2.spectrum, tension: V3.tab };
 
+  var OVT = ({ ru: { tab: 'Обзор', hint: 'все виды на одном экране: числа и плитки; плитка открывает вид',
+                     kArt: 'статей разобрано', kMap: 'на карте статей', kWorld: 'поле arXiv', kAuth: 'авторов на карте',
+                     kCon: 'понятий в реестре', kTags: 'тегов в связях', kRhythm: 'выход по месяцам', kLang: 'языков',
+                     full: 'полных', express: 'экспресс', groups: 'групп', noise: 'вне групп', ours: 'наших',
+                     built: 'данные собраны', desk: 'на широком экране', open: 'открыть', months: 'мес.' },
+               en: { tab: 'Overview', hint: 'every view on one screen: numbers and tiles; a tile opens the view',
+                     kArt: 'articles reviewed', kMap: 'on the article map', kWorld: 'arXiv field', kAuth: 'authors on the map',
+                     kCon: 'concepts in the registry', kTags: 'tags in co-occurrence', kRhythm: 'output by month', kLang: 'languages',
+                     full: 'full', express: 'express', groups: 'groups', noise: 'outside groups', ours: 'ours',
+                     built: 'data built', desk: 'on a wide screen', open: 'open', months: 'mo' },
+               es: { tab: 'Resumen', hint: 'todas las vistas en una pantalla: cifras y fichas; la ficha abre la vista',
+                     kArt: 'artículos analizados', kMap: 'en el mapa de artículos', kWorld: 'campo arXiv', kAuth: 'autores en el mapa',
+                     kCon: 'conceptos en el registro', kTags: 'etiquetas en coocurrencia', kRhythm: 'salida por mes', kLang: 'idiomas',
+                     full: 'completos', express: 'exprés', groups: 'grupos', noise: 'fuera de grupos', ours: 'nuestros',
+                     built: 'datos generados', desk: 'en pantalla ancha', open: 'abrir', months: 'meses' },
+               ar: { tab: 'نظرة عامة', hint: 'كل الأشكال في شاشة واحدة: أرقام وبطاقات؛ البطاقة تفتح الشكل',
+                     kArt: 'مقالات محلّلة', kMap: 'على خريطة المقالات', kWorld: 'حقل arXiv', kAuth: 'مؤلفون على الخريطة',
+                     kCon: 'مفاهيم في السجل', kTags: 'وسوم في التلازم', kRhythm: 'الإصدار شهريًا', kLang: 'لغات',
+                     full: 'كاملة', express: 'سريعة', groups: 'مجموعات', noise: 'خارج المجموعات', ours: 'لدينا',
+                     built: 'بُنيت البيانات', desk: 'على شاشة عريضة', open: 'فتح', months: 'شهر' },
+               fr: { tab: 'Aperçu', hint: 'toutes les vues sur un écran : chiffres et tuiles ; une tuile ouvre la vue',
+                     kArt: 'articles analysés', kMap: 'sur la carte des articles', kWorld: 'champ arXiv', kAuth: 'auteurs sur la carte',
+                     kCon: 'concepts au registre', kTags: 'tags en cooccurrence', kRhythm: 'sortie par mois', kLang: 'langues',
+                     full: 'complets', express: 'express', groups: 'groupes', noise: 'hors groupes', ours: 'à nous',
+                     built: 'données générées', desk: 'sur grand écran', open: 'ouvrir', months: 'mois' } })[LANG] ||
+            { tab: 'Overview', hint: 'every view on one screen: numbers and tiles; a tile opens the view',
+              kArt: 'articles reviewed', kMap: 'on the article map', kWorld: 'arXiv field', kAuth: 'authors on the map',
+              kCon: 'concepts in the registry', kTags: 'tags in co-occurrence', kRhythm: 'output by month', kLang: 'languages',
+              full: 'full', express: 'express', groups: 'groups', noise: 'outside groups', ours: 'ours',
+              built: 'data built', desk: 'on a wide screen', open: 'open', months: 'mo' };
+  // Значок «i» у вкладки: подсказка о том, что на виде (владелец 05.09: как на панели El Niño).
+  function ti(mode) {
+    var t = mode === 'overview' ? OVT.hint : (HEAD[mode] || '');
+    return t ? '<span class="ti" title="' + t.replace(/"/g, '&quot;') + '" data-tip-text="' + t.replace(/"/g, '&quot;') + '">i</span>' : '';
+  }
+  // Страница аналитики — широкая, как панель El Niño: колонка в 668px не вмещала ни карту, ни плитки.
+  document.body.classList.add('an-wide');
+
   root.innerHTML =
     '<h1 class="dash-h1">' + T.title + '</h1>' +
-    '<div class="an-tabs"><button class="an-tab active" data-t="articles">' + T.articles + '</button>' +
-    '<button class="an-tab" data-t="world"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><ellipse cx="12" cy="12" rx="4" ry="8.5"/><path d="M3.8 9.5h16.4"/><path d="M3.8 14.5h16.4"/></svg> ' + WM.tab + '</button>' +
-    '<button class="an-tab" data-t="authors">' + T.authors + '</button>' +
-    '<button class="an-tab" data-t="fly"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12l18-8-7 18-2.5-7.5L3 12Z"/></svg> ' + FLY.tab + '</button>' +
-    '<button class="an-tab" data-t="heat"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="13" width="4" height="7.5" rx="1"/><rect x="10" y="8" width="4" height="12.5" rx="1"/><rect x="16.5" y="4" width="4" height="16.5" rx="1"/></svg> ' + HEAT.tab + '</button>' +
-    '<button class="an-tab" data-t="sphere"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><ellipse cx="12" cy="12" rx="8" ry="3.4"/><path d="M12 4c2.2 2.3 3.4 5 3.4 8s-1.2 5.7-3.4 8"/><path d="M12 4c-2.2 2.3-3.4 5-3.4 8s1.2 5.7 3.4 8"/></svg> ' + V.sphere + '</button>' +
-    '<button class="an-tab" data-t="mobius"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12c0-2.8 3.4-5 7.5-5s7.5 2.2 7.5 5-3.4 5-7.5 5-7.5-2.2-7.5-5Z"/><path d="M6.5 9.5c3 1.6 8 3.4 11 5"/></svg> ' + V.mobius + '</button>' +
-    '<button class="an-tab" data-t="matrix"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1"/></svg> ' + V.matrix + '</button>' +
-    '<button class="an-tab" data-t="tree"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h4"/><path d="M8 12V6h5"/><path d="M8 12v6h5"/><circle cx="15" cy="6" r="2"/><circle cx="15" cy="18" r="2"/><circle cx="4" cy="12" r="1.6"/></svg> ' + V2.tree + '</button>' +
-    '<button class="an-tab" data-t="spectrum"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18l3-6 3 9 3-13 3 8 3-4 3 6"/></svg> ' + V2.spectrum + '</button>' +
-    '<button class="an-tab" data-t="tension"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h5"/><path d="M15 12h5"/><path d="M9 8.5 12 12l-3 3.5"/><path d="M15 8.5 12 12l3 3.5"/></svg> ' + V3.tab + '</button></div>' +
+    '<div class="an-tabs"><button class="an-tab active" data-t="overview">' + OVT.tab + ti('overview') + '</button>' +
+    '<button class="an-tab" data-t="articles">' + T.articles + ti('articles') + '</button>' +
+    '<button class="an-tab" data-t="world"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><ellipse cx="12" cy="12" rx="4" ry="8.5"/><path d="M3.8 9.5h16.4"/><path d="M3.8 14.5h16.4"/></svg> ' + WM.tab + '' + ti('world') + '</button>' +
+    '<button class="an-tab" data-t="authors">' + T.authors + ti('authors') + '</button>' +
+    '<button class="an-tab" data-t="fly"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12l18-8-7 18-2.5-7.5L3 12Z"/></svg> ' + FLY.tab + '' + ti('fly') + '</button>' +
+    '<button class="an-tab" data-t="heat"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="13" width="4" height="7.5" rx="1"/><rect x="10" y="8" width="4" height="12.5" rx="1"/><rect x="16.5" y="4" width="4" height="16.5" rx="1"/></svg> ' + HEAT.tab + '' + ti('heat') + '</button>' +
+    '<button class="an-tab" data-t="sphere"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><ellipse cx="12" cy="12" rx="8" ry="3.4"/><path d="M12 4c2.2 2.3 3.4 5 3.4 8s-1.2 5.7-3.4 8"/><path d="M12 4c-2.2 2.3-3.4 5-3.4 8s1.2 5.7 3.4 8"/></svg> ' + V.sphere + '' + ti('sphere') + '</button>' +
+    '<button class="an-tab" data-t="mobius"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12c0-2.8 3.4-5 7.5-5s7.5 2.2 7.5 5-3.4 5-7.5 5-7.5-2.2-7.5-5Z"/><path d="M6.5 9.5c3 1.6 8 3.4 11 5"/></svg> ' + V.mobius + '' + ti('mobius') + '</button>' +
+    '<button class="an-tab" data-t="matrix"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1"/></svg> ' + V.matrix + '' + ti('matrix') + '</button>' +
+    '<button class="an-tab" data-t="tree"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h4"/><path d="M8 12V6h5"/><path d="M8 12v6h5"/><circle cx="15" cy="6" r="2"/><circle cx="15" cy="18" r="2"/><circle cx="4" cy="12" r="1.6"/></svg> ' + V2.tree + '' + ti('tree') + '</button>' +
+    '<button class="an-tab" data-t="spectrum"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18l3-6 3 9 3-13 3 8 3-4 3 6"/></svg> ' + V2.spectrum + '' + ti('spectrum') + '</button>' +
+    '<button class="an-tab" data-t="tension"><svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h5"/><path d="M15 12h5"/><path d="M9 8.5 12 12l-3 3.5"/><path d="M15 8.5 12 12l3 3.5"/></svg> ' + V3.tab + '' + ti('tension') + '</button></div>' +
+    '<div class="anv" id="an-ov" hidden></div>' +
     '<p class="an-intro" id="an-intro">' + T.introA + '</p>' +
     '<div class="an-head" id="an-head"></div>' +
     '<div class="an-stage" id="an-stage"><canvas id="an-canvas"></canvas><div class="an-hint">' + T.hint + '</div>' +
@@ -533,6 +573,13 @@
 
   function load(mode) {
     state.mode = mode;
+    if (location.hash.slice(1) !== mode) { try { history.replaceState(null, '', '#' + mode); } catch (e) {} }
+    var ovEl = document.getElementById('an-ov');
+    ['an-intro', 'an-head', 'an-stage', 'an-legend'].forEach(function (id) {
+      var e = document.getElementById(id); if (e) e.hidden = (mode === 'overview');
+    });
+    if (mode === 'overview') { if (ovEl) { ovEl.hidden = false; overview(); } state.spin = false; return; }
+    if (ovEl) ovEl.hidden = true;
     // Авторов немного (у кого ≥4 статей), а разброс плотный — стартуем крупнее, чтобы облако читалось.
     state.zoom = mode === 'authors' ? 1.7 : 1;
     var intro = document.getElementById('an-intro');
@@ -579,6 +626,204 @@
     grab(name, BACK[name])
       .then(function (d) { cache[dataMode] = d; state.data = d; prep(); })
       .catch(function () { document.getElementById('an-loading').textContent = '—'; });
+  }
+
+  /* ОБЗОР: ПОЛОСА KPI И ПЛИТКИ ВИДОВ. Владелец 05.09: «аналитике удели внимание, сделать
+     похожей на наш дашборд» — тот же приём, что на панели El Niño: сначала числа, потом
+     мозаика всех видов, каждая плитка — живая мини-картинка на своих данных и ссылка в вид.
+     Данные те же файлы, что и у видов (кэш общий); карта авторов (3 МБ) — только на широком
+     экране и после остального. */
+  var OV = { done: false };
+  function ovGrab(name) {
+    if (cache[name]) return Promise.resolve(cache[name]);
+    return fetch('/data/analytics/' + ({ articles: 'articles-map-v2', authors: 'authors-map', cooc: 'tags-cooc', world: 'world-view' })[name] + '.json')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { if (d) cache[name] = d; return d; }).catch(function () { return null; });
+  }
+  function fmtN(n) { return (n == null || isNaN(n)) ? '—' : String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '\u2009'); }
+  function ovKpi(kn, big, small, go, tipText) {
+    return '<div class="anv-kpi" data-go="' + (go || '') + '"' + (tipText ? ' title="' + tipText.replace(/"/g, '&quot;') + '"' : '') + '>' +
+      '<div class="kn">' + kn + '</div><div class="kv">' + big + '</div><div class="km">' + (small || '') + '</div></div>';
+  }
+  function overview() {
+    var el = document.getElementById('an-ov');
+    if (!el) return;
+    if (OV.done) return;
+    OV.done = true;
+    el.innerHTML = '<div class="b42-loader">' + T.loading + '</div>';
+    var wide = (window.innerWidth || 0) >= 900;
+    Promise.all([ovGrab('articles'), ovGrab('world'), ovGrab('cooc'),
+                 fetch('/data/corpus-stats.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+                 (window._conceptsNamesP && window._conceptsNamesP.then) ? window._conceptsNamesP.catch(function () { return null; }) : Promise.resolve(window.conceptsNames || null)])
+      .then(function (res) {
+        var A = res[0], W = res[1], C = res[2], S = res[3], N = res[4];
+        var months = (S && S.months) || [];
+        var last = months.slice(-24);
+        var gen = (S && S.generated_total) || {};
+        var clusters = A && A.clusters ? Object.keys(A.clusters).length : 0;
+        var noise = A ? Math.round(100 * (A.noise || 0) / Math.max(1, A.n || 1)) : 0;
+        var built = (W && W.built) || (S && S.dump_date) || '';
+        var spark = '';
+        if (last.length > 2) {
+          var mx = Math.max.apply(null, last.map(function (m) { return m.published || m.generated || 0; })) || 1;
+          spark = '<svg class="anv-spark" viewBox="0 0 ' + (last.length * 6) + ' 24" preserveAspectRatio="none">' + last.map(function (m, i) {
+            var v = (m.published || m.generated || 0) / mx, h = Math.max(1, Math.round(v * 22));
+            return '<rect x="' + (i * 6) + '" y="' + (24 - h) + '" width="4" height="' + h + '" fill="var(--ochre)" opacity=".8"/>';
+          }).join('') + '</svg>';
+        }
+        var strip = '<div class="anv-strip">' +
+          ovKpi(OVT.kArt, fmtN(gen.gen) , fmtN(gen.full) + ' ' + OVT.full + ' · ' + fmtN(gen.express) + ' ' + OVT.express, 'articles') +
+          ovKpi(OVT.kMap, A ? fmtN(A.n) : '—', A ? (clusters + ' ' + OVT.groups + ' · ' + noise + '% ' + OVT.noise) : '', 'articles') +
+          ovKpi(OVT.kWorld, W ? fmtN(W.field) : '—', W ? (fmtN(W.ours) + ' ' + OVT.ours + ' · ' + (W.empty_regions || 0) + '/' + (W.n || 0)) : '', 'world', WM.hint) +
+          ovKpi(OVT.kAuth, '<span id="anv-auth">' + (wide ? '…' : '—') + '</span>', wide ? '' : OVT.desk, 'authors') +
+          ovKpi(OVT.kCon, N ? fmtN(Object.keys(N).length) : '—', '<a href="/lang/' + LANG + '/concepts/">' + OVT.open + ' →</a>', '') +
+          ovKpi(OVT.kTags, C && C.entities ? fmtN(C.entities.length) : '—', '', 'sphere') +
+          ovKpi(OVT.kRhythm, spark || '—', last.length ? (last[0].ym + ' → ' + last[last.length - 1].ym) : '', 'spectrum') +
+          ovKpi(OVT.kLang, '5', 'ru · en · es · ar · fr', '') +
+          '</div>';
+        var ORDER = ['articles', 'world', 'authors', 'fly', 'heat', 'sphere', 'mobius', 'matrix', 'tree', 'spectrum', 'tension'];
+        var tiles = '<div class="anv-grid">' + ORDER.map(function (m) {
+          return '<div class="anv-tile" data-t="' + m + '"><div class="anv-t">' + (HEAD_T[m] || m) + '</div>' +
+            '<canvas class="anv-cv" data-m="' + m + '"></canvas><div class="anv-c">' + (HEAD[m] || '') + '</div></div>';
+        }).join('') + '</div>';
+        var badge = built ? '<div class="anv-date" title="' + OVT.built + ' ' + built + '">' +
+          '<svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><rect x="1" y="2.5" width="10" height="8.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.1"/><line x1="1" y1="5.2" x2="11" y2="5.2" stroke="currentColor" stroke-width="1.1"/><line x1="3.8" y1="1" x2="3.8" y2="3.5" stroke="currentColor" stroke-width="1.1"/><line x1="8.2" y1="1" x2="8.2" y2="3.5" stroke="currentColor" stroke-width="1.1"/></svg> ' + built + '</div>' : '';
+        el.innerHTML = strip + tiles + badge;
+        el.querySelectorAll('.anv-kpi[data-go]').forEach(function (k) {
+          if (!k.dataset.go) return;
+          k.addEventListener('click', function (e) { if (e.target.closest('a')) return; goTab(k.dataset.go); });
+        });
+        el.querySelectorAll('.anv-tile').forEach(function (t) { t.addEventListener('click', function () { goTab(t.dataset.t); }); });
+        el.querySelectorAll('canvas.anv-cv').forEach(function (cv) { miniDraw(cv, cv.dataset.m, A, W, C, null); });
+        if (wide) {
+          var run = function () {
+            ovGrab('authors').then(function (AU) {
+              var s = document.getElementById('anv-auth');
+              if (s) s.textContent = AU ? fmtN(AU.n) : '—';
+              var cv = el.querySelector('canvas.anv-cv[data-m="authors"]');
+              if (cv && AU) miniDraw(cv, 'authors', A, W, C, AU);
+            });
+          };
+          if (window.requestIdleCallback) requestIdleCallback(run, { timeout: 4000 }); else setTimeout(run, 1200);
+        }
+      });
+  }
+  function goTab(mode) {
+    var b = document.querySelector('.an-tab[data-t="' + mode + '"]');
+    if (!b) return;
+    document.querySelectorAll('.an-tab').forEach(function (x) { x.classList.remove('active'); });
+    b.classList.add('active'); state.spin = true; load(mode);
+    var top = document.getElementById('an-head'); if (top && top.scrollIntoView) top.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }
+  /* Мини-картинки плиток: тот же смысл, что у вида, но в сто строк и без интерактива. */
+  function miniDraw(cv, m, A, W, C, AU) {
+    var dpr = window.devicePixelRatio || 1, w = cv.clientWidth || 260, h = cv.clientHeight || 140;
+    cv.width = w * dpr; cv.height = h * dpr;
+    var g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+    var cs = getComputedStyle(document.documentElement);
+    var soft = cs.getPropertyValue('--soft').trim() || '#999', line = cs.getPropertyValue('--hair').trim() || '#ddd';
+    var pts = (A && A.points) || [], ents = (C && C.entities) || [], wp = (W && W.points) || [];
+    var pad = 8;
+    function sx(x) { return pad + x * (w - 2 * pad); }
+    function sy(y) { return pad + y * (h - 2 * pad); }
+    g.globalAlpha = 1;
+    if (m === 'articles' || m === 'fly' || m === 'mobius') {
+      for (var i = 0; i < pts.length; i += 1) {
+        var p = pts[i], z = p.z != null ? p.z : 0.5;
+        var x, y, r;
+        if (m === 'mobius') {
+          var a = p.x * Math.PI * 2, R = Math.min(w, h) * 0.36;
+          x = w / 2 + Math.cos(a) * (R + (p.y - 0.5) * 22); y = h / 2 + Math.sin(a) * (R * 0.55 + (p.y - 0.5) * 22) * 0.9; r = 1.1;
+        } else if (m === 'fly') {
+          var d = 0.35 + z;                                   // ближние крупнее
+          x = w / 2 + (p.x - 0.5) * (w - 2 * pad) * d; y = h / 2 + (p.y - 0.5) * (h - 2 * pad) * d; r = 0.6 + z * 1.6;
+        } else { x = sx(p.x); y = sy(p.y); r = 1.2; }
+        g.fillStyle = palOf(p.c); g.globalAlpha = isNoise(p.c) ? 0.35 : 0.8;
+        g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+      }
+    } else if (m === 'heat' || m === 'spectrum') {
+      var byM = {}, order = [];
+      pts.forEach(function (p) { var k = (p.d || '').slice(0, 7); if (k.length !== 7) return; if (!byM[k]) { byM[k] = {}; order.push(k); } byM[k][p.c] = (byM[k][p.c] || 0) + 1; });
+      order.sort(); order = order.slice(-24);
+      var cl = {}; pts.forEach(function (p) { if (!isNoise(p.c)) cl[p.c] = (cl[p.c] || 0) + 1; });
+      var top = Object.keys(cl).sort(function (a, b) { return cl[b] - cl[a]; }).slice(0, 8);
+      var cw = (w - 2 * pad) / Math.max(1, order.length);
+      if (m === 'heat') {
+        var ch = (h - 2 * pad) / Math.max(1, top.length), mx = 1;
+        order.forEach(function (k) { top.forEach(function (c) { mx = Math.max(mx, byM[k][c] || 0); }); });
+        order.forEach(function (k, i) { top.forEach(function (c, j) {
+          var v = (byM[k][c] || 0) / mx; if (!v) return;
+          g.fillStyle = palOf(c); g.globalAlpha = 0.15 + v * 0.85;
+          g.fillRect(pad + i * cw, pad + j * ch, Math.max(1, cw - 1), Math.max(1, ch - 1));
+        }); });
+      } else {
+        var tot = order.map(function (k) { var s = 0; for (var c in byM[k]) s += byM[k][c]; return s; }), mm = Math.max.apply(null, tot.concat([1]));
+        order.forEach(function (k, i) {
+          var y0 = h - pad;
+          top.forEach(function (c) { var v = byM[k][c] || 0; if (!v) return; var bh = v / mm * (h - 2 * pad);
+            g.fillStyle = palOf(c); g.globalAlpha = 0.85; g.fillRect(pad + i * cw + 1, y0 - bh, Math.max(1, cw - 2), bh); y0 -= bh; });
+        });
+      }
+    } else if (m === 'tree') {
+      var cnt = {}; pts.forEach(function (p) { if (!isNoise(p.c)) cnt[p.c] = (cnt[p.c] || 0) + 1; });
+      var ks = Object.keys(cnt), cx = w / 2, cy = h / 2, R2 = Math.min(w, h) * 0.42, mxc = Math.max.apply(null, ks.map(function (k) { return cnt[k]; }).concat([1]));
+      g.strokeStyle = line; g.lineWidth = 1;
+      ks.forEach(function (k, i) {
+        var a = -Math.PI / 2 + i / ks.length * Math.PI * 2, x = cx + Math.cos(a) * R2, y = cy + Math.sin(a) * R2 * 0.8;
+        g.globalAlpha = 0.6; g.beginPath(); g.moveTo(cx, cy); g.quadraticCurveTo((cx + x) / 2, cy, x, y); g.stroke();
+        g.fillStyle = palOf(k); g.globalAlpha = 0.9; g.beginPath(); g.arc(x, y, 2 + Math.sqrt(cnt[k] / mxc) * 7, 0, Math.PI * 2); g.fill();
+      });
+      g.fillStyle = soft; g.beginPath(); g.arc(cx, cy, 3, 0, Math.PI * 2); g.fill();
+    } else if (m === 'world') {
+      var mw = Math.max.apply(null, wp.map(function (q) { return q.w || 0; }).concat([1]));
+      wp.forEach(function (q) {
+        var r = 0.8 + Math.sqrt((q.w || 0) / mw) * 6, cov = Math.max(0, Math.min(1, q.cov || 0));
+        g.fillStyle = cov > 0 ? 'rgba(46,138,160,' + (0.18 + cov * 0.6).toFixed(2) + ')' : 'rgba(150,150,150,0.18)';
+        g.beginPath(); g.arc(sx(q.x), sy(q.y), r, 0, Math.PI * 2); g.fill();
+      });
+    } else if (m === 'authors') {
+      var ap = (AU && AU.points) || [];
+      if (!ap.length) { g.fillStyle = soft; g.font = '11px ' + (cs.getPropertyValue('--mono') || 'monospace'); g.textAlign = 'center'; g.fillText(OVT.desk, w / 2, h / 2 + 4); return; }
+      var step = Math.max(1, Math.floor(ap.length / 6000));
+      for (var k2 = 0; k2 < ap.length; k2 += step) {
+        var q2 = ap[k2], t = q2.th != null ? q2.th : 0.5, ca = [199, 127, 58], cb = [46, 138, 160];
+        g.fillStyle = 'rgb(' + Math.round(ca[0] + (cb[0] - ca[0]) * t) + ',' + Math.round(ca[1] + (cb[1] - ca[1]) * t) + ',' + Math.round(ca[2] + (cb[2] - ca[2]) * t) + ')';
+        g.globalAlpha = 0.6; g.beginPath(); g.arc(sx(q2.x), sy(q2.y), 1, 0, Math.PI * 2); g.fill();
+      }
+    } else if (m === 'sphere' || m === 'matrix' || m === 'tension') {
+      var E = ents.slice().sort(function (a, b) { return (b.n || 0) - (a.n || 0); });
+      var idx = {}; E.forEach(function (e, i) { idx[e.id] = i; });
+      if (m === 'matrix') {
+        var K = Math.min(22, E.length), cell = (Math.min(w, h) - 2 * pad) / Math.max(1, K), ox = (w - cell * K) / 2;
+        for (var a1 = 0; a1 < K; a1++) for (var b1 = 0; b1 < K; b1++) {
+          var wgt = 0; (E[a1].nb || []).forEach(function (nb) { if (nb[0] === E[b1].id) wgt = nb[1]; });
+          if (a1 === b1) wgt = 0.12;
+          if (!wgt) continue;
+          g.fillStyle = palOf(E[a1].c); g.globalAlpha = Math.min(1, 0.15 + wgt * 6);
+          g.fillRect(ox + b1 * cell, pad + a1 * cell, Math.max(1, cell - 1), Math.max(1, cell - 1));
+        }
+      } else if (m === 'sphere') {
+        var K2 = Math.min(72, E.length), cx2 = w / 2, cy2 = h / 2, R3 = Math.min(w, h) * 0.44, pos = [];
+        for (var i2 = 0; i2 < K2; i2++) { var an = i2 / K2 * Math.PI * 2; pos.push([cx2 + Math.cos(an) * R3 * 1.35, cy2 + Math.sin(an) * R3]); }
+        g.strokeStyle = soft; g.lineWidth = 0.6; g.globalAlpha = 0.25;
+        for (var i3 = 0; i3 < K2; i3++) (E[i3].nb || []).slice(0, 2).forEach(function (nb) { var j = idx[nb[0]]; if (j == null || j >= K2) return; g.beginPath(); g.moveTo(pos[i3][0], pos[i3][1]); g.lineTo(pos[j][0], pos[j][1]); g.stroke(); });
+        g.globalAlpha = 0.9;
+        for (var i4 = 0; i4 < K2; i4++) { g.fillStyle = palOf(E[i4].c); g.beginPath(); g.arc(pos[i4][0], pos[i4][1], 1.5 + Math.sqrt(E[i4].n || 1) / 8, 0, Math.PI * 2); g.fill(); }
+      } else {
+        var K3 = Math.min(40, E.length), base = h - pad - 4, xs = [];
+        for (var i5 = 0; i5 < K3; i5++) xs.push(pad + i5 / Math.max(1, K3 - 1) * (w - 2 * pad));
+        g.lineWidth = 0.8;
+        for (var i6 = 0; i6 < K3; i6++) (E[i6].nb || []).slice(0, 3).forEach(function (nb) {
+          var j = idx[nb[0]]; if (j == null || j >= K3 || j === i6) return;
+          var x0 = xs[i6], x1 = xs[j], r = Math.abs(x1 - x0) / 2, cxm = (x0 + x1) / 2;
+          g.strokeStyle = palOf(E[i6].c); g.globalAlpha = 0.25 + Math.min(0.6, nb[1] * 6);
+          g.beginPath(); g.arc(cxm, base, r, Math.PI, 0); g.stroke();
+        });
+        g.globalAlpha = 0.9;
+        for (var i7 = 0; i7 < K3; i7++) { g.fillStyle = palOf(E[i7].c); g.beginPath(); g.arc(xs[i7], base, 2, 0, Math.PI * 2); g.fill(); }
+      }
+    }
+    g.globalAlpha = 1;
   }
 
   function prep() {
@@ -1564,7 +1809,8 @@
   if (speedR) speedR.addEventListener('input', function () { state.speed = (+speedR.value) / 60 * 0.006; });
 
   document.querySelectorAll('.an-tab').forEach(function (b) {
-    b.addEventListener('click', function () {
+    b.addEventListener('click', function (e) {
+      if (e.target.closest('.ti')) { e.preventDefault(); return; }   // значок i — только подсказка
       document.querySelectorAll('.an-tab').forEach(function (x) { x.classList.remove('active'); });
       b.classList.add('active'); state.spin = true; load(b.dataset.t);
     });
@@ -1587,5 +1833,14 @@
 
   window.addEventListener('resize', function () { sizeCanvas(); draw(); });
   sizeCanvas();
-  load('articles');
+  // Стартовый вид — из адреса (#articles, #world…), иначе обзор.
+  var VALID = ['overview', 'articles', 'world', 'authors', 'fly', 'heat', 'sphere', 'mobius', 'matrix', 'tree', 'spectrum', 'tension'];
+  var h0 = location.hash.slice(1);
+  var start = VALID.indexOf(h0) >= 0 ? h0 : 'overview';
+  document.querySelectorAll('.an-tab').forEach(function (x) { x.classList.toggle('active', x.dataset.t === start); });
+  load(start);
+  window.addEventListener('hashchange', function () {
+    var hm = location.hash.slice(1);
+    if (VALID.indexOf(hm) >= 0 && hm !== state.mode) goTab(hm);
+  });
 })();
