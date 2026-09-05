@@ -175,6 +175,12 @@ def main(fetch=True, llm=True):
         JR.build()
     except Exception as e:                                       # noqa: BLE001
         print("  журнал значений не собрался:", str(e)[:160])
+    # ЛЕНТА НОВОСТЕЙ — из журнала, правилами (владелец 05.09): что изменилось за неделю и что впереди.
+    try:
+        import news as NWS
+        NWS.build()
+    except Exception as e:                                       # noqa: BLE001
+        print("  новости не собрались:", str(e)[:160])
     stale = [k for k, v in cur["sources"].items() if not v["fresh"]]
     print("готово:", cur["stamp"], "| индекс риска", cur["risk_index"],
           "| рисков", len(cur["risks"]), "| несвежих источников", len(stale), stale or "")

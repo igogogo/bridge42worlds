@@ -17,7 +17,7 @@
 
   var T = {
     fresh: 'fresh', stale: 'stale',
-    tabs: { verdict: 'Verdict', now: 'Where we are', ocean: 'Ocean', models: 'Models', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', how: 'Method', chain: 'Data chain', about: 'About' },
+    tabs: { verdict: 'Verdict', news: 'News', now: 'Where we are', ocean: 'Ocean', models: 'Models', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', how: 'Method', chain: 'Data chain', about: 'About' },
     railTabs: { state: 'State', risks: 'Risks' },
     dockHint: 'Point at anything underlined — definition, source and date appear here.',
     okC: 'keeping up', lagC: 'lagging', brokeC: 'broken', naC: 'no data',
@@ -344,7 +344,7 @@
         kf++;
         var seq = AF[y] || [];
         s += segs(seq.map(function (v, i2) { return [X(n - 1 + i2), fin(v) ? Y(v) : NaN]; }),
-          'var(--a' + y + ')', 1.1, .85, dashOf(kf));
+          'var(--a' + y + ')', 1.1, pickOp(y, .85), dashOf(kf));
       });
       s += '<line x1="' + X(n - 1).toFixed(1) + '" y1="' + Tp + '" x2="' + X(n - 1).toFixed(1) + '" y2="' + (H - B) +
         '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="2 3" opacity=".7"/>';
@@ -356,7 +356,7 @@
       for (var j = n - 1; j >= 0; j--) if (fin(lo[j])) dn.push(X(j).toFixed(1) + ',' + Y(lo[j]).toFixed(1));
       return '<polygon points="' + up.join(' ') + ' ' + dn.join(' ') + '" style="fill:var(--band)" opacity="' + op + '"/>';
     }
-    s += band(bmin, bmax, .22) + band(p10, p90, .38);
+    s += band(bmin, bmax, pickOp('band', .22)) + band(p10, p90, pickOp('band', .38));
     for (var i2 = 0; i2 < n; i2++) {
       var d = addDays(w.last_date, -(n - 1 - i2));
       if (d.slice(8) === '01') {
@@ -365,8 +365,8 @@
         if (W > 480 || mo % 2 === 1) s += '<text x="' + (X(i2) + 2).toFixed(0) + '" y="' + (H - 10) + '">' + MONTHS[mo - 1] + (mo === 1 ? ' ' + d.slice(2, 4) : '') + '</text>';
       }
     }
-    s += segs(rec.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 1.8);
-    s += segs(rec.slice(-30).map(function (v, i) { return [X(n - 30 + i), fin(v) ? Y(v) : NaN]; }), 'var(--nino)', 2.6);
+    s += segs(rec.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 1.8, pickOp('all'));
+    s += segs(rec.slice(-30).map(function (v, i) { return [X(n - 30 + i), fin(v) ? Y(v) : NaN]; }), 'var(--nino)', 2.6, pickOp('last30'));
     // где стоял ряд на прошлом обновлении — линия «было»
     var pv = S.P && S.P.daily && S.P.daily[seriesKey(w)];
     if (fin(pv)) {
@@ -379,7 +379,9 @@
     s += '<text x="' + (x1 + 4).toFixed(0) + '" y="' + (Y(f.p90) + 3).toFixed(0) + '">' + fnum(f.p90) + '</text>';
     s += '<text x="' + (x1 + 4).toFixed(0) + '" y="' + (Y(f.p50) + 3).toFixed(0) + '" class="tt">' + fnum(f.p50) + '</text>';
     s += '<text x="' + (x1 + 4).toFixed(0) + '" y="' + (Y(f.p10) + 3).toFixed(0) + '">' + fnum(f.p10) + '</text>';
-    s += legend([['last 30 days', 'var(--nino)', 2.6], ['400 days', 'var(--text)', 1.8], ['10–90 % of all years', 'var(--band)', 6], ['forecast +14 d', 'var(--nino)', 1.6, '5 3']], W, H, R, Tp);
+    var legR = [['last 30 days', 'var(--nino)', 2.6, '', 'last30'], ['400 days', 'var(--text)', 1.8, '', 'all'], ['10–90 % of all years', 'var(--band)', 6, '', 'band'], ['forecast +14 d', 'var(--nino)', 1.6, '5 3', 'fc']];
+    if (AF) Object.keys(AF).sort().forEach(function (y, k2) { legR.push([y + ' from this day on', 'var(--a' + y + ')', 1.1, dashOf(k2 + 1), y]); });
+    s += legend(legR, W, H, R, Tp);
     return s + '</svg>';
   }
   /* Сезон НА СЕГОДНЯ: среднее тех месяцев сезона, что уже измерены недельными данными.
@@ -585,8 +587,13 @@
       return s;
     }
     var cap = Math.max(5, w * .3);
-    s += '<line x1="' + x.toFixed(1) + '" y1="' + Y(p.hi).toFixed(1) + '" x2="' + x.toFixed(1) +
-      '" y2="' + Y(p.lo).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="3" opacity=".55"/>';
+    /* ТОЧКА ВНУТРИ ОТРЕЗКА. Владелец 05.09: «если мы в середине или начале периода —
+       отображается не точка, а вертикальный отрезок, и точка должна быть внутри отрезка».
+       Отрезок идёт от прожитого (точка) до того, где может кончиться среднее за сезон
+       по разбросу живых моделей: «где мы сейчас и где будем». */
+    var segLo = Math.min(p.lo, p.todate), segHi = Math.max(p.hi, p.todate);
+    s += '<line x1="' + x.toFixed(1) + '" y1="' + Y(segHi).toFixed(1) + '" x2="' + x.toFixed(1) +
+      '" y2="' + Y(segLo).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="3" opacity=".55"/>';
     [p.lo, p.hi].forEach(function (v) {
       s += '<line x1="' + (x - cap).toFixed(1) + '" y1="' + Y(v).toFixed(1) + '" x2="' + (x + cap).toFixed(1) +
         '" y2="' + Y(v).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1.6" opacity=".8"/>';
@@ -667,20 +674,20 @@
     var hist = IRI.history || [];
     if (hist.length > 1 && hist[1].combined) {
       var pv = hist[1], idx = {}; pv.seasons.forEach(function (sn, k) { idx[sn] = k; });
-      s += segs(fc.map(function (i) { var k = idx[seasons[i]]; return [X(i), (k != null && fin(pv.combined[k])) ? Y(pv.combined[k]) : NaN]; }), 'var(--soft)', 1.6, 1, '5 4');
+      s += segs(fc.map(function (i) { var k = idx[seasons[i]]; return [X(i), (k != null && fin(pv.combined[k])) ? Y(pv.combined[k]) : NaN]; }), 'var(--soft)', 1.6, pickOp('prev'), '5 4');
     }
     var comb = (IRI.summary || {}).combined;
     // опубликованное сводное по ВСЕМ моделям остаётся для сверки, но тонкой бледной линией:
     // владелец 04.09 — «толстая тёмная линия среднее по всем моделям нас мало интересует»
-    if (comb) s += segs(cols.map(function (c) { return [XK(cols.indexOf(c)), (c.i != null && fin(comb[c.i])) ? Y(comb[c.i]) : NaN]; }), 'var(--soft)', 1.1, .75, '3 3');
+    if (comb) s += segs(cols.map(function (c) { return [XK(cols.indexOf(c)), (c.i != null && fin(comb[c.i])) ? Y(comb[c.i]) : NaN]; }), 'var(--soft)', 1.1, pickOp('pub', .75), '3 3');
     /* СРЕДНЕЕ ПО ЖИВЫМ. Опубликованное сводное считает все модели поровну, включая
        одиннадцать сломанных, и оттого лежит ниже. Владелец 04.09: «нам нужны модели,
        которые шли с нами вместе, по ним и рисуем среднее». */
     var LV = IRI.live;
     if (LV && (LV.rms || LV.mean)) {
       var main = LV.rms || LV.mean;
-      s += segs(fc.map(function (i) { return [X(i), fin(main[i]) ? Y(main[i]) : NaN]; }), 'var(--ochre)', 3.2);
-      if (LV.rms && LV.mean) s += segs(fc.map(function (i) { return [X(i), fin(LV.mean[i]) ? Y(LV.mean[i]) : NaN]; }), 'var(--ochre)', 1, .5, '2 3');
+      s += segs(fc.map(function (i) { return [X(i), fin(main[i]) ? Y(main[i]) : NaN]; }), 'var(--ochre)', 3.2, pickOp('rms'));
+      if (LV.rms && LV.mean) s += segs(fc.map(function (i) { return [X(i), fin(LV.mean[i]) ? Y(LV.mean[i]) : NaN]; }), 'var(--ochre)', 1, pickOp('mean', .5), '2 3');
     }
     /* ЧЕРТА УЖЕ ДОСТИГНУТОГО УРОВНЯ через весь график. Без неё глаз сравнивал всю кривую
        с одной точкой и спрашивал: почему линии выше 2.6, если модели «ломаются»? Линии идут
@@ -731,16 +738,18 @@
     }
     // счёт «сколько ниже прожитого» ушёл в фишки под графиком: на графике он налезал на полосу
     var LVn = IRI.live || {}, tally2 = IRI.class_tally || {};
-    var leg = [['root mean square, live models ' + (LVn.n_live || '—') + ' of ' + (LVn.n_all || '—'), 'var(--ochre)', 3.2],
-      ['their plain mean', 'var(--ochre)', 1, '2 3'],
-      ['published average, all ' + (LVn.n_all || '—'), 'var(--soft)', 1.1, '3 3'],
+    var leg = [['root mean square, live models ' + (LVn.n_live || '—') + ' of ' + (LVn.n_all || '—'), 'var(--ochre)', 3.2, '', 'rms'],
+      ['their plain mean', 'var(--ochre)', 1, '2 3', 'mean'],
+      ['published average, all ' + (LVn.n_all || '—'), 'var(--soft)', 1.1, '3 3', 'pub'],
       [(strongest ? 'strongest live model: ' + strongest + ' ' + fnum(strongestPeak) : 'strongest model'), 'var(--lv4)', 2, null, strongest || ''],
-      ['previous issue' + (hist.length > 1 ? ' (' + hist[1].issued + ')' : ''), 'var(--soft)', 1.6, '5 4'],
+      ['previous issue' + (hist.length > 1 ? ' (' + hist[1].issued + ')' : ''), 'var(--soft)', 1.6, '5 4', 'prev'],
       ['keeping up ' + (tally2.ok || 0), 'var(--nina)', 1.4, null, 'ok'],
       ['lagging ' + (tally2.lag || 0), 'var(--lv3)', 1.4, null, 'lag'],
       ['broken ' + (tally2.broke || 0), 'var(--lv5)', 1.4, null, 'broke'],
       [esc(ao.season) + ' so far ' + fnum(ref), 'var(--nino)', 1, '4 3'], ['below the lived part', 'var(--lv5)', 'dot']];
     if (IRI.last_full_season) leg.push([esc(IRI.last_full_season.season) + ' lived in full', 'var(--ok)', 1, '2 4']);
+    leg.push(['lived part of a season: the dot', 'var(--nino)', 'dot']);
+    leg.push(['where its mean can still end: the bar', 'var(--nino)', 4]);
     if (S.model) leg.unshift([S.model, 'var(--ochre)', 2.6]);
     s += legend(leg, W, H, R, Tp);
     return s + '</svg>';
@@ -801,7 +810,7 @@
          — для тех моделей, что живы». Опубликованное сводное остаётся тонкой линией рядом:
          разрыв между ними и есть цена того, что кто-то давно сломался. */
       var comb = Object.keys(r.models).filter(function (k) { return k.indexOf('COMBINED') === 0; })[0];
-      if (comb) s2 += segs(fc.map(function (i) { return [X(i), fin(r.models[comb].values[i]) ? Y(r.models[comb].values[i]) : NaN]; }), 'var(--soft)', 1.2, .9, '3 3');
+      if (comb) s2 += segs(fc.map(function (i) { return [X(i), fin(r.models[comb].values[i]) ? Y(r.models[comb].values[i]) : NaN]; }), 'var(--soft)', 1.2, pickOp('pub', .9), '3 3');
       var liveMean = fc.map(function (i) {
         var sum = 0, wsum = 0;
         Object.keys(r.models).forEach(function (nm) {
@@ -829,8 +838,8 @@
         var v = Math.sqrt(sq / wsum);
         return [X(i), Y(sgn >= 0 ? v : -v)];
       });
-      s2 += segs(liveMean, 'var(--ochre)', 1, .5, '2 3');
-      s2 += segs(liveRms, 'var(--ochre)', 2.8);
+      s2 += segs(liveMean, 'var(--ochre)', 1, pickOp('mean', .5), '2 3');
+      s2 += segs(liveRms, 'var(--ochre)', 2.8, pickOp('rms'));
       /* КАК ДВИГАЛСЯ ДИАПАЗОН ЖИВЫХ. Владелец 04.09: «как менялись диапазоны за последние
          три месяца». Классы у моделей общие (по сегодняшней проверке), поэтому в каждом
          выпуске берём те же живые имена — и видно, что месяц назад их коридор был ниже
@@ -874,9 +883,9 @@
       s2 += '<text class="tt" x="' + Lp + '" y="' + (top + 10) + '">' + esc(r.issued) + ' issue' + (ri === 0 ? ' — the newest' : '') + '</text>';
       if (RCs && ri === 0) {
         var CLt = ((S.D.iri || {}).class_tally) || {};
-        s2 += legend([['root mean square, live', 'var(--ochre)', 2.8],
-          ['their plain mean', 'var(--ochre)', 1, '2 3'],
-          ['published average, all', 'var(--soft)', 1.2, '3 3'],
+        s2 += legend([['root mean square, live', 'var(--ochre)', 2.8, '', 'rms'],
+          ['their plain mean', 'var(--ochre)', 1, '2 3', 'mean'],
+          ['published average, all', 'var(--soft)', 1.2, '3 3', 'pub'],
           ['each model', 'var(--soft)', 1],
           ['live spread', 'var(--ochre)', 6],
           ['where we stand', 'var(--nino)', 3],
@@ -942,10 +951,11 @@
     { name: 'Indonesia', pts: [[119, 1.5], [122.5, 0.5], [125.5, 1.5], [127, -1], [124, -4], [121, -5.5], [119, -3.5], [118.5, -1]] },
     { name: '', pts: [[124, -8.5], [128, -8], [131, -8.5], [127, -10], [124.5, -9.5]] },
     { name: 'New Guinea', pts: [[131, -1], [136, -2], [141, -2.5], [147, -6], [150.5, -8.5], [147, -9.5], [141, -8], [136, -6], [132, -4]] },
-    { name: 'N. Australia', pts: [[129, -11], [133, -11.5], [136.5, -12], [138, -15], [129, -15]] },
+    { name: 'N. Australia', pts: [[129, -11], [133, -11.5], [136.5, -12], [138, -15], [140, -18], [141, -22], [129, -22]] },
+    { name: 'Mexico', pts: [[255, 22], [262, 22], [266, 19], [272, 17], [275, 15], [272, 15], [263, 18], [256, 20]] },
     { name: '', pts: [[141, -10.8], [143.5, -12], [145.5, -15], [139, -15], [139.5, -12.5]] },
     { name: 'Central America', pts: [[275, 15], [279, 13], [281, 10], [280, 8.5], [277.5, 9.5], [274, 11], [272, 15]] },
-    { name: 'South America', pts: [[280, 8.5], [282.5, 6], [281.5, 2], [279.3, 0], [280, -4], [281.5, -8], [283, -12], [284.5, -15], [292, -15], [292, 8.5]] }
+    { name: 'South America', pts: [[280, 8.5], [282.5, 6], [281.5, 2], [279.3, 0], [280, -4], [281.5, -8], [283, -12], [284.5, -15], [288, -19], [290, -22], [295, -22], [295, 8.5]] }
   ];
 
   function pacific(NW, W, H) {
@@ -954,8 +964,11 @@
     var small = H < 200;
     var Lp = small ? 14 : 40, R = small ? 10 : 16, Tp = small ? 22 : 34, B = small ? 10 : 30;
     var pw = W - Lp - R, ph = H - Tp - B;
-    var lon = function (d) { return Lp + (d - 120) / (290 - 120) * pw; };
-    var lat = function (d) { return Tp + (15 - d) / 30 * ph; };
+    /* ШИРЕ И КРУПНЕЕ. Владелец 05.09: «очень маленькие цифры; побольше значения, побольше
+       контраста, чуть меньше масштаб, чтобы очертания континентов появились, и сетку». */
+    var LON0 = 110, LON1 = 295, LAT0 = 22;
+    var lon = function (d) { return Lp + (d - LON0) / (LON1 - LON0) * pw; };
+    var lat = function (d) { return Tp + (LAT0 - d) / (2 * LAT0) * ph; };
     var lv = NW.latest, aw = NW.analog_week || {}, ap = NW.analog_peak || {};
     var years = Object.keys(aw).sort();
     var cmpYear = S.sub.cmp || (years.indexOf('1997') >= 0 ? '1997' : years[years.length - 1]);
@@ -967,22 +980,30 @@
     // суша поверх воды, до участков Niño
     s += '<clipPath id="pacclip"><rect x="' + Lp + '" y="' + Tp + '" width="' + pw + '" height="' + ph + '" rx="8"/></clipPath><g clip-path="url(#pacclip)">';
     LAND.forEach(function (L) {
-      var pts = L.pts.map(function (p) { return lon(p[0]).toFixed(1) + ',' + lat(Math.max(-15, Math.min(15, p[1]))).toFixed(1); }).join(' ');
-      s += '<polygon points="' + pts + '" style="fill:var(--ink);stroke:var(--soft)" fill-opacity=".16" stroke-width=".8" stroke-opacity=".5"/>';
+      var pts = L.pts.map(function (p) { return lon(p[0]).toFixed(1) + ',' + lat(Math.max(-LAT0, Math.min(LAT0, p[1]))).toFixed(1); }).join(' ');
+      s += '<polygon points="' + pts + '" style="fill:var(--ink);stroke:var(--text)" fill-opacity=".14" stroke-width="1" stroke-opacity=".6"/>';
       if (L.name && !small) {
+        var LBL = { 'South America': [294, -18, 'end'], 'Central America': [266.5, 18.8, 'middle'], 'Mexico': [257.5, 21, 'middle'], 'Indonesia': [111.5, -5, 'start'], 'Philippines': [111.5, 17.5, 'start'] };
         var cx = 0, cy = 0;
-        L.pts.forEach(function (p) { cx += lon(p[0]); cy += lat(Math.max(-15, Math.min(15, p[1]))); });
-        s += '<text x="' + (cx / L.pts.length).toFixed(0) + '" y="' + (cy / L.pts.length).toFixed(0) + '" text-anchor="middle" font-size="9" style="fill:var(--soft)">' + esc(L.name) + '</text>';
+        L.pts.forEach(function (p) { cx += lon(p[0]); cy += lat(Math.max(-LAT0, Math.min(LAT0, p[1]))); });
+        var lb = LBL[L.name], px = lb ? lon(lb[0]) : cx / L.pts.length, py = lb ? lat(lb[1]) : cy / L.pts.length;
+        s += '<text x="' + px.toFixed(0) + '" y="' + py.toFixed(0) + '" text-anchor="' + (lb ? lb[2] : 'middle') + '" font-size="10" style="fill:var(--text)" opacity=".8">' + esc(L.name) + '</text>';
       }
     });
     // Галапагосы — единственная суша посреди очага, полезный ориентир
     if (!small) {
       s += '<circle cx="' + lon(269.5).toFixed(1) + '" cy="' + lat(-0.5).toFixed(1) + '" r="2.2" style="fill:var(--ink)" opacity=".45"/>';
-      s += '<text x="' + (lon(269.5) + 5).toFixed(0) + '" y="' + (lat(-0.5) + 3).toFixed(0) + '" font-size="8.5" style="fill:var(--soft)">Galápagos</text>';
+      s += '<text x="' + (lon(269.5) - 4).toFixed(0) + '" y="' + (lat(-0.5) - 6).toFixed(0) + '" font-size="8.5" text-anchor="end" style="fill:var(--soft)">Galápagos</text>';
     }
     s += '</g>';
-    s += '<line x1="' + Lp + '" y1="' + lat(0) + '" x2="' + (W - R) + '" y2="' + lat(0) + '" style="stroke:var(--soft)" stroke-width=".6" stroke-dasharray="4 4"/>';
-    s += '<text x="' + (Lp + 4) + '" y="' + (lat(0) - 4) + '">equator</text>';
+    // сетка: широты через 10°, долготы через 30°
+    [-20, -10, 10, 20].forEach(function (d) {
+      s += '<line x1="' + Lp + '" y1="' + lat(d).toFixed(1) + '" x2="' + (W - R) + '" y2="' + lat(d).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".7"/>';
+      if (!small) s += '<text x="' + (Lp - 4) + '" y="' + (lat(d) + 3).toFixed(1) + '" text-anchor="end" font-size="9">' + Math.abs(d) + '°' + (d > 0 ? 'N' : 'S') + '</text>';
+    });
+    [120, 150, 180, 210, 240, 270].forEach(function (d) { s += '<line x1="' + lon(d).toFixed(1) + '" y1="' + Tp + '" x2="' + lon(d).toFixed(1) + '" y2="' + (Tp + ph) + '" style="stroke:var(--grid)" stroke-width=".7"/>'; });
+    s += '<line x1="' + Lp + '" y1="' + lat(0) + '" x2="' + (W - R) + '" y2="' + lat(0) + '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="4 4"/>';
+    s += '<text x="' + (Lp + 4) + '" y="' + (lat(0) + 12) + '" font-size="9">equator</text>';
     if (!small) {
       [120, 150, 180, 210, 240, 270].forEach(function (d) { s += '<text x="' + lon(d).toFixed(0) + '" y="' + (H - 8) + '" text-anchor="middle">' + (d <= 180 ? d + '°E' : (360 - d) + '°W') + '</text>'; });
       s += '<text x="' + (W - R) + '" y="' + (Tp - 9) + '" text-anchor="end">South America →</text><text x="' + Lp + '" y="' + (Tp - 9) + '">← Australia, Indonesia</text>';
@@ -995,11 +1016,15 @@
         def: 'Now ' + fnum(v, 1) + ' °C. On the same week of ' + cmpYear + ': ' + fnum(then, 1) + ' °C; the peak of that event was ' + fnum(peak, 1) + ' °C. ' +
           (fin(then) ? (v > then ? 'This event is ' + fnum(v - then, 1) + ' °C warmer at the same point of the calendar.' : 'This event is ' + fnum(v - then, 1) + ' °C against it.') : ''),
         src: 'NOAA CPC weekly indices, wksst9120', date: NW.date };
-      s += '<g data-src="' + esc(JSON.stringify(pay)) + '"><rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + h.toFixed(1) + '" style="fill:' + col + ';stroke:' + col + '" fill-opacity=".22" stroke-width="1.2" rx="3"/>';
-      var cy = y + h / 2;
-      s += '<text class="tt" x="' + (x + w / 2).toFixed(1) + '" y="' + (cy - (small ? 4 : 6)).toFixed(1) + '" text-anchor="middle">' + b[1] + '</text>';
-      s += '<text x="' + (x + w / 2).toFixed(1) + '" y="' + (cy + (small ? 8 : 9)).toFixed(1) + '" text-anchor="middle" style="fill:' + col + '" font-size="' + (small ? 12 : 13) + '">' + fnum(v, 1) + '</text>';
-      if (fin(then)) s += '<text x="' + (x + w / 2).toFixed(1) + '" y="' + (cy + (small ? 19 : 22)).toFixed(1) + '" text-anchor="middle" style="fill:var(--soft)" font-size="10">' + cmpYear + ': ' + fnum(then, 1) + '</text>';
+      s += '<g data-src="' + esc(JSON.stringify(pay)) + '"><rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + h.toFixed(1) + '" style="fill:' + col + ';stroke:' + col + '" fill-opacity=".3" stroke-width="1.8" rx="3"/>';
+      /* Боксы Niño 4, 3.4 и 3 перекрываются по долготе — подписи ярусами: 4 выше, 3.4 по
+         центру, 3 ниже; у Niño 1+2 бокс узкий — подписи слева от него. */
+      var tier = { nino4: -0.3, nino34: 0, nino3: 0.3 }[b[0]] || 0;
+      var cy = y + h / 2 + tier * h, big = small ? 14 : 18, tx = x + w / 2, anc = 'middle';
+      if (b[0] === 'nino12') { tx = x - 6; anc = 'end'; cy = y + h / 2; }
+      s += '<text class="tt" x="' + tx.toFixed(1) + '" y="' + (cy - (small ? 6 : 11)).toFixed(1) + '" text-anchor="' + anc + '">' + b[1] + '</text>';
+      s += '<text x="' + tx.toFixed(1) + '" y="' + (cy + (small ? 8 : 7)).toFixed(1) + '" text-anchor="' + anc + '" style="fill:var(--text);font-weight:700" font-size="' + big + '">' + fnum(v, 1) + '</text>';
+      if (fin(then)) s += '<text x="' + tx.toFixed(1) + '" y="' + (cy + (small ? 20 : 21)).toFixed(1) + '" text-anchor="' + anc + '" style="fill:var(--text)" font-size="' + (small ? 10 : 11) + '">' + cmpYear + ' ' + fnum(then, 1) + ' · ' + (v >= then ? '▲' : '▼') + fnum(Math.abs(v - then), 1, false) + '</text>';
       s += '</g>';
     });
     return s + '</svg>';
@@ -1176,23 +1201,26 @@
         '" style="stroke:var(--a' + y + ')" stroke-width="1" stroke-dasharray="' + dashOf(lvi) + '" opacity=".85"/>' +
         '<text x="' + (Lp + 3) + '" y="' + (Y(LV[y]) - 3).toFixed(1) + '" font-size="9" style="fill:var(--a' + y + ')">after ' + esc(y) + ' ' + fnum(LV[y]) + '</text>';
     });
-    var MAN = m.analogs || {};
+    var MAN = m.analogs || {}, legM = [['now', 'var(--text)', 2.2, '', 'now']];
     Object.keys(MAN).sort().forEach(function (y, k) {
       var av = MAN[y] || [], off = n - av.length;
       s += segs(av.map(function (v, i) { return [X(off + i), fin(v) ? Y(v) : NaN]; }),
-        'var(--a' + y + ')', 1.3, .9, dashOf(k + 1));
+        'var(--a' + y + ')', 1.3, pickOp(y, .9), dashOf(k + 1));
+      legM.push([y, 'var(--a' + y + ')', 1.3, dashOf(k + 1), y]);
     });
     var step = (vmax - vmin) > 4 ? 1 : ((vmax - vmin) > 1.2 ? .5 : .25);
     s += gridY(vmin, vmax, step, Y, Lp, R, W);
     if (dates.length === n) dates.forEach(function (d, i) { if (i === 0 || i === n - 1 || (n > 6 && i === Math.floor(n / 2))) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="' + (i === 0 ? 'start' : (i === n - 1 ? 'end' : 'middle')) + '">' + esc(String(d)) + '</text>'; });
     // аналоги того же календарного окна — тонкими цветными линиями под нашим рядом
-    ana.forEach(function (a) {
+    ana.forEach(function (a, ai) {
       var off = n - a.values.length;
-      s += segs(a.values.map(function (v, i) { return [X(off + i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + a.year + ')', 1.3, .85);
+      legM.push([String(a.year), 'var(--a' + a.year + ')', 1.3, dashOf(ai + 1), String(a.year)]);
+      s += segs(a.values.map(function (v, i) { return [X(off + i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + a.year + ')', 1.3, pickOp(String(a.year), .85), dashOf(ai + 1));
       var li2 = a.values.length - 1; while (li2 > 0 && !fin(a.values[li2])) li2--;
       if (fin(a.values[li2])) s += '<text x="' + (X(off + li2) + 4).toFixed(0) + '" y="' + (Y(a.values[li2]) + 4).toFixed(0) + '" style="fill:var(--a' + a.year + ')" font-size="10">' + a.year + '</text>';
     });
-    s += segs(vals.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.2);
+    s += segs(vals.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.2, pickOp('now'));
+    if (legM.length > 1) s += legendAt(legM, Lp + 8, Tp + 12);
     if (m.flags && m.flags.length === n) vals.forEach(function (v, i) { if (m.flags[i] && fin(v)) s += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(v).toFixed(1) + '" r="2.2" style="fill:var(--nino)"/>'; });
     var li = n - 1; while (li > 0 && !fin(vals[li])) li--;
     s += '<circle cx="' + X(li).toFixed(1) + '" cy="' + Y(vals[li]).toFixed(1) + '" r="4" style="fill:var(--nino)"/>';
@@ -1250,18 +1278,25 @@
          появлялись там, где они к месту (владелец 04.09); значит, их надо ВИДЕТЬ. Плашка той
          же формы, что у ссылок на работы во всём проекте, а в подсказке — НАШ заголовок и
          НАША строка о работе, а не только «почему она здесь». */
-      var pay = { name: ls.length + ' work' + (ls.length > 1 ? 's' : '') + ' we parsed on this',
-        def: ls.map(function (l) {
-          return '· ' + (l.our_title || l.title) + (l.oneliner ? ' — ' + l.oneliner : '') +
-            (l.why ? ' (' + l.why + ')' : '') + (l.weak ? ' [more distant match]' : '');
-        }).join('  '),
-        why: 'Open the risk or the region to follow the links.', src: 'our archive, matched by meaning and checked by the model', date: S.L.built };
+      /* КАЖДАЯ РАБОТА — СВОИМ АБЗАЦЕМ И СО ССЫЛКОЙ. Владелец 05.09: «если две работы — не
+         понятно, где начинается одна и заканчивается другая; жирным, разными абзацами; и
+         нет ссылки на сами работы на наш сайт». Ссылка — на популярную английскую версию;
+         на компьютере в новой вкладке, на телефоне просто переход. */
+      var tgt = window.matchMedia('(max-width:900px)').matches ? '' : ' target="_blank" rel="noopener"';
+      var html = ls.map(function (l) {
+        var u = '/lang/en/archive/' + esc(l.date) + '/' + esc(l.folder) + '/index.html';
+        return '<p class="wk-p"><b>' + esc(l.our_title || l.title) + '</b>' + (l.oneliner ? esc(l.oneliner) : '') +
+          (l.why ? '<i>' + esc(l.why) + '</i>' : '') + (l.weak ? '<i>more distant match</i>' : '') +
+          '<a href="' + u + '"' + tgt + '>read our version ↗</a> <span class="wk-num">arXiv ' + esc(l.id) + '</span></p>';
+      }).join('');
+      var pay = { name: ls.length + ' work' + (ls.length > 1 ? 's' : '') + ' we parsed on this', html: html,
+        src: 'our archive, matched by meaning and checked by the model', date: S.L.built };
       return '<span class="lk wk-chip" data-src="' + esc(JSON.stringify(pay)) + '">' + ls.length + ' work' + (ls.length > 1 ? 's' : '') + '</span>';
     }
     return '<div class="lk-h">What the research says about this</div>' + ls.map(function (l) {
       /* Сначала НАШ заголовок и НАША строка: читатель должен понять, о чём работа, не уходя
          со страницы. Авторское название и номер идут подписью снизу. */
-      return '<a class="lk-i" href="/lang/en/archive/' + esc(l.date) + '/' + esc(l.folder) + '/advanced.html" target="_blank" rel="noopener">' +
+      return '<a class="lk-i" href="/lang/en/archive/' + esc(l.date) + '/' + esc(l.folder) + '/index.html"' + (window.matchMedia('(max-width:900px)').matches ? '' : ' target="_blank" rel="noopener"') + '>' +
         '<b>' + esc(l.our_title || l.title) + '</b>' +
         (l.oneliner ? '<span class="lk-one">' + esc(l.oneliner) + '</span>' : '') +
         '<span>' + esc(l.why || '') + '</span><i>' + esc(l.kind || '') +
@@ -2727,6 +2762,40 @@
   }
 
 
+
+  // ---------------------------------------------------------------- News (владелец 05.09)
+  var KIND_LBL = { alert: 'alert', risk: 'risk', value: 'value', verdict: 'verdict' };
+  function viewNews() {
+    var N = S.N || {}, D = S.D;
+    var tw = N.this_week || [], nx = N.next_week || [], watch = N.watch || [];
+    var body = stageShell(tw.length ? tw.length + ' things changed in the last week; ' + nx.length + ' releases ahead' : 'News: what changed, what is ahead', []);
+    body.classList.add('scroll');
+    if (!N.built) { body.appendChild(el('div', 'note warn', 'The news feed did not load (data/enso/news.json).')); return; }
+    var wrap = el('div', 'news');
+    var colA = el('div', 'news-col');
+    colA.innerHTML = '<div class="chain-h">This week<span>' + esc(N.since) + ' → ' + esc(N.until) + ': every line is a value, a risk, an alert or the verdict that actually changed, with the date of the data.</span></div>' +
+      (tw.length ? tw.map(function (it) {
+        var go = it.go || [];
+        return '<div class="news-i k-' + esc(it.kind) + '"><div class="ni-h"><span class="ni-k">' + esc(KIND_LBL[it.kind] || it.kind) + '</span><span class="ni-d">' + esc(it.date) + '</span></div>' +
+          '<div class="ni-t">' + mark(it.title) + '</div>' + (it.detail ? '<div class="ni-s">' + mark(it.detail) + '</div>' : '') +
+          (it.why ? '<div class="ni-w">' + mark(it.why) + '</div>' : '') +
+          (go[0] === 'risk' ? '<div class="ni-go"><button type="button" class="vgo" data-view="now" data-risk="' + esc(go[1]) + '">open the risk →</button></div>'
+            : (go[0] ? '<div class="ni-go">' + vLink('open the numbers', go[0], go[1]) + '</div>' : '')) + '</div>';
+      }).join('') : '<div class="note">Nothing changed in the last week.</div>');
+    var colB = el('div', 'news-col');
+    colB.innerHTML = '<div class="chain-h">Next week<span>What is due, from each source\u2019s stated schedule; the panel is recomputed after each release worth it.</span></div>' +
+      nx.map(function (c) {
+        return '<div class="news-i k-cal"><div class="ni-h"><span class="ni-k">release</span><span class="ni-d">' + esc(c.next) + (c.in_days === 0 ? ' · today' : ' · in ' + c.in_days + ' d') + '</span></div>' +
+          '<div class="ni-t">' + esc(c.name) + '</div><div class="ni-s">' + esc(c.src) + ' · ' + esc(c.rule) + '</div></div>';
+      }).join('') +
+      (watch.length ? '<div class="chain-h" style="margin-top:14px">What would change the picture<span>From the current verdict.</span></div>' +
+        watch.map(function (w) { return '<div class="news-i k-watch"><div class="ni-t">' + mark(w) + '</div></div>'; }).join('') : '') +
+      '<div class="cap" style="margin-top:10px">' + esc(N.update_note || '') + '</div>';
+    wrap.appendChild(colA); wrap.appendChild(colB);
+    body.appendChild(wrap);
+    body.appendChild(el('div', 'cap', esc(N.note || '')));
+  }
+
   // ---------------------------------------------------------------- Data chain (владелец 04.09, ночь)
   /* ПЛАНШЕТ ПОТОКОВ ДАННЫХ. Четыре колонки: источники → сборщики → что считаем сами → куда
      уходит. У источника — свежесть (ответил ли на последнем обновлении) и дата последней
@@ -2755,7 +2824,19 @@
   function viewChain() {
     var C = S.C || {}, D = S.D, nodes = C.nodes || [], layers = C.layers || [];
     var body = stageShell('The chain, end to end: ' + nodes.filter(function (n) { return n.layer === 'src'; }).length + ' sources, ' +
-      nodes.filter(function (n) { return n.layer === 'collect'; }).length + ' collectors, ' + nodes.filter(function (n) { return n.layer === 'state'; }).length + ' computed states', []);
+      nodes.filter(function (n) { return n.layer === 'collect'; }).length + ' collectors, ' + nodes.filter(function (n) { return n.layer === 'state'; }).length + ' computed states',
+      [{ label: S.full ? 'exit full screen (Esc)' : '⛶ full screen', on: !!S.full, click: function () { S.full = !S.full; render(); } }]);
+    /* ПОДСВЕТКА ВСЕЙ ЦЕПОЧКИ. Владелец 05.09: «нажал на одну — остаётся она и всё, что с ней
+       связано». Раньше горел только соседний слой; теперь — все предки и все потомки. */
+    var byId = {}; nodes.forEach(function (n) { byId[n.id] = n; });
+    var litSet = null;
+    if (S.pick && byId[S.pick]) {
+      litSet = {};
+      var stA = [S.pick];
+      while (stA.length) { var idA = stA.pop(); if (litSet[idA]) continue; litSet[idA] = 1; (byId[idA].in || []).forEach(function (x) { stA.push(x); }); }
+      var stD = [S.pick], seenD = {};
+      while (stD.length) { var idD = stD.pop(); if (seenD[idD]) continue; seenD[idD] = 1; nodes.forEach(function (m) { if ((m.in || []).indexOf(idD) >= 0) { litSet[m.id] = 1; stD.push(m.id); } }); }
+    }
     body.classList.add('scroll');
     if (!nodes.length) { body.appendChild(el('div', 'note warn', 'The chain reference did not load (data/enso/chain-ref.json).')); return; }
     body.appendChild(el('div', 'lead', 'Point at anything: what it is, why it is here, where it comes from and when its data last changed. Click a node to light its chain; click again to release. ' +
@@ -2764,12 +2845,11 @@
     var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('class', 'chain-edges');
     wrap.appendChild(svg);
     var cols = el('div', 'chain-cols');
-    var byId = {};
     layers.forEach(function (L) {
       var col = el('div', 'chain-col');
       col.innerHTML = '<div class="chain-h">' + esc(L.title) + '<span>' + esc(L.note) + '</span></div>';
       nodes.filter(function (n) { return n.layer === L.id; }).forEach(function (n) {
-        var f = chainFresh(n), lit = S.pick && (S.pick === n.id || (n.in || []).indexOf(S.pick) >= 0 || (byId[S.pick] && (byId[S.pick].in || []).indexOf(n.id) >= 0));
+        var f = chainFresh(n), lit = !!(litSet && litSet[n.id]);
         var card = el('div', 'chain-node' + (S.pick ? (lit ? ' lit' : ' dim') : '') + (S.pick === n.id ? ' on' : ''));
         card.setAttribute('data-node', n.id);
         var pay = { name: n.name, def: n.def, why: n.why + (n.code ? ' Code: ' + n.code + '.' : '') + (f.note ? ' ' + f.note + '.' : ''), src: (n.sub || '') + (n.cadence ? ' · ' + n.cadence : ''), date: f.date, url: n.url };
@@ -2778,7 +2858,7 @@
           '<div class="cn-s">' + esc(n.sub || '') + '</div>' +
           '<div class="cn-m">' + (n.cadence ? esc(n.cadence) + ' · ' : '') + (f.date ? 'data ' + esc(f.date) : '') + (n.url ? ' · <a href="' + esc(n.url) + '" target="_blank" rel="noopener">source ↗</a>' : '') + '</div>';
         card.addEventListener('click', function (e) { if (e.target.closest('a')) return; S.pick = S.pick === n.id ? null : n.id; render(); });
-        col.appendChild(card); byId[n.id] = n; n._el = card;
+        col.appendChild(card); n._el = card;
       });
       cols.appendChild(col);
     });
@@ -2798,7 +2878,7 @@
           var ra = a._el.getBoundingClientRect(), rb = b._el.getBoundingClientRect();
           var x1 = ra.right - wr.left + wrap.scrollLeft, y1 = ra.top + ra.height / 2 - wr.top + wrap.scrollTop;
           var x2 = rb.left - wr.left + wrap.scrollLeft, y2 = rb.top + rb.height / 2 - wr.top + wrap.scrollTop;
-          var lit = S.pick && (S.pick === a.id || S.pick === b.id);
+          var lit = !!(litSet && litSet[a.id] && litSet[b.id]);
           var mx = (x1 + x2) / 2;
           s += '<path d="M' + x1.toFixed(0) + ',' + y1.toFixed(0) + ' C' + mx.toFixed(0) + ',' + y1.toFixed(0) + ' ' + mx.toFixed(0) + ',' + y2.toFixed(0) + ' ' + x2.toFixed(0) + ',' + y2.toFixed(0) +
             '" fill="none" style="stroke:' + (lit ? 'var(--ochre)' : 'var(--soft)') + '" stroke-width="' + (lit ? 2 : 1) + '" opacity="' + (S.pick ? (lit ? .95 : .12) : .35) + '"/>';
@@ -2820,7 +2900,6 @@
     ['What is measured here that is not measured elsewhere', 'The daily Niño boxes straight from the NOAA grid, one day behind, with our own climatologies; the water under the equator by mooring, every day, against each mooring\u2019s own record; the westerly wind bursts from daily reanalysis wind; the live-model centre and where we stand inside the season; the comparable core of the risk index for past events, and the same by RONI; the Gulf and Kuwait measured, not quoted.'],
     ['What we do not claim', 'We have no model of our own and forecast nothing. A “broken” model is one below the official value in most verified issues, not a bad model. The risk index is a construction of this page, comparable only with itself; the core and RONI are the fair comparisons across decades. Analogue paths of prices are what happened then, not what will happen. Regional impacts are typical, never guaranteed; the teleconnections for Europe and Russia are weak and the page says so on the row.'],
     ['Reading the charts', 'Every chart with more than one series distinguishes them by dash pattern, not by colour alone; the legend is clickable and lights one series. Past events are drawn on the same days of the year, dashed, in the same order everywhere: 1982, 1997, 2015, 2023, then last year in grey. Negative values on heat maps are hatched. The vertical mark on the plume shows the lived part of the season as a point and the rest as a range.'],
-    ['Where the code lives', 'tools/enso/: sources.py (fetch and read), oisst.py, subsurface.py, wind.py, air.py, gulf.py, background.py (collectors), watch.py (rules and assembly), models.py and iri_plume.py (the plume and the scoreboard), food.py, regions.py, history_index.py, alerts.py, journal.py, summary.py, links.py, refresh.py and publish.py (the update and the deploy). The page: enso.html and js/enso.js. The data: data/enso/latest.json, history.json, journal.json, glossary.json, links.json, chain-ref.json, models-ref.json, regions-ref.json. The Data chain tab draws all of this with the freshness of every piece.'],
     ['Changelog', '2026-09-03 — first version: daily series, weekly indices, ONI, the plume, food, regions, risks, the verdict. 2026-09-04 — the value journal, the atmosphere and fuel, satellite layers, commodities by name, models by class, the live centre, the comparable core, contextual links to parsed papers. 2026-09-04, evening, after the first expert review — OISST direct with own climatologies, the moorings and the reanalysis section, daily wind and bursts, the MJO, RONI and the second scale, MEI and the Indian Ocean Dipole, the ocean heat content, the release calendar, the Regions tab with the Gulf measured, commodity paths since onset, dashed series and clickable legends everywhere, this chain and this page.']
   ];
   function viewAbout() {
@@ -2913,6 +2992,11 @@
   }
   function render() {
     writeHash();
+    /* ВЫБОР В ЛЕГЕНДЕ ЖИВЁТ ТОЛЬКО НА СВОЕЙ СЦЕНЕ. Владелец 05.09: «походил, вернулся на
+       Against analogues — всё блёклое, не могу вернуть яркость». Уход со сцены снимает выбор. */
+    var scene = S.view + '/' + (S.sub[S.view] || '');
+    if (S._scene !== scene) { S.pick = null; S._scene = scene; }
+    $('stage').classList.toggle('full', !!(S.full && S.view === 'chain'));
     var narrow = window.matchMedia('(max-width:900px)').matches;
     // База сравнения выбирается режимом, но код блоков читает S.P — подменяем на время отрисовки.
     S.P = S.delta ? baseline() : (S.D || {}).prev || null;
@@ -2939,6 +3023,7 @@
     else if (S.view === 'ocean') viewOcean();
     else if (S.view === 'regions' || S.view === 'gulf') viewRegions();
     else if (S.view === 'chain') viewChain();
+    else if (S.view === 'news') viewNews();
     else if (S.view === 'about') viewAbout();
     else if (S.view === 'trend') viewTrend();
     else if (S.view === 'food') viewFood();
@@ -2969,6 +3054,11 @@
     var b = e.target.closest && e.target.closest('.vgo');
     if (!b) return;
     e.stopPropagation();
+    var rid = b.getAttribute('data-risk');
+    if (rid) {
+      var idx = (S.D.risks || []).map(function (r) { return r.id; }).indexOf(rid);
+      if (idx >= 0) { S.risk = idx; S.view = 'risk'; render(); return; }
+    }
     S.view = b.getAttribute('data-view') || 'now';
     var sb = b.getAttribute('data-sub');
     if (sb) S.sub[S.view] = sb;
@@ -2986,7 +3076,7 @@
       return null;
     }
     function fill(p) {
-      return '<b>' + esc(p.name || '') + '</b>' + esc(p.def || '') + (p.why ? ' ' + esc(p.why) : '') +
+      return '<b>' + esc(p.name || '') + '</b>' + (p.html ? p.html : esc(p.def || '')) + (p.why ? ' ' + esc(p.why) : '') +
         (p.url ? ' <a href="' + esc(p.url) + '" target="_blank" rel="noopener">source ↗</a>' : '') +
         (p.src || p.date ? '<span class="s">' + srcHtml(p.src) + (p.date ? '<div>' + esc(p.date) + '</div>' : '') + '</span>' : '');
     }
@@ -3115,7 +3205,7 @@
       if (x) { S.pinned = (S.pinned === x ? null : x); if (S.pinned) { show(x, e); tip.classList.add('pin'); } else hide(); return; }
       if (S.pinned && !e.target.closest('#tip')) { S.pinned = null; hide(); }
     });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { S.pinned = null; hide(); } });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { S.pinned = null; hide(); if (S.full) { S.full = false; render(); } } });
     hide();
   }
 
@@ -3126,10 +3216,11 @@
     get('/data/enso/models-ref.json').catch(function () { return {}; }),
     get('/data/enso/links.json').catch(function () { return {}; }),
     get('/data/enso/journal.json').catch(function () { return {}; }),
-    get('/data/enso/chain-ref.json').catch(function () { return {}; })])
+    get('/data/enso/chain-ref.json').catch(function () { return {}; }),
+    get('/data/enso/news.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {};
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {};
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');

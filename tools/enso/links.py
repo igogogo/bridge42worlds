@@ -46,6 +46,7 @@ OUT = DATA / "links.json"
 TOP = 8                 # сколько кандидатов вектор отдаёт модели на проверку
 FLOOR = 0.50            # пол по косинусу: ниже — уже соседняя тема (bge-m3 лежит узко)
 FLOOR_WEAK = 0.42       # второй заход для якорей, которым не нашлось ничего: помечаем weak
+FLOOR_ALL = 0.56        # работа вне темы (весь архив) — только при заметно большем сходстве
 KEEP = 3                # сколько ссылок остаётся у одного якоря после проверки
 MODEL = os.environ.get("ELNINO_LLM_MODEL", "deepseek-v4-pro")
 
@@ -127,8 +128,15 @@ def anchors():
 
 
 # ---------------------------------------------------------------- работы
-def works(limit_ids=None):
-    """Разобранные климатические работы: номер, дата, английское название, аннотация arXiv."""
+TOPIC_IDS = set()
+
+
+def works(limit_ids=None, all_archive=False):
+    """Разобранные климатические работы: номер, дата, английское название, аннотация arXiv.
+
+    all_archive=True — весь архив (владелец 05.09: «попробовать ещё поискать, может что-то
+    есть»): работы вне темы допускаются к якорю только при заметно большем сходстве
+    (FLOOR_ALL), чтобы широкий пул не нанёс шума."""
     ids = []
     for name in ("works-tier1.txt", "works-tier2.txt"):
         p = DATA / name
@@ -138,6 +146,10 @@ def works(limit_ids=None):
     have = {}
     for p in ROOT.glob("lang/ru/archive/*/*/data.json"):
         have[p.parent.name.split("v")[0]] = p
+    TOPIC_IDS.update(i.split("v")[0] for i in ids)
+    if all_archive:
+        extra = sorted(b for b in have if b not in TOPIC_IDS)
+        ids = ids + extra
     # Аннотация — из дампа arXiv тем же способом, что у tools/field.py: индекс FTS у нас
     # contentless (content=''), из него текст не достать, а дамп лежит по месяцам.
     sys.path.insert(0, str(ROOT / "tools"))
@@ -198,7 +210,10 @@ def candidates(A, W, anc, wks):
     out = {}
     for i, a in enumerate(anc):
         order = np.argsort(-sim[i])[:TOP]
-        picks = [{"w": wks[j], "score": round(float(sim[i][j]), 3)} for j in order if sim[i][j] >= FLOOR]
+        def ok(j):
+            base = (wks[j]["id"] or "").split("v")[0]
+            return sim[i][j] >= (FLOOR if base in TOPIC_IDS else FLOOR_ALL)
+        picks = [{"w": wks[j], "score": round(float(sim[i][j]), 3)} for j in order if ok(j)]
         # ВТОРОЙ ЗАХОД С НИЗКИМ ПОРОГОМ. Из 87 якорей ссылки нашлись у сорока: пул в сто
         # работ мал, и половине якорей нечего предложить выше 0.50. Вместо пустоты берём
         # лучших кандидатов выше FLOOR_WEAK и помечаем weak — решает по-прежнему модель,
@@ -263,6 +278,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry", action="store_true", help="только вектор, без модели и без записи")
     ap.add_argument("--limit", type=int, help="взять только первые N якорей (проба)")
+    ap.add_argument("--all", action="store_true", help="пул — весь архив, не только работы темы")
     a = ap.parse_args()
 
     from dotenv import load_dotenv
@@ -271,7 +287,7 @@ def main():
     anc = anchors()
     if a.limit:
         anc = anc[:a.limit]
-    wks = works()
+    wks = works(all_archive=('--all' in sys.argv))
     print(f"якорей {len(anc)}, разобранных климатических работ {len(wks)}")
     if not wks:
         sys.exit("нет ни одной разобранной работы из списков — сначала works_run.py")
