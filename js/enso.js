@@ -310,7 +310,9 @@
     }
     return s;
   }
-  function legendW(w) { return w < 560 ? 0 : Math.min(190, Math.round(w * 0.22)); }
+  /* Колонка легенды шире и с запасом: подписи справа выезжали за поле (владелец 05.09:
+     «сделай отступ резервный, не жмись»). */
+  function legendW(w) { return w < 560 ? 0 : Math.min(240, Math.round(w * 0.27)); }
   function topPad(w) { return legendW(w) ? 26 : 42; }
   /* КЛИКАБЕЛЬНАЯ ЛЕГЕНДА. Владелец 04.09: «все линии тоже нужно дать легенду по моделям,
      отдельно выделить визуально; при нажатии на элемент легенды график её высвечивать
@@ -992,7 +994,7 @@
     // В низкой плитке (телефон, короткое окно) подписи долгот и «экватор» съедали карту —
     // при высоте меньше 200 пикселей оставляем только сами участки.
     var small = H < 200;
-    var Lp = small ? 14 : 40, R = small ? 10 : 16, Tp = small ? 22 : 34, B = small ? 10 : 30;
+    var Lp = small ? 14 : 40, R = small ? 10 : 26, Tp = small ? 22 : 34, B = small ? 10 : 30;
     var pw = W - Lp - R, ph = H - Tp - B;
     /* ШИРЕ И КРУПНЕЕ. Владелец 05.09: «очень маленькие цифры; побольше значения, побольше
        контраста, чуть меньше масштаб, чтобы очертания континентов появились, и сетку». */
@@ -1203,7 +1205,7 @@
 
   function chartMetric(m, W, H, title) {
     var vals = m.values, dates = m.dates || [], n = vals.length;
-    var Lp = 46, R = 54, Tp = topPad(W), B = 26, pw = W - Lp - R, ph = H - Tp - B;
+    var Lp = 46, R = 76, Tp = topPad(W), B = 26, pw = W - Lp - R, ph = H - Tp - B;
     var vv = vals.filter(fin);
     if (vv.length < 2) return svgOpen(W, H) + '<text x="20" y="' + (H / 2) + '">no series for this item</text></svg>';
     var ana = analogFor(m) || [];
@@ -1257,7 +1259,7 @@
     if (m.flags && m.flags.length === n) vals.forEach(function (v, i) { if (m.flags[i] && fin(v)) s += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(v).toFixed(1) + '" r="2.2" style="fill:var(--nino)"/>'; });
     var li = n - 1; while (li > 0 && !fin(vals[li])) li--;
     s += '<circle cx="' + X(li).toFixed(1) + '" cy="' + Y(vals[li]).toFixed(1) + '" r="4" style="fill:var(--nino)"/>';
-    s += '<text x="' + (X(li) + 7).toFixed(0) + '" y="' + (Y(vals[li]) + 4).toFixed(0) + '" class="tt">' + fnum(Math.abs(vals[li]) < 0.005 ? 0 : vals[li]) + ' ' + esc(m.unit || '') + '</text>';
+    s += '<text x="' + (X(li) + 7).toFixed(0) + '" y="' + (Y(vals[li]) + 4).toFixed(0) + '" class="tt">' + fnum(Math.abs(vals[li]) < 0.005 ? 0 : vals[li]) + (m.unit && m.unit.length <= 4 ? ' ' + esc(m.unit) : '') + '</text>';
     return s + '</svg>';
   }
 
@@ -1409,8 +1411,11 @@
     /* РЯДА ТОЧЕК БОЛЬШЕ НЕТ. Он горел всегда и потому не значил ничего; откуда взято
        и за когда — теперь на каждом кирпиче отдельно (владелец 04.09). Осталась одна
        строка и только когда есть о чём сказать: источник не ответил. */
+    /* В шапке — только «updated» (владелец 05.09: «источников много — просто updated
+       оставить, всё убрать»); свежесть каждого источника живёт на Data chain и References. */
+    Array.prototype.slice.call(host.children, 1).forEach(function (c) { host.removeChild(c); });
     var stale = Object.keys(D.sources).filter(function (q) { return !D.sources[q].fresh; });
-    if (stale.length) {
+    if (false && stale.length) {
       item('<b>stale</b> ' + stale.length, { name: 'Sources that did not answer', def: stale.map(function (q) { return D.sources[q].label + ': ' + (D.sources[q].error || 'no answer'); }).join('; ') + '. The panel is showing the last good value for these.', src: 'our fetch log', date: (D.stamp || '').slice(0, 10) }, 'bad');
     }
   }
@@ -1529,7 +1534,8 @@
         '<div><div class="rt">' + mark(r.title) + (was == null && P ? ' <span class="new">new</span>' : '') + '</div>' +
         '<div class="rh">' + esc(r.horizon) + (wasJ ? ' · <span class="' + jsign(r.level - wasJ.v) + '">' + jarrow(r.level - wasJ.v) + ' was ' + wasJ.v + ' on ' + esc(wasJ.d) + '</span>' : '') + (r.metric ? ' · ' + esc(r.metric.name) : '') + '</div>' +
         (r.metric ? '<div class="rs">' + spark(r.metric, 200, 24) + '</div>' : '') +
-        '<div class="rf">' + (linksHtml('risk:' + (r.id || '')) || '') + (jr ? '<button type="button" class="jh" data-hist="risk:' + esc(r.id) + '">history</button>' : '') + '</div></div>';
+        '<div class="rf">' + (linksHtml('risk:' + (r.id || '')) || '') + (jr ? '<button type="button" class="jh" data-hist="risk:' + esc(r.id) + '">history</button>' : '') +
+        dateBadge(null, (r.metric ? r.metric.name : 'this rule'), (r.metric && r.metric.dates ? String(r.metric.dates[r.metric.dates.length - 1]) : (je.length ? je[je.length - 1].d : '')), r.title) + '</div></div>';
       c.onclick = function (e) {
         if (e.target.closest('[data-hist]')) return;      // кнопка истории живёт своей жизнью
         S.risk = (S.risk === i ? null : i); S.view = S.risk == null ? 'now' : 'risk'; render();
@@ -1583,11 +1589,15 @@
     });
     body.appendChild(p);
     S.plotEl = p; S.draw = draw; S.pw = 0; S.ph = 0;
+    // дата данных — значок в правом нижнем углу поля графика
+    var wrapB = el('span', 'dcal-wrap', dateBadge(plotKey(draw)));
+    p.appendChild(wrapB);
     if (plotRO) { plotRO.disconnect(); plotRO.observe(p); }
   }
   function redrawPlot() {
     var p = S.plotEl;
     if (!p || !S.draw || !p.isConnected) return;
+    var badge = p.querySelector('.dcal-wrap');
     var w = Math.max(220, Math.round(p.clientWidth)), h = Math.max(150, Math.round(p.clientHeight));
     if (w === S.pw && h === S.ph) return;
     S.pw = w; S.ph = h;
@@ -1600,6 +1610,7 @@
       /(<text class="tt"[^>]*y="13"[^>]*>)([^<]{1,400})(<\/text>)/,
       // текст уже экранирован сборщиком — повторно не экранируем, только режем
       function (all, head, txt, tail) { return head + fitText(txt, w, 12) + tail; });
+    if (badge) p.appendChild(badge);           // значок даты данных переживает перерисовку
   }
   /* ══ ЖУРНАЛ ЗНАЧЕНИЙ НА КИРПИЧЕ ══════════════════════════════════════════════
      Владелец 04.09: «изменение данных не равно времени обновления… на каждом кирпичике
@@ -1622,11 +1633,39 @@
   }
   /* Подпись под числом. src0/date0 — для кирпичей, у которых своего ряда в журнале нет
      (сводные и производные): стрелок не будет, но откуда и за когда — будет всегда. */
+  /* ДАТА ДАННЫХ — ЗНАЧКОМ В ПРАВОМ НИЖНЕМ УГЛУ. Владелец 05.09: «нам не важно, когда
+     обновлялся дашборд — важно, когда изменились данные; на всех визуалах и KPI — маленький
+     календарь с подсказкой». Дата берётся из журнала значений (смена данного, а не опрос);
+     если ряда в журнале нет — дата, которую назвал сам блок; и только в крайнем случае —
+     штамп пересчёта, честно так и подписанный. */
+  var CAL_SVG = '<svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><rect x="1" y="2.5" width="10" height="8.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.1"/><line x1="1" y1="5.2" x2="11" y2="5.2" stroke="currentColor" stroke-width="1.1"/><line x1="3.8" y1="1" x2="3.8" y2="3.5" stroke="currentColor" stroke-width="1.1"/><line x1="8.2" y1="1" x2="8.2" y2="3.5" stroke="currentColor" stroke-width="1.1"/></svg>';
+  function dateBadge(k, src0, date0, title0) {
+    var r = k ? jrec(k) : null, e = r ? (r.entries || []) : [], last = e[e.length - 1];
+    var pay;
+    if (last) pay = { name: 'Data date · ' + (r.title || k), def: 'The data behind this changed on ' + last.d + ' (we saw it ' + (last.seen || '').slice(0, 10) + ').' + (e.length > 1 ? ' Before that: ' + e[e.length - 2].d + '.' : ' First reading we hold.'), src: r.src || '', date: last.d };
+    else if (date0) pay = { name: 'Data date · ' + (title0 || src0 || ''), def: 'The data behind this is dated ' + date0 + '.', src: src0 || '', date: date0 };
+    else pay = { name: 'Data date', def: 'No separate data date for this piece: it was recomputed with the panel at ' + (S.D.stamp || '') + '.', src: 'our pipeline', date: (S.D.stamp || '').slice(0, 10) };
+    return '<span class="dcal" data-src="' + esc(JSON.stringify(pay)) + '">' + CAL_SVG + '</span>';
+  }
+  /* Какой ряд журнала стоит за графиком: по имени функции внутри отрисовщика, чтобы не
+     трогать сорок мест вызова. */
+  var PLOT_KEY = [
+    [/chartAnalogs|chartRecent\(w0|sst_nino34/, 'n34_daily'], [/pacific|chartNoaa/, 'n34_weekly'],
+    [/chartPlume|chartStack|chartBreakdown/, 'iri_peak'], [/chartAir/, 'soi'], [/chartFuel/, 'wwv'], [/chartLayers/, 'tlt_tropics'],
+    [/chartWind/, 'wind_week'], [/chartMJO/, 'mjo_amp'], [/chartFood|chartOverlay/, 'food_index'], [/chartOHC/, 'ohc_2000'],
+    [/chartKuwait/, 'kuwait_tmax30'], [/chartHistory/, 'risk_index'], [/boxMetric\(bx/, 'n34_box'], [/title: 'Persian Gulf'/, 'gulf_sst'],
+    [/get: function \(i, j\) \{ return good/, 'subsurface_warmest'], [/GD\.labels/, 'subsurface_warmest'], [/blk\.title/, 'dmi']
+  ];
+  function plotKey(draw) {
+    var src = String(draw);
+    for (var i = 0; i < PLOT_KEY.length; i++) if (PLOT_KEY[i][0].test(src)) return PLOT_KEY[i][1];
+    return null;
+  }
   function kmeta(k, src0, date0) {
     var r = jrec(k), out = '<div class="kj">';
     if (!r) {
       if (!src0 && !date0) return '';
-      return out + '<div class="jsrc"><span>' + mark(src0 || '') + (date0 ? ' · ' + esc(date0) : '') + '</span></div></div>';
+      return out + '<div class="jsrc"><span>' + mark(src0 || '') + (date0 ? ' · ' + esc(date0) : '') + '</span>' + dateBadge(null, src0, date0) + '</div></div>';
     }
     var e = r.entries || [], last = e[e.length - 1], prev = e[e.length - 2], dg = r.digits;
     if (last && prev) out += '<div class="jr">' + jdelta(last.v, prev.v, dg) + ' since ' + esc(prev.d) + '</div>';
@@ -1645,7 +1684,7 @@
       src: r.src || '', date: last ? last.d : '' };
     out += '<div class="jsrc"><span data-src="' + esc(JSON.stringify(srcPay)) + '">' + mark(r.src || '') +
       (last ? ' · ' + esc(last.d) : '') + '</span>' +
-      '<button type="button" class="jh" data-hist="' + esc(k) + '">history</button></div>';
+      '<button type="button" class="jh" data-hist="' + esc(k) + '">history</button>' + dateBadge(k) + '</div>';
     return out + '</div>';
   }
   /* Стрелка в одну щепотку — для фишек под графиками, где целой строке журнала нет места
@@ -2539,7 +2578,7 @@
 
   function chartWind(e, W, H) {
     var vals = e.anom, n = vals.length, dates = e.dates;
-    var Lp = 46, R = 16, Tp = 26, B = 26, pw = W - Lp - R, ph = H - Tp - B;
+    var Lp = 46, R = 40, Tp = 26, B = 26, pw = W - Lp - R, ph = H - Tp - B;
     var vv = vals.filter(fin).concat([e.threshold || 0, -(e.threshold || 0)]);
     var vmin = Math.min.apply(null, vv), vmax = Math.max.apply(null, vv);
     var pad = (vmax - vmin) * .12; vmin -= pad; vmax += pad * 2;
@@ -2630,7 +2669,7 @@
   }
 
   function chartKuwait(K, W, H) {
-    var n = K.tmax.length, Lp = 46, R = 16, Tp = 26, B = 26, pw = W - Lp - R, ph = H - Tp - B;
+    var n = K.tmax.length, Lp = 46, R = 40, Tp = 26, B = 26, pw = W - Lp - R, ph = H - Tp - B;
     var vv = K.tmax.filter(fin).concat((K.tmax_clim || []).filter(fin)).concat(K.tmin.filter(fin));
     var vmin = Math.min.apply(null, vv) - 1, vmax = Math.max.apply(null, vv) + 3;
     var X = function (i) { return Lp + i / (n - 1) * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
