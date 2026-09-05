@@ -47,13 +47,31 @@ def scenario_support(iri, observed_weekly, record):
     Пороги: base — медиана пиков моделей, strong — 90-й процентиль, record — рекорд
     недельного ряда NOAA. Оговорка обязательна: реальность уже выше части плюма, значит
     доли занижены — это нижняя граница, а не оценка сверху."""
+    # СЛОМАННЫЕ МОДЕЛИ НЕ ЗАДАЮТ СЦЕНАРИИ. Владелец 04.09 сказал это про среднее на графиках,
+    # но болезнь та же и здесь, а последствия хуже: пороги сценариев — это медиана и 90-й
+    # процентиль пиков, и модели, уже занизившие прожитые сезоны, тянут их вниз. Отсюда и
+    # выходила лестница, где порог «record» оказывался ниже медианы. Считаем по живым:
+    # сломанные исключены, остальные равноправны (веса тут ни к чему — это порядковые
+    # статистики, а не среднее). Если живых почему-то меньше пяти, берём всех и говорим об
+    # этом полем models_used: молчаливая подмена выборки хуже широкого порога.
     models = (iri or {}).get("models") or {}
-    peaks = []
-    for m in models.values():
-        if m.get("section") in ("dyn", "stat") and m.get("values"):
+    classes = (iri or {}).get("classes") or {}
+
+    def _peaks(only_live):
+        out = []
+        for nm, m in models.items():
+            if m.get("section") not in ("dyn", "stat") or not m.get("values"):
+                continue
+            if only_live and (classes.get(nm) or {}).get("cls") == "broke":
+                continue
             vv = [v for v in m["values"] if v is not None]
             if vv:
-                peaks.append(max(vv))
+                out.append(max(vv))
+        return out
+
+    peaks, used = _peaks(True), "live"
+    if len(peaks) < 5:
+        peaks, used = _peaks(False), "all"
     if not peaks:
         return None
     peaks.sort()
@@ -63,8 +81,8 @@ def scenario_support(iri, observed_weekly, record):
     th = {"base": p50, "strong": p90,
           "record": record if record is not None else peaks[-1]}
     words = {
-        "base": "the event peaks near the middle of the plume",
-        "strong": "the event peaks at the top of the model spread",
+        "base": "the event peaks near the middle of the plume, counting only the models that kept up",
+        "strong": "the event peaks at the top of the spread of the models that kept up",
         "record": "the peak goes above the record of the weekly NOAA series",
     }
     out = {}
@@ -73,11 +91,17 @@ def scenario_support(iri, observed_weekly, record):
         out[k] = {"threshold": round(float(t), 2), "models_at_or_above": at, "of": n,
                   "share": round(100 * at / n), "what": words[k]}
     below_now = len([p for p in peaks if observed_weekly is not None and p < observed_weekly])
-    out["_note"] = (f"Share of the {n} IRI models whose peak reaches the threshold. Not a probability: "
-                    f"these are {n} different models, not draws from one. Reality is already above "
-                    f"{below_now} of them, so every share here is a lower bound.")
+    out["_note"] = (f"Share of the {n} IRI models whose peak reaches the threshold"
+                    + (" — counting only the models that kept up with reality; the ones that broke are "
+                       "left out, because a forecast already below the lived part of the season cannot "
+                       "set the scale for the ones ahead" if used == "live" else
+                       " — counting every model, because too few passed verification this month")
+                    + f". Not a probability: these are {n} different models, not draws from one. "
+                    f"Reality is already above {below_now} of them, so every share here is a lower bound.")
     out["_median_peak"] = round(float(p50), 2)
     out["_p90_peak"] = round(float(p90), 2)
+    out["_models_used"] = used
+    out["_n_models"] = len(peaks)
     return out
 
 

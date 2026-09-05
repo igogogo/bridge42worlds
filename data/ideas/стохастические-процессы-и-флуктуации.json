@@ -1,0 +1,639 @@
+{
+ "topic": "стохастические процессы и флуктуации",
+ "slug": "стохастические-процессы-и-флуктуации",
+ "built": "2026-09-04",
+ "note": "В области стохастических процессов активно развиваются методы анализа флуктуаций в неравновесных системах, от плазмы до финансовых рынков, с акцентом на проверку теоретических предсказаний на реальных данных.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.636,
+  "band": "mid",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Сравнение стохастических моделей для флуктуаций в плазме токамака",
+   "what": "Взять данные о флуктуациях в краевой области токамака (например, из открытых архивов) и проверить, какая модель лучше описывает наблюдаемые временные ряды: пуассоновский процесс, процесс Орнштейна–Уленбека или дробовой шум с тяжелыми хвостами.",
+   "why": "Позволит выявить механизмы аномального переноса в плазме и может быть полезно для диагностики удержания частиц в токамаках.",
+   "methods": [
+    "Оценить параметры моделей методом максимального правдоподобия или байесовскими методами.",
+    "Сравнить модели по информационным критериям (AIC, BIC) и проверить остатки на автокорреляцию.",
+    "Применить методы нелинейного анализа временных рядов (показатель Хёрста, мультифрактальный анализ) для оценки корреляций."
+   ],
+   "origin": "В работе 0711.0279 обсуждается стохастическое поведение флуктуаций в краевой области токамака, но не проводится систематическое сравнение различных стохастических моделей. Работа cond-mat/9707147 дает обзор стохастических процессов, применимых в физике, но не привязана к конкретным данным токамака. Не хватает проверки, какая из стандартных моделей адекватно описывает наблюдаемые флуктуации.",
+   "first_step": "Скачать открытые данные флуктуаций (например, с базы данных какого-либо токамака) и построить гистограммы распределений амплитуд и времена ожидания между событиями.",
+   "needs": "Доступ к данным флуктуаций (открытые архивы, например, с установок типа SINP), навыки программирования на Python/R, знание основ стохастических процессов.",
+   "risks": "Данные могут быть зашумлены или недостаточно длинны для различения моделей; также возможна нестационарность, требующая предварительной обработки.",
+   "scale": "семестр",
+   "based_on": [
+    "0711.0279",
+    "cond-mat/9707147"
+   ]
+  },
+  {
+   "title": "Анализ ограниченности флуктуаций в хаотических системах и 1/f шуме",
+   "what": "Для нескольких хаотических динамических систем (например, логистическое отображение, система Лоренца) численно исследовать, как ограниченность флуктуаций влияет на спектр мощности, и сравнить с поведением 1/f^alpha шума.",
+   "why": "Может прояснить связь между детерминированным хаосом и стохастическими процессами с долгой памятью, что важно для моделирования природных сигналов.",
+   "methods": [
+    "Сгенерировать временные ряды хаотических систем с различными параметрами.",
+    "Рассчитать спектры мощности и оценить показатель alpha.",
+    "Исследовать распределение флуктуаций и их ограниченность (например, через экстремальные значения).",
+    "Сравнить с теоретическими предсказаниями для 1/f шума из работы cond-mat/0309418."
+   ],
+   "origin": "Работа cond-mat/0309418 указывает на общие черты между хаотическими системами и 1/f шумом, но ограничивается конкретными примерами. Не хватает систематического исследования для широкого класса хаотических отображений и проверки универсальности.",
+   "first_step": "Написать скрипт для моделирования логистического отображения и рассчитать спектр мощности при разных значениях параметра.",
+   "needs": "Компьютер с Python/Matlab, знание численных методов и основ теории хаоса.",
+   "risks": "Численные артефакты (конечная длина ряда, эффекты дискретизации) могут исказить оценку показателя alpha.",
+   "scale": "диплом",
+   "based_on": [
+    "cond-mat/0309418"
+   ]
+  },
+  {
+   "title": "Проверка флуктуационных теорем в периодически управляемых марковских цепях",
+   "what": "Численно и аналитически проверить справедливость флуктуационных теорем для производства энтропии и тепловыделения в марковских цепях с периодически изменяющимися вероятностями переходов.",
+   "why": "Расширение флуктуационных теорем на нестационарные условия важно для понимания неравновесных систем с внешним воздействием, таких как молекулярные моторы или микрофлюидные устройства.",
+   "methods": [
+    "Построить простую марковскую цепь с периодическими вероятностями переходов (например, двухуровневую систему с осциллирующим полем).",
+    "Аналитически вычислить производство энтропии и тепловыделение, используя методы из работы 0907.4727.",
+    "Численно смоделировать траектории и оценить функцию больших уклонений.",
+    "Проверить симметрию Галлавотти–Коэна для конечных времен."
+   ],
+   "origin": "Работа 0907.4727 доказывает флуктуационные теоремы для периодически управляемых марковских цепей, но не приводит численных примеров и не исследует скорость сходимости. Не хватает практической проверки и иллюстрации для простых моделей.",
+   "first_step": "Реализовать симуляцию двухуровневой марковской цепи с периодическими скоростями переходов и накопить статистику для оценки распределения производства энтропии.",
+   "needs": "Знание теории марковских процессов, навыки численного моделирования (Python/C++), возможно, символьные вычисления (Mathematica).",
+   "risks": "Для наблюдения симметрии может потребоваться очень большое число траекторий, что ограничено вычислительными ресурсами.",
+   "scale": "диплом",
+   "based_on": [
+    "0907.4727"
+   ]
+  },
+  {
+   "title": "Моделирование стохастической волатильности на основе процессов Хокса",
+   "what": "Построить высокочастотную модель цены финансового инструмента, в которой интенсивность скачков задается процессом Хокса, и исследовать предельный переход к стохастической волатильности типа Хестона.",
+   "why": "Позволит связать микроструктуру рынка с макроскопическими моделями волатильности, что полезно для оценки рисков и ценообразования опционов.",
+   "methods": [
+    "Определить процесс Хокса с экспоненциальным ядром и параметром эндогенности, близким к критическому.",
+    "Вывести уравнения для интенсивности и флуктуаций в пределе высоких частот, следуя работе 1807.04192.",
+    "Численно смоделировать процесс Хокса и сравнить статистику с решением уравнения Хестона.",
+    "Оценить параметры модели на реальных данных (например, тиковые данные акций)."
+   ],
+   "origin": "Работа 1807.04192 устанавливает связь между процессами Хокса и стохастической волатильностью, но не проверяет качество приближения на конечных частотах. Не хватает численной верификации и применения к реальным данным.",
+   "first_step": "Написать симулятор процесса Хокса с экспоненциальным ядром и оценить его спектральные характеристики при различных параметрах.",
+   "needs": "Доступ к высокочастотным финансовым данным (бесплатные источники, например, данные с бирж), навыки стохастического моделирования и статистического оценивания.",
+   "risks": "Реальные данные могут не соответствовать предположениям модели (например, наличие микроструктурного шума), что потребует дополнительной фильтрации.",
+   "scale": "диплом",
+   "based_on": [
+    "1807.04192"
+   ]
+  },
+  {
+   "title": "Флуктуации в стохастической модели точечных вихрей с общим шумом",
+   "what": "Исследовать поведение флуктуаций в системе точечных вихрей, подверженных общему шуму, и проверить сходимость к решению стохастического уравнения эволюции, полученному в работе 2501.06850.",
+   "why": "Модель точечных вихрей используется для описания двумерной турбулентности, и понимание флуктуаций может пролить свет на статистические свойства вихревых структур.",
+   "methods": [
+    "Изучить математическую постановку из работы 2501.06850 и воспроизвести доказательство сходимости.",
+    "Численно решить систему стохастических дифференциальных уравнений для N вихрей с общим шумом.",
+    "Оценить флуктуационные процессы и сравнить с предельным линейным уравнением.",
+    "Исследовать скорость сходимости при увеличении N."
+   ],
+   "origin": "Работа 2501.06850 устанавливает теоретический результат о сходимости флуктуаций, но не приводит численных иллюстраций и не исследует практическую применимость. Не хватает вычислительных экспериментов для подтверждения и визуализации.",
+   "first_step": "Реализовать численное решение для малого числа вихрей (N=2,3) с общим шумом и построить траектории.",
+   "needs": "Знание стохастического анализа, навыки численного решения СДУ (например, схема Эйлера–Маруямы), вычислительные ресурсы для больших N.",
+   "risks": "Численная неустойчивость при больших N и сильном шуме; также проверка сходимости требует очень точных оценок.",
+   "scale": "годы",
+   "based_on": [
+    "2501.06850"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "0711.0279",
+   "full": false,
+   "field": true,
+   "score": 0.636,
+   "titles": {
+    "ru": "Stochastic behaviour in the edge region of the SINP tokamak"
+   },
+   "abstract": "Stochasticity is one of the most extensively researched topics in laboratory and space plasmas since it has been successful in explaining the various anomalous processes like transport, particle heating, particle loss etc. Since there is a growing need for better understanding of this nonlinear process, it has led to the development of new and more advanced data analysis techniques. In this paper we present an analysis of the floating potential fluctuations which show the existence of a stochastic multifractal process along with low dimensional chaos. This has been shown primarily by wavelet a"
+  },
+  {
+   "id": "cond-mat/0309418",
+   "full": false,
+   "field": true,
+   "score": 0.628,
+   "titles": {
+    "ru": "Common and different features between the behavior of the chaotic   dynamical systems and the 1/f^alpha(f) noise"
+   },
+   "abstract": "The major goal of the present paper is to find out the manifestation of the boundedness of fluctuations. Two different subjects are considered: (i) an ergodic Markovian process associated with a new type of large scaled fluctuations at spatially homogeneous reaction systems; (ii) simulated dynamical systems that posses strange attractors. Their common property is that the fluctuations are bounded. It is found out that the mathematical description of the stochasity at both types of systems is identical. Then, it is to be expected that it exhibits certain common features whose onset is the stoch"
+  },
+  {
+   "id": "cond-mat/9707147",
+   "full": false,
+   "field": true,
+   "score": 0.623,
+   "titles": {
+    "ru": "Stochastic Effects in Physical Systems"
+   },
+   "abstract": "A tutorial review is given of some developments and applications of stochastic processes from the point of view of the practicioner physicist. The index is the following: 1.- Introduction 2.- Stochastic Processes 3.- Transient Stochastic Dynamics 4.- Noise in Dynamical Systems 5.- Noise Effects in Spatially Extended Systems 6.- Fluctuations, Phase Transitions and Noise-Induced Transitions."
+  },
+  {
+   "id": "1807.04192",
+   "full": false,
+   "field": true,
+   "score": 0.621,
+   "titles": {
+    "ru": "From Hawkes-type processes to stochastic volatility"
+   },
+   "abstract": "We introduce a Hawkes-like process and study its scaling limit as the system becomes increasingly endogenous. We derive functional limit theorems for intensity and fluctuations. Then, we introduce a high-frequency model for a price of a liquid traded financial instrument in which the nearly unstable regime leads to a Heston-type process where the negative correlation between the noise driving the proce of the instrument and the volatility can be viewed as a result of high variance of the sell-side order arrivals."
+  },
+  {
+   "id": "2501.06850",
+   "full": false,
+   "field": true,
+   "score": 0.621,
+   "titles": {
+    "ru": "The fluctuation behaviour of the stochastic point vortex model with   common noise"
+   },
+   "abstract": "This article studies the fluctuation behaviour of the stochastic point vortex model with common noise. Using the martingale method combined with a localization argument, we prove that the sequence of fluctuation processes converges in distribution to the unique probabilistically strong solution of a linear stochastic evolution equation. In particular, we establish the strong convergence from the stochastic point vortex model with common noise to the conditional McKean Vlasov equation."
+  },
+  {
+   "id": "0910.5337",
+   "full": false,
+   "field": true,
+   "score": 0.62,
+   "titles": {
+    "ru": "Fluctuations and stochastic processes in one-dimensional many-body   quantum systems"
+   },
+   "abstract": "We study the fluctuation properties of a one-dimensional many-body quantum system composed of interacting bosons, and investigate the regimes where quantum noise or, respectively, thermal excitations are dominant. For the latter we develop a semiclassical description of the fluctuation properties based on the Ornstein-Uhlenbeck stochastic process. As an illustration, we analyze the phase correlation functions and the full statistical distributions of the interference between two one-dimensional systems, either independent or tunnel-coupled and compare with the Luttinger-liquid theory."
+  },
+  {
+   "id": "0902.4195",
+   "full": false,
+   "field": true,
+   "score": 0.619,
+   "titles": {
+    "ru": "Stationarity, time--reversal and fluctuation theory for a class of   piecewise deterministic Markov processes"
+   },
+   "abstract": "We consider a class of stochastic dynamical systems, called piecewise deterministic Markov processes, with states $(x, \\s)\\in \\O\\times \\G$, $\\O$ being a region in $\\bbR^d$ or the $d$--dimensional torus, $\\G$ being a finite set. The continuous variable $x$ follows a piecewise deterministic dynamics, the discrete variable $\\s$ evolves by a stochastic jump dynamics and the two resulting evolutions are fully--coupled. We study stationarity, reversibility and time--reversal symmetries of the process. Increasing the frequency of the $\\s$--jumps, we show that the system behaves asymptotically as dete"
+  },
+  {
+   "id": "0907.2818",
+   "full": false,
+   "field": true,
+   "score": 0.615,
+   "titles": {
+    "ru": "Stochastic Processes in Yellow and Red Pulsating Variables"
+   },
+   "abstract": "Random changes in pulsation period are well established in cool pulsating stars, in particular the red giant variables: Miras, semi-regulars of types A and B, and RV Tau variables. Such effects are also observed in a handful of Cepheids, the SX Phe variable XX Cyg, and, most recently, the red supergiant variable, BC Cyg, a type C semi-regular. The nature of such fluctuations is seemingly random over a few pulsation cycles of the stars, yet the regularity of the primary pulsation mechanism dominates over the long term. The degree of stochasticity is linked to the dimensions of the stars, the ra"
+  },
+  {
+   "id": "2412.19167",
+   "full": false,
+   "field": true,
+   "score": 0.613,
+   "titles": {
+    "ru": "Fluid-particle interactions and fluctuation-dissipation relations II --   Gaussianity and Gaussianity breaking"
+   },
+   "abstract": "The analysis of fluctuation-dissipation relations developed in Giona et al. (2024) for particle hydromechanics is extended to stochastic forcings alternative to Wiener processes, with the aim of addressing the occurrence of Gaussian equilibrium densities or alternatively the breaking of the Gaussian paradigm at equilibrium. Preliminarly, it is discussed how the determination of the fluctuational patterns starting from the Gaussian approach to Markov processes is practically unfeasible, and the moment analysis provides the simplest way to achieve it. We show the existence of an uncountable fami"
+  },
+  {
+   "id": "0907.4727",
+   "full": false,
+   "field": true,
+   "score": 0.613,
+   "titles": {
+    "ru": "Fluctuation Theorems for Entropy Production and Heat Dissipation in   Periodically Driven Markov Chains"
+   },
+   "abstract": "Asymptotic fluctuation theorems are statements of a Gallavotti-Cohen symmetry in the rate function of either the time-averaged entropy production or heat dissipation of a process. Such theorems have been proved for various general classes of continuous-time deterministic and stochastic processes, but always under the assumption that the forces driving the system are time independent, and often relying on the existence of a limiting ergodic distribution. In this paper we extend the asymptotic fluctuation theorem for the first time to inhomogeneous continuous-time processes without a stationary "
+  },
+  {
+   "id": "cond-mat/0108539",
+   "full": false,
+   "field": true,
+   "score": 0.611,
+   "titles": {
+    "ru": "Stochastic models for heterogeneous relaxation: Application to   inhomogeneous optical lineshapes"
+   },
+   "abstract": "Dynamic heterogeneity has often been modeled by assuming that a single-particle observable, fluctuating at a molecular scale, is influenced by its coupling to environmental variables fluctuating on a second, perhaps slower, time scale. Starting from the most simple Gaussian Markov process we model the exchange between 'slow' and 'fast' environments by treating the fluctuating single-particle variable as a projection from a higher-dimensional Markov process. The moments of the resulting stochastic process are calculated from the corresponding Master equations or Langevin equations, depending on"
+  },
+  {
+   "id": "0904.1585",
+   "full": false,
+   "field": true,
+   "score": 0.61,
+   "titles": {
+    "ru": "Current fluctuations in stochastic systems with long-range memory"
+   },
+   "abstract": "We propose a method to calculate the large deviations of current fluctuations in a class of stochastic particle systems with history-dependent rates. Long-range temporal correlations are seen to alter the speed of the large deviation function in analogy with long-range spatial correlations in equilibrium systems. We give some illuminating examples and discuss the applicability of the Gallavotti-Cohen fluctuation theorem."
+  }
+ ],
+ "lang": {
+  "en": {
+   "note": "In the field of stochastic processes, methods for analyzing fluctuations in nonequilibrium systems are actively being developed, from plasmas to financial markets, with an emphasis on testing theoretical predictions against real data.",
+   "topic": "stochastic processes and fluctuations",
+   "ideas": [
+    {
+     "based_on": [
+      "0711.0279",
+      "cond-mat/9707147"
+     ],
+     "title": "Comparing stochastic models for fluctuations in tokamak edge plasma",
+     "what": "Take data on fluctuations in the edge region of a tokamak (for example, from open archives) and test which model best describes the observed time series: a Poisson process, an Ornstein–Uhlenbeck process, or shot noise with heavy tails.",
+     "why": "This will help identify mechanisms of anomalous transport in plasma and may be useful for diagnosing particle confinement in tokamaks.",
+     "origin": "Work 0711.0279 discusses the stochastic behavior of fluctuations in the tokamak edge region but does not systematically compare different stochastic models. Work cond-mat/9707147 provides an overview of stochastic processes applicable in physics but is not tied to specific tokamak data. What is missing is a test of which standard model adequately describes the observed fluctuations.",
+     "first_step": "Download open fluctuation data (for example, from a tokamak database) and construct histograms of amplitude distributions and waiting times between events.",
+     "needs": "Access to fluctuation data (open archives, for example, from facilities like SINP), programming skills in Python/R, and knowledge of the basics of stochastic processes.",
+     "risks": "Data may be noisy or not long enough to distinguish models; nonstationarity is also possible, requiring preprocessing.",
+     "scale": "semester",
+     "methods": [
+      "Estimate model parameters using maximum likelihood or Bayesian methods.",
+      "Compare models using information criteria (AIC, BIC) and check residuals for autocorrelation.",
+      "Apply nonlinear time series analysis methods (Hurst exponent, multifractal analysis) to assess correlations."
+     ]
+    },
+    {
+     "based_on": [
+      "cond-mat/0309418"
+     ],
+     "title": "Analysis of bounded fluctuations in chaotic systems and 1/f noise",
+     "what": "For several chaotic dynamical systems (e.g., logistic map, Lorenz system), numerically investigate how bounded fluctuations affect the power spectrum and compare with the behavior of 1/f^alpha noise.",
+     "why": "This may clarify the connection between deterministic chaos and stochastic processes with long memory, which is important for modeling natural signals.",
+     "origin": "Work cond-mat/0309418 points to common features between chaotic systems and 1/f noise but is limited to specific examples. A systematic study for a wide class of chaotic maps and a test of universality is missing.",
+     "first_step": "Write a script to simulate the logistic map and calculate the power spectrum for different parameter values.",
+     "needs": "A computer with Python/Matlab, knowledge of numerical methods and basics of chaos theory.",
+     "risks": "Numerical artifacts (finite series length, discretization effects) may distort the estimate of the exponent alpha.",
+     "scale": "thesis",
+     "methods": [
+      "Generate time series of chaotic systems with various parameters.",
+      "Calculate power spectra and estimate the exponent alpha.",
+      "Investigate the distribution of fluctuations and their boundedness (e.g., through extreme values).",
+      "Compare with theoretical predictions for 1/f noise from work cond-mat/0309418."
+     ]
+    },
+    {
+     "based_on": [
+      "0907.4727"
+     ],
+     "title": "Testing fluctuation theorems in periodically driven Markov chains",
+     "what": "Numerically and analytically verify the validity of fluctuation theorems for entropy production and heat dissipation in Markov chains with periodically changing transition probabilities.",
+     "why": "Extending fluctuation theorems to nonstationary conditions is important for understanding nonequilibrium systems under external driving, such as molecular motors or microfluidic devices.",
+     "origin": "Work 0907.4727 proves fluctuation theorems for periodically driven Markov chains but does not provide numerical examples or investigate the convergence rate. A practical check and illustration for simple models is missing.",
+     "first_step": "Implement a simulation of a two-level Markov chain with periodic transition rates and accumulate statistics to estimate the distribution of entropy production.",
+     "needs": "Knowledge of Markov process theory, numerical simulation skills (Python/C++), possibly symbolic computation (Mathematica).",
+     "risks": "Observing the symmetry may require a very large number of trajectories, which is limited by computational resources.",
+     "scale": "thesis",
+     "methods": [
+      "Construct a simple Markov chain with periodic transition probabilities (e.g., a two-level system with an oscillating field).",
+      "Analytically compute entropy production and heat dissipation using methods from work 0907.4727.",
+      "Numerically simulate trajectories and estimate the large deviation function.",
+      "Check the Gallavotti-Cohen symmetry for finite times."
+     ]
+    },
+    {
+     "based_on": [
+      "1807.04192"
+     ],
+     "title": "Modeling stochastic volatility based on Hawkes processes",
+     "what": "Build a high-frequency model of a financial instrument's price where the jump intensity is given by a Hawkes process, and investigate the limiting transition to Heston-type stochastic volatility.",
+     "why": "This will link market microstructure with macroscopic volatility models, which is useful for risk assessment and option pricing.",
+     "origin": "Work 1807.04192 establishes a connection between Hawkes processes and stochastic volatility but does not test the quality of the approximation at finite frequencies. Numerical verification and application to real data are missing.",
+     "first_step": "Write a simulator for a Hawkes process with an exponential kernel and estimate its spectral characteristics under various parameters.",
+     "needs": "Access to high-frequency financial data (free sources, e.g., exchange data), skills in stochastic modeling and statistical estimation.",
+     "risks": "Real data may not conform to model assumptions (e.g., presence of microstructure noise), requiring additional filtering.",
+     "scale": "thesis",
+     "methods": [
+      "Define a Hawkes process with an exponential kernel and an endogeneity parameter close to critical.",
+      "Derive equations for intensity and fluctuations in the high-frequency limit, following work 1807.04192.",
+      "Numerically simulate the Hawkes process and compare statistics with the solution of the Heston equation.",
+      "Estimate model parameters on real data (e.g., tick data of stocks)."
+     ]
+    },
+    {
+     "based_on": [
+      "2501.06850"
+     ],
+     "title": "Fluctuations in a stochastic model of point vortices with common noise",
+     "what": "Investigate the behavior of fluctuations in a system of point vortices subject to common noise and verify convergence to the solution of the stochastic evolution equation obtained in work 2501.06850.",
+     "why": "The point vortex model is used to describe two-dimensional turbulence, and understanding fluctuations may shed light on the statistical properties of vortex structures.",
+     "origin": "Work 2501.06850 establishes a theoretical result on the convergence of fluctuations but does not provide numerical illustrations or investigate practical applicability. Computational experiments for confirmation and visualization are missing.",
+     "first_step": "Implement a numerical solution for a small number of vortices (N=2,3) with common noise and plot trajectories.",
+     "needs": "Knowledge of stochastic analysis, skills in numerical solution of SDEs (e.g., Euler-Maruyama scheme), computational resources for large N.",
+     "risks": "Numerical instability for large N and strong noise; also, verifying convergence requires very precise estimates.",
+     "scale": "years",
+     "methods": [
+      "Study the mathematical formulation from work 2501.06850 and reproduce the convergence proof.",
+      "Numerically solve the system of stochastic differential equations for N vortices with common noise.",
+      "Estimate fluctuation processes and compare with the limiting linear equation.",
+      "Investigate the convergence rate as N increases."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el campo de los procesos estocásticos se desarrollan activamente métodos para analizar fluctuaciones en sistemas fuera del equilibrio, desde plasmas hasta mercados financieros, con énfasis en contrastar predicciones teóricas con datos reales.",
+   "topic": "procesos estocásticos y fluctuaciones",
+   "ideas": [
+    {
+     "based_on": [
+      "0711.0279",
+      "cond-mat/9707147"
+     ],
+     "title": "Comparación de modelos estocásticos para fluctuaciones en el plasma de un tokamak",
+     "what": "Tomar datos de fluctuaciones en la región del borde de un tokamak (por ejemplo, de archivos abiertos) y comprobar qué modelo describe mejor las series temporales observadas: un proceso de Poisson, un proceso de Ornstein-Uhlenbeck o un ruido de disparo con colas pesadas.",
+     "why": "Permitirá identificar los mecanismos de transporte anómalo en el plasma y puede ser útil para diagnosticar el confinamiento de partículas en tokamaks.",
+     "origin": "El trabajo 0711.0279 discute el comportamiento estocástico de las fluctuaciones en la región del borde de un tokamak, pero no realiza una comparación sistemática de diferentes modelos estocásticos. El trabajo cond-mat/9707147 ofrece una revisión de procesos estocásticos aplicables en física, pero no está vinculado a datos específicos de tokamak. Falta verificar cuál de los modelos estándar describe adecuadamente las fluctuaciones observadas.",
+     "first_step": "Descargar datos abiertos de fluctuaciones (por ejemplo, de la base de datos de algún tokamak) y construir histogramas de las distribuciones de amplitudes y tiempos de espera entre eventos.",
+     "needs": "Acceso a datos de fluctuaciones (archivos abiertos, por ejemplo, de instalaciones tipo SINP), habilidades de programación en Python/R, conocimiento de los fundamentos de los procesos estocásticos.",
+     "risks": "Los datos pueden estar contaminados por ruido o ser insuficientemente largos para distinguir entre modelos; también es posible la no estacionariedad, lo que requeriría un preprocesamiento.",
+     "scale": "semestre",
+     "methods": [
+      "Estimar los parámetros de los modelos mediante máxima verosimilitud o métodos bayesianos.",
+      "Comparar los modelos mediante criterios de información (AIC, BIC) y verificar la autocorrelación de los residuos.",
+      "Aplicar métodos de análisis no lineal de series temporales (exponente de Hurst, análisis multifractal) para evaluar las correlaciones."
+     ]
+    },
+    {
+     "based_on": [
+      "cond-mat/0309418"
+     ],
+     "title": "Análisis de la acotación de las fluctuaciones en sistemas caóticos y ruido 1/f",
+     "what": "Para varios sistemas dinámicos caóticos (por ejemplo, la aplicación logística, el sistema de Lorenz) investigar numéricamente cómo la acotación de las fluctuaciones afecta al espectro de potencia y comparar con el comportamiento del ruido 1/f^alpha.",
+     "why": "Puede aclarar la relación entre el caos determinista y los procesos estocásticos con memoria larga, lo cual es importante para modelar señales naturales.",
+     "origin": "El trabajo cond-mat/0309418 señala rasgos comunes entre sistemas caóticos y ruido 1/f, pero se limita a ejemplos concretos. Falta una investigación sistemática para una amplia clase de aplicaciones caóticas y una verificación de universalidad.",
+     "first_step": "Escribir un script para simular la aplicación logística y calcular el espectro de potencia para diferentes valores del parámetro.",
+     "needs": "Computadora con Python/Matlab, conocimiento de métodos numéricos y fundamentos de la teoría del caos.",
+     "risks": "Los artefactos numéricos (longitud finita de la serie, efectos de discretización) pueden distorsionar la estimación del exponente alpha.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Generar series temporales de sistemas caóticos con diversos parámetros.",
+      "Calcular los espectros de potencia y estimar el exponente alpha.",
+      "Investigar la distribución de las fluctuaciones y su acotación (por ejemplo, mediante valores extremos).",
+      "Comparar con las predicciones teóricas para ruido 1/f del trabajo cond-mat/0309418."
+     ]
+    },
+    {
+     "based_on": [
+      "0907.4727"
+     ],
+     "title": "Verificación de los teoremas de fluctuación en cadenas de Markov periódicamente forzadas",
+     "what": "Verificar numérica y analíticamente la validez de los teoremas de fluctuación para la producción de entropía y la disipación de calor en cadenas de Markov con probabilidades de transición que varían periódicamente.",
+     "why": "La extensión de los teoremas de fluctuación a condiciones no estacionarias es importante para comprender sistemas fuera del equilibrio con influencia externa, como motores moleculares o dispositivos de microfluídica.",
+     "origin": "El trabajo 0907.4727 demuestra los teoremas de fluctuación para cadenas de Markov periódicamente forzadas, pero no proporciona ejemplos numéricos ni investiga la velocidad de convergencia. Falta una verificación práctica e ilustraciones para modelos simples.",
+     "first_step": "Implementar una simulación de una cadena de Markov de dos niveles con tasas de transición periódicas y acumular estadísticas para estimar la distribución de la producción de entropía.",
+     "needs": "Conocimiento de la teoría de procesos de Markov, habilidades en simulación numérica (Python/C++), posiblemente cálculo simbólico (Mathematica).",
+     "risks": "Para observar la simetría puede ser necesario un número muy grande de trayectorias, lo que está limitado por los recursos computacionales.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Construir una cadena de Markov simple con probabilidades de transición periódicas (por ejemplo, un sistema de dos niveles con un campo oscilante).",
+      "Calcular analíticamente la producción de entropía y la disipación de calor utilizando los métodos del trabajo 0907.4727.",
+      "Simular numéricamente las trayectorias y estimar la función de desviaciones grandes.",
+      "Verificar la simetría de Gallavotti-Cohen para tiempos finitos."
+     ]
+    },
+    {
+     "based_on": [
+      "1807.04192"
+     ],
+     "title": "Modelado de la volatilidad estocástica mediante procesos de Hawkes",
+     "what": "Construir un modelo de alta frecuencia para el precio de un instrumento financiero en el que la intensidad de los saltos viene dada por un proceso de Hawkes, e investigar el límite hacia una volatilidad estocástica tipo Heston.",
+     "why": "Permitirá conectar la microestructura del mercado con los modelos macroscópicos de volatilidad, lo cual es útil para la evaluación de riesgos y la fijación de precios de opciones.",
+     "origin": "El trabajo 1807.04192 establece una conexión entre los procesos de Hawkes y la volatilidad estocástica, pero no verifica la calidad de la aproximación en frecuencias finitas. Faltan verificación numérica y aplicación a datos reales.",
+     "first_step": "Escribir un simulador del proceso de Hawkes con núcleo exponencial y evaluar sus características espectrales para diferentes parámetros.",
+     "needs": "Acceso a datos financieros de alta frecuencia (fuentes gratuitas, por ejemplo, datos de bolsas), habilidades en modelado estocástico y estimación estadística.",
+     "risks": "Los datos reales pueden no ajustarse a los supuestos del modelo (por ejemplo, presencia de ruido microestructural), lo que requeriría filtrado adicional.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Definir un proceso de Hawkes con núcleo exponencial y un parámetro de endogeneidad cercano al crítico.",
+      "Derivar las ecuaciones para la intensidad y las fluctuaciones en el límite de altas frecuencias, siguiendo el trabajo 1807.04192.",
+      "Simular numéricamente el proceso de Hawkes y comparar la estadística con la solución de la ecuación de Heston.",
+      "Estimar los parámetros del modelo con datos reales (por ejemplo, datos tick de acciones)."
+     ]
+    },
+    {
+     "based_on": [
+      "2501.06850"
+     ],
+     "title": "Fluctuaciones en un modelo estocástico de vórtices puntuales con ruido común",
+     "what": "Investigar el comportamiento de las fluctuaciones en un sistema de vórtices puntuales sometidos a ruido común y verificar la convergencia a la solución de la ecuación estocástica de evolución obtenida en el trabajo 2501.06850.",
+     "why": "El modelo de vórtices puntuales se utiliza para describir la turbulencia bidimensional, y comprender las fluctuaciones puede arrojar luz sobre las propiedades estadísticas de las estructuras vorticiales.",
+     "origin": "El trabajo 2501.06850 establece un resultado teórico sobre la convergencia de las fluctuaciones, pero no proporciona ilustraciones numéricas ni investiga su aplicabilidad práctica. Faltan experimentos computacionales para confirmar y visualizar.",
+     "first_step": "Implementar una solución numérica para un número pequeño de vórtices (N=2,3) con ruido común y construir trayectorias.",
+     "needs": "Conocimiento de análisis estocástico, habilidades en solución numérica de EDE (por ejemplo, esquema de Euler-Maruyama), recursos computacionales para N grande.",
+     "risks": "Inestabilidad numérica para N grande y ruido fuerte; además, la verificación de la convergencia requiere estimaciones muy precisas.",
+     "scale": "años",
+     "methods": [
+      "Estudiar el planteamiento matemático del trabajo 2501.06850 y reproducir la demostración de convergencia.",
+      "Resolver numéricamente el sistema de ecuaciones diferenciales estocásticas para N vórtices con ruido común.",
+      "Estimar los procesos de fluctuación y compararlos con la ecuación lineal límite.",
+      "Investigar la velocidad de convergencia al aumentar N."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال العمليات العشوائية، تتطور بنشاط طرق تحليل التقلبات في الأنظمة غير المتوازنة، من البلازما إلى الأسواق المالية، مع التركيز على التحقق من التنبؤات النظرية باستخدام بيانات حقيقية.",
+   "topic": "العمليات العشوائية والتقلبات",
+   "ideas": [
+    {
+     "based_on": [
+      "0711.0279",
+      "cond-mat/9707147"
+     ],
+     "title": "مقارنة النماذج العشوائية للتقلبات في بلازما التوكاماك",
+     "what": "أخذ بيانات عن التقلبات في المنطقة الحدودية للتوكاماك (مثلاً من الأرشيفات المفتوحة) واختبار أي نموذج يصف بشكل أفضل السلاسل الزمنية المرصودة: عملية بواسون، أو عملية أورنشتاين-أولينبك، أو ضجيج طلقي بذيول ثقيلة.",
+     "why": "سيسمح ذلك بتحديد آليات النقل الشاذ في البلازما وقد يكون مفيداً لتشخيص حبس الجسيمات في التوكاماك.",
+     "origin": "في العمل 0711.0279 تتم مناقشة السلوك العشوائي للتقلبات في المنطقة الحدودية للتوكاماك، لكن لا يتم إجراء مقارنة منهجية بين النماذج العشوائية المختلفة. يقدم العمل cond-mat/9707147 نظرة عامة على العمليات العشوائية القابلة للتطبيق في الفيزياء، لكنه غير مرتبط ببيانات محددة من التوكاماك. ينقص التحقق من أي من النماذج القياسية يصف التقلبات المرصودة بشكل مناسب.",
+     "first_step": "تحميل بيانات التقلبات المفتوحة (مثلاً من قاعدة بيانات لأحد التوكامكات) ورسم مدرج تكراري لتوزيعات السعات وأزمنة الانتظار بين الأحداث.",
+     "needs": "الوصول إلى بيانات التقلبات (أرشيفات مفتوحة، مثل تلك من منشآت من نوع SINP)، ومهارات البرمجة بلغة Python أو R، ومعرفة أساسيات العمليات العشوائية.",
+     "risks": "قد تكون البيانات مشوشة أو غير طويلة بما يكفي للتمييز بين النماذج؛ كما قد تكون هناك لاثباتية (non-stationarity) تتطلب معالجة مسبقة.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "تقدير معلمات النماذج باستخدام طريقة الإمكان الأعظم أو الطرق البايزية.",
+      "مقارنة النماذج باستخدام معايير المعلومات (AIC, BIC) وفحص البواقي للتأكد من عدم وجود ارتباط ذاتي.",
+      "تطبيق طرق التحليل اللاخطي للسلاسل الزمنية (مؤشر هيرست، التحليل متعدد الكسيريات) لتقييم الارتباطات."
+     ]
+    },
+    {
+     "based_on": [
+      "cond-mat/0309418"
+     ],
+     "title": "تحليل حدودية التقلبات في الأنظمة الفوضوية وضجيج 1/f",
+     "what": "بالنسبة للعديد من الأنظمة الديناميكية الفوضوية (مثل الخريطة اللوجستية، نظام لورينتز)، دراسة عددياً كيف تؤثر حدودية التقلبات على الطيف القدرة، ومقارنة ذلك بسلوك ضجيج 1/f^alpha.",
+     "why": "قد يوضح العلاقة بين الفوضى الحتمية والعمليات العشوائية ذات الذاكرة الطويلة، وهو أمر مهم لنمذجة الإشارات الطبيعية.",
+     "origin": "يشير العمل cond-mat/0309418 إلى سمات مشتركة بين الأنظمة الفوضوية وضجيج 1/f، لكنه يقتصر على أمثلة محددة. ينقص إجراء دراسة منهجية لفئة واسعة من الخرائط الفوضوية والتحقق من العمومية.",
+     "first_step": "كتابة سكربت لمحاكاة الخريطة اللوجستية وحساب الطيف القدرة عند قيم مختلفة للمعامل.",
+     "needs": "حاسوب مزود بـ Python أو Matlab، ومعرفة بالطرق العددية وأسس نظرية الفوضى.",
+     "risks": "قد تؤدي القطع الأثرية العددية (مثل طول السلسلة المحدود، تأثيرات التكميم) إلى تشويه تقدير الأس alpha.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "توليد سلاسل زمنية للأنظمة الفوضوية بمعاملات مختلفة.",
+      "حساب الأطياف القدرة وتقدير الأس alpha.",
+      "دراسة توزيع التقلبات وحدوديتها (مثلاً من خلال القيم المتطرفة).",
+      "مقارنة النتائج مع التنبؤات النظرية لضجيج 1/f من العمل cond-mat/0309418."
+     ]
+    },
+    {
+     "based_on": [
+      "0907.4727"
+     ],
+     "title": "التحقق من مبرهنات التقلبات في سلاسل ماركوف المُدارة دورياً",
+     "what": "التحقق عددياً وتحليلياً من صحة مبرهنات التقلبات لإنتاج الإنتروبيا وإطلاق الحرارة في سلاسل ماركوف ذات احتمالات انتقال متغيرة دورياً.",
+     "why": "توسيع مبرهنات التقلبات لتشمل الظروف اللاثابتة مهم لفهم الأنظمة غير المتوازنة ذات التأثير الخارجي، مثل المحركات الجزيئية أو الأجهزة الدقيقة للسوائل.",
+     "origin": "يُثبت العمل 0907.4727 مبرهنات التقلبات لسلاسل ماركوف المُدارة دورياً، لكنه لا يقدم أمثلة عددية ولا يدرس سرعة التقارب. ينقص التحقق العملي والتوضيح لنماذج بسيطة.",
+     "first_step": "تنفيذ محاكاة لسلسلة ماركوف ذات مستويين مع معدلات انتقال دورية وتجميع إحصاءات لتقدير توزيع إنتاج الإنتروبيا.",
+     "needs": "معرفة بنظرية عمليات ماركوف، ومهارات في المحاكاة العددية (Python/C++)، وربما حسابات رمزية (Mathematica).",
+     "risks": "لملاحظة التناظر قد يلزم عدد كبير جداً من المسارات، وهو ما قد يكون مقيداً بالموارد الحاسوبية.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "بناء سلسلة ماركوف بسيطة ذات احتمالات انتقال دورية (مثل نظام بمستويين مع حقل متذبذب).",
+      "حساب إنتاج الإنتروبيا وإطلاق الحرارة تحليلياً باستخدام طرق من العمل 0907.4727.",
+      "محاكاة المسارات عددياً وتقدير دالة الانحرافات الكبيرة.",
+      "التحقق من تناظر غالافوتي-كوهين لأزمنة محدودة."
+     ]
+    },
+    {
+     "based_on": [
+      "1807.04192"
+     ],
+     "title": "نمذجة التقلبية العشوائية باستخدام عمليات هوكس",
+     "what": "بناء نموذج عالي التردد لسعر أداة مالية، حيث تُعطى شدة القفزات بعملية هوكس، ودراسة الانتقال النهائي إلى تقلبية عشوائية من نوع هيستون.",
+     "why": "سيسمح ذلك بربط البنية الدقيقة للسوق بالنماذج العيانية للتقلبية، وهو مفيد لتقييم المخاطر وتسعير الخيارات.",
+     "origin": "يؤسس العمل 1807.04192 علاقة بين عمليات هوكس والتقلبية العشوائية، لكنه لا يتحقق من جودة التقريب عند الترددات المحدودة. ينقص التحقق العددي والتطبيق على بيانات حقيقية.",
+     "first_step": "كتابة محاكي لعملية هوكس بنواة أسية وتقدير خصائصها الطيفية عند معاملات مختلفة.",
+     "needs": "الوصول إلى بيانات مالية عالية التردد (مصادر مجانية، مثل بيانات من البورصات)، ومهارات في النمذجة العشوائية والتقدير الإحصائي.",
+     "risks": "قد لا تتوافق البيانات الحقيقية مع افتراضات النموذج (مثل وجود ضجيج بنيوي دقيق)، مما يتطلب ترشيحاً إضافياً.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "تحديد عملية هوكس بنواة أسية ومعامل ذاتية قريب من القيمة الحرجة.",
+      "اشتقاق معادلات للشدة والتقلبات في حد الترددات العالية، باتباع العمل 1807.04192.",
+      "محاكاة عملية هوكس عددياً ومقارنة الإحصاءات مع حل معادلة هيستون.",
+      "تقدير معلمات النموذج على بيانات حقيقية (مثل بيانات التيك للأسهم)."
+     ]
+    },
+    {
+     "based_on": [
+      "2501.06850"
+     ],
+     "title": "التقلبات في نموذج عشوائي للدوامات النقطية مع ضجيج مشترك",
+     "what": "دراسة سلوك التقلبات في نظام من الدوامات النقطية الخاضعة لضجيج مشترك، والتحقق من التقارب إلى حل معادلة التطور العشوائية التي تم الحصول عليها في العمل 2501.06850.",
+     "why": "يُستخدم نموذج الدوامات النقطية لوصف الاضطراب ثنائي الأبعاد، وفهم التقلبات قد يلقي الضوء على الخصائص الإحصائية للبنى الدوامية.",
+     "origin": "يُثبت العمل 2501.06850 نتيجة نظرية حول تقارب التقلبات، لكنه لا يقدم توضيحات عددية ولا يدرس قابلية التطبيق العملي. ينقص إجراء تجارب حسابية للتأكيد والتصور.",
+     "first_step": "تنفيذ حل عددي لعدد صغير من الدوامات (N=2,3) مع ضجيج مشترك ورسم المسارات.",
+     "needs": "معرفة بالتحليل العشوائي، ومهارات في الحل العددي للمعادلات التفاضلية العشوائية (مثل مخطط أويلر-ماروياما)، وموارد حسابية لأعداد كبيرة من N.",
+     "risks": "عدم الاستقرار العددي عند قيم كبيرة من N وضجيج قوي؛ كما أن التحقق من التقارب يتطلب تقديرات دقيقة جداً.",
+     "scale": "سنوات",
+     "methods": [
+      "دراسة الصياغة الرياضية من العمل 2501.06850 وإعادة إنتاج برهان التقارب.",
+      "حل نظام المعادلات التفاضلية العشوائية عددياً لعدد N من الدوامات مع ضجيج مشترك.",
+      "تقدير عمليات التقلب ومقارنتها بالمعادلة الخطية الحدية.",
+      "دراسة سرعة التقارب عند زيادة N."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine des processus stochastiques, les méthodes d'analyse des fluctuations dans les systèmes hors équilibre se développent activement, du plasma aux marchés financiers, avec un accent sur la vérification des prédictions théoriques sur des données réelles.",
+   "topic": "processus stochastiques et fluctuations",
+   "ideas": [
+    {
+     "based_on": [
+      "0711.0279",
+      "cond-mat/9707147"
+     ],
+     "title": "Comparaison de modèles stochastiques pour les fluctuations dans le plasma d'un tokamak",
+     "what": "Prendre des données sur les fluctuations dans la région de bord d'un tokamak (par exemple, à partir d'archives ouvertes) et vérifier quel modèle décrit le mieux les séries temporelles observées : processus de Poisson, processus d'Ornstein-Uhlenbeck ou bruit de grenaille à queues lourdes.",
+     "why": "Cela permettra d'identifier les mécanismes de transport anormal dans le plasma et pourrait être utile pour le diagnostic du confinement des particules dans les tokamaks.",
+     "origin": "Le travail 0711.0279 discute du comportement stochastique des fluctuations dans la région de bord d'un tokamak, mais ne procède pas à une comparaison systématique de différents modèles stochastiques. Le travail cond-mat/9707147 donne un aperçu des processus stochastiques applicables en physique, mais n'est pas lié à des données spécifiques de tokamak. Il manque une vérification de savoir lequel des modèles standard décrit adéquatement les fluctuations observées.",
+     "first_step": "Télécharger des données ouvertes de fluctuations (par exemple, depuis la base de données d'un tokamak) et construire des histogrammes des distributions d'amplitudes et des temps d'attente entre les événements.",
+     "needs": "Accès aux données de fluctuations (archives ouvertes, par exemple, d'installations de type SINP), compétences en programmation Python/R, connaissance des bases des processus stochastiques.",
+     "risks": "Les données peuvent être bruitées ou pas assez longues pour distinguer les modèles ; une non-stationnarité est également possible, nécessitant un prétraitement.",
+     "scale": "semestre",
+     "methods": [
+      "Estimer les paramètres des modèles par maximum de vraisemblance ou par méthodes bayésiennes.",
+      "Comparer les modèles à l'aide de critères d'information (AIC, BIC) et vérifier l'autocorrélation des résidus.",
+      "Appliquer des méthodes d'analyse non linéaire des séries temporelles (exposant de Hurst, analyse multifractale) pour évaluer les corrélations."
+     ]
+    },
+    {
+     "based_on": [
+      "cond-mat/0309418"
+     ],
+     "title": "Analyse de la délimitation des fluctuations dans les systèmes chaotiques et le bruit 1/f",
+     "what": "Pour plusieurs systèmes dynamiques chaotiques (par exemple, l'application logistique, le système de Lorenz), étudier numériquement comment la délimitation des fluctuations affecte le spectre de puissance, et comparer avec le comportement du bruit 1/f^alpha.",
+     "why": "Cela pourrait clarifier le lien entre le chaos déterministe et les processus stochastiques à mémoire longue, ce qui est important pour la modélisation des signaux naturels.",
+     "origin": "Le travail cond-mat/0309418 indique des traits communs entre les systèmes chaotiques et le bruit 1/f, mais se limite à des exemples spécifiques. Il manque une étude systématique pour une large classe d'applications chaotiques et une vérification de l'universalité.",
+     "first_step": "Écrire un script pour simuler l'application logistique et calculer le spectre de puissance pour différentes valeurs du paramètre.",
+     "needs": "Ordinateur avec Python/Matlab, connaissance des méthodes numériques et des bases de la théorie du chaos.",
+     "risks": "Des artefacts numériques (longueur finie de la série, effets de discrétisation) peuvent fausser l'estimation de l'exposant alpha.",
+     "scale": "mémoire",
+     "methods": [
+      "Générer des séries temporelles de systèmes chaotiques avec différents paramètres.",
+      "Calculer les spectres de puissance et estimer l'exposant alpha.",
+      "Étudier la distribution des fluctuations et leur délimitation (par exemple, via les valeurs extrêmes).",
+      "Comparer avec les prédictions théoriques pour le bruit 1/f du travail cond-mat/0309418."
+     ]
+    },
+    {
+     "based_on": [
+      "0907.4727"
+     ],
+     "title": "Vérification des théorèmes de fluctuation dans les chaînes de Markov périodiquement pilotées",
+     "what": "Vérifier numériquement et analytiquement la validité des théorèmes de fluctuation pour la production d'entropie et le dégagement de chaleur dans des chaînes de Markov avec des probabilités de transition variant périodiquement.",
+     "why": "L'extension des théorèmes de fluctuation aux conditions non stationnaires est importante pour comprendre les systèmes hors équilibre soumis à une influence externe, tels que les moteurs moléculaires ou les dispositifs microfluidiques.",
+     "origin": "Le travail 0907.4727 prouve les théorèmes de fluctuation pour les chaînes de Markov périodiquement pilotées, mais ne fournit pas d'exemples numériques et n'étudie pas la vitesse de convergence. Il manque une vérification pratique et une illustration pour des modèles simples.",
+     "first_step": "Implémenter une simulation d'une chaîne de Markov à deux niveaux avec des taux de transition périodiques et accumuler des statistiques pour estimer la distribution de la production d'entropie.",
+     "needs": "Connaissance de la théorie des processus de Markov, compétences en simulation numérique (Python/C++), éventuellement calcul symbolique (Mathematica).",
+     "risks": "Pour observer la symétrie, un très grand nombre de trajectoires peut être nécessaire, ce qui est limité par les ressources de calcul.",
+     "scale": "mémoire",
+     "methods": [
+      "Construire une chaîne de Markov simple avec des probabilités de transition périodiques (par exemple, un système à deux niveaux avec un champ oscillant).",
+      "Calculer analytiquement la production d'entropie et le dégagement de chaleur, en utilisant les méthodes du travail 0907.4727.",
+      "Simuler numériquement des trajectoires et estimer la fonction de grandes déviations.",
+      "Vérifier la symétrie de Gallavotti-Cohen pour des temps finis."
+     ]
+    },
+    {
+     "based_on": [
+      "1807.04192"
+     ],
+     "title": "Modélisation de la volatilité stochastique à partir des processus de Hawkes",
+     "what": "Construire un modèle haute fréquence du prix d'un instrument financier, dans lequel l'intensité des sauts est donnée par un processus de Hawkes, et étudier la transition limite vers une volatilité stochastique de type Heston.",
+     "why": "Cela permettra de relier la microstructure du marché aux modèles macroscopiques de volatilité, ce qui est utile pour l'évaluation des risques et la tarification des options.",
+     "origin": "Le travail 1807.04192 établit un lien entre les processus de Hawkes et la volatilité stochastique, mais ne vérifie pas la qualité de l'approximation à des fréquences finies. Il manque une vérification numérique et une application à des données réelles.",
+     "first_step": "Écrire un simulateur de processus de Hawkes avec un noyau exponentiel et estimer ses caractéristiques spectrales pour différents paramètres.",
+     "needs": "Accès à des données financières haute fréquence (sources gratuites, par exemple, données de bourse), compétences en modélisation stochastique et en estimation statistique.",
+     "risks": "Les données réelles peuvent ne pas correspondre aux hypothèses du modèle (par exemple, présence de bruit de microstructure), ce qui nécessitera un filtrage supplémentaire.",
+     "scale": "mémoire",
+     "methods": [
+      "Définir un processus de Hawkes avec un noyau exponentiel et un paramètre d'endogénéité proche de la criticité.",
+      "Dériver les équations pour l'intensité et les fluctuations dans la limite des hautes fréquences, en suivant le travail 1807.04192.",
+      "Simuler numériquement le processus de Hawkes et comparer les statistiques avec la solution de l'équation de Heston.",
+      "Estimer les paramètres du modèle sur des données réelles (par exemple, données tick par tick d'actions)."
+     ]
+    },
+    {
+     "based_on": [
+      "2501.06850"
+     ],
+     "title": "Fluctuations dans le modèle stochastique de vortex ponctuels avec bruit commun",
+     "what": "Étudier le comportement des fluctuations dans un système de vortex ponctuels soumis à un bruit commun, et vérifier la convergence vers la solution de l'équation d'évolution stochastique obtenue dans le travail 2501.06850.",
+     "why": "Le modèle de vortex ponctuels est utilisé pour décrire la turbulence bidimensionnelle, et la compréhension des fluctuations peut éclairer les propriétés statistiques des structures vorticales.",
+     "origin": "Le travail 2501.06850 établit un résultat théorique sur la convergence des fluctuations, mais ne fournit pas d'illustrations numériques et n'étudie pas l'applicabilité pratique. Il manque des expériences de calcul pour confirmer et visualiser.",
+     "first_step": "Implémenter une solution numérique pour un petit nombre de vortex (N=2,3) avec bruit commun et construire des trajectoires.",
+     "needs": "Connaissance de l'analyse stochastique, compétences en résolution numérique d'équations différentielles stochastiques (par exemple, schéma d'Euler-Maruyama), ressources de calcul pour de grands N.",
+     "risks": "Instabilité numérique pour de grands N et un bruit fort ; la vérification de la convergence nécessite également des estimations très précises.",
+     "scale": "années",
+     "methods": [
+      "Étudier la formulation mathématique du travail 2501.06850 et reproduire la preuve de convergence.",
+      "Résoudre numériquement le système d'équations différentielles stochastiques pour N vortex avec bruit commun.",
+      "Estimer les processus de fluctuation et les comparer avec l'équation linéaire limite.",
+      "Étudier la vitesse de convergence lorsque N augmente."
+     ]
+    }
+   ]
+  }
+ }
+}

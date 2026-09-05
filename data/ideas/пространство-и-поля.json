@@ -1,0 +1,624 @@
+{
+ "topic": "пространство и поля",
+ "slug": "пространство-и-поля",
+ "built": "2026-09-04",
+ "note": "В области пространства и полей активно исследуются некоммутативные геометрии, многомерные модели и альтернативные формулировки симметрий, но многие предложения остаются на уровне абстрактных конструкций без конкретных вычислений или моделей.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.568,
+  "band": "sparse",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Калибровка некоммутативных координат через осциллятор в κ-Минковском",
+   "what": "Построить квантовомеханическую модель гармонического осциллятора на κ-Минковском пространстве, используя звёздочное произведение из работы hep-th/0312305, и вычислить поправки к спектру энергии в первом порядке по параметру деформации.",
+   "why": "Полученные поправки могут дать наблюдаемые предсказания для физики высоких энергий и указать, как некоммутативность проявляется в простых системах.",
+   "methods": [
+    "Взять звёздочное произведение, определённое в hep-th/0312305 через обобщённое вейлевское отображение, и записать гамильтониан осциллятора в некоммутативных координатах.",
+    "Разложить звёздочное произведение по параметру деформации κ^{-1} до первого порядка и получить эффективный гамильтониан в обычном пространстве.",
+    "Применить теорию возмущений для расчёта сдвигов уровней энергии и сравнить с известными результатами для других некоммутативных пространств."
+   ],
+   "origin": "В hep-th/0312305 введено понятие поля и симметрий в κ-Минковском, но не рассмотрены простые квантовые системы, где некоммутативность даёт явные поправки. В литературе есть расчёты для канонической некоммутативности, но для κ-деформации они фрагментарны. Здесь можно проверить, насколько методы из статьи переносятся на конкретную задачу.",
+   "first_step": "Выписать явный вид звёздочного произведения для координат и импульсов из статьи и записать гамильтониан осциллятора в некоммутативных переменных.",
+   "needs": "Знание квантовой механики и теории возмущений; доступ к статье hep-th/0312305; навыки символьных вычислений (например, Mathematica) для разложения звёздочного произведения.",
+   "risks": "Звёздочное произведение в κ-Минковском может быть неассоциативным или плохо определённым для импульсов, что усложнит построение гамильтониана. Поправки могут оказаться тривиальными из-за специфики деформации.",
+   "scale": "семестр",
+   "based_on": [
+    "hep-th/0312305"
+   ]
+  },
+  {
+   "title": "Единая геометрическая трактовка калибровочных и пространственно-временных симметрий в теории поля",
+   "what": "Разработать вычислительный инструмент для работы с параметризованной формулировкой теории поля из работы 1502.06539, который позволит автоматически проверять калибровочную инвариантность действий для полей с внутренними симметриями.",
+   "why": "Такой инструмент может помочь теоретикам быстрее исследовать новые модели, где гравитация рассматривается как калибровочная теория, и выявлять скрытые симметрии.",
+   "methods": [
+    "Изучить параметризованное представление полей из 1502.06539, где координаты поля сами являются динамическими переменными.",
+    "Реализовать на языке символьных вычислений (например, SageMath) операции с вариациями полей и калибровочными преобразованиями.",
+    "Протестировать инструмент на известных примерах: калибровочное поле U(1) и гравитация как калибровочная теория Пуанкаре."
+   ],
+   "origin": "В 1502.06539 показано, что внутренние и пространственно-временные симметрии можно трактовать единообразно, но не предоставлено готового программного кода для практических расчётов. Существующие пакеты для тензорной алгебры не учитывают параметризацию. Создание инструмента восполнит этот пробел и позволит применять подход к новым моделям.",
+   "first_step": "Выбрать простую модель (например, скалярное поле с U(1) симметрией) и вручную выписать параметризованное действие и его вариацию, следуя обозначениям статьи.",
+   "needs": "Навыки программирования на Python или Mathematica; понимание дифференциальной геометрии и калибровочных теорий; доступ к статье 1502.06539.",
+   "risks": "Параметризованная формулировка может быть громоздкой, и автоматизация столкнётся с проблемами производительности. Возможно, некоторые преобразования не удастся реализовать в общем виде.",
+   "scale": "диплом",
+   "based_on": [
+    "1502.06539"
+   ]
+  },
+  {
+   "title": "Исследование физики в 16-мерном C-пространстве: от геометрии к эффективным теориям",
+   "what": "Изучить возможность компактификации 16-мерного C-пространства из работы gr-qc/0611050 до 4 измерений с целью получения эффективной теории, объединяющей гравитацию и калибровочные поля.",
+   "why": "Если удастся построить непротиворечивую компактификацию, это даст новый подход к объединению взаимодействий и, возможно, предсказания для физики частиц.",
+   "methods": [
+    "Взять метрику и спиновую связность C-пространства из gr-qc/0611050 и рассмотреть простейшие анзацы для компактификации дополнительных измерений (например, тор или сфера).",
+    "Вычислить размерную редукцию действия Эйнштейна-Гильберта в C-пространстве и выделить члены, соответствующие 4D гравитации и калибровочным полям.",
+    "Сравнить полученные калибровочные группы и константы связи с известными моделями великого объединения."
+   ],
+   "origin": "В gr-qc/0611050 предложена геометрическая структура C-пространства, но не исследована её феноменология при компактификации. Работы по многомерным теориям (например, hep-th/0606080) показывают, что такие подходы могут приводить к реалистичным моделям, однако для C-пространства это не проделано. Идея восполняет пробел между чистой геометрией и физикой частиц.",
+   "first_step": "Выписать метрику и связность C-пространства в координатах, удобных для выделения 4D подпространства, и выбрать простейший анзац для дополнительных координат.",
+   "needs": "Глубокое знание дифференциальной геометрии и теории Калуцы-Клейна; вычислительные ресурсы для символьных расчётов; доступ к статьям gr-qc/0611050 и hep-th/0606080.",
+   "risks": "C-пространство имеет нетривиальную структуру (точки, площади, объёмы), и его компактификация может быть математически сложной или приводить к нестабильным вакуумам. Возможно, эффективная теория окажется нереалистичной.",
+   "scale": "годы",
+   "based_on": [
+    "gr-qc/0611050",
+    "hep-th/0606080"
+   ]
+  },
+  {
+   "title": "Построение лагранжианов полей из метрической функции финслерова пространства",
+   "what": "Разработать алгоритм для вычисления лагранжианов скалярных и векторных полей, основанный на методе из работы math-ph/0702037, где лагранжиан строится как обратный объём, заметаемый единичным вектором на индикатрисе.",
+   "why": "Такой алгоритм позволит генерировать новые полевые теории с заданными симметриями и, возможно, находить связи между геометрией финслеровых пространств и физикой частиц.",
+   "methods": [
+    "Изучить конструкцию из math-ph/0702037: для заданной метрической функции финслерова пространства вычислить объём индикатрисы в касательном пространстве.",
+    "Реализовать численное или символьное вычисление этого объёма для классов метрик, зависящих от параметров.",
+    "Применить алгоритм к простым финслеровым метрикам (например, метрика Рандерса) и получить соответствующие лагранжианы, сравнить с известными теориями."
+   ],
+   "origin": "В math-ph/0702037 предложен общий метод, но он не доведён до практических рецептов и не применён к конкретным физически интересным метрикам. Существующие работы по финслеровой геометрии в физике обычно фокусируются на кинематике, а не на построении действий. Здесь можно создать мост между абстрактной геометрией и теорией поля.",
+   "first_step": "Для простейшей финслеровой метрики (например, евклидовой с малым возмущением) вручную вычислить объём индикатрисы и получить лагранжиан в пределе малого параметра.",
+   "needs": "Знание финслеровой геометрии; навыки программирования для численного интегрирования по индикатрисе; доступ к статье math-ph/0702037.",
+   "risks": "Вычисление объёма индикатрисы может быть аналитически невыполнимым для общих метрик, а численно — ресурсоёмким. Полученные лагранжианы могут оказаться нефизичными (например, с высшими производными).",
+   "scale": "диплом",
+   "based_on": [
+    "math-ph/0702037"
+   ]
+  },
+  {
+   "title": "Проверка расширенной модели пространства-времени через потенциалы Лиенара-Вихерта",
+   "what": "Проверить предсказания модели расширенного (1+4)-мерного пространства из работы physics/0302006 для электромагнитных и гравитационных полей точечных источников, сравнив их с известными решениями в 4D.",
+   "why": "Если модель даёт отличия от стандартных потенциалов Лиенара-Вихерта, это может указать на наблюдаемые эффекты дополнительного измерения и стимулировать экспериментальные поиски.",
+   "methods": [
+    "Взять точные решения для потенциалов Лиенара-Вихерта в расширенном пространстве из physics/0302006.",
+    "Выполнить редукцию к 4D, проинтегрировав или зафиксировав дополнительную координату, и получить эффективные 4D потенциалы.",
+    "Сравнить с классическими выражениями для движущихся зарядов и масс, вычислить поправки в пределе малой дополнительной координаты."
+   ],
+   "origin": "В physics/0302006 получены решения в расширенном пространстве, но не исследовано, как они выглядят с точки зрения 4D наблюдателя. Работа hep-th/0303078 даёт потенциалы в чётных измерениях, но не для расширенной модели. Сравнение может выявить, являются ли дополнительные члены просто калибровочными артефактами или физическими.",
+   "first_step": "Выписать решения из physics/0302006 в явном виде и рассмотреть простейший случай покоящегося источника, чтобы понять структуру дополнительной координаты.",
+   "needs": "Знание классической электродинамики и теории гравитации; навыки аналитических вычислений; доступ к статьям physics/0302006 и hep-th/0303078.",
+   "risks": "Редукция к 4D может быть неоднозначной из-за свободы в выборе условий на дополнительную координату. Поправки могут оказаться исчезающе малыми или нефизичными.",
+   "scale": "семестр",
+   "based_on": [
+    "physics/0302006",
+    "hep-th/0303078"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "gr-qc/0611050",
+   "full": false,
+   "field": true,
+   "score": 0.568,
+   "titles": {
+    "ru": "An Extra Structure of Spacetime: A Space of Points, Areas and Volumes"
+   },
+   "abstract": "A theory in which points, lines, areas and volumes are on on the same footing is investigated. All those geometric objects form a 16-dimensional manifold, called C-space, which generalizes spacetime. In such higher dimensional space fundamental interactions can be unified \\` a la Kaluza-Klein. The ordinary, 4-dimensional, gravity and gauge fields are incorporated in the metric and spin connection, whilst the conserved gauge charges are related to the isometries of curved C-space. It is shown that a conserved generator of an isometry in C-space contains a part with derivatives, which generalize"
+  },
+  {
+   "id": "1502.06539",
+   "full": false,
+   "field": true,
+   "score": 0.566,
+   "titles": {
+    "ru": "Fields as Bodies: a unified presentation of spacetime and internal gauge   symmetry"
+   },
+   "abstract": "Using the parametrised representation of field theory (in which the location in spacetime of a part of a field is itself represented by a map from the base manifold to Minkowski spacetime) I demonstrate that in both local and global cases, internal (Yang-Mills-type) and spacetime (Poincar\\'{e}) symmetries can be treated precisely on a par, so that gravitational theories may be regarded as gauge theories in a completely standard sense."
+  },
+  {
+   "id": "math-ph/0702037",
+   "full": false,
+   "field": true,
+   "score": 0.56,
+   "titles": {
+    "ru": "On Field Theory and Some Finsler Spaces"
+   },
+   "abstract": "The paper introduces the approach to construction of the Lagrangian of the field (fields). This approach is based solely on the metric function of the Finsler space: the Lagrangian is constructed as the unit divided by the volume swept by the unit vector running through all the points of the indicatrix in the tangent space under the assumption of the tangent space being Euclidean. For the space, which is conformally connected to the Minkowski space, under the assumption of the exponential time dependence and spherically symmetrical coordinates dependence the cosmological equation is written, w"
+  },
+  {
+   "id": "hep-th/0312305",
+   "full": false,
+   "field": true,
+   "score": 0.56,
+   "titles": {
+    "ru": "Fields and symmetries in $\\kappa$-Minkowski noncommutative spacetime"
+   },
+   "abstract": "We have investigated some issues relevant for the possibility to construct physical theories on the $\\kappa$-Minkowski noncommutative spacetime. The notion of field in $\\kappa$-Minkowski has been introduced by generalizing the Weyl system/map formalism and a comparative study of the star products arising from this generalization has been done. A line of analysis of the symmetries of $\\kappa$-Minkowski has been proposed that relies on the possibility to find a \"maximally\"-symmetric action which is invariant under a 10-generator Poincar\\'e-like symmetry algebra. The equation of motion for scalar"
+  },
+  {
+   "id": "physics/0302006",
+   "full": false,
+   "field": true,
+   "score": 0.557,
+   "titles": {
+    "ru": "Lienard-Wiechert Potentials for Model of Extended Space"
+   },
+   "abstract": "In the extended (1 + 4) -dimensional space (T;X,Y,Z,S)-(time-space-interval) it is considered a model joining electromagnetic and gravitational fields. For the equations circumscribing these fields, the exact solutions appropriated to dot moving sources are found. Such solutions express through potentials Lienard-Wiechert in the extended space. Their properties are analyzed."
+  },
+  {
+   "id": "hep-th/0012205",
+   "full": false,
+   "field": true,
+   "score": 0.557,
+   "titles": {
+    "ru": "On schizosymmetric superfields and sl(2/1,C)_R supersymmetry"
+   },
+   "abstract": "Superfield expansions over four-dimensional graded spacetime $(x^\\mu,\\theta^\\nu)$, with Minkowski coordinates $x$ extended by vector Grassmann variables $\\theta$, are investigated. By appropriate identification of the physical Lorentz algebra in the even and odd parts of the superfield, a typology of `schizofields' containing both integer and half-integer spin fields is established. For two of these types, identified as `gauge potential'-like and `field strength'-like schizofields, an $sl(2/1,{\\mathbb C})_{\\mathbb R}$ supersymmetry at the component field level is demonstrated. Prospects for a "
+  },
+  {
+   "id": "hep-th/0105251",
+   "full": false,
+   "field": true,
+   "score": 0.556,
+   "titles": {
+    "ru": "Spacetime and Fields, a Quantum Texture"
+   },
+   "abstract": "We report on joint work, past and in progress, with K.Fredenhagen and with J.E,Roberts, on the quantum structure of spacetime in the small which is dictated by the principles of Quantum Mechanics and of General Relativity; we comment on how these principles point to a deep link between coordinates and fields. This is an expanded version of a lecture delivered at the 37th Karpacz School in Theoretical Physics, February 2001."
+  },
+  {
+   "id": "0805.3963",
+   "full": false,
+   "field": true,
+   "score": 0.555,
+   "titles": {
+    "ru": "Particles and fields within a unification scheme"
+   },
+   "abstract": "We discuss properties of particles and fields in a multi-dimensional space-time, where the geometrization of gauge interactions can be performed. For instance, in a 5-dimensional Kaluza-Klein manifold we argue that the motion of charged spinning bodies is obtain in a Papapetrou-like formulation. As far as spinors are concerned, we outline how the gauge coupling can be recognized by a proper dependence on extra-coordinates and by the dimensional reduction procedure."
+  },
+  {
+   "id": "hep-th/0606080",
+   "full": false,
+   "field": true,
+   "score": 0.554,
+   "titles": {
+    "ru": "Fundamental Field Theory in Ten Dimensions and The Early Universe"
+   },
+   "abstract": "A unified field theory in ten dimensions, of all interactions, can describe high energy processes occuring in the early universe. In such a theory transitions that give properties of the universe can occur due to the presence of algebraic and geometric structures. A correspondence between theory and observations of the universe is made, to obtain a new interpretation and properties. This paper consists of a field theory and cosmological model of dark and normal energy and matter, cosmological constant, acceleration and inflation in the early universe."
+  },
+  {
+   "id": "1810.07295",
+   "full": false,
+   "field": true,
+   "score": 0.554,
+   "titles": {
+    "ru": "Palais leaf-space manifolds and surfaces carrying holomorphic flows"
+   },
+   "abstract": "Starting from some remarkable singularities of holomorphic vector fields, we construct (open) complex surfaces over which the singularities in question are realized by complete vector fields. Our constructions lead to manifolds and vector fields beyond the algebraic setting and provide examples of complete vector fields with some new dynamical phenomena."
+  },
+  {
+   "id": "hep-th/0303078",
+   "full": false,
+   "field": true,
+   "score": 0.554,
+   "titles": {
+    "ru": "Lienard-Wiechert Potentials in Even Dimensions"
+   },
+   "abstract": "The motion of point charged particles is considered in an even dimensional Minkowski space-time. The potential functions corresponding to the massless scalar and the Maxwell fields are derived algorithmically. It is shown that in all even dimensions particles lose energy due to acceleration."
+  },
+  {
+   "id": "hep-ph/0411101",
+   "full": false,
+   "field": true,
+   "score": 0.553,
+   "titles": {
+    "ru": "Evolution of coupled classical fields"
+   },
+   "abstract": "We study the evolution of the coupled scalar and fermion fields within the classical field theory. We examine the case of N coupled fields in 1+3 dimensional space. The general expressions for the fields distributions are obtained. The particular case of two fields in 1+1 dimensional space is carefully studied. We obtain the expressions for the averaged fields intensities and show that in the relativistic limit they are similar to the usual transition probabilities formulae of neutrino oscillations."
+  }
+ ],
+ "lang": {
+  "en": {
+   "note": "Research in the area of space and fields actively explores noncommutative geometries, multidimensional models, and alternative formulations of symmetries, but many proposals remain at the level of abstract constructions without concrete calculations or models.",
+   "topic": "space and fields",
+   "ideas": [
+    {
+     "based_on": [
+      "hep-th/0312305"
+     ],
+     "title": "Gauging noncommutative coordinates via an oscillator in κ-Minkowski",
+     "what": "Construct a quantum mechanical model of a harmonic oscillator on κ-Minkowski space using the star product from hep-th/0312305, and compute the corrections to the energy spectrum to first order in the deformation parameter.",
+     "why": "The obtained corrections may yield observable predictions for high-energy physics and indicate how noncommutativity manifests in simple systems.",
+     "origin": "In hep-th/0312305, the notion of fields and symmetries in κ-Minkowski was introduced, but simple quantum systems where noncommutativity gives explicit corrections were not considered. In the literature, calculations exist for canonical noncommutativity, but for κ-deformation they are fragmentary. Here one can check how well the methods from that paper carry over to a concrete problem.",
+     "first_step": "Write down the explicit form of the star product for coordinates and momenta from the paper, and express the oscillator Hamiltonian in noncommutative variables.",
+     "needs": "Knowledge of quantum mechanics and perturbation theory; access to hep-th/0312305; skills in symbolic computation (e.g., Mathematica) for expanding the star product.",
+     "risks": "The star product in κ-Minkowski may be non-associative or poorly defined for momenta, complicating the construction of the Hamiltonian. The corrections might turn out to be trivial due to the specifics of the deformation.",
+     "scale": "semester",
+     "methods": [
+      "Take the star product defined in hep-th/0312305 via the generalized Weyl map, and write the oscillator Hamiltonian in noncommutative coordinates.",
+      "Expand the star product in the deformation parameter κ^{-1} to first order and obtain an effective Hamiltonian in ordinary space.",
+      "Apply perturbation theory to compute the energy level shifts and compare with known results for other noncommutative spaces."
+     ]
+    },
+    {
+     "based_on": [
+      "1502.06539"
+     ],
+     "title": "Unified geometric treatment of gauge and spacetime symmetries in field theory",
+     "what": "Develop a computational tool for working with the parametrized formulation of field theory from 1502.06539, which would allow automatic verification of gauge invariance of actions for fields with internal symmetries.",
+     "why": "Such a tool could help theorists explore new models where gravity is treated as a gauge theory more quickly, and uncover hidden symmetries.",
+     "origin": "In 1502.06539, it was shown that internal and spacetime symmetries can be treated in a unified way, but no ready-made software code for practical calculations was provided. Existing packages for tensor algebra do not account for parametrization. Creating such a tool would fill this gap and allow the approach to be applied to new models.",
+     "first_step": "Choose a simple model (e.g., a scalar field with U(1) symmetry) and manually write down the parametrized action and its variation, following the notation of the paper.",
+     "needs": "Programming skills in Python or Mathematica; understanding of differential geometry and gauge theories; access to 1502.06539.",
+     "risks": "The parametrized formulation may be cumbersome, and automation might face performance issues. Some transformations may not be implementable in full generality.",
+     "scale": "thesis",
+     "methods": [
+      "Study the parametrized representation of fields from 1502.06539, where the field coordinates themselves are dynamical variables.",
+      "Implement operations with field variations and gauge transformations in a symbolic computation language (e.g., SageMath).",
+      "Test the tool on known examples: a U(1) gauge field and gravity as a Poincaré gauge theory."
+     ]
+    },
+    {
+     "based_on": [
+      "gr-qc/0611050",
+      "hep-th/0606080"
+     ],
+     "title": "Exploring physics in 16-dimensional C-space: from geometry to effective theories",
+     "what": "Investigate the possibility of compactifying the 16-dimensional C-space from gr-qc/0611050 down to 4 dimensions, aiming to obtain an effective theory that unifies gravity and gauge fields.",
+     "why": "If a consistent compactification can be built, it would offer a new approach to unifying interactions and possibly yield predictions for particle physics.",
+     "origin": "In gr-qc/0611050, the geometric structure of C-space was proposed, but its phenomenology under compactification was not explored. Works on higher-dimensional theories (e.g., hep-th/0606080) show that such approaches can lead to realistic models, but this has not been done for C-space. The idea fills the gap between pure geometry and particle physics.",
+     "first_step": "Write down the metric and connection of C-space in coordinates convenient for isolating the 4D subspace, and choose the simplest ansatz for the extra coordinates.",
+     "needs": "Deep knowledge of differential geometry and Kaluza-Klein theory; computational resources for symbolic calculations; access to gr-qc/0611050 and hep-th/0606080.",
+     "risks": "C-space has a nontrivial structure (points, areas, volumes), and its compactification may be mathematically challenging or lead to unstable vacua. The effective theory might turn out to be unrealistic.",
+     "scale": "years",
+     "methods": [
+      "Take the metric and spin connection of C-space from gr-qc/0611050 and consider simple ansätze for compactifying the extra dimensions (e.g., torus or sphere).",
+      "Compute the dimensional reduction of the Einstein-Hilbert action in C-space and isolate the terms corresponding to 4D gravity and gauge fields.",
+      "Compare the resulting gauge groups and coupling constants with known grand unified models."
+     ]
+    },
+    {
+     "based_on": [
+      "math-ph/0702037"
+     ],
+     "title": "Constructing field Lagrangians from the metric function of Finsler space",
+     "what": "Develop an algorithm for computing Lagrangians of scalar and vector fields based on the method from math-ph/0702037, where the Lagrangian is constructed as the inverse of the volume swept by a unit vector on the indicatrix.",
+     "why": "Such an algorithm would allow generating new field theories with desired symmetries and possibly uncover connections between Finsler geometry and particle physics.",
+     "origin": "In math-ph/0702037, a general method was proposed, but it was not developed into practical recipes nor applied to specific physically interesting metrics. Existing works on Finsler geometry in physics usually focus on kinematics rather than on constructing actions. Here one can build a bridge between abstract geometry and field theory.",
+     "first_step": "For the simplest Finsler metric (e.g., Euclidean with a small perturbation), manually compute the volume of the indicatrix and obtain the Lagrangian in the limit of a small parameter.",
+     "needs": "Knowledge of Finsler geometry; programming skills for numerical integration over the indicatrix; access to math-ph/0702037.",
+     "risks": "Computing the volume of the indicatrix may be analytically intractable for general metrics, and numerically resource-intensive. The resulting Lagrangians may turn out to be unphysical (e.g., involving higher derivatives).",
+     "scale": "thesis",
+     "methods": [
+      "Study the construction from math-ph/0702037: for a given metric function of a Finsler space, compute the volume of the indicatrix in the tangent space.",
+      "Implement a numerical or symbolic computation of this volume for classes of metrics depending on parameters.",
+      "Apply the algorithm to simple Finsler metrics (e.g., the Randers metric) and obtain the corresponding Lagrangians, comparing with known theories."
+     ]
+    },
+    {
+     "based_on": [
+      "physics/0302006",
+      "hep-th/0303078"
+     ],
+     "title": "Testing an extended spacetime model through Liénard-Wiechert potentials",
+     "what": "Test the predictions of the extended (1+4)-dimensional spacetime model from physics/0302006 for electromagnetic and gravitational fields of point sources, comparing them with known 4D solutions.",
+     "why": "If the model yields deviations from the standard Liénard-Wiechert potentials, it could point to observable effects of the extra dimension and stimulate experimental searches.",
+     "origin": "In physics/0302006, solutions in the extended space were obtained, but it was not investigated how they appear from the perspective of a 4D observer. The work hep-th/0303078 gives potentials in even dimensions, but not for the extended model. A comparison could reveal whether the extra terms are merely gauge artifacts or physical.",
+     "first_step": "Write down the solutions from physics/0302006 in explicit form and consider the simplest case of a stationary source to understand the structure of the extra coordinate.",
+     "needs": "Knowledge of classical electrodynamics and gravitational theory; skills in analytical computation; access to physics/0302006 and hep-th/0303078.",
+     "risks": "The reduction to 4D may be ambiguous due to freedom in choosing conditions on the extra coordinate. The corrections might turn out to be vanishingly small or unphysical.",
+     "scale": "semester",
+     "methods": [
+      "Take the exact Liénard-Wiechert potential solutions in the extended space from physics/0302006.",
+      "Perform the reduction to 4D by integrating out or fixing the extra coordinate, and obtain effective 4D potentials.",
+      "Compare with classical expressions for moving charges and masses, computing corrections in the limit of a small extra coordinate."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el ámbito del espacio y los campos se investigan activamente las geometrías no conmutativas, los modelos multidimensionales y las formulaciones alternativas de las simetrías, pero muchas propuestas permanecen en el nivel de construcciones abstractas sin cálculos concretos ni modelos.",
+   "topic": "espacio y campos",
+   "ideas": [
+    {
+     "based_on": [
+      "hep-th/0312305"
+     ],
+     "title": "Calibración de coordenadas no conmutativas mediante un oscilador en el espacio κ-Minkowski",
+     "what": "Construir un modelo mecanocuántico de oscilador armónico en el espacio κ-Minkowski, utilizando el producto estrella del trabajo hep-th/0312305, y calcular las correcciones al espectro de energía en primer orden en el parámetro de deformación.",
+     "why": "Las correcciones obtenidas podrían proporcionar predicciones observables para la física de altas energías e indicar cómo se manifiesta la no conmutatividad en sistemas simples.",
+     "origin": "En hep-th/0312305 se introdujo el concepto de campo y simetrías en κ-Minkowski, pero no se consideraron sistemas cuánticos simples donde la no conmutatividad produzca correcciones explícitas. En la literatura existen cálculos para la no conmutatividad canónica, pero para la deformación κ son fragmentarios. Aquí se puede comprobar hasta qué punto los métodos del artículo se trasladan a un problema concreto.",
+     "first_step": "Escribir la forma explícita del producto estrella para coordenadas y momentos a partir del artículo y formular el hamiltoniano del oscilador en variables no conmutativas.",
+     "needs": "Conocimiento de mecánica cuántica y teoría de perturbaciones; acceso al artículo hep-th/0312305; habilidades en cálculo simbólico (por ejemplo, Mathematica) para expandir el producto estrella.",
+     "risks": "El producto estrella en κ-Minkowski podría ser no asociativo o estar mal definido para los momentos, lo que complicaría la construcción del hamiltoniano. Las correcciones podrían resultar triviales debido a la especificidad de la deformación.",
+     "scale": "semestre",
+     "methods": [
+      "Tomar el producto estrella definido en hep-th/0312305 mediante la aplicación de Weyl generalizada y escribir el hamiltoniano del oscilador en coordenadas no conmutativas.",
+      "Expandir el producto estrella en el parámetro de deformación κ^{-1} hasta primer orden y obtener un hamiltoniano efectivo en el espacio ordinario.",
+      "Aplicar la teoría de perturbaciones para calcular los desplazamientos de los niveles de energía y comparar con resultados conocidos para otros espacios no conmutativos."
+     ]
+    },
+    {
+     "based_on": [
+      "1502.06539"
+     ],
+     "title": "Tratamiento geométrico unificado de las simetrías de gauge y espacio-temporales en la teoría de campos",
+     "what": "Desarrollar una herramienta computacional para trabajar con la formulación parametrizada de la teoría de campos del trabajo 1502.06539, que permita verificar automáticamente la invariancia gauge de acciones para campos con simetrías internas.",
+     "why": "Tal herramienta podría ayudar a los teóricos a explorar más rápidamente nuevos modelos donde la gravedad se considera una teoría gauge y a identificar simetrías ocultas.",
+     "origin": "En 1502.06539 se muestra que las simetrías internas y espacio-temporales pueden tratarse de manera unificada, pero no se proporciona un código de software listo para cálculos prácticos. Los paquetes existentes para álgebra tensorial no tienen en cuenta la parametrización. Crear la herramienta llenaría este vacío y permitiría aplicar el enfoque a nuevos modelos.",
+     "first_step": "Elegir un modelo simple (por ejemplo, un campo escalar con simetría U(1)) y escribir manualmente la acción parametrizada y su variación, siguiendo la notación del artículo.",
+     "needs": "Habilidades de programación en Python o Mathematica; comprensión de geometría diferencial y teorías gauge; acceso al artículo 1502.06539.",
+     "risks": "La formulación parametrizada puede ser engorrosa y la automatización podría enfrentar problemas de rendimiento. Es posible que algunas transformaciones no puedan implementarse en forma general.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Estudiar la representación parametrizada de los campos de 1502.06539, donde las coordenadas del campo son variables dinámicas.",
+      "Implementar en un lenguaje de cálculo simbólico (por ejemplo, SageMath) operaciones con variaciones de campos y transformaciones gauge.",
+      "Probar la herramienta en ejemplos conocidos: campo gauge U(1) y gravedad como teoría gauge de Poincaré."
+     ]
+    },
+    {
+     "based_on": [
+      "gr-qc/0611050",
+      "hep-th/0606080"
+     ],
+     "title": "Investigación de la física en el espacio C de 16 dimensiones: de la geometría a las teorías efectivas",
+     "what": "Estudiar la posibilidad de compactificar el espacio C de 16 dimensiones del trabajo gr-qc/0611050 a 4 dimensiones con el fin de obtener una teoría efectiva que unifique la gravedad y los campos gauge.",
+     "why": "Si se logra construir una compactificación consistente, esto proporcionaría un nuevo enfoque para la unificación de las interacciones y, posiblemente, predicciones para la física de partículas.",
+     "origin": "En gr-qc/0611050 se propone la estructura geométrica del espacio C, pero no se investiga su fenomenología bajo compactificación. Los trabajos sobre teorías multidimensionales (por ejemplo, hep-th/0606080) muestran que tales enfoques pueden conducir a modelos realistas, sin embargo, para el espacio C esto no se ha hecho. La idea llena el vacío entre la geometría pura y la física de partículas.",
+     "first_step": "Escribir la métrica y la conexión del espacio C en coordenadas adecuadas para separar el subespacio 4D y elegir el ansatz más simple para las coordenadas adicionales.",
+     "needs": "Conocimiento profundo de geometría diferencial y teoría de Kaluza-Klein; recursos computacionales para cálculos simbólicos; acceso a los artículos gr-qc/0611050 y hep-th/0606080.",
+     "risks": "El espacio C tiene una estructura no trivial (puntos, áreas, volúmenes), y su compactificación podría ser matemáticamente compleja o conducir a vacíos inestables. Es posible que la teoría efectiva resulte no realista.",
+     "scale": "años",
+     "methods": [
+      "Tomar la métrica y la conexión espinorial del espacio C de gr-qc/0611050 y considerar los ansatz más simples para la compactificación de las dimensiones adicionales (por ejemplo, toro o esfera).",
+      "Calcular la reducción dimensional de la acción de Einstein-Hilbert en el espacio C y extraer los términos correspondientes a la gravedad 4D y a los campos gauge.",
+      "Comparar los grupos gauge y las constantes de acoplamiento obtenidos con los modelos conocidos de gran unificación."
+     ]
+    },
+    {
+     "based_on": [
+      "math-ph/0702037"
+     ],
+     "title": "Construcción de lagrangianos de campos a partir de la función métrica de un espacio de Finsler",
+     "what": "Desarrollar un algoritmo para calcular lagrangianos de campos escalares y vectoriales, basado en el método del trabajo math-ph/0702037, donde el lagrangiano se construye como el volumen inverso barrido por un vector unitario en la indicatriz.",
+     "why": "Tal algoritmo permitiría generar nuevas teorías de campos con simetrías dadas y, posiblemente, encontrar conexiones entre la geometría de los espacios de Finsler y la física de partículas.",
+     "origin": "En math-ph/0702037 se propone un método general, pero no se ha llevado a recetas prácticas ni se ha aplicado a métricas concretas de interés físico. Los trabajos existentes sobre geometría de Finsler en física suelen centrarse en la cinemática, no en la construcción de acciones. Aquí se puede crear un puente entre la geometría abstracta y la teoría de campos.",
+     "first_step": "Para la métrica de Finsler más simple (por ejemplo, la euclidiana con una pequeña perturbación), calcular manualmente el volumen de la indicatriz y obtener el lagrangiano en el límite de parámetro pequeño.",
+     "needs": "Conocimiento de geometría de Finsler; habilidades de programación para integración numérica sobre la indicatriz; acceso al artículo math-ph/0702037.",
+     "risks": "El cálculo del volumen de la indicatriz puede ser analíticamente inviable para métricas generales y numéricamente costoso. Los lagrangianos obtenidos podrían resultar no físicos (por ejemplo, con derivadas superiores).",
+     "scale": "tesis de grado",
+     "methods": [
+      "Estudiar la construcción de math-ph/0702037: para una función métrica de Finsler dada, calcular el volumen de la indicatriz en el espacio tangente.",
+      "Implementar el cálculo numérico o simbólico de este volumen para clases de métricas que dependen de parámetros.",
+      "Aplicar el algoritmo a métricas de Finsler simples (por ejemplo, la métrica de Randers) y obtener los lagrangianos correspondientes, comparándolos con teorías conocidas."
+     ]
+    },
+    {
+     "based_on": [
+      "physics/0302006",
+      "hep-th/0303078"
+     ],
+     "title": "Verificación del modelo de espacio-tiempo extendido mediante los potenciales de Liénard-Wiechert",
+     "what": "Verificar las predicciones del modelo de espacio (1+4)-dimensional extendido del trabajo physics/0302006 para los campos electromagnéticos y gravitacionales de fuentes puntuales, comparándolos con las soluciones conocidas en 4D.",
+     "why": "Si el modelo produce diferencias con los potenciales estándar de Liénard-Wiechert, esto podría indicar efectos observables de la dimensión extra y estimular búsquedas experimentales.",
+     "origin": "En physics/0302006 se obtienen soluciones en el espacio extendido, pero no se investiga cómo se ven desde la perspectiva de un observador 4D. El trabajo hep-th/0303078 proporciona potenciales en dimensiones pares, pero no para el modelo extendido. La comparación podría revelar si los términos adicionales son simplemente artefactos gauge o físicos.",
+     "first_step": "Escribir las soluciones de physics/0302006 en forma explícita y considerar el caso más simple de una fuente en reposo para comprender la estructura de la coordenada adicional.",
+     "needs": "Conocimiento de electrodinámica clásica y teoría de la gravitación; habilidades en cálculo analítico; acceso a los artículos physics/0302006 y hep-th/0303078.",
+     "risks": "La reducción a 4D podría ser ambigua debido a la libertad en la elección de condiciones sobre la coordenada adicional. Las correcciones podrían ser infinitesimalmente pequeñas o no físicas.",
+     "scale": "semestre",
+     "methods": [
+      "Tomar las soluciones exactas para los potenciales de Liénard-Wiechert en el espacio extendido de physics/0302006.",
+      "Realizar la reducción a 4D integrando o fijando la coordenada adicional y obtener los potenciales 4D efectivos.",
+      "Comparar con las expresiones clásicas para cargas y masas en movimiento y calcular las correcciones en el límite de coordenada adicional pequeña."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال الفضاء والحقول، تُجرى أبحاث نشطة حول الهندسات غير التبادلية والنماذج متعددة الأبعاد وصيغ بديلة للتناظرات، لكن العديد من المقترحات تبقى في مستوى البنى المجردة دون حسابات أو نماذج ملموسة.",
+   "topic": "الفضاء والحقول",
+   "ideas": [
+    {
+     "based_on": [
+      "hep-th/0312305"
+     ],
+     "title": "معايرة الإحداثيات غير التبادلية عبر المذبذب في فضاء كابا-مينكوفسكي",
+     "what": "بناء نموذج ميكانيكا كمومية للمذبذب التوافقي في فضاء كابا-مينكوفسكي باستخدام حاصل الضرب النجمي من العمل hep-th/0312305، وحساب التصحيحات لطيف الطاقة في الرتبة الأولى لبارامتر التشوه.",
+     "why": "قد تقدم التصحيحات الناتجة تنبؤات قابلة للرصد لفيزياء الطاقات العالية وتشير إلى كيفية ظهور عدم التبادلية في أنظمة بسيطة.",
+     "origin": "في العمل hep-th/0312305 تم تقديم مفهوم الحقل والتناظرات في فضاء كابا-مينكوفسكي، لكن لم تُدرس أنظمة كمومية بسيطة حيث تعطي عدم التبادلية تصحيحات صريحة. توجد في الأدبيات حسابات لعدم التبادلية القانونية، لكنها مجزأة لتشوه كابا. هنا يمكن التحقق من مدى قابلية نقل الطرق من المقال إلى مسألة محددة.",
+     "first_step": "كتابة الصيغة الصريحة لحاصل الضرب النجمي للإحداثيات والعزوم من المقال، وكتابة هاملتوني المذبذب في المتغيرات غير التبادلية.",
+     "needs": "معرفة بميكانيكا الكم ونظرية الاضطراب؛ الوصول إلى المقال hep-th/0312305؛ مهارات في الحسابات الرمزية (مثل Mathematica) لتفكيك حاصل الضرب النجمي.",
+     "risks": "قد يكون حاصل الضرب النجمي في كابا-مينكوفسكي غير تجميعي أو غير محدد جيدًا للعزوم، مما يعقد بناء الهاملتوني. قد تكون التصحيحات تافهة بسبب خصوصية التشوه.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "أخذ حاصل الضرب النجمي المعرّف في hep-th/0312305 عبر تطبيق فايل المعمم، وكتابة هاملتوني المذبذب في الإحداثيات غير التبادلية.",
+      "تفكيك حاصل الضرب النجمي وفق بارامتر التشوه κ^{-1} حتى الرتبة الأولى والحصول على هاملتوني فعال في الفضاء العادي.",
+      "تطبيق نظرية الاضطراب لحساب إزاحات مستويات الطاقة ومقارنتها بالنتائج المعروفة لفضاءات غير تبادلية أخرى."
+     ]
+    },
+    {
+     "based_on": [
+      "1502.06539"
+     ],
+     "title": "معالجة هندسية موحدة لتناظرات المعايرة والزمكان في نظرية الحقل",
+     "what": "تطوير أداة حسابية للتعامل مع الصيغة المعلمترية لنظرية الحقل من العمل 1502.06539، تسمح بالتحقق تلقائيًا من ثبات المعايرة للأفعال للحقول ذات التناظرات الداخلية.",
+     "why": "قد تساعد هذه الأداة المنظرين على استكشاف نماذج جديدة حيث تُعامل الجاذبية كنظرية معايرة بشكل أسرع، وكشف التناظرات الخفية.",
+     "origin": "في العمل 1502.06539 تبيّن أنه يمكن معالجة التناظرات الداخلية والزمكانية بشكل موحد، لكن لم يُقدم كود برمجي جاهز للحسابات العملية. الحزم الموجودة للجبر الموترى لا تأخذ في الاعتبار المعلمترة. إنشاء الأداة سيسد هذه الفجوة ويسمح بتطبيق المنهج على نماذج جديدة.",
+     "first_step": "اختيار نموذج بسيط (مثل حقل قياسي مع تناظر U(1)) وكتابة الفعل المعلمتر وتغيره يدويًا باتباع رموز المقال.",
+     "needs": "مهارات برمجة بلغة Python أو Mathematica؛ فهم الهندسة التفاضلية ونظريات المعايرة؛ الوصول إلى المقال 1502.06539.",
+     "risks": "قد تكون الصيغة المعلمترية مرهقة، وقد تواجه الأتمتة مشاكل في الأداء. ربما يتعذر تنفيذ بعض التحويلات بشكل عام.",
+     "scale": "أطروحة",
+     "methods": [
+      "دراسة التمثيل المعلمتر للحقول من 1502.06539، حيث تكون إحداثيات الحقل نفسها متغيرات ديناميكية.",
+      "تنفيذ العمليات على تغيرات الحقول وتحويلات المعايرة بلغة حساب رمزي (مثل SageMath).",
+      "اختبار الأداة على أمثلة معروفة: حقل معايرة U(1) والجاذبية كنظرية معايرة بوانكاريه."
+     ]
+    },
+    {
+     "based_on": [
+      "gr-qc/0611050",
+      "hep-th/0606080"
+     ],
+     "title": "دراسة الفيزياء في الفضاء C ذي 16 بُعدًا: من الهندسة إلى النظريات الفعالة",
+     "what": "دراسة إمكانية ضغط الفضاء C ذي 16 بُعدًا من العمل gr-qc/0611050 إلى 4 أبعاد بهدف الحصول على نظرية فعالة توحد الجاذبية وحقول المعايرة.",
+     "why": "إذا أمكن بناء ضغط متسق، فسيعطي نهجًا جديدًا لتوحيد التفاعلات وربما تنبؤات لفيزياء الجسيمات.",
+     "origin": "في العمل gr-qc/0611050 اقتُرح البنية الهندسية للفضاء C، لكن لم تُدرس ظاهرته عند الضغط. الأعمال حول النظريات متعددة الأبعاد (مثل hep-th/0606080) تُظهر أن مثل هذه المناهج قد تؤدي إلى نماذج واقعية، لكن لم يُفعل ذلك للفضاء C. الفكرة تسد الفجوة بين الهندسة البحتة وفيزياء الجسيمات.",
+     "first_step": "كتابة المترية والاتصال للفضاء C في إحداثيات مناسبة لفصل الفضاء الجزئي رباعي الأبعاد، واختيار أبسط أنساتز للإحداثيات الإضافية.",
+     "needs": "معرفة عميقة بالهندسة التفاضلية ونظرية كالوتسا-كلاين؛ موارد حسابية للحسابات الرمزية؛ الوصول إلى المقالين gr-qc/0611050 وhep-th/0606080.",
+     "risks": "الفضاء C له بنية غير تافهة (نقاط، مساحات، أحجام)، وقد يكون ضغطه معقدًا رياضيًا أو يؤدي إلى فراغات غير مستقرة. ربما تكون النظرية الفعالة غير واقعية.",
+     "scale": "سنوات",
+     "methods": [
+      "أخذ المترية والاتصال المغزلي للفضاء C من gr-qc/0611050 والنظر في أبسط أنساتز لضغط الأبعاد الإضافية (مثل الطارة أو الكرة).",
+      "حساب الاختزال البعدي لفعل أينشتاين-هيلبرت في الفضاء C وعزل الحدود المقابلة لجاذبية رباعية الأبعاد وحقول المعايرة.",
+      "مقارنة مجموعات المعايرة وثوابت الاقتران الناتجة مع نماذج التوحيد الكبرى المعروفة."
+     ]
+    },
+    {
+     "based_on": [
+      "math-ph/0702037"
+     ],
+     "title": "بناء لاغرانجيات الحقول من دالة مترية لفضاء فينسلر",
+     "what": "تطوير خوارزمية لحساب لاغرانجيات الحقول القياسية والمتجهية، استنادًا إلى الطريقة من العمل math-ph/0702037، حيث يُبنى اللاغرانجي كحجم معكوس يمسحه متجه وحدة على مؤشر.",
+     "why": "ستسمح هذه الخوارزمية بتوليد نظريات حقل جديدة بتناظرات معينة وربما إيجاد روابط بين هندسة فضاءات فينسلر وفيزياء الجسيمات.",
+     "origin": "في العمل math-ph/0702037 اقتُرحت طريقة عامة، لكنها لم تصل إلى وصفات عملية ولم تُطبق على مترية محددة ذات أهمية فيزيائية. الأعمال الموجودة حول هندسة فينسلر في الفيزياء تركز عادة على الكينماتيكا وليس على بناء الأفعال. هنا يمكن إنشاء جسر بين الهندسة المجردة ونظرية الحقل.",
+     "first_step": "لأبسط مترية فينسلر (مثل الإقليدية مع اضطراب صغير)، حساب حجم المؤشر يدويًا والحصول على اللاغرانجي في حد البارامتر الصغير.",
+     "needs": "معرفة بهندسة فينسلر؛ مهارات برمجة للتكامل العددي على المؤشر؛ الوصول إلى المقال math-ph/0702037.",
+     "risks": "قد يكون حساب حجم المؤشر غير قابل للتنفيذ تحليليًا لمتريات عامة، وعدديًا قد يكون مكلفًا حسابيًا. قد تكون اللاغرانجيات الناتجة غير فيزيائية (مثل التي تحتوي على مشتقات أعلى).",
+     "scale": "أطروحة",
+     "methods": [
+      "دراسة البناء من math-ph/0702037: لدالة مترية معينة لفضاء فينسلر، حساب حجم المؤشر في فضاء التماس.",
+      "تنفيذ حساب عددي أو رمزي لهذا الحجم لفئات من المتريات المعتمدة على بارامترات.",
+      "تطبيق الخوارزمية على متريات فينسلر بسيطة (مثل مترية راندرز) والحصول على اللاغرانجيات المقابلة ومقارنتها بالنظريات المعروفة."
+     ]
+    },
+    {
+     "based_on": [
+      "physics/0302006",
+      "hep-th/0303078"
+     ],
+     "title": "اختبار نموذج الزمكان الموسع عبر جهود لينارد-فيشرت",
+     "what": "اختبار تنبؤات نموذج الفضاء الموسع (1+4)-الأبعاد من العمل physics/0302006 للحقول الكهرومغناطيسية والجاذبية لمصادر نقطية، بمقارنتها بالحلول المعروفة في 4 أبعاد.",
+     "why": "إذا أعطى النموذج اختلافات عن جهود لينارد-فيشرت القياسية، فقد يشير ذلك إلى تأثيرات قابلة للرصد للبعد الإضافي ويحفز البحث التجريبي.",
+     "origin": "في العمل physics/0302006 حُصل على حلول في الفضاء الموسع، لكن لم يُدرس كيف تبدو من منظور مراقب رباعي الأبعاد. العمل hep-th/0303078 يعطي جهودًا في أبعاد زوجية، لكن ليس للنموذج الموسع. المقارنة قد تكشف ما إذا كانت الحدود الإضافية مجرد قطع معايرة أو فيزيائية.",
+     "first_step": "كتابة الحلول من physics/0302006 بشكل صريح والنظر في أبسط حالة لمصدر ساكن لفهم بنية الإحداثي الإضافي.",
+     "needs": "معرفة بالديناميكا الكهربائية الكلاسيكية ونظرية الجاذبية؛ مهارات في الحسابات التحليلية؛ الوصول إلى المقالين physics/0302006 وhep-th/0303078.",
+     "risks": "قد يكون الاختزال إلى 4 أبعاد غير فريد بسبب الحرية في اختيار الشروط على الإحداثي الإضافي. قد تكون التصحيحات صغيرة جدًا أو غير فيزيائية.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "أخذ الحلول الدقيقة لجهود لينارد-فيشرت في الفضاء الموسع من physics/0302006.",
+      "تنفيذ الاختزال إلى 4 أبعاد، بتكامل أو تثبيت الإحداثي الإضافي، والحصول على جهود فعالة رباعية الأبعاد.",
+      "مقارنتها بالتعبيرات الكلاسيكية للشحنات والكتل المتحركة، وحساب التصحيحات في حد الإحداثي الإضافي الصغير."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine de l'espace et des champs, les géométries non commutatives, les modèles multidimensionnels et les formulations alternatives des symétries sont activement étudiés, mais de nombreuses propositions restent au niveau de constructions abstraites sans calculs concrets ni modèles.",
+   "topic": "espace et champs",
+   "ideas": [
+    {
+     "based_on": [
+      "hep-th/0312305"
+     ],
+     "title": "Jauger les coordonnées non commutatives via un oscillateur dans l'espace κ-Minkowski",
+     "what": "Construire un modèle de mécanique quantique pour un oscillateur harmonique dans l'espace κ-Minkowski, en utilisant le produit en étoile de l'article hep-th/0312305, et calculer les corrections au spectre d'énergie au premier ordre du paramètre de déformation.",
+     "why": "Les corrections obtenues pourraient fournir des prédictions observables pour la physique des hautes énergies et indiquer comment la non-commutativité se manifeste dans des systèmes simples.",
+     "origin": "Dans hep-th/0312305, la notion de champ et de symétries dans l'espace κ-Minkowski est introduite, mais les systèmes quantiques simples où la non-commutativité donne des corrections explicites n'y sont pas abordés. La littérature contient des calculs pour la non-commutativité canonique, mais pour la déformation κ, ils sont fragmentaires. Ici, on peut vérifier dans quelle mesure les méthodes de l'article se transposent à un problème concret.",
+     "first_step": "Écrire la forme explicite du produit en étoile pour les coordonnées et les impulsions à partir de l'article, puis écrire le hamiltonien de l'oscillateur dans les variables non commutatives.",
+     "needs": "Connaissance de la mécanique quantique et de la théorie des perturbations ; accès à l'article hep-th/0312305 ; compétences en calcul symbolique (par exemple, Mathematica) pour développer le produit en étoile.",
+     "risks": "Le produit en étoile dans κ-Minkowski pourrait être non associatif ou mal défini pour les impulsions, ce qui compliquerait la construction du hamiltonien. Les corrections pourraient s'avérer triviales en raison de la spécificité de la déformation.",
+     "scale": "semestre",
+     "methods": [
+      "Prendre le produit en étoile défini dans hep-th/0312305 via l'application de Weyl généralisée et écrire le hamiltonien de l'oscillateur dans les coordonnées non commutatives.",
+      "Développer le produit en étoile par rapport au paramètre de déformation κ^{-1} jusqu'au premier ordre et obtenir le hamiltonien effectif dans l'espace ordinaire.",
+      "Appliquer la théorie des perturbations pour calculer les déplacements des niveaux d'énergie et comparer avec les résultats connus pour d'autres espaces non commutatifs."
+     ]
+    },
+    {
+     "based_on": [
+      "1502.06539"
+     ],
+     "title": "Traitement géométrique unifié des symétries de jauge et spatio-temporelles en théorie des champs",
+     "what": "Développer un outil de calcul pour travailler avec la formulation paramétrée de la théorie des champs de l'article 1502.06539, qui permette de vérifier automatiquement l'invariance de jauge des actions pour des champs avec symétries internes.",
+     "why": "Un tel outil pourrait aider les théoriciens à explorer plus rapidement de nouveaux modèles où la gravité est considérée comme une théorie de jauge et à identifier des symétries cachées.",
+     "origin": "Dans 1502.06539, il est montré que les symétries internes et spatio-temporelles peuvent être traitées de manière unifiée, mais aucun code prêt à l'emploi n'est fourni pour les calculs pratiques. Les paquetages existants pour l'algèbre tensorielle ne tiennent pas compte de la paramétrisation. La création d'un outil comblerait cette lacune et permettrait d'appliquer l'approche à de nouveaux modèles.",
+     "first_step": "Choisir un modèle simple (par exemple, un champ scalaire avec symétrie U(1)) et écrire manuellement l'action paramétrée et sa variation, en suivant les notations de l'article.",
+     "needs": "Compétences en programmation Python ou Mathematica ; compréhension de la géométrie différentielle et des théories de jauge ; accès à l'article 1502.06539.",
+     "risks": "La formulation paramétrée peut être lourde et l'automatisation pourrait rencontrer des problèmes de performance. Certaines transformations pourraient ne pas être réalisables sous une forme générale.",
+     "scale": "mémoire de master",
+     "methods": [
+      "Étudier la représentation paramétrée des champs de 1502.06539, où les coordonnées du champ sont elles-mêmes des variables dynamiques.",
+      "Implémenter dans un langage de calcul symbolique (par exemple, SageMath) les opérations sur les variations des champs et les transformations de jauge.",
+      "Tester l'outil sur des exemples connus : le champ de jauge U(1) et la gravité comme théorie de jauge de Poincaré."
+     ]
+    },
+    {
+     "based_on": [
+      "gr-qc/0611050",
+      "hep-th/0606080"
+     ],
+     "title": "Explorer la physique dans l'espace C à 16 dimensions : de la géométrie aux théories effectives",
+     "what": "Étudier la possibilité de compactifier l'espace C à 16 dimensions de l'article gr-qc/0611050 vers 4 dimensions afin d'obtenir une théorie effective unifiant la gravité et les champs de jauge.",
+     "why": "Si une compactification cohérente peut être construite, cela fournirait une nouvelle approche pour unifier les interactions et peut-être des prédictions pour la physique des particules.",
+     "origin": "Dans gr-qc/0611050, la structure géométrique de l'espace C est proposée, mais sa phénoménologie sous compactification n'est pas étudiée. Les travaux sur les théories multidimensionnelles (par exemple, hep-th/0606080) montrent que de telles approches peuvent conduire à des modèles réalistes, mais cela n'a pas été fait pour l'espace C. L'idée comble le fossé entre la géométrie pure et la physique des particules.",
+     "first_step": "Écrire la métrique et la connexion de l'espace C dans des coordonnées adaptées pour isoler le sous-espace 4D, et choisir l'ansatz le plus simple pour les coordonnées supplémentaires.",
+     "needs": "Connaissance approfondie de la géométrie différentielle et de la théorie de Kaluza-Klein ; ressources de calcul pour les calculs symboliques ; accès aux articles gr-qc/0611050 et hep-th/0606080.",
+     "risks": "L'espace C a une structure non triviale (points, aires, volumes), et sa compactification pourrait être mathématiquement complexe ou conduire à des vides instables. La théorie effective pourrait s'avérer irréaliste.",
+     "scale": "années",
+     "methods": [
+      "Prendre la métrique et la connexion spinorelle de l'espace C de gr-qc/0611050 et considérer les ansatz les plus simples pour la compactification des dimensions supplémentaires (par exemple, tore ou sphère).",
+      "Calculer la réduction dimensionnelle de l'action d'Einstein-Hilbert dans l'espace C et identifier les termes correspondant à la gravité 4D et aux champs de jauge.",
+      "Comparer les groupes de jauge et les constantes de couplage obtenus avec les modèles connus de grande unification."
+     ]
+    },
+    {
+     "based_on": [
+      "math-ph/0702037"
+     ],
+     "title": "Construction de lagrangiens de champs à partir de la fonction métrique d'un espace de Finsler",
+     "what": "Développer un algorithme pour calculer les lagrangiens de champs scalaires et vectoriels, basé sur la méthode de l'article math-ph/0702037, où le lagrangien est construit comme le volume inverse balayé par un vecteur unitaire sur l'indicatrice.",
+     "why": "Un tel algorithme permettrait de générer de nouvelles théories de champs avec des symétries données et peut-être de trouver des liens entre la géométrie des espaces de Finsler et la physique des particules.",
+     "origin": "Dans math-ph/0702037, une méthode générale est proposée, mais elle n'est pas développée jusqu'à des recettes pratiques et n'est pas appliquée à des métriques physiquement intéressantes. Les travaux existants sur la géométrie de Finsler en physique se concentrent généralement sur la cinématique, pas sur la construction d'actions. Ici, on peut créer un pont entre la géométrie abstraite et la théorie des champs.",
+     "first_step": "Pour la métrique de Finsler la plus simple (par exemple, euclidienne avec une petite perturbation), calculer manuellement le volume de l'indicatrice et obtenir le lagrangien dans la limite du petit paramètre.",
+     "needs": "Connaissance de la géométrie de Finsler ; compétences en programmation pour l'intégration numérique sur l'indicatrice ; accès à l'article math-ph/0702037.",
+     "risks": "Le calcul du volume de l'indicatrice peut être analytiquement impossible pour des métriques générales, et numériquement coûteux. Les lagrangiens obtenus pourraient être non physiques (par exemple, avec des dérivées supérieures).",
+     "scale": "mémoire de master",
+     "methods": [
+      "Étudier la construction de math-ph/0702037 : pour une fonction métrique donnée d'un espace de Finsler, calculer le volume de l'indicatrice dans l'espace tangent.",
+      "Implémenter le calcul numérique ou symbolique de ce volume pour des classes de métriques dépendant de paramètres.",
+      "Appliquer l'algorithme à des métriques de Finsler simples (par exemple, la métrique de Randers) et obtenir les lagrangiens correspondants, puis les comparer avec des théories connues."
+     ]
+    },
+    {
+     "based_on": [
+      "physics/0302006",
+      "hep-th/0303078"
+     ],
+     "title": "Vérification du modèle d'espace-temps étendu via les potentiels de Liénard-Wiechert",
+     "what": "Vérifier les prédictions du modèle d'espace étendu (1+4)-dimensionnel de l'article physics/0302006 pour les champs électromagnétiques et gravitationnels de sources ponctuelles, en les comparant avec les solutions connues en 4D.",
+     "why": "Si le modèle donne des différences par rapport aux potentiels standard de Liénard-Wiechert, cela pourrait indiquer des effets observables de la dimension supplémentaire et stimuler les recherches expérimentales.",
+     "origin": "Dans physics/0302006, des solutions dans l'espace étendu sont obtenues, mais on n'y étudie pas leur apparence du point de vue d'un observateur 4D. L'article hep-th/0303078 donne des potentiels en dimensions paires, mais pas pour le modèle étendu. La comparaison pourrait révéler si les termes supplémentaires sont simplement des artefacts de jauge ou physiques.",
+     "first_step": "Écrire les solutions de physics/0302006 sous forme explicite et considérer le cas le plus simple d'une source au repos pour comprendre la structure de la coordonnée supplémentaire.",
+     "needs": "Connaissance de l'électrodynamique classique et de la théorie de la gravitation ; compétences en calcul analytique ; accès aux articles physics/0302006 et hep-th/0303078.",
+     "risks": "La réduction à 4D pourrait être ambiguë en raison de la liberté dans le choix des conditions sur la coordonnée supplémentaire. Les corrections pourraient être infiniment petites ou non physiques.",
+     "scale": "semestre",
+     "methods": [
+      "Prendre les solutions exactes pour les potentiels de Liénard-Wiechert dans l'espace étendu de physics/0302006.",
+      "Effectuer la réduction à 4D en intégrant ou en fixant la coordonnée supplémentaire, et obtenir les potentiels 4D effectifs.",
+      "Comparer avec les expressions classiques pour les charges et masses en mouvement, et calculer les corrections dans la limite de petite coordonnée supplémentaire."
+     ]
+    }
+   ]
+  }
+ }
+}

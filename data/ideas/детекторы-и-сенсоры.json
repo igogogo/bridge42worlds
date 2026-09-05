@@ -1,0 +1,449 @@
+{
+ "topic": "детекторы и сенсоры",
+ "slug": "детекторы-и-сенсоры",
+ "built": "2026-09-04",
+ "note": "В области детекторов и сенсоров активно развиваются пиксельные и криогенные детекторы, требующие новых подходов к питанию, моделированию и измерению характеристик.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.56,
+  "band": "sparse",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Стенд для измерения времени отклика пиксельных сенсоров при разных температурах",
+   "what": "Собрать установку для измерения временного разрешения пиксельных детекторов (например, монолитных CMOS) при охлаждении до температур ниже комнатной. Проверить, как меняется время нарастания сигнала и джиттер при изменении температуры.",
+   "why": "Временное разрешение важно для экспериментов на коллайдерах и для применений в рентгеновской визуализации. Данные о поведении сенсоров при охлаждении помогут оптимизировать системы охлаждения детекторов.",
+   "methods": [
+    "Использовать методику измерения временного разрешения с помощью лазерных импульсов с пикосекундной длительностью, как описано в обзоре по пиксельным детекторам (1208.0251).",
+    "Собрать термокамеру с элементом Пельтье для регулировки температуры образца от -20°C до +20°C.",
+    "Измерять временное разрешение при разных температурах и сравнивать с моделью, учитывающей подвижность носителей и ёмкость пикселя."
+   ],
+   "origin": "В обзоре по путям развития пиксельных детекторов (1208.0251) указано, что временное разрешение является критическим параметром, но систематических данных о влиянии температуры на него для новых монолитных сенсоров недостаточно. Работа по CMOS APS (nucl-ex/0212019) показывает, что характеристики сенсоров зависят от конструкции пикселя, но температурные зависимости не исследованы.",
+   "first_step": "Подобрать доступный пиксельный сенсор (например, с открытой документацией) и проверить, можно ли его охлаждать без потери работоспособности, измерив вольт-амперные характеристики при разных температурах.",
+   "needs": "Пиксельный детектор с платой считывания, лазер с пикосекундными импульсами, осциллограф с полосой >1 ГГц, термокамера с контроллером, навыки работы с электроникой и программирования для управления сенсором.",
+   "risks": "Сенсор может деградировать при охлаждении или его параметры могут не измениться заметно в доступном диапазоне температур, что сделает результат неинтересным.",
+   "scale": "семестр",
+   "based_on": [
+    "1208.0251",
+    "nucl-ex/0212019"
+   ]
+  },
+  {
+   "title": "Моделирование отклика TES-детектора для поиска тёмной материи в установке ALPS II",
+   "what": "Разработать программную модель отклика переходного краевого сенсора (TES) на одиночные фотоны с учётом шумов и нелинейности. Сравнить модельные спектры с данными, полученными в ALPS II, и оценить чувствительность к сигналу тёмной материи.",
+   "why": "Точное моделирование отклика позволит улучшить анализ данных и оценить систематические неопределённости. Это важно для будущих экспериментов по поиску лёгкой тёмной материи.",
+   "methods": [
+    "Использовать подход из работы по моделированию для ALPS II (2407.02954): построить симуляцию теплового отклика TES на основе дифференциальных уравнений, описывающих сверхпроводящий переход.",
+    "Включить в модель источники шума (тепловой шум, шум Джонсона, шум SQUID) и проверить соответствие измеренным энергетическим разрешениям.",
+    "Сгенерировать модельные спектры для различных масс аксионов и оценить, при каких параметрах сигнал будет различим над фоном."
+   ],
+   "origin": "Работа по моделированию для ALPS II (2407.02954) описывает симуляции отклика TES-детекторов, но не рассматривает детально вклад нелинейностей и шумов. Обзор новых фотодетекторов (2401.06033) подчёркивает важность понимания шумов в криогенных детекторах для достижения предельной чувствительности.",
+   "first_step": "Изучить статью 2407.02954 и воспроизвести базовую модель отклика TES, используя открытые данные или параметры из публикации, чтобы убедиться в совпадении с опубликованными результатами.",
+   "needs": "Компьютер с достаточной вычислительной мощностью, знание Python или MATLAB, доступ к данным ALPS II (или открытым данным аналогичных экспериментов), понимание физики сверхпроводников.",
+   "risks": "Модель может оказаться слишком упрощённой по сравнению с реальным детектором, и расхождения с данными будет трудно объяснить без доступа к детальной информации о приборе.",
+   "scale": "диплом",
+   "based_on": [
+    "2407.02954",
+    "2401.06033"
+   ]
+  },
+  {
+   "title": "Разработка модуля питания для пиксельных детекторов, устойчивого к магнитному полю и радиации",
+   "what": "Спроектировать и испытать DC-DC преобразователь для питания фронтальной электроники детекторов, способный работать в сильном магнитном поле (до 2 Тл) и при накопленной дозе радиации до 100 Мрад. Прототип должен быть компактным и иметь высокий КПД.",
+   "why": "Современные детекторы на коллайдерах требуют питания тысяч каналов, и размещение преобразователей вблизи детектора снижает потери в кабелях. Устойчивость к полю и радиации критична для работы в условиях эксперимента.",
+   "methods": [
+    "Изучить топологии преобразователей, предложенные в работе по новому поколению преобразователей (2401.09238), и адаптировать одну из них для конкретных требований.",
+    "Использовать радиационно-стойкие компоненты (например, с технологией кремний-на-изоляторе) и провести моделирование работы схемы в магнитном поле.",
+    "Провести испытания прототипа: измерить КПД и стабильность выходного напряжения при помещении в магнитное поле (например, с помощью электромагнита) и после облучения гамма-источником."
+   ],
+   "origin": "Работа по новому поколению преобразователей (2401.09238) описывает требования и подходы к созданию радиационно-стойких источников питания для детекторов, но не рассматривает конкретные схемные решения для магнитных полей выше 1 Тл. Обзор по пиксельным детекторам (1208.0251) отмечает, что интеграция питания является узким местом при увеличении числа каналов.",
+   "first_step": "Собрать список требований к преобразователю (входное напряжение, выходные параметры, допустимые габариты) и выбрать базовую микросхему контроллера, проверив её документацию на радиационную стойкость.",
+   "needs": "Опыт проектирования импульсных источников питания, доступ к программам моделирования (SPICE), возможность изготовления печатных плат, оборудование для испытаний в магнитном поле (электромагнит) и источник гамма-излучения (или договорённость с лабораторией).",
+   "risks": "Подбор компонентов, одновременно радиационно-стойких и работающих в магнитном поле, может оказаться сложным, и прототип может не достичь требуемых характеристик без нескольких итераций.",
+   "scale": "годы",
+   "based_on": [
+    "2401.09238",
+    "1208.0251"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2407.02954",
+   "full": false,
+   "field": true,
+   "score": 0.56,
+   "titles": {
+    "ru": "Simulations for direct dark matter searches using ALPS II's TES   detection system"
+   },
+   "abstract": "Transition Edge Sensors (TES) are superconducting microcalorimeters that can be used for single-photon detection with extremely low backgrounds. When they are within their superconducting transition region, small temperature fluctuations - like the energy deposited by single photons - lead to large resistance variations. These variations can be measured using Superconducting Quantum Interference Devices (SQUIDs). This technology is planned to be used as a single-photon detector for later runs of the ALPS II experiment, a light-shining-through-walls experiment at DESY Hamburg, searching for Axi"
+  },
+  {
+   "id": "2401.06033",
+   "full": false,
+   "field": true,
+   "score": 0.557,
+   "titles": {
+    "ru": "Novel photon detectors"
+   },
+   "abstract": "The paper reviews recent progress in photodetectors, discussing vacuum-based detectors, semiconductor sensors, and gas-based detectors. The emphasis in this review is on the detection of low light levels, enhanced timing resolution, and spectral range of photon detectors, as well as the development of photosensors for extreme conditions, for operation in cryogenic and high radiation-level environments."
+  },
+  {
+   "id": "2401.06033",
+   "full": false,
+   "field": true,
+   "score": 0.557,
+   "titles": {
+    "ru": "Novel photon detectors"
+   },
+   "abstract": "The paper reviews recent progress in photodetectors, discussing vacuum-based detectors, semiconductor sensors, and gas-based detectors. The emphasis in this review is on the detection of low light levels, enhanced timing resolution, and spectral range of photon detectors, as well as the development of photosensors for extreme conditions, for operation in cryogenic and high radiation-level environments."
+  },
+  {
+   "id": "2401.09238",
+   "full": false,
+   "field": true,
+   "score": 0.551,
+   "titles": {
+    "ru": "New generation B-Field and RAD-tolerant DCDC power converter for   on-detector operation"
+   },
+   "abstract": "The increase in the number of readout channels in new detectors, like the Micro Pattern Gas Detectors (MPGD), in the order of several millions, requires a large amount of electrical power to supply the front-end electronics, up to hundreds kW. If this power is generated at long distances from the detector, the voltage drop on the connection cables puts serious constraints to the supply current, to the wire cross-section and to the power distribution. A large amount of voltage drop on the cables, apart an increased power dissipation on wire resistance, determines regulation issues on the load i"
+  },
+  {
+   "id": "2401.09238",
+   "full": false,
+   "field": true,
+   "score": 0.551,
+   "titles": {
+    "ru": "New generation B-Field and RAD-tolerant DCDC power converter for   on-detector operation"
+   },
+   "abstract": "The increase in the number of readout channels in new detectors, like the Micro Pattern Gas Detectors (MPGD), in the order of several millions, requires a large amount of electrical power to supply the front-end electronics, up to hundreds kW. If this power is generated at long distances from the detector, the voltage drop on the connection cables puts serious constraints to the supply current, to the wire cross-section and to the power distribution. A large amount of voltage drop on the cables, apart an increased power dissipation on wire resistance, determines regulation issues on the load i"
+  },
+  {
+   "id": "2410.22965",
+   "full": false,
+   "field": true,
+   "score": 0.551,
+   "titles": {
+    "ru": "System Design of the Newest Generation Detector Controller for ELT and   new VLT Instruments"
+   },
+   "abstract": "A new detector controller, NGCII, is in development for the first-generation instruments of the ELT as well as new instruments for the VLT. Building on experience with previous ESO detector controllers, a modular system based on the MicroTCA.4 industrial standard, is designed to control a variety of infrared and visible light scientific and wavefront sensor detectors. This article presents the early development stages of NGCII hardware and firmware from the decision to start an all-new design to first tests with detectors and ROICs."
+  },
+  {
+   "id": "2111.06732",
+   "full": false,
+   "field": true,
+   "score": 0.549,
+   "titles": {
+    "ru": "Dissecting axion and dark photon with a network of vector sensors"
+   },
+   "abstract": "We develop formalisms for a network of vector sensors, sensitive to certain spatial components of the signals, to identify the properties of a light axion or a dark photon background. These bosonic fields contribute to vector-like signals in the detectors, including effective magnetic fields triggering the spin precession, effective electric currents in a shielded room, and forces on the matter. The interplay between a pair of vector sensors and a baseline that separates them can potentially uncover rich information of the bosons, including angular distribution, polarization modes, source loca"
+  },
+  {
+   "id": "hep-ph/0208269",
+   "full": false,
+   "field": true,
+   "score": 0.549,
+   "titles": {
+    "ru": "Silicon Detectors at the LHC"
+   },
+   "abstract": "The silicon systems of the Large Hadron Collider (LHC) detectors are briefly described. The complexity and diversity of the projects are illustrated by highlighting for discussion different components of the silicon systems in each experiment."
+  },
+  {
+   "id": "2411.01260",
+   "full": false,
+   "field": true,
+   "score": 0.548,
+   "titles": {
+    "ru": "Detector integration at HEPS: a systematic, efficient and   high-performance approach"
+   },
+   "abstract": "At least 25 kinds of detector-like devices need to be integrated in Phase I of the High Energy Photon Source (HEPS), and the work needs to be carefully planned to maximise productivity with highly limited human resources. After a systematic analysis on the actual work involved in detector integration, a separation of concerns between collaborating groups of personnel is established to minimise the duplication of efforts. To facilitate software development for detector integration, the ADGenICam library, which abstracts repeated code in EPICS modules for cameras, is extended to support a much w"
+  },
+  {
+   "id": "1208.0251",
+   "full": false,
+   "field": true,
+   "score": 0.547,
+   "titles": {
+    "ru": "R&D Paths of Pixel Detectors for Vertex Tracking and Radiation Imaging"
+   },
+   "abstract": "This report reviews current trends in the R&D of semiconductor pixellated sensors for vertex tracking and radiation imaging. It identifies requirements of future HEP experiments at colliders, needed technological breakthroughs and highlights the relation to radiation detection and imaging applications in other fields of science."
+  },
+  {
+   "id": "0706.0427",
+   "full": false,
+   "field": true,
+   "score": 0.547,
+   "titles": {
+    "ru": "Watermark Embedding and Detection"
+   },
+   "abstract": "The embedder and the detector (or decoder) are the two most important components of the digital watermarking systems. Thus in this work, we discuss how to design a better embedder and detector (or decoder). I first give a summary of the prospective applications of watermarking technology and major watermarking schemes in the literature. My review on the literature closely centers upon how the side information is exploited at both embedders and detectors. In Chapter 3, I explore the optimum detector or decoder according to a particular probability distribution of the host signals. We found that"
+  },
+  {
+   "id": "nucl-ex/0212019",
+   "full": false,
+   "field": true,
+   "score": 0.546,
+   "titles": {
+    "ru": "Charged Particle Detection using a CMOS Active Pixel Sensor"
+   },
+   "abstract": "Active Pixel Sensor (APS) technology has shown promise for next-generation vertex detectors. This paper discusses the design and testing of two generations of APS chips. Both are arrays of 128 by 128 pixels, each 20 by 20 micro-m. Each array is divided into sub-arrays in which different sensor structures (4 in the first version and 16 in the second) and/or readout circuits are employed. Measurements of several of these structures under Fe55 exposure are reported. The sensors have also been irradiated by 55 MeV protons to test for radiation damage. The radiation increased the noise and reduced "
+  }
+ ],
+ "lang": {
+  "en": {
+   "note": "In the field of detectors and sensors, pixel and cryogenic detectors are actively being developed, requiring new approaches to powering, modeling, and measuring their characteristics.",
+   "topic": "detectors and sensors",
+   "ideas": [
+    {
+     "based_on": [
+      "1208.0251",
+      "nucl-ex/0212019"
+     ],
+     "title": "Test bench for measuring the response time of pixel sensors at different temperatures",
+     "what": "Build a setup to measure the time resolution of pixel detectors (e.g., monolithic CMOS) when cooled to temperatures below room temperature. Check how the signal rise time and jitter change with temperature.",
+     "why": "Time resolution is important for collider experiments and for applications in X-ray imaging. Data on sensor behavior under cooling will help optimize detector cooling systems.",
+     "origin": "A review of pixel detector development paths (1208.0251) states that time resolution is a critical parameter, but systematic data on the effect of temperature on it for new monolithic sensors is insufficient. Work on CMOS APS (nucl-ex/0212019) shows that sensor characteristics depend on pixel design, but temperature dependencies have not been investigated.",
+     "first_step": "Select an available pixel sensor (e.g., one with open documentation) and check whether it can be cooled without losing functionality by measuring current-voltage characteristics at different temperatures.",
+     "needs": "Pixel detector with readout board, laser with picosecond pulses, oscilloscope with bandwidth >1 GHz, thermal chamber with controller, skills in electronics and programming to control the sensor.",
+     "risks": "The sensor may degrade under cooling, or its parameters may not change noticeably over the accessible temperature range, making the result uninteresting.",
+     "scale": "semester",
+     "methods": [
+      "Use the time resolution measurement technique with picosecond laser pulses, as described in the pixel detector review (1208.0251).",
+      "Build a thermal chamber with a Peltier element to regulate the sample temperature from -20°C to +20°C.",
+      "Measure time resolution at different temperatures and compare with a model that accounts for carrier mobility and pixel capacitance."
+     ]
+    },
+    {
+     "based_on": [
+      "2407.02954",
+      "2401.06033"
+     ],
+     "title": "Modeling the response of a TES detector for dark matter search in the ALPS II setup",
+     "what": "Develop a software model of the response of a transition-edge sensor (TES) to single photons, including noise and nonlinearity. Compare model spectra with data obtained in ALPS II and estimate sensitivity to a dark matter signal.",
+     "why": "Accurate response modeling will improve data analysis and allow estimation of systematic uncertainties. This is important for future experiments searching for light dark matter.",
+     "origin": "A modeling paper for ALPS II (2407.02954) describes simulations of TES detector response but does not consider in detail the contribution of nonlinearities and noise. A review of new photodetectors (2401.06033) emphasizes the importance of understanding noise in cryogenic detectors to achieve ultimate sensitivity.",
+     "first_step": "Study the paper 2407.02954 and reproduce the basic TES response model using open data or parameters from the publication to ensure agreement with published results.",
+     "needs": "A computer with sufficient computational power, knowledge of Python or MATLAB, access to ALPS II data (or open data from similar experiments), and understanding of superconductor physics.",
+     "risks": "The model may be too simplified compared to the real detector, and discrepancies with data may be hard to explain without access to detailed information about the instrument.",
+     "scale": "diploma",
+     "methods": [
+      "Use the approach from the ALPS II modeling paper (2407.02954): build a simulation of the TES thermal response based on differential equations describing the superconducting transition.",
+      "Include noise sources in the model (thermal noise, Johnson noise, SQUID noise) and check agreement with measured energy resolutions.",
+      "Generate model spectra for various axion masses and estimate at which parameters the signal would be distinguishable above background."
+     ]
+    },
+    {
+     "based_on": [
+      "2401.09238",
+      "1208.0251"
+     ],
+     "title": "Development of a power supply module for pixel detectors that is tolerant to magnetic fields and radiation",
+     "what": "Design and test a DC-DC converter for powering front-end detector electronics, capable of operating in a strong magnetic field (up to 2 T) and at a cumulative radiation dose of up to 100 Mrad. The prototype must be compact and have high efficiency.",
+     "why": "Modern detectors at colliders require powering thousands of channels, and placing converters near the detector reduces cable losses. Tolerance to field and radiation is critical for operation in the experiment environment.",
+     "origin": "A paper on a new generation of converters (2401.09238) describes requirements and approaches for radiation-hard power supplies for detectors, but does not address specific circuit solutions for magnetic fields above 1 T. A review of pixel detectors (1208.0251) notes that power integration is a bottleneck when increasing the number of channels.",
+     "first_step": "Compile a list of converter requirements (input voltage, output parameters, allowable dimensions) and select a base controller chip, checking its documentation for radiation tolerance.",
+     "needs": "Experience in switching power supply design, access to simulation programs (SPICE), ability to fabricate printed circuit boards, equipment for testing in magnetic fields (electromagnet), and a gamma radiation source (or an agreement with a laboratory).",
+     "risks": "Finding components that are simultaneously radiation-hard and operate in a magnetic field may be difficult, and the prototype may not achieve required characteristics without several iterations.",
+     "scale": "years",
+     "methods": [
+      "Study the converter topologies proposed in the new generation converter paper (2401.09238) and adapt one of them to specific requirements.",
+      "Use radiation-hard components (e.g., silicon-on-insulator technology) and simulate the circuit operation in a magnetic field.",
+      "Conduct prototype tests: measure efficiency and output voltage stability when placed in a magnetic field (e.g., using an electromagnet) and after gamma irradiation."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el ámbito de los detectores y sensores, están en pleno desarrollo los detectores de píxeles y los criogénicos, que requieren nuevos enfoques para la alimentación, el modelado y la medición de sus características.",
+   "topic": "detectores y sensores",
+   "ideas": [
+    {
+     "based_on": [
+      "1208.0251",
+      "nucl-ex/0212019"
+     ],
+     "title": "Banco de pruebas para medir el tiempo de respuesta de sensores de píxeles a diferentes temperaturas",
+     "what": "Montar un sistema para medir la resolución temporal de detectores de píxeles (por ejemplo, CMOS monolíticos) al enfriarlos por debajo de la temperatura ambiente. Comprobar cómo varían el tiempo de subida de la señal y el jitter al cambiar la temperatura.",
+     "why": "La resolución temporal es crucial para los experimentos en colisionadores y para aplicaciones de imagen de rayos X. Los datos sobre el comportamiento de los sensores al enfriarse ayudarán a optimizar los sistemas de refrigeración de los detectores.",
+     "origin": "En la revisión sobre las vías de desarrollo de los detectores de píxeles (1208.0251) se indica que la resolución temporal es un parámetro crítico, pero no hay suficientes datos sistemáticos sobre el efecto de la temperatura en los nuevos sensores monolíticos. El trabajo sobre CMOS APS (nucl-ex/0212019) muestra que las características de los sensores dependen del diseño del píxel, pero no se han investigado las dependencias con la temperatura.",
+     "first_step": "Seleccionar un sensor de píxeles disponible (por ejemplo, con documentación abierta) y comprobar si se puede enfriar sin perder funcionalidad, midiendo sus curvas corriente-voltaje a diferentes temperaturas.",
+     "needs": "Detector de píxeles con placa de lectura, láser con pulsos de picosegundos, osciloscopio con ancho de banda >1 GHz, cámara térmica con controlador, habilidades en electrónica y programación para controlar el sensor.",
+     "risks": "El sensor podría degradarse al enfriarse o sus parámetros podrían no cambiar de manera apreciable en el rango de temperaturas accesible, lo que haría que el resultado no fuera interesante.",
+     "scale": "semestre",
+     "methods": [
+      "Utilizar la metodología de medición de resolución temporal con pulsos láser de duración de picosegundos, como se describe en la revisión sobre detectores de píxeles (1208.0251).",
+      "Montar una cámara térmica con un elemento Peltier para ajustar la temperatura de la muestra entre -20 °C y +20 °C.",
+      "Medir la resolución temporal a diferentes temperaturas y comparar con un modelo que tenga en cuenta la movilidad de los portadores y la capacitancia del píxel."
+     ]
+    },
+    {
+     "based_on": [
+      "2407.02954",
+      "2401.06033"
+     ],
+     "title": "Modelado de la respuesta de un detector TES para la búsqueda de materia oscura en el experimento ALPS II",
+     "what": "Desarrollar un modelo computacional de la respuesta de un sensor de borde de transición (TES) a fotones individuales, incluyendo ruidos y no linealidades. Comparar los espectros modelados con los datos obtenidos en ALPS II y evaluar la sensibilidad a la señal de materia oscura.",
+     "why": "Un modelado preciso de la respuesta permitirá mejorar el análisis de datos y evaluar las incertidumbres sistemáticas. Esto es importante para futuros experimentos de búsqueda de materia oscura ligera.",
+     "origin": "El trabajo de modelado para ALPS II (2407.02954) describe simulaciones de la respuesta de detectores TES, pero no examina en detalle la contribución de las no linealidades y los ruidos. La revisión de nuevos fotodetectores (2401.06033) subraya la importancia de comprender los ruidos en los detectores criogénicos para alcanzar la sensibilidad límite.",
+     "first_step": "Estudiar el artículo 2407.02954 y reproducir el modelo básico de respuesta del TES, utilizando datos abiertos o parámetros de la publicación, para verificar que coincide con los resultados publicados.",
+     "needs": "Computadora con suficiente potencia de cálculo, conocimiento de Python o MATLAB, acceso a los datos de ALPS II (o a datos abiertos de experimentos similares), comprensión de la física de los superconductores.",
+     "risks": "El modelo podría resultar demasiado simplificado en comparación con el detector real, y las discrepancias con los datos serían difíciles de explicar sin acceso a información detallada del instrumento.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Usar el enfoque del trabajo de modelado para ALPS II (2407.02954): construir una simulación de la respuesta térmica del TES basada en ecuaciones diferenciales que describen la transición superconductora.",
+      "Incluir en el modelo las fuentes de ruido (ruido térmico, ruido de Johnson, ruido del SQUID) y verificar la concordancia con las resoluciones energéticas medidas.",
+      "Generar espectros modelo para diferentes masas de axiones y evaluar con qué parámetros la señal sería distinguible sobre el fondo."
+     ]
+    },
+    {
+     "based_on": [
+      "2401.09238",
+      "1208.0251"
+     ],
+     "title": "Desarrollo de un módulo de alimentación para detectores de píxeles resistente a campos magnéticos y radiación",
+     "what": "Diseñar y probar un convertidor DC-DC para alimentar la electrónica frontal de los detectores, capaz de operar en un campo magnético intenso (hasta 2 T) y con una dosis acumulada de radiación de hasta 100 Mrad. El prototipo debe ser compacto y tener alta eficiencia.",
+     "why": "Los detectores modernos en colisionadores requieren alimentar miles de canales, y colocar los convertidores cerca del detector reduce las pérdidas en los cables. La resistencia al campo y a la radiación es crítica para operar en condiciones experimentales.",
+     "origin": "El trabajo sobre la nueva generación de convertidores (2401.09238) describe los requisitos y enfoques para crear fuentes de alimentación resistentes a la radiación para detectores, pero no examina soluciones de circuito específicas para campos magnéticos superiores a 1 T. La revisión sobre detectores de píxeles (1208.0251) señala que la integración de la alimentación es un cuello de botella al aumentar el número de canales.",
+     "first_step": "Recopilar una lista de requisitos para el convertidor (voltaje de entrada, parámetros de salida, dimensiones permitidas) y seleccionar un chip controlador básico, verificando en su documentación la resistencia a la radiación.",
+     "needs": "Experiencia en diseño de fuentes de alimentación conmutadas, acceso a programas de simulación (SPICE), posibilidad de fabricar placas de circuito impreso, equipo para pruebas en campo magnético (electroimán) y una fuente de radiación gamma (o un acuerdo con un laboratorio).",
+     "risks": "Encontrar componentes que sean a la vez resistentes a la radiación y funcionen en un campo magnético puede resultar difícil, y el prototipo podría no alcanzar las características requeridas sin varias iteraciones.",
+     "scale": "años",
+     "methods": [
+      "Estudiar las topologías de convertidores propuestas en el trabajo sobre la nueva generación de convertidores (2401.09238) y adaptar una de ellas a los requisitos específicos.",
+      "Utilizar componentes resistentes a la radiación (por ejemplo, con tecnología de silicio sobre aislante) y realizar simulaciones del funcionamiento del circuito en un campo magnético.",
+      "Realizar pruebas del prototipo: medir la eficiencia y la estabilidad del voltaje de salida al colocarlo en un campo magnético (por ejemplo, con un electroimán) y después de la irradiación con una fuente gamma."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال الكواشف والحساسات، تتطور بنشاط الكواشف البكسيلية والكواشف المبردة، الأمر الذي يتطلب مقاربات جديدة للتغذية والنمذجة وقياس الخصائص.",
+   "topic": "الكواشف والحساسات",
+   "ideas": [
+    {
+     "based_on": [
+      "1208.0251",
+      "nucl-ex/0212019"
+     ],
+     "title": "منصة لقياس زمن استجابة الحساسات البكسيلية عند درجات حرارة مختلفة",
+     "what": "تجميع منظومة لقياس الدقة الزمنية للكواشف البكسيلية (مثل CMOS أحادية الكتلة) عند التبريد إلى درجات حرارة أقل من درجة حرارة الغرفة. والتحقق من كيفية تغير زمن صعود الإشارة والارتعاش (jitter) مع تغير درجة الحرارة.",
+     "why": "الدقة الزمنية مهمة لتجارب المصادمات ولتطبيقات التصوير بالأشعة السينية. البيانات حول سلوك الحساسات عند التبريد ستساعد في تحسين أنظمة تبريد الكواشف.",
+     "origin": "في الاستعراض حول مسارات تطوير الكواشف البكسيلية (1208.0251) يُشار إلى أن الدقة الزمنية معلمة حرجة، لكن البيانات المنهجية حول تأثير درجة الحرارة عليها بالنسبة للحساسات أحادية الكتلة الجديدة غير كافية. العمل حول CMOS APS (nucl-ex/0212019) يُظهر أن خصائص الحساسات تعتمد على تصميم البكسل، لكن الاعتمادات على درجة الحرارة لم تُدرس.",
+     "first_step": "اختيار حساس بكسيلي متاح (مثلًا ذي توثيق مفتوح) والتحقق من إمكانية تبريده دون فقدان الوظيفة، بقياس خصائص الجهد-التيار عند درجات حرارة مختلفة.",
+     "needs": "كاشف بكسيلي مع لوحة قراءة، ليزر بنبضات بيكو ثانية، راسم إشارة بعرض نطاق أكبر من 1 جيجاهرتز، حجرة حرارية مع وحدة تحكم، ومهارات في التعامل مع الإلكترونيات والبرمجة للتحكم في الحساس.",
+     "risks": "قد يتدهور الحساس عند التبريد أو قد لا تتغير معلماته بشكل ملحوظ في نطاق درجات الحرارة المتاح، مما يجعل النتيجة غير مثيرة للاهتمام.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام منهجية قياس الدقة الزمنية بنبضات ليزر بيكو ثانية، كما هو موصوف في استعراض الكواشف البكسيلية (1208.0251).",
+      "تجميع حجرة حرارية بعنصر بلتيير لضبط درجة حرارة العينة من -20°C إلى +20°C.",
+      "قياس الدقة الزمنية عند درجات حرارة مختلفة ومقارنتها بنموذج يأخذ في الاعتبار حركة الناقلات وسعة البكسل."
+     ]
+    },
+    {
+     "based_on": [
+      "2407.02954",
+      "2401.06033"
+     ],
+     "title": "نمذجة استجابة كاشف TES للبحث عن المادة المظلمة في منظومة ALPS II",
+     "what": "تطوير نموذج برمجي لاستجابة كاشف الحافة الانتقالية (TES) للفوتونات المفردة مع مراعاة الضوضاء واللاخطية. ومقارنة الأطياف النموذجية مع البيانات التي تم الحصول عليها في ALPS II، وتقييم الحساسية لإشارة المادة المظلمة.",
+     "why": "النمذجة الدقيقة للاستجابة ستسمح بتحسين تحليل البيانات وتقييم الشكوك المنهجية. هذا مهم للتجارب المستقبلية للبحث عن المادة المظلمة الخفيفة.",
+     "origin": "العمل حول النمذجة لـ ALPS II (2407.02954) يصف محاكاة استجابة كواشف TES، لكنه لا يدرس بالتفصيل مساهمة اللاخطيات والضوضاء. الاستعراض حول كواشف الفوتون الجديدة (2401.06033) يؤكد أهمية فهم الضوضاء في الكواشف المبردة لتحقيق الحساسية القصوى.",
+     "first_step": "دراسة المقال 2407.02954 وإعادة إنتاج النموذج الأساسي لاستجابة TES باستخدام بيانات مفتوحة أو معلمات من المنشور، للتأكد من التطابق مع النتائج المنشورة.",
+     "needs": "حاسوب بقدرة حسابية كافية، معرفة بـ Python أو MATLAB، الوصول إلى بيانات ALPS II (أو بيانات مفتوحة من تجارب مماثلة)، وفهم فيزياء الموصلات الفائقة.",
+     "risks": "قد يكون النموذج مبسطًا جدًا مقارنة بالكاشف الحقيقي، وسيكون من الصعب تفسير الانحرافات عن البيانات دون الوصول إلى معلومات تفصيلية عن الجهاز.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "استخدام النهج من عمل النمذجة لـ ALPS II (2407.02954): بناء محاكاة للاستجابة الحرارية لـ TES بناءً على معادلات تفاضلية تصف الانتقال فائق التوصيل.",
+      "إدراج مصادر الضوضاء في النموذج (الضوضاء الحرارية، ضوضاء جونسون، ضوضاء SQUID) والتحقق من مطابقة الدقة الطاقية المقاسة.",
+      "توليد أطياف نموذجية لكتل مختلفة من الأكسيونات وتقييم عند أي معلمات ستكون الإشارة مميزة عن الخلفية."
+     ]
+    },
+    {
+     "based_on": [
+      "2401.09238",
+      "1208.0251"
+     ],
+     "title": "تطوير وحدة تغذية للكواشف البكسيلية مقاومة للمجال المغناطيسي والإشعاع",
+     "what": "تصميم واختبار محول DC-DC لتغذية الإلكترونيات الأمامية للكواشف، قادر على العمل في مجال مغناطيسي قوي (حتى 2 تسلا) وعند جرعة إشعاع متراكمة حتى 100 ميجا راد. يجب أن يكون النموذج الأولي مضغوطًا وذا كفاءة عالية.",
+     "why": "الكواشف الحديثة في المصادمات تتطلب تغذية آلاف القنوات، ووضع المحولات بالقرب من الكاشف يقلل الفقد في الكابلات. المقاومة للمجال والإشعاع حرجة للعمل في ظروف التجربة.",
+     "origin": "العمل حول الجيل الجديد من المحولات (2401.09238) يصف المتطلبات والمقاربات لإنشاء مصادر طاقة مقاومة للإشعاع للكواشف، لكنه لا يدرس حلولًا داراتية محددة للمجالات المغناطيسية الأعلى من 1 تسلا. الاستعراض حول الكواشف البكسيلية (1208.0251) يلاحظ أن تكامل التغذية هو عنق الزجاجة عند زيادة عدد القنوات.",
+     "first_step": "جمع قائمة متطلبات المحول (جهد الدخل، معلمات الخرج، الأبعاد المسموحة) واختيار شريحة تحكم أساسية، والتحقق من توثيقها بشأن المقاومة للإشعاع.",
+     "needs": "خبرة في تصميم مصادر طاقة نبضية، الوصول إلى برامج المحاكاة (SPICE)، إمكانية تصنيع لوحات الدوائر المطبوعة، معدات للاختبار في مجال مغناطيسي (مغناطيس كهربائي) ومصدر لأشعة غاما (أو اتفاق مع مختبر).",
+     "risks": "اختيار مكونات مقاومة للإشعاع وتعمل في مجال مغناطيسي في نفس الوقت قد يكون صعبًا، وقد لا يحقق النموذج الأولي الخصائص المطلوبة دون عدة تكرارات.",
+     "scale": "سنوات",
+     "methods": [
+      "دراسة طوبولوجيات المحولات المقترحة في عمل الجيل الجديد من المحولات (2401.09238) وتكييف إحداها للمتطلبات المحددة.",
+      "استخدام مكونات مقاومة للإشعاع (مثلًا بتقنية السيليكون على العازل) وإجراء محاكاة لعمل الدارة في مجال مغناطيسي.",
+      "إجراء اختبارات النموذج الأولي: قياس الكفاءة واستقرار جهد الخرج عند وضعه في مجال مغناطيسي (مثلًا باستخدام مغناطيس كهربائي) وبعد التشعيع بمصدر غاما."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine des détecteurs et des capteurs, les détecteurs à pixels et cryogéniques se développent activement, nécessitant de nouvelles approches pour l'alimentation, la modélisation et la mesure des caractéristiques.",
+   "topic": "détecteurs et capteurs",
+   "ideas": [
+    {
+     "based_on": [
+      "1208.0251",
+      "nucl-ex/0212019"
+     ],
+     "title": "Banc de mesure du temps de réponse de capteurs à pixels à différentes températures",
+     "what": "Monter un dispositif pour mesurer la résolution temporelle de détecteurs à pixels (par exemple, les CMOS monolithiques) lors d'un refroidissement en dessous de la température ambiante. Vérifier comment le temps de montée du signal et la gigue varient avec la température.",
+     "why": "La résolution temporelle est cruciale pour les expériences dans les collisionneurs et pour les applications en imagerie par rayons X. Les données sur le comportement des capteurs lors du refroidissement aideront à optimiser les systèmes de refroidissement des détecteurs.",
+     "origin": "Dans la revue sur les voies de développement des détecteurs à pixels (1208.0251), il est indiqué que la résolution temporelle est un paramètre critique, mais les données systématiques sur l'effet de la température sur celle-ci pour les nouveaux capteurs monolithiques sont insuffisantes. Le travail sur les CMOS APS (nucl-ex/0212019) montre que les caractéristiques des capteurs dépendent de la conception du pixel, mais les dépendances en température n'y sont pas étudiées.",
+     "first_step": "Choisir un capteur à pixels disponible (par exemple, avec une documentation ouverte) et vérifier s'il peut être refroidi sans perte de fonctionnalité, en mesurant les caractéristiques courant-tension à différentes températures.",
+     "needs": "Un détecteur à pixels avec une carte de lecture, un laser à impulsions picosecondes, un oscilloscope avec une bande passante >1 GHz, une chambre thermique avec contrôleur, des compétences en électronique et en programmation pour piloter le capteur.",
+     "risks": "Le capteur pourrait se dégrader lors du refroidissement, ou ses paramètres pourraient ne pas changer de manière significative dans la plage de températures accessible, ce qui rendrait le résultat peu intéressant.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser la méthode de mesure de la résolution temporelle avec des impulsions laser picosecondes, comme décrit dans la revue sur les détecteurs à pixels (1208.0251).",
+      "Construire une chambre thermique avec un module Peltier pour réguler la température de l'échantillon de -20°C à +20°C.",
+      "Mesurer la résolution temporelle à différentes températures et la comparer avec un modèle prenant en compte la mobilité des porteurs et la capacité du pixel."
+     ]
+    },
+    {
+     "based_on": [
+      "2407.02954",
+      "2401.06033"
+     ],
+     "title": "Modélisation de la réponse d'un détecteur TES pour la recherche de matière noire dans l'installation ALPS II",
+     "what": "Développer un modèle logiciel de la réponse d'un capteur à bord de transition supraconducteur (TES) à des photons uniques, en tenant compte des bruits et de la non-linéarité. Comparer les spectres modélisés avec les données obtenues dans ALPS II et évaluer la sensibilité au signal de matière noire.",
+     "why": "Une modélisation précise de la réponse permettra d'améliorer l'analyse des données et d'évaluer les incertitudes systématiques. C'est important pour les futures expériences de recherche de matière noire légère.",
+     "origin": "Le travail de modélisation pour ALPS II (2407.02954) décrit des simulations de la réponse des détecteurs TES, mais n'examine pas en détail la contribution des non-linéarités et des bruits. La revue des nouveaux photodétecteurs (2401.06033) souligne l'importance de comprendre les bruits dans les détecteurs cryogéniques pour atteindre une sensibilité maximale.",
+     "first_step": "Étudier l'article 2407.02954 et reproduire le modèle de base de la réponse TES, en utilisant des données ouvertes ou des paramètres issus de la publication, pour vérifier la cohérence avec les résultats publiés.",
+     "needs": "Un ordinateur avec une puissance de calcul suffisante, la connaissance de Python ou MATLAB, l'accès aux données d'ALPS II (ou à des données ouvertes d'expériences similaires), la compréhension de la physique des supraconducteurs.",
+     "risks": "Le modèle pourrait s'avérer trop simplifié par rapport au détecteur réel, et les écarts avec les données seraient difficiles à expliquer sans accès à des informations détaillées sur l'instrument.",
+     "scale": "mémoire",
+     "methods": [
+      "Utiliser l'approche du travail de modélisation pour ALPS II (2407.02954) : construire une simulation de la réponse thermique du TES basée sur des équations différentielles décrivant la transition supraconductrice.",
+      "Inclure dans le modèle les sources de bruit (bruit thermique, bruit de Johnson, bruit SQUID) et vérifier la cohérence avec les résolutions en énergie mesurées.",
+      "Générer des spectres modélisés pour différentes masses d'axions et évaluer pour quels paramètres le signal serait distinguable du bruit de fond."
+     ]
+    },
+    {
+     "based_on": [
+      "2401.09238",
+      "1208.0251"
+     ],
+     "title": "Développement d'un module d'alimentation pour détecteurs à pixels, résistant au champ magnétique et aux radiations",
+     "what": "Concevoir et tester un convertisseur DC-DC pour alimenter l'électronique frontale des détecteurs, capable de fonctionner dans un champ magnétique intense (jusqu'à 2 T) et avec une dose de radiation accumulée allant jusqu'à 100 Mrad. Le prototype doit être compact et avoir un rendement élevé.",
+     "why": "Les détecteurs modernes dans les collisionneurs nécessitent l'alimentation de milliers de canaux, et placer les convertisseurs près du détecteur réduit les pertes dans les câbles. La résistance au champ et aux radiations est critique pour le fonctionnement dans les conditions de l'expérience.",
+     "origin": "Le travail sur la nouvelle génération de convertisseurs (2401.09238) décrit les exigences et les approches pour créer des alimentations résistantes aux radiations pour les détecteurs, mais n'examine pas de solutions de circuits spécifiques pour des champs magnétiques supérieurs à 1 T. La revue sur les détecteurs à pixels (1208.0251) note que l'intégration de l'alimentation est un goulot d'étranglement lors de l'augmentation du nombre de canaux.",
+     "first_step": "Compiler la liste des exigences pour le convertisseur (tension d'entrée, paramètres de sortie, dimensions admissibles) et choisir une puce de contrôle de base, en vérifiant sa documentation sur la résistance aux radiations.",
+     "needs": "Expérience dans la conception d'alimentations à découpage, accès à des logiciels de simulation (SPICE), possibilité de fabriquer des circuits imprimés, équipement pour les tests en champ magnétique (électroaimant) et une source de rayonnement gamma (ou un accord avec un laboratoire).",
+     "risks": "La sélection de composants à la fois résistants aux radiations et fonctionnant dans un champ magnétique peut s'avérer difficile, et le prototype pourrait ne pas atteindre les caractéristiques requises sans plusieurs itérations.",
+     "scale": "années",
+     "methods": [
+      "Étudier les topologies de convertisseurs proposées dans le travail sur la nouvelle génération de convertisseurs (2401.09238) et adapter l'une d'elles aux exigences spécifiques.",
+      "Utiliser des composants résistants aux radiations (par exemple, avec la technologie silicium sur isolant) et effectuer une simulation du fonctionnement du circuit dans un champ magnétique.",
+      "Effectuer des tests du prototype : mesurer le rendement et la stabilité de la tension de sortie lorsqu'il est placé dans un champ magnétique (par exemple, à l'aide d'un électroaimant) et après irradiation par une source gamma."
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,649 @@
+{
+ "topic": "медицинская визуализация",
+ "slug": "медицинская-визуализация",
+ "built": "2026-09-04",
+ "note": "В медицинской визуализации активно развиваются методы объединения модальностей и интерактивные инструменты для врачей, но многие прототипы остаются лабораторными и требуют адаптации к практике.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.716,
+  "band": "dense",
+  "near": 8,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Собрать стенд для проверки точности ультразвуковой навигации по позвоночнику",
+   "what": "Собрать фантом позвоночника с подвижными позвонками, подключить ультразвуковой датчик и роботизированную руку, чтобы проверить, насколько точно система отслеживает смещения позвонков в реальном времени.",
+   "why": "Метод из работы 2602.12917 обещает заменить рентген при диагностике нестабильности позвоночника, но проверен только на простой модели. Такой стенд позволит оценить практическую точность и выявить ограничения.",
+   "methods": [
+    "Изготовить фантом из материалов, имитирующих кости и мягкие ткани, с возможностью контролируемого смещения позвонков (например, с помощью шаговых двигателей).",
+    "Использовать роботизированную руку с ультразвуковым датчиком для сканирования по заданной траектории, как описано в 2602.12917.",
+    "Реализовать алгоритм совмещения ультразвуковых срезов с заранее полученной 3D-моделью (например, с помощью open-source библиотек типа ITK или 3D Slicer).",
+    "Сравнить измеренные смещения с заданными эталонными значениями, оценить ошибку и повторяемость."
+   ],
+   "origin": "В работе 2602.12917 предложен метод ультразвуковой навигации, но он испытан лишь на гибкой модели. Не хватает независимой проверки на более реалистичном фантоме с контролируемыми смещениями, чтобы понять, какие ошибки вносит неидеальная геометрия и движение датчика.",
+   "first_step": "Спроектировать и напечатать на 3D-принтере простой фантом из двух позвонков с возможностью смещения на известную величину, затем провести сканирование ручным ультразвуковым датчиком и попытаться восстановить смещение.",
+   "needs": "3D-принтер, материалы для фантома (например, PLA, силикон), ультразвуковой аппарат с возможностью записи видео, доступ к библиотекам обработки изображений.",
+   "risks": "Точность может оказаться недостаточной из-за сложности имитации акустических свойств тканей; совмещение ультразвука с 3D-моделью может требовать тонкой калибровки.",
+   "scale": "семестр",
+   "based_on": [
+    "2602.12917"
+   ]
+  },
+  {
+   "title": "Разработать модуль визуализации для сравнения слияний МРТ и ПЭТ при глиомах",
+   "what": "Создать программный инструмент для визуализации результатов слияния и трансляции медицинских изображений (МРТ, ПЭТ) с возможностью оценки достоверности, ориентированный на нейрохирургов.",
+   "why": "Работа 2001.09535 указывает на недоверие врачей к автоматическим методам слияния; визуальный инструмент для проверки может ускорить внедрение в клинику.",
+   "methods": [
+    "Изучить существующие методы слияния и трансляции из работы 2001.09535, выбрать несколько алгоритмов для реализации.",
+    "Использовать библиотеки для обработки медицинских изображений (например, SimpleITK, MONAI) для построения пайплайна слияния.",
+    "Разработать интерактивный интерфейс (например, на базе 3D Slicer или веб-технологий) для наложения результатов и оценки качества.",
+    "Провести пилотное тестирование с привлечением врача-рентгенолога для оценки удобства и выявления проблем."
+   ],
+   "origin": "В работе 2001.09535 подчеркивается, что методы слияния могут быть ненадежными, и нейрохирургам нужен инструмент для проверки. Однако готовых решений для визуальной верификации нет, и разработка такого модуля заполнит пробел.",
+   "first_step": "Собрать набор данных МРТ и ПЭТ пациентов с глиомами из открытых источников (например, BraTS) и реализовать базовый алгоритм слияния с помощью SimpleITK.",
+   "needs": "Доступ к медицинским изображениям (открытые наборы), знание Python и библиотек обработки изображений, компьютер с достаточной производительностью.",
+   "risks": "Сложность оценки качества слияния без эксперта; возможные проблемы с совместимостью форматов данных.",
+   "scale": "диплом",
+   "based_on": [
+    "2001.09535"
+   ]
+  },
+  {
+   "title": "Проверить применимость языково-управляемого предобучения для мультимодальной визуализации",
+   "what": "Взять модель из работы 2311.14851, обученную на парах изображение-текст, и адаптировать её для задач мультимодальной визуализации (например, слияние МРТ и КТ) с целью улучшения представлений.",
+   "why": "Метод обещает унифицированные представления, которые могут помочь в задачах, где не хватает размеченных данных, что часто встречается в медицинской визуализации.",
+   "methods": [
+    "Изучить архитектуру и код (если доступен) модели из 2311.14851, понять механизм языкового руководства.",
+    "Подготовить датасет из пар изображений разных модальностей и соответствующих текстовых описаний (например, из открытых источников).",
+    "Дообучить модель на этом датасете, используя техники трансферного обучения.",
+    "Оценить качество полученных представлений на downstream-задачах (классификация, сегментация) и сравнить с базовыми методами."
+   ],
+   "origin": "Работа 2311.14851 демонстрирует преимущества языкового руководства в предобучении, но только на одномодальных данных. Не хватает проверки, работает ли подход при объединении нескольких модальностей, что актуально для комплексной диагностики.",
+   "first_step": "Воспроизвести обучение модели на небольшом подмножестве данных, чтобы убедиться в работоспособности кода и понять требования к ресурсам.",
+   "needs": "Доступ к GPU (желательно несколько), знание PyTorch, навыки работы с большими датасетами.",
+   "risks": "Высокие вычислительные затраты; может не хватить размеченных данных для дообучения, и результаты не улучшатся.",
+   "scale": "годы",
+   "based_on": [
+    "2311.14851"
+   ]
+  },
+  {
+   "title": "Создать прототип виртуального монитора для интервенционных процедур на основе HoloLens",
+   "what": "Разработать систему, транслирующую изображения с медицинского оборудования (например, ангиографа) на оптический прозрачный шлем (HoloLens) в реальном времени, следуя подходу из работы 1710.00808.",
+   "why": "Это может улучшить эргономику и снизить время процедуры, как показано в пилотных исследованиях, но требуется адаптация под конкретное оборудование и проверка в реальных условиях.",
+   "methods": [
+    "Изучить архитектуру системы из 1710.00808, включая протоколы передачи видео.",
+    "Настроить захват видеопотока с медицинского устройства (например, через HDMI-захват) и передачу на HoloLens по Wi-Fi.",
+    "Разработать приложение для HoloLens, отображающее видео с возможностью позиционирования окна в пространстве.",
+    "Провести тестирование с врачами на фантомах, оценить задержку и удобство использования."
+   ],
+   "origin": "В работе 1710.00808 предложена концепция виртуального монитора, но реализация привязана к конкретному оборудованию. Не хватает адаптации к современным шлемам и интеграции с распространёнными ангиографическими системами.",
+   "first_step": "Собрать стенд из доступного шлема (например, HoloLens 2) и источника видеосигнала, реализовать простую передачу изображения с минимальной задержкой.",
+   "needs": "HoloLens или аналог, медицинский монитор с видеовыходом, навыки разработки под смешанную реальность (Unity, C#).",
+   "risks": "Задержка может оказаться критичной для процедур; стерильность и эргономика могут потребовать доработок.",
+   "scale": "диплом",
+   "based_on": [
+    "1710.00808"
+   ]
+  },
+  {
+   "title": "Разработать интерактивную визуализацию сосудистых структур с дистанционными полями",
+   "what": "Реализовать методы визуализации расстояний до аневризм или стенозов на поверхности сосудов, как описано в 2305.06726, и интегрировать их в инструмент для планирования лечения.",
+   "why": "Такие визуализации помогают врачам быстро оценивать геометрию сосудов и принимать решения, но существующие реализации разрознены и не адаптированы под клинические рабочие станции.",
+   "methods": [
+    "Изучить алгоритмы из 2305.06726 для вычисления расстояний на поверхности сосудистой сети.",
+    "Использовать библиотеки обработки мешей (например, VTK, Trimesh) для реализации вычислений.",
+    "Создать прототип приложения, загружающего сегментации сосудов (например, из открытых датасетов) и отображающего цветовые карты расстояний.",
+    "Провести оценку производительности и точности на синтетических и реальных данных."
+   ],
+   "origin": "В обзоре 2305.06726 собраны методы, но нет готового открытого инструмента, который бы врачи могли использовать. Не хватает практической реализации с удобным интерфейсом и проверкой на клинических данных.",
+   "first_step": "Скачать открытый набор данных с сегментацией сосудов (например, из проекта Vascular Model Repository) и реализовать расчёт расстояний до выбранной точки с помощью VTK.",
+   "needs": "Знание C++ или Python, библиотеки VTK, доступ к данным сосудистых сегментаций.",
+   "risks": "Сложность точного вычисления расстояний на искривлённых поверхностях; возможны проблемы с производительностью для больших сеток.",
+   "scale": "семестр",
+   "based_on": [
+    "2305.06726"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2602.12917",
+   "date": "2026-02-13",
+   "full": false,
+   "titles": {
+    "ru": "Ультразвук следит за спиной",
+    "en": "Ultrasound Keeps an Eye on the Spine",
+    "es": "El ultrasonido vigila la espalda",
+    "ar": "الموجات فوق الصوتية تراقب العمود الفقري",
+    "fr": "L'échographie veille sur le dos"
+   },
+   "score": 0.479,
+   "url": "/lang/{lang}/archive/2026-02-13/2602.12917/",
+   "abstract": "Врачи обычно смотрят на движение позвоночника с помощью рентгена, но он даёт только плоскую картинку и облучает. Учёные предложили использовать ультразвук: робот водит датчиком по спине, а компьютер совмещает эти данные с заранее сделанным 3D-снимком. Так можно увидеть, как позвонки смещаются в реальном времени, и найти нестабильность — частую причину боли. Метод проверили на гибкой модели позвоночника, напечатанной на 3D-принтере."
+  },
+  {
+   "id": "2607.16491",
+   "date": "2026-07-17",
+   "full": false,
+   "titles": {
+    "ru": "Медицинский 3D-сканер, который учится видеть всё и сразу",
+    "en": "A Medical 3D Scanner That Learns to See It All at Once",
+    "es": "Un escáner médico 3D que aprende a verlo todo de una vez",
+    "ar": "ماسح طبي ثلاثي الأبعاد يتعلم رؤية كل شيء دفعة واحدة",
+    "fr": "Un scanner médical 3D qui apprend à tout voir d'un coup"
+   },
+   "score": 0.47,
+   "url": "/lang/{lang}/archive/2026-07-17/2607.16491/",
+   "abstract": "Обработка полных трёхмерных медицинских снимков — задача, требующая больших вычислительных ресурсов. Авторы предложили модель, которая работает не с отдельными кубиками-вокселями, а с непрерывной функцией всего объёма. Это похоже на описание скульптуры математической формулой, а не набором точек. Такой подход ускоряет работу в десятки раз и позволяет восстанавливать изображения по неполным данным, например, при ускоренном МРТ. Результат — цельные 3D-картинки без видимых швов, полученные на обычном графическом процессоре."
+  },
+  {
+   "id": "1802.07710",
+   "full": false,
+   "field": true,
+   "score": 0.716,
+   "titles": {
+    "ru": "Medical Volume Reconstruction Techniques"
+   },
+   "abstract": "Medical visualization is the use of computers to create 3D images from medical imaging data sets, almost all surgery and cancer treatment in the developed world relies on it.Volume visualization techniques includes iso-surface visualization, mesh visualization and point cloud visualization techniques, these techniques have revolutionized medicine. Much of modern medicine relies on the 3D imaging that is possible with magnetic resonance imaging (MRI) scanners, functional magnetic resonance imaging (fMRI)scanners, positron emission tomography (PET) scanners, ultrasound imaging (US) scanners, X-R"
+  },
+  {
+   "id": "2001.09535",
+   "full": false,
+   "field": true,
+   "score": 0.674,
+   "titles": {
+    "ru": "Visualisation of Medical Image Fusion and Translation for Accurate   Diagnosis of High Grade Gliomas"
+   },
+   "abstract": "The medical image fusion combines two or more modalities into a single view while medical image translation synthesizes new images and assists in data augmentation. Together, these methods help in faster diagnosis of high grade malignant gliomas. However, they might be untrustworthy due to which neurosurgeons demand a robust visualisation tool to verify the reliability of the fusion and translation results before they make pre-operative surgical decisions. In this paper, we propose a novel approach to compute a confidence heat map between the source-target image pair by estimating the informat"
+  },
+  {
+   "id": "1206.1148",
+   "full": false,
+   "field": true,
+   "score": 0.662,
+   "titles": {
+    "ru": "From individual to population: Challenges in Medical Visualization"
+   },
+   "abstract": "In this paper, we first give a high-level overview of medical visualization development over the past 30 years, focusing on key developments and the trends that they represent. During this discussion, we will refer to a number of key papers that we have also arranged on the medical visualization research timeline. Based on the overview and our observations of the field, we then identify and discuss the medical visualization research challenges that we foresee for the coming decade."
+  },
+  {
+   "id": "2506.22926",
+   "full": false,
+   "field": true,
+   "score": 0.661,
+   "titles": {
+    "ru": "Coordinated 2D-3D Visualization of Volumetric Medical Data in XR with Multimodal Interactions"
+   },
+   "abstract": "Volumetric medical imaging technologies produce detailed 3D representations of anatomical structures. However, effective medical data visualization and exploration pose significant challenges, especially for individuals with limited medical expertise. We introduce a novel XR-based system with two key innovations: (1) a coordinated visualization module integrating Multi-layered Multi-planar Reconstruction with 3D mesh models and (2) a multimodal interaction framework combining hand gestures with LLM-enabled voice commands. We conduct preliminary evaluations, including a 15-participant user stud"
+  },
+  {
+   "id": "2305.06726",
+   "full": false,
+   "field": true,
+   "score": 0.658,
+   "titles": {
+    "ru": "Enhancing Vascular Analysis with Distance Visualizations: An Overview   and Implementation"
+   },
+   "abstract": "In recent years, the use of expressive surface visualizations in the representation of vascular structures has gained significant attention. These visualizations provide a comprehensive understanding of complex anatomical structures and are crucial for treatment planning and medical education. However, to aid decision-making, physicians require visualizations that accurately depict anatomical structures and their spatial relationships in a clear and well-perceivable manner. This work extends a previous paper and presents a thorough examination of common techniques for encoding distance informa"
+  },
+  {
+   "id": "1710.00808",
+   "full": false,
+   "field": true,
+   "score": 0.656,
+   "titles": {
+    "ru": "Technical Note: Towards Virtual Monitors for Image Guided Interventions   - Real-time Streaming to Optical See-Through Head-Mounted Displays"
+   },
+   "abstract": "Purpose: Image guidance is crucial for the success of many interventions. Images are displayed on designated monitors that cannot be positioned optimally due to sterility and spatial constraints. This indirect visualization causes potential occlusion, hinders hand-eye coordination, leads to increased procedure duration and surgeon load. Methods: We propose a virtual monitor system that displays medical images in a mixed reality visualization using optical see-through head-mounted displays. The system streams high-resolution medical images from any modality to the head-mounted display in real-t"
+  },
+  {
+   "id": "2311.14851",
+   "full": false,
+   "field": true,
+   "score": 0.656,
+   "titles": {
+    "ru": "Unified Medical Image Pre-training in Language-Guided Common Semantic   Space"
+   },
+   "abstract": "Vision-Language Pre-training (VLP) has shown the merits of analysing medical images, by leveraging the semantic congruence between medical images and their corresponding reports. It efficiently learns visual representations, which in turn facilitates enhanced analysis and interpretation of intricate imaging data. However, such observation is predominantly justified on single-modality data (mostly 2D images like X-rays), adapting VLP to learning unified representations for medical images in real scenario remains an open challenge. This arises from medical images often encompass a variety of mod"
+  },
+  {
+   "id": "1906.07720",
+   "full": false,
+   "field": true,
+   "score": 0.65,
+   "titles": {
+    "ru": "On-Body Visualization of Patient Data for Cooperative Tasks"
+   },
+   "abstract": "Electronic health records (EHR) systematically represent patient data in digital form. However, text and visualization based EHR systems are poorly integrated in the hospital workflow due to their complex and rather non-intuitive access structure. This is especially disadvantageous in clinical cooperative situations that require an efficient, task specific information transfer. In this paper we introduce a novel concept of anatomically integrated in-place visualization designed to engage with cooperative tasks on a neurosurgical ward. Based on the findings of our field studies and the derived "
+  },
+  {
+   "id": "1206.3975",
+   "full": false,
+   "field": true,
+   "score": 0.649,
+   "titles": {
+    "ru": "The Ultrasound Visualization Pipeline - A Survey"
+   },
+   "abstract": "Ultrasound is one of the most frequently used imaging modality in medicine. The high spatial resolution, its interactive nature and non-invasiveness makes it the first choice in many examinations. Image interpretation is one of ultrasound's main challenges. Much training is required to obtain a confident skill level in ultrasound-based diagnostics. State-of-the-art graphics techniques is needed to provide meaningful visualizations of ultrasound in real-time. In this paper we present the process-pipeline for ultrasound visualization, including an overview of the tasks performed in the specific "
+  },
+  {
+   "id": "2009.00887",
+   "full": false,
+   "field": true,
+   "score": 0.649,
+   "titles": {
+    "ru": "Inspection of histological 3D reconstructions in virtual reality"
+   },
+   "abstract": "3D reconstruction is a challenging current topic in medical research. We perform 3D reconstructions from serial sections stained by immunohistological methods. This paper presents an immersive visualisation solution to quality control (QC), inspect, and analyse such reconstructions. QC is essential to establish correct digital processing methodologies. Visual analytics, such as annotation placement, mesh painting, and classification utility, facilitates medical research insights. We propose a visualisation in virtual reality (VR) for these purposes. In this manner, we advance the microanatomic"
+  }
+ ],
+ "lang": {
+  "en": {
+   "note": "In medical imaging, methods for combining modalities and interactive tools for clinicians are actively developing, but many prototypes remain in the lab and need adaptation for clinical practice.",
+   "topic": "medical imaging",
+   "ideas": [
+    {
+     "based_on": [
+      "2602.12917"
+     ],
+     "title": "Build a test bench to verify the accuracy of ultrasound-guided navigation of the spine",
+     "what": "Assemble a spine phantom with movable vertebrae, connect an ultrasound probe and a robotic arm, and test how accurately the system tracks vertebral displacements in real time.",
+     "why": "The method from paper 2602.12917 promises to replace X-rays for diagnosing spinal instability, but it has only been tested on a simple model. Such a bench would allow assessing practical accuracy and identifying limitations.",
+     "origin": "Paper 2602.12917 proposes an ultrasound navigation method, but it has only been tested on a flexible model. Independent validation on a more realistic phantom with controlled displacements is missing, to understand what errors are introduced by imperfect geometry and probe motion.",
+     "first_step": "Design and 3D-print a simple phantom with two vertebrae that can be displaced by a known amount, then scan it with a handheld ultrasound probe and attempt to recover the displacement.",
+     "needs": "3D printer, phantom materials (e.g., PLA, silicone), an ultrasound machine with video recording capability, access to image processing libraries.",
+     "risks": "Accuracy may be insufficient due to the difficulty of mimicking acoustic properties of tissues; aligning ultrasound with the 3D model may require fine calibration.",
+     "scale": "semester",
+     "methods": [
+      "Fabricate a phantom from materials mimicking bone and soft tissue, with controllable vertebral displacement (e.g., using stepper motors).",
+      "Use a robotic arm with an ultrasound probe to scan along a predefined trajectory, as described in 2602.12917.",
+      "Implement an algorithm to register ultrasound slices with a pre-acquired 3D model (e.g., using open-source libraries like ITK or 3D Slicer).",
+      "Compare measured displacements with known reference values, and evaluate error and repeatability."
+     ]
+    },
+    {
+     "based_on": [
+      "2001.09535"
+     ],
+     "title": "Develop a visualization module for comparing MRI and PET fusions in gliomas",
+     "what": "Create a software tool to visualize the results of fusion and registration of medical images (MRI, PET) with the ability to assess reliability, aimed at neurosurgeons.",
+     "why": "Paper 2001.09535 points to clinicians' distrust of automatic fusion methods; a visual verification tool could accelerate clinical adoption.",
+     "origin": "Paper 2001.09535 emphasizes that fusion methods can be unreliable, and neurosurgeons need a tool for verification. However, no ready-made solutions for visual verification exist, and developing such a module would fill the gap.",
+     "first_step": "Collect MRI and PET datasets of glioma patients from open sources (e.g., BraTS) and implement a basic fusion algorithm using SimpleITK.",
+     "needs": "Access to medical images (open datasets), knowledge of Python and image processing libraries, a computer with sufficient performance.",
+     "risks": "Difficulty in assessing fusion quality without an expert; potential issues with data format compatibility.",
+     "scale": "thesis",
+     "methods": [
+      "Study existing fusion and registration methods from paper 2001.09535, and select several algorithms for implementation.",
+      "Use medical image processing libraries (e.g., SimpleITK, MONAI) to build a fusion pipeline.",
+      "Develop an interactive interface (e.g., based on 3D Slicer or web technologies) for overlaying results and assessing quality.",
+      "Conduct pilot testing with a radiologist to evaluate usability and identify issues."
+     ]
+    },
+    {
+     "based_on": [
+      "2311.14851"
+     ],
+     "title": "Test the applicability of language-guided pretraining for multimodal imaging",
+     "what": "Take a model from paper 2311.14851, trained on image-text pairs, and adapt it for multimodal imaging tasks (e.g., MRI and CT fusion) to improve representations.",
+     "why": "The method promises unified representations that could help in tasks with limited labeled data, which is common in medical imaging.",
+     "origin": "Paper 2311.14851 demonstrates the benefits of language guidance in pretraining, but only on unimodal data. It remains untested whether the approach works when combining multiple modalities, which is relevant for comprehensive diagnostics.",
+     "first_step": "Reproduce model training on a small data subset to verify code functionality and understand resource requirements.",
+     "needs": "Access to GPU (preferably multiple), knowledge of PyTorch, skills in handling large datasets.",
+     "risks": "High computational costs; there may not be enough labeled data for fine-tuning, and results may not improve.",
+     "scale": "years",
+     "methods": [
+      "Study the architecture and code (if available) of the model from 2311.14851, and understand the language-guidance mechanism.",
+      "Prepare a dataset of image pairs from different modalities and corresponding text descriptions (e.g., from open sources).",
+      "Fine-tune the model on this dataset using transfer learning techniques.",
+      "Evaluate the quality of learned representations on downstream tasks (classification, segmentation) and compare with baseline methods."
+     ]
+    },
+    {
+     "based_on": [
+      "1710.00808"
+     ],
+     "title": "Create a prototype virtual monitor for interventional procedures using HoloLens",
+     "what": "Develop a system that streams images from medical equipment (e.g., an angiograph) to an optical see-through headset (HoloLens) in real time, following the approach from paper 1710.00808.",
+     "why": "This could improve ergonomics and reduce procedure time, as shown in pilot studies, but adaptation to specific equipment and validation in real conditions are needed.",
+     "origin": "Paper 1710.00808 proposed the concept of a virtual monitor, but the implementation was tied to specific equipment. Adaptation to modern headsets and integration with common angiographic systems is missing.",
+     "first_step": "Set up a test bench with an available headset (e.g., HoloLens 2) and a video signal source, and implement simple image transmission with minimal latency.",
+     "needs": "HoloLens or equivalent, a medical monitor with video output, skills in mixed-reality development (Unity, C#).",
+     "risks": "Latency may be critical for procedures; sterility and ergonomics may require refinements.",
+     "scale": "thesis",
+     "methods": [
+      "Study the system architecture from 1710.00808, including video transmission protocols.",
+      "Set up video capture from a medical device (e.g., via HDMI capture) and transmission to HoloLens over Wi-Fi.",
+      "Develop a HoloLens application that displays video with the ability to position the window in space.",
+      "Conduct testing with clinicians on phantoms, and evaluate latency and usability."
+     ]
+    },
+    {
+     "based_on": [
+      "2305.06726"
+     ],
+     "title": "Develop interactive visualization of vascular structures with distance fields",
+     "what": "Implement methods for visualizing distances to aneurysms or stenoses on vessel surfaces, as described in 2305.06726, and integrate them into a treatment planning tool.",
+     "why": "Such visualizations help clinicians quickly assess vessel geometry and make decisions, but existing implementations are fragmented and not adapted to clinical workstations.",
+     "origin": "Review 2305.06726 compiles methods, but there is no ready-made open tool that clinicians could use. A practical implementation with a user-friendly interface and validation on clinical data is missing.",
+     "first_step": "Download an open dataset with vessel segmentation (e.g., from the Vascular Model Repository) and implement distance calculation to a selected point using VTK.",
+     "needs": "Knowledge of C++ or Python, VTK libraries, access to vascular segmentation data.",
+     "risks": "Difficulty in accurately computing distances on curved surfaces; potential performance issues for large meshes.",
+     "scale": "semester",
+     "methods": [
+      "Study algorithms from 2305.06726 for computing distances on the surface of a vascular network.",
+      "Use mesh processing libraries (e.g., VTK, Trimesh) to implement the computations.",
+      "Create a prototype application that loads vessel segmentations (e.g., from open datasets) and displays color maps of distances.",
+      "Evaluate performance and accuracy on synthetic and real data."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En la imagen médica se están desarrollando activamente métodos para combinar modalidades y herramientas interactivas para los médicos, pero muchos prototipos permanecen en el laboratorio y requieren adaptación a la práctica clínica.",
+   "topic": "imagen médica",
+   "ideas": [
+    {
+     "based_on": [
+      "2602.12917"
+     ],
+     "title": "Montar un banco de pruebas para verificar la precisión de la navegación por ultrasonido en la columna vertebral",
+     "what": "Construir un maniquí de columna con vértebras móviles, conectar un transductor de ultrasonido y un brazo robótico para comprobar con qué precisión el sistema rastrea los desplazamientos vertebrales en tiempo real.",
+     "why": "El método del artículo 2602.12917 promete reemplazar los rayos X en el diagnóstico de la inestabilidad espinal, pero solo se ha probado en un modelo simple. Este banco permitirá evaluar la precisión práctica y detectar limitaciones.",
+     "origin": "En el artículo 2602.12917 se propone un método de navegación por ultrasonido, pero solo se ha probado en un modelo flexible. Falta una verificación independiente en un maniquí más realista con desplazamientos controlados para comprender qué errores introduce la geometría no ideal y el movimiento del transductor.",
+     "first_step": "Diseñar e imprimir en 3D un maniquí simple de dos vértebras con posibilidad de desplazamiento en una magnitud conocida, luego realizar un escaneo con un transductor de ultrasonido manual e intentar recuperar el desplazamiento.",
+     "needs": "Impresora 3D, materiales para el maniquí (por ejemplo, PLA, silicona), equipo de ultrasonido con capacidad de grabación de video, acceso a bibliotecas de procesamiento de imágenes.",
+     "risks": "La precisión podría ser insuficiente debido a la dificultad de simular las propiedades acústicas de los tejidos; la fusión del ultrasonido con el modelo 3D puede requerir una calibración fina.",
+     "scale": "semestre",
+     "methods": [
+      "Fabricar un maniquí con materiales que imiten huesos y tejidos blandos, con posibilidad de desplazamiento controlado de las vértebras (por ejemplo, mediante motores paso a paso).",
+      "Usar un brazo robótico con transductor de ultrasonido para escanear a lo largo de una trayectoria definida, como se describe en 2602.12917.",
+      "Implementar un algoritmo para fusionar los cortes de ultrasonido con un modelo 3D previamente obtenido (por ejemplo, usando bibliotecas de código abierto como ITK o 3D Slicer).",
+      "Comparar los desplazamientos medidos con los valores de referencia establecidos, evaluar el error y la repetibilidad."
+     ]
+    },
+    {
+     "based_on": [
+      "2001.09535"
+     ],
+     "title": "Desarrollar un módulo de visualización para comparar fusiones de MRI y PET en gliomas",
+     "what": "Crear una herramienta de software para visualizar los resultados de la fusión y traducción de imágenes médicas (MRI, PET) con capacidad de evaluar la confiabilidad, orientada a neurocirujanos.",
+     "why": "El artículo 2001.09535 señala la desconfianza de los médicos hacia los métodos automáticos de fusión; una herramienta visual para verificar podría acelerar la adopción clínica.",
+     "origin": "El artículo 2001.09535 destaca que los métodos de fusión pueden ser poco fiables y que los neurocirujanos necesitan una herramienta para verificar. Sin embargo, no existen soluciones listas para la verificación visual, y el desarrollo de dicho módulo llenaría ese vacío.",
+     "first_step": "Recopilar un conjunto de datos de MRI y PET de pacientes con gliomas de fuentes abiertas (por ejemplo, BraTS) e implementar un algoritmo básico de fusión con SimpleITK.",
+     "needs": "Acceso a imágenes médicas (conjuntos abiertos), conocimiento de Python y bibliotecas de procesamiento de imágenes, computadora con suficiente rendimiento.",
+     "risks": "Dificultad para evaluar la calidad de la fusión sin un experto; posibles problemas de compatibilidad de formatos de datos.",
+     "scale": "tesis",
+     "methods": [
+      "Estudiar los métodos existentes de fusión y traducción del artículo 2001.09535, seleccionar varios algoritmos para implementar.",
+      "Usar bibliotecas para procesamiento de imágenes médicas (por ejemplo, SimpleITK, MONAI) para construir el pipeline de fusión.",
+      "Desarrollar una interfaz interactiva (por ejemplo, basada en 3D Slicer o tecnologías web) para superponer los resultados y evaluar la calidad.",
+      "Realizar una prueba piloto con un radiólogo para evaluar la usabilidad e identificar problemas."
+     ]
+    },
+    {
+     "based_on": [
+      "2311.14851"
+     ],
+     "title": "Probar la aplicabilidad del preentrenamiento guiado por lenguaje para la visualización multimodal",
+     "what": "Tomar el modelo del artículo 2311.14851, entrenado en pares imagen-texto, y adaptarlo para tareas de visualización multimodal (por ejemplo, fusión de MRI y CT) con el fin de mejorar las representaciones.",
+     "why": "El método promete representaciones unificadas que podrían ayudar en tareas donde faltan datos etiquetados, algo común en la imagen médica.",
+     "origin": "El artículo 2311.14851 demuestra las ventajas del guiado por lenguaje en el preentrenamiento, pero solo con datos unimodales. Falta verificar si el enfoque funciona al combinar múltiples modalidades, lo cual es relevante para el diagnóstico integral.",
+     "first_step": "Reproducir el entrenamiento del modelo en un subconjunto pequeño de datos para asegurar que el código funciona y comprender los requisitos de recursos.",
+     "needs": "Acceso a GPU (idealmente varias), conocimiento de PyTorch, habilidades para trabajar con grandes conjuntos de datos.",
+     "risks": "Altos costos computacionales; podría no haber suficientes datos etiquetados para el ajuste fino y los resultados podrían no mejorar.",
+     "scale": "años",
+     "methods": [
+      "Estudiar la arquitectura y el código (si está disponible) del modelo de 2311.14851, comprender el mecanismo de guiado por lenguaje.",
+      "Preparar un conjunto de datos de pares de imágenes de diferentes modalidades y descripciones de texto correspondientes (por ejemplo, de fuentes abiertas).",
+      "Ajustar el modelo en este conjunto de datos utilizando técnicas de aprendizaje por transferencia.",
+      "Evaluar la calidad de las representaciones obtenidas en tareas posteriores (clasificación, segmentación) y comparar con métodos base."
+     ]
+    },
+    {
+     "based_on": [
+      "1710.00808"
+     ],
+     "title": "Crear un prototipo de monitor virtual para procedimientos intervencionistas basado en HoloLens",
+     "what": "Desarrollar un sistema que transmita imágenes desde equipos médicos (por ejemplo, un angiografo) a un visor óptico transparente (HoloLens) en tiempo real, siguiendo el enfoque del artículo 1710.00808.",
+     "why": "Esto podría mejorar la ergonomía y reducir el tiempo del procedimiento, como se muestra en estudios piloto, pero se requiere adaptación al equipo específico y pruebas en condiciones reales.",
+     "origin": "El artículo 1710.00808 propone el concepto de monitor virtual, pero la implementación está ligada a un equipo específico. Falta adaptación a visores modernos e integración con sistemas angiográficos comunes.",
+     "first_step": "Montar un banco de pruebas con un visor disponible (por ejemplo, HoloLens 2) y una fuente de señal de video, implementar una transmisión simple de imagen con latencia mínima.",
+     "needs": "HoloLens o similar, monitor médico con salida de video, habilidades de desarrollo para realidad mixta (Unity, C#).",
+     "risks": "La latencia podría ser crítica para los procedimientos; la esterilidad y la ergonomía podrían requerir ajustes.",
+     "scale": "tesis",
+     "methods": [
+      "Estudiar la arquitectura del sistema de 1710.00808, incluidos los protocolos de transmisión de video.",
+      "Configurar la captura del flujo de video desde el dispositivo médico (por ejemplo, mediante captura HDMI) y la transmisión a HoloLens por Wi-Fi.",
+      "Desarrollar una aplicación para HoloLens que muestre el video con capacidad de posicionar la ventana en el espacio.",
+      "Realizar pruebas con médicos en maniquíes, evaluar la latencia y la facilidad de uso."
+     ]
+    },
+    {
+     "based_on": [
+      "2305.06726"
+     ],
+     "title": "Desarrollar una visualización interactiva de estructuras vasculares con campos de distancia",
+     "what": "Implementar métodos de visualización de distancias a aneurismas o estenosis en la superficie de los vasos, como se describe en 2305.06726, e integrarlos en una herramienta para la planificación del tratamiento.",
+     "why": "Tales visualizaciones ayudan a los médicos a evaluar rápidamente la geometría de los vasos y tomar decisiones, pero las implementaciones existentes están dispersas y no adaptadas a las estaciones de trabajo clínicas.",
+     "origin": "La revisión 2305.06726 recopila métodos, pero no hay una herramienta abierta lista para que los médicos la usen. Falta una implementación práctica con una interfaz amigable y validación con datos clínicos.",
+     "first_step": "Descargar un conjunto de datos abierto con segmentaciones vasculares (por ejemplo, del proyecto Vascular Model Repository) e implementar el cálculo de distancias a un punto seleccionado con VTK.",
+     "needs": "Conocimiento de C++ o Python, bibliotecas VTK, acceso a datos de segmentaciones vasculares.",
+     "risks": "Dificultad para calcular distancias precisas en superficies curvas; posibles problemas de rendimiento con mallas grandes.",
+     "scale": "semestre",
+     "methods": [
+      "Estudiar los algoritmos de 2305.06726 para calcular distancias en la superficie de la red vascular.",
+      "Usar bibliotecas de procesamiento de mallas (por ejemplo, VTK, Trimesh) para implementar los cálculos.",
+      "Crear un prototipo de aplicación que cargue segmentaciones vasculares (por ejemplo, de conjuntos de datos abiertos) y muestre mapas de color de distancias.",
+      "Evaluar el rendimiento y la precisión en datos sintéticos y reales."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في التصوير الطبي، تتطور بنشاط أساليب دمج طرائق التصوير والأدوات التفاعلية للأطباء، لكن العديد من النماذج الأولية تبقى في المختبرات وتحتاج إلى تكييف مع الممارسة السريرية.",
+   "topic": "التصوير الطبي",
+   "ideas": [
+    {
+     "based_on": [
+      "2602.12917"
+     ],
+     "title": "بناء منصة اختبار لدقة التوجيه بالموجات فوق الصوتية للعمود الفقري",
+     "what": "بناء نموذج محاكاة (فانتوم) للعمود الفقري بفقرات متحركة، وتوصيل مسبار الموجات فوق الصوتية وذراع آلية، للتحقق من مدى دقة النظام في تتبع إزاحات الفقرات في الزمن الحقيقي.",
+     "why": "الطريقة المقدمة في العمل 2602.12917 تعد باستبدال الأشعة السينية في تشخيص عدم استقرار العمود الفقري، لكنها اختُبرت فقط على نموذج بسيط. مثل هذه المنصة ستسمح بتقييم الدقة العملية وتحديد القيود.",
+     "origin": "في العمل 2602.12917 اقترحت طريقة للتوجيه بالموجات فوق الصوتية، لكنها اختُبرت فقط على نموذج مرن. ينقصنا تحقق مستقل على فانتوم أكثر واقعية مع إزاحات مضبوطة لفهم الأخطاء الناتجة عن الهندسة غير المثالية وحركة المسبار.",
+     "first_step": "تصميم وطباعة فانتوم بسيط بفقرتين باستخدام طابعة ثلاثية الأبعاد، مع إمكانية إزاحة بمقدار معروف، ثم إجراء مسح ضوئي بمسبار موجات فوق صوتية يدوي ومحاولة استعادة الإزاحة.",
+     "needs": "طابعة ثلاثية الأبعاد، مواد للفانتوم (مثل PLA والسيليكون)، جهاز موجات فوق صوتية مع إمكانية تسجيل الفيديو، والوصول إلى مكتبات معالجة الصور.",
+     "risks": "قد تكون الدقة غير كافية بسبب صعوبة محاكاة الخصائص الصوتية للأنسجة؛ وقد يتطلب دمج الموجات فوق الصوتية مع النموذج ثلاثي الأبعاد معايرة دقيقة.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "تصنيع فانتوم من مواد تحاكي العظام والأنسجة الرخوة، مع إمكانية إزاحة مضبوطة للفقرات (على سبيل المثال، باستخدام محركات خطوية).",
+      "استخدام ذراع آلية مزودة بمسبار موجات فوق صوتية للمسح على مسار محدد، كما هو موصوف في 2602.12917.",
+      "تنفيذ خوارزمية لمطابقة المقاطع فوق الصوتية مع نموذج ثلاثي الأبعاد تم الحصول عليه مسبقًا (على سبيل المثال، باستخدام مكتبات مفتوحة المصدر مثل ITK أو 3D Slicer).",
+      "مقارنة الإزاحات المقاسة مع القيم المرجعية المحددة، وتقييم الخطأ والتكرارية."
+     ]
+    },
+    {
+     "based_on": [
+      "2001.09535"
+     ],
+     "title": "تطوير وحدة عرض لمقارنة دمج التصوير بالرنين المغناطيسي والتصوير المقطعي بالإصدار البوزيتروني في حالات الأورام الدبقية",
+     "what": "إنشاء أداة برمجية لعرض نتائج دمج وترجمة الصور الطبية (MRI, PET) مع إمكانية تقييم الموثوقية، موجهة لجراحي الأعصاب.",
+     "why": "يشير العمل 2001.09535 إلى عدم ثقة الأطباء في طرق الدمج التلقائية؛ أداة بصرية للتحقق قد تسرع الاعتماد السريري.",
+     "origin": "في العمل 2001.09535 يُبرز أن طرق الدمج قد تكون غير موثوقة، وأن جراحي الأعصاب يحتاجون أداة للتحقق. ومع ذلك، لا توجد حلول جاهزة للتحقق البصري، وتطوير مثل هذه الوحدة سيسد الفجوة.",
+     "first_step": "جمع مجموعة بيانات من صور الرنين المغناطيسي والتصوير المقطعي بالإصدار البوزيتروني لمرضى بالأورام الدبقية من مصادر مفتوحة (مثل BraTS) وتنفيذ خوارزمية دمج أساسية باستخدام SimpleITK.",
+     "needs": "الوصول إلى صور طبية (مجموعات مفتوحة)، ومعرفة بلغة Python ومكتبات معالجة الصور، وحاسوب بأداء كافٍ.",
+     "risks": "صعوبة تقييم جودة الدمج دون خبير؛ مشاكل محتملة في توافق تنسيقات البيانات.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "دراسة طرق الدمج والترجمة الحالية من العمل 2001.09535، واختيار عدة خوارزميات للتنفيذ.",
+      "استخدام مكتبات معالجة الصور الطبية (مثل SimpleITK و MONAI) لبناء خط أنابيب الدمج.",
+      "تطوير واجهة تفاعلية (على سبيل المثال، باستخدام 3D Slicer أو تقنيات الويب) لعرض النتائج وتقييم الجودة.",
+      "إجراء اختبار تجريبي بمشاركة طبيب أشعة لتقييم سهولة الاستخدام وتحديد المشكلات."
+     ]
+    },
+    {
+     "based_on": [
+      "2311.14851"
+     ],
+     "title": "اختبار قابلية تطبيق التعلم المسبق الموجه باللغة للتصوير متعدد الوسائط",
+     "what": "أخذ نموذج من العمل 2311.14851، تم تدريبه على أزواج صورة-نص، وتكييفه لمهام التصوير متعدد الوسائط (مثل دمج الرنين المغناطيسي والتصوير المقطعي المحوسب) بهدف تحسين التمثيلات.",
+     "why": "تعد الطريقة بتمثيلات موحدة يمكن أن تساعد في المهام التي تفتقر إلى بيانات مصنفة، وهو أمر شائع في التصوير الطبي.",
+     "origin": "يظهر العمل 2311.14851 مزايا التوجيه اللغوي في التعلم المسبق، لكن فقط على بيانات أحادية الوسائط. ينقصنا التحقق مما إذا كان النهج يعمل عند دمج وسائط متعددة، وهو أمر مهم للتشخيص الشامل.",
+     "first_step": "إعادة إنتاج تدريب النموذج على مجموعة فرعية صغيرة من البيانات للتأكد من أن الكود يعمل وفهم متطلبات الموارد.",
+     "needs": "الوصول إلى وحدات معالجة رسومية (يفضل عدة)، ومعرفة بـ PyTorch، ومهارات العمل مع مجموعات بيانات كبيرة.",
+     "risks": "تكاليف حسابية عالية؛ قد لا تكفي البيانات المصنفة للضبط الدقيق، وقد لا تتحسن النتائج.",
+     "scale": "سنوات",
+     "methods": [
+      "دراسة بنية وكود (إذا كان متاحًا) النموذج من 2311.14851، وفهم آلية التوجيه اللغوي.",
+      "إعداد مجموعة بيانات من أزواج صور من وسائط مختلفة والأوصاف النصية المقابلة (على سبيل المثال، من مصادر مفتوحة).",
+      "ضبط النموذج على هذه المجموعة باستخدام تقنيات التعلم بالنقل.",
+      "تقييم جودة التمثيلات على مهام المصب (التصنيف، التقسيم) ومقارنتها بالطرق الأساسية."
+     ]
+    },
+    {
+     "based_on": [
+      "1710.00808"
+     ],
+     "title": "إنشاء نموذج أولي لشاشة افتراضية للإجراءات التداخلية باستخدام HoloLens",
+     "what": "تطوير نظام ينقل الصور من المعدات الطبية (مثل جهاز تصوير الأوعية) إلى خوذة شفافة بصرية (HoloLens) في الوقت الفعلي، باتباع النهج من العمل 1710.00808.",
+     "why": "قد يحسن ذلك بيئة العمل ويقلل وقت الإجراء، كما هو موضح في دراسات تجريبية، لكنه يتطلب تكييفًا مع معدات محددة واختبارًا في ظروف حقيقية.",
+     "origin": "في العمل 1710.00808 اقترح مفهوم الشاشة الافتراضية، لكن التنفيذ مرتبط بمعدات محددة. ينقصنا التكيف مع الخوذات الحديثة والتكامل مع أنظمة تصوير الأوعية الشائعة.",
+     "first_step": "تجميع منصة من خوذة متاحة (مثل HoloLens 2) ومصدر إشارة فيديو، وتنفيذ نقل بسيط للصورة مع حد أدنى من التأخير.",
+     "needs": "HoloLens أو ما يعادلها، شاشة طبية بمخرج فيديو، مهارات تطوير للواقع المختلط (Unity, C#).",
+     "risks": "قد يكون التأخير حرجًا للإجراءات؛ قد تتطلب العقامة وبيئة العمل تحسينات.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "دراسة بنية النظام من 1710.00808، بما في ذلك بروتوكولات نقل الفيديو.",
+      "إعداد التقاط دفق الفيديو من الجهاز الطبي (على سبيل المثال، عبر التقاط HDMI) ونقله إلى HoloLens عبر Wi-Fi.",
+      "تطوير تطبيق لـ HoloLens يعرض الفيديو مع إمكانية وضع النافذة في الفضاء.",
+      "إجراء اختبار مع أطباء على فانتومات، وتقييم التأخير وسهولة الاستخدام."
+     ]
+    },
+    {
+     "based_on": [
+      "2305.06726"
+     ],
+     "title": "تطوير تصور تفاعلي للبنى الوعائية مع حقول المسافات",
+     "what": "تنفيذ طرق لتصور المسافات إلى تمدد الأوعية الدموية أو التضيقات على سطح الأوعية، كما هو موصوف في 2305.06726، ودمجها في أداة لتخطيط العلاج.",
+     "why": "تساعد هذه التصورات الأطباء على تقييم هندسة الأوعية بسرعة واتخاذ القرارات، لكن التطبيقات الحالية متناثرة وغير مكيفة مع محطات العمل السريرية.",
+     "origin": "في المراجعة 2305.06726 جمعت الطرق، لكن لا توجد أداة مفتوحة جاهزة يمكن للأطباء استخدامها. ينقصنا تنفيذ عملي بواجهة سهلة والتحقق على بيانات سريرية.",
+     "first_step": "تنزيل مجموعة بيانات مفتوحة مع تقسيم الأوعية (على سبيل المثال، من مشروع Vascular Model Repository) وتنفيذ حساب المسافات إلى نقطة محددة باستخدام VTK.",
+     "needs": "معرفة بـ C++ أو Python، مكتبات VTK، الوصول إلى بيانات تقسيم الأوعية.",
+     "risks": "صعوبة الحساب الدقيق للمسافات على الأسطح المنحنية؛ مشاكل محتملة في الأداء مع الشبكات الكبيرة.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "دراسة الخوارزميات من 2305.06726 لحساب المسافات على سطح الشبكة الوعائية.",
+      "استخدام مكتبات معالجة الشبكات (مثل VTK و Trimesh) لتنفيذ الحسابات.",
+      "إنشاء نموذج أولي لتطبيق يحمّل تقسيمات الأوعية (على سبيل المثال، من مجموعات بيانات مفتوحة) ويعرض خرائط ألوان للمسافات.",
+      "إجراء تقييم للأداء والدقة على بيانات اصطناعية وحقيقية."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "En imagerie médicale, les méthodes de fusion de modalités et les outils interactifs destinés aux cliniciens se développent activement, mais de nombreux prototypes restent au stade du laboratoire et doivent être adaptés à la pratique clinique.",
+   "topic": "imagerie médicale",
+   "ideas": [
+    {
+     "based_on": [
+      "2602.12917"
+     ],
+     "title": "Construire un banc d'essai pour évaluer la précision de la navigation échographique sur la colonne vertébrale",
+     "what": "Construire un fantôme de colonne vertébrale avec des vertèbres mobiles, connecter une sonde d'échographie et un bras robotisé afin de vérifier avec quelle précision le système suit les déplacements vertébraux en temps réel.",
+     "why": "La méthode de l'article 2602.12917 promet de remplacer la radiographie pour le diagnostic de l'instabilité vertébrale, mais elle n'a été testée que sur un modèle simple. Un tel banc permettrait d'évaluer la précision pratique et d'identifier les limites.",
+     "origin": "L'article 2602.12917 propose une méthode de navigation échographique, mais elle n'a été testée que sur un modèle flexible. Il manque une validation indépendante sur un fantôme plus réaliste avec des déplacements contrôlés, afin de comprendre les erreurs introduites par une géométrie imparfaite et le mouvement de la sonde.",
+     "first_step": "Concevoir et imprimer en 3D un fantôme simple composé de deux vertèbres avec possibilité de déplacement d'une amplitude connue, puis effectuer un balayage avec une sonde échographique manuelle et tenter de reconstituer le déplacement.",
+     "needs": "Imprimante 3D, matériaux pour le fantôme (par exemple PLA, silicone), échographe avec enregistrement vidéo, accès à des bibliothèques de traitement d'images.",
+     "risks": "La précision pourrait s'avérer insuffisante en raison de la difficulté à simuler les propriétés acoustiques des tissus ; la superposition de l'échographie avec le modèle 3D pourrait nécessiter un calibrage minutieux.",
+     "scale": "semestre",
+     "methods": [
+      "Fabriquer un fantôme à partir de matériaux imitant les os et les tissus mous, avec possibilité de déplacement contrôlé des vertèbres (par exemple à l'aide de moteurs pas à pas).",
+      "Utiliser un bras robotisé équipé d'une sonde échographique pour effectuer un balayage selon une trajectoire définie, comme décrit dans 2602.12917.",
+      "Implémenter un algorithme de superposition des coupes échographiques avec un modèle 3D préalablement acquis (par exemple à l'aide de bibliothèques open source telles que ITK ou 3D Slicer).",
+      "Comparer les déplacements mesurés avec les valeurs de référence définies, évaluer l'erreur et la répétabilité."
+     ]
+    },
+    {
+     "based_on": [
+      "2001.09535"
+     ],
+     "title": "Développer un module de visualisation pour comparer les fusions IRM-TEP dans les gliomes",
+     "what": "Créer un outil logiciel pour visualiser les résultats de fusion et de transformation d'images médicales (IRM, TEP) avec une fonction d'évaluation de la fiabilité, destiné aux neurochirurgiens.",
+     "why": "L'article 2001.09535 souligne la méfiance des cliniciens envers les méthodes de fusion automatiques ; un outil visuel de vérification pourrait accélérer l'adoption clinique.",
+     "origin": "L'article 2001.09535 insiste sur le fait que les méthodes de fusion peuvent être peu fiables et que les neurochirurgiens ont besoin d'un outil de vérification. Cependant, aucune solution prête à l'emploi pour la vérification visuelle n'existe, et le développement d'un tel module comblerait cette lacune.",
+     "first_step": "Rassembler un ensemble de données IRM et TEP de patients atteints de gliomes à partir de sources ouvertes (par exemple BraTS) et implémenter un algorithme de fusion de base avec SimpleITK.",
+     "needs": "Accès à des images médicales (ensembles ouverts), connaissance de Python et des bibliothèques de traitement d'images, ordinateur avec des performances suffisantes.",
+     "risks": "Difficulté à évaluer la qualité de la fusion sans expert ; problèmes potentiels de compatibilité des formats de données.",
+     "scale": "mémoire",
+     "methods": [
+      "Étudier les méthodes de fusion et de transformation existantes de l'article 2001.09535, sélectionner plusieurs algorithmes à implémenter.",
+      "Utiliser des bibliothèques de traitement d'images médicales (par exemple SimpleITK, MONAI) pour construire un pipeline de fusion.",
+      "Développer une interface interactive (par exemple basée sur 3D Slicer ou des technologies web) pour superposer les résultats et évaluer la qualité.",
+      "Effectuer un test pilote avec un radiologue pour évaluer l'utilisabilité et identifier les problèmes."
+     ]
+    },
+    {
+     "based_on": [
+      "2311.14851"
+     ],
+     "title": "Tester l'applicabilité du pré-entraînement guidé par le langage pour l'imagerie multimodale",
+     "what": "Reprendre le modèle de l'article 2311.14851, entraîné sur des paires image-texte, et l'adapter à des tâches d'imagerie multimodale (par exemple la fusion IRM-TDM) afin d'améliorer les représentations.",
+     "why": "La méthode promet des représentations unifiées qui pourraient aider dans les tâches où les données annotées manquent, ce qui est fréquent en imagerie médicale.",
+     "origin": "L'article 2311.14851 démontre les avantages du guidage par le langage dans le pré-entraînement, mais uniquement sur des données monomodales. On ne sait pas si l'approche fonctionne lors de la combinaison de plusieurs modalités, ce qui est pertinent pour un diagnostic complet.",
+     "first_step": "Reproduire l'entraînement du modèle sur un petit sous-ensemble de données pour vérifier que le code fonctionne et comprendre les besoins en ressources.",
+     "needs": "Accès à des GPU (idéalement plusieurs), connaissance de PyTorch, compétences en gestion de grands ensembles de données.",
+     "risks": "Coûts de calcul élevés ; les données annotées pourraient être insuffisantes pour le fine-tuning, et les résultats pourraient ne pas s'améliorer.",
+     "scale": "années",
+     "methods": [
+      "Étudier l'architecture et le code (si disponible) du modèle de 2311.14851, comprendre le mécanisme de guidage par le langage.",
+      "Préparer un ensemble de données composé de paires d'images de différentes modalités et de descriptions textuelles correspondantes (par exemple à partir de sources ouvertes).",
+      "Affiner le modèle sur cet ensemble de données en utilisant des techniques d'apprentissage par transfert.",
+      "Évaluer la qualité des représentations obtenues sur des tâches en aval (classification, segmentation) et les comparer aux méthodes de base."
+     ]
+    },
+    {
+     "based_on": [
+      "1710.00808"
+     ],
+     "title": "Créer un prototype de moniteur virtuel pour les procédures interventionnelles basé sur HoloLens",
+     "what": "Développer un système qui transmet les images d'un équipement médical (par exemple un angiographe) vers un casque à réalité augmentée optique (HoloLens) en temps réel, en suivant l'approche de l'article 1710.00808.",
+     "why": "Cela pourrait améliorer l'ergonomie et réduire la durée des procédures, comme le montrent des études pilotes, mais une adaptation à l'équipement spécifique et une validation dans des conditions réelles sont nécessaires.",
+     "origin": "L'article 1710.00808 propose le concept de moniteur virtuel, mais l'implémentation est liée à un équipement spécifique. Il manque une adaptation aux casques modernes et une intégration avec les systèmes d'angiographie courants.",
+     "first_step": "Assembler un banc d'essai avec un casque disponible (par exemple HoloLens 2) et une source de signal vidéo, implémenter une transmission d'image simple avec un délai minimal.",
+     "needs": "HoloLens ou équivalent, moniteur médical avec sortie vidéo, compétences en développement pour la réalité mixte (Unity, C#).",
+     "risks": "Le délai pourrait être critique pour les procédures ; la stérilité et l'ergonomie pourraient nécessiter des améliorations.",
+     "scale": "mémoire",
+     "methods": [
+      "Étudier l'architecture du système de 1710.00808, y compris les protocoles de transmission vidéo.",
+      "Configurer la capture du flux vidéo depuis le dispositif médical (par exemple via une carte d'acquisition HDMI) et la transmission vers HoloLens par Wi-Fi.",
+      "Développer une application pour HoloLens affichant la vidéo avec possibilité de positionner la fenêtre dans l'espace.",
+      "Effectuer des tests avec des cliniciens sur des fantômes, évaluer le délai et la facilité d'utilisation."
+     ]
+    },
+    {
+     "based_on": [
+      "2305.06726"
+     ],
+     "title": "Développer une visualisation interactive des structures vasculaires avec des champs de distance",
+     "what": "Implémenter des méthodes de visualisation des distances aux anévrismes ou aux sténoses à la surface des vaisseaux, comme décrit dans 2305.06726, et les intégrer dans un outil de planification de traitement.",
+     "why": "Ces visualisations aident les cliniciens à évaluer rapidement la géométrie des vaisseaux et à prendre des décisions, mais les implémentations existantes sont dispersées et non adaptées aux postes de travail cliniques.",
+     "origin": "La revue 2305.06726 rassemble des méthodes, mais il n'existe pas d'outil ouvert prêt à l'emploi que les cliniciens pourraient utiliser. Il manque une implémentation pratique avec une interface conviviale et une validation sur des données cliniques.",
+     "first_step": "Télécharger un ensemble de données ouvert avec segmentation vasculaire (par exemple du projet Vascular Model Repository) et implémenter le calcul des distances à un point choisi à l'aide de VTK.",
+     "needs": "Connaissance de C++ ou Python, bibliothèques VTK, accès à des données de segmentation vasculaire.",
+     "risks": "Difficulté à calculer précisément les distances sur des surfaces incurvées ; problèmes potentiels de performance pour de grands maillages.",
+     "scale": "semestre",
+     "methods": [
+      "Étudier les algorithmes de 2305.06726 pour le calcul des distances à la surface du réseau vasculaire.",
+      "Utiliser des bibliothèques de traitement de maillages (par exemple VTK, Trimesh) pour implémenter les calculs.",
+      "Créer un prototype d'application qui charge des segmentations vasculaires (par exemple à partir d'ensembles de données ouverts) et affiche des cartes de couleurs des distances.",
+      "Évaluer les performances et la précision sur des données synthétiques et réelles."
+     ]
+    }
+   ]
+  }
+ }
+}

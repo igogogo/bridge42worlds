@@ -1,0 +1,449 @@
+{
+ "topic": "энергетика и термодинамика",
+ "slug": "энергетика-и-термодинамика",
+ "built": "2026-09-04",
+ "note": "В области энергетики и термодинамики активно развиваются квантовые подходы, но экспериментальных проверок новых теоретических моделей пока мало.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.614,
+  "band": "mid",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Собрать квантовую батарею на кольцевом резонаторе и померить её эффективность",
+   "what": "Собрать экспериментальную установку, повторяющую квантовую батарею из работы 2603.15268: атомы в кольцевом резонаторе, возбуждаемые светом, с однонаправленной передачей энергии. Измерить кпд зарядки и разрядки, сравнить с теоретическим предсказанием.",
+   "why": "Проверить, воспроизводится ли эффект в реальной установке, и понять, какие параметры критичны для высокой эффективности. Пригодится исследователям квантовых технологий и энергетики.",
+   "methods": [
+    "Собрать оптическую схему с кольцевым резонатором и ловушкой для холодных атомов (по описанию из 2603.15268).",
+    "Измерить населённости энергетических уровней атомов после импульса накачки и при разрядке, используя спектроскопию.",
+    "Рассчитать эффективность как отношение извлечённой энергии к запасённой, варьируя число атомов и интенсивность накачки."
+   ],
+   "origin": "В работе 2603.15268 предложена теоретическая модель квантовой батареи с почти 100% эффективностью, но экспериментальной проверки нет. Никто не собрал такую систему и не измерил, насколько реальные потери и декогеренция снижают кпд.",
+   "first_step": "Собрать пробную версию резонатора с рубидиевыми атомами и проверить, наблюдается ли однонаправленный перенос энергии.",
+   "needs": "Оптический стол, лазеры, вакуумная камера, атомный пучок или магнитооптическая ловушка, детекторы одиночных фотонов. Навыки в атомной физике и оптике. Стоимость оборудования — от нескольких миллионов рублей.",
+   "risks": "Сложность стабилизации резонатора и контроля декогеренции может помешать достичь теоретического кпд. Эффект может оказаться слишком малым для измерения в любительских условиях.",
+   "scale": "годы",
+   "based_on": [
+    "2603.15268"
+   ]
+  },
+  {
+   "title": "Проверить термодинамику оптомеханической системы с квантовой ванной",
+   "what": "Построить оптомеханическую систему (микрозеркало в оптическом резонаторе) и измерить обмен энергией с квантовым окружением, чтобы проверить предсказания работы 2602.03764 о совершении работы и получении тепла одновременно.",
+   "why": "Работа даёт новые правила термодинамики для квантовых систем, но экспериментальных данных мало. Такая проверка поможет понять, как использовать квантовые флуктуации для полезной работы.",
+   "methods": [
+    "Собрать оптомеханический резонатор с зеркалом на пружине (по аналогии с системами, описанными в 2602.03764).",
+    "Измерять смещения зеркала и потоки энергии при воздействии сжатого света.",
+    "Сравнить измеренные работу и тепло с теоретическими формулами из работы, учитывая квантовые поправки."
+   ],
+   "origin": "В 2602.03764 выведены соотношения для обмена энергией классической системы с квантовой ванной, но нет экспериментальной проверки на реальном оптомеханическом устройстве. Не хватает данных о том, насколько эти эффекты заметны при комнатной температуре.",
+   "first_step": "Собрать простейший оптомеханический резонатор (например, из коммерческих компонентов) и измерить его тепловые флуктуации.",
+   "needs": "Оптический резонатор, микрозеркало, лазер, фотодетекторы, система охлаждения или стабилизации. Навыки в оптике и прецизионных измерениях.",
+   "risks": "Квантовые эффекты могут быть замаскированы тепловым шумом; потребуется охлаждение до низких температур, что усложнит установку.",
+   "scale": "диплом",
+   "based_on": [
+    "2602.03764"
+   ]
+  },
+  {
+   "title": "Смоделировать фотонный теплообмен между телами и проверить закон 2.7kT",
+   "what": "Написать программу для моделирования теплообмена излучением между двумя телами на микроуровне, используя подход из работы 2601.22247, и проверить, действительно ли средняя энергия фотона в обмене в 2.7 раза больше тепловой энергии.",
+   "why": "Это даст простой инструмент для расчёта радиационного теплообмена в микро- и наносистемах, где классические формулы могут не работать.",
+   "methods": [
+    "Реализовать модель случайных блужданий фотонов между двумя поверхностями с заданными температурами.",
+    "Рассчитать среднюю энергию фотонов, участвующих в обмене, и сравнить с предсказанием 2.7kT.",
+    "Исследовать зависимость от расстояния между телами и материалов."
+   ],
+   "origin": "В 2601.22247 выведено универсальное соотношение для средней энергии фотона в теплообмене, но не показано, как оно проявляется в конкретных геометриях. Не хватает проверки для ближнепольного режима и реальных материалов.",
+   "first_step": "Написать простую симуляцию Монте-Карло для двух параллельных пластин и посчитать среднюю энергию обменных фотонов.",
+   "needs": "Компьютер, знание Python или C++, доступ к статьям по radiative heat transfer. Время на разработку и отладку.",
+   "risks": "Результат может оказаться тривиальным или совпасть с классическими расчётами, если не учесть квантовые эффекты.",
+   "scale": "семестр",
+   "based_on": [
+    "2601.22247"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2603.15268",
+   "date": "2026-03-16",
+   "full": false,
+   "titles": {
+    "ru": "Бактерии обучают квантовые батареи накоплению света",
+    "en": "Bacteria Teach Quantum Batteries to Store Light",
+    "es": "Las bacterias enseñan a las baterías cuánticas a almacenar luz",
+    "ar": "البكتيريا تعلّم البطاريات الكمومية كيفية تخزين الضوء",
+    "fr": "Des bactéries inspirent des batteries quantiques qui stockent la lumière"
+   },
+   "score": 0.495,
+   "url": "/lang/{lang}/archive/2026-03-16/2603.15268/",
+   "abstract": "Природа подсказывает путь к идеальным аккумуляторам: бактериальные ловушки света вдохновили физиков на создание квантовых батарей. Атомы в кольцевом резонаторе работают как однонаправленный клапан для энергии, блокируя её обратный выход. Удивительный эффект позволяет извлечь больше энергии, чем было запасено, благодаря квантовым связям. Технология обещает почти 100% эффективность и мгновенную зарядку устройств будущего."
+  },
+  {
+   "id": "2602.03764",
+   "date": "2026-02-03",
+   "full": false,
+   "titles": {
+    "ru": "Квантовая ванна: как шум делает работу",
+    "en": "Quantum Bath: How Noise Does Work",
+    "es": "Baño cuántico: cómo el ruido hace trabajo",
+    "ar": "حمام كمومي: كيف يصنع الضجيج الشغل",
+    "fr": "Bain quantique : quand le bruit fait le travail"
+   },
+   "score": 0.468,
+   "url": "/lang/{lang}/archive/2026-02-03/2602.03764/",
+   "abstract": "Учёные разобрали, как классическая система обменивается энергией с квантовым окружением. Оказалось, такой контакт позволяет одновременно получать тепло и совершать работу. Новые правила термодинамики учитывают квантовые особенности, например сжатие. Это важно для понимания оптомеханических устройств, где свет управляет движением зеркал."
+  },
+  {
+   "id": "2601.22247",
+   "date": "2026-01-29",
+   "full": false,
+   "titles": {
+    "ru": "Тепло вашего кофе — безмолвная торговля светом",
+    "en": "Your Coffee’s Warmth Is a Silent Light Trade",
+    "es": "El calor de tu café es un comercio silencioso de luz",
+    "ar": "دفء قهوتك — تبادل صامت للضوء",
+    "fr": "La chaleur de votre café est un échange silencieux de lumière"
+   },
+   "score": 0.464,
+   "url": "/lang/{lang}/archive/2026-01-29/2601.22247/",
+   "abstract": "Тепло вашего кофе — это безмолвный обмен невидимыми фотонами. Новое исследование раскрывает удивительную математическую связь: энергия среднего фотона в этом обмене в 2,7 раза превышает тепловую энергию молекул. От чашки до Солнца — вся Вселенная предстаёт как гигантский «фотонный рынок», где фундаментальные законы Максвелла, Планка и Больцмана сплетаются воедино."
+  },
+  {
+   "id": "1003.2283",
+   "full": false,
+   "field": true,
+   "score": 0.614,
+   "titles": {
+    "ru": "Energy Band and Thermodynamics"
+   },
+   "abstract": "The behavior of various thermodynamic functions in the dependence of degree of energy band occupation and temperature in the one-band tight binding approximation for the crystal was studied. The Fermi energy, density of states, degeneracy temperature, chemical potential, partition function, thermodynamic po-tential, energy, free energy, entropy, heat capacity, spin magnetization and initial susceptibility were calculated. The limited energetic spectrum leads to the peculiarities in the behavior of these quantities in comparison with free electron gas."
+  },
+  {
+   "id": "cond-mat/0503308",
+   "full": false,
+   "field": true,
+   "score": 0.609,
+   "titles": {
+    "ru": "Thermodynamics and Economics"
+   },
+   "abstract": "The application of principles of thermodynamics and statistical mechanics to economic systems is considered in a broad historical perspective, extending from prehistoric times to the present day. The hypothesis of maximum entropy production (MEP), which has been used to model complex physical systems such as fluid turbulence and the climate of the Earth and other planets, may be applied to human economic activity, subject to constraints such as the availability of suitable technology, and the nature of political control. Applied to the current abundance of available energy from fossil fuel res"
+  },
+  {
+   "id": "1403.3664",
+   "full": false,
+   "field": true,
+   "score": 0.604,
+   "titles": {
+    "ru": "Thermodynamical asymmetries in whirling, jumping and walking"
+   },
+   "abstract": "We analyze, from the thermodynamical point of view, mechanical systems in which there is production of mechanical energy due to an internal source of energy, and compare that analysis with the similar one for the \"symmetric\" motion which occurs with energy dissipation. The analysis of the energetic asymmetries is instructive to put in evidence the role of thermodynamics even in the discussion of mechanical aspects. We illustrate the discussion with the well known example of a person on a rotating platform outstretching and contracting his/her arms, and also with other common situations such as"
+  },
+  {
+   "id": "1206.6333",
+   "full": false,
+   "field": true,
+   "score": 0.602,
+   "titles": {
+    "ru": "Expanding Universe: Thermodynamical Aspects From Different Models"
+   },
+   "abstract": "The pivotal point of the paper is to discuss the behavior of temperature, pressure, energy density as a function of volume along with determination of caloric EoS from following two model: $w(z)=w_{0}+w_{1}\\ln(1+z)$ & $ w(z)=-1+\\frac{(1+z)}{3}\\frac{A_{1}+2A_{2}(1+z)}{A_{0}+2A_{1}(1+z)+A_{2}(1+z)^{2}}$. The time scale of instability for this two models is discussed. In the paper we then generalize our result and arrive at general expression for energy density irrespective of the model. The thermodynamical stability for both of the model and the general case is discussed from this viewpoint. We "
+  },
+  {
+   "id": "hep-ph/0609226",
+   "full": false,
+   "field": true,
+   "score": 0.602,
+   "titles": {
+    "ru": "Thermodynamics of electroweak matter"
+   },
+   "abstract": "This paper is a slightly modified version of the introductory part of a PhD thesis, also containing the articles hep-ph/0303019, hep-ph/0510375 and hep-ph/0512177. We provide a short history of the research of electroweak thermodynamics and a brief introduction to the theory as well as to the necessary theoretical tools needed to work at finite temperatures. We then review computations regarding the pressure of electroweak matter at high temperatures (the full expression of the perturbative expansion of the pressure is given in the appendix) and the electroweak phase diagram at finite chemical"
+  },
+  {
+   "id": "1203.2294",
+   "full": false,
+   "field": true,
+   "score": 0.602,
+   "titles": {
+    "ru": "The concepts of work and heat and the first and second laws of   thermodynamics"
+   },
+   "abstract": "A simple and effective approach to thermodynamics is suggested, which solves the major difficulties in the traditional presentation of the subject. The internal energy is introduced from the behavior of deformable bodies, whereas the importance of keeping in mind the microscopic picture is emphasized. A straightforward model is used to show that the internal energy depends on the volume and entropy, from where the relationship between mechanics and thermodynamics is immediate, mechanics corresponding to isentropic thermodynamics. The questions of evolution to equilibrium and irreversibility ar"
+  },
+  {
+   "id": "1704.03317",
+   "full": false,
+   "field": true,
+   "score": 0.597,
+   "titles": {
+    "ru": "Thermodynamics of the Fermi gas in a nanotube"
+   },
+   "abstract": "For the ideal Fermi gas that fills the space inside a cylindrical tube, there are calculated the thermodynamic characteristics in general form for arbitrary temperatures, namely: the thermodynamic potential, energy, entropy, equations of state, heat capacities and compressibilities. All these quantities are expressed through the introduced standard functions and their derivatives. The radius of the tube is considered as an additional thermodynamic variable. It is shown that at low temperatures in the quasi-one-dimensional case the temperature dependencies of the entropy and heat capacities rem"
+  },
+  {
+   "id": "1003.2093",
+   "full": false,
+   "field": true,
+   "score": 0.593,
+   "titles": {
+    "ru": "Thermodynamics of interacting entropy-corrected holographic dark energy   in a non-flat FRW universe"
+   },
+   "abstract": "A so-called \"entropy-corrected holographic dark energy\" (ECHDE), was recently proposed to explain the dark energy-dominated universe with the help of quantum corrections to the entropy-area relation in the setup of loop quantum cosmology. Using this new definition, we investigate its thermodynamical features including entropy and energy conservation. We describe the thermodynamical interpretation of the interaction between ECHDE and dark matter in a non-flat universe. We obtain a relation between the interaction term of the dark components and thermal fluctuation. Our study further generalizes"
+  },
+  {
+   "id": "1403.1777",
+   "full": false,
+   "field": true,
+   "score": 0.592,
+   "titles": {
+    "ru": "Ensemble and Trajectory Thermodynamics: A Brief Introduction"
+   },
+   "abstract": "We revisit stochastic thermodynamics for a system with discrete energy states in contact with a heat and particle reservoir."
+  }
+ ],
+ "lang": {
+  "en": {
+   "note": "Quantum approaches are actively being developed in the fields of energy and thermodynamics, but experimental tests of new theoretical models are still scarce.",
+   "topic": "energy and thermodynamics",
+   "ideas": [
+    {
+     "based_on": [
+      "2603.15268"
+     ],
+     "title": "Build a quantum battery in a ring resonator and measure its efficiency",
+     "what": "Build an experimental setup replicating the quantum battery from paper 2603.15268: atoms in a ring resonator excited by light, with unidirectional energy transfer. Measure the charging and discharging efficiency and compare with the theoretical prediction.",
+     "why": "To test whether the effect reproduces in a real setup and to understand which parameters are critical for high efficiency. This will be useful for researchers in quantum technologies and energy.",
+     "origin": "Paper 2603.15268 proposes a theoretical model of a quantum battery with nearly 100% efficiency, but no experimental verification exists. No one has built such a system or measured how much real losses and decoherence reduce the efficiency.",
+     "first_step": "Assemble a test version of the resonator with rubidium atoms and check whether unidirectional energy transfer is observed.",
+     "needs": "Optical table, lasers, vacuum chamber, atomic beam or magneto-optical trap, single-photon detectors. Skills in atomic physics and optics. Equipment cost starts at several million rubles.",
+     "risks": "The complexity of stabilizing the resonator and controlling decoherence may prevent reaching the theoretical efficiency. The effect may be too small to measure under amateur conditions.",
+     "scale": "years",
+     "methods": [
+      "Assemble the optical setup with a ring resonator and a cold atom trap (as described in 2603.15268).",
+      "Measure the populations of atomic energy levels after the pump pulse and during discharge using spectroscopy.",
+      "Calculate the efficiency as the ratio of extracted energy to stored energy, varying the number of atoms and the pump intensity."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.03764"
+     ],
+     "title": "Test the thermodynamics of an optomechanical system with a quantum bath",
+     "what": "Build an optomechanical system (a micromirror in an optical cavity) and measure energy exchange with a quantum environment to test the predictions of paper 2602.03764 about simultaneously performing work and receiving heat.",
+     "why": "The paper provides new rules for thermodynamics of quantum systems, but experimental data are scarce. Such a test would help understand how to harness quantum fluctuations for useful work.",
+     "origin": "Paper 2602.03764 derives relations for energy exchange between a classical system and a quantum bath, but there is no experimental verification on a real optomechanical device. Data are lacking on how noticeable these effects are at room temperature.",
+     "first_step": "Assemble a simple optomechanical resonator (e.g., from commercial components) and measure its thermal fluctuations.",
+     "needs": "Optical cavity, micromirror, laser, photodetectors, cooling or stabilization system. Skills in optics and precision measurements.",
+     "risks": "Quantum effects may be masked by thermal noise; cooling to low temperatures may be required, complicating the setup.",
+     "scale": "thesis",
+     "methods": [
+      "Assemble an optomechanical resonator with a spring-mounted mirror (following the analogy of systems described in 2602.03764).",
+      "Measure mirror displacements and energy flows under the influence of squeezed light.",
+      "Compare the measured work and heat with the theoretical formulas from the paper, accounting for quantum corrections."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.22247"
+     ],
+     "title": "Simulate photon heat transfer between bodies and test the 2.7kT law",
+     "what": "Write a program to simulate radiative heat transfer between two bodies at the microscopic level, using the approach from paper 2601.22247, and check whether the average photon energy in the exchange is indeed 2.7 times the thermal energy.",
+     "why": "This would provide a simple tool for calculating radiative heat transfer in micro- and nanosystems, where classical formulas may fail.",
+     "origin": "Paper 2601.22247 derives a universal relation for the average photon energy in heat transfer, but it does not show how it manifests in specific geometries. Verification is lacking for the near-field regime and real materials.",
+     "first_step": "Write a simple Monte Carlo simulation for two parallel plates and compute the average energy of exchanged photons.",
+     "needs": "Computer, knowledge of Python or C++, access to articles on radiative heat transfer. Time for development and debugging.",
+     "risks": "The result may turn out to be trivial or coincide with classical calculations if quantum effects are not taken into account.",
+     "scale": "semester",
+     "methods": [
+      "Implement a random walk model for photons between two surfaces with given temperatures.",
+      "Calculate the average energy of photons participating in the exchange and compare with the prediction of 2.7kT.",
+      "Investigate the dependence on the distance between the bodies and on the materials."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el ámbito de la energía y la termodinámica, los enfoques cuánticos están en pleno desarrollo, pero aún hay pocas verificaciones experimentales de los nuevos modelos teóricos.",
+   "topic": "energía y termodinámica",
+   "ideas": [
+    {
+     "based_on": [
+      "2603.15268"
+     ],
+     "title": "Construir una batería cuántica en un resonador anular y medir su eficiencia",
+     "what": "Montar una instalación experimental que reproduzca la batería cuántica del trabajo 2603.15268: átomos en un resonador anular excitados por luz, con transferencia de energía unidireccional. Medir la eficiencia de carga y descarga y compararla con la predicción teórica.",
+     "why": "Comprobar si el efecto se reproduce en una instalación real y entender qué parámetros son críticos para lograr una alta eficiencia. Será útil para investigadores de tecnologías cuánticas y energía.",
+     "origin": "En el trabajo 2603.15268 se propone un modelo teórico de batería cuántica con una eficiencia cercana al 100%, pero no se ha verificado experimentalmente. Nadie ha construido un sistema así ni ha medido cuánto reducen la eficiencia las pérdidas reales y la decoherencia.",
+     "first_step": "Montar una versión de prueba del resonador con átomos de rubidio y comprobar si se observa la transferencia unidireccional de energía.",
+     "needs": "Mesa óptica, láseres, cámara de vacío, haz atómico o trampa magnetoóptica, detectores de fotones individuales. Habilidades en física atómica y óptica. El costo del equipo parte de varios millones de rublos.",
+     "risks": "La dificultad de estabilizar el resonador y controlar la decoherencia puede impedir alcanzar la eficiencia teórica. El efecto podría ser demasiado pequeño para medirlo en condiciones de aficionado.",
+     "scale": "años",
+     "methods": [
+      "Montar el esquema óptico con un resonador anular y una trampa de átomos fríos (según la descripción de 2603.15268).",
+      "Medir las poblaciones de los niveles de energía de los átomos tras el pulso de bombeo y durante la descarga, mediante espectroscopía.",
+      "Calcular la eficiencia como la relación entre la energía extraída y la almacenada, variando el número de átomos y la intensidad del bombeo."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.03764"
+     ],
+     "title": "Verificar la termodinámica de un sistema optomecánico con baño cuántico",
+     "what": "Construir un sistema optomecánico (un microespejo en un resonador óptico) y medir el intercambio de energía con el entorno cuántico, para comprobar las predicciones del trabajo 2602.03764 sobre realizar trabajo y recibir calor simultáneamente.",
+     "why": "El trabajo ofrece nuevas reglas de termodinámica para sistemas cuánticos, pero hay pocos datos experimentales. Esta verificación ayudaría a entender cómo aprovechar las fluctuaciones cuánticas para realizar trabajo útil.",
+     "origin": "En 2602.03764 se derivan relaciones para el intercambio de energía entre un sistema clásico y un baño cuántico, pero no se ha comprobado experimentalmente en un dispositivo optomecánico real. Faltan datos sobre cuán notables son estos efectos a temperatura ambiente.",
+     "first_step": "Montar un resonador optomecánico sencillo (por ejemplo, con componentes comerciales) y medir sus fluctuaciones térmicas.",
+     "needs": "Resonador óptico, microespejo, láser, fotodetectores, sistema de enfriamiento o estabilización. Habilidades en óptica y mediciones de precisión.",
+     "risks": "Los efectos cuánticos podrían quedar enmascarados por el ruido térmico; sería necesario enfriar a bajas temperaturas, lo que complica la instalación.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Montar un resonador optomecánico con un espejo sobre un resorte (siguiendo la analogía con los sistemas descritos en 2602.03764).",
+      "Medir los desplazamientos del espejo y los flujos de energía al aplicar luz comprimida.",
+      "Comparar el trabajo y el calor medidos con las fórmulas teóricas del trabajo, incluyendo las correcciones cuánticas."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.22247"
+     ],
+     "title": "Simular el intercambio de calor por fotones entre cuerpos y verificar la ley 2.7kT",
+     "what": "Escribir un programa para simular el intercambio de calor por radiación entre dos cuerpos a nivel microscópico, usando el enfoque del trabajo 2601.22247, y comprobar si la energía media del fotón en el intercambio es efectivamente 2.7 veces la energía térmica.",
+     "why": "Proporcionaría una herramienta sencilla para calcular el intercambio de calor por radiación en micro y nanosistemas, donde las fórmulas clásicas pueden no ser válidas.",
+     "origin": "En 2601.22247 se deriva una relación universal para la energía media del fotón en el intercambio de calor, pero no se muestra cómo se manifiesta en geometrías concretas. Faltan comprobaciones para el régimen de campo cercano y con materiales reales.",
+     "first_step": "Escribir una simulación simple de Monte Carlo para dos placas paralelas y calcular la energía media de los fotones intercambiados.",
+     "needs": "Computadora, conocimiento de Python o C++, acceso a artículos sobre transferencia de calor por radiación. Tiempo para desarrollar y depurar.",
+     "risks": "El resultado podría ser trivial o coincidir con los cálculos clásicos si no se tienen en cuenta los efectos cuánticos.",
+     "scale": "semestre",
+     "methods": [
+      "Implementar un modelo de caminatas aleatorias de fotones entre dos superficies con temperaturas dadas.",
+      "Calcular la energía media de los fotones que participan en el intercambio y compararla con la predicción 2.7kT.",
+      "Investigar la dependencia con la distancia entre los cuerpos y con los materiales."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجالي الطاقة والديناميكا الحرارية، تتطور المناهج الكمومية بنشاط، لكن الاختبارات التجريبية للنماذج النظرية الجديدة ما زالت قليلة.",
+   "topic": "الطاقة والديناميكا الحرارية",
+   "ideas": [
+    {
+     "based_on": [
+      "2603.15268"
+     ],
+     "title": "بناء بطارية كمومية في مرنان حلقي وقياس كفاءتها",
+     "what": "بناء منظومة تجريبية تحاكي البطارية الكمومية من العمل 2603.15268: ذرات داخل مرنان حلقي تُثار بالضوء، مع نقل طاقة أحادي الاتجاه. قياس كفاءة الشحن والتفريغ، ومقارنتها بالتوقع النظري.",
+     "why": "للتحقق مما إذا كان التأثير يتكرر في منظومة حقيقية، وفهم المعاملات الحرجة لتحقيق كفاءة عالية. سيفيد ذلك الباحثين في التقنيات الكمومية والطاقة.",
+     "origin": "في العمل 2603.15268 اقتُرح نموذج نظري لبطارية كمومية بكفاءة تقارب 100%، لكن لا يوجد تحقق تجريبي. لم يقم أحد ببناء مثل هذا النظام أو قياس مدى تأثير الخسائر الحقيقية وفقدان الترابط الكمومي على الكفاءة.",
+     "first_step": "بناء نسخة تجريبية من المرنان مع ذرات الروبيديوم والتحقق مما إذا كان نقل الطاقة أحادي الاتجاه يُلاحظ.",
+     "needs": "طاولة بصرية، ليزرات، حجرة تفريغ، حزمة ذرية أو مصيدة مغناطيسية بصرية، كواشف فوتونات مفردة. مهارات في الفيزياء الذرية والبصريات. تكلفة المعدات تبدأ من عدة ملايين روبل.",
+     "risks": "قد يعيق تعقيد تثبيت المرنان والتحكم في فقدان الترابط الكمومي الوصول إلى الكفاءة النظرية. قد يكون التأثير أصغر من أن يُقاس في ظروف الهواة.",
+     "scale": "سنوات",
+     "methods": [
+      "بناء مخطط بصري بمرنان حلقي ومصيدة للذرات الباردة (وفق الوصف في 2603.15268).",
+      "قياس أعداد شغل المستويات الطاقية للذرات بعد نبضة الضخ وأثناء التفريغ، باستخدام المطيافية.",
+      "حساب الكفاءة كنسبة الطاقة المستخرجة إلى الطاقة المخزنة، مع تغيير عدد الذرات وشدة الضخ."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.03764"
+     ],
+     "title": "اختبار الديناميكا الحرارية لنظام بصري ميكانيكي مع حمام كمومي",
+     "what": "بناء نظام بصري ميكانيكي (مرآة دقيقة داخل مرنان بصري) وقياس تبادل الطاقة مع البيئة الكمومية، للتحقق من تنبؤات العمل 2602.03764 حول إنجاز شغل واستقبال حرارة في الوقت نفسه.",
+     "why": "يقدم العمل قواعد جديدة للديناميكا الحرارية للأنظمة الكمومية، لكن البيانات التجريبية قليلة. مثل هذا الاختبار يساعد في فهم كيفية استخدام التقلبات الكمومية لإنتاج شغل مفيد.",
+     "origin": "في 2602.03764 اشتُقت علاقات لتبادل الطاقة بين نظام كلاسيكي وحمام كمومي، لكن لا يوجد تحقق تجريبي على جهاز بصري ميكانيكي حقيقي. تنقص البيانات حول مدى وضوح هذه التأثيرات في درجة حرارة الغرفة.",
+     "first_step": "بناء مرنان بصري ميكانيكي بسيط (مثلاً من مكونات تجارية) وقياس تقلباته الحرارية.",
+     "needs": "مرنان بصري، مرآة دقيقة، ليزر، كواشف ضوئية، نظام تبريد أو تثبيت. مهارات في البصريات والقياسات الدقيقة.",
+     "risks": "قد تُخفي الضوضاء الحرارية التأثيرات الكمومية؛ قد يتطلب الأمر تبريدًا لدرجات حرارة منخفضة، مما يعقد المنظومة.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "بناء مرنان بصري ميكانيكي بمرآة على نابض (على غرار الأنظمة الموصوفة في 2602.03764).",
+      "قياس إزاحات المرآة وتدفقات الطاقة عند تسليط ضوء مضغوط.",
+      "مقارنة الشغل والحرارة المقاسين بالصيغ النظرية من العمل، مع مراعاة التصحيحات الكمومية."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.22247"
+     ],
+     "title": "نمذجة التبادل الحراري الفوتوني بين الأجسام والتحقق من قانون 2.7kT",
+     "what": "كتابة برنامج لمحاكاة التبادل الحراري الإشعاعي بين جسمين على المستوى المجهري، باستخدام المنهج من العمل 2601.22247، والتحقق مما إذا كان متوسط طاقة الفوتون في التبادل أكبر بالفعل بمقدار 2.7 مرة من الطاقة الحرارية.",
+     "why": "سيعطي ذلك أداة بسيطة لحساب التبادل الحراري الإشعاعي في الأنظمة المجهرية والنانوية، حيث قد لا تعمل الصيغ الكلاسيكية.",
+     "origin": "في 2601.22247 اشتُقت علاقة عامة لمتوسط طاقة الفوتون في التبادل الحراري، لكن لم يُظهر كيف تظهر في أشكال هندسية محددة. ينقص التحقق في نظام المجال القريب والمواد الحقيقية.",
+     "first_step": "كتابة محاكاة مونت كارلو بسيطة للوحين متوازيين وحساب متوسط طاقة الفوتونات المتبادلة.",
+     "needs": "حاسوب، معرفة بلغة بايثون أو C++، وصول إلى مقالات عن انتقال الحرارة الإشعاعي. وقت للتطوير والتصحيح.",
+     "risks": "قد تكون النتيجة بديهية أو مطابقة للحسابات الكلاسيكية إذا لم تُؤخذ التأثيرات الكمومية في الاعتبار.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "تنفيذ نموذج مشي عشوائي للفوتونات بين سطحين بدرجتي حرارة محددتين.",
+      "حساب متوسط طاقة الفوتونات المشاركة في التبادل ومقارنته بالتوقع 2.7kT.",
+      "دراسة الاعتماد على المسافة بين الجسمين والمواد."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine de l'énergie et de la thermodynamique, les approches quantiques se développent activement, mais les vérifications expérimentales des nouveaux modèles théoriques sont encore rares.",
+   "topic": "énergie et thermodynamique",
+   "ideas": [
+    {
+     "based_on": [
+      "2603.15268"
+     ],
+     "title": "Assembler une batterie quantique dans un résonateur en anneau et mesurer son efficacité",
+     "what": "Construire un montage expérimental reproduisant la batterie quantique de l'article 2603.15268 : des atomes dans un résonateur en anneau, excités par la lumière, avec un transfert d'énergie unidirectionnel. Mesurer le rendement de charge et de décharge, et le comparer à la prédiction théorique.",
+     "why": "Vérifier si l'effet se reproduit dans un dispositif réel et comprendre quels paramètres sont critiques pour une efficacité élevée. Cela sera utile aux chercheurs en technologies quantiques et en énergie.",
+     "origin": "L'article 2603.15268 propose un modèle théorique de batterie quantique avec une efficacité proche de 100 %, mais aucune vérification expérimentale n'a été faite. Personne n'a assemblé un tel système ni mesuré dans quelle mesure les pertes réelles et la décohérence réduisent le rendement.",
+     "first_step": "Assembler une version d'essai du résonateur avec des atomes de rubidium et vérifier si le transfert d'énergie unidirectionnel est observé.",
+     "needs": "Table optique, lasers, chambre à vide, jet atomique ou piège magnéto-optique, détecteurs de photons uniques. Compétences en physique atomique et en optique. Coût de l'équipement : à partir de plusieurs millions de roubles.",
+     "risks": "La difficulté de stabiliser le résonateur et de contrôler la décohérence pourrait empêcher d'atteindre le rendement théorique. L'effet pourrait être trop faible pour être mesuré dans des conditions amateurs.",
+     "scale": "années",
+     "methods": [
+      "Monter le schéma optique avec un résonateur en anneau et un piège à atomes froids (selon la description de 2603.15268).",
+      "Mesurer les populations des niveaux d'énergie des atomes après l'impulsion de pompe et pendant la décharge, en utilisant la spectroscopie.",
+      "Calculer l'efficacité comme le rapport de l'énergie extraite à l'énergie stockée, en faisant varier le nombre d'atomes et l'intensité de la pompe."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.03764"
+     ],
+     "title": "Tester la thermodynamique d'un système optomécanique avec un bain quantique",
+     "what": "Construire un système optomécanique (un micro-miroir dans un résonateur optique) et mesurer l'échange d'énergie avec l'environnement quantique afin de vérifier les prédictions de l'article 2602.03764 concernant l'effet de travail et l'obtention de chaleur simultanés.",
+     "why": "L'article donne de nouvelles règles de thermodynamique pour les systèmes quantiques, mais les données expérimentales sont rares. Une telle vérification aiderait à comprendre comment utiliser les fluctuations quantiques pour produire un travail utile.",
+     "origin": "Dans 2602.03764, des relations pour l'échange d'énergie entre un système classique et un bain quantique sont dérivées, mais aucune vérification expérimentale sur un dispositif optomécanique réel n'a été faite. On manque de données sur l'ampleur de ces effets à température ambiante.",
+     "first_step": "Assembler un résonateur optomécanique simple (par exemple à partir de composants commerciaux) et mesurer ses fluctuations thermiques.",
+     "needs": "Résonateur optique, micro-miroir, laser, photodétecteurs, système de refroidissement ou de stabilisation. Compétences en optique et en mesures de précision.",
+     "risks": "Les effets quantiques pourraient être masqués par le bruit thermique ; un refroidissement à basse température serait nécessaire, ce qui compliquerait le montage.",
+     "scale": "diplôme",
+     "methods": [
+      "Assembler un résonateur optomécanique avec un miroir sur ressort (par analogie avec les systèmes décrits dans 2602.03764).",
+      "Mesurer les déplacements du miroir et les flux d'énergie sous l'effet de la lumière comprimée.",
+      "Comparer le travail et la chaleur mesurés aux formules théoriques de l'article, en tenant compte des corrections quantiques."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.22247"
+     ],
+     "title": "Modéliser le transfert de chaleur photonique entre corps et vérifier la loi 2.7kT",
+     "what": "Écrire un programme pour modéliser le transfert de chaleur par rayonnement entre deux corps à l'échelle microscopique, en utilisant l'approche de l'article 2601.22247, et vérifier si l'énergie moyenne des photons échangés est bien 2.7 fois l'énergie thermique.",
+     "why": "Cela fournirait un outil simple pour calculer le transfert de chaleur radiatif dans les micro- et nanosystèmes, où les formules classiques peuvent ne pas s'appliquer.",
+     "origin": "Dans 2601.22247, une relation universelle pour l'énergie moyenne des photons dans le transfert de chaleur est dérivée, mais on ne montre pas comment elle se manifeste dans des géométries spécifiques. Il manque une vérification pour le régime de champ proche et pour des matériaux réels.",
+     "first_step": "Écrire une simulation de Monte-Carlo simple pour deux plaques parallèles et calculer l'énergie moyenne des photons échangés.",
+     "needs": "Ordinateur, connaissance de Python ou C++, accès aux articles sur le transfert de chaleur radiatif. Temps pour le développement et le débogage.",
+     "risks": "Le résultat pourrait être trivial ou coïncider avec les calculs classiques si les effets quantiques ne sont pas pris en compte.",
+     "scale": "semestre",
+     "methods": [
+      "Implémenter un modèle de marche aléatoire des photons entre deux surfaces à des températures données.",
+      "Calculer l'énergie moyenne des photons participant à l'échange et la comparer à la prédiction 2.7kT.",
+      "Étudier la dépendance en fonction de la distance entre les corps et des matériaux."
+     ]
+    }
+   ]
+  }
+ }
+}

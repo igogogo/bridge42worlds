@@ -1755,6 +1755,13 @@ def original_abstract_html(article, lang):
     Показываем и у экспрессов: аннотация — ровно то, из чего экспресс и сделан, скрывать
     её там особенно нечего.
     """
+    # ЛИЦЕНЗИЯ ЗАКРЫВАЕТ ЭТОТ РАЗДЕЛ. У работ класса analysis (arXiv non-exclusive и
+    # NC-семейство) права на дословный текст автора нам никто не давал: публикуем только
+    # свой пересказ. Раньше заслон стоял ТОЛЬКО в воркере (он вырезает раздел при отдаче по
+    # ключу lic:*), а страница на диске всё равно несла чужой абзац — сторож лицензий
+    # считал такие страницы жёлтыми, 3 255 штук. Причину чиним здесь: не собираем вовсе.
+    if (article.get("license_class") or "") == "analysis":
+        return ""
     text = (article.get("abstract_orig") or "").strip()
     if not text:
         return ""
@@ -1873,7 +1880,10 @@ def knowledge_advice_html(article, lang):
     def meta(n):
         """Код работы и дата публикации — «паспорт» соседа той же строкой, что и в ленте."""
         aid = n.get("id") or ""
-        code = (f'<a class="km-arxiv" href="https://arxiv.org/abs/{attr_safe(aid)}" '
+        # data-work — признак для карточки у курсора (js/workcard.js): по наведению читатель
+        # видит НАШЕ резюме этой работы и уходит на нашу страницу, а не на arxiv.org.
+        code = (f'<a class="km-arxiv" data-work="{attr_safe(aid)}" '
+                f'href="https://arxiv.org/abs/{attr_safe(aid)}" '
                 f'target="_blank" rel="noopener">arXiv:{safe(aid)}</a>'
                 if re.match(r"^\d{4}\.\d{4,5}", aid) else f'<span class="km-arxiv">{safe(aid)}</span>')
         # Честная пометка: у экспресса разобрана только авторская аннотация. Читатель по
@@ -1894,7 +1904,16 @@ def knowledge_advice_html(article, lang):
     items = []
     for x in rec["directions"]:
         srcs = [s for s in (link(a) for a in (x.get("based_on") or [])) if s]
-        tail = (f'<span class="km-src">{safe(t["src"])} {" · ".join(srcs)}</span>'
+        # НОМЕР РАБОТЫ РЯДОМ С УТВЕРЖДЕНИЕМ. Раньше опора называлась только заголовком, а
+        # номер жил отдельно в списке соседей: чтобы понять, на что опирается направление,
+        # читателю приходилось сличать названия. Теперь у каждой опоры стоит её плашка с
+        # номером, и по наведению видно НАШЕ резюме этой работы (js/workcard.js).
+        codes = " ".join(
+            f'<a class="km-arxiv" data-work="{attr_safe(a)}" '
+            f'href="https://arxiv.org/abs/{attr_safe(a)}" target="_blank" rel="noopener">'
+            f'arXiv:{safe(a)}</a>'
+            for a in (x.get("based_on") or []) if re.match(r"^\d{4}\.\d{4,5}", str(a)))
+        tail = (f'<span class="km-src">{safe(t["src"])} {" · ".join(srcs)} {codes}</span>'
                 if srcs else "")
         items.append(f'<li>{safe(x["text"])}{tail}</li>')
     cards.append(f'<div class="aw-card aw-card-adv"><p class="aw-card-l">{safe(t["dirs"])}</p>'

@@ -1,0 +1,644 @@
+{
+ "topic": "теория гравитации",
+ "slug": "теория-гравитации",
+ "built": "2026-09-04",
+ "note": "В области теории гравитации активно развиваются подходы, связывающие гравитацию с квантовыми эффектами и предлагающие проверяемые предсказания для новых экспериментов и наблюдений.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.601,
+  "band": "sparse",
+  "near": 0,
+  "full": 1,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Собрать численную модель гравитационного излучения от расходящихся масс",
+   "what": "Воспроизвести расчёт спектра гравитационного излучения от пары масс, которые медленно расходятся, из работы 2606.01052, и расширить его на случай произвольного закона движения.",
+   "why": "Если удастся подтвердить совпадение с планковским спектром, это даст простую численную площадку для проверки аналогий между гравитацией и термодинамикой.",
+   "methods": [
+    "Взять формулы для медленно расходящихся масс из работы 2606.01052 и реализовать их численно на Python.",
+    "Сравнить полученный спектр с формулой Планка для разных параметров расхождения.",
+    "Попробовать обобщить на случай масс, движущихся по спирали или с ускорением, чтобы увидеть, сохраняется ли планковская форма."
+   ],
+   "origin": "В работе 2606.01052 выведена точная формула для конкретного сценария, но не показано, как спектр меняется при отклонении от медленного расхождения. Численная модель позволит проверить, насколько универсален этот результат.",
+   "first_step": "Написать код, который вычисляет спектр по формулам из статьи, и воспроизвести график из работы для проверки.",
+   "needs": "Компьютер с Python, знание основ численного интегрирования, доступ к статье.",
+   "risks": "Формулы могут быть громоздкими, и на их воспроизведение уйдёт больше времени, чем ожидалось. Возможно, спектр сохраняет планковскую форму только в узком диапазоне параметров.",
+   "scale": "семестр",
+   "based_on": [
+    "2606.01052"
+   ]
+  },
+  {
+   "title": "Проверить предсказания теории инерции из прошлого Вселенной на данных двойных пульсаров",
+   "what": "Использовать опубликованные данные о замедлении двойных пульсаров, чтобы оценить, есть ли отклонения от общей теории относительности, которые предсказывает теория из работы 2601.07904.",
+   "why": "Если теория верна, для очень плотных объектов должны быть заметные поправки к орбитальному движению, и это можно искать в уже существующих данных, не строя новый детектор.",
+   "methods": [
+    "Изучить предсказания для плотных объектов из работы 2601.07904 и вывести поправки к периоду обращения двойной системы.",
+    "Скачать открытые данные о тайминге двойных пульсаров (например, из ATNF Pulsar Catalogue).",
+    "Сравнить наблюдаемое замедление орбиты с предсказаниями ОТО и новой теории, оценить статистическую значимость."
+   ],
+   "origin": "Работа 2601.07904 утверждает, что отличия от ОТО должны проявляться для очень плотных объектов, но не приводит сравнения с реальными наблюдениями. Двойные пульсары — идеальная лаборатория для такой проверки, и данные по ним общедоступны.",
+   "first_step": "Выписать из статьи формулу для дополнительного ускорения в двойной системе и прикинуть, какой величины эффект ожидается для известных пульсаров.",
+   "needs": "Доступ к базам данных пульсаров, навыки обработки временных рядов, знание основ ОТО.",
+   "risks": "Эффект может оказаться слишком мал, чтобы его можно было выделить на фоне шумов и систематических погрешностей. Также возможна неоднозначность в интерпретации параметров пульсара.",
+   "scale": "диплом",
+   "based_on": [
+    "2601.07904"
+   ]
+  },
+  {
+   "title": "Построить лабораторный эксперимент по проверке связи гравитации и квантовой статистики через акустические аналоги",
+   "what": "Создать акустическую установку, имитирующую гравитационное излучение от расходящихся масс, и измерить спектр акустических волн, чтобы проверить, воспроизводится ли планковская форма.",
+   "why": "Акустические аналоги гравитации позволяют проверить идеи из работы 2606.01052 в настольном эксперименте, без детекторов гравитационных волн.",
+   "methods": [
+    "Спроектировать акустическую среду с переменной плотностью, моделирующую расходящиеся массы, по аналогии с методами из работы 2606.01052.",
+    "Использовать пьезоизлучатели и гидрофоны для генерации и регистрации акустических волн.",
+    "Измерить спектр излучения и сравнить с расчётным планковским спектром для акустического случая."
+   ],
+   "origin": "Работа 2606.01052 показала глубокую аналогию между гравитационным излучением и тепловым спектром, но это чисто теоретический результат. Акустические аналоги — известный способ проверить гравитационные эффекты в лаборатории, и никто ещё не пытался воспроизвести именно этот сценарий.",
+   "first_step": "Рассчитать параметры акустической среды, при которых ожидается планковский спектр, и закупить базовые компоненты.",
+   "needs": "Оборудование для акустических измерений (излучатели, гидрофоны, осциллограф), навыки работы с LabVIEW или Python для управления экспериментом, бюджет порядка 200-300 тысяч рублей.",
+   "risks": "Сложно точно контролировать акустическую среду, чтобы она соответствовала теоретической модели. Эффект может быть замаскирован вязкостью и нелинейностями.",
+   "scale": "годы",
+   "based_on": [
+    "2606.01052"
+   ]
+  },
+  {
+   "title": "Сравнить предсказания биметрических теорий гравитации по данным о гравитационных волнах",
+   "what": "Написать код для расчёта формы гравитационных волн в биметрических теориях, описанных в работах 2607.20689v1 и 1007.3290, и сравнить с опубликованными данными LIGO/Virgo.",
+   "why": "Если биметрические теории предсказывают заметное отличие в форме волн, это можно искать в уже собранных данных, не дожидаясь новых детекторов.",
+   "methods": [
+    "Изучить, как в работах 2607.20689v1 и 1007.3290 вычисляется изменение поляризации и скорости гравитационных волн.",
+    "Реализовать численный расчёт ожидаемой формы сигнала для конкретных событий LIGO (например, GW150914).",
+    "Использовать открытые данные LIGO и методы согласованной фильтрации для поиска отклонений от ОТО."
+   ],
+   "origin": "В работе 2607.20689v1 показано, что в некоторых биметрических моделях гравитационные волны меняют скорость и поляризацию, но не проведено сравнение с реальными данными. Работа 1007.3290 даёт теоретическую основу для таких моделей. Открытые данные LIGO позволяют проверить эти предсказания.",
+   "first_step": "Скачать данные события GW150914 с сайта LIGO и воспроизвести стандартный анализ в ОТО, чтобы убедиться в работоспособности пайплайна.",
+   "needs": "Доступ к данным LIGO, навыки программирования на Python (библиотеки PyCBC или аналоги), понимание методов анализа гравитационных волн.",
+   "risks": "Отклонения от ОТО могут быть слишком малы, чтобы их можно было обнаружить с текущей чувствительностью детекторов. Также возможны сложности с корректной реализацией биметрических уравнений.",
+   "scale": "диплом",
+   "based_on": [
+    "2607.20689v1",
+    "1007.3290"
+   ]
+  },
+  {
+   "title": "Проверить устойчивость гравитонов в моделях с обрезанием на малых расстояниях",
+   "what": "Численно решить уравнения для гравитонных пропагаторов в теории с ограничением роста гравитации на малых расстояниях, описанной в работе 2606.19321, и исследовать, при каких параметрах гравитоны остаются стабильными.",
+   "why": "Если гравитоны нестабильны в некоторых режимах, это может накладывать ограничения на жизнеспособность таких теорий, что важно для квантовой гравитации.",
+   "methods": [
+    "Взять уравнения для пропагатора из работы 2606.19321 и реализовать их численно для различных значений параметра обрезания.",
+    "Исследовать полюса пропагатора в комплексной плоскости энергии, чтобы определить условия стабильности.",
+    "Построить фазовые диаграммы стабильности в пространстве параметров теории."
+   ],
+   "origin": "Работа 2606.19321 аналитически показала стабильность гравитонов в некоторых случаях, но не исследовала весь диапазон параметров. Численный анализ позволит выявить границы применимости и возможные ограничения на теорию.",
+   "first_step": "Вывести из статьи явный вид уравнений для пропагатора и записать их в безразмерной форме, удобной для численного решения.",
+   "needs": "Компьютер с Python или Mathematica, знание методов решения дифференциальных уравнений, понимание квантовой теории поля.",
+   "risks": "Уравнения могут быть сложными для численного решения из-за сингулярностей. Возможно, стабильность сохраняется во всей области параметров, и результат будет тривиальным.",
+   "scale": "семестр",
+   "based_on": [
+    "2606.19321"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2604.19418",
+   "date": "2026-04-21",
+   "full": false,
+   "titles": {
+    "ru": "Квантовая ткань пространства-времени",
+    "en": "The Quantum Fabric of Spacetime",
+    "es": "El tejido cuántico del espacio-tiempo",
+    "ar": "النسيج الكمومي للزمكان",
+    "fr": "La toile quantique de l'espace-temps"
+   },
+   "score": 0.492,
+   "url": "/lang/{lang}/archive/2026-04-21/2604.19418/",
+   "abstract": "Пространство-время — не гладкое, а вибрирующее, словно шёлк на ветру. Его дрожь порождает квантовые вероятности и даже наделяет частицы массой. Это новый взгляд на объединение гравитации и микромира, проливающий свет на тёмную энергию и массы элементарных частиц."
+  },
+  {
+   "id": "2601.07904",
+   "date": "2026-01-12",
+   "full": false,
+   "titles": {
+    "ru": "Как инерция рождается из прошлого Вселенной",
+    "en": "How Inertia Emerges from the Universe's Past",
+    "es": "Cómo nace la inercia del pasado del universo",
+    "ar": "كيف تولد القصور الذاتي من ماضي الكون",
+    "fr": "Comment l'inertie naît du passé de l'Univers"
+   },
+   "score": 0.474,
+   "url": "/lang/{lang}/archive/2026-01-12/2601.07904/",
+   "abstract": "Учёные предложили теорию, где инерция — не свойство тела, а отклик на всю материю вокруг. В ней сила, мешающая разогнать камень, приходит из прошлого Вселенной. Теория согласуется с обычной физикой для лёгких тел, но предсказывает отличия для очень плотных объектов."
+  },
+  {
+   "id": "2606.01052",
+   "date": "2026-05-31",
+   "full": false,
+   "titles": {
+    "ru": "Гравитационный свет без огня",
+    "en": "Gravitational Light Without Fire",
+    "es": "Luz gravitacional sin fuego",
+    "ar": "ضوء ثقالي بلا نار",
+    "fr": "Lumière gravitationnelle sans feu"
+   },
+   "score": 0.469,
+   "url": "/lang/{lang}/archive/2026-05-31/2606.01052/",
+   "abstract": "Учёные вывели точную формулу гравитационного излучения от пары масс, которые медленно расходятся. Спектр этого излучения совпал с формулой Планка для теплового света, хотя никакого нагрева нет — только движение. Работа показывает глубокое родство между гравитацией и квантовой статистикой."
+  },
+  {
+   "id": "2607.20689v1",
+   "date": "2026-07-22",
+   "full": true,
+   "titles": {
+    "ru": "Космический исландский шпат: когда гравитационные волны начинают двоиться",
+    "en": "Cosmic Iceland Spar: When Gravitational Waves Double",
+    "es": "Espato de Islandia cósmico: cuando las ondas gravitacionales se duplican",
+    "ar": "بلورة الصاري الأيسلندي الكونية: حين تتثنى الموجات الثقالية",
+    "fr": "Le spath d'Islande cosmique : quand les ondes gravitationnelles se dédoublent"
+   },
+   "score": 0.463,
+   "url": "/lang/{lang}/archive/2026-07-22/2607.20689v1/",
+   "abstract": "Гравитационная волна, как луч света в дымке, может слегка «перекручиваться» в пространстве, пока летит к нам миллиарды лет. Учёные просчитали, как такая «скрутка» возникает в двух разных версиях теории гравитации, и нашли, где эффект сильнее. Оказалось, что в одной из версий волны меняют не только форму, но и скорость, а в трёх популярных моделях, объясняющих ускоренное расширение Вселенной, этот сдвиг заметно вырастает. Если будущие детекторы поймают эту разницу, мы сможем понять, какая из теорий верна, и узнать, как устроено само пространство."
+  },
+  {
+   "id": "2606.19321",
+   "date": "2026-06-17",
+   "full": false,
+   "titles": {
+    "ru": "Как гравитон перестаёт взрываться",
+    "en": "How the graviton stops blowing up",
+    "es": "Cómo el gravitón deja de explotar",
+    "ar": "كيف يتوقف الغرافيتون عن الانفجار",
+    "fr": "Comment le graviton cesse d'exploser"
+   },
+   "score": 0.461,
+   "url": "/lang/{lang}/archive/2026-06-17/2606.19321/",
+   "abstract": "Учёные вычислили, как ведут себя гравитоны — частицы-переносчики тяготения — в теории, где сила гравитации на сверхмалых расстояниях перестаёт расти. Они использовали специальные уравнения, которые напрямую описывают «отклик» частицы на возмущение, и учли скрытые симметрии, чтобы результаты не противоречили друг другу. Оказалось, что при разных настройках теории гравитоны остаются стабильными и не дают бесконечных ответов. Это шаг к пониманию, как квантовая гравитация может быть внутренне непротиворечивой теорией без духов — частиц с отрицательной вероятностью."
+  },
+  {
+   "id": "gr-qc/9912003",
+   "full": false,
+   "field": true,
+   "score": 0.601,
+   "titles": {
+    "ru": "Field Theory of Gravitation: Desire and Reality"
+   },
+   "abstract": "A retrospective analysis of the field theory of gravitation, describing gravitational field in the same way as other fields of matter in the flat space-time, is done. The field approach could be called \"quantum gravidynamics\" to distinguish it from the \"geometrodynamics\" or general relativity. The basic propositions and main conclusions of the field approach are discussed with reference to classical works of Birkhoff, Moshinsky, Thirring, Kalman, Feynman, Weinberg, Deser. In the case of weak fields both \"gravidynamics\" and \"geometrodynamics\" give the same predictions for classical relativistic"
+  },
+  {
+   "id": "physics/0612096",
+   "full": false,
+   "field": true,
+   "score": 0.6,
+   "titles": {
+    "ru": "A Theory of Gravity and General Relativity based on Quantum   Electromagnetism"
+   },
+   "abstract": "Based on first principles solutions in a unified framework of quantum mechanics and electromagnetism we predict the presence of a universal attractive depolarisation radiation (DR) Lorentz force ($F$) between quantum entities, each being either an IED matter particle or light quantum, in a vacuuonic dielectric vacuum. Given two quantum entities $i=1,2$ of either kind, of characteristic frequencies $\\nu_i^0$, masses $m_i^0=h\\nu_i^0 / c^2$ and separated at a distance r^0, the solution is $F=- G m_1^0 m_2^0/ (r^0)^2$, where $G= \\chi_0^2 e^4/12 \\pi^2 \\epsilon_0^2 \\rho_\\lambda$, $\\chi_0$ is the sus"
+  },
+  {
+   "id": "1607.04202",
+   "full": false,
+   "field": true,
+   "score": 0.598,
+   "titles": {
+    "ru": "Theory of Gravitational Waves"
+   },
+   "abstract": "The existence of gravitational radiation is a natural prediction of any relativistic description of the gravitational interaction. In this chapter, we focus on gravitational waves, as predicted by Einstein's general theory of relativity. First, we introduce those mathematical concepts that are necessary to properly formulate the physical theory, such as the notions of manifold, vector, tensor, metric, connection and curvature. Second, we motivate, formulate and then discuss Einstein's equation, which relates the geometry of spacetime to its matter content. Gravitational waves are later introdu"
+  },
+  {
+   "id": "1007.3290",
+   "full": false,
+   "field": true,
+   "score": 0.594,
+   "titles": {
+    "ru": "Bimetric Theory of Gravitational-Inertial Field in Riemannian and in   Finsler-Lagrange Approximation"
+   },
+   "abstract": "In present article the original proposition is a generalization of the Einstein's world tensor $g_{ij}$ by the introduction of pure inertial field tensor $g^{ac}_{ij}$ such that $R_{{\\mu}{\\nu}{\\lambda}}^{{\\alpha}}(g^{ac}_{ij})\\neq0$.Bimetric theory of gravitational-inertial field is considered for the case when the gravitational-Inertial field is governed by either a perfect magnetic fluid.In a series of papers published during the past decade with respect to M\\\"ossbauer experiments in a rotating system [71]-[75],it has been experimentally shown that the relative energy shift {\\Delta}E/E betwe"
+  },
+  {
+   "id": "2411.15166",
+   "full": false,
+   "field": true,
+   "score": 0.593,
+   "titles": {
+    "ru": "Gravitization Equation and Zero Energy Momentum Tensor Theorem with Cancellation Law in Gravitational Quantum Field Theory"
+   },
+   "abstract": "We investigate the essential properties of gravitational quantum field theory (GQFT) based on spin gauge symmetry, using the general theory of quantum electrodynamics as an example. A constraint equation for the field strength of the gravigauge field is derived, serving as a gravitization equation within the spin-related gravigauge spacetime. This equation reveals how gravitational effects emerge from the non-commutative relation of the gravigauge derivative operator. By transmuting the action from gravigauge spacetime to Minkowski spacetime, we demonstrate that translational invariance result"
+  },
+  {
+   "id": "1309.0214",
+   "full": false,
+   "field": true,
+   "score": 0.593,
+   "titles": {
+    "ru": "Gravitation, Equivalence Principle, and Quantum Mechanics"
+   },
+   "abstract": "Gravitation, according to General Relativity, is an attribute of space-time's geometry and hence not a force in the Newtonian sense. This is a consequence of Einstein's equivalence principle, which so far passed all experimental tests with high precision. However, the search for possible violations continues, for they, as the case may be, are expected to point towards more fundamental theoretical extensions of General Relativity. In particular, it is expected that useful insights are gained by studying the interaction between gravitational fields and genuine quantum-mechanical systems, like at"
+  },
+  {
+   "id": "physics/0105011",
+   "full": false,
+   "field": true,
+   "score": 0.592,
+   "titles": {
+    "ru": "A Relativistic Gravitational Model Based on an Atom's Behavior in a   Gravitational Field"
+   },
+   "abstract": "A simple general relativity theory for objects moving in gravitational fields is developed based on studying the behavior of an atom in a gravitational field. The theory is applied to calculate the satellite time dilation, light deflection by the sun, and Mercury's precession with an error of less than 1%. The approach to the new theory introduced here is radically different from the geometric approach used by Einstein's general relativity. The theory is field based where the potential energy of a system of masses can be easily calculated and the force can be found as the gradient of the poten"
+  }
+ ],
+ "lang": {
+  "en": {
+   "note": "In the field of gravitational theory, approaches that link gravity to quantum effects and offer testable predictions for new experiments and observations are actively developing.",
+   "topic": "theory of gravity",
+   "ideas": [
+    {
+     "based_on": [
+      "2606.01052"
+     ],
+     "title": "Build a numerical model of gravitational radiation from receding masses",
+     "what": "Reproduce the calculation of the gravitational radiation spectrum from a pair of masses that slowly recede, from paper 2606.01052, and extend it to the case of an arbitrary law of motion.",
+     "why": "If the match with the Planck spectrum is confirmed, this will provide a simple numerical platform for testing analogies between gravity and thermodynamics.",
+     "origin": "Paper 2606.01052 derives an exact formula for a specific scenario, but does not show how the spectrum changes when deviating from slow recession. A numerical model will allow testing how universal this result is.",
+     "first_step": "Write code that computes the spectrum using the formulas from the paper, and reproduce the figure from the paper for verification.",
+     "needs": "A computer with Python, knowledge of the basics of numerical integration, access to the paper.",
+     "risks": "The formulas may be cumbersome, and reproducing them may take longer than expected. The spectrum might retain the Planck form only in a narrow range of parameters.",
+     "scale": "semester",
+     "methods": [
+      "Take the formulas for slowly receding masses from paper 2606.01052 and implement them numerically in Python.",
+      "Compare the obtained spectrum with the Planck formula for different recession parameters.",
+      "Try to generalize to masses moving in a spiral or with acceleration, to see if the Planck form is preserved."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.07904"
+     ],
+     "title": "Test predictions of the theory of inertia from the early universe against double pulsar data",
+     "what": "Use published data on the orbital decay of double pulsars to assess whether there are deviations from general relativity predicted by the theory in paper 2601.07904.",
+     "why": "If the theory is correct, noticeable corrections to orbital motion should appear for very dense objects, and this can be searched for in existing data without building a new detector.",
+     "origin": "Paper 2601.07904 claims that deviations from GR should manifest for very dense objects, but does not provide a comparison with real observations. Double pulsars are an ideal laboratory for such a test, and their data are publicly available.",
+     "first_step": "Extract from the paper the formula for the additional acceleration in a binary system and estimate the magnitude of the expected effect for known pulsars.",
+     "needs": "Access to pulsar databases, skills in time-series processing, knowledge of the basics of GR.",
+     "risks": "The effect may be too small to be distinguished from noise and systematic errors. There may also be ambiguity in interpreting pulsar parameters.",
+     "scale": "thesis",
+     "methods": [
+      "Study the predictions for dense objects from paper 2601.07904 and derive corrections to the orbital period of a binary system.",
+      "Download open data on double pulsar timing (e.g., from the ATNF Pulsar Catalogue).",
+      "Compare the observed orbital decay with predictions from GR and the new theory, and assess statistical significance."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.01052"
+     ],
+     "title": "Build a laboratory experiment to test the connection between gravity and quantum statistics via acoustic analogs",
+     "what": "Create an acoustic setup that mimics gravitational radiation from receding masses, and measure the spectrum of acoustic waves to check whether the Planck form is reproduced.",
+     "why": "Acoustic analogs of gravity allow testing ideas from paper 2606.01052 in a tabletop experiment, without gravitational wave detectors.",
+     "origin": "Paper 2606.01052 demonstrated a deep analogy between gravitational radiation and a thermal spectrum, but this is a purely theoretical result. Acoustic analogs are a known way to test gravitational effects in the laboratory, and no one has yet attempted to reproduce this specific scenario.",
+     "first_step": "Calculate the parameters of the acoustic medium for which a Planck spectrum is expected, and purchase basic components.",
+     "needs": "Equipment for acoustic measurements (transducers, hydrophones, oscilloscope), skills with LabVIEW or Python for experiment control, a budget of about 200-300 thousand rubles.",
+     "risks": "It is difficult to precisely control the acoustic medium to match the theoretical model. The effect may be masked by viscosity and nonlinearities.",
+     "scale": "years",
+     "methods": [
+      "Design an acoustic medium with variable density that models receding masses, following the methods in paper 2606.01052.",
+      "Use piezoelectric transducers and hydrophones to generate and record acoustic waves.",
+      "Measure the radiation spectrum and compare it with the calculated Planck spectrum for the acoustic case."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.20689v1",
+      "1007.3290"
+     ],
+     "title": "Compare predictions of bimetric theories of gravity with gravitational wave data",
+     "what": "Write code to compute the shape of gravitational waves in bimetric theories described in papers 2607.20689v1 and 1007.3290, and compare with published LIGO/Virgo data.",
+     "why": "If bimetric theories predict a noticeable difference in waveform, this can be searched for in already collected data without waiting for new detectors.",
+     "origin": "Paper 2607.20689v1 shows that in some bimetric models gravitational waves change speed and polarization, but does not compare with real data. Paper 1007.3290 provides the theoretical foundation for such models. Open LIGO data allow testing these predictions.",
+     "first_step": "Download data for event GW150914 from the LIGO website and reproduce the standard GR analysis to ensure the pipeline works.",
+     "needs": "Access to LIGO data, programming skills in Python (PyCBC or similar libraries), understanding of gravitational wave analysis methods.",
+     "risks": "Deviations from GR may be too small to be detected with current detector sensitivity. There may also be difficulties in correctly implementing the bimetric equations.",
+     "scale": "thesis",
+     "methods": [
+      "Study how papers 2607.20689v1 and 1007.3290 compute changes in polarization and speed of gravitational waves.",
+      "Implement a numerical calculation of the expected signal shape for specific LIGO events (e.g., GW150914).",
+      "Use open LIGO data and matched filtering methods to search for deviations from GR."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.19321"
+     ],
+     "title": "Test the stability of gravitons in models with a short-distance cutoff",
+     "what": "Numerically solve the equations for graviton propagators in a theory that restricts the growth of gravity at short distances, described in paper 2606.19321, and investigate for which parameters gravitons remain stable.",
+     "why": "If gravitons are unstable in some regimes, this could impose constraints on the viability of such theories, which is important for quantum gravity.",
+     "origin": "Paper 2606.19321 analytically showed the stability of gravitons in some cases, but did not explore the full parameter range. Numerical analysis will reveal the boundaries of applicability and possible constraints on the theory.",
+     "first_step": "Derive from the paper the explicit form of the propagator equations and write them in a dimensionless form suitable for numerical solution.",
+     "needs": "A computer with Python or Mathematica, knowledge of methods for solving differential equations, understanding of quantum field theory.",
+     "risks": "The equations may be difficult to solve numerically due to singularities. It is possible that stability holds over the entire parameter range, making the result trivial.",
+     "scale": "semester",
+     "methods": [
+      "Take the propagator equations from paper 2606.19321 and implement them numerically for various values of the cutoff parameter.",
+      "Investigate the poles of the propagator in the complex energy plane to determine stability conditions.",
+      "Construct stability phase diagrams in the parameter space of the theory."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el campo de la teoría de la gravedad se desarrollan activamente enfoques que vinculan la gravedad con efectos cuánticos y ofrecen predicciones comprobables para nuevos experimentos y observaciones.",
+   "topic": "teoría de la gravedad",
+   "ideas": [
+    {
+     "based_on": [
+      "2606.01052"
+     ],
+     "title": "Construir un modelo numérico de la radiación gravitacional de masas que se separan",
+     "what": "Reproducir el cálculo del espectro de radiación gravitacional de un par de masas que se separan lentamente, a partir del trabajo 2606.01052, y extenderlo al caso de una ley de movimiento arbitraria.",
+     "why": "Si se logra confirmar la coincidencia con el espectro de Planck, esto proporcionará una plataforma numérica simple para probar analogías entre la gravedad y la termodinámica.",
+     "origin": "En el trabajo 2606.01052 se deriva una fórmula exacta para un escenario concreto, pero no se muestra cómo cambia el espectro cuando se desvía de la separación lenta. Un modelo numérico permitirá comprobar cuán universal es este resultado.",
+     "first_step": "Escribir un código que calcule el espectro según las fórmulas del artículo y reproducir la gráfica del trabajo para verificar.",
+     "needs": "Computadora con Python, conocimiento de los fundamentos de la integración numérica, acceso al artículo.",
+     "risks": "Las fórmulas pueden ser engorrosas y su reproducción puede llevar más tiempo del esperado. Es posible que el espectro conserve la forma de Planck solo en un rango estrecho de parámetros.",
+     "scale": "semestre",
+     "methods": [
+      "Tomar las fórmulas para masas que se separan lentamente del trabajo 2606.01052 e implementarlas numéricamente en Python.",
+      "Comparar el espectro obtenido con la fórmula de Planck para diferentes parámetros de separación.",
+      "Intentar generalizar al caso de masas que se mueven en espiral o con aceleración, para ver si la forma de Planck se mantiene."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.07904"
+     ],
+     "title": "Probar las predicciones de la teoría de la inercia del pasado del universo con datos de púlsares binarios",
+     "what": "Usar datos publicados sobre la desaceleración de púlsares binarios para evaluar si hay desviaciones de la relatividad general que predice la teoría del trabajo 2601.07904.",
+     "why": "Si la teoría es correcta, para objetos muy densos debería haber correcciones notables al movimiento orbital, y esto se puede buscar en datos existentes sin construir un nuevo detector.",
+     "origin": "El trabajo 2601.07904 afirma que las diferencias con la relatividad general deberían manifestarse en objetos muy densos, pero no presenta una comparación con observaciones reales. Los púlsares binarios son un laboratorio ideal para esta prueba y sus datos son de acceso público.",
+     "first_step": "Extraer del artículo la fórmula para la aceleración adicional en un sistema binario y estimar la magnitud del efecto esperado para púlsares conocidos.",
+     "needs": "Acceso a bases de datos de púlsares, habilidades en procesamiento de series temporales, conocimiento de los fundamentos de la relatividad general.",
+     "risks": "El efecto podría ser demasiado pequeño para distinguirlo del ruido y los errores sistemáticos. También es posible que haya ambigüedad en la interpretación de los parámetros del púlsar.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Estudiar las predicciones para objetos densos del trabajo 2601.07904 y derivar las correcciones al período orbital de un sistema binario.",
+      "Descargar datos abiertos de temporización de púlsares binarios (por ejemplo, del Catálogo de Púlsares ATNF).",
+      "Comparar la desaceleración orbital observada con las predicciones de la relatividad general y de la nueva teoría, y evaluar la significancia estadística."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.01052"
+     ],
+     "title": "Construir un experimento de laboratorio para probar la conexión entre gravedad y estadística cuántica mediante análogos acústicos",
+     "what": "Crear un montaje acústico que imite la radiación gravitacional de masas que se separan y medir el espectro de ondas acústicas para comprobar si se reproduce la forma de Planck.",
+     "why": "Los análogos acústicos de la gravedad permiten probar las ideas del trabajo 2606.01052 en un experimento de mesa, sin detectores de ondas gravitacionales.",
+     "origin": "El trabajo 2606.01052 mostró una profunda analogía entre la radiación gravitacional y el espectro térmico, pero es un resultado puramente teórico. Los análogos acústicos son una forma conocida de probar efectos gravitacionales en el laboratorio, y nadie ha intentado aún reproducir este escenario específico.",
+     "first_step": "Calcular los parámetros del medio acústico en los que se espera un espectro de Planck y adquirir los componentes básicos.",
+     "needs": "Equipo para mediciones acústicas (emisores, hidrófonos, osciloscopio), habilidades con LabVIEW o Python para controlar el experimento, presupuesto de unos 200-300 mil rublos.",
+     "risks": "Es difícil controlar con precisión el medio acústico para que corresponda al modelo teórico. El efecto podría quedar enmascarado por la viscosidad y las no linealidades.",
+     "scale": "años",
+     "methods": [
+      "Diseñar un medio acústico con densidad variable que simule masas que se separan, siguiendo la analogía con los métodos del trabajo 2606.01052.",
+      "Usar emisores piezoeléctricos e hidrófonos para generar y registrar ondas acústicas.",
+      "Medir el espectro de la radiación y compararlo con el espectro de Planck calculado para el caso acústico."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.20689v1",
+      "1007.3290"
+     ],
+     "title": "Comparar las predicciones de las teorías bimétricas de la gravedad con datos de ondas gravitacionales",
+     "what": "Escribir un código para calcular la forma de las ondas gravitacionales en teorías bimétricas, descritas en los trabajos 2607.20689v1 y 1007.3290, y comparar con los datos publicados de LIGO/Virgo.",
+     "why": "Si las teorías bimétricas predicen una diferencia notable en la forma de las ondas, esto se puede buscar en los datos ya recopilados, sin esperar nuevos detectores.",
+     "origin": "En el trabajo 2607.20689v1 se muestra que en algunos modelos bimétricos las ondas gravitacionales cambian de velocidad y polarización, pero no se realiza una comparación con datos reales. El trabajo 1007.3290 proporciona la base teórica para tales modelos. Los datos abiertos de LIGO permiten probar estas predicciones.",
+     "first_step": "Descargar los datos del evento GW150914 del sitio de LIGO y reproducir el análisis estándar en relatividad general para verificar que el pipeline funciona.",
+     "needs": "Acceso a los datos de LIGO, habilidades de programación en Python (bibliotecas PyCBC o similares), comprensión de los métodos de análisis de ondas gravitacionales.",
+     "risks": "Las desviaciones de la relatividad general podrían ser demasiado pequeñas para detectarlas con la sensibilidad actual de los detectores. También puede haber dificultades para implementar correctamente las ecuaciones bimétricas.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Estudiar cómo se calcula el cambio de polarización y velocidad de las ondas gravitacionales en los trabajos 2607.20689v1 y 1007.3290.",
+      "Implementar el cálculo numérico de la forma esperada de la señal para eventos específicos de LIGO (por ejemplo, GW150914).",
+      "Usar los datos abiertos de LIGO y métodos de filtrado adaptado para buscar desviaciones de la relatividad general."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.19321"
+     ],
+     "title": "Probar la estabilidad de los gravitones en modelos con corte a pequeñas distancias",
+     "what": "Resolver numéricamente las ecuaciones para los propagadores de gravitones en una teoría con límite al crecimiento de la gravedad a pequeñas distancias, descrita en el trabajo 2606.19321, e investigar bajo qué parámetros los gravitones permanecen estables.",
+     "why": "Si los gravitones son inestables en algunos regímenes, esto podría imponer restricciones a la viabilidad de tales teorías, lo cual es importante para la gravedad cuántica.",
+     "origin": "El trabajo 2606.19321 demostró analíticamente la estabilidad de los gravitones en algunos casos, pero no investigó todo el rango de parámetros. Un análisis numérico permitirá identificar los límites de aplicabilidad y posibles restricciones a la teoría.",
+     "first_step": "Derivar del artículo la forma explícita de las ecuaciones para el propagador y escribirlas en forma adimensional, adecuada para la solución numérica.",
+     "needs": "Computadora con Python o Mathematica, conocimiento de métodos para resolver ecuaciones diferenciales, comprensión de la teoría cuántica de campos.",
+     "risks": "Las ecuaciones pueden ser difíciles de resolver numéricamente debido a singularidades. Es posible que la estabilidad se mantenga en toda la región de parámetros, y el resultado sea trivial.",
+     "scale": "semestre",
+     "methods": [
+      "Tomar las ecuaciones para el propagador del trabajo 2606.19321 e implementarlas numéricamente para diferentes valores del parámetro de corte.",
+      "Investigar los polos del propagador en el plano complejo de energía para determinar las condiciones de estabilidad.",
+      "Construir diagramas de fase de estabilidad en el espacio de parámetros de la teoría."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال نظرية الجاذبية، تتطور بنشاط مناهج تربط الجاذبية بالتأثيرات الكمومية وتقدم تنبؤات قابلة للاختبار لتجارب ورصدات جديدة.",
+   "topic": "نظرية الجاذبية",
+   "ideas": [
+    {
+     "based_on": [
+      "2606.01052"
+     ],
+     "title": "بناء نموذج عددي لإشعاع الجاذبية الناتج عن كتل متباعدة",
+     "what": "إعادة إنتاج حساب طيف إشعاع الجاذبية الناتج عن كتلتين تتباعدان ببطء، من العمل 2606.01052، وتوسيعه ليشمل حالة قانون حركة تعسفي.",
+     "why": "إذا أمكن تأكيد التطابق مع طيف بلانك، فسيعطي ذلك منصة عددية بسيطة لاختبار أوجه التشابه بين الجاذبية والديناميكا الحرارية.",
+     "origin": "في العمل 2606.01052 تم اشتقاق صيغة دقيقة لسيناريو محدد، ولكن لم يُظهر كيف يتغير الطيف عند الانحراف عن التباعد البطيء. سيسمح النموذج العددي بالتحقق من مدى عالمية هذه النتيجة.",
+     "first_step": "كتابة كود يحسب الطيف وفقًا للصيغ الواردة في المقالة، وإعادة إنتاج الرسم البياني من العمل للتحقق.",
+     "needs": "حاسوب يعمل بنظام Python، ومعرفة بأساسيات التكامل العددي، والوصول إلى المقالة.",
+     "risks": "قد تكون الصيغ معقدة، وقد يستغرق إعادة إنتاجها وقتًا أطول من المتوقع. ومن المحتمل أن يحتفظ الطيف بالشكل البلانكي فقط في نطاق ضيق من المعاملات.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "أخذ الصيغ الخاصة بالكتل المتباعدة ببطء من العمل 2606.01052 وتنفيذها عدديًا باستخدام Python.",
+      "مقارنة الطيف الناتج مع صيغة بلانك لمعاملات تباعد مختلفة.",
+      "محاولة تعميم النتائج على حالة كتل تتحرك حلزونيًا أو بتسارع، لمعرفة ما إذا كان الشكل البلانكي محفوظًا."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.07904"
+     ],
+     "title": "اختبار تنبؤات نظرية القصور الذاتي من الماضي البعيد للكون باستخدام بيانات النباضات المزدوجة",
+     "what": "استخدام البيانات المنشورة حول تباطؤ النباضات المزدوجة لتقييم ما إذا كانت هناك انحرافات عن النسبية العامة تتنبأ بها النظرية الواردة في العمل 2601.07904.",
+     "why": "إذا كانت النظرية صحيحة، فيجب أن تكون هناك تصحيحات ملحوظة على الحركة المدارية للأجسام شديدة الكثافة، ويمكن البحث عنها في البيانات الموجودة بالفعل دون بناء كاشف جديد.",
+     "origin": "يدعي العمل 2601.07904 أن الاختلافات عن النسبية العامة يجب أن تظهر للأجسام شديدة الكثافة، لكنه لا يقدم مقارنة مع الأرصاد الفعلية. النباضات المزدوجة هي مختبر مثالي لمثل هذا الاختبار، وبياناتها متاحة للعموم.",
+     "first_step": "استخراج الصيغة من المقالة للتسارع الإضافي في النظام المزدوج وتقدير حجم التأثير المتوقع للنباضات المعروفة.",
+     "needs": "الوصول إلى قواعد بيانات النباضات، ومهارات معالجة السلاسل الزمنية، ومعرفة بأساسيات النسبية العامة.",
+     "risks": "قد يكون التأثير صغيرًا جدًا بحيث لا يمكن تمييزه عن الضوضاء والأخطاء المنهجية. كما قد يكون هناك غموض في تفسير معاملات النباض.",
+     "scale": "أطروحة",
+     "methods": [
+      "دراسة التنبؤات الخاصة بالأجسام الكثيفة من العمل 2601.07904 واشتقاق التصحيحات على فترة دوران النظام المزدوج.",
+      "تنزيل البيانات المفتوحة حول توقيت النباضات المزدوجة (على سبيل المثال، من ATNF Pulsar Catalogue).",
+      "مقارنة التباطؤ المرصود للمدار مع تنبؤات النسبية العامة والنظرية الجديدة، وتقييم الدلالة الإحصائية."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.01052"
+     ],
+     "title": "بناء تجربة معملية لاختبار العلاقة بين الجاذبية والإحصاء الكمومي من خلال النظائر الصوتية",
+     "what": "إنشاء إعداد صوتي يحاكي إشعاع الجاذبية الناتج عن كتل متباعدة، وقياس طيف الموجات الصوتية للتحقق مما إذا كان الشكل البلانكي يُستنسخ.",
+     "why": "تتيح النظائر الصوتية للجاذبية اختبار أفكار العمل 2606.01052 في تجربة مكتبية، دون الحاجة إلى كاشفات موجات الجاذبية.",
+     "origin": "أظهر العمل 2606.01052 تشابهًا عميقًا بين إشعاع الجاذبية والطيف الحراري، لكنها نتيجة نظرية بحتة. النظائر الصوتية هي وسيلة معروفة لاختبار تأثيرات الجاذبية في المختبر، ولم يحاول أحد حتى الآن إعادة إنتاج هذا السيناريو تحديدًا.",
+     "first_step": "حساب معاملات الوسط الصوتي التي يُتوقع عندها طيف بلانك، وشراء المكونات الأساسية.",
+     "needs": "معدات للقياسات الصوتية (مولدات الموجات، هيدروفونات، راسم إشارة)، ومهارات العمل مع LabVIEW أو Python للتحكم في التجربة، وميزانية تتراوح بين 200 و300 ألف روبل.",
+     "risks": "من الصعب التحكم بدقة في الوسط الصوتي ليتوافق مع النموذج النظري. قد يكون التأثير محجوبًا بسبب اللزوجة واللاخطية.",
+     "scale": "سنوات",
+     "methods": [
+      "تصميم وسط صوتي بكثافة متغيرة يحاكي الكتل المتباعدة، بالقياس على الطرق الواردة في العمل 2606.01052.",
+      "استخدام مولّدات كهرضغطية وهيدروفونات لتوليد وتسجيل الموجات الصوتية.",
+      "قياس طيف الإشعاع ومقارنته بالطيف البلانكي المحسوب للحالة الصوتية."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.20689v1",
+      "1007.3290"
+     ],
+     "title": "مقارنة تنبؤات نظريات الجاذبية ثنائية القياس باستخدام بيانات موجات الجاذبية",
+     "what": "كتابة كود لحساب شكل موجات الجاذبية في النظريات ثنائية القياس الموصوفة في العملين 2607.20689v1 و1007.3290، ومقارنتها بالبيانات المنشورة من LIGO/Virgo.",
+     "why": "إذا كانت النظريات ثنائية القياس تتنبأ باختلاف ملحوظ في شكل الموجات، فيمكن البحث عنه في البيانات المجمعة بالفعل دون انتظار كاشفات جديدة.",
+     "origin": "في العمل 2607.20689v1، تبيّن أنه في بعض النماذج ثنائية القياس، تغير موجات الجاذبية سرعتها واستقطابها، لكن لم تُجرَ مقارنة مع البيانات الفعلية. يقدم العمل 1007.3290 الأساس النظري لهذه النماذج. تسمح البيانات المفتوحة لـ LIGO باختبار هذه التنبؤات.",
+     "first_step": "تنزيل بيانات حدث GW150914 من موقع LIGO وإعادة إنتاج التحليل القياسي في إطار النسبية العامة للتأكد من سلامة خط المعالجة.",
+     "needs": "الوصول إلى بيانات LIGO، ومهارات البرمجة بلغة Python (مكتبات PyCBC أو ما يعادلها)، وفهم طرق تحليل موجات الجاذبية.",
+     "risks": "قد تكون الانحرافات عن النسبية العامة صغيرة جدًا بحيث لا يمكن اكتشافها بالحساسية الحالية للكاشفات. كما قد تكون هناك صعوبات في التنفيذ الصحيح للمعادلات ثنائية القياس.",
+     "scale": "أطروحة",
+     "methods": [
+      "دراسة كيفية حساب تغير الاستقطاب وسرعة موجات الجاذبية في العملين 2607.20689v1 و1007.3290.",
+      "تنفيذ حساب عددي للشكل المتوقع للإشارة لأحداث LIGO محددة (مثل GW150914).",
+      "استخدام البيانات المفتوحة لـ LIGO وطرق الترشيح المطابق للبحث عن انحرافات عن النسبية العامة."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.19321"
+     ],
+     "title": "التحقق من استقرار الغرافيتونات في نماذج ذات اقتطاع على المسافات الصغيرة",
+     "what": "حل معادلات مُوجّهات الغرافيتون عدديًا في نظرية تحد من نمو الجاذبية على المسافات الصغيرة، الموصوفة في العمل 2606.19321، ودراسة المعاملات التي تظل عندها الغرافيتونات مستقرة.",
+     "why": "إذا كانت الغرافيتونات غير مستقرة في بعض الأنظمة، فقد يفرض ذلك قيودًا على قابلية هذه النظريات للحياة، وهو أمر مهم للجاذبية الكمومية.",
+     "origin": "أظهر العمل 2606.19321 تحليليًا استقرار الغرافيتونات في بعض الحالات، لكنه لم يدرس كامل نطاق المعاملات. سيسمح التحليل العددي بتحديد حدود قابلية التطبيق والقيود المحتملة على النظرية.",
+     "first_step": "اشتقاق الصيغة الصريحة لمعادلات المُوجّه من المقالة وكتابتها في صورة بلا أبعاد مناسبة للحل العددي.",
+     "needs": "حاسوب يعمل بنظام Python أو Mathematica، ومعرفة بطرق حل المعادلات التفاضلية، وفهم نظرية الحقل الكمومي.",
+     "risks": "قد تكون المعادلات معقدة للحل العددي بسبب التفردات. ومن المحتمل أن يظل الاستقرار محفوظًا في كامل منطقة المعاملات، وستكون النتيجة تافهة.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "أخذ معادلات المُوجّه من العمل 2606.19321 وتنفيذها عدديًا لقيم مختلفة لمعامل الاقتطاع.",
+      "دراسة أقطاب المُوجّه في المستوى المركب للطاقة لتحديد شروط الاستقرار.",
+      "بناء مخططات طور الاستقرار في فضاء معاملات النظرية."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine de la théorie de la gravitation, des approches se développent activement, reliant la gravitation aux effets quantiques et proposant des prédictions vérifiables pour de nouvelles expériences et observations.",
+   "topic": "théorie de la gravitation",
+   "ideas": [
+    {
+     "based_on": [
+      "2606.01052"
+     ],
+     "title": "Construire un modèle numérique du rayonnement gravitationnel émis par des masses en divergence",
+     "what": "Reproduire le calcul du spectre du rayonnement gravitationnel émis par une paire de masses qui divergent lentement, à partir de l'article 2606.01052, et l'étendre au cas d'une loi de mouvement arbitraire.",
+     "why": "Si l'on parvient à confirmer la coïncidence avec le spectre de Planck, cela fournira une plateforme numérique simple pour tester les analogies entre la gravitation et la thermodynamique.",
+     "origin": "Dans l'article 2606.01052, une formule exacte est dérivée pour un scénario spécifique, mais on n'y montre pas comment le spectre change lorsqu'on s'écarte de la divergence lente. Un modèle numérique permettra de vérifier à quel point ce résultat est universel.",
+     "first_step": "Écrire un code qui calcule le spectre à partir des formules de l'article et reproduire le graphique de l'article pour vérification.",
+     "needs": "Un ordinateur avec Python, des connaissances de base en intégration numérique, un accès à l'article.",
+     "risks": "Les formules peuvent être lourdes et leur reproduction peut prendre plus de temps que prévu. Il est possible que le spectre ne conserve la forme de Planck que dans une plage étroite de paramètres.",
+     "scale": "semestre",
+     "methods": [
+      "Reprendre les formules pour les masses en divergence lente de l'article 2606.01052 et les implémenter numériquement en Python.",
+      "Comparer le spectre obtenu avec la formule de Planck pour différents paramètres de divergence.",
+      "Tenter de généraliser au cas de masses en mouvement spiralé ou accéléré, afin de voir si la forme de Planck est conservée."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.07904"
+     ],
+     "title": "Tester les prédictions de la théorie de l'inertie du passé de l'Univers sur les données des pulsars binaires",
+     "what": "Utiliser les données publiées sur le ralentissement des pulsars binaires pour évaluer s'il existe des écarts par rapport à la relativité générale, comme le prédit la théorie de l'article 2601.07904.",
+     "why": "Si la théorie est correcte, des corrections notables au mouvement orbital devraient apparaître pour les objets très denses, et on peut les rechercher dans les données existantes sans construire un nouveau détecteur.",
+     "origin": "L'article 2601.07904 affirme que des différences par rapport à la relativité générale devraient se manifester pour les objets très denses, mais il ne fournit pas de comparaison avec des observations réelles. Les pulsars binaires constituent un laboratoire idéal pour un tel test, et leurs données sont publiquement accessibles.",
+     "first_step": "Extraire de l'article la formule de l'accélération supplémentaire dans un système binaire et estimer l'ampleur de l'effet attendu pour des pulsars connus.",
+     "needs": "Accès aux bases de données de pulsars, compétences en traitement de séries temporelles, connaissances de base en relativité générale.",
+     "risks": "L'effet pourrait être trop faible pour être distingué du bruit et des erreurs systématiques. Une ambiguïté dans l'interprétation des paramètres du pulsar est également possible.",
+     "scale": "mémoire",
+     "methods": [
+      "Étudier les prédictions pour les objets denses de l'article 2601.07904 et dériver les corrections à la période orbitale d'un système binaire.",
+      "Télécharger les données ouvertes de chronométrage des pulsars binaires (par exemple, depuis le catalogue ATNF Pulsar Catalogue).",
+      "Comparer le ralentissement orbital observé avec les prédictions de la relativité générale et de la nouvelle théorie, et évaluer la significativité statistique."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.01052"
+     ],
+     "title": "Construire une expérience de laboratoire pour tester le lien entre gravitation et statistique quantique via des analogies acoustiques",
+     "what": "Créer un dispositif acoustique simulant le rayonnement gravitationnel de masses en divergence et mesurer le spectre des ondes acoustiques afin de vérifier si la forme de Planck est reproduite.",
+     "why": "Les analogies acoustiques de la gravitation permettent de tester les idées de l'article 2606.01052 dans une expérience de paillasse, sans détecteurs d'ondes gravitationnelles.",
+     "origin": "L'article 2606.01052 a montré une analogie profonde entre le rayonnement gravitationnel et le spectre thermique, mais il s'agit d'un résultat purement théorique. Les analogies acoustiques sont un moyen connu de tester les effets gravitationnels en laboratoire, et personne n'a encore tenté de reproduire précisément ce scénario.",
+     "first_step": "Calculer les paramètres du milieu acoustique pour lesquels un spectre de Planck est attendu et acheter les composants de base.",
+     "needs": "Équipement pour mesures acoustiques (émetteurs, hydrophones, oscilloscope), compétences en LabVIEW ou Python pour le contrôle de l'expérience, budget d'environ 200 à 300 mille roubles.",
+     "risks": "Il est difficile de contrôler précisément le milieu acoustique pour qu'il corresponde au modèle théorique. L'effet pourrait être masqué par la viscosité et les non-linéarités.",
+     "scale": "années",
+     "methods": [
+      "Concevoir un milieu acoustique à densité variable, modélisant des masses en divergence, par analogie avec les méthodes de l'article 2606.01052.",
+      "Utiliser des émetteurs piézoélectriques et des hydrophones pour générer et enregistrer les ondes acoustiques.",
+      "Mesurer le spectre du rayonnement et le comparer au spectre de Planck calculé pour le cas acoustique."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.20689v1",
+      "1007.3290"
+     ],
+     "title": "Comparer les prédictions des théories bimétriques de la gravitation avec les données sur les ondes gravitationnelles",
+     "what": "Écrire un code pour calculer la forme des ondes gravitationnelles dans les théories bimétriques décrites dans les articles 2607.20689v1 et 1007.3290, et les comparer aux données publiées de LIGO/Virgo.",
+     "why": "Si les théories bimétriques prédisent une différence notable dans la forme des ondes, on peut la rechercher dans les données déjà collectées, sans attendre de nouveaux détecteurs.",
+     "origin": "L'article 2607.20689v1 montre que dans certains modèles bimétriques, les ondes gravitationnelles changent de vitesse et de polarisation, mais aucune comparaison avec des données réelles n'est effectuée. L'article 1007.3290 fournit la base théorique de ces modèles. Les données ouvertes de LIGO permettent de tester ces prédictions.",
+     "first_step": "Télécharger les données de l'événement GW150914 depuis le site de LIGO et reproduire l'analyse standard en relativité générale pour s'assurer que le pipeline fonctionne.",
+     "needs": "Accès aux données de LIGO, compétences en programmation Python (bibliothèques PyCBC ou équivalentes), compréhension des méthodes d'analyse des ondes gravitationnelles.",
+     "risks": "Les écarts par rapport à la relativité générale pourraient être trop faibles pour être détectés avec la sensibilité actuelle des détecteurs. Des difficultés de mise en œuvre correcte des équations bimétriques sont également possibles.",
+     "scale": "mémoire",
+     "methods": [
+      "Étudier comment les articles 2607.20689v1 et 1007.3290 calculent le changement de polarisation et de vitesse des ondes gravitationnelles.",
+      "Implémenter un calcul numérique de la forme de signal attendue pour des événements LIGO spécifiques (par exemple, GW150914).",
+      "Utiliser les données ouvertes de LIGO et des méthodes de filtrage adapté pour rechercher des écarts par rapport à la relativité générale."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.19321"
+     ],
+     "title": "Tester la stabilité des gravitons dans les modèles avec coupure à petite distance",
+     "what": "Résoudre numériquement les équations pour les propagateurs de gravitons dans une théorie avec limitation de la croissance de la gravitation à petite distance, décrite dans l'article 2606.19321, et étudier pour quels paramètres les gravitons restent stables.",
+     "why": "Si les gravitons sont instables dans certains régimes, cela pourrait imposer des contraintes sur la viabilité de ces théories, ce qui est important pour la gravitation quantique.",
+     "origin": "L'article 2606.19321 a montré analytiquement la stabilité des gravitons dans certains cas, mais n'a pas exploré tout l'espace des paramètres. Une analyse numérique permettra de révéler les limites de validité et les contraintes possibles sur la théorie.",
+     "first_step": "Dériver de l'article la forme explicite des équations du propagateur et les écrire sous forme adimensionnée, pratique pour la résolution numérique.",
+     "needs": "Un ordinateur avec Python ou Mathematica, des connaissances en méthodes de résolution d'équations différentielles, une compréhension de la théorie quantique des champs.",
+     "risks": "Les équations peuvent être difficiles à résoudre numériquement en raison de singularités. Il est possible que la stabilité soit préservée sur tout l'espace des paramètres, rendant le résultat trivial.",
+     "scale": "semestre",
+     "methods": [
+      "Reprendre les équations du propagateur de l'article 2606.19321 et les implémenter numériquement pour différentes valeurs du paramètre de coupure.",
+      "Étudier les pôles du propagateur dans le plan complexe de l'énergie pour déterminer les conditions de stabilité.",
+      "Construire des diagrammes de phase de stabilité dans l'espace des paramètres de la théorie."
+     ]
+    }
+   ]
+  }
+ }
+}

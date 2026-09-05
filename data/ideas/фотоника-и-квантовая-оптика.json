@@ -1,0 +1,449 @@
+{
+ "topic": "фотоника и квантовая оптика",
+ "slug": "фотоника-и-квантовая-оптика",
+ "built": "2026-09-04",
+ "note": "В фотонных квантовых технологиях сейчас активно развиваются интегральные платформы для невзаимных устройств и методы универсальных квантовых операций на свету.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.601,
+  "band": "sparse",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Собрать оптическую схему для проверки невзаимного турникета на доступных компонентах",
+   "what": "Собрать упрощённый вариант невзаимного турникета для одиночных фотонов на основе частотного сдвига и интерференции, используя стандартные оптоволоконные компоненты и лазер. Измерить коэффициент пропускания в прямом и обратном направлениях для классического света, затем перейти к однофотонному режиму с ослабленным лазером.",
+   "why": "Проверить, насколько концепция из работы 2511.00570 воспроизводима без специализированного чипа. Если схема покажет невзаимность, это даст простую платформу для экспериментов с направленной передачей квантовых состояний.",
+   "methods": [
+    "Собрать интерферометрическую схему с электрооптическим модулятором для частотного сдвига, как описано в 2511.00570, но на дискретных компонентах.",
+    "Измерить пропускание в обоих направлениях с помощью лазера и фотодетектора, затем с ослабленным до однофотонного уровня излучением и счётчиком фотонов.",
+    "Оценить потери и сохранение квантового состояния через интерференцию с опорным пучком."
+   ],
+   "origin": "В 2511.00570 реализован невзаимный турникет на чипе с рекордными характеристиками. Не хватает проверки, можно ли получить аналогичный эффект на доступных компонентах, что позволило бы быстрее тестировать приложения в квантовой связи.",
+   "first_step": "Собрать базовую схему с модулятором и интерферометром, измерить невзаимность для классического света.",
+   "needs": "Оптический стол, лазер, электрооптический модулятор, светоделители, фотодетекторы, однофотонный детектор (можно арендовать).",
+   "risks": "Невзаимность может оказаться слабой из-за потерь в дискретных компонентах, и эффект будет трудно отличить от шума.",
+   "scale": "семестр",
+   "based_on": [
+    "2511.00570"
+   ]
+  },
+  {
+   "title": "Симуляция нелинейных квантовых операций на линейно-оптической платформе с использованием метода из 2602.06544",
+   "what": "Разработать и проверить численно схему для реализации нелинейных квантовых гейтов на основе линейной оптики, постселекции и вспомогательных фотонов, используя подход из работы 2602.06544. Сравнить эффективность с известными протоколами.",
+   "why": "Линейная оптика обычно ограничена линейными преобразованиями, но работа 2602.06544 показывает, как обойти это ограничение. Воспроизведение и оптимизация таких схем может улучшить практические квантовые вычисления.",
+   "methods": [
+    "Изучить математический аппарат из 2602.06544 для генерации нелинейных операций через линейные элементы и измерения.",
+    "Написать симуляцию на Python (например, с библиотекой QuTiP) для расчёта вероятности успеха и точности гейта.",
+    "Оптимизировать параметры схемы (число вспомогательных фотонов, конфигурацию интерферометра) для повышения эффективности."
+   ],
+   "origin": "В 2602.06544 предложен способ универсальных квантовых операций на свету, но не детализированы конкретные схемы для отдельных гейтов. Не хватает практической проработки и оценки реализуемости на существующих платформах.",
+   "first_step": "Воспроизвести расчёты из 2602.06544 для простейшего нелинейного элемента, затем реализовать симуляцию.",
+   "needs": "Компьютер, знание квантовой оптики и линейной алгебры, доступ к научным статьям.",
+   "risks": "Схемы могут требовать большого числа вспомогательных фотонов, что делает их неэффективными на практике.",
+   "scale": "диплом",
+   "based_on": [
+    "2602.06544",
+    "quant-ph/0512071"
+   ]
+  },
+  {
+   "title": "Измерение квантовых корреляций ультрахолодных атомов с помощью неразрушающего детектирования света в резонаторе",
+   "what": "Построить экспериментальную установку для неразрушающего измерения квантовых корреляций атомного ансамбля в оптической решётке через рассеяние света в резонатор, как описано в 1506.07700. Реализовать протокол различения квантовых состояний по статистике фотонов.",
+   "why": "Это позволит исследовать квантовые фазовые переходы и запутанность в ультрахолодных газах без разрушения образца, что важно для квантовой симуляции.",
+   "methods": [
+    "Собрать вакуумную камеру с магнитооптической ловушкой и оптической решёткой (или использовать существующую установку).",
+    "Установить оптический резонатор с высокой добротностью для сбора рассеянных фотонов.",
+    "Реализовать схему детектирования одиночных фотонов и анализ корреляций второго порядка для различения состояний."
+   ],
+   "origin": "Работа 1506.07700 описывает теоретические основы неразрушающего измерения корреляций, но экспериментальная демонстрация на конкретной платформе отсутствует. Не хватает проверки метода в реальных условиях с шумами и конечной эффективностью детектирования.",
+   "first_step": "Провести численное моделирование сигнала для параметров планируемой установки, чтобы оценить необходимое время измерения.",
+   "needs": "Лаборатория с оборудованием для ультрахолодных атомов (лазеры, вакуумная система, магнитные катушки), оптический резонатор, однофотонные детекторы.",
+   "risks": "Сложность совмещения оптической решётки с резонатором и подавления технических шумов может затянуть проект.",
+   "scale": "годы",
+   "based_on": [
+    "1506.07700"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2602.06544",
+   "date": "2026-02-06",
+   "full": false,
+   "titles": {
+    "ru": "Свет научился считать",
+    "en": "Light Learns to Count",
+    "es": "La luz aprende a contar",
+    "ar": "الضوء يتعلم العد",
+    "fr": "La lumière apprend à compter"
+   },
+   "score": 0.486,
+   "url": "/lang/{lang}/archive/2026-02-06/2602.06544/",
+   "abstract": "Учёные собрали фотонный компьютер, который умеет выполнять любые квантовые операции. Раньше световым схемам не хватало нелинейности, и они не могли стать универсальными. Теперь платформа генерирует особые состояния света почти гарантированно и моделирует сложные квантовые системы. Это открывает путь к надёжным квантовым вычислениям и симуляциям."
+  },
+  {
+   "id": "2511.00570",
+   "date": "2025-11-01",
+   "full": false,
+   "titles": {
+    "ru": "Квантовый чип-турникет для фотонов: невзаимная маршрутизация света",
+    "en": "A Quantum Turnstile Chip for Photons",
+    "es": "Chip torniquete cuántico para fotones",
+    "ar": "شريحة كمية كبوابة دوارة للفوتونات",
+    "fr": "Un tourniquet quantique pour les photons"
+   },
+   "score": 0.485,
+   "url": "/lang/{lang}/archive/2025-11-01/2511.00570/",
+   "abstract": "Физики реализовали на полупроводниковом чипе невзаимный турникет для одиночных фотонов, блокирующий обратный поток с эффективностью 99,96% без магнитов и шума. Устройство мягко меняет частоту света, сохраняя квантовое состояние и теряя менее 1% сигнала. Такой направленный свет не только передаёт данные без энтропийного шума, но и способен охлаждать детекторы, забирая тепловую энергию. Это шаг к квантовому интернету, защищённому самой природой частиц."
+  },
+  {
+   "id": "1506.07700",
+   "full": false,
+   "field": true,
+   "score": 0.601,
+   "titles": {
+    "ru": "Probing and Manipulating Fermionic and Bosonic Quantum Gases with   Quantum Light"
+   },
+   "abstract": "We study the atom-light interaction in the fully quantum regime, with focus on off-resonant light scattering into a cavity from ultracold atoms trapped in an optical lattice. The detection of photons allows the quantum nondemolition (QND) measurement of quantum correlations of the atomic ensemble, distinguishing between different quantum states. We analyse the entanglement between light and matter and show how it can be exploited for realising multimode macroscopic quantum superpositions such as Schr\\\"odinger cat states, for both bosons and fermions. We provide examples utilising different mea"
+  },
+  {
+   "id": "astro-ph/0701220",
+   "full": false,
+   "field": true,
+   "score": 0.598,
+   "titles": {
+    "ru": "Photonic Astronomy and Quantum Optics"
+   },
+   "abstract": "Quantum optics potentially offers an information channel from the Universe beyond the established ones of imaging and spectroscopy. All existing cameras and all spectrometers measure aspects of the first-order spatial and/or temporal coherence of light. However, light has additional degrees of freedom, manifest in the statistics of photon arrival times, or in the amount of photon orbital angular momentum. Such quantum-optical measures may carry information on how the light was created at the source, and whether it reached the observer directly or via some intermediate process. Astronomical qua"
+  },
+  {
+   "id": "quant-ph/9509018",
+   "full": false,
+   "field": true,
+   "score": 0.595,
+   "titles": {
+    "ru": "Introduction to Quantum Optics"
+   },
+   "abstract": "The theory of quantum propagator and time--dependent integrals of motion in quantum optics is reviewed as well as the properties of Wigner function, Q--function, and coherent state representation. Propagators and wave functions of a free particle, harmonic oscillator, and the oscillator with varying frequency are studied using time--dependent linear in position and momentum integrals of motion. Such nonclassical states of light (of quantum systems) as squeezed states, correlated states, even and odd coherent states (Schr\\\"odinger cat states) are considered. Photon distribution functions of Sch"
+  },
+  {
+   "id": "2206.02247",
+   "full": false,
+   "field": true,
+   "score": 0.591,
+   "titles": {
+    "ru": "Quantum non-Gaussianity of light and atoms"
+   },
+   "abstract": "Quantum non-Gaussian states of photons and phonons are conclusive and direct witnesses of higher-than-quadratic nonlinearities in optical and mechanical processes. Moreover, they are proven resources for quantum sensing, communication and error correction with diverse continuous-variable systems. This review introduces theoretical analyses of nonclassical and quantum non-Gaussian states of photons and phonons. It recapitulates approaches used to derive operational criteria for photons tolerant to optical losses, their application in experiments and their nowadays extension to quantum non-Gauss"
+  },
+  {
+   "id": "quant-ph/0405030",
+   "full": false,
+   "field": true,
+   "score": 0.591,
+   "titles": {
+    "ru": "Quantum optical implementation of quantum information processing"
+   },
+   "abstract": "By popular request we post these old (from 2001) lecture notes of the Varenna Summer School Proceedings. The original was published as J. I. Cirac, L. M. Duan, and P. Zoller, in \"Experimental Quantum Computation and Information\" Proceedings of the International School of Physics \"Enrico Fermi\", Course CXLVIII, p. 263, edited by F. Di Martini and C. Monroe (IOS Press, Amsterdam, 2002)."
+  },
+  {
+   "id": "1402.2541",
+   "full": false,
+   "field": true,
+   "score": 0.591,
+   "titles": {
+    "ru": "Quantum optics and cavity QED with quantum dots in photonic crystals"
+   },
+   "abstract": "This chapter will primarily focus on the studies of quantum optics with semiconductor, epitaxially grown quantum dots embedded in photonic crystal cavities. We will start by giving brief introductions into photonic crystals and quantum dots, then proceed with the introduction to cavity quantum electrodynamics (QED) effects, with a particular emphasis on the demonstration of these effects on the quantum dot-photonic crystal platform. Finally, we will focus on the applications of such cavity QED effects."
+  },
+  {
+   "id": "1904.01251",
+   "full": false,
+   "field": true,
+   "score": 0.59,
+   "titles": {
+    "ru": "Quantum imaging with sub-Poissonian light: challenges and perspectives   in optical metrology"
+   },
+   "abstract": "Non-classical correlations in optical beams offer the unprecedented opportunity of surpassing conventional limits of sensitivity and resolution in optical measurements and imaging, especially but not only, when a low photon flux down to the single photons are measured. We review the principles of quantum imaging and sensing techniques which exploit sub-Poissonian photon statistics and non-classical photon number correlation, presenting some state-of-the-art achievements in the field. These quantum photonics protocols have the potential to trigger major steps in many applications, such as micro"
+  },
+  {
+   "id": "2204.12985",
+   "full": false,
+   "field": true,
+   "score": 0.586,
+   "titles": {
+    "ru": "Quantum Linear Optics via String Diagrams"
+   },
+   "abstract": "We establish a formal bridge between qubit-based and photonic quantum computing. We do this by defining a functor from the ZX calculus to linear optical circuits. In the process we provide a compositional theory of quantum linear optics which allows to reason about events involving multiple photons such as those required to perform linear-optical and fusion-based quantum computing."
+  },
+  {
+   "id": "2106.00372",
+   "full": false,
+   "field": true,
+   "score": 0.585,
+   "titles": {
+    "ru": "Quantum-Optical Spectrometry in Relativistic Laser-Plasma Interactions   Using the High-Harmonic Generation Process: A Proposal"
+   },
+   "abstract": "Quantum-optical spectrometry is a recently developed shot-to-shot photon correlation-based method, namely using a quantum spectrometer (QS), that has been used to reveal the quantum optical nature of intense laser-matter interactions and connect the research domains of quantum optics (QO) and strong laser-field physics (SLFP). The method provides the probability of absorbing photons from a driving laser field towards the generation of a strong laser-field interaction product, such as high-order harmonics. In this case, the harmonic spectrum is reflected in the photon number distribution of the"
+  },
+  {
+   "id": "quant-ph/0512071",
+   "full": false,
+   "field": true,
+   "score": 0.585,
+   "titles": {
+    "ru": "Review article: Linear optical quantum computing"
+   },
+   "abstract": "Linear optics with photon counting is a prominent candidate for practical quantum computing. The protocol by Knill, Laflamme, and Milburn [Nature 409, 46 (2001)] explicitly demonstrates that efficient scalable quantum computing with single photons, linear optical elements, and projective measurements is possible. Subsequently, several improvements on this protocol have started to bridge the gap between theoretical scalability and practical implementation. We review the original theory and its improvements, and we give a few examples of experimental two-qubit gates. We discuss the use of realis"
+  }
+ ],
+ "lang": {
+  "en": {
+   "note": "In photonic quantum technologies, integrated platforms for nonreciprocal devices and methods for universal quantum operations on light are currently being actively developed.",
+   "topic": "photonics and quantum optics",
+   "ideas": [
+    {
+     "based_on": [
+      "2511.00570"
+     ],
+     "title": "Building an optical setup to test a nonreciprocal turnstile using off-the-shelf components",
+     "what": "Build a simplified version of a nonreciprocal turnstile for single photons based on frequency shifting and interference, using standard fiber-optic components and a laser. Measure the transmission coefficient in the forward and backward directions for classical light, then move to the single-photon regime with an attenuated laser.",
+     "why": "To test how reproducible the concept from paper 2511.00570 is without a specialized chip. If the setup shows nonreciprocity, it will provide a simple platform for experiments on directional transfer of quantum states.",
+     "origin": "In 2511.00570, a nonreciprocal turnstile on a chip with record-breaking performance was demonstrated. What is missing is a test of whether a similar effect can be achieved with off-the-shelf components, which would allow faster testing of applications in quantum communication.",
+     "first_step": "Assemble a basic setup with a modulator and an interferometer, and measure nonreciprocity for classical light.",
+     "needs": "Optical table, laser, electro-optic modulator, beam splitters, photodetectors, single-photon detector (can be rented).",
+     "risks": "Nonreciprocity may be weak due to losses in discrete components, making the effect hard to distinguish from noise.",
+     "scale": "semester",
+     "methods": [
+      "Build an interferometric setup with an electro-optic modulator for frequency shifting, as described in 2511.00570, but using discrete components.",
+      "Measure transmission in both directions using a laser and photodetector, then with light attenuated to the single-photon level and a photon counter.",
+      "Assess losses and preservation of the quantum state through interference with a reference beam."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.06544",
+      "quant-ph/0512071"
+     ],
+     "title": "Simulating nonlinear quantum operations on a linear-optical platform using the method from 2602.06544",
+     "what": "Develop and numerically test a scheme for implementing nonlinear quantum gates based on linear optics, postselection, and auxiliary photons, using the approach from paper 2602.06544. Compare the efficiency with known protocols.",
+     "why": "Linear optics is usually limited to linear transformations, but paper 2602.06544 shows how to overcome this limitation. Reproducing and optimizing such schemes could improve practical quantum computing.",
+     "origin": "In 2602.06544, a method for universal quantum operations on light is proposed, but specific circuits for individual gates are not detailed. What is missing is practical elaboration and assessment of feasibility on existing platforms.",
+     "first_step": "Reproduce the calculations from 2602.06544 for the simplest nonlinear element, then implement the simulation.",
+     "needs": "Computer, knowledge of quantum optics and linear algebra, access to scientific articles.",
+     "risks": "The schemes may require a large number of auxiliary photons, making them inefficient in practice.",
+     "scale": "thesis",
+     "methods": [
+      "Study the mathematical framework from 2602.06544 for generating nonlinear operations through linear elements and measurements.",
+      "Write a simulation in Python (e.g., using the QuTiP library) to calculate the success probability and gate fidelity.",
+      "Optimize the circuit parameters (number of auxiliary photons, interferometer configuration) to improve efficiency."
+     ]
+    },
+    {
+     "based_on": [
+      "1506.07700"
+     ],
+     "title": "Measuring quantum correlations of ultracold atoms via nondestructive light detection in a cavity",
+     "what": "Build an experimental setup for nondestructive measurement of quantum correlations of an atomic ensemble in an optical lattice via light scattering into a cavity, as described in 1506.07700. Implement a protocol for distinguishing quantum states based on photon statistics.",
+     "why": "This will allow studying quantum phase transitions and entanglement in ultracold gases without destroying the sample, which is important for quantum simulation.",
+     "origin": "Paper 1506.07700 describes the theoretical foundations of nondestructive measurement of correlations, but experimental demonstration on a specific platform is lacking. What is missing is a test of the method under real conditions with noise and finite detection efficiency.",
+     "first_step": "Perform numerical simulation of the signal for the parameters of the planned setup to estimate the required measurement time.",
+     "needs": "Laboratory with equipment for ultracold atoms (lasers, vacuum system, magnetic coils), optical cavity, single-photon detectors.",
+     "risks": "The complexity of aligning the optical lattice with the cavity and suppressing technical noise may delay the project.",
+     "scale": "years",
+     "methods": [
+      "Assemble a vacuum chamber with a magneto-optical trap and an optical lattice (or use an existing setup).",
+      "Install a high-finesse optical cavity to collect scattered photons.",
+      "Implement a single-photon detection scheme and second-order correlation analysis to distinguish states."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En las tecnologías cuánticas fotónicas se están desarrollando activamente plataformas integradas para dispositivos no recíprocos y métodos de operaciones cuánticas universales con luz.",
+   "topic": "fotónica y óptica cuántica",
+   "ideas": [
+    {
+     "based_on": [
+      "2511.00570"
+     ],
+     "title": "Montar un esquema óptico para probar un torniquete no recíproco con componentes disponibles",
+     "what": "Montar una versión simplificada de un torniquete no recíproco para fotones individuales basado en desplazamiento de frecuencia e interferencia, utilizando componentes de fibra óptica estándar y un láser. Medir el coeficiente de transmisión en las direcciones directa e inversa para luz clásica y luego pasar al régimen de un solo fotón con un láser atenuado.",
+     "why": "Comprobar hasta qué punto el concepto del trabajo 2511.00570 es reproducible sin un chip especializado. Si el esquema muestra no reciprocidad, proporcionará una plataforma sencilla para experimentos con transferencia direccional de estados cuánticos.",
+     "origin": "En 2511.00570 se implementó un torniquete no recíproco en un chip con características récord. Falta verificar si se puede obtener un efecto similar con componentes disponibles, lo que permitiría probar aplicaciones en comunicación cuántica más rápidamente.",
+     "first_step": "Montar el esquema básico con un modulador y un interferómetro, y medir la no reciprocidad para luz clásica.",
+     "needs": "Mesa óptica, láser, modulador electroóptico, divisores de haz, fotodetectores, detector de fotón único (se puede alquilar).",
+     "risks": "La no reciprocidad podría ser débil debido a pérdidas en componentes discretos, y el efecto podría ser difícil de distinguir del ruido.",
+     "scale": "semestre",
+     "methods": [
+      "Montar el esquema interferométrico con un modulador electroóptico para el desplazamiento de frecuencia, como se describe en 2511.00570, pero con componentes discretos.",
+      "Medir la transmisión en ambas direcciones con un láser y un fotodetector, y luego con radiación atenuada al nivel de un solo fotón y un contador de fotones.",
+      "Evaluar las pérdidas y la preservación del estado cuántico mediante la interferencia con un haz de referencia."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.06544",
+      "quant-ph/0512071"
+     ],
+     "title": "Simulación de operaciones cuánticas no lineales en una plataforma de óptica lineal utilizando el método de 2602.06544",
+     "what": "Desarrollar y verificar numéricamente un esquema para implementar compuertas cuánticas no lineales basado en óptica lineal, postselección y fotones auxiliares, utilizando el enfoque del trabajo 2602.06544. Comparar la eficiencia con protocolos conocidos.",
+     "why": "La óptica lineal suele estar limitada a transformaciones lineales, pero el trabajo 2602.06544 muestra cómo superar esta limitación. Reproducir y optimizar tales esquemas podría mejorar la computación cuántica práctica.",
+     "origin": "En 2602.06544 se propone un método para operaciones cuánticas universales con luz, pero no se detallan esquemas específicos para compuertas individuales. Falta un desarrollo práctico y una evaluación de viabilidad en plataformas existentes.",
+     "first_step": "Reproducir los cálculos de 2602.06544 para el elemento no lineal más simple y luego implementar la simulación.",
+     "needs": "Computadora, conocimiento de óptica cuántica y álgebra lineal, acceso a artículos científicos.",
+     "risks": "Los esquemas podrían requerir un gran número de fotones auxiliares, lo que los haría ineficientes en la práctica.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Estudiar el aparato matemático de 2602.06544 para generar operaciones no lineales mediante elementos lineales y mediciones.",
+      "Escribir una simulación en Python (por ejemplo, con la biblioteca QuTiP) para calcular la probabilidad de éxito y la fidelidad de la compuerta.",
+      "Optimizar los parámetros del esquema (número de fotones auxiliares, configuración del interferómetro) para aumentar la eficiencia."
+     ]
+    },
+    {
+     "based_on": [
+      "1506.07700"
+     ],
+     "title": "Medición de correlaciones cuánticas de átomos ultrafríos mediante detección de luz no destructiva en una cavidad",
+     "what": "Construir una configuración experimental para la medición no destructiva de correlaciones cuánticas de un conjunto atómico en una red óptica mediante la dispersión de luz en una cavidad, como se describe en 1506.07700. Implementar un protocolo para distinguir estados cuánticos según la estadística de fotones.",
+     "why": "Esto permitirá investigar transiciones de fase cuánticas y entrelazamiento en gases ultrafríos sin destruir la muestra, lo cual es importante para la simulación cuántica.",
+     "origin": "El trabajo 1506.07700 describe las bases teóricas de la medición no destructiva de correlaciones, pero no hay una demostración experimental en una plataforma concreta. Falta verificar el método en condiciones reales con ruido y eficiencia de detección finita.",
+     "first_step": "Realizar una simulación numérica de la señal para los parámetros de la configuración planificada, con el fin de estimar el tiempo de medición necesario.",
+     "needs": "Laboratorio con equipo para átomos ultrafríos (láseres, sistema de vacío, bobinas magnéticas), cavidad óptica, detectores de fotón único.",
+     "risks": "La dificultad de combinar la red óptica con la cavidad y suprimir el ruido técnico podría retrasar el proyecto.",
+     "scale": "años",
+     "methods": [
+      "Montar la cámara de vacío con una trampa magnetoóptica y una red óptica (o utilizar una configuración existente).",
+      "Instalar una cavidad óptica de alta fineza para recolectar los fotones dispersados.",
+      "Implementar el esquema de detección de fotones individuales y el análisis de correlaciones de segundo orden para distinguir los estados."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في تقنيات الفوتونات الكمومية، تتطور حاليًا منصات متكاملة للأجهزة غير المتبادلة وطرق إجراء عمليات كمومية عامة على الضوء.",
+   "topic": "الفوتونيات والبصريات الكمومية",
+   "ideas": [
+    {
+     "based_on": [
+      "2511.00570"
+     ],
+     "title": "بناء دائرة بصرية لاختبار البوابة الدوارة غير المتبادلة باستخدام مكونات متاحة",
+     "what": "بناء نسخة مبسطة من البوابة الدوارة غير المتبادلة للفوتونات المفردة، تعتمد على الإزاحة الترددية والتداخل، باستخدام مكونات ألياف بصرية قياسية وليزر. قياس معامل النفاذية في الاتجاهين الأمامي والخلفي للضوء الكلاسيكي، ثم الانتقال إلى نظام الفوتون الواحد باستخدام ليزر مخفف.",
+     "why": "التحقق من إمكانية إعادة إنتاج المفهوم الوارد في العمل 2511.00570 دون الحاجة إلى شريحة متخصصة. إذا أظهرت الدائرة سلوكًا غير متبادل، فسيمثل ذلك منصة بسيطة لتجارب النقل الموجّه للحالات الكمومية.",
+     "origin": "في العمل 2511.00570 تم تحقيق بوابة دوارة غير متبادلة على شريحة بخصائص قياسية. ينقص التحقق من إمكانية الحصول على تأثير مماثل باستخدام مكونات متاحة، مما قد يسرّع اختبار التطبيقات في الاتصالات الكمومية.",
+     "first_step": "تجميع الدائرة الأساسية مع المُعدِّل ومقياس التداخل، وقياس اللا-تبادلية للضوء الكلاسيكي.",
+     "needs": "طاولة بصرية، ليزر، مُعدِّل كهرو-بصري، مقسمات حزمة، كواشف ضوئية، كاشف فوتون واحد (يمكن استئجاره).",
+     "risks": "قد تكون اللا-تبادلية ضعيفة بسبب الخسائر في المكونات المنفصلة، وقد يصعب تمييز التأثير عن الضوضاء.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "تجميع دائرة تداخل مع مُعدِّل كهرو-بصري للإزاحة الترددية، كما هو موصوف في 2511.00570، ولكن باستخدام مكونات منفصلة.",
+      "قياس النفاذية في كلا الاتجاهين باستخدام ليزر وكاشف ضوئي، ثم باستخدام إشعاع مخفف إلى مستوى الفوتون الواحد وعداد فوتونات.",
+      "تقدير الخسائر والحفاظ على الحالة الكمومية من خلال التداخل مع حزمة مرجعية."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.06544",
+      "quant-ph/0512071"
+     ],
+     "title": "محاكاة العمليات الكمومية غير الخطية على منصة بصرية خطية باستخدام الطريقة من 2602.06544",
+     "what": "تطوير والتحقق عدديًا من مخطط لتنفيذ بوابات كمومية غير خطية بالاعتماد على البصريات الخطية، والانتقاء اللاحق (postselection)، وفوتونات مساعدة، باستخدام النهج المقدم في العمل 2602.06544. مقارنة الكفاءة مع البروتوكولات المعروفة.",
+     "why": "البصريات الخطية عادةً ما تكون محدودة بالتحولات الخطية، لكن العمل 2602.06544 يوضح كيفية تجاوز هذا القيد. إعادة إنتاج وتحسين هذه المخططات قد يحسن الحوسبة الكمومية العملية.",
+     "origin": "في 2602.06544 تم اقتراح طريقة للعمليات الكمومية العامة على الضوء، لكن دون تفصيل مخططات محددة للبوابات الفردية. ينقص التطوير العملي وتقييم قابلية التنفيذ على المنصات الحالية.",
+     "first_step": "إعادة إنتاج حسابات 2602.06544 لأبسط عنصر غير خطي، ثم تنفيذ المحاكاة.",
+     "needs": "حاسوب، معرفة بالبصريات الكمومية والجبر الخطي، والوصول إلى المقالات العلمية.",
+     "risks": "قد تتطلب المخططات عددًا كبيرًا من الفوتونات المساعدة، مما يجعلها غير فعالة عمليًا.",
+     "scale": "أطروحة دبلوم",
+     "methods": [
+      "دراسة الأدوات الرياضية من 2602.06544 لتوليد عمليات غير خطية عبر عناصر خطية وقياسات.",
+      "كتابة محاكاة بلغة بايثون (مثلًا باستخدام مكتبة QuTiP) لحساب احتمال النجاح ودقة البوابة.",
+      "تحسين معلمات المخطط (عدد الفوتونات المساعدة، تكوين مقياس التداخل) لزيادة الكفاءة."
+     ]
+    },
+    {
+     "based_on": [
+      "1506.07700"
+     ],
+     "title": "قياس الارتباطات الكمومية للذرات فائقة البرودة باستخدام كشف ضوئي غير مدمر في تجويف بصري",
+     "what": "بناء منظومة تجريبية للقياس غير المدمر للارتباطات الكمومية لتجمع ذري في شبكة بصرية عبر تشتت الضوء في تجويف، كما هو موصوف في 1506.07700. تنفيذ بروتوكول تمييز الحالات الكمومية بناءً على إحصاءات الفوتونات.",
+     "why": "سيسمح ذلك بدراسة التحولات الطورية الكمومية والتشابك في الغازات فائقة البرودة دون تدمير العينة، وهو أمر مهم للمحاكاة الكمومية.",
+     "origin": "يصف العمل 1506.07700 الأسس النظرية للقياس غير المدمر للارتباطات، لكن لا يوجد عرض تجريبي على منصة محددة. ينقص التحقق من الطريقة في ظروف حقيقية مع الضوضاء وكفاءة كشف محدودة.",
+     "first_step": "إجراء محاكاة عددية للإشارة لمعلمات المنظومة المخطط لها، لتقدير زمن القياس اللازم.",
+     "needs": "مختبر بمعدات للذرات فائقة البرودة (ليزرات، نظام تفريغ، ملفات مغناطيسية)، تجويف بصري، كواشف فوتون واحد.",
+     "risks": "صعوبة دمج الشبكة البصرية مع التجويف وقمع الضوضاء التقنية قد يطيلان المشروع.",
+     "scale": "سنوات",
+     "methods": [
+      "تجميع غرفة تفريغ مع مصيدة مغناطيسية بصرية وشبكة بصرية (أو استخدام منظومة قائمة).",
+      "تركيب تجويف بصري عالي الجودة (Q-factor) لتجميع الفوتونات المتناثرة.",
+      "تنفيذ مخطط كشف الفوتونات المفردة وتحليل ارتباطات الرتبة الثانية لتمييز الحالات."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans les technologies quantiques photoniques, les plateformes intégrées pour dispositifs non réciproques et les méthodes d'opérations quantiques universelles sur la lumière se développent activement.",
+   "topic": "photonique et optique quantique",
+   "ideas": [
+    {
+     "based_on": [
+      "2511.00570"
+     ],
+     "title": "Assembler un montage optique pour tester un tourniquet non réciproque avec des composants disponibles",
+     "what": "Assembler une version simplifiée d'un tourniquet non réciproque pour photons uniques, basée sur un décalage en fréquence et l'interférence, en utilisant des composants fibrés standards et un laser. Mesurer le coefficient de transmission dans les sens direct et inverse pour la lumière classique, puis passer au régime monophotonique avec un laser atténué.",
+     "why": "Vérifier dans quelle mesure le concept de l'article 2511.00570 est reproductible sans puce spécialisée. Si le montage montre une non-réciprocité, cela fournira une plateforme simple pour des expériences sur le transfert directionnel d'états quantiques.",
+     "origin": "Dans 2511.00570, un tourniquet non réciproque sur puce a été réalisé avec des performances record. Il manque une vérification que l'on peut obtenir un effet similaire avec des composants disponibles, ce qui permettrait de tester plus rapidement des applications en communication quantique.",
+     "first_step": "Assembler le montage de base avec un modulateur et un interféromètre, mesurer la non-réciprocité pour la lumière classique.",
+     "needs": "Table optique, laser, modulateur électro-optique, séparateurs de faisceau, photodétecteurs, détecteur de photons uniques (peut être loué).",
+     "risks": "La non-réciprocité pourrait être faible en raison des pertes dans les composants discrets, et l'effet serait difficile à distinguer du bruit.",
+     "scale": "semestre",
+     "methods": [
+      "Assembler un montage interférométrique avec un modulateur électro-optique pour le décalage en fréquence, comme décrit dans 2511.00570, mais avec des composants discrets.",
+      "Mesurer la transmission dans les deux sens à l'aide d'un laser et d'un photodétecteur, puis avec un rayonnement atténué au niveau monophotonique et un compteur de photons.",
+      "Évaluer les pertes et la préservation de l'état quantique via l'interférence avec un faisceau de référence."
+     ]
+    },
+    {
+     "based_on": [
+      "2602.06544",
+      "quant-ph/0512071"
+     ],
+     "title": "Simulation d'opérations quantiques non linéaires sur une plateforme optique linéaire en utilisant la méthode de 2602.06544",
+     "what": "Développer et vérifier numériquement un schéma pour réaliser des portes quantiques non linéaires basées sur l'optique linéaire, la post-sélection et des photons auxiliaires, en utilisant l'approche de l'article 2602.06544. Comparer l'efficacité avec des protocoles connus.",
+     "why": "L'optique linéaire est généralement limitée aux transformations linéaires, mais l'article 2602.06544 montre comment contourner cette limitation. Reproduire et optimiser de tels schémas pourrait améliorer le calcul quantique pratique.",
+     "origin": "Dans 2602.06544, une méthode pour des opérations quantiques universelles sur la lumière est proposée, mais les schémas spécifiques pour chaque porte ne sont pas détaillés. Il manque une étude pratique et une évaluation de la faisabilité sur les plateformes existantes.",
+     "first_step": "Reproduire les calculs de 2602.06544 pour l'élément non linéaire le plus simple, puis implémenter la simulation.",
+     "needs": "Ordinateur, connaissances en optique quantique et en algèbre linéaire, accès aux articles scientifiques.",
+     "risks": "Les schémas pourraient nécessiter un grand nombre de photons auxiliaires, ce qui les rend inefficaces en pratique.",
+     "scale": "mémoire",
+     "methods": [
+      "Étudier l'appareil mathématique de 2602.06544 pour générer des opérations non linéaires via des éléments linéaires et des mesures.",
+      "Écrire une simulation en Python (par exemple avec la bibliothèque QuTiP) pour calculer la probabilité de succès et la fidélité de la porte.",
+      "Optimiser les paramètres du schéma (nombre de photons auxiliaires, configuration de l'interféromètre) pour améliorer l'efficacité."
+     ]
+    },
+    {
+     "based_on": [
+      "1506.07700"
+     ],
+     "title": "Mesure des corrélations quantiques d'atomes ultra-froids par détection non destructive de la lumière dans une cavité",
+     "what": "Construire un montage expérimental pour la mesure non destructive des corrélations quantiques d'un ensemble atomique dans un réseau optique via la diffusion de la lumière dans une cavité, comme décrit dans 1506.07700. Implémenter le protocole de distinction des états quantiques par la statistique des photons.",
+     "why": "Cela permettra d'étudier les transitions de phase quantiques et l'intrication dans les gaz ultra-froids sans détruire l'échantillon, ce qui est important pour la simulation quantique.",
+     "origin": "L'article 1506.07700 décrit les bases théoriques de la mesure non destructive des corrélations, mais une démonstration expérimentale sur une plateforme spécifique manque. Il manque une vérification de la méthode dans des conditions réelles avec bruit et efficacité de détection finie.",
+     "first_step": "Effectuer une simulation numérique du signal pour les paramètres du montage prévu afin d'estimer le temps de mesure nécessaire.",
+     "needs": "Laboratoire avec équipement pour atomes ultra-froids (lasers, système à vide, bobines magnétiques), cavité optique, détecteurs de photons uniques.",
+     "risks": "La difficulté de combiner le réseau optique avec la cavité et de supprimer les bruits techniques pourrait prolonger le projet.",
+     "scale": "années",
+     "methods": [
+      "Assembler une chambre à vide avec un piège magnéto-optique et un réseau optique (ou utiliser un montage existant).",
+      "Installer une cavité optique à haute finesse pour collecter les photons diffusés.",
+      "Implémenter le schéma de détection de photons uniques et l'analyse des corrélations du second ordre pour distinguer les états."
+     ]
+    }
+   ]
+  }
+ }
+}

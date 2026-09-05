@@ -255,7 +255,17 @@ def cmd_run(a):
         return 0
     import runlock
     runlock.acquire("tree", f"topic {t['slug']}")
-    env = dict(os.environ, B42_RUN_ORIGIN="manual", PYTHONIOENCODING="utf-8")
+    # ОДНА ВЫКЛАДКА НА ПРОГОН, А НЕ ПОСЛЕ КАЖДОГО КУСКА. run.py по правилам публикует сам
+    # в конце каждой команды — это верно для одной команды и разорительно для прогона из
+    # кусков: обход четверти миллиона файлов облака и ста шестидесяти тысяч страниц
+    # перевода повторяется столько раз, сколько кусков, и на прод по дороге уезжают
+    # промежуточные состояния. Куски идут молча, выкладка одна — в самом конце, обычной
+    # командой run.py publish (с проверкой после выкладки). Внешнее B42_NO_PUBLISH=1
+    # (ночная цепочка, дев-режим) отменяет и её.
+    quiet = os.environ.get("B42_NO_PUBLISH") == "1"
+    env = dict(os.environ, B42_RUN_ORIGIN="manual", PYTHONIOENCODING="utf-8",
+               B42_NO_PUBLISH="1", SKIP_R2_BACKUP="1",
+               B42_SKIP_DERIVED="1")   # копия, выкладка и производные файлы — по разу, в конце
     chunks = [todo[i:i + CHUNK] for i in range(0, len(todo), CHUNK)]
     try:
         for n, ch in enumerate(chunks, 1):
@@ -278,6 +288,11 @@ def cmd_run(a):
             post(t, todo, say, env)
     finally:
         runlock.release("tree")
+    if not quiet:
+        say("· выкладка одним разом")
+        rc = subprocess.run([sys.executable, "run.py", "publish"], cwd=str(ROOT),
+                            env=dict(env, B42_NO_PUBLISH="0", SKIP_R2_BACKUP="", B42_SKIP_DERIVED="")).returncode
+        say(f"  выкладка: код {rc}")
     have = parsed_ids()
     say(f"■ конец: разобрано {sum(1 for i in ids if i.split('v')[0] in have)}/{len(ids)}")
     t.setdefault("state", {})["parsed_at"] = datetime.now().strftime("%Y-%m-%d %H:%M")

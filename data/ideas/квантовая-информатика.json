@@ -1,0 +1,614 @@
+{
+ "topic": "квантовая информатика",
+ "slug": "квантовая-информатика",
+ "built": "2026-09-04",
+ "note": "В области квантовой информатики активно развиваются как аппаратные платформы (ионные ловушки, сверхпроводники), так и методы борьбы с шумом и масштабирования, что открывает много возможностей для практических проектов.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.587,
+  "band": "sparse",
+  "near": 0,
+  "full": 0,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Симулятор шума для квантовых схем на базе модели из 1207.3313",
+   "what": "Разработать программный модуль, который по описанию квантовой схемы и параметрам аппаратных компонентов (время декогеренции, точность гейтов, частота ошибок) генерирует реалистичную модель шума и оценивает вероятность успешного выполнения схемы.",
+   "why": "Позволит разработчикам квантовых алгоритмов проверять устойчивость схем к шуму до запуска на реальном железе, а инженерам — сравнивать архитектуры процессоров.",
+   "methods": [
+    "Использовать формализм операторных сумм и chi-матриц из работы 1207.3313 для представления шумовых каналов.",
+    "Реализовать симуляцию методом Монте-Карло: многократно применять случайные ошибки к состоянию и усреднять результаты.",
+    "Интегрировать с открытыми фреймворками (Qiskit, Cirq) для описания схем и сравнения с встроенными шумовыми моделями."
+   ],
+   "origin": "В 1207.3313 описаны методы моделирования квантовых операций с шумом, но нет готового программного инструмента, который бы позволял инженеру без глубокой математики подставлять параметры конкретного устройства и получать оценку надёжности схемы.",
+   "first_step": "Выбрать простую квантовую схему (например, цепочку из 5 вентилей), реализовать модель деполяризующего шума с параметрами из статьи и сравнить с аналитическим расчётом вероятности ошибки.",
+   "needs": "Ноутбук, знание Python, библиотеки NumPy и Qiskit. Доступ к реальному квантовому компьютеру не обязателен.",
+   "risks": "Упрощённая модель шума может плохо соответствовать реальному поведению аппаратуры, если не учесть коррелированные ошибки.",
+   "scale": "семестр",
+   "based_on": [
+    "1207.3313"
+   ]
+  },
+  {
+   "title": "Эмуляция протоколов квантового интернета на ионном квантовом компьютере",
+   "what": "Взять за основу методику из работы QI-Nutshell (2507.14383) и воспроизвести эмуляцию протокола квантового распределения ключей (BB84) на доступном ионном процессоре (например, через облачный доступ к IonQ).",
+   "why": "Даёт практический опыт работы с реальным квантовым железом и проверяет, насколько эмуляция на ионных ловушках соответствует теоретическим протоколам.",
+   "methods": [
+    "Изучить, как в 2507.14383 шаги протокола QKD отображаются на физические операции ионной ловушки (повороты кубитов, измерения).",
+    "Реализовать ту же схему с помощью Qiskit или Cirq, адаптировав под параметры конкретного ионного процессора.",
+    "Сравнить полученные ключи и уровень ошибок с симуляцией идеального протокола."
+   ],
+   "origin": "В 2507.14383 показана эмуляция протоколов на ионных ловушках, но не хватает воспроизводимого практического руководства для студентов: какие именно параметры шума учитывать и как интерпретировать результаты на реальном устройстве.",
+   "first_step": "Получить доступ к облачному ионному квантовому компьютеру (например, через Amazon Braket или Microsoft Azure) и запустить простейшую схему BB84, следуя описанию из 2507.14383.",
+   "needs": "Облачный доступ к ионному квантовому компьютеру (может быть платным), навыки работы с Qiskit/Cirq, понимание основ QKD.",
+   "risks": "Реальное устройство может иметь ограниченное время когерентности и низкую точность гейтов, что затруднит получение ключа.",
+   "scale": "диплом",
+   "based_on": [
+    "2507.14383"
+   ]
+  },
+  {
+   "title": "Оценка энергии для квантовых вычислений с помощью квантовых батарей",
+   "what": "Построить численную модель, которая рассчитывает энергопотребление квантового компьютера при использовании квантовых батарей как источника питания для логических операций, и сравнить с классическим питанием.",
+   "why": "Позволит понять, насколько квантовые батареи могут решить проблему масштабирования криогенных систем, уменьшив число управляющих линий и тепловыделение.",
+   "methods": [
+    "Использовать формализм из 2503.23610 для описания квантовой батареи и её взаимодействия с рабочими кубитами.",
+    "Написать симуляцию на Python (QuTiP) для небольшой системы (2-3 кубита), моделируя передачу энергии и декогеренцию.",
+    "Рассчитать КПД и тепловые потери для различных протоколов зарядки/разрядки батареи."
+   ],
+   "origin": "В 2503.23610 предложена концепция квантовых батарей для питания квантовых вычислений, но отсутствует количественная оценка выигрыша в энергопотреблении и тепловыделении для реалистичных параметров современных процессоров.",
+   "first_step": "Воспроизвести простейшую модель из статьи: два кубита, один — батарея, второй — потребитель, и посчитать энергию, переданную за один цикл.",
+   "needs": "Компьютер с Python, библиотека QuTiP, знание квантовой термодинамики на базовом уровне.",
+   "risks": "Эффективность квантовых батарей может оказаться ниже, чем у классических источников, из-за потерь на декогеренцию.",
+   "scale": "диплом",
+   "based_on": [
+    "2503.23610"
+   ]
+  },
+  {
+   "title": "Моделирование рассеяния элементарных частиц на квантовом компьютере с улучшенной загрузкой данных",
+   "what": "Реализовать квантовый алгоритм для вычисления сечений процессов e+e- -> qq~ и e+e- -> qq~W, используя методы загрузки распределений из 2201.01547 и сравнить точность с классическим Монте-Карло.",
+   "why": "Если квантовый компьютер сможет эффективно интегрировать функции распределения, это ускорит расчёты для физики высоких энергий, где классические методы требуют огромных вычислительных ресурсов.",
+   "methods": [
+    "Изучить предложенные в 2201.01547 способы загрузки вероятностных распределений (квантовые GAN или точный метод).",
+    "Реализовать схему квантовой оценки интеграла на симуляторе (Qiskit Aer) для простого процесса e+e- -> qq~.",
+    "Сравнить число требуемых кубитов и точность с классическим методом Монте-Карло."
+   ],
+   "origin": "В 2201.01547 показана принципиальная возможность квантового интегрирования для процессов рассеяния, но не проведено детальное сравнение с классическими методами по точности и ресурсам для реалистичных параметров.",
+   "first_step": "Загрузить простое распределение (например, Брейта-Вигнера) на квантовый симулятор, используя точный метод из статьи, и вычислить интеграл.",
+   "needs": "Доступ к симулятору квантовых вычислений (локально или облачно), знание квантовых алгоритмов, основы физики частиц.",
+   "risks": "Точность квантового интегрирования может быть ограничена шумом и числом кубитов, что сделает метод неконкурентоспособным.",
+   "scale": "диплом",
+   "based_on": [
+    "2201.01547"
+   ]
+  },
+  {
+   "title": "Разработка симулятора ядерной физики на квантовом компьютере с использованием методов из 2312.07617",
+   "what": "Создать программный прототип для моделирования простых ядерных систем (например, дейтрона) на квантовом симуляторе, применяя вариационные методы, описанные в 2312.07617.",
+   "why": "Позволит оценить, насколько современные квантовые алгоритмы пригодны для задач ядерной физики, и выявить узкие места перед запуском на реальном железе.",
+   "methods": [
+    "Изучить обзор цифровых квантовых симуляций из 2312.07617 и выбрать подходящий вариационный алгоритм (VQE).",
+    "Реализовать гамильтониан дейтрона в базисе нескольких кубитов и запустить VQE на симуляторе.",
+    "Сравнить полученную энергию связи с экспериментальным значением и оценить влияние шума."
+   ],
+   "origin": "В 2312.07617 дан обзор перспектив квантовых вычислений для ядерной физики, но нет готового практического примера с открытым кодом, который студент мог бы воспроизвести и модифицировать.",
+   "first_step": "Записать гамильтониан дейтрона в представлении вторичного квантования и отобразить его на кубиты, используя преобразование Йордана-Вигнера.",
+   "needs": "Ноутбук с Python, библиотеки Qiskit или Cirq, знание квантовой механики и основ ядерной физики.",
+   "risks": "Вариационный алгоритм может сходиться медленно или застревать в локальных минимумах, требуя тонкой настройки.",
+   "scale": "семестр",
+   "based_on": [
+    "2312.07617"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "1207.3313",
+   "full": false,
+   "field": true,
+   "score": 0.587,
+   "titles": {
+    "ru": "Mathematical modeling of quantum noise and the quality of hardware   components of quantum computers"
+   },
+   "abstract": "In the present paper methods and algorithms of modeling quantum operations for quantum computer integrated circuits design are developed. We examine different ways of quantum operation descriptions, including operator-sums, unitary representations, Choi-Jamiolkowski state representations and the corresponding chi-matrices, as well as quantum system evolution operators. The results of modeling of practically important quantum gates: SQiSW (square root of i-SWAP gate), controlled-NOT (CNOT), and controlled Z-transform (CZ) subject to different decoherence mechanisms are presented. These mechanis"
+  },
+  {
+   "id": "2503.23610",
+   "full": false,
+   "field": true,
+   "score": 0.584,
+   "titles": {
+    "ru": "Powering Quantum Computation with Quantum Batteries"
+   },
+   "abstract": "Executing quantum logic in cryogenic quantum computers requires a continuous energy supply from room-temperature control electronics. This dependence on external energy sources creates scalability limitations due to control channel density and heat dissipation. Here, we propose quantum batteries (QBs) as intrinsic quantum energy sources for quantum computation, enabling the thermodynamic limit of zero dissipation for unitary gates. Unlike classical power sources, QBs maintain quantum coherence with their load - a property that, while theoretically studied, remains unexploited in practical quan"
+  },
+  {
+   "id": "2507.14383",
+   "full": false,
+   "field": true,
+   "score": 0.579,
+   "titles": {
+    "ru": "Quantum Internet in a Nutshell -- Advancing Quantum Communication with Ion Traps"
+   },
+   "abstract": "Quantum Internet in a Nutshell (QI-Nutshell) connects the fields of quantum communication and quantum computing by emulating quantum communication protocols on currently available ion-trap quantum computers. We demonstrate emulations of QKD protocols where the individual steps are mapped to physical operations within our hardware platform. This allows us to not only practically execute established protocols such as BB84 or BBM92, but also include cloning attacks by an eavesdropping party, noise sources and side-channel attacks that are generally hard to include in theoretical QKD security proo"
+  },
+  {
+   "id": "2201.01547",
+   "full": false,
+   "field": true,
+   "score": 0.578,
+   "titles": {
+    "ru": "Quantum integration of elementary particle processes"
+   },
+   "abstract": "We apply quantum integration to elementary particle-physics processes. In particular, we look at scattering processes such as ${\\rm e}^+{\\rm e}^- \\to q \\bar q$ and ${\\rm e}^+{\\rm e}^- \\to q \\bar q' {\\rm W}$. The corresponding probability distributions can be first appropriately loaded on a quantum computer using either quantum Generative Adversarial Networks or an exact method. The distributions are then integrated sing the method of Quantum Amplitude Estimation which shows a quadratic speed-up with respect to classical techniques. In simulations of noiseless quantum computers, we obtain per-c"
+  },
+  {
+   "id": "2312.07617",
+   "full": false,
+   "field": true,
+   "score": 0.578,
+   "titles": {
+    "ru": "Quantum Computing for Nuclear Physics"
+   },
+   "abstract": "Future quantum computers are anticipated to be able to perform simulations of quantum many-body systems and quantum field theories that lie beyond the capabilities of classical computation. This will lead to new insights and predictions for systems ranging from dense non-equilibrium matter, to low-energy nuclear structure and reactions, to high-energy collisions. I present an overview of digital quantum simulations in nuclear physics, with select examples relevant for studies of quark matter."
+  },
+  {
+   "id": "2203.06809",
+   "full": false,
+   "field": true,
+   "score": 0.578,
+   "titles": {
+    "ru": "Ion Coulomb Crystals in Storage Rings for Quantum Information Science"
+   },
+   "abstract": "Quantum information science is a growing field that promises to take computing into a new age of higher performance and larger scale computing as well as being capable of solving problems classical computers are incapable of solving. The outstanding issue in practical quantum computing today is scaling up the system while maintaining interconnectivity of the qubits and low error rates in qubit operations to be able to implement error correction and fault-tolerant operations. Trapped ion qubits offer long coherence times that allow error correction. However, error correction algorithms require "
+  },
+  {
+   "id": "1910.11696",
+   "full": false,
+   "field": true,
+   "score": 0.578,
+   "titles": {
+    "ru": "An Improved Implementation Approach for Quantum Phase Estimation on   Quantum Computers"
+   },
+   "abstract": "Quantum phase estimation (QPE) is one of the core algorithms for quantum computing. It has been extensively studied and applied in a variety of quantum applications such as the Shor's factoring algorithm, quantum sampling algorithms and the calculation of the eigenvalues of unitary matrices. The QPE algorithm has been combined with Kitaev's algorithm and the inverse quantum Fourier transform (IQFT) which are utilized as a fundamental component of such quantum algorithms. In this paper, we explore the computational challenges of implementing QPE algorithms on noisy intermediate-scale quantum (N"
+  },
+  {
+   "id": "quant-ph/0004053",
+   "full": false,
+   "field": true,
+   "score": 0.577,
+   "titles": {
+    "ru": "Quantum computing with trapped ions, atoms and light"
+   },
+   "abstract": "We first consider the basic requirements for a quantum computer, arguing for the attractiveness of nuclear spins as information-bearing entities, and light for the coupling which allows quantum gates. We then survey the strengths of and immediate prospects for quantum information processing in ion traps. We discuss decoherence and gate rates in ion traps, comparing methods based on the vibrational motion with a method based on exchange of photons in cavity QED. We then sketch the main features of a quantum computer designed to allow an algorithm needing 10^6 Toffoli gates on 100 logical qubits"
+  },
+  {
+   "id": "2301.09679",
+   "full": false,
+   "field": true,
+   "score": 0.575,
+   "titles": {
+    "ru": "Notes on Quantum Computation and Information"
+   },
+   "abstract": "We discuss fundamentals of quantum computing and information - quantum gates, circuits, algorithms, theorems, error correction, and provide collection of QISKIT programs and exercises for the interested reader."
+  },
+  {
+   "id": "quant-ph/0606188",
+   "full": false,
+   "field": true,
+   "score": 0.575,
+   "titles": {
+    "ru": "Quantum Information Processing with Delocalized Qubits under Global   Control"
+   },
+   "abstract": "Any technology for quantum information processing (QIP) must embody within it quantum bits (qubits) and maintain control of their key quantum properties of superposition and entanglement. Typical QIP schemes envisage an array of physical systems, such as electrons or nuclei, with each system representing a given qubit. For adequate control, systems must be distinguishable either by physical separation or unique frequencies, and their mutual interactions must be individually manipulable. These difficult requirements exclude many nanoscale technologies where systems are densely packed and contin"
+  },
+  {
+   "id": "1210.4994",
+   "full": false,
+   "field": true,
+   "score": 0.574,
+   "titles": {
+    "ru": "Few-Qubit Magnetic Resonance Quantum Information Processors: Simulating   Chemistry and Physics"
+   },
+   "abstract": "We review recent progress made in quantum information processing (QIP) which can be applied in the simulation of quantum systems and chemical phenomena. The review is focused on quantum algorithms which are useful for quantum simulation of chemistry and advances in nuclear magnetic resonance (NMR) and electron spin resonance (ESR) QIP. Discussions also include a number of recent experiments demonstrating the current capabilities of the NMR QIP for quantum simulation and prospects for spin-based implementations of QIP."
+  },
+  {
+   "id": "quant-ph/0301105",
+   "full": false,
+   "field": true,
+   "score": 0.573,
+   "titles": {
+    "ru": "Quantum Computing in the Presence of Detected Spontaneous Emission"
+   },
+   "abstract": "A new method for quantum computation in the presence of detected spontaneous emission is proposed. The method combines strong and fast (dynamical decoupling) pulses and a quantum error correcting code that encodes $n$ logical qubits into only $n+1$ physical qubits. Universal fault-tolerant quantum computation is shown to be possible in this scheme using Hamiltonians relevant to a range of promising proposals for the physical implementation of quantum computers."
+  }
+ ],
+ "lang": {
+  "en": {
+   "note": "Quantum information science is advancing rapidly on both hardware platforms (ion traps, superconductors) and methods for noise mitigation and scaling, opening up many opportunities for practical projects.",
+   "topic": "quantum informatics",
+   "ideas": [
+    {
+     "based_on": [
+      "1207.3313"
+     ],
+     "title": "Noise simulator for quantum circuits based on the model from 1207.3313",
+     "what": "Develop a software module that, given a quantum circuit description and hardware component parameters (decoherence time, gate fidelity, error rates), generates a realistic noise model and estimates the probability of successful circuit execution.",
+     "why": "This will allow quantum algorithm developers to test circuit robustness to noise before running on real hardware, and engineers to compare processor architectures.",
+     "origin": "Paper 1207.3313 describes methods for modeling noisy quantum operations, but there is no ready-made software tool that would let an engineer without deep mathematics plug in parameters of a specific device and obtain a circuit reliability estimate.",
+     "first_step": "Choose a simple quantum circuit (for example, a chain of 5 gates), implement a depolarizing noise model with parameters from the paper, and compare against an analytical calculation of the error probability.",
+     "needs": "A laptop, knowledge of Python, NumPy and Qiskit libraries. Access to a real quantum computer is not required.",
+     "risks": "A simplified noise model may not match real hardware behavior well if correlated errors are not taken into account.",
+     "scale": "semester",
+     "methods": [
+      "Use the operator-sum formalism and chi matrices from 1207.3313 to represent noise channels.",
+      "Implement Monte Carlo simulation: repeatedly apply random errors to the state and average the results.",
+      "Integrate with open-source frameworks (Qiskit, Cirq) for circuit description and comparison with built-in noise models."
+     ]
+    },
+    {
+     "based_on": [
+      "2507.14383"
+     ],
+     "title": "Emulation of quantum internet protocols on an ion-trap quantum computer",
+     "what": "Take the methodology from the paper QI-Nutshell (2507.14383) and reproduce the emulation of the quantum key distribution protocol (BB84) on an accessible ion-trap processor (for example, via cloud access to IonQ).",
+     "why": "This provides hands-on experience with real quantum hardware and tests how well emulation on ion traps matches theoretical protocols.",
+     "origin": "Paper 2507.14383 demonstrates emulation of protocols on ion traps, but there is a lack of a reproducible practical guide for students: which specific noise parameters to consider and how to interpret results on a real device.",
+     "first_step": "Get access to a cloud-based ion-trap quantum computer (for example, through Amazon Braket or Microsoft Azure) and run a simple BB84 circuit, following the description in 2507.14383.",
+     "needs": "Cloud access to an ion-trap quantum computer (may be paid), familiarity with Qiskit/Cirq, understanding of QKD basics.",
+     "risks": "The real device may have limited coherence time and low gate fidelities, which could hinder key generation.",
+     "scale": "thesis",
+     "methods": [
+      "Study how the QKD protocol steps in 2507.14383 are mapped to physical ion-trap operations (qubit rotations, measurements).",
+      "Implement the same circuit using Qiskit or Cirq, adapting to the parameters of a specific ion processor.",
+      "Compare the obtained keys and error rates with a simulation of the ideal protocol."
+     ]
+    },
+    {
+     "based_on": [
+      "2503.23610"
+     ],
+     "title": "Energy estimation for quantum computing using quantum batteries",
+     "what": "Build a numerical model that calculates the energy consumption of a quantum computer when using quantum batteries as a power source for logic operations, and compare with classical powering.",
+     "why": "This will help understand to what extent quantum batteries can solve the scaling problem of cryogenic systems by reducing the number of control lines and heat dissipation.",
+     "origin": "Paper 2503.23610 proposes the concept of quantum batteries for powering quantum computations, but lacks a quantitative estimate of the gain in energy consumption and heat dissipation for realistic parameters of modern processors.",
+     "first_step": "Reproduce the simplest model from the paper: two qubits, one acting as a battery, the other as a consumer, and compute the energy transferred in one cycle.",
+     "needs": "A computer with Python, the QuTiP library, and a basic understanding of quantum thermodynamics.",
+     "risks": "Quantum batteries may be less efficient than classical power sources due to decoherence losses.",
+     "scale": "thesis",
+     "methods": [
+      "Use the formalism from 2503.23610 to describe the quantum battery and its interaction with the working qubits.",
+      "Write a Python simulation (QuTiP) for a small system (2-3 qubits), modeling energy transfer and decoherence.",
+      "Calculate efficiency and heat losses for various battery charging/discharging protocols."
+     ]
+    },
+    {
+     "based_on": [
+      "2201.01547"
+     ],
+     "title": "Simulation of elementary particle scattering on a quantum computer with improved data loading",
+     "what": "Implement a quantum algorithm to compute cross sections for e+e- -> qq~ and e+e- -> qq~W processes, using the distribution loading methods from 2201.01547, and compare accuracy with classical Monte Carlo.",
+     "why": "If a quantum computer can efficiently integrate distribution functions, it could speed up calculations for high-energy physics, where classical methods require enormous computational resources.",
+     "origin": "Paper 2201.01547 demonstrates the principal possibility of quantum integration for scattering processes, but does not provide a detailed comparison with classical methods in terms of accuracy and resources for realistic parameters.",
+     "first_step": "Load a simple distribution (for example, Breit-Wigner) onto a quantum simulator using the exact method from the paper, and compute the integral.",
+     "needs": "Access to a quantum simulator (local or cloud), knowledge of quantum algorithms, and basics of particle physics.",
+     "risks": "The accuracy of quantum integration may be limited by noise and the number of qubits, making the method non-competitive.",
+     "scale": "thesis",
+     "methods": [
+      "Study the methods for loading probability distributions proposed in 2201.01547 (quantum GANs or exact method).",
+      "Implement a quantum amplitude estimation circuit on a simulator (Qiskit Aer) for the simple process e+e- -> qq~.",
+      "Compare the required number of qubits and accuracy with the classical Monte Carlo method."
+     ]
+    },
+    {
+     "based_on": [
+      "2312.07617"
+     ],
+     "title": "Development of a nuclear physics simulator on a quantum computer using methods from 2312.07617",
+     "what": "Create a software prototype for modeling simple nuclear systems (for example, the deuteron) on a quantum simulator, applying the variational methods described in 2312.07617.",
+     "why": "This will allow assessing how suitable modern quantum algorithms are for nuclear physics problems and identify bottlenecks before running on real hardware.",
+     "origin": "Paper 2312.07617 provides an overview of the prospects of quantum computing for nuclear physics, but there is no ready-made practical example with open code that a student could reproduce and modify.",
+     "first_step": "Write the deuteron Hamiltonian in second quantization and map it onto qubits using the Jordan-Wigner transformation.",
+     "needs": "A laptop with Python, Qiskit or Cirq libraries, knowledge of quantum mechanics and basics of nuclear physics.",
+     "risks": "The variational algorithm may converge slowly or get stuck in local minima, requiring fine-tuning.",
+     "scale": "semester",
+     "methods": [
+      "Study the review of digital quantum simulations from 2312.07617 and select an appropriate variational algorithm (VQE).",
+      "Implement the deuteron Hamiltonian in a basis of a few qubits and run VQE on a simulator.",
+      "Compare the obtained binding energy with the experimental value and assess the impact of noise."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "En el campo de la informática cuántica se desarrollan activamente tanto plataformas de hardware (trampas de iones, superconductores) como métodos para combatir el ruido y escalar, lo que abre muchas oportunidades para proyectos prácticos.",
+   "topic": "informática cuántica",
+   "ideas": [
+    {
+     "based_on": [
+      "1207.3313"
+     ],
+     "title": "Simulador de ruido para circuitos cuánticos basado en el modelo de 1207.3313",
+     "what": "Desarrollar un módulo de software que, a partir de la descripción de un circuito cuántico y de los parámetros de los componentes de hardware (tiempo de decoherencia, precisión de las compuertas, tasa de errores), genere un modelo de ruido realista y estime la probabilidad de que el circuito se ejecute con éxito.",
+     "why": "Permitirá a los desarrolladores de algoritmos cuánticos comprobar la robustez de los circuitos frente al ruido antes de ejecutarlos en hardware real, y a los ingenieros comparar arquitecturas de procesadores.",
+     "origin": "En 1207.3313 se describen métodos para modelar operaciones cuánticas con ruido, pero no existe una herramienta de software lista para usar que permita a un ingeniero sin conocimientos profundos de matemáticas introducir los parámetros de un dispositivo concreto y obtener una estimación de la fiabilidad del circuito.",
+     "first_step": "Elegir un circuito cuántico sencillo (por ejemplo, una cadena de 5 compuertas), implementar un modelo de ruido despolarizante con los parámetros del artículo y compararlo con el cálculo analítico de la probabilidad de error.",
+     "needs": "Portátil, conocimientos de Python, bibliotecas NumPy y Qiskit. No es necesario tener acceso a un ordenador cuántico real.",
+     "risks": "Un modelo de ruido simplificado puede no corresponderse bien con el comportamiento real del hardware si no se tienen en cuenta los errores correlacionados.",
+     "scale": "semestre",
+     "methods": [
+      "Utilizar el formalismo de sumas de operadores y las matrices chi del trabajo 1207.3313 para representar los canales de ruido.",
+      "Implementar una simulación mediante el método de Monte Carlo: aplicar repetidamente errores aleatorios al estado y promediar los resultados.",
+      "Integrar con marcos de trabajo abiertos (Qiskit, Cirq) para describir circuitos y comparar con los modelos de ruido integrados."
+     ]
+    },
+    {
+     "based_on": [
+      "2507.14383"
+     ],
+     "title": "Emulación de protocolos de internet cuántico en un ordenador cuántico de iones",
+     "what": "Tomar como base la metodología del trabajo QI-Nutshell (2507.14383) y reproducir la emulación del protocolo de distribución cuántica de claves (BB84) en un procesador de iones accesible (por ejemplo, mediante acceso en la nube a IonQ).",
+     "why": "Proporciona experiencia práctica con hardware cuántico real y comprueba hasta qué punto la emulación en trampas de iones se corresponde con los protocolos teóricos.",
+     "origin": "En 2507.14383 se muestra la emulación de protocolos en trampas de iones, pero falta una guía práctica reproducible para estudiantes: qué parámetros de ruido tener en cuenta y cómo interpretar los resultados en un dispositivo real.",
+     "first_step": "Obtener acceso a un ordenador cuántico de iones en la nube (por ejemplo, a través de Amazon Braket o Microsoft Azure) y ejecutar el circuito más sencillo de BB84, siguiendo la descripción de 2507.14383.",
+     "needs": "Acceso en la nube a un ordenador cuántico de iones (puede ser de pago), habilidades con Qiskit/Cirq, comprensión de los fundamentos de QKD.",
+     "risks": "El dispositivo real puede tener un tiempo de coherencia limitado y una baja precisión de las compuertas, lo que dificultará la obtención de la clave.",
+     "scale": "tesis",
+     "methods": [
+      "Estudiar cómo en 2507.14383 los pasos del protocolo QKD se mapean a operaciones físicas de la trampa de iones (rotaciones de qubits, mediciones).",
+      "Implementar el mismo circuito con Qiskit o Cirq, adaptándolo a los parámetros del procesador de iones concreto.",
+      "Comparar las claves obtenidas y la tasa de errores con la simulación del protocolo ideal."
+     ]
+    },
+    {
+     "based_on": [
+      "2503.23610"
+     ],
+     "title": "Estimación de la energía para la computación cuántica mediante baterías cuánticas",
+     "what": "Construir un modelo numérico que calcule el consumo energético de un ordenador cuántico cuando se utilizan baterías cuánticas como fuente de alimentación para las operaciones lógicas, y compararlo con la alimentación clásica.",
+     "why": "Permitirá comprender hasta qué punto las baterías cuánticas pueden resolver el problema de la escalabilidad de los sistemas criogénicos, reduciendo el número de líneas de control y la disipación de calor.",
+     "origin": "En 2503.23610 se propone el concepto de baterías cuánticas para alimentar la computación cuántica, pero falta una evaluación cuantitativa de la ventaja en consumo energético y disipación de calor para parámetros realistas de los procesadores actuales.",
+     "first_step": "Reproducir el modelo más sencillo del artículo: dos qubits, uno como batería y otro como consumidor, y calcular la energía transferida en un ciclo.",
+     "needs": "Ordenador con Python, biblioteca QuTiP, conocimientos básicos de termodinámica cuántica.",
+     "risks": "La eficiencia de las baterías cuánticas puede ser inferior a la de las fuentes clásicas debido a las pérdidas por decoherencia.",
+     "scale": "tesis",
+     "methods": [
+      "Utilizar el formalismo de 2503.23610 para describir la batería cuántica y su interacción con los qubits de trabajo.",
+      "Escribir una simulación en Python (QuTiP) para un sistema pequeño (2-3 qubits), modelando la transferencia de energía y la decoherencia.",
+      "Calcular la eficiencia y las pérdidas térmicas para diferentes protocolos de carga/descarga de la batería."
+     ]
+    },
+    {
+     "based_on": [
+      "2201.01547"
+     ],
+     "title": "Modelado de la dispersión de partículas elementales en un ordenador cuántico con carga de datos mejorada",
+     "what": "Implementar un algoritmo cuántico para calcular las secciones eficaces de los procesos e+e- -> qq~ y e+e- -> qq~W, utilizando los métodos de carga de distribuciones de 2201.01547 y comparar la precisión con el Monte Carlo clásico.",
+     "why": "Si un ordenador cuántico puede integrar funciones de distribución de manera eficiente, aceleraría los cálculos para la física de altas energías, donde los métodos clásicos requieren enormes recursos computacionales.",
+     "origin": "En 2201.01547 se demuestra la viabilidad de la integración cuántica para procesos de dispersión, pero no se ha realizado una comparación detallada con los métodos clásicos en cuanto a precisión y recursos para parámetros realistas.",
+     "first_step": "Cargar una distribución simple (por ejemplo, Breit-Wigner) en un simulador cuántico, utilizando el método exacto del artículo, y calcular la integral.",
+     "needs": "Acceso a un simulador de computación cuántica (local o en la nube), conocimientos de algoritmos cuánticos, fundamentos de física de partículas.",
+     "risks": "La precisión de la integración cuántica puede verse limitada por el ruido y el número de qubits, lo que haría que el método no fuera competitivo.",
+     "scale": "tesis",
+     "methods": [
+      "Estudiar los métodos de carga de distribuciones de probabilidad propuestos en 2201.01547 (GAN cuánticas o método exacto).",
+      "Implementar el esquema de estimación de integrales cuánticas en un simulador (Qiskit Aer) para el proceso simple e+e- -> qq~.",
+      "Comparar el número de qubits requeridos y la precisión con el método clásico de Monte Carlo."
+     ]
+    },
+    {
+     "based_on": [
+      "2312.07617"
+     ],
+     "title": "Desarrollo de un simulador de física nuclear en un ordenador cuántico utilizando métodos de 2312.07617",
+     "what": "Crear un prototipo de software para modelar sistemas nucleares simples (por ejemplo, el deuterón) en un simulador cuántico, aplicando los métodos variacionales descritos en 2312.07617.",
+     "why": "Permitirá evaluar hasta qué punto los algoritmos cuánticos actuales son adecuados para problemas de física nuclear e identificar los cuellos de botella antes de ejecutarlos en hardware real.",
+     "origin": "En 2312.07617 se ofrece una revisión de las perspectivas de la computación cuántica para la física nuclear, pero no hay un ejemplo práctico listo para usar con código abierto que un estudiante pueda reproducir y modificar.",
+     "first_step": "Escribir el hamiltoniano del deuterón en la representación de segunda cuantización y mapearlo a qubits utilizando la transformación de Jordan-Wigner.",
+     "needs": "Portátil con Python, bibliotecas Qiskit o Cirq, conocimientos de mecánica cuántica y fundamentos de física nuclear.",
+     "risks": "El algoritmo variacional puede converger lentamente o quedarse atascado en mínimos locales, requiriendo un ajuste fino.",
+     "scale": "semestre",
+     "methods": [
+      "Estudiar la revisión de las simulaciones cuánticas digitales de 2312.07617 y elegir un algoritmo variacional adecuado (VQE).",
+      "Implementar el hamiltoniano del deuterón en una base de varios qubits y ejecutar VQE en un simulador.",
+      "Comparar la energía de enlace obtenida con el valor experimental y evaluar el impacto del ruido."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "في مجال المعلوماتية الكمومية، تتطور بنشاط كل من المنصات العتادية (المصائد الأيونية، الموصلات الفائقة) وأساليب مكافحة الضوضاء والتوسع، مما يفتح العديد من الفرص للمشاريع العملية.",
+   "topic": "المعلوماتية الكمومية",
+   "ideas": [
+    {
+     "based_on": [
+      "1207.3313"
+     ],
+     "title": "محاكي الضوضاء للدوائر الكمومية بالاعتماد على نموذج من 1207.3313",
+     "what": "تطوير وحدة برمجية تقوم، استنادًا إلى وصف الدائرة الكمومية ومعايير المكونات العتادية (زمن فك الترابط، دقة البوابات، معدل الأخطاء)، بتوليد نموذج واقعي للضوضاء وتقدير احتمال التنفيذ الناجح للدائرة.",
+     "why": "سيسمح ذلك لمطوري الخوارزميات الكمومية بفحص متانة الدوائر ضد الضوضاء قبل تشغيلها على العتاد الحقيقي، وللمهندسين بمقارنة بنى المعالجات.",
+     "origin": "في 1207.3313 تم وصف طرق نمذجة العمليات الكمومية مع الضوضاء، لكن لا توجد أداة برمجية جاهزة تسمح للمهندس دون رياضيات عميقة بإدخال معايير جهاز معين والحصول على تقدير لموثوقية الدائرة.",
+     "first_step": "اختيار دائرة كمومية بسيطة (مثل سلسلة من 5 بوابات)، وتنفيذ نموذج ضوضاء الاستقطاب (depolarizing noise) بمعايير من المقال، ومقارنة النتائج مع الحساب التحليلي لاحتمال الخطأ.",
+     "needs": "حاسوب محمول، معرفة بلغة بايثون، ومكتبات NumPy وQiskit. الوصول إلى حاسوب كمومي حقيقي ليس ضروريًا.",
+     "risks": "نموذج الضوضاء المبسط قد لا يطابق السلوك الحقيقي للعتاد بشكل جيد إذا لم تؤخذ في الاعتبار الأخطاء المترابطة.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "استخدام صيغة مجاميع المؤثرات (operator-sum representation) ومصفوفات χ من العمل 1207.3313 لتمثيل قنوات الضوضاء.",
+      "تنفيذ المحاكاة بطريقة مونت كارلو: تطبيق أخطاء عشوائية على الحالة بشكل متكرر ومتوسط النتائج.",
+      "التكامل مع الأطر مفتوحة المصدر (Qiskit، Cirq) لوصف الدوائر ومقارنة النماذج المدمجة للضوضاء."
+     ]
+    },
+    {
+     "based_on": [
+      "2507.14383"
+     ],
+     "title": "محاكاة بروتوكولات الإنترنت الكمومي على حاسوب كمومي أيوني",
+     "what": "اعتمادًا على المنهجية من العمل QI-Nutshell (2507.14383)، إعادة إنتاج محاكاة بروتوكول التوزيع الكمومي للمفاتيح (BB84) على معالج أيوني متاح (مثلًا عبر الوصول السحابي إلى IonQ).",
+     "why": "يعطي خبرة عملية مع العتاد الكمومي الحقيقي ويتحقق من مدى تطابق المحاكاة على المصائد الأيونية مع البروتوكولات النظرية.",
+     "origin": "في 2507.14383 تم عرض محاكاة البروتوكولات على المصائد الأيونية، لكن ينقص دليل عملي قابل للتكرار للطلاب: ما هي معايير الضوضاء التي يجب أخذها بعين الاعتبار وكيفية تفسير النتائج على جهاز حقيقي.",
+     "first_step": "الحصول على وصول سحابي إلى حاسوب كمومي أيوني (مثلًا عبر Amazon Braket أو Microsoft Azure) وتشغيل أبسط دائرة BB84، باتباع الوصف من 2507.14383.",
+     "needs": "وصول سحابي إلى حاسوب كمومي أيوني (قد يكون مدفوعًا)، مهارات في استخدام Qiskit/Cirq، وفهم أساسيات توزيع المفاتيح الكمومية (QKD).",
+     "risks": "الجهاز الحقيقي قد يكون لديه زمن تماسك محدود ودقة بوابات منخفضة، مما يصعب الحصول على المفتاح.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "دراسة كيفية ترجمة خطوات بروتوكول QKD في 2507.14383 إلى عمليات فيزيائية على المصيدة الأيونية (تدوير الكيوبتات، القياسات).",
+      "تنفيذ نفس الدائرة باستخدام Qiskit أو Cirq، مع تكييفها مع معايير المعالج الأيوني المحدد.",
+      "مقارنة المفاتيح المستخرجة ومستوى الأخطاء مع محاكاة البروتوكول المثالي."
+     ]
+    },
+    {
+     "based_on": [
+      "2503.23610"
+     ],
+     "title": "تقييم الطاقة للحوسبة الكمومية باستخدام البطاريات الكمومية",
+     "what": "بناء نموذج عددي يحسب استهلاك الطاقة لحاسوب كمومي عند استخدام بطاريات كمومية كمصدر طاقة للعمليات المنطقية، ومقارنته بالتغذية الكلاسيكية.",
+     "why": "سيسمح بفهم مدى قدرة البطاريات الكمومية على حل مشكلة توسيع الأنظمة المبردة، من خلال تقليل عدد خطوط التحكم وإنتاج الحرارة.",
+     "origin": "في 2503.23610 تم اقتراح مفهوم البطاريات الكمومية لتغذية الحوسبة الكمومية، لكن لا يوجد تقييم كمي للمكسب في استهلاك الطاقة وإنتاج الحرارة لمعايير واقعية للمعالجات الحديثة.",
+     "first_step": "إعادة إنتاج أبسط نموذج من المقال: كيوبتان، أحدهما بطارية والآخر مستهلك، وحساب الطاقة المنقولة في دورة واحدة.",
+     "needs": "حاسوب مع بايثون، مكتبة QuTiP، ومعرفة أساسية بالديناميكا الحرارية الكمومية.",
+     "risks": "كفاءة البطاريات الكمومية قد تكون أقل من المصادر الكلاسيكية بسبب خسائر فك الترابط.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "استخدام الصياغة من 2503.23610 لوصف البطارية الكمومية وتفاعلها مع كيوبتات العمل.",
+      "كتابة محاكاة بلغة بايثون (QuTiP) لنظام صغير (2-3 كيوبتات)، نمذجة نقل الطاقة وفك الترابط.",
+      "حساب الكفاءة والخسائر الحرارية لبروتوكولات مختلفة لشحن/تفريغ البطارية."
+     ]
+    },
+    {
+     "based_on": [
+      "2201.01547"
+     ],
+     "title": "محاكاة تشتت الجسيمات الأولية على حاسوب كمومي مع تحسين تحميل البيانات",
+     "what": "تنفيذ خوارزمية كمومية لحساب المقاطع العرضية لعمليات e+e- -> qq~ و e+e- -> qq~W، باستخدام طرق تحميل التوزيعات من 2201.01547 ومقارنة الدقة مع مونت كارلو الكلاسيكي.",
+     "why": "إذا تمكن الحاسوب الكمومي من دمج دوال التوزيع بكفاءة، فسيؤدي ذلك إلى تسريع حسابات فيزياء الطاقة العالية، حيث تتطلب الطرق الكلاسيكية موارد حسابية هائلة.",
+     "origin": "في 2201.01547 تم عرض الإمكانية الأساسية للتكامل الكمومي لعمليات التشتت، لكن لم يتم إجراء مقارنة مفصلة مع الطرق الكلاسيكية من حيث الدقة والموارد لمعايير واقعية.",
+     "first_step": "تحميل توزيع بسيط (مثل توزيع برايت-فيغنر) على محاكي كمومي، باستخدام الطريقة الدقيقة من المقال، وحساب التكامل.",
+     "needs": "الوصول إلى محاكي حوسبة كمومية (محليًا أو سحابيًا)، معرفة بالخوارزميات الكمومية، وأساسيات فيزياء الجسيمات.",
+     "risks": "دقة التكامل الكمومي قد تكون محدودة بالضوضاء وعدد الكيوبتات، مما يجعل الطريقة غير قادرة على المنافسة.",
+     "scale": "مشروع تخرج",
+     "methods": [
+      "دراسة طرق تحميل التوزيعات الاحتمالية المقترحة في 2201.01547 (شبكات GAN الكمومية أو الطريقة الدقيقة).",
+      "تنفيذ مخطط تقدير التكامل الكمومي على محاكي (Qiskit Aer) لعملية بسيطة e+e- -> qq~.",
+      "مقارنة عدد الكيوبتات المطلوبة والدقة مع طريقة مونت كارلو الكلاسيكية."
+     ]
+    },
+    {
+     "based_on": [
+      "2312.07617"
+     ],
+     "title": "تطوير محاكي فيزياء نووية على حاسوب كمومي باستخدام طرق من 2312.07617",
+     "what": "إنشاء نموذج أولي برمجي لمحاكاة أنظمة نووية بسيطة (مثل الديوترون) على محاكي كمومي، باستخدام الطرق التغيّرية الموصوفة في 2312.07617.",
+     "why": "سيسمح بتقييم مدى ملاءمة الخوارزميات الكمومية الحديثة لمشاكل الفيزياء النووية، وتحديد الاختناقات قبل التشغيل على العتاد الحقيقي.",
+     "origin": "في 2312.07617 تم تقديم مراجعة لآفاق الحوسبة الكمومية للفيزياء النووية، لكن لا يوجد مثال عملي جاهز ومفتوح المصدر يمكن للطالب إعادة إنتاجه وتعديله.",
+     "first_step": "كتابة هاملتوني الديوترون في تمثيل التكميم الثانوي وترميزه على الكيوبتات باستخدام تحويل يوردان-فيغنر.",
+     "needs": "حاسوب محمول مع بايثون، مكتبات Qiskit أو Cirq، معرفة بميكانيكا الكم وأساسيات الفيزياء النووية.",
+     "risks": "الخوارزمية التغيّرية قد تتقارب ببطء أو تعلق في حد أدنى محلي، مما يتطلب ضبطًا دقيقًا.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "دراسة مراجعة المحاكاة الكمومية الرقمية من 2312.07617 واختيار خوارزمية تغيّرية مناسبة (VQE).",
+      "تنفيذ هاملتوني الديوترون في أساس من عدة كيوبتات وتشغيل VQE على محاكي.",
+      "مقارنة طاقة الارتباط الناتجة مع القيمة التجريبية وتقييم تأثير الضوضاء."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Dans le domaine de l'informatique quantique, les plateformes matérielles (pièges à ions, supraconducteurs) et les méthodes de lutte contre le bruit et de passage à l'échelle se développent activement, ce qui ouvre de nombreuses possibilités pour des projets pratiques.",
+   "topic": "informatique quantique",
+   "ideas": [
+    {
+     "based_on": [
+      "1207.3313"
+     ],
+     "title": "Simulateur de bruit pour circuits quantiques basé sur le modèle de 1207.3313",
+     "what": "Développer un module logiciel qui, à partir de la description d'un circuit quantique et des paramètres des composants matériels (temps de décohérence, précision des portes, taux d'erreurs), génère un modèle de bruit réaliste et estime la probabilité d'exécution réussie du circuit.",
+     "why": "Cela permettra aux développeurs d'algorithmes quantiques de vérifier la robustesse des circuits au bruit avant de les lancer sur du matériel réel, et aux ingénieurs de comparer les architectures de processeurs.",
+     "origin": "Dans 1207.3313, des méthodes de modélisation des opérations quantiques avec bruit sont décrites, mais il n'existe pas d'outil logiciel prêt à l'emploi qui permettrait à un ingénieur sans mathématiques approfondies de saisir les paramètres d'un dispositif spécifique et d'obtenir une estimation de la fiabilité du circuit.",
+     "first_step": "Choisir un circuit quantique simple (par exemple, une chaîne de 5 portes), implémenter un modèle de bruit dépolarisant avec les paramètres de l'article et le comparer à un calcul analytique de la probabilité d'erreur.",
+     "needs": "Ordinateur portable, connaissance de Python, bibliothèques NumPy et Qiskit. L'accès à un véritable ordinateur quantique n'est pas obligatoire.",
+     "risks": "Un modèle de bruit simplifié peut mal correspondre au comportement réel du matériel si les erreurs corrélées ne sont pas prises en compte.",
+     "scale": "semestre",
+     "methods": [
+      "Utiliser le formalisme des sommes d'opérateurs et des matrices chi de l'article 1207.3313 pour représenter les canaux de bruit.",
+      "Implémenter une simulation par méthode de Monte-Carlo : appliquer de manière répétée des erreurs aléatoires à l'état et moyenner les résultats.",
+      "Intégrer avec des frameworks open source (Qiskit, Cirq) pour la description des circuits et la comparaison avec les modèles de bruit intégrés."
+     ]
+    },
+    {
+     "based_on": [
+      "2507.14383"
+     ],
+     "title": "Émulation de protocoles d'internet quantique sur un ordinateur quantique à ions",
+     "what": "Prendre comme base la méthodologie de l'article QI-Nutshell (2507.14383) et reproduire l'émulation du protocole de distribution quantique de clés (BB84) sur un processeur à ions accessible (par exemple, via un accès cloud à IonQ).",
+     "why": "Cela donne une expérience pratique avec du matériel quantique réel et vérifie dans quelle mesure l'émulation sur pièges à ions correspond aux protocoles théoriques.",
+     "origin": "Dans 2507.14383, l'émulation de protocoles sur pièges à ions est présentée, mais il manque un guide pratique reproductible pour les étudiants : quels paramètres de bruit prendre en compte et comment interpréter les résultats sur un dispositif réel.",
+     "first_step": "Obtenir un accès à un ordinateur quantique à ions via le cloud (par exemple, via Amazon Braket ou Microsoft Azure) et exécuter un circuit BB84 simple, en suivant la description de 2507.14383.",
+     "needs": "Accès cloud à un ordinateur quantique à ions (peut être payant), compétences avec Qiskit/Cirq, compréhension des bases de la QKD.",
+     "risks": "Le dispositif réel peut avoir un temps de cohérence limité et une faible précision des portes, ce qui rendra difficile l'obtention de la clé.",
+     "scale": "mémoire",
+     "methods": [
+      "Étudier comment, dans 2507.14383, les étapes du protocole QKD sont mappées sur les opérations physiques du piège à ions (rotations de qubits, mesures).",
+      "Implémenter le même circuit avec Qiskit ou Cirq, en l'adaptant aux paramètres du processeur à ions spécifique.",
+      "Comparer les clés obtenues et le taux d'erreur avec une simulation du protocole idéal."
+     ]
+    },
+    {
+     "based_on": [
+      "2503.23610"
+     ],
+     "title": "Évaluation de l'énergie pour le calcul quantique à l'aide de batteries quantiques",
+     "what": "Construire un modèle numérique qui calcule la consommation d'énergie d'un ordinateur quantique lors de l'utilisation de batteries quantiques comme source d'alimentation pour les opérations logiques, et le comparer à une alimentation classique.",
+     "why": "Cela permettra de comprendre dans quelle mesure les batteries quantiques peuvent résoudre le problème de la mise à l'échelle des systèmes cryogéniques, en réduisant le nombre de lignes de contrôle et la dissipation thermique.",
+     "origin": "Dans 2503.23610, le concept de batteries quantiques pour alimenter le calcul quantique est proposé, mais il manque une évaluation quantitative du gain en consommation d'énergie et en dissipation thermique pour des paramètres réalistes de processeurs modernes.",
+     "first_step": "Reproduire le modèle le plus simple de l'article : deux qubits, l'un étant la batterie, l'autre le consommateur, et calculer l'énergie transférée en un cycle.",
+     "needs": "Ordinateur avec Python, bibliothèque QuTiP, connaissances de base en thermodynamique quantique.",
+     "risks": "L'efficacité des batteries quantiques peut s'avérer inférieure à celle des sources classiques en raison des pertes par décohérence.",
+     "scale": "mémoire",
+     "methods": [
+      "Utiliser le formalisme de 2503.23610 pour décrire la batterie quantique et son interaction avec les qubits de travail.",
+      "Écrire une simulation en Python (QuTiP) pour un petit système (2-3 qubits), en modélisant le transfert d'énergie et la décohérence.",
+      "Calculer le rendement et les pertes thermiques pour différents protocoles de charge/décharge de la batterie."
+     ]
+    },
+    {
+     "based_on": [
+      "2201.01547"
+     ],
+     "title": "Simulation de la diffusion de particules élémentaires sur un ordinateur quantique avec un chargement de données amélioré",
+     "what": "Implémenter un algorithme quantique pour calculer les sections efficaces des processus e+e- -> qq~ et e+e- -> qq~W, en utilisant les méthodes de chargement de distributions de 2201.01547 et comparer la précision avec le Monte-Carlo classique.",
+     "why": "Si un ordinateur quantique peut intégrer efficacement les fonctions de distribution, cela accélérera les calculs pour la physique des hautes énergies, où les méthodes classiques nécessitent d'énormes ressources de calcul.",
+     "origin": "Dans 2201.01547, la possibilité fondamentale de l'intégration quantique pour les processus de diffusion est démontrée, mais une comparaison détaillée avec les méthodes classiques en termes de précision et de ressources pour des paramètres réalistes n'a pas été effectuée.",
+     "first_step": "Charger une distribution simple (par exemple, Breit-Wigner) sur un simulateur quantique, en utilisant la méthode exacte de l'article, et calculer l'intégrale.",
+     "needs": "Accès à un simulateur de calcul quantique (local ou cloud), connaissance des algorithmes quantiques, bases de la physique des particules.",
+     "risks": "La précision de l'intégration quantique peut être limitée par le bruit et le nombre de qubits, ce qui rendrait la méthode non compétitive.",
+     "scale": "mémoire",
+     "methods": [
+      "Étudier les méthodes de chargement de distributions probabilistes proposées dans 2201.01547 (GAN quantiques ou méthode exacte).",
+      "Implémenter un schéma d'estimation quantique d'intégrale sur simulateur (Qiskit Aer) pour le processus simple e+e- -> qq~.",
+      "Comparer le nombre de qubits requis et la précision avec la méthode classique de Monte-Carlo."
+     ]
+    },
+    {
+     "based_on": [
+      "2312.07617"
+     ],
+     "title": "Développement d'un simulateur de physique nucléaire sur ordinateur quantique utilisant des méthodes de 2312.07617",
+     "what": "Créer un prototype logiciel pour simuler des systèmes nucléaires simples (par exemple, le deutéron) sur un simulateur quantique, en appliquant les méthodes variationnelles décrites dans 2312.07617.",
+     "why": "Cela permettra d'évaluer dans quelle mesure les algorithmes quantiques modernes sont adaptés aux problèmes de la physique nucléaire et d'identifier les goulots d'étranglement avant de les lancer sur du matériel réel.",
+     "origin": "Dans 2312.07617, un aperçu des perspectives du calcul quantique pour la physique nucléaire est donné, mais il n'existe pas d'exemple pratique prêt à l'emploi avec code ouvert qu'un étudiant pourrait reproduire et modifier.",
+     "first_step": "Écrire l'hamiltonien du deutéron dans la représentation de seconde quantification et le mapper sur des qubits en utilisant la transformation de Jordan-Wigner.",
+     "needs": "Ordinateur portable avec Python, bibliothèques Qiskit ou Cirq, connaissances en mécanique quantique et bases de la physique nucléaire.",
+     "risks": "L'algorithme variationnel peut converger lentement ou rester bloqué dans des minima locaux, nécessitant un réglage fin.",
+     "scale": "semestre",
+     "methods": [
+      "Étudier l'aperçu des simulations quantiques numériques de 2312.07617 et choisir un algorithme variationnel approprié (VQE).",
+      "Implémenter l'hamiltonien du deutéron dans une base de quelques qubits et exécuter VQE sur simulateur.",
+      "Comparer l'énergie de liaison obtenue avec la valeur expérimentale et évaluer l'impact du bruit."
+     ]
+    }
+   ]
+  }
+ }
+}

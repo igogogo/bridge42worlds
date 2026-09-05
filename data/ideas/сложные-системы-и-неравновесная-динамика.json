@@ -1,0 +1,674 @@
+{
+ "topic": "сложные системы и неравновесная динамика",
+ "slug": "сложные-системы-и-неравновесная-динамика",
+ "built": "2026-09-04",
+ "note": "Область сложных систем и неравновесной динамики активно развивается, но многие методы остаются теоретическими и ждут экспериментальной проверки или практической реализации.",
+ "drill": {
+  "found": 12,
+  "nearest": 0.633,
+  "band": "mid",
+  "near": 0,
+  "full": 1,
+  "model": "bge-m3"
+ },
+ "ideas": [
+  {
+   "title": "Стенд для диагностики колебаний в тяговой сети по данным PMU",
+   "what": "Собрать лабораторный стенд, имитирующий участок тяговой сети с двумя-тремя источниками гармоник (инверторами), и проверить метод двухэтапного анализа из [2607.11243]: сначала выделить гармоники напряжения, затем сопоставить их с графиком движения поездов.",
+   "why": "Метод обещает выявлять составы, вызывающие опасные колебания, без отключения оборудования. Лабораторная проверка поможет понять, насколько он устойчив к шуму измерений и неидеальностям сети.",
+   "methods": [
+    "Собрать маломощную модель тяговой сети: источник постоянного тока, инверторы с широтно-импульсной модуляцией, нагрузочные резисторы, датчики напряжения с частотой дискретизации не менее 10 кГц.",
+    "Использовать синхронизированные измерения (как PMU) и применить алгоритм из [2607.11243]: разложение напряжения на гармоники и корреляцию с известным графиком включения инверторов.",
+    "Внести возмущения (изменение нагрузки, шум) и оценить точность локализации источника гармоник."
+   ],
+   "origin": "В [2607.11243] описан метод диагностики для реальной сети, но нет экспериментальной проверки на контролируемом стенде. Работа [1911.04219] даёт подходы к численному моделированию связанных линейных систем, которые помогут спроектировать стенд, но между численной моделью и физическим экспериментом есть разрыв — его и предлагается заполнить.",
+   "first_step": "Собрать простейшую схему: источник 24 В, один инвертор на MOSFET, резистивная нагрузка, осциллограф с функцией записи. Записать напряжение при разных частотах ШИМ и проверить, выделяются ли гармоники.",
+   "needs": "Лаборатория электроники: паяльная станция, осциллограф (желательно с возможностью синхронизации), источник питания, компоненты. Навыки схемотехники и программирования микроконтроллеров (или ПЛИС) для генерации ШИМ.",
+   "risks": "Маломощный стенд может не воспроизвести эффекты реальной сети (например, резонансы на длинных линиях). Придётся аккуратно масштабировать параметры или перейти к численному моделированию.",
+   "scale": "семестр",
+   "based_on": [
+    "2607.11243",
+    "1911.04219"
+   ]
+  },
+  {
+   "title": "Ускорение расчёта колебаний разреженного газа в МЭМС с помощью гибридного метода",
+   "what": "Реализовать метод из [2601.17484] для типичной задачи МЭМС — колеблющейся микробалки в разреженном газе — и сравнить скорость и точность с полным кинетическим решением (например, методом дискретных ординат).",
+   "why": "Если метод действительно даёт ускорение в тысячи раз без потери точности, это откроет путь к быстрому проектированию датчиков (акселерометров, гироскопов) с учётом демпфирования газом.",
+   "methods": [
+    "Написать код на Python или C++ для решения уравнения Больцмана-БГК в частотной области для одномерной задачи (колеблющаяся пластина).",
+    "Реализовать гибридную схему: в кнудсеновском слое использовать кинетическое уравнение, вдали — макроскопические уравнения (уравнения Навье-Стокса с поправками), сшивать решения.",
+    "Сравнить с эталонным решением методом дискретных ординат (или прямым моделированием Монте-Карло) по времени расчёта и точности."
+   ],
+   "origin": "В [2601.17484] предложен гибридный метод и показано ускорение, но только для одного частного случая. Работа [2012.06770] даёт общие методы редукции медленно-быстрых систем, которые могут помочь в анализе сходимости гибридной схемы. Не хватает независимой реализации и проверки на других параметрах (число Кнудсена, частота колебаний).",
+   "first_step": "Скачать открытый код для решения уравнения БГК (например, из репозиториев по kinetic theory) и воспроизвести результаты [2601.17484] для одного набора параметров.",
+   "needs": "Компьютер с достаточной памятью (16+ ГБ), знание численных методов для кинетических уравнений, опыт программирования на Python/C++.",
+   "risks": "Метод может оказаться неустойчивым для некоторых диапазонов параметров, и потребуется тонкая настройка схемы сшивания. Возможно, ускорение будет меньше заявленного из-за накладных расходов.",
+   "scale": "диплом",
+   "based_on": [
+    "2601.17484",
+    "2012.06770"
+   ]
+  },
+  {
+   "title": "Адаптивное управление нестабильной системой с неизвестной динамикой на примере душа",
+   "what": "Построить физический стенд «умный душ» с двумя клапанами (горячая/холодная вода) и датчиками температуры, реализовать контроллер из [2607.13513] и проверить его работу при случайных скачках давления.",
+   "why": "Если контроллер сможет удерживать температуру в узком диапазоне без знания точной модели смесителя, это будет шагом к применению в протезах и робототехнике, где динамика заранее неизвестна.",
+   "methods": [
+    "Собрать гидравлический контур с двумя пропорциональными клапанами, датчиками температуры (термопары или термисторы) и давления, подключить к микроконтроллеру (Arduino или STM32).",
+    "Реализовать двухрежимный контроллер из [2607.13513]: предсказательный режим на основе идентификации модели в реальном времени и аварийный режим при резких возмущениях.",
+    "Провести серию экспериментов с искусственными скачками давления (например, перекрывая кран) и измерить время восстановления и перерегулирование."
+   ],
+   "origin": "В [2607.13513] контроллер испытан в протезах, но нет данных о его работе в гидравлических системах с большими задержками и шумом. Работа [1704.08764] даёт методы идентификации нелинейных систем по данным, которые можно использовать для улучшения предсказательного режима. Не хватает проверки на простом и дешёвом стенде, доступном для воспроизведения.",
+   "first_step": "Собрать простейший контур с двумя ручными кранами и одним датчиком температуры, записать реакцию на ступенчатое изменение расхода, чтобы оценить постоянные времени системы.",
+   "needs": "Сантехнические компоненты, датчики температуры (например, DS18B20), микроконтроллер, навыки ПИД-регулирования и программирования.",
+   "risks": "Гидравлическая система может иметь нелинейности (люфты клапанов, турбулентность), которые трудно учесть, и контроллер может раскачиваться. Придётся вводить ограничения на скорость изменения управляющего сигнала.",
+   "scale": "семестр",
+   "based_on": [
+    "2607.13513",
+    "1704.08764"
+   ]
+  },
+  {
+   "title": "Поиск скрытых фаз в модели неравновесной кристаллизации",
+   "what": "Численно исследовать модель кристаллизации переохлаждённой жидкости, чтобы обнаружить «скрытые фазы» — неустойчивые состояния, которые становятся видимыми при аналитическом продолжении температуры в комплексную плоскость, как в [2606.08004].",
+   "why": "Понимание скрытых фаз может помочь управлять процессом кристаллизации в промышленности (например, в фармацевтике или металлургии), где важно избегать нежелательных полиморфных форм.",
+   "methods": [
+    "Выбрать простую модель кристаллизации (например, уравнение фазового поля или модель Кана-Хилларда) с параметрами, допускающими переохлаждение.",
+    "Реализовать численное решение и найти стационарные состояния (устойчивые и неустойчивые) с помощью методов продолжения по параметру (например, AUTO или самописный код).",
+    "Выполнить аналитическое продолжение температуры в комплексную плоскость, как описано в [2606.08004], и проследить за поведением особых точек (бифуркаций)."
+   ],
+   "origin": "В [2606.08004] предложен математический аппарат для описания скрытых фаз, но он применён к абстрактным моделям. Работа [1507.08302] связывает неравновесную статистическую механику с динамическими системами и может дать физическую интерпретацию. Не хватает конкретного примера с реалистичной моделью кристаллизации, где скрытые фазы можно было бы связать с экспериментально наблюдаемыми метастабильными состояниями.",
+   "first_step": "Взять одномерную модель фазового поля с двойной ямой потенциала, найти все стационарные решения и построить бифуркационную диаграмму в зависимости от температуры.",
+   "needs": "Компьютер, знание численных методов для дифференциальных уравнений в частных производных, навыки программирования (Python/Matlab).",
+   "risks": "Аналитическое продолжение может быть численно неустойчивым, и скрытые фазы могут не проявиться в выбранной модели. Возможно, придётся упростить модель или использовать методы аппроксимации Паде.",
+   "scale": "диплом",
+   "based_on": [
+    "2606.08004",
+    "1507.08302"
+   ]
+  },
+  {
+   "title": "Связанные линейные системы: библиотека для редукции моделей с гарантией точности",
+   "what": "Разработать программную библиотеку для построения редуцированных моделей связанных линейных динамических систем, следуя подходу из [1911.04219], и применить её к задаче демпфирования колебаний в механической конструкции.",
+   "why": "Инженерам часто нужны быстрые модели для оптимизации, но полные конечно-элементные модели слишком тяжелы. Библиотека с автоматическим выбором порядка редукции и оценкой ошибки сэкономит время.",
+   "methods": [
+    "Изучить методы редукции из [1911.04219] (сбалансированное отсечение, интерполяция передаточных функций) и реализовать их на Python с использованием SciPy.",
+    "Собрать тестовый набор из нескольких связанных подсистем (например, балка + пьезоэлектрический демпфер) и сравнить точность редуцированных моделей разных порядков.",
+    "Добавить адаптивный выбор порядка редукции на основе заданной пользователем допустимой ошибки."
+   ],
+   "origin": "В [1911.04219] рассмотрены общие принципы моделирования связанных линейных систем, но нет готовой реализации с удобным интерфейсом. Работа [nlin/0307013] даёт меры сложности динамических систем, которые можно использовать для оценки минимально необходимого порядка модели. Не хватает инструмента, который бы автоматизировал редукцию для практических задач.",
+   "first_step": "Реализовать сбалансированное отсечение для одной линейной системы (матрицы A, B, C) и проверить на примере из учебника.",
+   "needs": "Компьютер, знание линейной алгебры и теории управления, опыт программирования на Python.",
+   "risks": "Для систем с большой размерностью (сотни тысяч состояний) стандартные алгоритмы могут быть слишком медленными, потребуется использовать разреженные методы или итерационные алгоритмы.",
+   "scale": "диплом",
+   "based_on": [
+    "1911.04219",
+    "nlin/0307013"
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "2607.11243",
+   "date": "2026-07-13",
+   "full": false,
+   "titles": {
+    "ru": "Почему в тяговой сети поездов возникают колебания напряжения",
+    "en": "Why Trains Rock the Voltage",
+    "es": "Por qué los trenes provocan oscilaciones de tensión",
+    "ar": "لماذا يتأرجح الجهد في القطارات؟",
+    "fr": "Pourquoi les trains font tanguer la tension"
+   },
+   "score": 0.486,
+   "url": "/lang/{lang}/archive/2026-07-13/2607.11243/",
+   "abstract": "Тяговая сеть железной дороги сравнивается с оркестром, где каждый поезд — источник электрических гармоник. Объясняется, как новый метод диагностики без вскрытия оборудования выявляет составы, вызывающие опасные колебания напряжения. Подчёркивается роль законов Максвелла и двухэтапного анализа, завершающегося сверкой с графиком движения для предотвращения сбоев."
+  },
+  {
+   "id": "2601.17484",
+   "date": "2026-01-24",
+   "full": false,
+   "titles": {
+    "ru": "Колебания разреженного газа: как ускорить расчёт в тысячу раз",
+    "en": "Oscillations of a rarefied gas: how to speed up calculations a thousandfold",
+    "es": "Oscilaciones de un gas enrarecido: cómo acelerar el cálculo mil veces",
+    "ar": "اهتزازات الغاز المخلخل: كيف نسرّع الحساب ألف مرة",
+    "fr": "Oscillations d'un gaz raréfié : accélérer le calcul d'un facteur mille"
+   },
+   "score": 0.479,
+   "url": "/lang/{lang}/archive/2026-01-24/2601.17484/",
+   "abstract": "В микроэлектромеханических системах (МЭМС) газ настолько разрежен, что обычные законы течения не работают. Расчёт его колебаний требует огромных вычислительных ресурсов. Новый метод решает задачу в частотной области и одновременно использует два уравнения: точное кинетическое и приближённое макроскопическое. Они помогают друг другу, ускоряя сходимость в тысячи раз. Это позволит проектировать датчики и актюаторы точнее и быстрее."
+  },
+  {
+   "id": "2607.13513",
+   "date": "2026-07-15",
+   "full": false,
+   "titles": {
+    "ru": "Интеллектуальное управление душем: укрощение стохастической системы",
+    "en": "Smart Shower: Taming an Unpredictable System",
+    "es": "Ducha inteligente: cómo domar un sistema impredecible",
+    "ar": "تحكم ذكي في الدش: ترويض نظام عشوائي",
+    "fr": "Douche intelligente : comment apprivoiser un système imprévisible"
+   },
+   "score": 0.473,
+   "url": "/lang/{lang}/archive/2026-07-15/2607.13513/",
+   "abstract": "Как адаптивный контроллер приручает хаотичный водопровод, не зная его устройства. Два режима — предсказательный и аварийный — позволяют мягко удерживать комфортную температуру, несмотря на скачки давления. Аналогия с турбулентностью объясняет, почему случайные толчки неустранимы, но ими можно управлять. Технология уже тестируется в протезах и обещает сделать роботов такими же надёжными, как утренний душ."
+  },
+  {
+   "id": "2606.08004",
+   "date": "2026-06-06",
+   "full": false,
+   "titles": {
+    "ru": "Как удержать нестабильное: формула скрытых фаз",
+    "en": "How to Stabilize the Unstable: The Formula of Hidden Phases",
+    "es": "Cómo mantener lo inestable: la fórmula de las fases ocultas",
+    "ar": "كيف نحافظ على غير المستقر: صيغة الأطوار الخفية",
+    "fr": "Comment retenir l'instable : la formule des phases cachées"
+   },
+   "score": 0.471,
+   "url": "/lang/{lang}/archive/2026-06-06/2606.08004/",
+   "abstract": "Когда вы резко охлаждаете перегретый сироп, он не сразу кристаллизуется, а застывает в промежуточном, «неправильном» состоянии. Учёные нашли способ описывать такие состояния математически, словно рассматривая температуру не на прямой линии, а в воображаемой плоскости. Оказалось, что эти «неустойчивые» фазы возникают там, где математические особые точки раздваиваются и приближаются к реальности. Это позволяет предсказывать, когда материал захочет задержаться в необычном состоянии, что полезно для создания новых сплавов и управления веществами светом."
+  },
+  {
+   "id": "2605.08860",
+   "date": "2026-05-09",
+   "full": false,
+   "titles": {
+    "ru": "Термостат, который любит склеивать вероятности",
+    "en": "A Thermostat That Likes to Glue Probabilities Together",
+    "es": "El termostato que ama pegar probabilidades",
+    "ar": "منظم حرارة يعشق لصق الاحتمالات",
+    "fr": "Un thermostat qui aime coller les probabilités"
+   },
+   "score": 0.47,
+   "url": "/lang/{lang}/archive/2026-05-09/2605.08860/",
+   "abstract": "Работа пересматривает старую задачу о равновесии нагретых тел, но для систем с сильной памятью между частями. Авторы нашли условия, при которых можно точно вычислить, как устроен покой в таком необычном мире. Они показали, что из множества вариантов всего два приводят к красивым и удобным формулам, и открыли третий, ранее не замеченный. Это помогает моделировать реальные системы — от звёздных скоплений до хаотичных электронных схем."
+  },
+  {
+   "id": "2607.14525",
+   "date": "2026-07-16",
+   "full": true,
+   "titles": {
+    "ru": "Читая космический палимпсест: redshift-томография неразрешённых галактик",
+    "en": "Reading the Cosmic Palimpsest: Redshift Tomography of Unresolved Galaxies",
+    "es": "Leyendo el palimpsesto cósmico: tomografía de redshift de galaxias no resueltas",
+    "ar": "قراءة الطِّرس الكوني: تصوير طبقي بالانزياح الأحمر للمجرات غير المميزة",
+    "fr": "Lire le palimpseste cosmique : tomographie par décalage vers le rouge de galaxies non résolues"
+   },
+   "score": 0.468,
+   "url": "/lang/{lang}/archive/2026-07-16/2607.14525/",
+   "abstract": "Представьте, что вы пытаетесь разглядеть далёкие огни города сквозь плотный туман: видно только общее свечение, а не отдельные фонари. Учёные научили компьютер угадывать, насколько далеко находятся эти «невидимые» галактики, используя только размытые пятна света с разных цветных фотографий неба. Оказалось, что точность такой оценки достигает 99%, даже если часть данных потеряна. Теперь астрономы смогут точнее составлять трёхмерную карту Вселенной и понимать, как она устроена."
+  },
+  {
+   "id": "2607.10962",
+   "date": "2026-07-13",
+   "full": false,
+   "titles": {
+    "ru": "Волновая энергия: оптимизация преобразователей через энтропийный подход",
+    "en": "Wave Energy: Optimizing Converters via an Entropy-Based Approach",
+    "es": "Las olas se vuelven más listas: optimizar la energía del mar",
+    "ar": "الطاقة الموجية: تحسين المحولات عبر نهج الإنتروبيا",
+    "fr": "Des vagues plus intelligentes : optimiser l'énergie marine"
+   },
+   "score": 0.463,
+   "url": "/lang/{lang}/archive/2026-07-13/2607.10962/",
+   "abstract": "Океанские волны хранят солнечную энергию, и её извлечение зависит от точной настройки плавучих преобразователей. Новая модель использует энтропию как помощника в поиске оптимальной конфигурации, заимствуя методы из авиационной турбулентности. Такой подход объединяет геометрию, расстановку и сопротивление поплавков, учитывая изменчивость моря. Идеи совместного проектирования восходят к Бернулли и Эйлеру, а волновая динамика описана Стоксом."
+  },
+  {
+   "id": "1704.08764",
+   "full": false,
+   "field": true,
+   "score": 0.633,
+   "titles": {
+    "ru": "Data Based Identification and Prediction of Nonlinear and Complex   Dynamical Systems"
+   },
+   "abstract": "The problem of reconstructing nonlinear and complex dynamical systems from measured data or time series is central to many scientific disciplines including physical, biological, computer, and social sciences, as well as engineering and economics. In this paper, we review the recent advances in this forefront and rapidly evolving field, aiming to cover topics such as compressive sensing (a novel optimization paradigm for sparse-signal reconstruction), noised-induced dynamical mapping, perturbations, reverse engineering, synchronization, inner composition alignment, global silencing, Granger Cau"
+  },
+  {
+   "id": "1911.04219",
+   "full": false,
+   "field": true,
+   "score": 0.633,
+   "titles": {
+    "ru": "Numerical modelling of coupled linear dynamical systems"
+   },
+   "abstract": "Numerical modelling of several coupled passive linear dynamical systems (LDS) is considered. Since such component systems may arise from partial differential equations, transfer function descriptions, lumped systems, measurement data, etc., the first step is to discretise them into finite-dimensional LDSs using, e.g., the finite element method, autoregressive techniques, and interpolation. The finite-dimensional component systems may satisfy various types of energy (in)equalities due to passivity that require translation into a common form such as the scattering passive representation. Only th"
+  },
+  {
+   "id": "nlin/0307013",
+   "full": false,
+   "field": true,
+   "score": 0.626,
+   "titles": {
+    "ru": "Complexity Characterization of Dynamical Systems Through Predictability"
+   },
+   "abstract": "Some aspects of the predictability problem in dynamical systems are reviewed. The deep relation among Lyapunov exponents, Kolmogorov-Sinai entropy, Shannon entropy and algorithmic complexity is discussed. In particular, we emphasize how a characterization of the unpredictability of a system gives a measure of its complexity. A special attention is devoted to finite-resolution effects on predictability, which can be accounted with suitable generalization of the standard indicators. The problems involved in systems with intrinsic randomness is discussed, with emphasis on the important problems o"
+  },
+  {
+   "id": "2012.06770",
+   "full": false,
+   "field": true,
+   "score": 0.625,
+   "titles": {
+    "ru": "Slow Invariant Manifolds of Slow-Fast Dynamical Systems"
+   },
+   "abstract": "Slow-fast dynamical systems, i.e., singularly or non-singularly perturbed dynamical systems possess slow invariant manifolds on which trajectories evolve slowly. Since the last century various methods have been developed for approximating their equations. This paper aims, on the one hand, to propose a classification of the most important of them into two great categories: singular perturbation-based methods and curvature-based methods, and on the other hand, to prove the equivalence between any methods belonging to the same category and between the two categories. Then, a deep analysis and com"
+  },
+  {
+   "id": "1507.08302",
+   "full": false,
+   "field": true,
+   "score": 0.625,
+   "titles": {
+    "ru": "Nonequilibrium Systems : Hard Disks and Harmonic Oscillators Near and   Far From Equilibrium"
+   },
+   "abstract": "We relate progress in statistical mechanics, both at and far from equilibrium, to advances in the theory of dynamical systems. We consider computer simulations of time-reversible deterministic chaos in small systems with three- and four-dimensional phase spaces. These models provide us with a basis for understanding equilibration and thermodynamic irreversibility in terms of Lyapunov instability, fractal distributions, and thermal constraints"
+  }
+ ],
+ "lang": {
+  "en": {
+   "note": "The field of complex systems and nonequilibrium dynamics is developing rapidly, but many methods remain theoretical and await experimental verification or practical implementation.",
+   "topic": "complex systems and nonequilibrium dynamics",
+   "ideas": [
+    {
+     "based_on": [
+      "2607.11243",
+      "1911.04219"
+     ],
+     "title": "Test bench for diagnosing oscillations in a traction network using PMU data",
+     "what": "Build a laboratory test bench that mimics a section of a traction network with two or three harmonic sources (inverters), and test the two-stage analysis method from [2607.11243]: first extract voltage harmonics, then correlate them with the train schedule.",
+     "why": "The method promises to identify trains that cause dangerous oscillations without disconnecting equipment. A laboratory test will help understand how robust it is to measurement noise and network imperfections.",
+     "origin": "[2607.11243] describes a diagnostic method for a real network, but there is no experimental validation on a controlled test bench. Work [1911.04219] provides approaches for numerical simulation of coupled linear systems that will help design the test bench, but there is a gap between the numerical model and the physical experiment, which this project aims to fill.",
+     "first_step": "Assemble a simple circuit: a 24 V source, one MOSFET inverter, a resistive load, and an oscilloscope with recording capability. Record the voltage at different PWM frequencies and check whether harmonics can be extracted.",
+     "needs": "Electronics laboratory: soldering station, oscilloscope (preferably with synchronization capability), power supply, components. Skills in circuit design and microcontroller (or FPGA) programming for PWM generation.",
+     "risks": "A low-power test bench may not reproduce the effects of a real network (for example, resonances on long lines). It may be necessary to carefully scale parameters or switch to numerical simulation.",
+     "scale": "semester",
+     "methods": [
+      "Assemble a low-power model of a traction network: DC source, inverters with pulse-width modulation, load resistors, voltage sensors with a sampling rate of at least 10 kHz.",
+      "Use synchronized measurements (like PMU) and apply the algorithm from [2607.11243]: decompose the voltage into harmonics and correlate with the known inverter switching schedule.",
+      "Introduce disturbances (load changes, noise) and evaluate the accuracy of harmonic source localization."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.17484",
+      "2012.06770"
+     ],
+     "title": "Accelerating calculations of rarefied gas oscillations in MEMS using a hybrid method",
+     "what": "Implement the method from [2601.17484] for a typical MEMS problem, an oscillating microbeam in a rarefied gas, and compare speed and accuracy with a full kinetic solution (for example, the discrete ordinate method).",
+     "why": "If the method indeed provides thousands-fold acceleration without loss of accuracy, it will pave the way for fast design of sensors (accelerometers, gyroscopes) accounting for gas damping.",
+     "origin": "[2601.17484] proposes a hybrid method and demonstrates acceleration, but only for one specific case. Work [2012.06770] provides general reduction methods for slow-fast systems that may help analyze the convergence of the hybrid scheme. What is missing is an independent implementation and testing on other parameters (Knudsen number, oscillation frequency).",
+     "first_step": "Download open-source code for solving the BGK equation (for example, from kinetic theory repositories) and reproduce the results of [2601.17484] for one set of parameters.",
+     "needs": "A computer with sufficient memory (16+ GB), knowledge of numerical methods for kinetic equations, and programming experience in Python/C++.",
+     "risks": "The method may be unstable for some parameter ranges, requiring fine-tuning of the coupling scheme. The acceleration might be less than claimed due to overhead.",
+     "scale": "thesis",
+     "methods": [
+      "Write code in Python or C++ to solve the Boltzmann-BGK equation in the frequency domain for a one-dimensional problem (oscillating plate).",
+      "Implement the hybrid scheme: use the kinetic equation in the Knudsen layer and macroscopic equations (Navier-Stokes with corrections) away from it, and couple the solutions.",
+      "Compare with a reference solution using the discrete ordinate method (or direct simulation Monte Carlo) in terms of computation time and accuracy."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.13513",
+      "1704.08764"
+     ],
+     "title": "Adaptive control of an unstable system with unknown dynamics: the shower example",
+     "what": "Build a physical 'smart shower' test bench with two valves (hot/cold water) and temperature sensors, implement the controller from [2607.13513], and test its performance under random pressure fluctuations.",
+     "why": "If the controller can maintain temperature within a narrow range without knowing the exact mixer model, it will be a step toward applications in prosthetics and robotics, where dynamics are unknown in advance.",
+     "origin": "In [2607.13513], the controller was tested in prosthetics, but there is no data on its performance in hydraulic systems with large delays and noise. Work [1704.08764] provides methods for data-driven identification of nonlinear systems that could be used to improve the predictive mode. What is missing is a test on a simple, inexpensive test bench that is easy to reproduce.",
+     "first_step": "Assemble a simple loop with two manual taps and one temperature sensor, and record the response to a step change in flow to estimate the system time constants.",
+     "needs": "Plumbing components, temperature sensors (e.g., DS18B20), a microcontroller, and skills in PID control and programming.",
+     "risks": "The hydraulic system may have nonlinearities (valve backlash, turbulence) that are difficult to account for, and the controller may oscillate. It may be necessary to impose limits on the rate of change of the control signal.",
+     "scale": "semester",
+     "methods": [
+      "Assemble a hydraulic loop with two proportional valves, temperature sensors (thermocouples or thermistors) and pressure sensors, connected to a microcontroller (Arduino or STM32).",
+      "Implement the two-mode controller from [2607.13513]: a predictive mode based on real-time model identification and an emergency mode for sudden disturbances.",
+      "Conduct a series of experiments with artificial pressure surges (for example, by shutting off a valve) and measure recovery time and overshoot."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.08004",
+      "1507.08302"
+     ],
+     "title": "Searching for hidden phases in a nonequilibrium crystallization model",
+     "what": "Numerically investigate a model of crystallization of a supercooled liquid to detect 'hidden phases', which are unstable states that become visible when the temperature is analytically continued into the complex plane, as in [2606.08004].",
+     "why": "Understanding hidden phases may help control crystallization processes in industry (for example, in pharmaceuticals or metallurgy), where avoiding unwanted polymorphic forms is important.",
+     "origin": "[2606.08004] proposes a mathematical framework for describing hidden phases, but it has been applied only to abstract models. Work [1507.08302] connects nonequilibrium statistical mechanics with dynamical systems and may provide a physical interpretation. What is missing is a concrete example with a realistic crystallization model where hidden phases could be linked to experimentally observable metastable states.",
+     "first_step": "Take a one-dimensional phase-field model with a double-well potential, find all stationary solutions, and construct a bifurcation diagram as a function of temperature.",
+     "needs": "A computer, knowledge of numerical methods for partial differential equations, and programming skills (Python/Matlab).",
+     "risks": "Analytic continuation may be numerically unstable, and hidden phases may not appear in the chosen model. It may be necessary to simplify the model or use Padé approximation methods.",
+     "scale": "thesis",
+     "methods": [
+      "Choose a simple crystallization model (for example, the phase-field equation or the Cahn-Hilliard model) with parameters that allow supercooling.",
+      "Implement a numerical solution and find stationary states (stable and unstable) using parameter continuation methods (e.g., AUTO or self-written code).",
+      "Perform analytic continuation of temperature into the complex plane as described in [2606.08004] and track the behavior of singular points (bifurcations)."
+     ]
+    },
+    {
+     "based_on": [
+      "1911.04219",
+      "nlin/0307013"
+     ],
+     "title": "Coupled linear systems: a library for model reduction with accuracy guarantees",
+     "what": "Develop a software library for constructing reduced models of coupled linear dynamical systems, following the approach from [1911.04219], and apply it to the problem of vibration damping in a mechanical structure.",
+     "why": "Engineers often need fast models for optimization, but full finite element models are too heavy. A library with automatic selection of reduction order and error estimation will save time.",
+     "origin": "[1911.04219] discusses general principles for modeling coupled linear systems, but there is no ready-made implementation with a user-friendly interface. Work [nlin/0307013] provides measures of complexity for dynamical systems that can be used to estimate the minimal required model order. What is missing is a tool that automates reduction for practical problems.",
+     "first_step": "Implement balanced truncation for a single linear system (matrices A, B, C) and test it on an example from a textbook.",
+     "needs": "A computer, knowledge of linear algebra and control theory, and programming experience in Python.",
+     "risks": "For systems with large dimension (hundreds of thousands of states), standard algorithms may be too slow, requiring sparse methods or iterative algorithms.",
+     "scale": "thesis",
+     "methods": [
+      "Study the reduction methods from [1911.04219] (balanced truncation, transfer function interpolation) and implement them in Python using SciPy.",
+      "Assemble a test set of several coupled subsystems (for example, a beam plus a piezoelectric damper) and compare the accuracy of reduced models of different orders.",
+      "Add adaptive selection of the reduction order based on a user-specified allowable error."
+     ]
+    }
+   ]
+  },
+  "es": {
+   "note": "El campo de los sistemas complejos y la dinámica de no equilibrio está en pleno desarrollo, pero muchos métodos siguen siendo teóricos y esperan verificación experimental o implementación práctica.",
+   "topic": "sistemas complejos y dinámica de no equilibrio",
+   "ideas": [
+    {
+     "based_on": [
+      "2607.11243",
+      "1911.04219"
+     ],
+     "title": "Banco de pruebas para diagnosticar oscilaciones en la red de tracción usando datos de PMU",
+     "what": "Montar un banco de pruebas de laboratorio que simule un tramo de red de tracción con dos o tres fuentes de armónicos (inversores) y verificar el método de análisis en dos etapas de [2607.11243]: primero extraer los armónicos de tensión y luego correlacionarlos con el horario de circulación de los trenes.",
+     "why": "El método promete identificar los trenes que causan oscilaciones peligrosas sin desconectar el equipo. Una prueba de laboratorio ayudará a entender su robustez frente al ruido de medición y a las imperfecciones de la red.",
+     "origin": "En [2607.11243] se describe un método de diagnóstico para una red real, pero no hay verificación experimental en un banco controlado. El trabajo [1911.04219] ofrece enfoques para la simulación numérica de sistemas lineales acoplados que ayudarán a diseñar el banco, pero existe una brecha entre el modelo numérico y el experimento físico, y esa brecha es lo que se propone llenar.",
+     "first_step": "Montar un circuito simple: fuente de 24 V, un inversor con MOSFET, carga resistiva y osciloscopio con función de registro. Registrar la tensión a diferentes frecuencias de PWM y comprobar si los armónicos se distinguen.",
+     "needs": "Laboratorio de electrónica: estación de soldadura, osciloscopio (idealmente con capacidad de sincronización), fuente de alimentación y componentes. Habilidades en diseño de circuitos y programación de microcontroladores (o FPGAs) para generar PWM.",
+     "risks": "Un banco de baja potencia puede no reproducir los efectos de una red real (por ejemplo, resonancias en líneas largas). Habrá que escalar los parámetros con cuidado o pasar a la simulación numérica.",
+     "scale": "semestre",
+     "methods": [
+      "Montar un modelo de baja potencia de la red de tracción: fuente de corriente continua, inversores con modulación por ancho de pulso, resistencias de carga y sensores de tensión con frecuencia de muestreo de al menos 10 kHz.",
+      "Usar mediciones sincronizadas (como PMU) y aplicar el algoritmo de [2607.11243]: descomposición de la tensión en armónicos y correlación con el cronograma conocido de activación de los inversores.",
+      "Introducir perturbaciones (cambios de carga, ruido) y evaluar la precisión de la localización de la fuente de armónicos."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.17484",
+      "2012.06770"
+     ],
+     "title": "Aceleración del cálculo de oscilaciones de gas enrarecido en MEMS mediante un método híbrido",
+     "what": "Implementar el método de [2601.17484] para un problema típico de MEMS, una microviga oscilante en gas enrarecido, y comparar velocidad y precisión con una solución cinética completa (por ejemplo, el método de ordenadas discretas).",
+     "why": "Si el método realmente acelera miles de veces sin perder precisión, abrirá el camino al diseño rápido de sensores (acelerómetros, giroscopios) teniendo en cuenta el amortiguamiento por gas.",
+     "origin": "En [2601.17484] se propone un método híbrido y se muestra una aceleración, pero solo para un caso particular. El trabajo [2012.06770] ofrece métodos generales de reducción de sistemas lentos-rápidos que pueden ayudar a analizar la convergencia del esquema híbrido. Falta una implementación independiente y una verificación con otros parámetros (número de Knudsen, frecuencia de oscilación).",
+     "first_step": "Descargar un código abierto para resolver la ecuación BGK (por ejemplo, de repositorios de teoría cinética) y reproducir los resultados de [2601.17484] para un conjunto de parámetros.",
+     "needs": "Computadora con suficiente memoria (16+ GB), conocimiento de métodos numéricos para ecuaciones cinéticas y experiencia en programación en Python/C++.",
+     "risks": "El método puede resultar inestable para ciertos rangos de parámetros y requerirá un ajuste fino del esquema de acoplamiento. Es posible que la aceleración sea menor de lo declarado debido a los gastos generales.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Escribir un código en Python o C++ para resolver la ecuación de Boltzmann-BGK en el dominio de la frecuencia para un problema unidimensional (placa oscilante).",
+      "Implementar el esquema híbrido: en la capa de Knudsen usar la ecuación cinética y lejos de ella las ecuaciones macroscópicas (ecuaciones de Navier-Stokes con correcciones), acoplando las soluciones.",
+      "Comparar con una solución de referencia mediante el método de ordenadas discretas (o simulación directa de Monte Carlo) en tiempo de cálculo y precisión."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.13513",
+      "1704.08764"
+     ],
+     "title": "Control adaptativo de un sistema inestable con dinámica desconocida, ejemplificado en una ducha",
+     "what": "Construir un banco físico de 'ducha inteligente' con dos válvulas (agua caliente/fría) y sensores de temperatura, implementar el controlador de [2607.13513] y probar su funcionamiento ante saltos aleatorios de presión.",
+     "why": "Si el controlador puede mantener la temperatura en un rango estrecho sin conocer el modelo exacto del mezclador, será un paso hacia su aplicación en prótesis y robótica, donde la dinámica no se conoce de antemano.",
+     "origin": "En [2607.13513] el controlador se probó en prótesis, pero no hay datos sobre su funcionamiento en sistemas hidráulicos con grandes retrasos y ruido. El trabajo [1704.08764] ofrece métodos de identificación de sistemas no lineales a partir de datos, que pueden usarse para mejorar el modo predictivo. Falta una verificación en un banco simple y económico que sea reproducible.",
+     "first_step": "Montar un circuito simple con dos grifos manuales y un sensor de temperatura, registrar la respuesta a un cambio escalonado del caudal para estimar las constantes de tiempo del sistema.",
+     "needs": "Componentes de fontanería, sensores de temperatura (por ejemplo, DS18B20), microcontrolador, habilidades en control PID y programación.",
+     "risks": "El sistema hidráulico puede tener no linealidades (holguras en las válvulas, turbulencia) difíciles de modelar, y el controlador podría oscilar. Habrá que limitar la velocidad de cambio de la señal de control.",
+     "scale": "semestre",
+     "methods": [
+      "Montar un circuito hidráulico con dos válvulas proporcionales, sensores de temperatura (termopares o termistores) y presión, conectados a un microcontrolador (Arduino o STM32).",
+      "Implementar el controlador de dos modos de [2607.13513]: un modo predictivo basado en la identificación del modelo en tiempo real y un modo de emergencia ante perturbaciones bruscas.",
+      "Realizar una serie de experimentos con saltos de presión artificiales (por ejemplo, cerrando una válvula) y medir el tiempo de recuperación y el sobreimpulso."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.08004",
+      "1507.08302"
+     ],
+     "title": "Búsqueda de fases ocultas en un modelo de cristalización fuera de equilibrio",
+     "what": "Investigar numéricamente un modelo de cristalización de un líquido sobreenfriado para descubrir 'fases ocultas', estados inestables que se vuelven visibles al continuar analíticamente la temperatura al plano complejo, como en [2606.08004].",
+     "why": "Comprender las fases ocultas puede ayudar a controlar el proceso de cristalización en la industria (por ejemplo, en farmacéutica o metalurgia), donde es importante evitar formas polimórficas no deseadas.",
+     "origin": "En [2606.08004] se propone un aparato matemático para describir fases ocultas, pero se aplica a modelos abstractos. El trabajo [1507.08302] relaciona la mecánica estadística de no equilibrio con los sistemas dinámicos y puede dar una interpretación física. Falta un ejemplo concreto con un modelo de cristalización realista donde las fases ocultas puedan asociarse con estados metaestables observables experimentalmente.",
+     "first_step": "Tomar un modelo unidimensional de campo de fases con potencial de doble pozo, encontrar todas las soluciones estacionarias y construir un diagrama de bifurcación en función de la temperatura.",
+     "needs": "Computadora, conocimiento de métodos numéricos para ecuaciones diferenciales parciales y habilidades de programación (Python/Matlab).",
+     "risks": "La continuación analítica puede ser numéricamente inestable y las fases ocultas pueden no aparecer en el modelo elegido. Quizás haya que simplificar el modelo o usar métodos de aproximación de Padé.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Elegir un modelo simple de cristalización (por ejemplo, la ecuación de campo de fases o el modelo de Cahn-Hilliard) con parámetros que permitan el sobreenfriamiento.",
+      "Implementar la solución numérica y encontrar los estados estacionarios (estables e inestables) mediante métodos de continuación por parámetros (por ejemplo, AUTO o código propio).",
+      "Realizar la continuación analítica de la temperatura al plano complejo, como se describe en [2606.08004], y seguir el comportamiento de los puntos singulares (bifurcaciones)."
+     ]
+    },
+    {
+     "based_on": [
+      "1911.04219",
+      "nlin/0307013"
+     ],
+     "title": "Sistemas lineales acoplados: biblioteca para reducción de modelos con garantía de precisión",
+     "what": "Desarrollar una biblioteca de software para construir modelos reducidos de sistemas dinámicos lineales acoplados, siguiendo el enfoque de [1911.04219], y aplicarla al problema del amortiguamiento de vibraciones en una estructura mecánica.",
+     "why": "Los ingenieros a menudo necesitan modelos rápidos para optimización, pero los modelos completos de elementos finitos son demasiado pesados. Una biblioteca con selección automática del orden de reducción y estimación del error ahorrará tiempo.",
+     "origin": "En [1911.04219] se consideran principios generales para modelar sistemas lineales acoplados, pero no hay una implementación lista con una interfaz conveniente. El trabajo [nlin/0307013] ofrece medidas de complejidad de sistemas dinámicos que pueden usarse para estimar el orden mínimo necesario del modelo. Falta una herramienta que automatice la reducción para problemas prácticos.",
+     "first_step": "Implementar el truncamiento balanceado para un sistema lineal simple (matrices A, B, C) y probarlo con un ejemplo de libro de texto.",
+     "needs": "Computadora, conocimiento de álgebra lineal y teoría de control, experiencia en programación en Python.",
+     "risks": "Para sistemas de gran dimensión (cientos de miles de estados), los algoritmos estándar pueden ser demasiado lentos; se necesitarán métodos dispersos o algoritmos iterativos.",
+     "scale": "tesis de grado",
+     "methods": [
+      "Estudiar los métodos de reducción de [1911.04219] (truncamiento balanceado, interpolación de funciones de transferencia) e implementarlos en Python usando SciPy.",
+      "Reunir un conjunto de pruebas de varias subsistemas acoplados (por ejemplo, viga + amortiguador piezoeléctrico) y comparar la precisión de los modelos reducidos de diferentes órdenes.",
+      "Añadir selección adaptativa del orden de reducción basada en un error admisible especificado por el usuario."
+     ]
+    }
+   ]
+  },
+  "ar": {
+   "note": "مجال الأنظمة المعقدة والديناميكا غير المتوازنة يشهد تطورًا نشطًا، لكن العديد من الأساليب تظل نظرية وتنتظر التحقق التجريبي أو التنفيذ العملي.",
+   "topic": "الأنظمة المعقدة والديناميكا غير المتوازنة",
+   "ideas": [
+    {
+     "based_on": [
+      "2607.11243",
+      "1911.04219"
+     ],
+     "title": "منصة اختبار لتشخيص التذبذبات في شبكة الجر باستخدام بيانات PMU",
+     "what": "بناء منصة اختبار معملية تحاكي جزءًا من شبكة الجر مع مصدرين أو ثلاثة مصادر للتوافقيات (محولات عاكسة)، والتحقق من طريقة التحليل على مرحلتين من [2607.11243]: أولاً استخلاص توافقيات الجهد، ثم مطابقتها مع جدول حركة القطارات.",
+     "why": "تعد الطريقة بالكشف عن القطارات التي تسبب تذبذبات خطيرة دون فصل المعدات. سيساعد الاختبار المعملي في فهم مدى تحمل الطريقة لضوضاء القياس والعيوب غير المثالية في الشبكة.",
+     "origin": "في [2607.11243] وُصفت طريقة تشخيص لشبكة حقيقية، لكن لا يوجد تحقق تجريبي على منصة مضبوطة. يقدم عمل [1911.04219] أساليب للمحاكاة العددية للأنظمة الخطية المترابطة، والتي ستساعد في تصميم المنصة، لكن هناك فجوة بين النموذج العددي والتجربة الفيزيائية، وهذه الفجوة يُقترح سدها.",
+     "first_step": "تجميع دائرة بسيطة: مصدر 24 فولت، عاكس واحد يعتمد على MOSFET، حمل مقاومي، راسم إشارة مع خاصية التسجيل. تسجيل الجهد عند ترددات PWM مختلفة والتحقق مما إذا كانت التوافقيات تُستخلص.",
+     "needs": "مختبر إلكترونيات: محطة لحام، راسم إشارة (يُفضل مع إمكانية المزامنة)، مصدر طاقة، مكونات. مهارات في تصميم الدوائر وبرمجة المتحكمات الدقيقة (أو FPGA) لتوليد PWM.",
+     "risks": "قد لا تعيد المنصة منخفضة الطاقة إنتاج تأثيرات الشبكة الحقيقية (مثل الرنين على الخطوط الطويلة). سيتعين ضبط المعاملات بعناية أو الانتقال إلى المحاكاة العددية.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "بناء نموذج منخفض الطاقة لشبكة الجر: مصدر تيار مستمر، محولات عاكسة مع تعديل عرض النبضة، مقاومات حمل، وأجهزة استشعار جهد بمعدل أخذ عينات لا يقل عن 10 كيلوهرتز.",
+      "استخدام قياسات متزامنة (مثل PMU) وتطبيق الخوارزمية من [2607.11243]: تحليل الجهد إلى توافقيات وربطها بجدول تشغيل المحولات المعروف.",
+      "إدخال اضطرابات (تغيير الحمل، الضوضاء) وتقييم دقة تحديد مصدر التوافقيات."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.17484",
+      "2012.06770"
+     ],
+     "title": "تسريع حساب تذبذبات الغاز المخلخل في أنظمة MEMS باستخدام طريقة هجينة",
+     "what": "تنفيذ الطريقة من [2601.17484] لمشكلة MEMS نموذجية: شعاع دقيق متذبذب في غاز مخلخل، ومقارنة السرعة والدقة مع الحل الحركي الكامل (مثل طريقة الإحداثيات المنفصلة).",
+     "why": "إذا كانت الطريقة تحقق تسارعًا آلاف المرات دون فقدان الدقة، فسيفتح ذلك الطريق أمام تصميم سريع لأجهزة الاستشعار (مقاييس التسارع، الجيروسكوبات) مع مراعاة التخميد بالغاز.",
+     "origin": "في [2601.17484] اقتُرحت طريقة هجينة وأظهرت تسارعًا، لكن فقط لحالة خاصة واحدة. يقدم عمل [2012.06770] طرقًا عامة لاختزال الأنظمة البطيئة-السريعة، والتي قد تساعد في تحليل تقارب المخطط الهجين. ينقص تنفيذ مستقل والتحقق على معاملات أخرى (رقم كنودسن، تردد التذبذب).",
+     "first_step": "تنزيل كود مفتوح لحل معادلة BGK (مثلًا من مستودعات النظرية الحركية) وإعادة إنتاج نتائج [2601.17484] لمجموعة واحدة من المعاملات.",
+     "needs": "حاسوب بذاكرة كافية (16+ جيجابايت)، معرفة بالطرق العددية للمعادلات الحركية، خبرة في البرمجة بلغة Python/C++.",
+     "risks": "قد تكون الطريقة غير مستقرة لبعض نطاقات المعاملات، وسيتطلب الأمر ضبطًا دقيقًا لمخطط الربط. ربما يكون التسارع أقل من المعلن بسبب التكاليف الإضافية.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "كتابة كود بلغة Python أو C++ لحل معادلة بولتزمان-BGK في مجال التردد لمشكلة أحادية البعد (لوحة متذبذبة).",
+      "تنفيذ المخطط الهجين: في طبقة كنودسن استخدام المعادلة الحركية، وفي المناطق البعيدة استخدام المعادلات العيانية (معادلات نافييه-ستوكس مع تصحيحات)، وربط الحلول.",
+      "مقارنة الحل المرجعي بطريقة الإحداثيات المنفصلة (أو محاكاة مونت كارلو المباشرة) من حيث وقت الحساب والدقة."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.13513",
+      "1704.08764"
+     ],
+     "title": "تحكم تكيفي في نظام غير مستقر بديناميكا غير معروفة: مثال الدش",
+     "what": "بناء منصة فيزيائية \"دش ذكي\" بصمامين (ماء ساخن/بارد) وأجهزة استشعار حرارة، وتنفيذ المتحكم من [2607.13513] واختبار أدائه عند قفزات ضغط عشوائية.",
+     "why": "إذا تمكن المتحكم من الحفاظ على درجة الحرارة في نطاق ضيق دون معرفة النموذج الدقيق للخلاط، فستكون خطوة نحو تطبيقات في الأطراف الاصطناعية والروبوتات حيث تكون الديناميكا غير معروفة مسبقًا.",
+     "origin": "في [2607.13513] اختُبر المتحكم في الأطراف الاصطناعية، لكن لا توجد بيانات عن أدائه في الأنظمة الهيدروليكية ذات التأخيرات الكبيرة والضوضاء. يقدم عمل [1704.08764] طرقًا لتحديد الأنظمة غير الخطية من البيانات، والتي يمكن استخدامها لتحسين الوضع التنبؤي. ينقص التحقق على منصة بسيطة وغير مكلفة وسهلة التكرار.",
+     "first_step": "تجميع دائرة بسيطة بصنبورين يدويين ومستشعر حرارة واحد، وتسجيل الاستجابة لتغيير تدريجي في التدفق لتقدير ثوابت الزمن للنظام.",
+     "needs": "مكونات سباكة، أجهزة استشعار حرارة (مثل DS18B20)، متحكم دقيق، مهارات في التحكم PID والبرمجة.",
+     "risks": "قد يحتوي النظام الهيدروليكي على لا خطيات (خلوص الصمامات، الاضطراب) يصعب أخذها في الاعتبار، وقد يتأرجح المتحكم. سيتعين فرض قيود على معدل تغيير إشارة التحكم.",
+     "scale": "فصل دراسي",
+     "methods": [
+      "بناء دائرة هيدروليكية بصمامين تناسبيين، وأجهزة استشعار حرارة (مزدوجات حرارية أو ثرمستورات) وضغط، وربطها بمتحكم دقيق (Arduino أو STM32).",
+      "تنفيذ المتحكم ثنائي الوضع من [2607.13513]: وضع تنبؤي يعتمد على تحديد النموذج في الوقت الفعلي ووضع طوارئ عند الاضطرابات المفاجئة.",
+      "إجراء سلسلة من التجارب مع قفزات ضغط اصطناعية (مثلًا بإغلاق الصنبور) وقياس زمن الاسترداد والتجاوز."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.08004",
+      "1507.08302"
+     ],
+     "title": "البحث عن أطوار خفية في نموذج تبلور غير متوازن",
+     "what": "دراسة عددية لنموذج تبلور سائل فائق التبريد لاكتشاف \"الأطوار الخفية\"، وهي حالات غير مستقرة تصبح مرئية عند الاستمرار التحليلي لدرجة الحرارة في المستوى المركب، كما في [2606.08004].",
+     "why": "فهم الأطوار الخفية قد يساعد في التحكم في عملية التبلور في الصناعة (مثل صناعة الأدوية أو علم المعادن)، حيث من المهم تجنب الأشكال متعددة الأشكال غير المرغوب فيها.",
+     "origin": "في [2606.08004] اقتُرح جهاز رياضي لوصف الأطوار الخفية، لكنه طُبق على نماذج مجردة. يربط عمل [1507.08302] الميكانيكا الإحصائية غير المتوازنة بالأنظمة الديناميكية وقد يعطي تفسيرًا فيزيائيًا. ينقص مثال ملموس بنموذج تبلور واقعي حيث يمكن ربط الأطوار الخفية بالحالات شبه المستقرة التي تُلاحظ تجريبيًا.",
+     "first_step": "أخذ نموذج أحادي البعد لحقل الطور مع جهد مزدوج البئر، وإيجاد جميع الحلول الثابتة ورسم مخطط التشعب كدالة لدرجة الحرارة.",
+     "needs": "حاسوب، معرفة بالطرق العددية للمعادلات التفاضلية الجزئية، مهارات برمجة (Python/Matlab).",
+     "risks": "قد يكون الاستمرار التحليلي غير مستقر عدديًا، وقد لا تظهر الأطوار الخفية في النموذج المختار. ربما يتطلب الأمر تبسيط النموذج أو استخدام طرق تقريب بادي.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "اختيار نموذج بسيط للتبلور (مثل معادلة حقل الطور أو نموذج كان-هيلارد) بمعاملات تسمح بالتبريد الفائق.",
+      "تنفيذ الحل العددي وإيجاد الحالات الثابتة (المستقرة وغير المستقرة) باستخدام طرق الاستمرار بالمعامل (مثل AUTO أو كود مكتوب يدويًا).",
+      "إجراء الاستمرار التحليلي لدرجة الحرارة في المستوى المركب، كما هو موصوف في [2606.08004]، وتتبع سلوك النقاط الخاصة (التشعبات)."
+     ]
+    },
+    {
+     "based_on": [
+      "1911.04219",
+      "nlin/0307013"
+     ],
+     "title": "الأنظمة الخطية المترابطة: مكتبة لاختزال النماذج مع ضمان الدقة",
+     "what": "تطوير مكتبة برمجية لبناء نماذج مختزلة للأنظمة الديناميكية الخطية المترابطة، باتباع النهج من [1911.04219]، وتطبيقها على مشكلة تخميد الاهتزازات في هيكل ميكانيكي.",
+     "why": "غالبًا ما يحتاج المهندسون إلى نماذج سريعة للتحسين، لكن نماذج العناصر المحدودة الكاملة ثقيلة جدًا. مكتبة مع اختيار تلقائي لرتبة الاختزال وتقدير الخطأ ستوفر الوقت.",
+     "origin": "في [1911.04219] نوقشت المبادئ العامة لنمذجة الأنظمة الخطية المترابطة، لكن لا يوجد تنفيذ جاهز بواجهة سهلة. يقدم عمل [nlin/0307013] مقاييس لتعقيد الأنظمة الديناميكية يمكن استخدامها لتقدير الحد الأدنى لرتبة النموذج. ينقص أداة تعمل على أتمتة الاختزال للمشاكل العملية.",
+     "first_step": "تنفيذ القطع المتوازن لنظام خطي واحد (المصفوفات A، B، C) والتحقق من مثال من كتاب مدرسي.",
+     "needs": "حاسوب، معرفة بالجبر الخطي ونظرية التحكم، خبرة في البرمجة بلغة Python.",
+     "risks": "بالنسبة للأنظمة ذات الأبعاد الكبيرة (مئات الآلاف من الحالات)، قد تكون الخوارزميات القياسية بطيئة جدًا، وسيتطلب الأمر استخدام طرق متفرقة أو خوارزميات تكرارية.",
+     "scale": "أطروحة تخرج",
+     "methods": [
+      "دراسة طرق الاختزال من [1911.04219] (القطع المتوازن، استيفاء دوال النقل) وتنفيذها بلغة Python باستخدام SciPy.",
+      "تجميع مجموعة اختبار من عدة أنظمة فرعية مترابطة (مثل شعاع + مخمد كهرضغطي) ومقارنة دقة النماذج المختزلة من رتب مختلفة.",
+      "إضافة اختيار تكيفي لرتبة الاختزال بناءً على الخطأ المسموح به الذي يحدده المستخدم."
+     ]
+    }
+   ]
+  },
+  "fr": {
+   "note": "Le domaine des systèmes complexes et de la dynamique hors équilibre est en plein essor, mais de nombreuses méthodes restent théoriques et attendent une validation expérimentale ou une mise en œuvre pratique.",
+   "topic": "systèmes complexes et dynamique hors équilibre",
+   "ideas": [
+    {
+     "based_on": [
+      "2607.11243",
+      "1911.04219"
+     ],
+     "title": "Banc de diagnostic des oscillations dans un réseau de traction à partir de données PMU",
+     "what": "Construire un banc de laboratoire simulant une section de réseau de traction avec deux ou trois sources d'harmoniques (onduleurs), et tester la méthode d'analyse en deux étapes de [2607.11243] : d'abord extraire les harmoniques de tension, puis les corréler avec l'horaire de circulation des trains.",
+     "why": "La méthode promet d'identifier les rames provoquant des oscillations dangereuses sans coupure d'équipement. Un essai en laboratoire permettra de juger de sa robustesse face au bruit de mesure et aux imperfections du réseau.",
+     "origin": "Dans [2607.11243], la méthode de diagnostic est décrite pour un réseau réel, mais aucune validation expérimentale sur un banc contrôlé n'est fournie. Les travaux [1911.04219] proposent des approches de modélisation numérique pour des systèmes linéaires couplés, utiles pour concevoir le banc, mais il existe un fossé entre le modèle numérique et l'expérience physique, que ce projet vise à combler.",
+     "first_step": "Assembler un circuit simple : source 24 V, un onduleur à MOSFET, charge résistive, oscilloscope avec fonction d'enregistrement. Enregistrer la tension à différentes fréquences de MLI et vérifier si les harmoniques se détachent.",
+     "needs": "Laboratoire d'électronique : station de soudage, oscilloscope (idéalement avec synchronisation), alimentation, composants. Compétences en conception de circuits et programmation de microcontrôleurs (ou FPGA) pour générer la MLI.",
+     "risks": "Un banc de faible puissance pourrait ne pas reproduire les effets d'un réseau réel (par exemple, les résonances sur les longues lignes). Il faudra ajuster soigneusement les paramètres ou passer à la simulation numérique.",
+     "scale": "semestre",
+     "methods": [
+      "Assembler un modèle réduit de réseau de traction : source de courant continu, onduleurs à modulation de largeur d'impulsion, résistances de charge, capteurs de tension avec une fréquence d'échantillonnage d'au moins 10 kHz.",
+      "Utiliser des mesures synchronisées (type PMU) et appliquer l'algorithme de [2607.11243] : décomposition de la tension en harmoniques et corrélation avec l'horaire connu de mise en service des onduleurs.",
+      "Introduire des perturbations (variation de charge, bruit) et évaluer la précision de localisation de la source d'harmoniques."
+     ]
+    },
+    {
+     "based_on": [
+      "2601.17484",
+      "2012.06770"
+     ],
+     "title": "Accélération du calcul des oscillations d'un gaz raréfié dans un MEMS grâce à une méthode hybride",
+     "what": "Implémenter la méthode de [2601.17484] pour un problème typique de MEMS, à savoir une micropoutre oscillante dans un gaz raréfié, et comparer la vitesse et la précision avec une solution cinétique complète (par exemple, la méthode des ordonnées discrètes).",
+     "why": "Si la méthode offre réellement une accélération de plusieurs ordres de grandeur sans perte de précision, cela ouvrirait la voie à une conception rapide de capteurs (accéléromètres, gyroscopes) prenant en compte l'amortissement par le gaz.",
+     "origin": "Dans [2601.17484], une méthode hybride est proposée et son accélération est démontrée, mais seulement pour un cas particulier. Les travaux [2012.06770] fournissent des méthodes générales de réduction pour les systèmes lents-rapides, qui pourraient aider à analyser la convergence du schéma hybride. Il manque une implémentation indépendante et une validation sur d'autres paramètres (nombre de Knudsen, fréquence d'oscillation).",
+     "first_step": "Télécharger un code ouvert pour résoudre l'équation BGK (par exemple, depuis des dépôts sur la théorie cinétique) et reproduire les résultats de [2601.17484] pour un jeu de paramètres.",
+     "needs": "Ordinateur avec une mémoire suffisante (16 Go ou plus), connaissance des méthodes numériques pour les équations cinétiques, expérience en programmation Python/C++.",
+     "risks": "La méthode pourrait se révéler instable pour certaines plages de paramètres, nécessitant un réglage fin du schéma de raccordement. L'accélération pourrait être moindre que prévu en raison des frais généraux.",
+     "scale": "mémoire de diplôme",
+     "methods": [
+      "Écrire un code en Python ou C++ pour résoudre l'équation de Boltzmann-BGK dans le domaine fréquentiel pour un problème unidimensionnel (plaque oscillante).",
+      "Implémenter le schéma hybride : dans la couche de Knudsen, utiliser l'équation cinétique ; loin de celle-ci, les équations macroscopiques (équations de Navier-Stokes avec corrections), et raccorder les solutions.",
+      "Comparer avec une solution de référence par la méthode des ordonnées discrètes (ou simulation directe de Monte-Carlo) en termes de temps de calcul et de précision."
+     ]
+    },
+    {
+     "based_on": [
+      "2607.13513",
+      "1704.08764"
+     ],
+     "title": "Contrôle adaptatif d'un système instable à dynamique inconnue, illustré par une douche",
+     "what": "Construire un banc physique de « douche intelligente » avec deux vannes (eau chaude/eau froide) et des capteurs de température, implémenter le contrôleur de [2607.13513] et tester son comportement lors de sauts de pression aléatoires.",
+     "why": "Si le contrôleur parvient à maintenir la température dans une plage étroite sans connaître le modèle exact du mélangeur, cela constituerait un pas vers des applications en prothèses et en robotique, où la dynamique est inconnue à l'avance.",
+     "origin": "Dans [2607.13513], le contrôleur a été testé sur des prothèses, mais aucune donnée n'existe sur son fonctionnement dans des systèmes hydrauliques à grands retards et bruités. Les travaux [1704.08764] fournissent des méthodes d'identification de systèmes non linéaires à partir de données, qui pourraient améliorer le mode prédictif. Il manque une validation sur un banc simple et peu coûteux, reproductible.",
+     "first_step": "Assembler une boucle simple avec deux robinets manuels et un capteur de température, enregistrer la réponse à un échelon de débit pour estimer les constantes de temps du système.",
+     "needs": "Composants de plomberie, capteurs de température (par exemple DS18B20), microcontrôleur, compétences en régulation PID et en programmation.",
+     "risks": "Le système hydraulique peut présenter des non-linéarités (jeux dans les vannes, turbulence) difficiles à prendre en compte, et le contrôleur pourrait osciller. Il faudra introduire des limites sur la vitesse de variation du signal de commande.",
+     "scale": "semestre",
+     "methods": [
+      "Assembler un circuit hydraulique avec deux vannes proportionnelles, des capteurs de température (thermocouples ou thermistances) et de pression, connectés à un microcontrôleur (Arduino ou STM32).",
+      "Implémenter le contrôleur à deux modes de [2607.13513] : un mode prédictif basé sur l'identification du modèle en temps réel et un mode d'urgence pour les perturbations brusques.",
+      "Mener une série d'expériences avec des sauts de pression artificiels (par exemple, en fermant un robinet) et mesurer le temps de rétablissement et le dépassement."
+     ]
+    },
+    {
+     "based_on": [
+      "2606.08004",
+      "1507.08302"
+     ],
+     "title": "Recherche de phases cachées dans un modèle de cristallisation hors équilibre",
+     "what": "Étudier numériquement un modèle de cristallisation d'un liquide surfondu afin de détecter des « phases cachées », c'est-à-dire des états instables qui deviennent visibles lors du prolongement analytique de la température dans le plan complexe, comme dans [2606.08004].",
+     "why": "Comprendre les phases cachées pourrait aider à contrôler le processus de cristallisation dans l'industrie (par exemple, en pharmacie ou en métallurgie), où il est crucial d'éviter des formes polymorphes indésirables.",
+     "origin": "Dans [2606.08004], un appareil mathématique est proposé pour décrire les phases cachées, mais il n'est appliqué qu'à des modèles abstraits. Les travaux [1507.08302] relient la mécanique statistique hors équilibre aux systèmes dynamiques et pourraient fournir une interprétation physique. Il manque un exemple concret avec un modèle de cristallisation réaliste, où les phases cachées pourraient être associées à des états métastables observables expérimentalement.",
+     "first_step": "Prendre un modèle unidimensionnel de champ de phase avec un potentiel à double puits, trouver toutes les solutions stationnaires et construire un diagramme de bifurcation en fonction de la température.",
+     "needs": "Ordinateur, connaissance des méthodes numériques pour les équations aux dérivées partielles, compétences en programmation (Python/Matlab).",
+     "risks": "Le prolongement analytique peut être numériquement instable, et les phases cachées pourraient ne pas apparaître dans le modèle choisi. Il faudra peut-être simplifier le modèle ou utiliser des approximants de Padé.",
+     "scale": "mémoire de diplôme",
+     "methods": [
+      "Choisir un modèle simple de cristallisation (par exemple, l'équation du champ de phase ou le modèle de Cahn-Hilliard) avec des paramètres permettant la surfusion.",
+      "Implémenter la résolution numérique et trouver les états stationnaires (stables et instables) à l'aide de méthodes de continuation par paramètre (par exemple, AUTO ou un code maison).",
+      "Effectuer le prolongement analytique de la température dans le plan complexe, comme décrit dans [2606.08004], et suivre le comportement des points singuliers (bifurcations)."
+     ]
+    },
+    {
+     "based_on": [
+      "1911.04219",
+      "nlin/0307013"
+     ],
+     "title": "Systèmes linéaires couplés : bibliothèque de réduction de modèles avec garantie de précision",
+     "what": "Développer une bibliothèque logicielle pour construire des modèles réduits de systèmes dynamiques linéaires couplés, en suivant l'approche de [1911.04219], et l'appliquer à un problème d'amortissement des oscillations dans une structure mécanique.",
+     "why": "Les ingénieurs ont souvent besoin de modèles rapides pour l'optimisation, mais les modèles complets par éléments finis sont trop lourds. Une bibliothèque avec sélection automatique de l'ordre de réduction et estimation d'erreur ferait gagner du temps.",
+     "origin": "Dans [1911.04219], les principes généraux de modélisation des systèmes linéaires couplés sont abordés, mais aucune implémentation prête à l'emploi avec une interface conviviale n'est fournie. Les travaux [nlin/0307013] donnent des mesures de complexité des systèmes dynamiques, qui pourraient servir à estimer l'ordre minimal nécessaire du modèle. Il manque un outil automatisant la réduction pour des problèmes pratiques.",
+     "first_step": "Implémenter la troncature équilibrée pour un système linéaire unique (matrices A, B, C) et la tester sur un exemple tiré d'un manuel.",
+     "needs": "Ordinateur, connaissance de l'algèbre linéaire et de la théorie du contrôle, expérience en programmation Python.",
+     "risks": "Pour des systèmes de grande dimension (des centaines de milliers d'états), les algorithmes standard peuvent être trop lents ; il faudra utiliser des méthodes creuses ou des algorithmes itératifs.",
+     "scale": "mémoire de diplôme",
+     "methods": [
+      "Étudier les méthodes de réduction de [1911.04219] (troncature équilibrée, interpolation de fonctions de transfert) et les implémenter en Python avec SciPy.",
+      "Constituer un ensemble de tests à partir de plusieurs sous-systèmes couplés (par exemple, poutre + amortisseur piézoélectrique) et comparer la précision des modèles réduits de différents ordres.",
+      "Ajouter une sélection adaptative de l'ordre de réduction basée sur une erreur admissible définie par l'utilisateur."
+     ]
+    }
+   ]
+  }
+ }
+}

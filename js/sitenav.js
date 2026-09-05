@@ -243,7 +243,11 @@
         bar.insertBefore(wrap, logo.nextSibling);
         if (pill) bar.insertBefore(pill, wrap.nextSibling);
         var after = (pill || wrap).nextElementSibling;
-        if (after) after.style.marginInlineStart = 'auto';
+        // ПАНЕЛЬ РАСКЛАДЫВАЕТ ШАПКУ САМА. На обычных страницах всё после гамбургера
+        // отжимается вправо — иначе ☰ повисает посреди шапки. У дашборда своя шапка с рядом
+        // вкладок: там этот отжим утаскивал ночной режим и заголовок к правому краю, стоило
+        // вкладкам переехать на свою строку (владелец 04.09). Признак — наличие .tabs.
+        if (after && !bar.querySelector('.tabs')) after.style.marginInlineStart = 'auto';
     } else {
         bar.appendChild(wrap);
         if (pill) bar.appendChild(pill);

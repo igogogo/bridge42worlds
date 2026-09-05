@@ -86,7 +86,13 @@ def main():
 
     import runlock
     runlock.acquire("tree", f"enso works {a.list}")
-    env = dict(os.environ, B42_RUN_ORIGIN="manual", PYTHONIOENCODING="utf-8")
+    # Выкладка одна на прогон, а не после каждого куска: run.py публикует в конце любой
+    # команды, и на прогоне из кусков это обход четверти миллиона файлов облака по кругу
+    # плюс промежуточные состояния на проде. Та же правка, что в tools/topics.py.
+    quiet = os.environ.get("B42_NO_PUBLISH") == "1"
+    env = dict(os.environ, B42_RUN_ORIGIN="manual", PYTHONIOENCODING="utf-8",
+               B42_NO_PUBLISH="1", SKIP_R2_BACKUP="1",
+               B42_SKIP_DERIVED="1")   # копия, выкладка и производные файлы — по разу, в конце
     chunks = [todo[i:i + CHUNK] for i in range(0, len(todo), CHUNK)]
     try:
         for n, ch in enumerate(chunks, 1):
@@ -102,6 +108,11 @@ def main():
             log(f"  кусок {n}: код {rc}, готово {got}/{len(ch)}, {int(time.time() - t0)} с")
     finally:
         runlock.release("tree")
+    if not quiet:
+        log("· выкладка одним разом")
+        rc = subprocess.run([sys.executable, "run.py", "publish"], cwd=str(ROOT),
+                            env=dict(env, B42_NO_PUBLISH="0", SKIP_R2_BACKUP="", B42_SKIP_DERIVED="")).returncode
+        log(f"  выкладка: код {rc}")
     log(f"■ конец: разобрано всего {sum(1 for i in ids if i.split('v')[0] in have())}/{len(ids)}")
     return 0
 

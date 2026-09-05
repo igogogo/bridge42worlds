@@ -198,6 +198,22 @@ def main():
     F.log("═══ СЛУЖЕБНЫЙ ПРОГОН: пересчёт по всему корпусу ═══")
     _lock.acquire("tree", "недельный конвейер")
     st = F.state()
+    # НЕДЕЛЬНЫЙ ПРОГОН ДОЛЖЕН НАЧИНАТЬСЯ ЗАНОВО. Состояние помнит выполненные шаги, чтобы
+    # оборванный прогон можно было продолжить, — и это правильно ровно до тех пор, пока
+    # прогон не закончен. Дальше оно превращалось в вечную заглушку: 4 сентября круг
+    # «прошёл» за сорок минут, потому что продолжал прогон от 31 августа и почти всё
+    # пропустил как «уже сделано». Начинаем новый, если прежний завершён или ему больше
+    # шести дней; прежний идентификатор оставляем в записи, чтобы было видно преемство.
+    planned = [s for s, _, _ in STEPS if not only or s in only]
+    prev_done = set(st.get("done") or [])
+    stale_days = 6
+    try:
+        age = (F.time.time() - float(st.get("t0") or 0)) / 86400.0
+    except (TypeError, ValueError):
+        age = 999
+    if st.get("run_id") and (all(x in prev_done for x in planned) or age > stale_days):
+        F.log(f"· прежний прогон {st.get('run_id')} завершён или устарел ({age:.1f} дн) — начинаю новый")
+        st = {"done": [], "prev_run_id": st.get("run_id"), "t0": F.time.time()}
     st.setdefault("run_id", F.time.strftime("%Y-%m-%d %H:%M"))
     st.setdefault("started", st["run_id"])
     st["plan"] = [s for s, _, _ in STEPS if not only or s in only]

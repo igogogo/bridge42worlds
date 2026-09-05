@@ -224,7 +224,7 @@ def translate_recommend(out, lang):
             "neighbours": out["neighbours"], "frontier": out.get("frontier") or {}}
 
 
-def build(aid, show=False, hints=""):
+def build(aid, show=False, hints="", _retry=0):
     """Рекомендации для одной статьи. Возвращает словарь или None."""
     hits = list(ROOT.glob(f"lang/ru/archive/*/{aid}/data.json"))
     if not hits:
@@ -403,8 +403,27 @@ def build(aid, show=False, hints=""):
             + list(out.get("ideas") or []) + [out.get("significance", "")])
         verdict = check_all("", draft_text)
         if not verdict["ok"]:
-            why = (", ".join(h.get("hit", h.get("kind", "?")) for h in verdict["stop"][:3])
+            # Страж кладёт найденное в ключ "found" (см. output_guard.stop_hits), а здесь
+            # читали несуществующий "hit" — в журнал попадало голое слово «оборот», и ни
+            # человек, ни модель на второй попытке не знали, что именно переписывать.
+            why = (", ".join(str(h.get("found") or h.get("hit") or h.get("kind") or "?")
+                             for h in verdict["stop"][:3])
                    or f"вопросов к автору: {len(verdict['questions'])}")
+            # ВТОРАЯ ПОПЫТКА ВМЕСТО МОЛЧАЛИВОЙ ПОТЕРИ. Страж выхода ловит запрещённые обороты
+            # и вопросы к автору — и раньше на этом раздел просто не записывался: на дотяжке
+            # темы так потерялись четырнадцать работ из ста, и заметить это можно было только
+            # сверкой вручную. Теперь модели говорят, за что её остановили, и просят написать
+            # заново. Один повтор: если и он не прошёл, значит дело не в случайной формулировке.
+            if _retry < 1:
+                bad = ", ".join("«%s»%s" % (h.get("found") or h.get("hit"),
+                                            (" — " + h["why"]) if h.get("why") else "")
+                                for h in verdict["stop"][:6] if (h.get("found") or h.get("hit")))
+                extra = ("\n\nПРЕДЫДУЩИЙ ВАРИАНТ ОТКЛОНЁН СТРАЖЕМ ВЫХОДА. "
+                         + (f"Запрещённые обороты в нём: {bad}. " if bad else "")
+                         + "Напиши заново теми же фактами, но без этих оборотов и без вопросов, "
+                         "обращённых к автору работы.")
+                print(f"  ↻ {aid}: страж выхода отклонил ({why}) — пробую ещё раз")
+                return build(aid, show=show, hints=(hints or "") + extra, _retry=_retry + 1)
             print(f"  ⛔ {aid}: рекомендации не прошли проверку выхода ({why}) — не записаны")
             return None
     except ImportError:
