@@ -17,7 +17,7 @@
 
   var T = {
     fresh: 'fresh', stale: 'stale',
-    tabs: { verdict: 'Verdict', overview: 'Overview', news: 'News', now: 'Where we are', ocean: 'Ocean', models: 'Models', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', how: 'Method', chain: 'Data chain', about: 'About' },
+    tabs: { verdict: 'Verdict', overview: 'Overview', news: 'News', now: 'Where we are', ocean: 'Ocean', models: 'Models', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', how: 'Method', refs: 'References', chain: 'Data chain', about: 'About' },
     tabHelp: {
       verdict: 'What the machine makes of it today: the verdict written from the numbers on this page, the turning point, the outlook, what to watch, the caveats.',
       overview: 'One screen with everything: a strip of key indicators and a mosaic of every chart, each a door into its section.',
@@ -31,6 +31,7 @@
       food: 'Food: the FAO index, its path since the onset against past events, and the commodities by name.',
       how: 'Glossary, method and parameters, sources with their freshness, the release calendar, what changed.',
       chain: 'The chain of data end to end: sources, collectors, computed states, outputs — with the freshness of every piece.',
+      refs: 'One register of everything this panel rests on: the papers we parsed and attached, the data sources, the literature quoted — each with a link and where it is used.',
       about: 'What this panel is, what it does and does not claim, and how to read it.',
       state: 'The state column: the risk index, the key numbers and the alerts.',
       risks: 'The board of risks with their levels, horizons and series.'
@@ -1372,7 +1373,7 @@
       /* Служебные вкладки (метод, цепочка, о панели) выглядят иначе: пунктирная рамка,
          приглушённый цвет; вердикт — контрастный чёрно-белый. У каждой — подсказка,
          что это (владелец 05.09). */
-      var svc = v[0] === 'how' || v[0] === 'chain' || v[0] === 'about';
+      var svc = v[0] === 'how' || v[0] === 'chain' || v[0] === 'about' || v[0] === 'refs';
       var b = el('button', 'tab' + (v[0] === 'verdict' ? ' verdict' : '') + (svc ? ' svc' : '') + (S.view === v[0] ? ' on' : ''), esc(v[1]));
       b.type = 'button';
       b.setAttribute('data-src', JSON.stringify({ name: v[1], def: T.tabHelp[v[0]] || '' }));
@@ -2806,6 +2807,110 @@
 
 
 
+
+  // ---------------------------------------------------------------- References (владелец 05.09)
+  /* ЕДИНЫЙ РЕЕСТР. Три полки: наши разобранные работы (из links.json — только те, что
+     привязаны к утверждениям), источники данных (из справочника цепочки) и литература (из
+     справочников регионов, Залива, фона и глоссария). Ничего не дублируется руками: реестр
+     собирается из тех же файлов, которые кормят сцены, и у каждой строки — где она
+     использована и зачем. */
+  var BLOCK_LBL = { models: 'How the forecast models break', peak: 'When the growth stops', food: 'El Niño and food prices', type: 'Eastern-type El Niño' };
+  function anchorLabel(key) {
+    var D = S.D, i = key.indexOf(':'), kind = key.slice(0, i), id = key.slice(i + 1);
+    if (kind === 'risk') { var r = (D.risks || []).filter(function (x) { return x.id === id; })[0]; return r ? 'risk: ' + r.title : (/^\d+$/.test(id) && D.risks[id] ? 'risk: ' + D.risks[id].title : null); }
+    if (kind === 'alert') { var a = (D.alerts || []).filter(function (x) { return aslug(x.title) === id; })[0]; return a ? 'alert: ' + a.title : (/^\d+$/.test(id) && D.alerts[id] ? 'alert: ' + D.alerts[id].title : null); }
+    if (kind === 'term') return S.G[id] ? 'term: ' + S.G[id].name : null;
+    if (kind === 'region') { var rg = (((D.regions || {}).items) || []).filter(function (x) { return x.id === id; })[0]; return rg ? 'region: ' + rg.name : null; }
+    if (kind === 'block') return 'block: ' + (BLOCK_LBL[id] || id);
+    return null;
+  }
+  function refsWorks() {
+    var by = {};
+    Object.keys(S.L.anchors || {}).forEach(function (k) {
+      var lab = anchorLabel(k);
+      if (!lab) return;                                     // якорь прошлого прогона, которого больше нет
+      (S.L.anchors[k] || []).forEach(function (l) {
+        var w = by[l.id] || (by[l.id] = { id: l.id, date: l.date, folder: l.folder, title: l.our_title || l.title, orig: l.title, oneliner: l.oneliner, uses: [] });
+        w.uses.push({ at: lab, why: l.why, kind: l.kind, weak: l.weak });
+      });
+    });
+    return Object.keys(by).map(function (k) { return by[k]; }).sort(function (a, b) { return b.uses.length - a.uses.length || (b.date > a.date ? 1 : -1); });
+  }
+  function refsSources() {
+    var nodes = (S.C.nodes || []), byId = {};
+    nodes.forEach(function (n) { byId[n.id] = n; });
+    return nodes.filter(function (n) { return n.layer === 'src'; }).map(function (n) {
+      var f = chainFresh(n);
+      var users = nodes.filter(function (m) { return (m.in || []).indexOf(n.id) >= 0; }).map(function (m) { return m.name; });
+      var states = [];
+      users.forEach(function (u) { nodes.forEach(function (m) { if (m.layer === 'state' && (m.in || []).some(function (x) { return byId[x] && byId[x].name === u; })) states.push(m.name); }); });
+      return { name: n.name, sub: n.sub, url: n.url, def: n.def, why: n.why, cadence: n.cadence, date: f.date, dot: f.dot, users: users, states: states.filter(function (v, i, a) { return a.indexOf(v) === i; }) };
+    });
+  }
+  function refsLiterature() {
+    var D = S.D, out = [], seen = {};
+    function push(name, url, desc, at) {
+      var key = (name || '').toLowerCase().slice(0, 60);
+      if (!name || seen[key]) { if (seen[key] && at) seen[key].at.push(at); return; }
+      seen[key] = { name: name, url: url || '', desc: desc || '', at: at ? [at] : [] };
+      out.push(seen[key]);
+    }
+    ((D.gulf || {}).winter || {}).refs && D.gulf.winter.refs.forEach(function (r) { push(r.src, r.url, r.what, 'Regions · Gulf · winter outlook'); });
+    ((D.gulf || {}).winter || {}).forecasts && D.gulf.winter.forecasts.forEach(function (r) { push(r.name, r.url, r.note, 'Regions · Gulf · winter outlook'); });
+    var I = (D.gulf || {}).imports || {};
+    (I.rows || []).forEach(function (r) { push(r.src, '', r.fact, 'Regions · Gulf · imports'); });
+    (I.precedents || []).forEach(function (r) { push(r.src, '', r.when + ': ' + r.what, 'Regions · Gulf · imports'); });
+    (I.watch || []).forEach(function (r) { push(r.name, r.url, r.cadence, 'Regions · Gulf · imports'); });
+    var E = (D.background || {}).eei;
+    if (E) push(E.src, E.url, E.claim, 'Dynamics · background');
+    var RS = (D.regions || {}).sources || {};
+    Object.keys(RS).forEach(function (k) {
+      var t = RS[k], m = SRC_RX.exec(t), url = m ? (/^https?:/i.test(m[1]) ? m[1] : 'https://' + m[1]) : '';
+      var used = (((D.regions || {}).items) || []).filter(function (r) { return (r.sources || []).indexOf(t) >= 0; }).map(function (r) { return r.name; });
+      push(t.split(',')[0], url, t, used.length ? 'Regions: ' + used.slice(0, 6).join(', ') + (used.length > 6 ? ' …' : '') : 'Regions');
+    });
+    Object.keys(S.G).forEach(function (k) {
+      var g = S.G[k]; if (!g.src) return;
+      var m = SRC_RX.exec(g.src), url = m ? (/^https?:/i.test(m[1]) ? m[1] : 'https://' + m[1]) : '';
+      push(g.src.split(';')[0], url, g.src, 'Glossary: ' + g.name);
+    });
+    return out;
+  }
+  function viewRefs() {
+    var k = sub('refs', 'works'), D = S.D;
+    var works = refsWorks(), srcs = refsSources(), lit = refsLiterature();
+    var body = stageShell('References: ' + works.length + ' parsed works attached, ' + srcs.length + ' data sources, ' + lit.length + ' literature and reference items',
+      [segBtn('refs', 'works', 'Our works (' + works.length + ')', 'works'), segBtn('refs', 'sources', 'Data sources (' + srcs.length + ')', 'works'), segBtn('refs', 'literature', 'Literature (' + lit.length + ')', 'works')]);
+    body.classList.add('scroll');
+    var tgt = window.matchMedia('(max-width:900px)').matches ? '' : ' target="_blank" rel="noopener"';
+    var list = el('div', 'refs');
+    if (k === 'works') {
+      list.innerHTML = works.map(function (w) {
+        var pay = { name: w.title, html: '<p>' + esc(w.oneliner || '') + '</p><p><b>Used at</b></p>' + w.uses.map(function (u) { return '<p class="wk-p">' + esc(u.at) + (u.why ? '<i>' + esc(u.why) + '</i>' : '') + '</p>'; }).join(''), src: 'arXiv ' + w.id + ' · ' + w.orig, date: w.date };
+        return '<div class="ref" data-src="' + esc(JSON.stringify(pay)) + '"><div class="ref-t"><a href="/lang/en/archive/' + esc(w.date) + '/' + esc(w.folder) + '/index.html"' + tgt + '>' + esc(w.title) + '</a><span class="ref-n">' + w.uses.length + ' use' + (w.uses.length > 1 ? 's' : '') + '</span></div>' +
+          '<div class="ref-d">' + esc(w.oneliner || w.orig) + '</div><div class="ref-m"><span class="wk-num">arXiv ' + esc(w.id) + '</span> · ' + esc(w.date) + ' · ' + esc(w.uses.map(function (u) { return u.at.split(':')[0]; }).filter(function (v, i, a) { return a.indexOf(v) === i; }).join(', ')) + '</div></div>';
+      }).join('') || '<div class="note">No works attached yet.</div>';
+      body.appendChild(list);
+      body.appendChild(el('div', 'cap', 'Only the papers that a model judged to belong next to a statement of this panel; the full pool is our archive of parsed works. Point at a row for where it is used and why; the link opens our version. Register built from data/enso/links.json at ' + esc(S.L.built || '') + '.'));
+    } else if (k === 'sources') {
+      list.innerHTML = srcs.map(function (s) {
+        var pay = { name: s.name, def: s.def, why: s.why + (s.states.length ? ' Feeds: ' + s.states.join('; ') + '.' : ''), src: s.sub + (s.cadence ? ' · ' + s.cadence : ''), date: s.date, url: s.url };
+        return '<div class="ref" data-src="' + esc(JSON.stringify(pay)) + '"><div class="ref-t"><i class="dot ' + s.dot + '"></i>' + (s.url ? '<a href="' + esc(s.url) + '"' + tgt + '>' + esc(s.name) + ' ↗</a>' : esc(s.name)) + '<span class="ref-n">' + esc(s.cadence || '') + '</span></div>' +
+          '<div class="ref-d">' + esc(s.sub || '') + '</div><div class="ref-m">' + (s.date ? 'data ' + esc(s.date) + ' · ' : '') + 'read by ' + esc(s.users.join(', ')) + (s.states.length ? ' → ' + esc(s.states.slice(0, 3).join('; ')) + (s.states.length > 3 ? ' …' : '') : '') + '</div></div>';
+      }).join('');
+      body.appendChild(list);
+      body.appendChild(el('div', 'cap', 'Every source is open and machine-readable; the dot is whether it answered on the last update, the date is when its data last changed. The same register drives the Data chain tab.'));
+    } else {
+      list.innerHTML = lit.map(function (r) {
+        var pay = { name: r.name, def: r.desc, why: r.at.length ? 'Used at: ' + r.at.join('; ') + '.' : '', url: r.url };
+        return '<div class="ref" data-src="' + esc(JSON.stringify(pay)) + '"><div class="ref-t">' + (r.url ? '<a href="' + esc(r.url) + '"' + tgt + '>' + esc(r.name) + ' ↗</a>' : esc(r.name)) + '</div>' +
+          '<div class="ref-d">' + esc(r.desc) + '</div>' + (r.at.length ? '<div class="ref-m">' + esc(r.at.join(' · ')) + '</div>' : '') + '</div>';
+      }).join('');
+      body.appendChild(list);
+      body.appendChild(el('div', 'cap', 'Quoted, not measured: the papers, agencies and reports behind the regional impacts, the winter outlook, the import chain, the energy imbalance and the glossary. Where a line carries a link it goes to the publisher.'));
+    }
+  }
+
   // ---------------------------------------------------------------- Overview (владелец 05.09)
   /* ОДИН ЭКРАН НА ВСЁ. Сверху — строка ключевых показателей, каждый со своей мини-картинкой
      (дуга, кольцо, полоса, искра, стрелка); ниже — мозаика из всех графиков панели, каждый
@@ -3018,6 +3123,7 @@
     }
     body.classList.add('scroll');
     if (!nodes.length) { body.appendChild(el('div', 'note warn', 'The chain reference did not load (data/enso/chain-ref.json).')); return; }
+    if (window.matchMedia('(max-width:900px)').matches) body.appendChild(el('div', 'note', 'The diagram with its links is a desktop view; on a phone the nodes are listed layer by layer. ' + vLink('the register', 'refs', 'sources')));
     body.appendChild(el('div', 'lead', 'Point at anything: what it is, why it is here, where it comes from and when its data last changed. Click a node to light its chain; click again to release. ' +
       'The dot is the state of the source on the last update (' + esc((D.stamp || '').slice(0, 16)) + '): green answered, ochre did not answer and the last good copy is shown, grey not part of this update.'));
     var wrap = el('div', 'chain');
@@ -3067,7 +3173,7 @@
     }
     requestAnimationFrame(drawEdges);
     setTimeout(drawEdges, 250);
-    body.appendChild(el('div', 'cap', 'Reference: data/enso/chain-ref.json, written by hand; dates and the dots come from data/enso/latest.json and the value journal at every update. ' +
+    body.appendChild(el('div', 'cap', vLink('the register of sources and references', 'refs', 'sources') + ' Reference: data/enso/chain-ref.json, written by hand; dates and the dots come from data/enso/latest.json and the value journal at every update. ' +
       'The climatologies (1991–2020 for every box, mooring and point; the reanalysis section by month) and the past-event series are built once and cached — an update pulls only the tails.'));
   }
 
@@ -3086,7 +3192,7 @@
     body.classList.add('scroll');
     var g = el('div', 'about');
     g.innerHTML = ABOUT.map(function (x) { return '<section><h3>' + esc(x[0]) + '</h3><p>' + mark(x[1]) + '</p></section>'; }).join('') +
-      '<section><h3>Where to look</h3><p>' + vLink('the chain of data', 'chain') + ' ' + vLink('the method', 'how', 'method') + ' ' + vLink('the sources', 'how', 'sources') + ' ' + vLink('the release calendar', 'how', 'calendar') + ' ' + vLink('the verdict', 'verdict', 'now') + '</p></section>';
+      '<section><h3>Where to look</h3><p>' + vLink('the references: works, sources, literature', 'refs', 'works') + ' ' + vLink('the chain of data', 'chain') + ' ' + vLink('the method', 'how', 'method') + ' ' + vLink('the sources', 'how', 'sources') + ' ' + vLink('the release calendar', 'how', 'calendar') + ' ' + vLink('the verdict', 'verdict', 'now') + '</p></section>';
     body.appendChild(g);
   }
 
@@ -3206,6 +3312,7 @@
     else if (S.view === 'chain') viewChain();
     else if (S.view === 'news') viewNews();
     else if (S.view === 'overview') viewOverview();
+    else if (S.view === 'refs') viewRefs();
     else if (S.view === 'about') viewAbout();
     else if (S.view === 'trend') viewTrend();
     else if (S.view === 'food') viewFood();
