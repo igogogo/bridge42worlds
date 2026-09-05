@@ -324,9 +324,11 @@
       var ly = top + 4, maxCh = Math.max(8, Math.floor((R - 40) / 6.3));
       for (i = 0; i < items.length; i++) {
         var it = items[i].slice();
+        if (it[0] === '' || it[0] == null) { ly += 7; continue; }   // пустая строка отделяет нажимаемое от справочного
         if (it[0] && it[0].length > maxCh) it[0] = it[0].slice(0, maxCh - 1) + '…';   // не вылезать за поле (владелец 05.09)
         var tag = it[4] ? ' data-pick="' + esc(it[4]) + '" class="pick' + (S.pick === it[4] ? ' on' : '') + '"' : '';
         if (tag) s += '<g' + tag + '>';
+        if (it[4] && S.pick === it[4]) s += '<rect x="' + (w - R + 2) + '" y="' + (ly - 1) + '" width="' + (R - 4) + '" height="15" rx="4" style="fill:var(--ochre)" opacity=".14"/>';
         if (it[2] === 'dot') s += '<circle cx="' + (w - R + 18) + '" cy="' + (ly + 4) + '" r="4" style="fill:' + it[1] + '"/>';
         else s += '<line x1="' + (w - R + 8) + '" y1="' + (ly + 4) + '" x2="' + (w - R + 28) + '" y2="' + (ly + 4) + '" style="stroke:' + it[1] + '" stroke-width="' + (it[2] || 2) + '"' + (it[3] ? ' stroke-dasharray="' + it[3] + '"' : '') + '/>';
         s += '<text x="' + (w - R + 34) + '" y="' + (ly + 8) + '"' + (it[4] ? ' style="cursor:pointer"' : '') + '>' + esc(it[0]) + '</text>';
@@ -679,7 +681,6 @@
       if (W <= 470 && k % 2 !== 0) return;
       var lived = c.pos && c.pos.months_done;
       s += '<text x="' + XK(k).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle"' + (lived ? ' style="fill:var(--nino)"' : '') + '>' + esc(c.label) + '</text>';
-      if (lived) s += '<text x="' + XK(k).toFixed(0) + '" y="' + (H - 1) + '" text-anchor="middle" font-size="8" style="fill:var(--soft)">' + c.pos.months_done + '/3 lived</text>';
     });
     var cls = IRI.classes || {};
     /* САМАЯ СИЛЬНАЯ МОДЕЛЬ — ОТДЕЛЬНОЙ ЛИНИЕЙ. Владелец 04.09: «самую сильную модель выдели».
@@ -771,19 +772,22 @@
     }
     // счёт «сколько ниже прожитого» ушёл в фишки под графиком: на графике он налезал на полосу
     var LVn = IRI.live || {}, tally2 = IRI.class_tally || {};
-    var leg = [['RMS, live ' + (LVn.n_live || '—') + ' of ' + (LVn.n_all || '—'), 'var(--ochre)', 3.2, '', 'rms'],
-      ['their plain mean', 'var(--ochre)', 1, '2 3', 'mean'],
-      ['published, all ' + (LVn.n_all || '—'), 'var(--soft)', 1.1, '3 3', 'pub'],
-      [(strongest ? 'strongest: ' + strongest + ' ' + fnum(strongestPeak) : 'strongest model'), 'var(--lv4)', 2, null, strongest || ''],
-      ['previous issue' + (hist.length > 1 ? ' (' + hist[1].issued + ')' : ''), 'var(--soft)', 1.6, '5 4', 'prev'],
-      ['keeping up ' + (tally2.ok || 0), 'var(--nina)', 1.4, null, 'ok'],
+    /* Сначала то, что нажимается и выделяет ряды; пустая строка; потом справочные строки
+       без действия (владелец 05.09). По умолчанию выделены «keeping up». */
+    var leg = [['keeping up ' + (tally2.ok || 0), 'var(--nina)', 1.4, null, 'ok'],
       ['lagging ' + (tally2.lag || 0), 'var(--lv3)', 1.4, null, 'lag'],
       ['broken ' + (tally2.broke || 0), 'var(--lv5)', 1.4, null, 'broke'],
+      [(strongest ? 'strongest: ' + strongest + ' ' + fnum(strongestPeak) : 'strongest model'), 'var(--lv4)', 2, null, strongest || ''],
+      ['RMS, live ' + (LVn.n_live || '—') + ' of ' + (LVn.n_all || '—'), 'var(--ochre)', 3.2, '', 'rms'],
+      ['their plain mean', 'var(--ochre)', 1, '2 3', 'mean'],
+      ['published, all ' + (LVn.n_all || '—'), 'var(--soft)', 1.1, '3 3', 'pub'],
+      ['previous issue' + (hist.length > 1 ? ' (' + hist[1].issued + ')' : ''), 'var(--soft)', 1.6, '5 4', 'prev'],
+      [''],
       [esc(ao.season) + ' so far ' + fnum(ref), 'var(--nino)', 1, '4 3'], ['below the lived part', 'var(--lv5)', 'dot']];
     if (IRI.last_full_season) leg.push([esc(IRI.last_full_season.season) + ' lived in full', 'var(--ok)', 1, '2 4']);
     leg.push(['lived part of a season: dot', 'var(--nino)', 'dot']);
     leg.push(['where its mean can end: bar', 'var(--nino)', 4]);
-    if (S.model) leg.unshift([S.model, 'var(--ochre)', 2.6]);
+    if (S.model) leg.unshift([S.model, 'var(--ochre)', 2.6, '', S.model]);
     s += legend(leg, W, H, R, Tp);
     return s + '</svg>';
   }
@@ -916,15 +920,16 @@
       s2 += '<text class="tt" x="' + Lp + '" y="' + (top + 10) + '">' + esc(r.issued) + ' issue' + (ri === 0 ? ' — the newest' : '') + '</text>';
       if (RCs && ri === 0) {
         var CLt = ((S.D.iri || {}).class_tally) || {};
-        s2 += legend([['RMS, live models', 'var(--ochre)', 2.8, '', 'rms'],
+        s2 += legend([['keeping up ' + (CLt.ok || 0), 'var(--nina)', 1.4, null, 'ok'],
+          ['lagging ' + (CLt.lag || 0), 'var(--lv3)', 1.4, null, 'lag'],
+          ['broken ' + (CLt.broke || 0), 'var(--lv5)', 1.4, null, 'broke'],
+          ['RMS, live models', 'var(--ochre)', 2.8, '', 'rms'],
           ['their plain mean', 'var(--ochre)', 1, '2 3', 'mean'],
           ['published, all', 'var(--soft)', 1.2, '3 3', 'pub'],
+          [''],
           ['each model', 'var(--soft)', 1],
           ['live spread', 'var(--ochre)', 6],
-          ['where we stand', 'var(--nino)', 3],
-          ['keeping up ' + (CLt.ok || 0), 'var(--nina)', 1.4, null, 'ok'],
-          ['lagging ' + (CLt.lag || 0), 'var(--lv3)', 1.4, null, 'lag'],
-          ['broken ' + (CLt.broke || 0), 'var(--lv5)', 1.4, null, 'broke']], W, H, RCs, Tp);
+          ['where we stand', 'var(--nino)', 3]], W, H, RCs, Tp);
       }
       s2 += '<text x="' + (W - R) + '" y="' + (top + 10) + '" text-anchor="end" style="fill:var(--soft)">' + below + ' of ' + tot + ' below ' + esc(lab || '') + ' as lived so far (' + fnum(ref2) + (td2 ? ', ' + td2.done + '/3 months' : '') + ')</text>';
       fc.forEach(function (i, k) { if (k % 2 === 0) s2 += '<text x="' + X(i).toFixed(0) + '" y="' + (Tp + ph + 12) + '" text-anchor="middle" font-size="9">' + esc(r.seasons[i]) + '</text>'; });
@@ -1404,7 +1409,7 @@
       sp.innerHTML = text;
       host.appendChild(sp);
     }
-    item('<b>updated</b> ' + esc((D.stamp || '').slice(0, 10)), { name: 'This update', def: 'The panel was recomputed at ' + D.stamp + (P ? '; the previous update was at ' + P.stamp + '.' : '.') + ' Updating is semi-automatic: a person runs it and looks at the result before it goes out.', src: 'tools/enso/publish.py', date: D.generated });
+    item('<b>updated</b> ' + esc((D.stamp || '').slice(0, 10)), { name: 'This update', def: 'The panel was recomputed at ' + D.stamp + (P ? '; the previous update was at ' + P.stamp + '.' : '.') + ' Updating is semi-automatic: a person runs it and looks at the result before it goes out.', src: 'this panel, recomputed by hand after each release', date: D.generated });
     item('<b>daily</b> ' + esc(n34.last_date) + ' <i>' + n34.days_stale + ' d ago</i>', { name: 'Daily series', def: 'Niño 3.4 and the world ocean: final OISST from climatereanalyzer' + (n34.prelim_from ? ' to ' + addDays(n34.prelim_from, -1) + ', then the preliminary NOAA grid (NRT) spliced on directly, one day behind; the last two weeks are re-pulled every update' : ', which lags one to three weeks') + '. Land+ocean (ERA5) reaches ' + tw.last_date + '.', src: n34.prelim_from ? 'climatereanalyzer.org + NOAA OISST NRT via ERDDAP' : 'climatereanalyzer.org', date: n34.last_date }, n34.days_stale > 14 ? 'bad' : '');
     item('<b>NOAA week</b> ' + esc(D.noaa.date), { name: 'NOAA weekly indices', def: 'Published every Wednesday for the previous week; always fresher than the daily OISST, and where they disagree the panel trusts the weekly.', src: 'NOAA CPC wksst9120.for', date: D.noaa.date });
     if (D.iri && D.iri.issued) item('<b>IRI</b> ' + esc(D.iri.issued), { name: 'IRI model plume', def: 'The forecasts of two dozen centres, published around the 19th of each month. ' + ((D.iri.class_issues || []).length) + ' issues are stored here, which is what makes the model scoreboard possible.', src: 'iri.columbia.edu', date: D.iri.issued });
@@ -2792,7 +2797,7 @@
       var ks = el('div', 'kpis');
       ks.innerHTML = '<div class="kpi"><div class="kn">' + term('gulfbox', 'Gulf today') + '</div><div class="kv">' + fnum(sea.last_sst, 1, false) + '<small>°C</small></div><div class="km">anomaly ' + fnum(Math.abs(sea.last_anom) < 0.005 ? 0 : sea.last_anom) + ' on ' + esc(sea.last_date) + (fin(sea.chg30) ? '; 30 d ' + fnum(sea.chg30) : '') + '</div>' + kmeta('gulf_sst') + '</div>' +
         '<div class="kpi"><div class="kn">days above 35 °C</div><div class="kv">' + (sea.days_over_35 == null ? '—' : sea.days_over_35) + '<small>of 120</small></div><div class="km">peak ' + fnum(sea.max_sst, 1, false) + ' °C on ' + esc(sea.max_sst_date || '') + '; the stress line for desalination and fisheries</div>' + kmeta(null, 'NOAA OISST NRT, our box', sea.last_date) + '</div>' +
-        '<div class="kpi"><div class="kn">the box</div><div class="kv" style="font-size:15px;line-height:1.3">24–30°N<br>48–56°E</div><div class="km">sea cells only, full 0.25° resolution, own 1991–2020 climatology</div>' + kmeta(null, 'tools/enso/oisst.py', sea.fetched) + '</div>';
+        '<div class="kpi"><div class="kn">the box</div><div class="kv" style="font-size:15px;line-height:1.3">24–30°N<br>48–56°E</div><div class="km">sea cells only, full 0.25° resolution, own 1991–2020 climatology</div>' + kmeta(null, 'our box mean on the NOAA grid', sea.fetched) + '</div>';
       body.appendChild(ks);
       return;
     }
@@ -3182,7 +3187,7 @@
         var f = chainFresh(n), lit = !!(litSet && litSet[n.id]);
         var card = el('div', 'chain-node' + (S.pick ? (lit ? ' lit' : ' dim') : '') + (S.pick === n.id ? ' on' : ''));
         card.setAttribute('data-node', n.id);
-        var pay = { name: n.name, def: n.def, why: n.why + (n.code ? ' Code: ' + n.code + '.' : '') + (f.note ? ' ' + f.note + '.' : ''), src: (n.sub || '') + (n.cadence ? ' · ' + n.cadence : ''), date: f.date, url: n.url };
+        var pay = { name: n.name, def: n.def, why: n.why + (f.note ? ' ' + f.note + '.' : ''), src: (n.sub || '') + (n.cadence ? ' · ' + n.cadence : ''), date: f.date, url: n.url };
         card.setAttribute('data-src', JSON.stringify(pay));
         card.innerHTML = '<div class="cn-h"><i class="dot ' + f.dot + '"></i><b>' + esc(n.name) + '</b></div>' +
           '<div class="cn-s">' + esc(n.sub || '') + '</div>' +
@@ -3325,7 +3330,7 @@
     /* ВЫБОР В ЛЕГЕНДЕ ЖИВЁТ ТОЛЬКО НА СВОЕЙ СЦЕНЕ. Владелец 05.09: «походил, вернулся на
        Against analogues — всё блёклое, не могу вернуть яркость». Уход со сцены снимает выбор. */
     var scene = S.view + '/' + (S.sub[S.view] || '');
-    if (S._scene !== scene) { S.pick = null; S._scene = scene; }
+    if (S._scene !== scene) { S.pick = (scene === 'models/plume' || scene === 'models/stack') ? 'ok' : null; S._scene = scene; }
     if (S.view === 'overview' && S.full == null) S.full = true;   // обзор открывается сразу на весь экран
     if (S.view !== 'overview' && S.view !== 'chain') S.full = null;
     $('stage').classList.toggle('full', !!(S.full && (S.view === 'chain' || S.view === 'overview')));
