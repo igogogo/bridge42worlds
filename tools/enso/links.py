@@ -25,12 +25,14 @@
     python tools/enso/links.py --limit 5       на пробу, пять якорей
 """
 import argparse
+import concurrent.futures as cf
 import hashlib
 import json
 import os
 import re
 import sqlite3
 import sys
+import threading
 from datetime import datetime
 from pathlib import Path
 
@@ -49,6 +51,7 @@ FLOOR = 0.50            # пол по косинусу: ниже — уже со
 FLOOR_WEAK = 0.42       # второй заход для якорей, которым не нашлось ничего: помечаем weak
 FLOOR_ALL = 0.56        # работа вне темы (весь архив) — только при заметно большем сходстве
 KEEP = 3                # сколько ссылок остаётся у одного якоря после проверки
+WORKERS = 4                              # потоков разметки: запросы независимы (06.09)
 MODEL = os.environ.get("ELNINO_LLM_MODEL", "deepseek-v4-pro")
 
 SYSTEM = """You decide whether a scientific paper belongs next to a specific statement on a
@@ -289,40 +292,49 @@ def verify(anc_by_id, cands, quiet=False):
     out, spent = {}, {"in": 0, "out": 0}
     done = _verdicts_load()
     reused = 0
-    for n, (aid, picks) in enumerate(cands.items(), 1):
+    items = list(cands.items())
+    lock = threading.Lock()
+
+    def one(n_aid_picks):
+        """Один якорь: взять готовое или спросить модель. Возвращает строку журнала."""
+        nonlocal reused
+        n, (aid, picks) = n_aid_picks
         a = anc_by_id[aid]
-        payload = {"statement": a["text"], "where_it_appears": a["kind"],
-                   "papers": [{"id": c["w"]["id"], "title": c["w"]["title"], "abstract": c["w"]["text"][:1400]}
-                              for c in picks]}
-        # Готовый приговор берём с диска: перезапуск после обрыва не переспрашивает модель,
-        # а повторная разметка спрашивает только там, где сменились кандидаты или текст.
         ck = _verdict_key(a, picks)
         got = done.get(ck)
         if got is not None:
-            reused += 1
             keep = _keep_from(got, picks)
-            if keep:
-                out[aid] = keep
-            if not quiet:
-                print(f"  {n}/{len(cands)} {aid}: из кэша, оставлено {len(keep)}")
-            continue
+            with lock:
+                reused += 1
+                if keep:
+                    out[aid] = keep
+            return f"  {n}/{len(items)} {aid}: из кэша, оставлено {len(keep)}"
+        payload = {"statement": a["text"], "where_it_appears": a["kind"],
+                   "papers": [{"id": c["w"]["id"], "title": c["w"]["title"], "abstract": c["w"]["text"][:1400]}
+                              for c in picks]}
         try:
             r = client.chat.completions.create(
                 model=MODEL, temperature=0.1, response_format={"type": "json_object"},
                 messages=[{"role": "system", "content": SYSTEM},
                           {"role": "user", "content": json.dumps(payload, ensure_ascii=False)}])
             got = json.loads(r.choices[0].message.content)
-            _verdict_save(ck, got)                           # сразу на диск: обрыв больше не сжигает оплаченное
-            if r.usage:
-                spent["in"] += r.usage.prompt_tokens; spent["out"] += r.usage.completion_tokens
         except Exception as e:                               # noqa: BLE001
-            print(f"  ⚠️ {aid}: модель не ответила ({str(e)[:90]}) — якорь без ссылок")
-            continue
+            return f"  ⚠️ {aid}: модель не ответила ({str(e)[:90]}) — якорь без ссылок"
         keep = _keep_from(got, picks)
-        if keep:
-            out[aid] = keep
-        if not quiet:
-            print(f"  {n}/{len(cands)} {aid}: из {len(picks)} оставлено {len(keep)}")
+        with lock:
+            _verdict_save(ck, got)                           # сразу на диск: обрыв не сжигает оплаченное
+            if r.usage:
+                spent["in"] += r.usage.prompt_tokens
+                spent["out"] += r.usage.completion_tokens
+            if keep:
+                out[aid] = keep
+        return f"  {n}/{len(items)} {aid}: из {len(picks)} оставлено {len(keep)}"
+
+    # Четыре потока: запросы независимы, а по одному якорю за раз прогон занимал три часа.
+    with cf.ThreadPoolExecutor(max_workers=WORKERS) as pool:
+        for line in pool.map(one, enumerate(items, 1)):
+            if not quiet:
+                print(line)
     print(f"проверка моделью: {spent['in']:,} + {spent['out']:,} токенов"
           + (f"; из кэша {reused} якорей" if reused else ""))
     return out

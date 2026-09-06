@@ -171,7 +171,24 @@ def fetch_all(timeout=40):
     # пустой каталог штампа, если всё упало, не нужен
     if not any(p.exists() for p in dest.iterdir()):
         dest.rmdir()
+    _prune_raw()
     return out, stamp
+
+
+RAW_KEEP = 10
+
+
+def _prune_raw(keep=RAW_KEEP):
+    """Сырьё каждого прогона копится вечно: 32 МБ за две недели, а панель им не пользуется —
+    свежие копии лежат отдельно в last_good (найдено 06.09). Держим последние десять
+    прогонов: этого хватает, чтобы вручную сравнить, что пришло, и понять, кто соврал.
+    """
+    try:
+        dirs = sorted([d for d in RAW.iterdir() if d.is_dir()])
+        for d in dirs[:-keep]:
+            shutil.rmtree(d, ignore_errors=True)
+    except Exception:                                    # noqa: BLE001 - уборка не важнее данных
+        pass
 
 
 # ------------------------------------------------------------------ разбор
