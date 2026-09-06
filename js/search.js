@@ -2562,6 +2562,41 @@ function collapseNavOverflow() {
     // пока меню верхних страниц говорило «Гид, Понятия, Учёные». Нет словаря — остаётся
     // прежнее английское слово, раздел не пропадает.
     var NL = window.B42NavLabel || function (k) { return k; };
+    /* СПИСОК И ПОРЯДОК — ОБЩИЕ, из js/sitenav.js. Раньше он был вбит здесь второй раз, и
+       два меню сайта разъезжались: свой набор, свой порядок, «about» латиницей на всех
+       языках (владелец 06.09: «привести к общему виду»). Нет sitenav (старый кэш) —
+       остаётся прежний список ниже, меню не пропадает. */
+    /* Список живёт в js/sitenav.js, а страницы ленты его не подключают: тридцать пять тысяч
+       готовых страниц ради одного тега не пересобрать. Поэтому подгружаем файл на лету и
+       перестраиваем панель, когда он приехал; до этого стоит прежний список — меню не
+       мигает пустотой и работает даже если файл не доехал. */
+    function applyShared() {
+        var list = window.B42NavItems ? window.B42NavItems(lang) : null;
+        if (!list) return false;
+        var keep = panel.querySelector('.nav-express-toggle');
+        panel.innerHTML = '';
+        var here = location.pathname + location.search;
+        list.forEach(function (e) {
+            var a = document.createElement('a');
+            a.href = e[1];
+            a.textContent = (window.B42NavLabel || NL)(e[0]);
+            if (here === e[1] || (e[1] !== '/' && here.indexOf(e[1]) === 0 && e[1].length > 12)) {
+                a.className = 'active';
+                btn.classList.add('active');
+            }
+            panel.appendChild(a);
+        });
+        if (keep) panel.appendChild(keep);
+        return true;
+    }
+    if (!window.B42NavItems && !document.querySelector('script[data-sitenav]')) {
+        var sn = document.createElement('script');
+        sn.src = '/js/sitenav.js';
+        sn.setAttribute('data-sitenav', '1');
+        sn.onload = applyShared;
+        document.head.appendChild(sn);
+    }
+    if (applyShared()) { /* список уже был — панель собрана из него */ } else
     [['/lang/' + lang + '/index.html', 'main'],
      ['/lang/' + lang + '/concepts/', 'concepts'],
      ['/lang/' + lang + '/formula/', 'formulas'],

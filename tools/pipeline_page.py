@@ -109,7 +109,10 @@ CSS = """
    впереди. Цвет остаётся, но он вторая подсказка, а не единственная. */
 :root { --ok: #1f9d76; --run: #c8892a; --fail: #c0392b; --wait: #b9b2a6; }
 body { max-width: 1100px; padding-bottom: 70px; }
-.pp-head h1 { font-size: 25px; margin: 24px 0 4px; }
+.pp-head h1 { font-size: 25px; margin: 8px 0 4px; }
+.top-bar { max-width: none; }
+.langs-row { display: none; }
+#pp-run { max-width: 100%; }
 .pp-sub { color: var(--soft); font-size: 13.5px; max-width: 74ch; line-height: 1.55; }
 .pp-bar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center;
     margin: 16px 0 6px; font-family: var(--mono); font-size: 12px; }
@@ -266,6 +269,8 @@ html[dir="rtl"] .pp-step:not(:last-child)::before { right: auto; left: -7px; }
 .pp-empty { margin: 22px 0; padding: 14px; border: 1px dashed var(--hair);
     border-radius: 8px; color: var(--soft); font-size: 13px; }
 @media (max-width: 720px) {
+  label:has(#pp-run) { display: block; }
+  #pp-run { width: 100%; display: block; margin-top: 4px; }
   .pp-phase { grid-template-columns: 1fr; gap: 4px; }
   .pp-legend { margin-left: 0; }
   .pp-step { min-width: 0; flex: 1 1 100%; max-width: none; }
@@ -711,6 +716,13 @@ def main():
 </head>
 <body>
 
+<!-- Общая шапка сайта: логотип, меню (js/sitenav.js), тема. Правку страницы руками
+     затирает этот генератор — поэтому шапка живёт здесь (владелец 06.09). -->
+<div class="top-bar">
+  <a href="/lang/ru/index.html" class="logo">bridge42worlds</a>
+  <button type="button" class="theme-toggle" aria-label="Тема" onclick="var h=document.documentElement;h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');">◐</button>
+</div>
+
 <div class="pp-head">
   <h1>Конвейер</h1>
   <div class="pp-sub">Полный цикл производства: от свежих работ с arXiv до
@@ -781,6 +793,9 @@ def main():
 полный итог. Пока конвейер работает, страница обновляется сама.</div>
 
 <script>{js}</script>
+<script src="/js/icons.js"></script>
+<script src="/js/course-i18n.js"></script>
+<script src="/js/sitenav.js"></script>
 </body>
 </html>
 

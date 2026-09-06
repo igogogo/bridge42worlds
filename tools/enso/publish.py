@@ -28,7 +28,9 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 # Журнал значений собирается тем же refresh и читается панелью — без него стрелки «с прошлого
 # значения» на проде отстают от чисел.
 FILES = ["data/enso/latest.json", "data/enso/history.json", "data/enso/glossary.json", "data/enso/journal.json",
-         "data/enso/news.json"]
+         "data/enso/news.json",
+         # береговая линия карты: Natural Earth 110m, общественное достояние, атрибуция не нужна
+         "data/enso/coast.json"]
 
 
 def main():

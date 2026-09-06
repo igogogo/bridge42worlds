@@ -540,7 +540,18 @@
     var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
     var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">NOAA weekly indices, last ' + n + ' weeks (anomaly, °C)' + (RC ? ' — and the same four, over their last ' + ((NW.analog_series[years[0]] || []).length || '') + ' weeks to the same week of the year, in the strongest past events' : '') + '</text>';
     s += gridY(vmin, vmax, .5, Y, Lp, RC + R + 16, W, 1);
-    ser.forEach(function (r, i) { if (parseInt(r.date.slice(8), 10) <= 7 && (W > 470 || i % 2 === 0)) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + MONTHS[parseInt(r.date.slice(5, 7), 10) - 1] + '</text>'; });
+    /* Подписи месяцев ставим не «каждый первый в месяце», а столько, сколько влезает: в
+       плитке обзора шириной 240 их выходило семь подряд и они слипались в кашу (владелец
+       06.09: «внизу сливаются даты»). Шаг считаем от ширины поля: месяц занимает 26 пикселей. */
+    var monthEvery = Math.max(1, Math.ceil(12 / Math.max(1, Math.floor(pw / 30))));
+    var monthSeen = 0;
+    ser.forEach(function (r, i) {
+      if (parseInt(r.date.slice(8), 10) > 7) return;
+      var use = (monthSeen % monthEvery) === 0;
+      monthSeen++;
+      if (!use) return;
+      s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + MONTHS[parseInt(r.date.slice(5, 7), 10) - 1] + '</text>';
+    });
     keys.forEach(function (k, ki) { s += segs(ser.map(function (r, i) { return [X(i), fin(r[k[0]]) ? Y(r[k[0]]) : NaN]; }), k[2], k[0] === 'n34a' ? 2.2 : 1.4, pickOp(k[0]), dashOf(ki)); });
     s += legendAt(keys.map(function (k, ki) {
       return [k[1] + ' ' + fnum(NW.latest[k[0]], 1), k[2], k[0] === 'n34a' ? 2.2 : 1.4, dashOf(ki), k[0]];
@@ -963,7 +974,10 @@
     rows.forEach(function (r, i) {
       var bw = Math.max(6, pw / n * .5);
       s += '<rect x="' + (X(i) - bw / 2).toFixed(1) + '" y="' + Y(r.share).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + (Y(0) - Y(r.share)).toFixed(1) + '" style="fill:var(--nino)" opacity=".55" rx="2"/>';
-      if (n < 14 || i % 2 === 0) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 16) + '" text-anchor="middle">' + esc(r.issue.split(' ')[0]) + '</text><text x="' + X(i).toFixed(0) + '" y="' + (H - 5) + '" text-anchor="middle" opacity=".6">' + esc(r.season.split(' ')[0]) + '</text>';
+      /* Подписей столько, сколько влезает: в плитке обзора «через одну» всё равно давало
+         десяток слипшихся слов (владелец 06.09: «внизу сливаются даты»). */
+      var every = Math.max(1, Math.ceil(n / Math.max(1, Math.floor(pw / 36))));
+      if (i % every === 0) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 16) + '" text-anchor="middle">' + esc(r.issue.split(' ')[0]) + '</text><text x="' + X(i).toFixed(0) + '" y="' + (H - 5) + '" text-anchor="middle" opacity=".6">' + esc(r.season.split(' ')[0]) + '</text>';
     });
     s += poly(rows.map(function (r, i) { return [X(i), Y2(r.mean_err)]; }), 'var(--text)', 2);
     rows.forEach(function (r, i) { s += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y2(r.mean_err).toFixed(1) + '" r="2.6" style="fill:var(--text)"/>'; });
@@ -1008,15 +1022,36 @@
     { name: 'South America', pts: [[280, 8.5], [282.5, 6], [281.5, 2], [279.3, 0], [280, -4], [281.5, -8], [283, -12], [284.5, -15], [288, -19], [290, -22], [295, -22], [295, 8.5]] }
   ];
 
+  /* Береговая линия грузится один раз и лениво: 11 КБ, но карта нужна не на каждой
+     вкладке. Пришла — перерисовываем текущий график, если он на экране. */
+  function loadCoast() {
+    if (S.COAST !== undefined) return;
+    S.COAST = null;
+    fetch('/data/enso/coast.json', { cache: 'force-cache' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { if (d && d.polys) { S.COAST = d; redrawPlot(); } })
+      .catch(function () {});
+  }
+
   function pacific(NW, W, H) {
+    loadCoast();
     // В низкой плитке (телефон, короткое окно) подписи долгот и «экватор» съедали карту —
     // при высоте меньше 200 пикселей оставляем только сами участки.
     var small = H < 200;
     var Lp = small ? 14 : 40, R = small ? 10 : 26, Tp = small ? 22 : 34, B = small ? 10 : 30;
+    var LON0 = 110, LON1 = 295, LAT0 = 22;
     var pw = W - Lp - R, ph = H - Tp - B;
+    /* КАРТА ДЕРЖИТ СВОИ ПРОПОРЦИИ. Окно — 185° долготы на 44° широты, это примерно 4:1;
+       в полноэкранном режиме (особенно на телефоне) поле оказывалось вдвое выше, и суша
+       растягивалась в вертикальные кляксы. Лишнюю высоту отдаём полям, карту ставим по
+       центру (владелец 06.09: «люди хотят увидеть на карте мира, где это находится»). */
+    var ideal = pw * (2 * LAT0) / (LON1 - LON0);
+    /* Двойное растяжение по вертикали для приэкваториальных карт привычно и полезно:
+       участки Niño узкие по широте, при честных пропорциях они схлопываются в полоску.
+       Ограничиваем не пропорцией 1:1, а двойной — дальше начинается клякса. */
+    if (ph > ideal * 2.2) { Tp += (ph - ideal * 2) / 2; ph = ideal * 2; }
     /* ШИРЕ И КРУПНЕЕ. Владелец 05.09: «очень маленькие цифры; побольше значения, побольше
        контраста, чуть меньше масштаб, чтобы очертания континентов появились, и сетку». */
-    var LON0 = 110, LON1 = 295, LAT0 = 22;
     var lon = function (d) { return Lp + (d - LON0) / (LON1 - LON0) * pw; };
     var lat = function (d) { return Tp + (LAT0 - d) / (2 * LAT0) * ph; };
     var lv = NW.latest, aw = NW.analog_week || {}, ap = NW.analog_peak || {};
@@ -1029,10 +1064,22 @@
     s += '<rect x="' + Lp + '" y="' + Tp + '" width="' + pw + '" height="' + ph + '" rx="8" style="fill:var(--nina)" opacity=".08"/>';
     // суша поверх воды, до участков Niño
     s += '<clipPath id="pacclip"><rect x="' + Lp + '" y="' + Tp + '" width="' + pw + '" height="' + ph + '" rx="8"/></clipPath><g clip-path="url(#pacclip)">';
-    LAND.forEach(function (L) {
+    /* НАСТОЯЩАЯ БЕРЕГОВАЯ ЛИНИЯ, если она уже загружена (data/enso/coast.json, Natural
+       Earth 110m, общественное достояние). Пока файл едет — рисуем прежние схематичные
+       пятна: карта не должна быть пустой ни секунды. */
+    var CO = S.COAST;
+    if (CO && CO.polys) {
+      CO.polys.forEach(function (poly) {
+        var pts = poly.map(function (q) {
+          return lon(Math.max(LON0 - 5, Math.min(LON1 + 5, q[0]))).toFixed(1) + ',' +
+                 lat(Math.max(-LAT0 - 4, Math.min(LAT0 + 4, q[1]))).toFixed(1);
+        }).join(' ');
+        s += '<polygon points="' + pts + '" style="fill:var(--ink);stroke:var(--text)" fill-opacity=".13" stroke-width=".8" stroke-opacity=".5"/>';
+      });
+    } else LAND.forEach(function (L) {
       var pts = L.pts.map(function (p) { return lon(p[0]).toFixed(1) + ',' + lat(Math.max(-LAT0, Math.min(LAT0, p[1]))).toFixed(1); }).join(' ');
       s += '<polygon points="' + pts + '" style="fill:var(--ink);stroke:var(--text)" fill-opacity=".14" stroke-width="1" stroke-opacity=".6"/>';
-      if (L.name && !small) {
+      if (L.name && !small && !CO) {
         var LBL = { 'South America': [294, -18, 'end'], 'Central America': [266.5, 18.8, 'middle'], 'Mexico': [257.5, 21, 'middle'], 'Indonesia': [111.5, -5, 'start'], 'Philippines': [111.5, 17.5, 'start'] };
         var cx = 0, cy = 0;
         L.pts.forEach(function (p) { cx += lon(p[0]); cy += lat(Math.max(-LAT0, Math.min(LAT0, p[1]))); });
@@ -1040,6 +1087,16 @@
         s += '<text x="' + px.toFixed(0) + '" y="' + py.toFixed(0) + '" text-anchor="' + (lb ? lb[2] : 'middle') + '" font-size="10" style="fill:var(--text)" opacity=".8">' + esc(L.name) + '</text>';
       }
     });
+    /* Подписи суши по координатам — они полезны и на настоящей линии: читателю нужно
+       понять, что слева Индонезия, а справа Южная Америка (владелец 06.09). */
+    if (CO && !small) {
+      [['Philippines', 122, 14, 'middle'], ['Indonesia', 114, -4.5, 'middle'], ['New Guinea', 141, -5.5, 'middle'],
+       ['Australia', 134, -20, 'middle'], ['Japan', 137, 20.5, 'middle'], ['Mexico', 258, 20, 'middle'],
+       ['Central America', 271, 13.5, 'middle'], ['South America', 289, -14, 'middle']].forEach(function (L) {
+        s += '<text x="' + lon(L[1]).toFixed(0) + '" y="' + lat(L[2]).toFixed(0) + '" text-anchor="' + L[3] +
+          '" font-size="10" style="fill:var(--text)" opacity=".62">' + L[0] + '</text>';
+      });
+    }
     // Галапагосы — единственная суша посреди очага, полезный ориентир
     if (!small) {
       s += '<circle cx="' + lon(269.5).toFixed(1) + '" cy="' + lat(-0.5).toFixed(1) + '" r="2.2" style="fill:var(--ink)" opacity=".45"/>';
@@ -1058,26 +1115,53 @@
       [120, 150, 180, 210, 240, 270].forEach(function (d) { s += '<text x="' + lon(d).toFixed(0) + '" y="' + (H - 8) + '" text-anchor="middle">' + (d <= 180 ? d + '°E' : (360 - d) + '°W') + '</text>'; });
       s += '<text x="' + (W - R) + '" y="' + (Tp - 9) + '" text-anchor="end">South America →</text><text x="' + Lp + '" y="' + (Tp - 9) + '">← Australia, Indonesia</text>';
     }
+    /* ВЫБОР ЗОНЫ. Четыре участка перекрываются по долготе, и в режиме «все» их числа и
+       подписи неизбежно спорят за место (владелец 06.09: «квадратики сливаются, всё
+       нечитаемо»). Выбранная зона остаётся в полном цвете и с полным сравнением, соседние
+       гаснут до 12% и молчат — карта читается даже на телефоне. */
+    var zone = S.sub.zone || 'all';
     boxes.forEach(function (b) {
       var x = lon(b[2]), w = lon(b[3]) - x, y = lat(b[4]), h = lat(b[5]) - y, key = b[6], v = lv[key];
+      var on = zone === 'all' || zone === b[0];
+      var dim = !on;
       var then = (aw[cmpYear] || {})[key], peak = (ap[cmpYear] || {})[key];
       var col = v >= 2 ? 'var(--lv5)' : (v >= 1 ? 'var(--nino)' : (v >= .5 ? 'var(--lv3)' : (v <= -.5 ? 'var(--nina)' : 'var(--lv2)')));
       var pay = { name: b[1] + ' — week of ' + NW.date,
         def: 'Now ' + fnum(v, 1) + ' °C. On the same week of ' + cmpYear + ': ' + fnum(then, 1) + ' °C; the peak of that event was ' + fnum(peak, 1) + ' °C. ' +
           (fin(then) ? (v > then ? 'This event is ' + fnum(v - then, 1) + ' °C warmer at the same point of the calendar.' : 'This event is ' + fnum(v - then, 1) + ' °C against it.') : ''),
         src: 'NOAA CPC weekly indices, wksst9120', date: NW.date };
-      s += '<g data-src="' + esc(JSON.stringify(pay)) + '"><rect' + (b[0] === 'nino34' ? ' class="breathe"' : '') + ' x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + h.toFixed(1) + '" style="fill:' + col + ';stroke:' + col + '" fill-opacity=".3" stroke-width="1.8" rx="3"/>';
+      s += '<g data-src="' + esc(JSON.stringify(pay)) + '" data-zone="' + b[0] + '"' + (dim ? ' opacity=".12"' : '') + '>' +
+        '<rect' + (b[0] === 'nino34' && zone === 'all' ? ' class="breathe"' : '') + ' x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + h.toFixed(1) + '" style="fill:' + col + ';stroke:' + col + '" fill-opacity="' + (zone === b[0] ? '.42' : '.3') + '" stroke-width="' + (zone === b[0] ? 2.6 : 1.8) + '" rx="3"/>';
       /* Боксы Niño 4, 3.4 и 3 перекрываются по долготе — подписи ярусами: 4 выше, 3.4 по
          центру, 3 ниже; у Niño 1+2 бокс узкий — подписи слева от него. */
-      var tier = { nino4: -0.3, nino34: 0, nino3: 0.3 }[b[0]] || 0;
-      var cy = y + h / 2 + tier * h, big = small ? 14 : 18, tx = x + w / 2, anc = 'middle';
-      if (b[0] === 'nino12') { tx = x - 6; anc = 'end'; cy = y + h / 2; }
-      // имя зоны — в плашке, как на всей панели (владелец 05.09: «в рамках контрастные названия, как у нас везде для зон»)
-      var lw = b[1].length * 7.2 + 12, lx0 = anc === 'end' ? tx - lw : tx - lw / 2, ly0 = cy - (small ? 6 : 11) - 10;
-      s += '<rect x="' + lx0.toFixed(1) + '" y="' + ly0.toFixed(1) + '" width="' + lw.toFixed(1) + '" height="14" rx="7" style="fill:var(--surface);stroke:' + col + '" stroke-width="1.2"/>';
-      s += '<text x="' + (lx0 + lw / 2).toFixed(1) + '" y="' + (ly0 + 10.5).toFixed(1) + '" text-anchor="middle" font-size="10" style="fill:' + col + ';font-weight:600;letter-spacing:.03em">' + b[1] + '</text>';
-      s += '<text x="' + tx.toFixed(1) + '" y="' + (cy + (small ? 8 : 7)).toFixed(1) + '" text-anchor="' + anc + '" style="fill:var(--text);font-weight:700" font-size="' + big + '">' + fnum(v, 1) + '</text>';
-      if (fin(then)) s += '<text x="' + tx.toFixed(1) + '" y="' + (cy + (small ? 20 : 21)).toFixed(1) + '" text-anchor="' + anc + '" style="fill:var(--text)" font-size="' + (small ? 10 : 11) + '">' + cmpYear + ' ' + fnum(then, 1) + ' · ' + (v >= then ? '▲' : '▼') + fnum(Math.abs(v - then), 1, false) + '</text>';
+      /* ПОДПИСЬ ЗОНЫ — ВНУТРИ ЕЁ ПРЯМОУГОЛЬНИКА, у верхнего края. Раньше плашка стояла по
+         центру бокса, с ярусным сдвигом, и у соседних зон эти плашки налезали друг на друга
+         и на чужие участки (владелец 06.09: «проверить, чтобы надписи классов попадали в
+         прямоугольник зоны»). Узкой Niño 1+2 плашка не по росту — ей подпись под боксом. */
+      var big = small ? 14 : 18;
+      var tier = { nino4: -0.32, nino34: 0, nino3: 0.32 }[b[0]] || 0;
+      var cy = y + h / 2 + (zone === 'all' ? tier * h : 0), tx = x + w / 2;
+      var lw = Math.min(b[1].length * 7.2 + 12, w - 6), narrowBox = lw < b[1].length * 6;
+      var lx0 = narrowBox ? x + w / 2 - (b[1].length * 7.2 + 12) / 2 : x + 3;
+      var ly0 = narrowBox ? y + h + 3 : y + 3;
+      if (narrowBox) lw = b[1].length * 7.2 + 12;
+      /* На узком экране в режиме «все зоны» плашки имён неизбежно налезают друг на друга:
+         четыре подписи на 250 пикселей ширины. Там оставляем только числа, а имя показываем
+         у выбранной зоны — за этим и сделан выбор (владелец 06.09). */
+      var showName = !(pw < 420 && zone === 'all');
+      if (showName) {
+        s += '<rect x="' + lx0.toFixed(1) + '" y="' + ly0.toFixed(1) + '" width="' + lw.toFixed(1) + '" height="14" rx="7" style="fill:var(--surface);stroke:' + col + '" stroke-width="1.2"/>';
+        s += '<text x="' + (lx0 + lw / 2).toFixed(1) + '" y="' + (ly0 + 10.5).toFixed(1) + '" text-anchor="middle" font-size="10" style="fill:' + col + ';font-weight:600;letter-spacing:.03em">' + b[1] + '</text>';
+      }
+      /* ЧИСЛА — БЕЛЫЕ ПОЛУЖИРНЫЕ С ТЁМНОЙ ОБВОДКОЙ. Владелец 06.09: «все цифры надо
+         изменить на белый жирный, потому что всё сливается с фоном». Обводка (paint-order:
+         stroke) держит их читаемыми и на светлой заливке зоны, и в тёмной теме, где белое
+         на белом было бы не лучше. */
+      var HALO = 'fill:#fff;paint-order:stroke;stroke:rgba(20,22,28,.75);stroke-width:3.4;stroke-linejoin:round;font-weight:700';
+      s += '<text x="' + tx.toFixed(1) + '" y="' + (cy + (small ? 8 : 7)).toFixed(1) + '" text-anchor="middle" style="' + HALO + '" font-size="' + big + '">' + fnum(v, 1) + '</text>';
+      // Сравнение с аналогом — только у выбранной зоны: в режиме «все» четыре таких строки
+      // и были главной кашей на карте.
+      if (fin(then) && zone === b[0]) s += '<text x="' + tx.toFixed(1) + '" y="' + (cy + (small ? 21 : 23)).toFixed(1) + '" text-anchor="middle" style="' + HALO.replace('stroke-width:3.4', 'stroke-width:3') + '" font-size="' + (small ? 10 : 12) + '">' + cmpYear + ' ' + fnum(then, 1) + ' · ' + (v >= then ? '▲' : '▼') + fnum(Math.abs(v - then), 1, false) + '</text>';
       s += '</g>';
     });
     return s + '</svg>';
@@ -1221,9 +1305,38 @@
     return null;
   }
 
+  /* ДАТА НА ОСИ — ПО-ЧЕЛОВЕЧЕСКИ. Владелец 06.09: «внизу сливаются даты по горизонтальной
+     оси, надо изменить формат, достаточно трёхбуквенных месяцев, как у других». Ряд знает
+     свой шаг: день → «3 Sep», месяц → «Sep 2026», всё остальное (сезоны, кварталы) уже
+     приходит готовой подписью. */
+  function axisDate(d, step) {
+    var t = String(d == null ? '' : d);
+    var m = /^(\d{4})-(\d{2})(?:-(\d{2}))?$/.exec(t);
+    if (!m) return t;
+    var mon = MONTHS[parseInt(m[2], 10) - 1] || m[2];
+    if (step === 'day' && m[3]) return parseInt(m[3], 10) + ' ' + mon;
+    return mon + ' ' + m[1];
+  }
+
+  /* ЛЕГЕНДА ЗНАЧКОМ. Владелец 06.09: «легенды везде сделать иконкой и открывать в
+     тултипе, чтобы не захламлять: и так тут мало места». Значок — обычный якорь подсказки
+     панели (data-src), список рядов идёт готовой разметкой, с цветом каждой линии. */
+  function legIcon(items, W) {
+    var rows = items.filter(function (it) { return it && it[0]; }).map(function (it) {
+      return '<p class="wk-p" style="border-color:' + (it[1] || 'var(--soft)') + '"><b>' + esc(String(it[0])) + '</b></p>';
+    }).join('');
+    var pay = { name: 'What the lines are', html: rows };
+    return '<g class="leg-i" data-src="' + esc(JSON.stringify(pay)) + '">' +
+      '<circle cx="' + (W - 14) + '" cy="14" r="7.5" style="fill:var(--surface);stroke:var(--soft)" stroke-width="1"/>' +
+      '<text x="' + (W - 14) + '" y="17.5" text-anchor="middle" font-size="9" style="fill:var(--soft)">' + items.length + '</text></g>';
+  }
+
   function chartMetric(m, W, H, title) {
     var vals = m.values, dates = m.dates || [], n = vals.length;
-    var Lp = 46, R = 76, Tp = topPad(W), B = 26, pw = W - Lp - R, ph = H - Tp - B;
+    /* Правое поле — под подпись последнего значения. Держать его 76 пикселей в плитке
+       шириной 230 значило отдать четверть картинки пустоте (владелец 06.09: «график не во
+       всю ширину блока»). Узкой плитке хватает 26. */
+    var Lp = 46, R = W < 420 ? 26 : 76, Tp = topPad(W), B = 26, pw = W - Lp - R, ph = H - Tp - B;
     var vv = vals.filter(fin);
     if (vv.length < 2) return svgOpen(W, H) + '<text x="20" y="' + (H / 2) + '">no series for this item</text></svg>';
     var ana = analogFor(m) || [];
@@ -1263,7 +1376,7 @@
     });
     var step = (vmax - vmin) > 4 ? 1 : ((vmax - vmin) > 1.2 ? .5 : .25);
     s += gridY(vmin, vmax, step, Y, Lp, R, W);
-    if (dates.length === n) dates.forEach(function (d, i) { if (i === 0 || i === n - 1 || (n > 6 && i === Math.floor(n / 2))) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="' + (i === 0 ? 'start' : (i === n - 1 ? 'end' : 'middle')) + '">' + esc(String(d)) + '</text>'; });
+    if (dates.length === n) dates.forEach(function (d, i) { if (i === 0 || i === n - 1 || (n > 6 && i === Math.floor(n / 2))) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="' + (i === 0 ? 'start' : (i === n - 1 ? 'end' : 'middle')) + '">' + esc(axisDate(d, m.step)) + '</text>'; });
     // аналоги того же календарного окна — тонкими цветными линиями под нашим рядом
     ana.forEach(function (a, ai) {
       var off = n - a.values.length;
@@ -1273,7 +1386,12 @@
       if (fin(a.values[li2])) s += '<text x="' + (X(off + li2) + 4).toFixed(0) + '" y="' + (Y(a.values[li2]) + 4).toFixed(0) + '" style="fill:var(--a' + a.year + ')" font-size="10">' + a.year + '</text>';
     });
     s += segs(vals.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.2, pickOp('now'));
-    if (legM.length > 1) s += legendAt(legM, Lp + 8, Tp + 12);
+    /* В плитке обзора легенда не помещается и съедает саму картинку: там её заменяет
+       значок, а список рядов читатель видит в подсказке плитки (владелец 06.09). */
+    if (legM.length > 1) {
+      if (W < 420) s += legIcon(legM, W);
+      else s += legendAt(legM, Lp + 8, Tp + 12);
+    }
     if (m.flags && m.flags.length === n) vals.forEach(function (v, i) { if (m.flags[i] && fin(v)) s += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(v).toFixed(1) + '" r="2.2" style="fill:var(--nino)"/>'; });
     var li = n - 1; while (li > 0 && !fin(vals[li])) li--;
     s += nowDot(X(li), Y(vals[li]), 'var(--nino)', 4);
@@ -1810,6 +1928,11 @@
     var above = Object.keys(N.analogs).every(function (y) { return N.analogs[y].same30 < N.current30; });
     var segs2 = [segBtn('now', 'analogs', 'Against analogues', 'analogs'), segBtn('now', 'map', 'Pacific map', 'analogs'),
       segBtn('now', 'weekly', 'Weekly indices', 'analogs'), segBtn('now', 'weekly_a', 'Weekly vs strongest', 'analogs')];
+    /* Полный экран у карты — как у обзора и цепочки данных. Владелец 06.09: «на мобильной
+       тем более каша, надо предусмотреть полноэкранный режим: люди хотят увидеть на карте
+       мира, где это находится». */
+    if (k === 'map') segs2.push({ label: S.full ? 'exit full screen (Esc)' : '⛶ full screen', on: !!S.full,
+                                  click: function () { S.full = !S.full; render(); } });
     var body = stageShell(above ? 'Warmer today than any of the four strongest events were at this time of year'
       : 'The event follows the strongest ones: rank ' + N.rank_same30 + ' among the analogues', segs2);
     if (k === 'map') {
@@ -1823,6 +1946,17 @@
         row.appendChild(b);
       });
       body.appendChild(row);
+      /* ВЫБОР ЗОНЫ отдельным рядом (владелец 06.09). «Все зоны» — обзор, любая другая
+         кнопка гасит соседей и показывает у выбранной сравнение с годом-аналогом. */
+      var zrow = el('div', 'seg sub');
+      var ZN = [['all', 'All zones'], ['nino12', 'Niño 1+2'], ['nino3', 'Niño 3'], ['nino34', 'Niño 3.4'], ['nino4', 'Niño 4']];
+      var zcur = S.sub.zone || 'all';
+      ZN.forEach(function (z) {
+        var b = el('button', zcur === z[0] ? 'on' : '', z[1]);
+        b.type = 'button'; b.onclick = function () { S.sub.zone = z[0]; render(); };
+        zrow.appendChild(b);
+      });
+      body.appendChild(zrow);
       plot(body, function (w, h) { return pacific(NW, w, h); });
     } else if (k === 'weekly') plot(body, function (w, h) { return chartNoaa(NW, w, h); });
     else if (k === 'weekly_a') {
@@ -1841,7 +1975,7 @@
     var cap = el('div', 'cap');
     var aw = (NW.analog_week || {})[S.sub.cmp || '1997'] || {};
     var td = (D.iri || {}).todate, lf = (D.iri || {}).last_full_season;
-    cap.innerHTML = k === 'map' ? 'The land is schematic, the boxes are the four Niño regions. Colour is the anomaly of the week; the small number under it is the same week of the comparison event. Point at a patch for the full comparison and the peak that event reached.'
+    cap.innerHTML = k === 'map' ? 'The coastline is real (Natural Earth, public domain); the boxes are the four Niño regions. Colour is the anomaly of the week; the small number under it is the same week of the comparison event. Pick a zone above to bring it forward and see how it compares with the same week of the chosen event; point at a patch for the peak that event reached.'
       : (k === 'weekly' ? 'Over 4 weeks: Niño 3.4 ' + fnum(c4.n34a, 1) + ', Niño 1+2 ' + fnum(c4.n12a, 1) + '; over 8 weeks ' + fnum(c8.n34a, 1) + ' and ' + fnum(c8.n12a, 1) + '. Record of the weekly Niño 3.4: ' + fnum(NW.hist_max_n34.n34a, 1) + ' (' + esc(NW.hist_max_n34.date) + ').'
         : (k === 'weekly_a' ? 'The same weekly index against 1982, 1997, 2015 and 2023 on the same weeks of the year. The number in brackets is how much this event is above that one right now.'
           : '<strong>Peak estimate.</strong> ' + esc(pe.note) + ' Typical peak window ' + esc(pe.typical_peak_window) + '.' +
@@ -3345,8 +3479,9 @@
     var scene = S.view + '/' + (S.sub[S.view] || '');
     if (S._scene !== scene) { S.pick = (scene === 'models/plume' || scene === 'models/stack') ? 'ok' : null; S._scene = scene; }
     if (S.view === 'overview' && S.full == null) S.full = true;   // обзор открывается сразу на весь экран
-    if (S.view !== 'overview' && S.view !== 'chain') S.full = null;
-    $('stage').classList.toggle('full', !!(S.full && (S.view === 'chain' || S.view === 'overview')));
+    var mapScene = S.view === 'now' && (S.sub.now || 'analogs') === 'map';
+    if (S.view !== 'overview' && S.view !== 'chain' && !mapScene) S.full = null;
+    $('stage').classList.toggle('full', !!(S.full && (S.view === 'chain' || S.view === 'overview' || mapScene)));
     var narrow = window.matchMedia('(max-width:900px)').matches;
     // База сравнения выбирается режимом, но код блоков читает S.P — подменяем на время отрисовки.
     S.P = S.delta ? baseline() : (S.D || {}).prev || null;
