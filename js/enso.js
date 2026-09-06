@@ -269,12 +269,27 @@
       return '<span class="leg-row"><svg viewBox="0 0 22 14" width="22" height="14" aria-hidden="true">' + mark + '</svg>' + esc(String(it[0])) + '</span>';
     }).join('');
     var pay = { name: 'What the lines are', html: '<span class="leg-list">' + rows + '</span>' };
-    /* Метка стоит в верхней строке справа, вровень с заголовком графика: круглый значок с
-       числом читался как «ещё одна точка на графике» (владелец 06.09). */
+    /* Метка живёт НЕ в картинке, а в строке названия карточки (владелец 06.09: «метку
+       legend поднять, где название карточки»). Здесь только складываем список — плитка
+       заберёт его после отрисовки и повесит метку рядом с заголовком. */
+    if (S._tight) { S._legend = pay; return ''; }
     var w = 44, x = W - w - 4;
     return '<g class="leg-i" data-src="' + esc(JSON.stringify(pay)) + '">' +
       '<rect x="' + x + '" y="4" width="' + w + '" height="13" rx="6.5" style="fill:var(--surface);stroke:var(--soft)" stroke-width=".9" opacity=".95"/>' +
       '<text x="' + (x + w / 2) + '" y="13.5" text-anchor="middle" font-size="8.5" style="fill:var(--soft);letter-spacing:.06em">legend</text></g>';
+  }
+
+  /* Шкала цвета у разрезов и подписи слоёв — та же легенда, только рисуется прямо в поле
+     графика. В плитке её нет места: отдаём тем же путём, что и обычную легенду. */
+  function scaleLegend(rows) {
+    if (!S._tight) return false;
+    S._legend = { name: 'What the colours are', html: '<span class="leg-list">' + rows.map(function (r) {
+      return '<span class="leg-row"><svg viewBox="0 0 22 14" width="22" height="14" aria-hidden="true">' +
+        (r[2] === 'line' ? '<line x1="1" y1="7" x2="21" y2="7" style="stroke:' + r[1] + '" stroke-width="2"' + (r[3] ? ' stroke-dasharray="5 3"' : '') + '/>'
+                         : '<rect x="1" y="2" width="20" height="10" rx="2" style="fill:' + r[1] + '" opacity="' + (r[3] || 1) + '"/>') +
+        '</svg>' + esc(String(r[0])) + '</span>';
+    }).join('') + '</span>' };
+    return true;
   }
 
   function legendAt(items, x, y) {
@@ -583,14 +598,24 @@
     /* Подписи месяцев ставим не «каждый первый в месяце», а столько, сколько влезает: в
        плитке обзора шириной 240 их выходило семь подряд и они слипались в кашу (владелец
        06.09: «внизу сливаются даты»). Шаг считаем от ширины поля: месяц занимает 26 пикселей. */
-    var monthEvery = Math.max(1, Math.ceil(12 / Math.max(1, Math.floor(pw / 30))));
-    var monthSeen = 0;
+    /* Считаем не «через сколько месяцев», а РАССТОЯНИЕ в пикселях до предыдущей подписи:
+       ширина поля у этого графика зависит от режима (у сравнения с сильнейшими справа стоит
+       колонка панелей), и формула по ширине давала подписи в тринадцати пикселях друг от
+       друга при ширине слова в двадцать (владелец 06.09: «внизу всё равно сливается ось»). */
+    var lastLabelX = -1e9, monthEvery = 1;
     ser.forEach(function (r, i) {
       if (parseInt(r.date.slice(8), 10) > 7) return;
-      var use = (monthSeen % monthEvery) === 0;
-      monthSeen++;
-      if (!use) return;
-      s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + MONTHS[parseInt(r.date.slice(5, 7), 10) - 1] + '</text>';
+      var xx = X(i);
+      if (xx - lastLabelX < 34) return;
+      monthEvery = (xx - lastLabelX) < 70 ? 3 : 1;   // подписи редкие — значит это сезоны
+      lastLabelX = xx;
+      /* Через три месяца подписываем сезон тремя заглавными — JAS, ASO, как во всей
+         панели: три полных названия подряд всё равно слипались (владелец 06.09). */
+      var mi = parseInt(r.date.slice(5, 7), 10) - 1;
+      var lab = monthEvery >= 3
+        ? (MONTHS[mi] || '').charAt(0) + (MONTHS[(mi + 1) % 12] || '').charAt(0) + (MONTHS[(mi + 2) % 12] || '').charAt(0)
+        : MONTHS[mi];
+      s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + lab + '</text>';
     });
     keys.forEach(function (k, ki) { s += segs(ser.map(function (r, i) { return [X(i), fin(r[k[0]]) ? Y(r[k[0]]) : NaN]; }), k[2], k[0] === 'n34a' ? 2.2 : 1.4, pickOp(k[0]), dashOf(ki)); });
     s += legendAt(keys.map(function (k, ki) {
@@ -636,7 +661,20 @@
     var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
     var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText(NAMES[key] + ' weekly, last ' + n + ' weeks, against the strongest events on the same calendar', W, 12) + '</text>';
     s += gridY(vmin, vmax, .5, Y, Lp, R + 8, W, 1);
-    ser.forEach(function (r, i) { if (parseInt(r.date.slice(8), 10) <= 7 && (W > 470 || i % 2 === 0)) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + MONTHS[parseInt(r.date.slice(5, 7), 10) - 1] + '</text>'; });
+    /* То же правило, что и на недельном графике: расстояние до предыдущей подписи не
+       меньше тридцати четырёх пикселей, иначе месяцы стоят вплотную и читаются как одно
+       слово; при редких подписях печатаем сезон тремя заглавными (владелец 06.09). */
+    var lastMX = -1e9;
+    ser.forEach(function (r, i) {
+      if (parseInt(r.date.slice(8), 10) > 7) return;
+      var xx = X(i);
+      if (xx - lastMX < 34) return;
+      var far = (xx - lastMX) < 70 && lastMX > -1e8;
+      lastMX = xx;
+      var mi = parseInt(r.date.slice(5, 7), 10) - 1;
+      var lab = far ? (MONTHS[mi] || '').charAt(0) + (MONTHS[(mi + 1) % 12] || '').charAt(0) + (MONTHS[(mi + 2) % 12] || '').charAt(0) : MONTHS[mi];
+      s += '<text x="' + xx.toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + lab + '</text>';
+    });
     ana.forEach(function (a, ai) {
       var off = n - a.values.length;
       s += segs(a.values.map(function (v, i) { return [X(off + i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + a.year + ')', 1.4, pickOp(a.year, .9), dashOf(ai + 1));
@@ -2255,6 +2293,7 @@
       Object.keys(x.after_events || {}).forEach(function (y) { if (fin(x.after_events[y])) all.push(x.after_events[y]); });
     });
     var vmin = Math.min.apply(null, all) - .1, vmax = Math.max.apply(null, all) + .1;
+    var LEGROWS = [];
     var s = svgOpen(W, H);
     items.forEach(function (x, xi) {
       var top = xi * (hh + gap), Lp = 46, Tp = top + 4, B = 4;
@@ -2282,6 +2321,7 @@
       if (fin(x.series.values[li])) s += '<circle cx="' + X(li).toFixed(1) + '" cy="' + Y(x.series.values[li]).toFixed(1) + '" r="3" style="fill:' + (xi === 0 ? 'var(--nina)' : 'var(--nino)') + '"/>';
       // колонка подписей
       var lx = Lp + pw + 10, ly = Tp + 10;
+      if (S._tight) { LEGROWS.push([x.title + ': ' + fnum(x.tropics) + ' °C' + (x.lag == null ? '' : ', lags ' + x.lag + ' mo'), x.col || 'var(--text)', 'line']); return; }
       s += '<text x="' + lx + '" y="' + ly + '" class="tt" font-size="11">' + esc(x.title) + '</text>';
       s += '<text x="' + lx + '" y="' + (ly + 13) + '" font-size="10" style="fill:var(--text)">now ' + fnum(x.tropics) + ' \u00b0C</text>';
       s += '<text x="' + lx + '" y="' + (ly + 25) + '" font-size="9" style="fill:var(--soft)">' +
@@ -2306,6 +2346,7 @@
         });
       }
     });
+    if (S._tight && LEGROWS.length) scaleLegend(LEGROWS);
     return s + '</svg>';
   }
 
@@ -2749,12 +2790,24 @@
     if (cfg.d20) s += segs(cfg.d20.map(function (d, k) { return [Lp + (k + .5) * cw, fin(d) ? Y(d) : NaN]; }), 'var(--text)', 2);
     if (cfg.d20clim) s += segs(cfg.d20clim.map(function (d, k) { return [Lp + (k + .5) * cw, fin(d) ? Y(d) : NaN]; }), 'var(--text)', 1.2, .8, '5 3');
     // подписи глубин слева, долгот снизу
-    [0, 50, 100, 150, 200, 250, 300].forEach(function (d) { if (d <= depthMax) s += '<text x="' + (Lp - 5) + '" y="' + (Y(d) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9">' + d + ' m</text>'; });
-    var every = Math.max(1, Math.round(nC / Math.max(3, Math.floor(pw / 58))));
-    for (i = 0; i < nC; i++) if (i % every === 0 || i === nC - 1) s += '<text x="' + (Lp + (i + .5) * cw).toFixed(1) + '" y="' + (H - 9) + '" text-anchor="middle" font-size="9">' + esc(cols[i]) + '</text>';
+    (S._tight ? [0, 150, 300] : [0, 50, 100, 150, 200, 250, 300]).forEach(function (d) { if (d <= depthMax) s += '<text x="' + (Lp - 5) + '" y="' + (Y(d) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9">' + d + ' m</text>'; });
+    /* В плитке обзора долготы стояли вплотную и сливались: там оставляем только края —
+       первую и последнюю (владелец 06.09). Глубины слева тоже прореживаем. */
+    if (S._tight) {
+      [0, nC - 1].forEach(function (i2) {
+        s += '<text x="' + (Lp + (i2 + .5) * cw).toFixed(1) + '" y="' + (H - 9) + '" text-anchor="' + (i2 ? 'end' : 'start') + '" font-size="9">' + esc(cols[i2]) + '</text>';
+      });
+    } else {
+      var every = Math.max(1, Math.round(nC / Math.max(3, Math.floor(pw / 58))));
+      for (i = 0; i < nC; i++) if (i % every === 0 || i === nC - 1) s += '<text x="' + (Lp + (i + .5) * cw).toFixed(1) + '" y="' + (H - 9) + '" text-anchor="middle" font-size="9">' + esc(cols[i]) + '</text>';
+    }
     // легенда справа
     var lx = W - Rp + 10, ly = Tp + 4;
-    [[vmax, 'var(--nino)', 1], [vmax / 2, 'var(--nino)', .5], [0, 'var(--grid)', .6], [-vmax / 2, 'var(--nina)', .5], [-vmax, 'var(--nina)', 1]].forEach(function (it, k) {
+    var SCALE = [[vmax, 'var(--nino)', 1], [vmax / 2, 'var(--nino)', .5], [0, 'var(--grid)', .6], [-vmax / 2, 'var(--nina)', .5], [-vmax, 'var(--nina)', 1]];
+    if (scaleLegend(SCALE.map(function (it) { return [fnum(it[0], 1) + ' °C', it[1], 'box', it[2]]; })
+        .concat(cfg.d20 ? [['20 °C now', 'var(--text)', 'line']] : [])
+        .concat(cfg.d20clim ? [['20 °C normal', 'var(--text)', 'line', 1]] : []))) return s + '</svg>';
+    SCALE.forEach(function (it, k) {
       s += '<rect x="' + lx + '" y="' + (ly + k * 15) + '" width="14" height="11" style="fill:' + it[1] + '" opacity="' + it[2] + '"/>' +
         (it[0] < 0 ? '<rect x="' + lx + '" y="' + (ly + k * 15) + '" width="14" height="11" fill="url(#hneg)" opacity=".7"/>' : '') +
         '<text x="' + (lx + 19) + '" y="' + (ly + k * 15 + 9) + '" font-size="9">' + fnum(it[0], 1) + ' °C</text>';
@@ -3278,9 +3331,21 @@
         /* В плитке легенда не помещается ни у одного графика: 300 пикселей ширины на
            картинку и подписи (владелец 06.09: «легенды везде сделать иконкой и открывать в
            тултипе»). Флаг включает у всех графиков одно поведение — значок вместо столбца. */
-        S._tight = w < 420; S._tightW = w;
+        S._tight = w < 420; S._tightW = w; S._legend = null;
         try { host.innerHTML = t.draw(w, h); } catch (err) { host.innerHTML = '<div class="note warn">' + esc(String(err.message || err)) + '</div>'; }
-        S._tight = false;
+        /* Метка «legend» — в строке названия карточки (владелец 06.09), а не в картинке:
+           там она отнимала место у самого графика. Список рядов график сложил в S._legend. */
+        var head = t._el && t._el.querySelector('.ov-t');
+        if (head) {
+          var oldChip = head.querySelector('.ov-leg');
+          if (oldChip) oldChip.remove();
+          if (S._legend) {
+            var chip = el('span', 'ov-leg', 'legend');
+            chip.setAttribute('data-src', JSON.stringify(S._legend));
+            head.appendChild(chip);
+          }
+        }
+        S._tight = false; S._legend = null;
       });
     }
     requestAnimationFrame(drawAll);
