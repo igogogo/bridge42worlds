@@ -800,7 +800,7 @@ def candidates(days, limit):
     return 0
 
 
-def by_paper(aid, lang, to, send, test=False, lang_explicit=False):
+def by_paper(aid, lang, to, send, test=False, lang_explicit=False, over_cap=False):
     """Письмо про КОНКРЕТНУЮ свежую работу — она идёт первой строкой.
 
     ЯЗЫК ВЫЧИСЛЯЕТСЯ ПО АВТОРУ, а не берётся из флага. У --lang значение по
@@ -849,10 +849,15 @@ def by_paper(aid, lang, to, send, test=False, lang_explicit=False):
         # проверялось перед отправкой: целый блок обоснования существовал как цифра
         # на экране (найдено разбором 02.09). Кнопка «отправить» в панели легко
         # послала бы за раз всю очередь — ровно то, от чего разгон и защищает.
-        if daily_cap() <= 0:
+        if daily_cap() <= 0 and not over_cap:
             print("на сегодня норма писем выбрана — разгон домена (5→10→20→30). "
                   "Остальные уйдут завтра.")
             return 1
+        if daily_cap() <= 0:
+            # Обход нормы — только по прямому слову владельца и только вручную: разгон
+            # домена защищает доставку, а не нас. Печатаем вслух, чтобы это не стало
+            # привычкой (владелец 06.09: «отправь сейчас ещё»).
+            print("⚠️ сверх нормы разгона, по прямой просьбе владельца")
     import council_mail
     if council_mail.send(to, subj, body, sender=FROM, html=html):
         if test:
@@ -877,6 +882,8 @@ def main():
     ap.add_argument("--days", type=int, default=30, help="глубина свежести, дней")
     ap.add_argument("--limit", type=int, default=40, help="сколько показать")
     ap.add_argument("--id", help="писать по конкретной работе (её arXiv-номер)")
+    ap.add_argument("--over-cap", dest="over_cap", action="store_true",
+                    help="отправить сверх суточной нормы разгона (только по слову владельца)")
     ap.add_argument("--test", action="store_true",
                     help="пробное письмо себе: уходит, но в журнал не пишется")
     a = ap.parse_args()
@@ -884,7 +891,7 @@ def main():
     if a.candidates:
         return candidates(a.days, a.limit)
     if a.id:
-        return by_paper(a.id, a.lang, a.to, a.send or a.test, a.test,
+        return by_paper(a.id, a.lang, a.to, a.send or a.test, a.test, over_cap=a.over_cap,
                         lang_explicit=("--lang" in sys.argv))
 
     if a.log:
