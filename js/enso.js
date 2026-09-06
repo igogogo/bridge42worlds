@@ -1713,7 +1713,7 @@
     var isNew = S.P && S.P.alerts && S.P.alerts.indexOf(a.title) < 0;
     c.innerHTML = '<div class="ch"><b>' + esc(a.level) + '</b><span class="kk">' + esc(a.kind || 'climate') + '</span>' + (isNew ? '<span class="new">new</span>' : '') + '</div>' +
       '<div class="ct">' + mark(a.title) + '</div><div class="cd">' + mark(a.detail) + '</div>' +
-      '<div class="cgo">' + esc(ALERT_GO[a.kind || 'climate'].label) + ' →</div>' + (linksHtml('alert:' + aslug(a.title)) || linksHtml('alert:' + i));
+      '<div class="cgo">' + esc(ALERT_GO[a.kind || 'climate'].label) + ' →</div>' + (linksHtml('alert:' + (a.id || aslug(a.title))) || linksHtml('alert:' + aslug(a.title)) || linksHtml('alert:' + i));
     /* КАРТОЧКА ТРЕВОГИ ВЕДЁТ ТУДА, ГДЕ ЕЁ ЧИСЛА. Владелец 04.09: «слева карточки, они же тоже
        могут вести на какие-то риски или наши графики навигации». Тревога — это утверждение,
        и у каждого утверждения на панели есть своя сцена: климат живёт в рядах, цены в товарах,
@@ -3208,7 +3208,7 @@
   function anchorLabel(key) {
     var D = S.D, i = key.indexOf(':'), kind = key.slice(0, i), id = key.slice(i + 1);
     if (kind === 'risk') { var r = (D.risks || []).filter(function (x) { return x.id === id; })[0]; return r ? 'risk: ' + r.title : (/^\d+$/.test(id) && D.risks[id] ? 'risk: ' + D.risks[id].title : null); }
-    if (kind === 'alert') { var a = (D.alerts || []).filter(function (x) { return aslug(x.title) === id; })[0]; return a ? 'alert: ' + a.title : (/^\d+$/.test(id) && D.alerts[id] ? 'alert: ' + D.alerts[id].title : null); }
+    if (kind === 'alert') { var a = (D.alerts || []).filter(function (x) { return x.id === id || aslug(x.title) === id; })[0]; return a ? 'alert: ' + a.title : (/^\d+$/.test(id) && D.alerts[id] ? 'alert: ' + D.alerts[id].title : null); }
     if (kind === 'term') return S.G[id] ? 'term: ' + S.G[id].name : null;
     if (kind === 'region') { var rg = (((D.regions || {}).items) || []).filter(function (x) { return x.id === id; })[0]; return rg ? 'region: ' + rg.name : null; }
     if (kind === 'block') return 'block: ' + (BLOCK_LBL[id] || id);

@@ -91,7 +91,8 @@ def anchors():
                     "text": " ".join([r["title"], r.get("plain") or "", r.get("evidence") or "",
                                       "What to watch: " + (r.get("watch") or "")])})
     for i, a in enumerate(D.get("alerts") or []):
-        out.append({"id": "alert:" + _aslug(a["title"]), "label": a["title"], "kind": "alert:" + (a.get("kind") or "climate"),
+        # id тревоги переживает смену числа в заголовке, slug — нет (06.09).
+        out.append({"id": "alert:" + (a.get("id") or _aslug(a["title"])), "label": a["title"], "kind": "alert:" + (a.get("kind") or "climate"),
                     "text": a["title"] + ". " + (a.get("detail") or "")})
     for r in (ref.get("regions") or []):
         seasons = " ".join((v or {}).get("note") or "" for v in (r.get("seasons") or {}).values())
