@@ -55,51 +55,12 @@ def log(msg):
         f.write(line + "\n")
 
 
-RUNS = ROOT / "data" / "pipeline-runs.json"
-RUN_ID = None
-
-
 def report(plan=None, done=None, current=None, steps=None, failed=None, finish=False, title=""):
-    """Запись прогона в общий журнал data/pipeline-runs.json — тот же файл, из которого
-    страница /pipeline.html рисует дневной и недельный прогоны.
-
-    Владелец 06.09: «есть же страница для мониторинга пайплайнов». Прогон по теме шёл мимо
-    неё: свой текстовый журнал видно только с машины. Пишем тем же форматом и родом
-    «topic», чтобы схема показывала все три прогона в одном месте. Ошибка записи журнала
-    не должна ронять прогон — она стоит строки в логе, а не работы.
-    """
-    global RUN_ID
-    try:
-        runs = json.loads(RUNS.read_text(encoding="utf-8")) if RUNS.exists() else []
-    except Exception:                                            # noqa: BLE001
-        runs = []
-    if not isinstance(runs, list):
-        runs = []
-    if RUN_ID is None:
-        RUN_ID = "тема " + datetime.now().strftime("%Y-%m-%d %H:%M")
-    rec = next((r for r in runs if r.get("id") == RUN_ID), None)
-    if rec is None:
-        rec = {"id": RUN_ID, "kind": "topic", "days": [],
-               "started": datetime.now().strftime("%Y-%m-%d %H:%M"),
-               "origin": os.environ.get("B42_RUN_ORIGIN") or "manual", "title": title}
-        runs.append(rec)
-    now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    if plan is not None:
-        rec["plan"] = list(plan)
-    if done is not None:
-        rec["done"] = list(done)
-    if steps is not None:
-        rec["steps"] = dict(steps)
-    if failed is not None:
-        rec["failed"] = list(failed)
-    rec["current"] = None if finish else current
-    rec["at"] = now
-    if finish:
-        rec["finished"] = now
-    try:
-        RUNS.write_text(json.dumps(runs[-30:], ensure_ascii=False, indent=1), encoding="utf-8")
-    except OSError as e:
-        print(f"  ⚠️ журнал прогонов не записан: {e}")
+    """Запись прогона по теме в общий журнал — сам механизм лежит в runlog.py, чтобы
+    обновление панели и прогон по теме писали одним и тем же способом (06.09)."""
+    import runlog
+    return runlog.report(kind="topic", plan=plan, done=done, current=current, steps=steps,
+                         failed=failed, finish=finish, title=title, label="тема")
 
 
 def wait_window(now):

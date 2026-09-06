@@ -24,6 +24,8 @@
 import json
 from datetime import date, timedelta
 
+import warnings
+
 import numpy as np
 from scipy import stats as st
 
@@ -236,10 +238,16 @@ def series_watch(ds, label, analog_years=None):
         fl.append(1 if (prev and np.isfinite(years[ycur][d0]) and years[ycur][d0] > max(prev)) else 0)
     out["records"]["flags45"] = fl
     band = np.array([[anom[y][d] for y in hist] for d in range(366)])
-    out["band_p10"] = [round(float(v), 3) for v in np.nanpercentile(band, 10, axis=1)]
-    out["band_p90"] = [round(float(v), 3) for v in np.nanpercentile(band, 90, axis=1)]
-    out["band_max"] = [round(float(v), 3) for v in np.nanmax(band, axis=1)]
-    out["band_min"] = [round(float(v), 3) for v in np.nanmin(band, axis=1)]
+    # 29 февраля в невисокосных годах — колонка сплошь из пропусков, и numpy честно кричит
+    # «All-NaN slice». Крик уходил в поток ошибок обновления и мешал видеть настоящие сбои,
+    # поэтому считаем под глушителем: пустой день так и остаётся пустым (владелец 06.09 —
+    # чистый журнал ошибок и есть признак здорового обновления).
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        out["band_p10"] = [round(float(v), 3) for v in np.nanpercentile(band, 10, axis=1)]
+        out["band_p90"] = [round(float(v), 3) for v in np.nanpercentile(band, 90, axis=1)]
+        out["band_max"] = [round(float(v), 3) for v in np.nanmax(band, axis=1)]
+        out["band_min"] = [round(float(v), 3) for v in np.nanmin(band, axis=1)]
     out["cur_year"] = [None if not np.isfinite(v) else round(float(v), 3) for v in cur]
     out["last_idx"] = idx
     out["year"] = ycur

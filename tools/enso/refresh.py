@@ -110,17 +110,44 @@ def history(snaps):
     return rows
 
 
+PLAN = ["источники", "ряды и риски", "тревоги", "саммари модели", "снимок и история",
+        "журнал значений", "лента новостей"]
+
+
+DONE = []
+
+
+def step(name, finish=False, failed=None):
+    """Отметка шага на странице мониторинга: прошлый шаг уходит в пройденные, новый
+    становится текущим. Молча переживает любую беду с журналом: обновление панели важнее
+    собственного отчёта о нём."""
+    try:
+        import runlog
+        for s in PLAN:                                           # всё до текущего — пройдено
+            if s == name:
+                break
+            if s not in DONE:
+                DONE.append(s)
+        runlog.report(kind="enso", plan=PLAN, done=DONE, current=name, finish=finish,
+                      failed=failed, title="обновление панели El Niño", label="панель")
+    except Exception:                                            # noqa: BLE001
+        pass
+
+
 def main(fetch=True, llm=True):
     SNAP.mkdir(parents=True, exist_ok=True)
     snaps = sorted(SNAP.glob("*.json"))
     prev = json.loads(snaps[-1].read_text(encoding="utf-8")) if snaps else None
 
+    step("источники")
     cur = watch.run(fetch=fetch)
+    step("ряды и риски")
     cur["stamp"] = datetime.now().strftime("%Y-%m-%d %H:%M")
     diff = diff_against(prev, cur)
     cur["diff"] = diff
 
     # детектор перелома — правила; потом саммари моделью по фактам, включая срабатывания
+    step("тревоги")
     import alerts as A
     cur["alerts"], cur["shout"] = A.detect(cur, prev)
     # Тревоги по ценам и по поломке моделей встают в тот же список: панель показывает их
@@ -156,6 +183,7 @@ def main(fetch=True, llm=True):
     for a in cur["alerts"]:
         a.setdefault("id", alert_id(a.get("title") or ""))
     cur["shout"] = any(a["level"] == "SHOUT" for a in cur["alerts"])
+    step("саммари модели")
     import summary as SM
     if llm:
         cur["summary"] = SM.summarize(cur)
@@ -169,6 +197,7 @@ def main(fetch=True, llm=True):
 
     # Память о прошлом прогоне: панель показывает «сейчас / было в прошлый раз» на каждом
     # числе (владелец 03.09). Кладём компактный слепок, а не весь прошлый снимок.
+    step("снимок и история")
     cur["prev"] = compact(prev)
     cur = clean(cur)
     (ROOT / "latest.json").write_text(json.dumps(cur, ensure_ascii=False, default=str, allow_nan=False), encoding="utf-8")
@@ -180,20 +209,27 @@ def main(fetch=True, llm=True):
     # «что изменилось с прошлого ЗНАЧЕНИЯ»; если журнал собирать руками, он однажды отстанет
     # от снимков, и стрелки начнут врать молча. Собирается по всем снимкам, поэтому порядок
     # важен: сначала записали свежий снимок, потом журнал.
+    step("журнал значений")
+    failed = []
     try:
         import journal as JR
         JR.build()
     except Exception as e:                                       # noqa: BLE001
         print("  журнал значений не собрался:", str(e)[:160])
+        failed.append("журнал значений: " + str(e)[:90])
     # ЛЕНТА НОВОСТЕЙ — из журнала, правилами (владелец 05.09): что изменилось за неделю и что впереди.
+    step("лента новостей")
     try:
         import news as NWS
         NWS.build()
     except Exception as e:                                       # noqa: BLE001
         print("  новости не собрались:", str(e)[:160])
+        failed.append("лента новостей: " + str(e)[:90])
+    DONE[:] = list(PLAN)
+    step("готово", finish=True, failed=failed + ["источник не ответил: " + k for k, v in cur["sources"].items() if not v["fresh"]])
     stale = [k for k, v in cur["sources"].items() if not v["fresh"]]
     print("готово:", cur["stamp"], "| индекс риска", cur["risk_index"],
-          "| рисков", len(cur["risks"]), "| несвежих источников", len(stale), stale or "")
+          "| рисков", len(cur["risks"]), "| не ответили источников", len(stale), stale or "")
     for d in diff:
         print("  ·", d)
     if cur["shout"]:

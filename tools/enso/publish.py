@@ -53,7 +53,7 @@ def main():
     print("вердикт:", (s.get("verdict") or "")[:300])
     stale = [k for k, v in cur["sources"].items() if not v["fresh"]]
     if stale:
-        print("несвежие источники:", ", ".join(stale))
+        print("не ответили источники:", ", ".join(stale))
     if a.dry:
         return 0
     if not a.yes:
