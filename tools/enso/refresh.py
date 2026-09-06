@@ -10,6 +10,7 @@
 «а что нового с прошлого раза».
 """
 import json
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -145,6 +146,11 @@ def main(fetch=True, llm=True):
     except Exception as e:                                       # noqa: BLE001
         cur["alerts"].append({"level": "WATCH", "kind": "models", "title": "Model alerts failed",
                               "detail": str(e)[:160]})
+    # УСТОЙЧИВЫЙ id ТРЕВОГИ. Заголовок несёт число, число меняется каждый день — по нему
+    # сравнивать нельзя (лента 06.09 объявляла новыми старые тревоги). Слепок берём с
+    # заголовка, из которого убраны числа: датчик тот же — id тот же.
+    for a in cur["alerts"]:
+        a.setdefault("id", alert_id(a.get("title") or ""))
     cur["shout"] = any(a["level"] == "SHOUT" for a in cur["alerts"])
     import summary as SM
     if llm:
@@ -197,6 +203,23 @@ def main(fetch=True, llm=True):
             print("  модель недоступна:", s["error"])
     return cur
 
+
+
+def alert_id(title):
+    """Слепок заголовка без чисел: «Cocoa: +43 % since the event began» → cocoa_since_the_event_began.
+
+    Числа из заголовка уходят: они меняются каждый день, а датчик остаётся тем же. Номер
+    бассейна — исключение, это часть имени: Niño 3 и Niño 1+2 обязаны различаться, поэтому
+    их цифры сперва записываются словами и переживают чистку.
+    """
+    W = {"0": "zero", "1": "one", "2": "two", "3": "three", "4": "four",
+         "5": "five", "6": "six", "7": "seven", "8": "eight", "9": "nine"}
+    s = title.lower()
+    s = re.sub(r"niño\s*([0-9](?:[.+][0-9])?)",
+               lambda m: "nino" + "".join(W.get(c, "") for c in m.group(1)), s)
+    s = re.sub(r"[-+−]?\d[\d\s.,:]*\s*(%|°c|σ|m/s|days?|mo|th)?", " ", s)
+    s = re.sub(r"[^a-zà-ÿа-я]+", "_", s).strip("_")
+    return s[:48] or "alert"
 
 
 def new_block_alerts(cur):

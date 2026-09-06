@@ -18,6 +18,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
 SNAP = ROOT / "snapshots"
+SEEN_FILE = ROOT / "risk-seen.json"
+ALERT_FILE = ROOT / "alert-seen.json"   # id риска -> когда впервые увидели (см. шапку)
 DAYS = 7
 
 # Какие ряды журнала стоят новости, куда вести и как подписать
@@ -74,6 +76,29 @@ def _snapshot_before(snaps, when):
     return _load(pick, {}) if pick else {}
 
 
+def _remember(path, ids, today, label=None):
+    """Список «когда впервые увидели» — единственный надёжный источник для слова «новый».
+
+    Снимки старше 03.09 не знают id рисков, самый ранний вообще на другом языке, а
+    заголовки тревог несут числа: сравнивать не с чем. Поэтому ведём свой список.
+    Молчим, когда он только заводится или когда разом пришло больше двух незнакомых id:
+    так выглядит не природа, а новые датчики в коде (поймано 06.09 — лента объявила
+    новыми двенадцать рисков, висящих неделями).
+    """
+    reg = _load(path, {})
+    fresh = [i for i in ids if i not in reg]
+    quiet = (not reg) or len(fresh) > 2
+    for i in fresh:
+        reg[i] = {"first": today.isoformat(), "quiet": bool(quiet)}
+    for i in ids:
+        reg[i]["last"] = today.isoformat()
+        reg[i].pop("gone", None)                                 # вернулась — снова живая
+    if fresh and label:
+        print(label + ": запомнили " + str(len(fresh)) + " новых id" + (" (молча)" if quiet else ""))
+    path.write_text(json.dumps(reg, ensure_ascii=False, indent=1), encoding="utf-8")
+    return reg
+
+
 def build(verbose=False):
     D = _load(ROOT / "latest.json", {})
     J = _load(ROOT / "journal.json", {})
@@ -83,6 +108,19 @@ def build(verbose=False):
     since = today - timedelta(days=DAYS)
     items = []
     risks_by_id = {r.get("id"): r for r in (D.get("risks") or [])}
+    # Снимок недельной давности нужен и рискам, и тревогам: «новый» — тот, кого там не было.
+    _all_snaps = sorted(SNAP.glob("*.json"))
+    # Панель моложе недели: снимка недельной давности может не быть вовсе (первый — 02.09).
+    # Тогда сравниваем с САМЫМ РАННИМ, что есть, иначе «новым» окажется всё подряд.
+    OLD_SNAP = _snapshot_before(_all_snaps, since) or (_load(_all_snaps[0], {}) if _all_snaps else {})
+    # Свой список «когда впервые увидели» — единственный надёжный источник для слова
+    # «новый»: снимки старше 03.09 не знают id, а самый ранний ещё и на другом языке.
+    SEEN = _remember(SEEN_FILE, [r for r in risks_by_id if r], today, verbose and "риски")
+    ALERTS_NOW = {a.get("id"): a for a in (D.get("alerts") or []) if a.get("id")}
+    ASEEN = _remember(ALERT_FILE, list(ALERTS_NOW), today, verbose and "тревоги")
+    for aid, a in ALERTS_NOW.items():                            # заголовок нужен строке «снята»
+        ASEEN[aid]["title"] = a.get("title") or aid
+    ALERT_FILE.write_text(json.dumps(ASEEN, ensure_ascii=False, indent=1), encoding="utf-8")
 
     # 1. значения
     for key, (title, view, sub) in WATCHED.items():
@@ -116,33 +154,52 @@ def build(verbose=False):
             continue
         rid = key[5:]
         r = risks_by_id.get(rid) or {}
-        if len(e) == 1:
+        # НОВЫЙ — ЗНАЧИТ ПОЯВИЛСЯ НА ЭТОЙ НЕДЕЛЕ. Журнал пишет запись только при СМЕНЕ
+        # значения, поэтому у риска, который держится месяц на одном уровне, ровно одна
+        # запись — и лента каждую неделю объявляла его «новым» (12 таких строк 06.09).
+        # Смотрим дату ПЕРВОЙ записи: она и есть день появления.
+        first_d = (e[0].get("d") or "")[:10]
+        # …и его действительно не было в снимке недельной давности. Журнал знает риски
+        # только с того дня, как у них появились устойчивые id (03.09), поэтому одной
+        # даты первой записи мало: без этой проверки лента объявляла новыми двенадцать
+        # давно висящих рисков (поймано 06.09).
+        s = SEEN.get(rid) or {}
+        # Новый — тот, кого мы впервые увидели внутри окна и не заводили молча.
+        is_new = bool(s.get("first")) and s["first"] >= since.isoformat() and not s.get("quiet")
+        if len(e) == 1 and first_d >= since.isoformat() and is_new:
             items.append({"date": d, "kind": "risk", "title": "New risk: " + (r.get("title") or m.get("title") or rid),
                           "detail": "level " + str(last["v"]) + " · " + (r.get("horizon") or ""),
                           "why": (r.get("plain") or "")[:280], "go": ["risk", rid]})
-        else:
+        elif len(e) > 1:
+            # Смена уровня. Раньше сюда попадали только риски с историей — теперь ветка
+            # ловит и молча заведённые, у которых записи всего одна: без этой проверки
+            # сборка ленты падала (поймано 06.09).
             prev = e[-2]
             if prev["v"] != last["v"]:
                 items.append({"date": d, "kind": "risk", "title": (r.get("title") or m.get("title") or rid) + ": level " + str(prev["v"]) + " → " + str(last["v"]),
                               "detail": r.get("horizon") or "", "why": (r.get("plain") or "")[:280], "go": ["risk", rid]})
 
     # 3. тревоги: сравнение с тем, что было неделю назад
-    snaps = sorted(SNAP.glob("*.json"))
-    old = _snapshot_before(snaps, since)
     since_note = ""
-    if not old and snaps:                                    # панель моложе недели: от первого снимка
-        old = _load(snaps[0], {})
-        since_note = "alerts compared with the first snapshot, " + str(old.get("generated") or "")
-    old_titles = {a.get("title") for a in (old.get("alerts") or [])}
-    for a in D.get("alerts") or []:
-        if a.get("title") not in old_titles:
-            items.append({"date": (D.get("generated") or "")[:10], "kind": "alert", "title": (a.get("level") or "") + ": " + (a.get("title") or ""),
+    day = (D.get("generated") or "")[:10]
+    for aid, a in ALERTS_NOW.items():
+        s = ASEEN.get(aid) or {}
+        if s.get("first") and s["first"] >= since.isoformat() and not s.get("quiet"):
+            items.append({"date": s["first"], "kind": "alert", "title": (a.get("level") or "") + ": " + (a.get("title") or ""),
                           "detail": (a.get("detail") or "")[:240], "why": "", "go": ["now", "analogs"]})
-    cur_titles = {a.get("title") for a in (D.get("alerts") or [])}
-    for t in old_titles - cur_titles:
-        if t:
-            items.append({"date": (D.get("generated") or "")[:10], "kind": "alert", "title": "Alert cleared: " + t,
+    # Снята — значит вчера была, сегодня нет. Печатаем один раз: пометка gone остаётся в
+    # списке, иначе строка «снята» висела бы всю неделю после исчезновения.
+    changed = False
+    for aid, s in ASEEN.items():
+        if aid in ALERTS_NOW or s.get("quiet") or s.get("gone"):
+            continue
+        if (s.get("last") or "") >= since.isoformat():
+            items.append({"date": day, "kind": "alert", "title": "Alert cleared: " + (s.get("title") or aid),
                           "detail": "", "why": "", "go": ["now", "analogs"]})
+        s["gone"] = day
+        changed = True
+    if changed:
+        ALERT_FILE.write_text(json.dumps(ASEEN, ensure_ascii=False, indent=1), encoding="utf-8")
 
     # 4. вердикт
     for v in (J.get("verdicts") or [])[-3:]:

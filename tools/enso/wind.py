@@ -338,7 +338,11 @@ def risks(WIND):
         last = ev[-1]
         since = e.get("days_since_last")
         out.append((
-            f"{len(ev)} westerly wind bursts in the last 120 days, the latest {since} days ago", 3, "2–3 months",
+            # ЗАГОЛОВОК БЕЗ МЕНЯЮЩЕГОСЯ ЧИСЛА. «…the latest 13 days ago» назавтра становится
+            # «14 days ago», и обновление честно рапортует «новый риск» + «риск снят» на один
+            # и тот же риск: так было в прогоне 06.09. Счётчик дней ушёл в подробности.
+            f"{len(ev)} westerly wind bursts in the last 120 days", 3, "2–3 months",
+            f"The latest ended {since} days ago. " +
             "; ".join(f"{x['start']} to {x['end']} ({x['days']} d, peak {x['peak']} m/s)" for x in ev) +
             f". Threshold {e.get('threshold')} m/s = two sigma of the daily anomaly. Last week: {e.get('mean7')} m/s.",
             "Bursts are how an El Niño is fed: the warm water each one sends east surfaces off South America two to "
