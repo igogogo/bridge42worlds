@@ -2063,7 +2063,13 @@
 
     var tp = sm.turning_point || {}, cav = Array.isArray(sm.caveats) ? sm.caveats : (sm.caveats ? [sm.caveats] : []);
     var lead = el('div', 'lead');
-    lead.innerHTML = '<b>' + (sm.error ? 'By rules, without the model' : esc(sm.model || 'model') + ', supervised by ' + CREW.supervisor) + ':</b> ' + mark(sm.verdict || '');
+    /* Две подписи в шапке: кто написал и кто проверил. Пояснение — в подсказке у каждой,
+       чтобы читатель понимал, что одна модель пишет, а другая сверяет (владелец 06.09). */
+    var wPay = { name: CREW.writer + ' \u2014 writes', def: 'Writes this verdict from the numbers on this page: the rules extract the facts, the model puts them into words. It may choose what to talk about; it may not invent a number or change its meaning.', src: 'our pipeline', date: (S.D.stamp || '').slice(0, 10) };
+    var st0 = reviewState();
+    var cPay = { name: CREW.supervisor + ' \u2014 checks', def: 'Reads every claim of the verdict against the same numbers, sharpens the wording where it is unclear, and writes nothing of its own. ' + (st0.done ? 'This verdict has been checked.' : 'This verdict has not been checked yet: ' + st0.why + '.'), src: 'our pipeline', date: st0.done ? (st0.rv.at || '').slice(0, 10) : (S.D.stamp || '').slice(0, 10) };
+    lead.innerHTML = '<b>' + (sm.error ? 'By rules, without the model'
+      : '<span data-src="' + esc(JSON.stringify(wPay)) + '">' + esc(sm.model || 'model') + '</span> writes, <span data-src="' + esc(JSON.stringify(cPay)) + '">' + esc(CREW.supervisor) + '</span> checks') + ':</b> ' + mark(sm.verdict || '');
     body.appendChild(lead);
 
     var rows = [
@@ -2085,9 +2091,15 @@
     var kp = el('div', 'kpis');
     kp.innerHTML = '<div class="kpi"><div class="kn">' + term('riskindex', 'risk index') + '</div><div class="kv">' + D.risk_index + '<small>of 100</small></div><div class="km">' + (D.risks || []).length + ' risks on the board, ' + (D.alerts || []).length + ' alerts</div>' + kmeta('risk_index') + '</div>' +
       '<div class="kpi"><div class="kn">verdicts stored</div><div class="kv" style="font-size:17px">' + ((J.verdicts || []).length) + '</div><div class="km">only the ones that actually changed</div>' + kmeta(null, 'our own record', (J.built || '').slice(0, 10)) + '</div>' +
-      '<div class="kpi"><div class="kn">the machine</div><div class="kv" style="font-size:15px;line-height:1.25">' + esc(sm.model || 'rules') + '<br><small style="margin:0">supervised by ' + esc(CREW.supervisor) + '</small></div><div class="km">' + (sm.error ? esc(sm.error) : 'DeepSeek writes the verdict from the numbers on this page; Fable reads it against the same numbers before it goes out') + '</div>' + kmeta(null, 'our pipeline', (D.stamp || '').slice(0, 10)) + '</div>';
+      '<div class="kpi"><div class="kn">who wrote and who checked</div>' +
+      '<div class="kv crew"><span class="cr-r">writes</span> ' + esc(sm.model || 'rules') + '<br>' +
+      '<span class="cr-r">checks</span> ' + esc(CREW.supervisor) + '</div>' +
+      '<div class="km">' + (sm.error ? esc(sm.error)
+        : 'The rules pull the facts, ' + esc(CREW.writer) + ' puts them into words and may not invent a number; ' +
+          esc(CREW.supervisor) + ' reads every claim against the same numbers and sharpens the wording. ' + reviewLine()) +
+      '</div>' + kmeta(null, 'our pipeline', (D.stamp || '').slice(0, 10)) + '</div>';
     body.appendChild(kp);
-    body.appendChild(el('div', 'cap', 'The verdict is an interpretation of our own numbers by a language model, not a source. Every claim in it can be checked on the scene it came from \u2014 the buttons above lead there. When the model is unavailable, the same block is filled by rules and says so.'));
+    body.appendChild(el('div', 'cap', 'The verdict is an interpretation of our own numbers by a language model, not a source. Every claim in it can be checked on the scene it came from \u2014 the buttons above lead there. Two models work here and neither measures anything: ' + esc(CREW.writer) + ' writes the verdict from the numbers, ' + esc(CREW.supervisor) + ' checks it against the same numbers before it is published and says so above. When the writing model is unavailable, the same block is filled by rules and says so.'));
   }
 
   function viewNow() {
@@ -2857,6 +2869,28 @@
 
   // ---------------------------------------------------------------- Ocean (экспертиза 04.09)
   var CREW = { writer: 'DeepSeek V4 Pro', supervisor: 'Fable (Claude)' };
+
+  /* ПРОВЕРКА — ФАКТ, А НЕ ОБЕЩАНИЕ. review.py кладёт в summary.review, кто проверил и при
+     каком штампе пересчёта. Если после этого данные пересчитали, вердикт стал другим, и
+     старая отметка к нему не относится: панель обязана сказать это вслух. */
+  function reviewState() {
+    var D = S.D || {}, rv = ((D.summary || {}).review) || null;
+    if (!rv || !rv.model) return { done: false, why: 'not checked yet' };
+    if (rv.stamp && D.stamp && rv.stamp !== D.stamp)
+      return { done: false, stale: true, rv: rv, why: 'the verdict was rewritten after the last check (' + rv.at + ')' };
+    return { done: true, rv: rv };
+  }
+
+  function reviewLine() {
+    var st = reviewState();
+    if (!st.done) return '<span class="rv-no">' + esc(st.why) + '</span>';
+    var rv = st.rv, bits = [];
+    if (rv.findings) bits.push(rv.findings + (rv.findings === 1 ? ' finding' : ' findings'));
+    if (rv.edits) bits.push(rv.edits + (rv.edits === 1 ? ' wording fixed' : ' wordings fixed'));
+    if (!bits.length) bits.push('nothing to correct');
+    return '<span class="rv-ok">checked ' + esc((rv.at || '').slice(0, 10)) + ' \u00b7 ' + esc(bits.join(', ')) +
+      '</span>' + (rv.blocking ? ' <span class="rv-no">blocking issues open</span>' : '');
+  }
   var BOX_ORDER = [['nino34', 'Niño 3.4'], ['nino3', 'Niño 3'], ['nino12', 'Niño 1+2'], ['nino4', 'Niño 4'], ['gulf', 'Gulf'], ['world', 'World ocean']];
 
   /* Тепловая карта разреза: столбцы — долготы, строки — глубины; цвет — знак и величина

@@ -501,6 +501,13 @@
     padding:1px 6px;cursor:pointer;flex-shrink:0}
   .jh:hover{color:var(--ochre);border-color:color-mix(in srgb, var(--ochre) 45%, var(--hair))}
   /* таблица истории внутри карточки */
+  /* Кто написал и кто проверил: роль подписью, отметка проверки — зелёная, её отсутствие
+     — приглушённая, но заметная (владелец 06.09). */
+  .kv.crew{font-size:13px;line-height:1.5;font-family:var(--mono)}
+  .kv.crew .cr-r{display:inline-block;min-width:44px;font-size:9.5px;letter-spacing:.06em;
+                 text-transform:uppercase;color:var(--soft)}
+  .rv-ok{color:var(--nina);white-space:nowrap}
+  .rv-no{color:var(--soft);font-style:italic}
   .htab{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;margin-top:6px}
   /* Подсказка переносит по любому месту (длинные ссылки), и в узкой колонке «↑ +0.18»
      уезжало на свою строку. В таблице истории перенос выключен, а числа выровнены по
@@ -753,7 +760,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=efa0adf1c9"></script>
+<script src="/js/enso.js?v=816bfa9b60"></script>
 <script src="/js/sitenav.js?v=cf6fd79772"></script>
 </body>
 </html>
