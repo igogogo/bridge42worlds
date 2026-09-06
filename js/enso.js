@@ -2009,7 +2009,10 @@
     var rows = all ? e : e.slice(0, 8);
     var s = '<b>' + esc(r.title || k) + '</b>' +
       'Every line is a change of the DATA, not of our refresh: the panel can update six times a day and this list stay still.' +
-      '<table class="htab">' + rows.map(function (x, i) {
+      /* Подписи колонок: без них столбик чисел и стрелок читался как одно месиво
+         (владелец 06.09: «не понятно расположено до конца»). */
+      '<table class="htab"><tr class="hh"><td>date of the data</td><td class="v">value</td>' +
+      '<td class="a">change</td></tr>' + rows.map(function (x, i) {
         var nx = rows[i + 1];
         return '<tr><td>' + esc(x.d) + '</td><td class="v">' + jval(x.v, dg) + (r.unit ? ' ' + esc(r.unit) : '') +
           '</td><td class="a">' + (nx ? jdelta(x.v, nx.v, dg) : '') + '</td></tr>';
@@ -2125,6 +2128,10 @@
       plot(body, function (w, h) { return pacific(NW, w, h); });
       // поле карты держит форму 2:1, иначе в полном экране вокруг неё пустота
       if (S.plotEl) S.plotEl.classList.add('map-fit');
+      /* Под картой ещё два ряда кнопок и четыре плашки: на невысоком экране они не влезают
+         и сцена их обрезала (владелец 06.09: «карточки внизу вышли за пределы экрана»).
+         Карта ужимается первой, а если и этого мало — тело сцены прокручивается. */
+      body.classList.add('scroll');
     } else if (k === 'weekly') plot(body, function (w, h) { return chartNoaa(NW, w, h); });
     else if (k === 'weekly_a') {
       var NAMES2 = { n34a: 'Niño 3.4', n3a: 'Niño 3', n12a: 'Niño 1+2', n4a: 'Niño 4' };

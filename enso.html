@@ -486,7 +486,9 @@
      на телефоне поле было 600 пикселей высотой, а карта 170 — сверху и снизу пустота. */
   /* Поле карты: пропорция 2:1, но flex-элемент со свободной высотой схлопывался в ноль —
      держим flex:none и запас снизу. */
-  .plot.map-fit{flex:none;width:100%;height:auto;aspect-ratio:2.1/1;min-height:170px}
+  /* Карта держит форму, но может ужаться: при flex:none четыре плашки под ней вылезали
+     за низ сцены и обрезались (владелец 06.09). */
+  .plot.map-fit{flex:0 1 auto;width:100%;height:auto;aspect-ratio:2.1/1;min-height:170px}
   .stage.full .plot.map-fit{aspect-ratio:2/1;min-height:220px;max-height:calc(100vh - 220px)}
   .stage.full .ov-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
   .stage.full .ov-tile .ov-p{height:170px}
@@ -500,10 +502,19 @@
   .jh:hover{color:var(--ochre);border-color:color-mix(in srgb, var(--ochre) 45%, var(--hair))}
   /* таблица истории внутри карточки */
   .htab{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;margin-top:6px}
-  .htab td{padding:2px 0;border-bottom:1px solid color-mix(in srgb, var(--ink) 6%, transparent)}
-  .htab td.v{text-align:right;font-variant-numeric:tabular-nums}
-  .htab td.a{text-align:right;width:52px}
+  /* Подсказка переносит по любому месту (длинные ссылки), и в узкой колонке «↑ +0.18»
+     уезжало на свою строку. В таблице истории перенос выключен, а числа выровнены по
+     разрядам (владелец 06.09). */
+  .htab td{padding:2.5px 0;border-bottom:1px solid color-mix(in srgb, var(--ink) 6%, transparent);
+           white-space:nowrap;word-break:normal;overflow-wrap:normal}
+  .htab td:first-child{width:1%;padding-right:10px}
+  .htab td.v{text-align:right;font-variant-numeric:tabular-nums;padding-right:10px}
+  .htab td.a{text-align:right;min-width:58px;font-variant-numeric:tabular-nums}
+  .htab td.a b{font-weight:500}                 /* разность — не заголовок, не жирнее строки */
+  .htab tr.hh td{font-size:9.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft);
+                 border-bottom:1px solid var(--hair);padding-bottom:3px}
   .htab tr:last-child td{border-bottom:0}
+  .tip:has(.htab){max-width:min(380px,86vw)}
   .hmore{font-family:var(--mono);font-size:10px;color:var(--ochre);background:none;border:0;
     cursor:pointer;padding:4px 0 0}
 
@@ -529,6 +540,10 @@
   .tip.on{opacity:1;transform:none;pointer-events:auto;visibility:visible}
   .tip.pin{border-color:color-mix(in srgb, var(--ochre) 55%, var(--hair))}
   .tip b{font-family:var(--font-display);font-size:13.5px;display:block;margin-bottom:3px;padding-inline-end:18px}
+  /* Заголовок подсказки — жирный блок; но тем же тегом набрана разность в таблице истории,
+     и она вылезала отдельной строкой крупным кеглем (владелец 06.09: «0.18 слишком жирное
+     и большое, перенеслось всё»). Внутри таблицы <b> остаётся строчным. */
+  .tip .htab b{display:inline;font-family:var(--mono);font-size:11px;font-weight:500;margin:0;padding:0}
   .tip .x{position:absolute;top:6px;inset-inline-end:8px;background:none;border:0;cursor:pointer;
     color:var(--soft);font-size:14px;line-height:1;padding:2px 4px}
   .tip .x:hover{color:var(--nino)}
@@ -738,7 +753,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=d6901f0685"></script>
+<script src="/js/enso.js?v=efa0adf1c9"></script>
 <script src="/js/sitenav.js?v=cf6fd79772"></script>
 </body>
 </html>
