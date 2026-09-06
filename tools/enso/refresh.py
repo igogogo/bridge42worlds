@@ -49,11 +49,15 @@ def diff_against(prev, cur):
                    f"(was {pn['latest']['n34a']:+.1f}), Niño 1+2 {cn['latest']['n12a']:+.1f} (was {pn['latest']['n12a']:+.1f}).")
     if cur["risk_index"] != prev["risk_index"]:
         out.append(f"Risk index {prev['risk_index']} → {cur['risk_index']}.")
-    pt = {r["title"] for r in prev["risks"]}; ct = {r["title"] for r in cur["risks"]}
-    for t in sorted(ct - pt):
-        out.append(f"New risk: {t}.")
-    for t in sorted(pt - ct):
-        out.append(f"Risk cleared: {t}.")
+    # СРАВНЕНИЕ ПО id, А НЕ ПО ЗАГОЛОВКУ. Заголовок несёт число («…the latest 15 days
+    # ago»), и на каждое обновление рождалась пара «новый риск» / «риск снят» — а этот
+    # список читает и модель, принимая его за факты (поймано 06.09).
+    pm = {r.get("id") or r["title"]: r["title"] for r in prev["risks"]}
+    cm = {r.get("id") or r["title"]: r["title"] for r in cur["risks"]}
+    for k in sorted(cm.keys() - pm.keys()):
+        out.append(f"New risk: {cm[k]}.")
+    for k in sorted(pm.keys() - cm.keys()):
+        out.append(f"Risk cleared: {pm[k]}.")
     if len(out) == 0:
         out.append("Nothing changed.")
     return out

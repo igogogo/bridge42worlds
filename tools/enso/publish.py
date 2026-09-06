@@ -30,7 +30,10 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 FILES = ["data/enso/latest.json", "data/enso/history.json", "data/enso/glossary.json", "data/enso/journal.json",
          "data/enso/news.json",
          # береговая линия карты: Natural Earth 110m, общественное достояние, атрибуция не нужна
-         "data/enso/coast.json"]
+         "data/enso/coast.json",
+         # ЭТИХ ТРЁХ ЗДЕСЬ НЕ БЫЛО (найдено 06.09): панель их читает, а выкладка не отправляла.
+         # Разметка ссылок обновляется каждую неделю — без неё на сайте висела бы прошлая.
+         "data/enso/links.json", "data/enso/chain-ref.json", "data/enso/models-ref.json"]
 
 
 def main():

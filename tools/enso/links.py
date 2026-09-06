@@ -25,6 +25,7 @@
     python tools/enso/links.py --limit 5       на пробу, пять якорей
 """
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -227,6 +228,52 @@ def candidates(A, W, anc, wks):
     return out
 
 
+# ---------------------------------------------------------------- приговоры на диске
+VERDICTS = DATA / "links-verdicts.jsonl"
+
+
+def _verdict_key(a, picks):
+    """Якорь плюс набор кандидатов: сменился текст или список работ — спросим заново."""
+    parts = [a["id"], a.get("text") or ""] + [c["w"]["id"] for c in picks]
+    h = hashlib.md5(chr(1).join(parts).encode("utf-8")).hexdigest()
+    return a["id"] + ":" + h[:12]
+
+
+def _verdicts_load():
+    out = {}
+    if not VERDICTS.exists():
+        return out
+    for line in VERDICTS.read_text(encoding="utf-8").splitlines():
+        try:
+            o = json.loads(line)
+            out[o["k"]] = o["v"]
+        except Exception:                                    # noqa: BLE001, PERF203
+            continue                                         # битую строку просто пропускаем
+    return out
+
+
+def _verdict_save(k, v):
+    with VERDICTS.open("a", encoding="utf-8") as f:
+        f.write(json.dumps({"k": k, "v": v}, ensure_ascii=False) + chr(10))
+
+
+def _keep_from(got, picks):
+    """Ответ модели → строки ссылок. Общая для свежего ответа и для взятого из кэша."""
+    by_id = {c["w"]["id"]: c for c in picks}
+    keep = []
+    for k in (got.get("keep") or [])[:KEEP]:
+        c = by_id.get(k.get("id"))
+        if not c:
+            continue
+        keep.append({"id": c["w"]["id"], "date": c["w"]["date"], "folder": c["w"]["folder"],
+                     "title": c["w"]["title"],
+                     "our_title": c["w"].get("our_title") or "",
+                     "oneliner": c["w"].get("oneliner") or "",
+                     "score": c["score"], "weak": bool(c.get("weak")),
+                     "why": (k.get("why") or "").strip()[:180], "kind": k.get("kind") or "background"})
+    return keep
+
+
 # ---------------------------------------------------------------- проверка моделью
 def verify(anc_by_id, cands, quiet=False):
     key = os.environ.get("DEEPSEEK_API_KEY", "")
@@ -236,41 +283,48 @@ def verify(anc_by_id, cands, quiet=False):
                      "title": c["w"]["title"], "score": c["score"], "why": "", "kind": "unverified"}
                     for c in v[:KEEP]] for k, v in cands.items()}
     from openai import OpenAI
-    client = OpenAI(api_key=key, base_url="https://api.deepseek.com", timeout=120)
+    # Ожидание жёсткое и повторов ровно два: без этого обрыв связи вешал прогон навсегда
+    # (06.09: двадцать минут на 60-м якоре из 108).
+    client = OpenAI(api_key=key, base_url="https://api.deepseek.com", timeout=90, max_retries=2)
     out, spent = {}, {"in": 0, "out": 0}
+    done = _verdicts_load()
+    reused = 0
     for n, (aid, picks) in enumerate(cands.items(), 1):
         a = anc_by_id[aid]
         payload = {"statement": a["text"], "where_it_appears": a["kind"],
                    "papers": [{"id": c["w"]["id"], "title": c["w"]["title"], "abstract": c["w"]["text"][:1400]}
                               for c in picks]}
+        # Готовый приговор берём с диска: перезапуск после обрыва не переспрашивает модель,
+        # а повторная разметка спрашивает только там, где сменились кандидаты или текст.
+        ck = _verdict_key(a, picks)
+        got = done.get(ck)
+        if got is not None:
+            reused += 1
+            keep = _keep_from(got, picks)
+            if keep:
+                out[aid] = keep
+            if not quiet:
+                print(f"  {n}/{len(cands)} {aid}: из кэша, оставлено {len(keep)}")
+            continue
         try:
             r = client.chat.completions.create(
                 model=MODEL, temperature=0.1, response_format={"type": "json_object"},
                 messages=[{"role": "system", "content": SYSTEM},
                           {"role": "user", "content": json.dumps(payload, ensure_ascii=False)}])
             got = json.loads(r.choices[0].message.content)
+            _verdict_save(ck, got)                           # сразу на диск: обрыв больше не сжигает оплаченное
             if r.usage:
                 spent["in"] += r.usage.prompt_tokens; spent["out"] += r.usage.completion_tokens
         except Exception as e:                               # noqa: BLE001
             print(f"  ⚠️ {aid}: модель не ответила ({str(e)[:90]}) — якорь без ссылок")
             continue
-        by_id = {c["w"]["id"]: c for c in picks}
-        keep = []
-        for k in (got.get("keep") or [])[:KEEP]:
-            c = by_id.get(k.get("id"))
-            if not c:
-                continue
-            keep.append({"id": c["w"]["id"], "date": c["w"]["date"], "folder": c["w"]["folder"],
-                         "title": c["w"]["title"],
-                         "our_title": c["w"].get("our_title") or "",
-                         "oneliner": c["w"].get("oneliner") or "",
-                         "score": c["score"], "weak": bool(c.get("weak")),
-                         "why": (k.get("why") or "").strip()[:180], "kind": k.get("kind") or "background"})
+        keep = _keep_from(got, picks)
         if keep:
             out[aid] = keep
         if not quiet:
             print(f"  {n}/{len(cands)} {aid}: из {len(picks)} оставлено {len(keep)}")
-    print(f"проверка моделью: {spent['in']:,} + {spent['out']:,} токенов")
+    print(f"проверка моделью: {spent['in']:,} + {spent['out']:,} токенов"
+          + (f"; из кэша {reused} якорей" if reused else ""))
     return out
 
 

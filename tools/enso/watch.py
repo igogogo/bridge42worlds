@@ -609,7 +609,7 @@ def _next_year_risks(W, ONI, cur_year=None):
                       # планки: каким был год ПОСЛЕ каждого прошлого события — ровно то, чем
                       # этот риск и меряется (владелец 04.09: «важные года события подписать»)
                       levels={str(y): ann[y + 1] for y in ANALOGS if (y + 1) in ann}),
-            "climate"))
+            "climate", "warmer_next_year"))
 
     # 2. разворот в Ла-Нинью на второй год
     after = ONI.get("analogs_after") or {}
@@ -624,7 +624,7 @@ def _next_year_risks(W, ONI, cur_year=None):
         cold = [f for f in flips if f[1] <= -0.5]
         out.append((
             "A La Niña usually follows within a year or two",
-            3, "2027",
+            3, (str(year + 1) if year else "next year"),
             "After the analogues the ONI fell to " + ", ".join(f"{y}: {v:+.2f}" for y, v in flips) +
             f"; it crossed the La Niña threshold of −0.5 in {len(cold)} of {len(flips)} cases.",
             "The ocean does not simply return to normal: after a strong El Niño it usually swings the other way. "
@@ -632,14 +632,16 @@ def _next_year_risks(W, ONI, cur_year=None):
             "grain exporters that had a good year tend to have a bad one. Planning that only covers this winter "
             "misses the swing.",
             "the ONI trend after the peak; a fall of 0.3 or more per month is the usual signature of the swing",
-            None, "climate"))
+            None, "climate", "la_nina_after"))
 
     # 3. воздух догоняет воду — уже есть отдельным риском, здесь про горизонт
     lag = tw["level30"]["det"]
     out.append((
         # Экспертиза 04.09, п. 3.10(6): трёхмесячный лаг доказан для ГЛОБАЛЬНОЙ температуры
         # (r ≈ 0.7); у региональных последствий свои задержки. Заголовок — про то, что измерено.
-        "Global temperature in 2027 is likely to run above 2026; regional impacts follow their own lags",
+        (f"Global temperature in {year + 1} is likely to run above {year}" if year else
+         "Global temperature next year is likely to run above this year") +
+        "; regional impacts follow their own lags",
         3, "6–18 months",
         f"Land+ocean is {lag:+.2f} °C above trend now, while the ocean heat that drives it is still rising; "
         "in the analogues the air-temperature records, the harvest failures and the price effects all came in "
@@ -648,7 +650,7 @@ def _next_year_risks(W, ONI, cur_year=None):
         "and those arrive with a delay of six to eighteen months. The plans that matter are for next year: "
         "import contracts, reserves, water rationing, insurance.",
         "the first harvests after the peak season and the food price index six to twelve months from the onset",
-        _m_daily(tw, "Land+ocean, daily anomaly"), "climate"))
+        _m_daily(tw, "Land+ocean, daily anomaly"), "climate", "global_next_year"))
     return out
 
 
@@ -878,7 +880,9 @@ def risks(W, N34, NW, ONI, IRI=None, AIR=None):
     # ---- 11. следующий год: чем прошлые события кончались ПОСЛЕ пика
     nxt = _next_year_risks(W, ONI, cur_year=W["t2_world"].get("year"))
     for r in nxt:
-        add(*r[:6], metric=r[6], kind=r[7])
+        # id закреплён девятым полем: без него он собирался из заголовка, а в заголовке
+        # стоит год — 1 января риск сменил бы id, потеряв историю (поймано 06.09).
+        add(*r[:6], metric=r[6], kind=r[7], rid=(r[8] if len(r) > 8 else None))
 
     # ---- 12. атмосфера, топливо и слои: правила лежат в air.py, рядом с их данными
     if AIR and not AIR.get("error"):
