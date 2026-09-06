@@ -3479,6 +3479,14 @@
       hideT = setTimeout(function () { if (!overTip && !S.pinned) hide(); }, 1500);
     }
     function find(e) { return e.target.closest && e.target.closest('[data-term],[data-src]'); }
+    /* Пришёл ли клик из самой карточки. Проверяем и путь события: содержимое карточки
+       подменяется на лету («N works» → список работ), и к моменту всплытия кликнутая
+       кнопка уже не в документе. */
+    function inTip(e) {
+      if (tip.contains(e.target)) return true;
+      var path = e.composedPath ? e.composedPath() : null;
+      return !!(path && path.indexOf(tip) >= 0);
+    }
     tip.addEventListener('mouseenter', function () {
       // курсор дошёл до карточки — значит она нужна: прикалываем, чтобы не исчезла из-под рук
       overTip = true; clearTimeout(hideT); clearTimeout(pinT);
@@ -3559,7 +3567,14 @@
       }
       var x = find(e);
       if (x) { S.pinned = (S.pinned === x ? null : x); if (S.pinned) { show(x, e); tip.classList.add('pin'); } else hide(); return; }
-      if (S.pinned && !e.target.closest('#tip')) { S.pinned = null; hide(); }
+      /* КЛИК ВНУТРИ КАРТОЧКИ НЕ ЗАКРЫВАЕТ ЕЁ — ДАЖЕ ЕСЛИ КНОПКИ УЖЕ НЕТ. Владелец 06.09:
+         «на ONI в подсказке указано 1 works, но кнопка ничего не производит». Кнопка
+         работала: обработчик карточки успевал подставить список работ. Следом срабатывал
+         этот, общий, и не находил кликнутый узел в документе — потому что сам список его
+         только что и заменил. Отвязанный узел «не внутри #tip», карточку закрывало,
+         и со стороны это выглядело как мёртвая кнопка. Путь события помнит, откуда клик
+         пришёл, и после подмены разметки. */
+      if (S.pinned && !inTip(e)) { S.pinned = null; hide(); }
     });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { S.pinned = null; hide(); if (S.full) { S.full = false; render(); } } });
     hide();
