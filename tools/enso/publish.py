@@ -14,6 +14,7 @@
     python tools/enso/publish.py --no-llm   # без модели (саммари прежнее, с пометкой)
 """
 import argparse
+import json
 import os
 import subprocess
 import sys
@@ -42,10 +43,19 @@ def main():
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--no-llm", action="store_true")
     ap.add_argument("--cached", action="store_true", help="без сети, из последних удачных копий")
+    ap.add_argument("--refresh", action="store_true",
+                    help="сперва обновить данные (иначе выкладывается уже посчитанное)")
     a = ap.parse_args()
 
-    import refresh
-    cur = refresh.main(fetch=not a.cached, llm=not a.no_llm)
+    if a.refresh:
+        # Пересчёт переписывает вердикт моделью: то, что было просмотрено до этого, на сайт
+        # уже не попадёт. Поэтому он не по умолчанию, а по прямой просьбе.
+        print("пересчёт перед выкладкой: вердикт будет написан заново")
+        import refresh
+        cur = refresh.main(fetch=not a.cached, llm=not a.no_llm)
+    else:
+        cur = json.loads((ROOT / "data" / "enso" / "latest.json").read_text(encoding="utf-8"))
+        print("выкладываю посчитанное:", cur.get("stamp"), "(пересчитать — ключ --refresh)")
     s = cur.get("summary") or {}
     print("\n— итог —")
     print(f"индекс {cur['risk_index']} · рисков {len(cur['risks'])} · тревога {'ДА' if cur.get('shout') else 'нет'}"
