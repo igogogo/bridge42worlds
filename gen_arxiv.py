@@ -125,6 +125,11 @@ def fetch_arxiv_local(date_str, category="astro-ph.*"):
                 "published": d.get("published", ""),
                 "categories": cats,
                 "primary_category": cats[0] if cats else "",
+                # Та же пометка, что у local_meta: раз данные уже наши, build_article не
+                # пойдёт за arxiv-atom.xml в сеть. Без неё дневной прогон брал список дня
+                # из дампа, а потом делал по запросу на статью — за тем, что уже держал
+                # в руках (найдено 06.09 при переносе правок в общий слой).
+                "from_local": True,
             })
     print(f"  📦 Локальный кэш: {len(articles)} статей")
     return articles

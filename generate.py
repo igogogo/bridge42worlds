@@ -6294,6 +6294,9 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
                 print(f"  ⏭️ {a['id']} — потолок доли {pfx}* ({quota[pfx]} на день) выбран")
         best = kept
     inputs = load_generation_inputs()
+    # PDF дня — пачкой и до разбора, тем же приёмом, что и при разборе по списку id.
+    if best:
+        prefetch_pdfs([a["id"] for a in best])
 
     # ДОЛЯ ПОЛНЫХ РАЗБОРОВ — КОНСТАНТА, А НЕ НАСТРОЕНИЕ ЗАПУСКА. Раньше глубина
     # решалась одним флагом на весь день: расписание звало с --express и делало сто
@@ -6708,6 +6711,10 @@ def generate_ids(id_list, force=False, express=False, allow_restricted=False, on
             item["only_langs"] = only_langs
         return item
 
+    # PDF — пачкой и ДО разбора: единственное, чего нет в нашей базе, и единственное
+    # место, где прогон зависит от чужой доступности. Внутри разбора таймаут уносит всю
+    # работу целиком (шесть работ за ночь 06.09), здесь — только один файл.
+    prefetch_pdfs([a.split("v")[0] for a in id_list])
     print(f"  🚀 Генерация {len(id_list)} статей по id в {ARTICLE_WORKERS} потока...")
     with ThreadPoolExecutor(max_workers=ARTICLE_WORKERS) as ex:
         prepared = [r for r in ex.map(prep, id_list) if r]
