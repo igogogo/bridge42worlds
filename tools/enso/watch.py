@@ -330,7 +330,8 @@ def nino34_analogs(ds):
         "additive_high": round(cur30 + max(gains), 2),
         "ratio_mid": round(cur30 * float(np.median(ratios)), 2) if ratios else None,
         "hist_ceiling": round(hist_ceiling, 2),
-        "typical_peak_window": "November to January",
+        # по суточному ряду 1997-й пиковал 6 февраля 1998-го: окно шире, чем «ноябрь–январь»
+        "typical_peak_window": "November to early February",
         "note": ("The current level is already above every analogue on these same days, so both adding and "
                  "multiplying their gain lead beyond anything measured (record of the series "
                  f"{hist_ceiling:+.2f} °C). The real question is not how much higher but when the growth "
@@ -744,8 +745,8 @@ def risks(W, N34, NW, ONI, IRI=None, AIR=None):
             f"Niño 3.4 by the NOAA weekly index {lat['n34a']:+.1f} °C on {NW['date']}; daily OISST "
             f"{N34['current_day']:+.2f}. Among all years since 1982 for the same 30 days: rank {N34['all_years_rank']}.",
             f"Water in the key patch of the Pacific is {lat['n34a']:.1f} degrees warmer than normal. The threshold for a "
-            "“very strong” event is two degrees. This is not a forecast, it is already measured, and it has never "
-            "happened this early in the year.",
+            "“very strong” event is two degrees. This is not a forecast, it is already measured, and no year since "
+            "1982 was this warm on these dates.",
             f"the NOAA weekly index; the official ONI is now {ONI['current'][ONI['last_season']]:+.2f} ({ONI['last_season']}), "
             "the “very strong” category starts at +2.0 on the three-month average",
             metric=_m_weekly(NW, "n34a", "Niño 3.4, NOAA weekly"), rid="event_strength")
@@ -761,7 +762,7 @@ def risks(W, N34, NW, ONI, IRI=None, AIR=None):
     add("The event has room to grow: the fuel is charged and the analogues peaked in winter", 4, "8–16 weeks",
         f"Past analogues peaked in {pe['typical_peak_window']}. Adding their gain from the same date gives "
         f"{pe['additive_low']:+.1f} … {pe['additive_high']:+.1f} °C, above the record of the series {pe['hist_ceiling']:+.2f}.",
-        "Every past event of this strength peaked in winter, November to January. It is the end of summer now, so "
+        "Every past event of this strength peaked in winter, between mid-November and early February. It is the end of summer now, so "
         "two or three more months of growth are likely. How much higher cannot be said: we are already above anything "
         "the ocean has shown at this time of year, and past events are no guide here. The real question is when the "
         "growth stops.",
@@ -871,16 +872,25 @@ def risks(W, N34, NW, ONI, IRI=None, AIR=None):
         elif ao["share_below"] >= 35:
             add("Some forecast models are already below reality", 4 if ao["share_below"] >= 50 else 3, "now",
                 f"{len(ao['below'])} of {ao['n']} models gave less for {ao['season']} than the already reached "
-                f"{ao['observed_weekly']:+.1f} °C: {', '.join(ao['below'][:6])}{'…' if len(ao['below']) > 6 else ''}. "
+                f"{ao['observed_weekly']:+.1f} °C: {', '.join(ao['below'][:6])}{' and others' if len(ao['below']) > 6 else ''}. "
                 f"Model mean {ao['mean']:+.2f}, spread {ao['min']:+.2f}…{ao['max']:+.2f}.",
                 f"Of {ao['n']} models, {len(ao['below'])} have already fallen behind what the ocean showed this week. "
                 "They are not “wrong about the future”; they are not keeping up with the present. Their winter "
                 "forecasts are most likely too low.",
                 "the next IRI issue: how many models catch up", metric=metric, rid="models_below_reality")
         if rv and rv.get("combined_peak_prev") is not None and rv["combined_peak_cur"] - rv["combined_peak_prev"] >= 0.2:
-            add("The models are revising the forecast upward for the second month running", 3, "until the next issue",
+            # СКОЛЬКО ВЫПУСКОВ ПОДРЯД сводный пик растёт — по истории, а не «второй месяц»
+            # из заголовка: к 06.09 рост шёл двенадцатый выпуск подряд (проверка Fable).
+            streak = 0
+            for (_, a), (_, b) in zip(hist_peaks[:-1][::-1], hist_peaks[1:][::-1]):   # (older, newer) from the newest
+                if b > a:
+                    streak += 1
+                else:
+                    break
+            add("The models keep revising the forecast upward, issue after issue", 3, "until the next issue",
                 f"Since the {rv['prev_issued']} issue {rv['n_up']} of {rv['n']} models raised their peak, {rv['n_down']} lowered it; "
-                f"combined peak {rv['combined_peak_prev']:+.2f} → {rv['combined_peak_cur']:+.2f} °C.",
+                f"combined peak {rv['combined_peak_prev']:+.2f} → {rv['combined_peak_cur']:+.2f} °C"
+                + (f"; the combined peak has risen in {streak} consecutive issues." if streak >= 2 else "."),
                 "When almost all models move their forecast in the same direction, the event is outrunning them. The shift "
                 "itself is a signal: the next issue will probably be higher again.",
                 "the IRI issue around the 19th", metric=metric, rid="models_revise_up")

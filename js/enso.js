@@ -161,7 +161,7 @@
      ссылки — делать ссылками на внешние источники». Строка источников склеивалась через « · »
      в одну простыню; адрес без пробелов давал горизонтальную прокрутку. Теперь каждый
      источник — своей строкой, а адрес в нём — живой ссылкой на домен. */
-  var SRC_RX = /((?:https?:\/\/)?(?:[a-z0-9-]+\.)+(?:gov|org|edu|int|com|net|academy|info|au|uk|eu)(?:\/[^\s,;)]*)?)/i;
+  var SRC_RX = /((?:https?:\/\/)?(?:[a-z0-9-]+\.)+(?:gov|org|edu|int|com|net|academy|info|au|uk|eu|ae|sa|pe)(?:\/[^\s,;)]*)?)/i;
   function srcHtml(s0) {
     if (!s0) return '';
     return String(s0).split(' · ').filter(Boolean).map(function (t) {
@@ -1808,7 +1808,9 @@
          может смениться, уровень должен идти подряд (владелец 04.09). */
       var jr = jrec('risk:' + (r.id || '')), je = jr ? (jr.entries || []) : [];
       var wasJ = je.length > 1 ? je[je.length - 2] : null;
-      var was = P && P.risks ? P.risks[r.title] : null;
+      /* Сравнение по имени риска; по заголовку — только для снимков до 03.09, где имени нет
+         (владелец 06.09: число в заголовке меняется с данными, риск не должен становиться «new»). */
+      var was = P && P.risks ? (P.risks[r.id] != null ? P.risks[r.id] : P.risks[r.title]) : null;
       var c = el('div', 'risk' + (S.risk === i ? ' on' : ''));
       c.innerHTML = '<div class="rl" style="background:' + lvlColor(r.level) + '">' + r.level + '</div>' +
         '<div><div class="rt">' + mark(r.title) + (was == null && P ? ' <span class="new">new</span>' : '') + '</div>' +
@@ -2053,6 +2055,9 @@
       var g = el('div', 'gloss');
       g.innerHTML = vs.map(function (x) {
         return '<div class="gl-i"><b>' + esc(x.d || '') + (x.shout ? ' \u00b7 ALERT' : '') + '</b>' + mark(x.v) +
+          /* Поправка к старому вердикту: запись остаётся, под ней сказано, что было неверно и как
+             на самом деле (data/enso/verdict-corrections.json через журнал; владелец 06.09). */
+          (x.correction ? '<div class="note warn" style="margin-top:6px"><strong>Correction' + (x.corrected_on ? ' (' + esc(x.corrected_on) + ')' : '') + '.</strong> ' + esc(x.correction) + '</div>' : '') +
           '<div class="s">risk index ' + (x.risk_index == null ? '\u2014' : x.risk_index) + ' \u00b7 ' + esc(x.model || '') + '</div></div>';
       }).join('');
       body.appendChild(g);
@@ -2857,7 +2862,7 @@
     if (!r) { S.view = 'now'; return viewNow(); }
     var body = stageShell(esc(r.title), [{ label: '← back', on: false, click: function () { S.risk = null; S.view = 'now'; render(); } }]);
     if (r.metric) plot(body, function (w, h) { return chartMetric(r.metric, w, h, r.metric.name); });
-    var was = S.P && S.P.risks ? S.P.risks[r.title] : null;
+    var was = S.P && S.P.risks ? (S.P.risks[r.id] != null ? S.P.risks[r.id] : S.P.risks[r.title]) : null;
     body.appendChild(el('div', 'lead', '<b>Level ' + r.level + ' · ' + esc(r.horizon) + '.</b> ' + mark(r.plain || '') + (fin(was) && was !== r.level ? ' <i>Level was ' + was + ' at ' + esc(prevStamp()) + '.</i>' : '')));
     body.appendChild(el('div', 'note', '<strong>Evidence.</strong> ' + mark(r.evidence) + (r.metric ? '<br>' + dynWords(r.metric) : '')));
     body.appendChild(el('div', 'note warn', '<strong>Watch.</strong> ' + mark(r.watch)));
@@ -3126,7 +3131,7 @@
       } else body.appendChild(el('div', 'note warn', 'The moorings answered, but their thirty-year climatologies are still being built: anomalies appear when they finish.'));
       body.appendChild(el('div', 'cap', esc(TAO.note || '') + ' ' + esc(TAO.clim || '') + '. Columns are moorings west to east; the line is the 20 °C isotherm.'));
       var kt = el('div', 'kpis');
-      kt.innerHTML = (TAO.warmest ? '<div class="kpi"><div class="kn">' + term('tao', 'warmest layer') + '</div><div class="kv">' + fnum(TAO.warmest.value, 1) + '<small>°C at ' + TAO.warmest.depth + ' m</small></div><div class="km">' + esc(TAO.warmest.station) + ', five-day mean to ' + esc(TAO.warmest.date) + '</div>' + kmeta('subsurface_warmest') + '</div>' : '') +
+      kt.innerHTML = (TAO.warmest ? '<div class="kpi"><div class="kn">' + term('tao', 'warmest layer') + '</div><div class="kv">' + fnum(TAO.warmest.value, 1) + '<small>°C at ' + TAO.warmest.depth + ' m</small></div><div class="km">' + esc(TAO.warmest.station) + ', five-day mean to ' + esc(TAO.warmest.date) + (TAO.warmest.prev_max ? '; the mooring record before 2026: ' + fnum(TAO.warmest.prev_max.value, 1) + ' °C at ' + TAO.warmest.prev_max.depth + ' m on ' + esc(TAO.warmest.prev_max.date) + (TAO.warmest.above_record ? ', now exceeded' : ', not exceeded') : '') + '</div>' + kmeta('subsurface_warmest') + '</div>' : '') +
         '<div class="kpi"><div class="kn">' + term('d20', '20 °C isotherm') + '</div><div class="kv">' + (TAO.d20_east == null ? '—' : TAO.d20_east) + '<small>m east</small></div><div class="km">' + (TAO.d20_west == null ? '—' : TAO.d20_west) + ' m in the west; normally shallow in the east and deep in the west</div>' + kmeta('d20_east') + '</div>' +
         '<div class="kpi"><div class="kn">moorings live</div><div class="kv">' + TAO.n_live + '<small>of ' + (TAO.stations || []).length + '</small></div><div class="km">' + (TAO.stations || []).map(function (s) { return s.label + (s.error ? ' ✗' : ' ' + (s.d20 == null ? '—' : s.d20 + ' m')); }).join(' · ') + '</div>' + kmeta(null, 'TAO/TRITON via ERDDAP', TAO.last_date) + '</div>';
       body.appendChild(kt);

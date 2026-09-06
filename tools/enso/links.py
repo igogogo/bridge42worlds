@@ -72,6 +72,26 @@ Rules:
 
 
 # ---------------------------------------------------------------- якоря
+def _delatex(t):
+    """Заголовки arXiv несут TeX-акценты: El Ni\\~no показывался на панели буквально
+    (28 заголовков в links.json 06.09, проверка Fable). Снимаем самые частые."""
+    t = str(t or "")
+    for a, b in (("\\~n", "ñ"), ("\\~N", "Ñ"), ("\\'e", "é"), ("\\'a", "á"), ("\\'o", "ó"),
+                 ("\\'i", "í"), ("\\'u", "ú"), ('\\"o', "ö"), ('\\"u', "ü"), ('\\"a', "ä"),
+                 ("\\c{c}", "ç"), ("{", ""), ("}", ""), (" -- ", " – "), ("$", "")):
+        t = t.replace(a, b)
+    return " ".join(t.split())
+
+def _deny_load():
+    """Снятые вручную ссылки: {якорь: [id работ]}. Кэш приговоров модели иначе вернул бы их
+    при следующей разметке. Файл пишет проверяющий (Fable), см. FABLE-ПРОВЕРКА-ПАНЕЛИ.md."""
+    p = DATA / "links-deny.json"
+    try:
+        return json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+    except Exception:                                        # noqa: BLE001
+        return {}
+
+
 def _aslug(title):
     """Тот же slug считает панель (js/enso.js, aslug): менять только вместе."""
     return re.sub(r"[^a-z0-9]+", "_", str(title).lower()).strip("_")[:48]
@@ -180,7 +200,7 @@ def works(limit_ids=None, all_archive=False):
         got = abstracts.get(aid) or abstracts.get(base)
         if got:
             title, abstract = got[0], got[1]
-        title = title or d.get("original_title") or ""
+        title = _delatex(title or d.get("original_title") or "")
         # НАШ заголовок и НАША строка, а не только авторские. Владелец 04.09: цель — чтобы
         # на дашборде контекстно появлялись разобранные НАМИ работы; значит и показывать надо
         # то, что мы про них написали, а не пересказ титульного листа.
@@ -372,6 +392,16 @@ def main():
 
     anc_by_id = {x["id"]: x for x in anc}
     links = verify(anc_by_id, cands)
+    deny = _deny_load()
+    if deny:
+        dropped = 0
+        for aid, ids in deny.items():
+            before = len(links.get(aid) or [])
+            links[aid] = [l for l in (links.get(aid) or []) if l["id"] not in set(ids)]
+            dropped += before - len(links[aid])
+            if not links[aid]:
+                links.pop(aid, None)
+        print(f"снято по links-deny.json: {dropped}")
     payload = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "model": MODEL,
                "floor": FLOOR, "floor_weak": FLOOR_WEAK, "top": TOP, "keep": KEEP,
                "n_works": len(wks), "n_anchors": len(anc), "anchors": links,

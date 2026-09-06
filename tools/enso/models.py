@@ -230,8 +230,11 @@ def alerts(iri, bd):
     if not iri or "error" in iri:
         return A
 
-    def add(level, title, detail):
-        A.append({"level": level, "title": title, "detail": detail, "kind": "models"})
+    def add(level, title, detail, aid=None):
+        a = {"level": level, "title": title, "detail": detail, "kind": "models"}
+        if aid:
+            a["id"] = aid          # устойчивый id, когда заголовок меняется по данным
+        A.append(a)
 
     tally = iri.get("class_tally") or {}
     total = sum(v for k, v in tally.items() if k in ("ok", "lag", "broke", "none"))
@@ -244,9 +247,17 @@ def alerts(iri, bd):
     if len(rows) >= 2:
         first, last = rows[0], rows[-1]
         if last["share"] - first["share"] >= 15:
-            add("WATCH", "The share of models below reality keeps growing",
-                f"{first['share']} % in the {first['issue']} issue → {last['share']} % in the {last['issue']} issue; "
-                f"the average model error went {first['mean_err']:+.2f} → {last['mean_err']:+.2f} °C")
+            # «keeps growing» при 76 → 71 → 62 % в трёх последних выпусках было неправдой
+            # (проверка Fable 06.09): если последний шаг вниз, так и говорим. id не меняется,
+            # иначе лента объявит «новую тревогу» на тот же датчик.
+            prev_row = rows[-2]
+            easing = last["share"] < prev_row["share"]
+            add("WATCH", (f"The share of models below reality has grown since {first['issue']}" if easing
+                          else "The share of models below reality keeps growing"),
+                f"{first['share']} % in the {first['issue']} issue → {last['share']} % in the {last['issue']} issue"
+                + (f", down from {prev_row['share']} % in the {prev_row['issue']} issue" if easing else "")
+                + f"; the average model error went {first['mean_err']:+.2f} → {last['mean_err']:+.2f} °C",
+                aid="the_share_of_models_below_reality_keeps_growing")
         if last["share"] >= 50:
             add("WATCH", f"In the {last['issue']} issue {last['below']} of {last['n']} models were below reality",
                 f"target season {last['season']}, observed ONI {last['observed']:+.2f}; "

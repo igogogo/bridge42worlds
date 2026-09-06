@@ -28,7 +28,7 @@
   "nino3": {
    "name": "Niño 3",
    "def": "The eastern part of the equatorial band, 150°W to 90°W.",
-   "why": "Niño 3 is right now above anything measured since 1981, and that is what raised the alert.",
+   "why": "The alert fires when Niño 3 goes above anything the weekly series has measured, as it did in this event: the eastern half of the band is where an eastern-type El Niño shows first.",
    "src": "NOAA CPC"
   },
   "nino4": {
@@ -148,7 +148,7 @@
   "oisst": {
    "name": "OISST v2.1",
    "def": "NOAA's daily sea-surface temperature from satellites and buoys, since 1981, on a 0.25° grid.",
-   "why": "It lags by one to three weeks: the watchdog is blind on it for that long, and the NOAA weekly data closes the gap.",
+   "why": "The final grid lags by two to three weeks; the preliminary grid (OISST NRT, see that entry) is one day behind and is spliced onto the long series, so the daily boxes on this panel are one day old. The last days are marked preliminary and re-pulled until the final values arrive.",
    "src": "climatereanalyzer.org → NOAA OISST"
   },
   "era5": {
@@ -159,13 +159,13 @@
   },
   "weekly": {
    "name": "NOAA weekly",
-   "def": "Anomalies of the four Niño regions, published every Wednesday for the previous week.",
-   "why": "Always fresher than the daily OISST; where they disagree, the page trusts the weekly and says so.",
+   "def": "Anomalies of the four Niño regions for the week centred on Wednesday, published by NOAA CPC on Mondays.",
+   "why": "The reference the forecast models are judged against and the index the strength rule uses; fresher than the final daily grid, a few days older than the preliminary one. Where the two disagree, the panel shows both.",
    "src": "NOAA CPC, wksst9120.for"
   },
   "shout": {
    "name": "The turning-point watchdog",
-   "def": "A set of rules, not a model: above the historical maximum, a reversal of growth at a high level, a fall of 0.3 or more in two weeks, ONI crossing +2.0, reality above every model: SHOUT; everything else: WATCH.",
+   "def": "A set of rules, not a model: above the historical maximum, a reversal of growth at a high level, a fall of 0.3 or more in two weeks, ONI crossing +2.0, reality above every model: SHOUT; everything else: WATCH. The subsurface alert follows the same idea: WATCH from +5 °C at a mooring, SHOUT only above that mooring's own maximum before this event. One hand-set exception remains: the FAO index at a five-year high is SHOUT. Price and model alerts have their own rules, described on the Food and Models tabs.",
    "why": "The rules are checkable: each compares a fresh number with the record of the series, the previous snapshot, or the same season in history. The model does not invent them.",
    "src": "tools/enso/alerts.py"
   },

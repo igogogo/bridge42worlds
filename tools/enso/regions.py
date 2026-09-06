@@ -97,7 +97,8 @@ def scenario_support(iri, observed_weekly, record):
                        "set the scale for the ones ahead" if used == "live" else
                        " — counting every model, because too few passed verification this month")
                     + f". Not a probability: these are {n} different models, not draws from one. "
-                    f"Reality is already above {below_now} of them, so every share here is a lower bound.")
+                    + (f"Reality is already above {below_now} of them, so every share here is a lower bound."
+                       if below_now else "Reality is not yet above any of these peaks."))
     out["_median_peak"] = round(float(p50), 2)
     out["_p90_peak"] = round(float(p90), 2)
     out["_models_used"] = used
@@ -145,7 +146,8 @@ def build(iri, noaa_latest_n34, record_weekly=None):
             "id": r["id"], "name": r["name"], "countries": r["countries"],
             "seasons": r["seasons"], "impact_score": impact, "worst": worst, "worst_season": worst_season,
             "vulnerability": r["vulnerability"], "levels": levels, "actions": acts,
-            "sources": [ref["sources"][k] for k in r["sources"] if k in ref["sources"]],
+            # источник справочника может быть списком строк (по одной работе со ссылкой в каждой)
+            "sources": [x for k in r["sources"] if k in ref["sources"] for x in _flat(ref["sources"][k])],
         })
     items.sort(key=lambda x: (-x["levels"][current], -x["vulnerability"]["level"]))
     return {
@@ -154,5 +156,10 @@ def build(iri, noaa_latest_n34, record_weekly=None):
         "factors": factors, "peak_p50": peak_p50, "peak_max": peak_max, "observed_weekly": noaa_latest_n34,
         "items": items,
         "method": "level = round(0.6 × impact + 0.4 × vulnerability + scenario), clipped to 1–5; impact: robust 4, likely 3, weak 1.5, none 0; scenario: base +0 (the event as in the combined forecast), strong +0.5 (top of the model spread), record +1 (reality above every model); one point lower everywhere if the combined peak is below 1.5 °C.",
-        "sources": ref["sources"],
+        "sources": {(k if len(_flat(v)) == 1 else f"{k}/{i + 1}"): x
+                    for k, v in ref["sources"].items() for i, x in enumerate(_flat(v))},
     }
+
+
+def _flat(v):
+    return v if isinstance(v, list) else [v]

@@ -62,13 +62,23 @@ def _load(p, default):
         return default
 
 
-def _fmt(v, unit, digits):
+# Ряды, где число — АБСОЛЮТНАЯ величина, а не аномалия: знак «+» перед ними читается как
+# «на столько теплее нормы» («Persian Gulf SST: +33.62 °C» в ленте 06.09, проверка Fable).
+ABSOLUTE = {"gulf_sst"}
+
+
+def _fmt(v, unit, digits, signed=True):
     if v is None:
         return "—"
     if isinstance(v, (int, float)):
-        s = f"{v:+.{digits}f}" if unit in ("°C", "σ", "m/s") else f"{v:.{digits}f}"
+        s = f"{v:+.{digits}f}" if signed and unit in ("°C", "σ", "m/s") else f"{v:.{digits}f}"
         return s + (" " + unit if unit else "")
     return str(v)
+
+
+def _nums(text):
+    """Числа в тексте вердикта: по ним видно, изменился он по сути или только переписан."""
+    return set(re.findall(r"-?\d+(?:\.\d+)?", text or ""))
 
 
 def _snapshot_before(snaps, when):
@@ -146,8 +156,14 @@ def build(verbose=False):
             continue
         prev = e[-2] if len(e) > 1 else None
         unit, dg = m.get("unit", ""), m.get("digits", 2)
-        det = _fmt(last["v"], unit, dg) + (" for " + d_raw if d_raw != d else "") +             (" (was " + _fmt(prev["v"], unit, dg) + " on " + str(prev.get("d")) + ")" if prev else " — first reading")
-        items.append({"date": d, "kind": "value", "title": title + ": " + _fmt(last["v"], unit, dg),
+        sg = key not in ABSOLUTE
+        # НЕ ИЗМЕНИЛОСЬ — НЕ НОВОСТЬ. Журнал пишет запись на каждый день данных, и лента
+        # выдавала «Risk index: 100 (was 100 on 2026-09-04)» — по собственной подписи ленты
+        # строка появляется, когда значение ДЕЙСТВИТЕЛЬНО изменилось (поймано 06.09).
+        if prev and _fmt(last["v"], unit, dg, sg) == _fmt(prev["v"], unit, dg, sg):
+            continue
+        det = _fmt(last["v"], unit, dg, sg) + (" for " + d_raw if d_raw != d else "") +             (" (was " + _fmt(prev["v"], unit, dg, sg) + " on " + str(prev.get("d")) + ")" if prev else " — first reading")
+        items.append({"date": d, "kind": "value", "title": title + ": " + _fmt(last["v"], unit, dg, sg),
                       "detail": det, "why": m.get("src", ""), "go": [view, sub], "key": key})
 
     # 2. риски: новые и сменившие уровень
@@ -210,12 +226,22 @@ def build(verbose=False):
     if changed:
         ALERT_FILE.write_text(json.dumps(ASEEN, ensure_ascii=False, indent=1), encoding="utf-8")
 
-    # 4. вердикт
-    for v in (J.get("verdicts") or [])[-3:]:
+    # 4. вердикт. «Changed» — только когда сменились ЧИСЛА; модель переписывает текст при
+    # каждом прогоне, и три строки «The verdict changed» за неделю на одних и тех же числах
+    # были ложью ленты (проверка Fable 06.09). Переписанный на тех же числах так и подписан.
+    vs = J.get("verdicts") or []
+    for i in range(max(0, len(vs) - 3), len(vs)):
+        v = vs[i]
         d = (v.get("d") or "")[:10]
         if d and d >= since.isoformat():
-            items.append({"date": d, "kind": "verdict", "title": "The verdict changed",
-                          "detail": (v.get("v") or "")[:300], "why": "", "go": ["verdict", "history"]})
+            prev_v = vs[i - 1].get("v") if i > 0 else None
+            same = prev_v is not None and _nums(prev_v) == _nums(v.get("v"))
+            det = (v.get("v") or "")[:300]
+            if v.get("correction"):                          # пометка из verdict-corrections.json (journal.py)
+                det += " CORRECTION (" + str(v.get("corrected_on") or "") + "): " + v["correction"]
+            items.append({"date": d, "kind": "verdict",
+                          "title": "The verdict was reworded, same numbers" if same else "The verdict changed",
+                          "detail": det, "why": "", "go": ["verdict", "history"]})
 
     order = {"alert": 0, "risk": 1, "verdict": 2, "value": 3}
     items.sort(key=lambda x: (x["date"], -order.get(x["kind"], 9)), reverse=True)

@@ -229,7 +229,7 @@ METRICS = {
         title="MJO amplitude (OMI)", unit="", digits=1, src="NOAA PSL",
         val=lambda d: _g(d, "mjo", "last", "amp"), date=lambda d: _g(d, "mjo", "last", "d")),
     "ohc_2000": dict(
-        title="Ocean heat content 0–2000 m", unit="10²² J", digits=1, src="NOAA NCEI",
+        title="Ocean heat content 0–2000 m", unit="×10²² J", digits=1, src="NOAA NCEI",
         val=lambda d: _g(d, "background", "ohc_2000", "last"), date=lambda d: _g(d, "background", "ohc_2000", "date")),
     "dmi": dict(
         title="Indian Ocean Dipole", unit="°C", digits=2, src="HadISST via PSL",
@@ -304,7 +304,7 @@ METRICS = {
         val=lambda d: _g(d, "air", "coupling", "score"),
         date=lambda d: _air_part_date(d, "soi")),
     "wwv": dict(
-        title="Warm water volume", unit="10¹⁴ m³", digits=2, src="NOAA PMEL / TAO",
+        title="Warm water volume", unit="×10¹⁴ m³", digits=2, src="NOAA PMEL / TAO",
         val=lambda d: (_g(d, "air", "fuel", "value") or 0) / 1e14 or None,
         date=lambda d: _g(d, "air", "fuel", "date")),
     "wwv_share": dict(
@@ -443,6 +443,19 @@ def build(verbose=False):
             verdicts[-1] = rec
         else:
             verdicts.append(rec)
+
+    # ПОПРАВКИ К СТАРЫМ ВЕРДИКТАМ. Запись остаётся как есть (панель говорила именно так), но под
+    # ней встаёт пометка, что было неверно и как на самом деле. Файл пишется руками проверяющим
+    # (владелец 06.09: «написать, что ошиблись, и написать, что с ценами сейчас»).
+    try:
+        corr = json.loads((ROOT / "verdict-corrections.json").read_text(encoding="utf-8"))
+    except Exception:                                    # noqa: BLE001
+        corr = {}
+    for rec in verdicts:
+        c = corr.get(str(rec.get("d")))
+        if isinstance(c, dict) and c.get("text"):
+            rec["correction"] = c["text"]
+            rec["corrected_on"] = c.get("on")
 
     doc = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "onset": onset,
            "snapshots": len(snaps), "metrics": out, "verdicts": verdicts[-40:]}

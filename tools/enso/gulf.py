@@ -33,12 +33,16 @@ WINTER = {
     "claim": ("In an El Niño winter the storm track over the Gulf and Iran is stronger and the storms are "
               "wetter; the risk is a wet winter with flash floods, not a forecast of one."),
     "refs": [
-        {"what": "El Niño winters strengthen the storm track and storm intensity over the Gulf and Iran",
-         "src": "Impact of ENSO on extreme precipitation in Southwest Asia (2024)", "url": "https://www.sciencedirect.com/"},
-        {"what": "ENSO and the Indian Ocean Dipole act together on sub-seasonal rainfall in the Middle East",
-         "src": "Hochman et al., Quarterly Journal of the Royal Meteorological Society (2025)", "url": "https://rmets.onlinelibrary.wiley.com/journal/1477870x"},
-        {"what": "The April 2024 floods in the UAE were linked in part to El Niño",
-         "src": "World Weather Attribution; CBC", "url": "https://www.worldweatherattribution.org/"},
+        # Адреса ведут на сами работы, не на главные страницы издательств (проверка Fable 06.09).
+        {"what": "El Niño winters strengthen the storm track and storm intensity over the Gulf and Iran; extreme daily rain is more frequent in autumn, winter and spring (GPCP and ERA5, 1997–2022)",
+         "src": "Impact of ENSO on extreme precipitation in Southwest Asia, Global and Planetary Change 244, 104645 (online December 2024)",
+         "url": "https://www.sciencedirect.com/science/article/pii/S0921818124002923"},
+        {"what": "ENSO and the Indian Ocean Dipole act together on sub-seasonal rainfall in the Middle East: El Niño with a positive dipole raises October precipitation by about half",
+         "src": "Hochman and Gildor, Quarterly Journal of the Royal Meteorological Society (2025), doi:10.1002/qj.4903",
+         "url": "https://rmets.onlinelibrary.wiley.com/doi/10.1002/qj.4903"},
+        {"what": "The April 2024 floods in the UAE and Oman: such downpours fall in El Niño years, and warming made them 10–40 % heavier",
+         "src": "World Weather Attribution, rapid study of the 14–15 April 2024 rainfall (April 2024)",
+         "url": "https://www.worldweatherattribution.org/heavy-precipitation-hitting-vulnerable-communities-in-the-uae-and-oman-becoming-an-increasing-threat-as-the-climate-warms/"},
     ],
     "forecasts": [
         {"name": "IRI seasonal climate forecasts (Middle East maps)", "url": "https://iri.columbia.edu/our-expertise/climate/forecasts/seasonal-climate-forecasts/", "note": "free, monthly, around the 15th"},

@@ -204,7 +204,7 @@ EL_NINO_LINK = {
     "cocoa": "West Africa dries out; the harvest falls with a lag of two quarters.",
     "fishmeal": "Peru: the anchoveta leaves the warm water. This is the most direct price signal of an El Niño.",
     "fertilizer_dap": "Not a weather channel: it is here because fertiliser cost decides the NEXT harvest.",
-    "fertilizer_urea": "Same: energy prices and fertiliser set the cost of the next sowing.",
+    "fertilizer_urea": "Not a weather channel either: energy prices and fertiliser set the cost of the next sowing.",
 }
 
 
@@ -395,7 +395,8 @@ def risks(A, n34_now=None):
                 "The fuel is at its record and has not started to burn", 5,
                 f"{lead or 6}–{(lead or 6) + 3} months",
                 f"Warm water volume {F['value'] / 1e14:.2f}·10¹⁴ m³, {share} % of the highest value of the "
-                f"series since 1980; the peak was {'this month' if not since else str(since) + ' months ago'}. "
+                f"series since 1980; "
+                f"{'the latest month, ' + str(F.get('date')) + ', is itself the peak' if not since else 'the peak was ' + str(since) + ' months ago, in ' + str(F.get('peak_date'))}. "
                 f"On our own data this gauge leads the surface index by {lead} months.",
                 "The heat that will surface later is already piled up under the equator, and it is at a record "
                 "for the whole series. This is measured, not forecast: the surface has not yet shown what is "
@@ -421,7 +422,9 @@ def risks(A, n34_now=None):
         tlt = next((x for x in L["items"] if x["key"] == "tlt"), None)
         if tlt and tlt.get("lag") is not None:
             out.append((
-                "The atmosphere is still catching up, by three floors", 3, f"{tlt['lag']} months",
+                # «by three floors» читалось как «отстаёт на три этажа»; речь о трёх слоях,
+                # которые идут за океаном с задержкой в три месяца (проверка Fable 06.09)
+                f"The atmosphere is still catching up: three floors follow the ocean with a {tlt['lag']}-month delay", 3, f"{tlt['lag']} months",
                 f"Satellite lower troposphere in the tropics {tlt['tropics']:+.2f} °C; on our own data this "
                 f"layer follows Niño 3.4 with a delay of {tlt['lag']} months (correlation {tlt['r']}).",
                 "The ocean heats the air, not the other way round, and the air takes months to answer. That is "
@@ -443,7 +446,7 @@ def alerts(A):
             continue
         out.append({"level": "WATCH", "kind": "food",
                     "title": f"{c['name']}: {v:+.0f} % since the event began",
-                    "detail": (f"{c['value']} {c['unit']} in {c['date']}, against the onset month "
+                    "detail": (f"{c['value']:g} {str(c['unit']).strip('()')} in {c['date']}, against the onset month "
                                f"{c.get('onset')}. {c.get('why', '')} A coincidence in time is not a cause: "
                                "prices move for many reasons at once.")})
     return out

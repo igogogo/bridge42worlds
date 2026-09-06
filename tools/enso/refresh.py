@@ -111,7 +111,9 @@ def history(snaps):
             "n_below": len(ao.get("below") or []), "n_models": ao.get("n"),
             # Уровни рисков и ключевые числа — чтобы панель могла сказать «было неделю назад»,
             # а не только «было в прошлый прогон» (владелец 03.09).
-            "risks": {r["title"]: r["level"] for r in (d.get("risks") or [])},
+            # КЛЮЧ — ИМЯ РИСКА, не заголовок: заголовок несёт число, которое меняется с данными
+            # (владелец 06.09). У снимков до 03.09 имени нет — там остаётся заголовок.
+            "risks": {(r.get("id") or r["title"]): r["level"] for r in (d.get("risks") or [])},
             "n34_weekly_prev": ((d.get("noaa") or {}).get("latest") or {}).get("n34a"),
             "food_index": (d.get("food") or {}).get("index") if isinstance(d.get("food"), dict) else None,
             "class_tally": iri.get("class_tally"),
@@ -283,9 +285,23 @@ def new_block_alerts(cur):
     t = (cur.get("subsurface") or {}).get("tao") or {}
     w = t.get("warmest") or {}
     if w.get("value") is not None and w["value"] >= 5.0:
-        A.append({"level": "SHOUT" if w["value"] >= 8 else "WATCH", "kind": "climate",
+        # SHOUT — только выше всего, что ЭТОТ буй мерил до события (subsurface.build_record_tao);
+        # порог +5 °C остаётся для WATCH. Владелец 06.09 после проверки Fable: SHOUT по
+        # определению — «такого не было никогда», ручной порог +8 этому не отвечал.
+        pm = w.get("prev_max") or {}
+        above = bool(w.get("above_record"))
+        if above:
+            why = (f"Above anything this mooring measured before this event: its previous maximum was "
+                   f"{pm['value']:+.1f} °C at {pm['depth']} m on {pm['date']} (record from {pm.get('from')}).")
+        elif pm.get("value") is not None:
+            why = (f"Large but not unprecedented here: the mooring's own maximum before this event was "
+                   f"{pm['value']:+.1f} °C at {pm['depth']} m on {pm['date']}. WATCH from +5 °C.")
+        else:
+            why = "No record comparison for this mooring yet, so the level stays WATCH (from +5 °C)."
+        A.append({"level": "SHOUT" if above else "WATCH", "kind": "climate",
                   "title": f"Water {w['value']:+.1f} °C above normal at {w['depth']} m depth, {w['station']}",
-                  "detail": f"TAO mooring, five-day mean to {w.get('date')}: the warm layer that will surface is already measured"})
+                  "detail": f"TAO mooring, five-day mean to {w.get('date')}: the warm layer that will surface is already "
+                            f"measured. {why}"})
     g = (cur.get("gulf") or {}).get("sea") or {}
     if g.get("last_sst") is not None and g["last_sst"] >= 35.0:
         A.append({"level": "WATCH", "kind": "climate", "title": f"The Gulf is at {g['last_sst']:.1f} °C, above the desalination stress line",
@@ -313,7 +329,7 @@ def compact(d):
     return {
         "stamp": d.get("stamp"), "generated": d.get("generated"),
         "risk_index": d.get("risk_index"), "n_risks": len(d.get("risks") or []),
-        "risks": {r["title"]: r["level"] for r in (d.get("risks") or [])},
+        "risks": {(r.get("id") or r["title"]): r["level"] for r in (d.get("risks") or [])},   # по имени риска, см. history()
         "shout": bool(d.get("shout")), "n_alerts": len(d.get("alerts") or []),
         "alerts": [a.get("title") for a in (d.get("alerts") or [])],
         "noaa_date": (d.get("noaa") or {}).get("date"),

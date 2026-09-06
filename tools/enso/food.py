@@ -52,6 +52,18 @@ def analyze(fao, oni_current, oni_analogs, cur_year):
         v = ser[-1]; v12 = ser[-13] if n > 12 else None
         g_last[g] = {"last": v, "mom": round(v - ser[-2], 1) if v is not None and ser[-2] is not None else None,
                      "yoy_pct": round(100.0 * (v / v12 - 1), 1) if v is not None and v12 else None}
+    # МАКСИМУМЫ ПО ПОЛНОМУ РЯДУ, а не по 36-месячному хвосту, который уходит на панель.
+    # Тревога «highest in five years» считалась по этому хвосту (три года) и 06.09 назвала
+    # 133.3 пятилетним максимумом, хотя весь 2022-й был выше (160.2 в марте) — поймано
+    # проверкой Fable. Здесь: максимум за 60 и за 12 месяцев и последний месяц, когда
+    # индекс был выше нынешнего.
+    hi60 = max((v, m) for m, v in zip(months[-60:], index[-60:]))
+    hi12 = max((v, m) for m, v in zip(months[-12:], index[-12:]))
+    above = [m for m, v in zip(months, index) if v > last]
+    highs = {"hi60": hi60[0], "hi60_month": hi60[1], "window60_from": months[-60:][0],
+             "hi12": hi12[0], "hi12_month": hi12[1],
+             "last_above": above[-1] if above else None,
+             "year_ago": index[-13] if n > 12 else None}
     onset = _onset_month(oni_current, cur_year)
     overlay = {"onset": onset, "current": _rel(index, months, onset) if onset else None, "analogs": {}}
     for y in ANALOG_ONSET_YEARS:
@@ -61,7 +73,7 @@ def analyze(fao, oni_current, oni_analogs, cur_year):
             overlay["analogs"][str(y)] = r
     return {
         "last_month": months[-1], "index": last, "mom": mom, "yoy_pct": yoy,
-        "groups": g_last,
+        "groups": g_last, "highs": highs,
         "series": {"months": months[-36:], "index": index[-36:],
                    "groups": {g: ser[-36:] for g, ser in groups.items()}},
         "overlay": overlay,
@@ -84,14 +96,19 @@ def alerts(F):
     def add(level, title, detail):
         A.append({"level": level, "title": title, "detail": detail, "kind": "food"})
 
-    # 1. пятилетний максимум — редкое событие, кричим
-    tail60 = idx[-60:] if len(idx) >= 12 else idx
-    if last >= max(tail60):
+    # 1. пятилетний максимум — редкое событие, кричим. Считается по ПОЛНОМУ ряду (highs в
+    # analyze), не по 36-месячному хвосту: хвост давал ложный «пятилетний максимум» (06.09).
+    H = F.get("highs") or {}
+    hi60, hi12 = H.get("hi60"), H.get("hi12")
+    since = H.get("last_above")
+    if hi60 is not None and last >= hi60:
         add("SHOUT", "World food prices are the highest in five years",
-            f"FAO index {last:.1f} in {month}, above every month since {months[-len(tail60)]}")
-    elif last >= max(idx[-12:]):
+            f"FAO index {last:.1f} in {month}, above every month since {H.get('window60_from')}")
+    elif hi12 is not None and last >= hi12:
         add("WATCH", "World food prices are at a twelve-month high",
-            f"FAO index {last:.1f} in {month}; a year ago {idx[-13]:.1f}" if len(idx) > 12 else f"FAO index {last:.1f}")
+            f"FAO index {last:.1f} in {month}"
+            + (f", the highest since {since}" if since else "")
+            + (f"; a year ago {H['year_ago']:.1f}" if H.get("year_ago") is not None else ""))
 
     # 2. рост три месяца подряд
     if len(idx) >= 4 and idx[-1] > idx[-2] > idx[-3] > idx[-4]:

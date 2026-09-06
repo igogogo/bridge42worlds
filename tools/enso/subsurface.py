@@ -68,11 +68,11 @@ def _save(p, obj):
 
 
 # ------------------------------------------------------------------ TAO
-def _tao_rows(lon, t0, t1=None):
+def _tao_rows(lon, t0, t1=None, timeout=120):
     # Tomcat за ERDDAP отвергает сырые «>» и «<» в строке запроса (400 без текста): кодируем.
     q = (f"{E}?time,depth,T_20&longitude={lon}&latitude=0&time%3E%3D{t0}" + (f"&time%3C%3D{t1}" if t1 else ""))
     req = urllib.request.Request(q, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=120) as r:
+    with urllib.request.urlopen(req, timeout=timeout) as r:
         txt = r.read().decode("utf-8", "replace")
     by = {}
     for ln in txt.splitlines()[2:]:
@@ -182,6 +182,70 @@ def build_clim_tao(name, lon, verbose=False):
     return cl
 
 
+RECORD_UNTIL = "2025-12-31"     # рекорд «до этого события»: всё, что буй мерил до 2026 года
+
+
+def build_record_tao(name, lon, verbose=False):
+    """Максимум подповерхностной аномалии за весь архив буя ДО этого события.
+
+    Владелец 06.09 (после проверки Fable): SHOUT по определению — «такого не было никогда»,
+    а тревога по глубине давала его по ручному порогу +8 °C. Здесь считается то же число, что
+    в tao(): пятидневное среднее аномалии по глубинам, максимум по всем дням и глубинам, — но
+    по всему архиву до 2026 года. Кэш record_<станция>.json, строится один раз."""
+    p = CACHE / f"record_{name}.json"
+    rec = _load(p, {})
+    if rec.get("max"):
+        return rec
+    cl = _load(CACHE / f"clim_{name}.json", {})
+    if not cl.get("clim"):
+        if verbose:
+            print(f"  {name}: нет климатологии, рекорд не посчитать")
+        return rec
+    c = np.array([[np.nan if v is None else v for v in row] for row in cl["clim"]], float)
+    t0 = time.time()
+    try:
+        rows = _tao_rows(lon, "1980-01-01", RECORD_UNTIL, timeout=600)
+    except Exception as e:                                       # noqa: BLE001
+        if verbose:
+            print(f"  {name}: архив одним запросом не отдан ({str(e)[:60]}), беру по годам")
+        rows = {}
+        for y in range(1985, 2026):
+            try:
+                rows.update(_tao_rows(lon, f"{y}-01-01", f"{y}-12-31"))
+            except Exception:                                    # noqa: BLE001
+                continue
+    an = {}
+    for d in sorted(rows):
+        pr = _profile(rows[d])
+        if pr is not None:
+            an[d] = pr - c[_doy(date.fromisoformat(d))]
+    keys = sorted(an)
+    best, by_year = None, {}
+    for i, k in enumerate(keys):
+        win = keys[max(0, i - 4):i + 1]                          # те же «последние пять измеренных дней», что в tao()
+        with np.errstate(all="ignore"):
+            m = np.nanmean(np.array([an[x] for x in win]), axis=0)
+        if not np.isfinite(m).any():
+            continue
+        j = int(np.nanargmax(np.where(np.isfinite(m), m, -99)))
+        v = float(m[j])
+        y = k[:4]
+        if y not in by_year or v > by_year[y]["value"]:
+            by_year[y] = {"value": round(v, 2), "depth": DEPTHS[j], "date": k}
+        if best is None or v > best["value"]:
+            best = {"value": round(v, 2), "depth": DEPTHS[j], "date": k}
+    if best is None:
+        return rec
+    top = sorted(by_year.values(), key=lambda r: -r["value"])[:5]
+    rec = {"max": best, "top_years": top, "from": keys[0], "until": keys[-1], "n_days": len(keys),
+           "clim": f"{CLIM_YEARS[0]}–{CLIM_YEARS[1]}", "built": datetime.now().strftime("%Y-%m-%d %H:%M")}
+    _save(p, rec)
+    if verbose:
+        print(f"  {name}: рекорд {best['value']:+.2f} °C на {best['depth']} м, {best['date']}; "
+              f"дней {len(keys)} ({keys[0]}…{keys[-1]}), {time.time() - t0:.0f} с")
+    return rec
+
+
 def tao(today=None, verbose=False):
     """Все станции: свежие профили, аномалии, D20, разрез."""
     today = today or date.today()
@@ -221,6 +285,7 @@ def tao(today=None, verbose=False):
         # ход D20 по дням для графика
         d20_series = [(d, d20(profs[d])) for d in days]
         an_d20 = _load(CACHE / f"analogs_{name}.json", {})
+        rc = _load(CACHE / f"record_{name}.json", {})           # рекорд буя до этого события (build_record_tao)
         d20_an = {}
         for y, arr in an_d20.items():
             vals = [arr[_doy(date.fromisoformat(d))] for d in days]
@@ -233,7 +298,8 @@ def tao(today=None, verbose=False):
                "anom": None if an is None else [None if not np.isfinite(v) else round(float(v), 2) for v in an],
                "d20": d_now, "d20_30d_ago": d_back,
                "d20_series": {"dates": [x[0] for x in d20_series], "values": [x[1] for x in d20_series], "analogs": d20_an},
-               "has_clim": bool(clim)}
+               "has_clim": bool(clim),
+               "record": (dict(rc["max"], **{"from": rc.get("from"), "until": rc.get("until")}) if rc.get("max") else None)}
         if an is not None and np.isfinite(an).any():
             j = int(np.nanargmax(np.abs(np.where(np.isfinite(an), an, 0))))
             rec["max_anom"] = {"value": round(float(an[j]), 2), "depth": DEPTHS[j]}
@@ -257,6 +323,10 @@ def tao(today=None, verbose=False):
     if good:
         best = max(good, key=lambda s: (s.get("warmest_anom") or {}).get("value") or -99)
         out["warmest"] = {"station": best["label"], **best["warmest_anom"], "date": best["last_date"]}
+        # СРАВНЕНИЕ С РЕКОРДОМ ЭТОГО ЖЕ БУЯ до события: по нему тревога решает, SHOUT это или WATCH
+        if best.get("record"):
+            out["warmest"]["prev_max"] = best["record"]
+            out["warmest"]["above_record"] = bool(best["warmest_anom"]["value"] > best["record"]["value"])
         east = [s for s in good if s["lon"] >= 235 and s.get("d20") is not None]
         west = [s for s in good if s["lon"] <= 190 and s.get("d20") is not None]
         out["d20_east"] = round(float(np.mean([s["d20"] for s in east])), 1) if east else None
@@ -448,8 +518,13 @@ def risks(SUB):
         de, dw = t.get("d20_east"), t.get("d20_west")
         out.append((
             f"Water {w['value']:+.1f} °C above normal is sitting at {w['depth']} m under {w['station']}", lvl, "1–3 months",
-            f"TAO mooring {w['station']}, five-day mean to {w.get('date')}, against the mooring's own 1991–2020 record. "
-            f"The 20 °C isotherm is at {dw} m in the west and {de} m in the east"
+            f"TAO mooring {w['station']}, five-day mean to {w.get('date')}, against the mooring's own 1991–2020 norm. "
+            + ((f"Above anything this mooring measured before this event: its previous maximum was "
+                f"{w['prev_max']['value']:+.1f} °C at {w['prev_max']['depth']} m on {w['prev_max']['date']}. ")
+               if w.get("above_record") else
+               (f"The mooring's own maximum before this event was {w['prev_max']['value']:+.1f} °C at "
+                f"{w['prev_max']['depth']} m on {w['prev_max']['date']}. " if w.get("prev_max") else ""))
+            + f"The 20 °C isotherm is at {dw} m in the west and {de} m in the east"
             + (" — deeper in the east than in the west, the reversed slope of a mature event." if de and dw and de > dw else "."),
             "This is the heat that has not surfaced yet. It is measured directly, every day, and it is what makes "
             "'the event has room to grow' a statement about the present rather than about the past events.",
@@ -467,7 +542,7 @@ def risks(SUB):
             f"GODAS reanalysis, {g.get('month')}: mean temperature anomaly of 0–300 m across 180–100°W, our climatology; "
             f"the reanalysis' warmest point is {(g.get('max_anom') or {}).get('value')} °C at {(g.get('max_anom') or {}).get('depth')} m, {(g.get('max_anom') or {}).get('label')}.",
             "The CPC calls this the upper-ocean heat content index and watches it as the leading sign of where the "
-            "surface goes next. A whole degree across that band is a large charge.",
+            f"surface goes next. One degree across that band is already a large charge; this is {hc[-1]:.1f}.",
             "the index in the next monthly GODAS; the moorings above show it a month earlier",
             {"name": "Upper-ocean heat content, 0–300 m, 180–100°W", "unit": "°C", "step": "month",
              "dates": (g.get("heat_content") or {}).get("months"), "values": hc,
@@ -478,7 +553,12 @@ def risks(SUB):
 
 if __name__ == "__main__":
     import sys
-    if "--clim" in sys.argv:
+    if "--records" in sys.argv:
+        for nm, ln in STATIONS:
+            print("рекорд буя до события", nm)
+            build_record_tao(nm, ln, verbose=True)
+        print("готово")
+    elif "--clim" in sys.argv:
         for nm, ln in STATIONS:
             print("климатология TAO", nm)
             build_clim_tao(nm, ln, verbose=True)

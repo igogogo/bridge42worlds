@@ -25,15 +25,15 @@ def detect(cur, prev=None):
     # ---- 1. выше всего измеренного
     if hm.get("n34a") is not None and lat["n34a"] > hm["n34a"]:
         _lvl(A, SHOUT, "Niño 3.4 is above anything measured since 1981",
-             f"weekly index {lat['n34a']:+.1f} °C against the previous maximum {hm['n34a']:+.1f}")
+             f"weekly index {lat['n34a']:+.1f} °C against the previous maximum {hm['n34a']:+.1f} °C")
     for k, name in (("n12a", "Niño 1+2"), ("n3a", "Niño 3"), ("n4a", "Niño 4")):
         if hm.get(k) is not None and lat[k] > hm[k]:
             _lvl(A, SHOUT, f"{name} is above anything measured",
-                 f"{lat[k]:+.1f} °C against the previous maximum {hm[k]:+.1f}")
+                 f"{lat[k]:+.1f} °C against the previous maximum {hm[k]:+.1f} °C")
     pe = N["peak_estimate"]
     if N["current_day"] > pe["hist_ceiling"]:
         _lvl(A, SHOUT, "Daily Niño 3.4 broke the record of the series",
-             f"{N['current_day']:+.2f} °C against a record of {pe['hist_ceiling']:+.2f}")
+             f"{N['current_day']:+.2f} °C against a record of {pe['hist_ceiling']:+.2f} °C")
     # ускорение невиданное для сезона при уже высоком уровне
     for w, name in ((n34, "Niño 3.4"), (sw, "world ocean")):
         s = w["slope14"]

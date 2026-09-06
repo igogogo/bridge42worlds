@@ -81,7 +81,7 @@ def ohc_block(rows, title):
         hit = [v for y, v in zip(ys, vs) if abs(y - (ay + frac)) < 0.13]
         if hit:
             levels[str(ay)] = round(hit[0], 2)
-    return {"title": title, "unit": "10²² J", "years": [round(y, 3) for y in ys[-160:]],
+    return {"title": title, "unit": "10²² J", "since": int(ys[0]), "years": [round(y, 3) for y in ys[-160:]],
             "values": [round(v, 2) for v in vs[-160:]], "last": round(last_v, 2),
             "date": f"{iy} Q{max(1, min(4, q))}", "record": bool(rec),
             "rise_10y": round(last_v - ten[0], 2) if ten else None, "levels": levels,
@@ -185,7 +185,10 @@ def risks(B):
         if o and o.get("record"):
             out.append((
                 f"The ocean holds more heat than ever measured ({o['title'].split(',')[1].strip()})", 3, "years",
-                f"{o['last']} × 10²² J in {o['date']}, a record of the series since 1955; up {o.get('rise_10y')} in ten years.",
+                # год начала — из самого ряда: 0–2000 м у NCEI идёт с 2005-го, а не с 1955-го
+                # (проверка Fable 06.09)
+                f"{o['last']} × 10²² J in {o['date']}, a record of the series since {o.get('since') or 1955}; "
+                f"up {o.get('rise_10y')} in ten years.",
                 "This is the reservoir the event draws on and returns to. A record reservoir means the statistical "
                 "forecasts, trained on a cooler ocean, are reading a different system than the one they learned.",
                 "the next quarterly NCEI update; whether the 0–2000 m series keeps rising through the event",

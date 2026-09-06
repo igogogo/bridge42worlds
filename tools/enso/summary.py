@@ -31,6 +31,9 @@ Rules, no exceptions:
    digest. Do not put a number on the peak of the event if the digest says the analogues lead beyond the
    record of the series; then talk about "when the growth stops".
 4. Distinguish "above all analogues" from "above anything measured": these are different claims.
+4a. Units are in the "units" section of the digest. The 14-day change is a TOTAL over the last 14 days;
+   never write "per day". Quote alert titles as they are; do not stretch "highest since <date>" into
+   "highest in N years" or the reverse.
 5. Write in English, briefly, no exclamation marks except the word ALERT, no generalities about
    climate. Every statement must be checkable against the digest.
 6. Write for an intelligent person who is not a climatologist. Every number comes with what it means in
@@ -68,8 +71,12 @@ def facts_from(cur):
                 "last_day": w["last_value"], "mean_7d": w["level7"],
                 "mean_30d": w["level30"]["anom"], "rank_30d": f"{w['level30']['rank_raw']} of {w['level30']['of']}",
                 "above_trend_30d": w["level30"]["det"], "z_30d": w["level30"]["z"],
-                "slope_14d": w["slope14"]["now"], "slope_percentile_of_season": w["slope14"]["pct"],
-                "acceleration": w["slope14"]["accel"],
+                # ЕДИНИЦА В ИМЕНИ КЛЮЧА. slope14 в watch.py — это изменение ЗА 14 ДНЕЙ
+                # (наклон × 14), не скорость в сутки; ключ «slope_14d» без единицы модель
+                # прочитала как «°C per day» и написала так в вердикте 06.09 (проверка Fable).
+                "change_over_last_14_days_c": w["slope14"]["now"],
+                "change_14d_percentile_of_season": w["slope14"]["pct"],
+                "acceleration_c_per_14_days": w["slope14"]["accel"],
                 "records_of_last_30_days": w["records"]["last30"], "record_run_days": w["records"]["streak"],
                 "records_this_year": f"{w['records']['year']} of {w['records']['year_days']}",
                 "cusum": {"value": w["cusum"]["final"], "threshold": w["cusum"]["threshold"], "alarm": w["cusum"]["alarm"],
@@ -79,6 +86,10 @@ def facts_from(cur):
     pe = N["peak_estimate"]
     return {
         "digest_date": cur["generated"], "stamp": cur["stamp"],
+        "units": {"change_over_last_14_days_c": "°C, total change over the last 14 days (NOT per day)",
+                  "acceleration_c_per_14_days": "°C, this 14-day change minus the previous 14-day change",
+                  "cusum": "dimensionless gauge in units of the series' spread",
+                  "anomalies": "°C against the 1991–2020 norm for the same day of year, never absolute temperature"},
         "risk_index_0_100": cur["risk_index"],
         "detector_alerts": cur.get("alerts", []),
         "series": {"Niño 3.4": card("sst_nino34"), "world ocean": card("sst_world"), "land+ocean": card("t2_world")},
@@ -231,6 +242,13 @@ def summarize(cur):
                           {"role": "user", "content": "Digest of facts:\n" + json.dumps(facts, ensure_ascii=False, indent=1)}])
             txt = r.choices[0].message.content
             result = json.loads(txt)
+            # СПИСКИ — СПИСКАМИ. Модель иногда отдаёт watch/caveats одной строкой (13:04 06.09,
+            # проверка Fable): панель переживёт, а check.py и лента считают по элементам.
+            for k in ("watch", "caveats"):
+                v = result.get(k)
+                if isinstance(v, str):
+                    parts = [x.strip() for x in v.replace(chr(10), " ").split(". ") if x.strip()]
+                    result[k] = [x if x.endswith(".") else x + "." for x in parts] if len(parts) > 1 else [v.strip()]
             result["model"] = MODEL
             result["usage"] = {"in": r.usage.prompt_tokens, "out": r.usage.completion_tokens} if r.usage else None
         except Exception as e:                       # noqa: BLE001
