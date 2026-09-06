@@ -374,7 +374,7 @@
   /* Верхний отступ поля графика. В тесном режиме (плитка обзора) легенды в картинке нет —
      она уехала в метку и подсказку, и держать под неё 42 пикселя незачем: именно этот
      зазор владелец 06.09 назвал «огромным между названием и графиком». */
-  function topPad(w) { return S._tight ? 22 : (legendW(w) ? 26 : 42); }
+  function topPad(w) { return S._tight ? 16 : (legendW(w) ? 26 : 42); }
   /* КЛИКАБЕЛЬНАЯ ЛЕГЕНДА. Владелец 04.09: «все линии тоже нужно дать легенду по моделям,
      отдельно выделить визуально; при нажатии на элемент легенды график её высвечивать
      отдельно, остальные делать блёклыми». Пятый элемент строки — имя того, что выделяем:
@@ -462,7 +462,7 @@
         // подписи месяцев — через один на среднем поле и через два в плитке обзора,
         // иначе они стоят вплотную и читаются как одно слово (владелец 06.09)
         var mEvery = W > 620 ? 1 : (W > 400 ? 2 : 3);
-        if (mo % mEvery === 0 || mEvery === 1) s += '<text x="' + (X(i2) + 2).toFixed(0) + '" y="' + (H - 10) + '">' + MONTHS[mo - 1] + (mo === 1 ? ' ' + d.slice(2, 4) : '') + '</text>';
+        if (mo % mEvery === 0 || mEvery === 1) s += '<text x="' + (X(i2) + 2).toFixed(0) + '" y="' + (H - 10) + '">' + MONTHS[mo - 1] + (mo === 1 && !S._tight ? " '" + d.slice(2, 4) : '') + '</text>';
       }
     }
     s += segs(rec.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 1.8, pickOp('all'));
@@ -780,7 +780,10 @@
     cols.forEach(function (c, k) {
       if (W <= 470 && k % 2 !== 0) return;
       var lived = c.pos && c.pos.months_done;
-      s += '<text x="' + XK(k).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle"' + (lived ? ' style="fill:var(--nino)"' : '') + '>' + esc(c.label) + '</text>';
+      // крайняя подпись прижимается к краю поля, иначе уезжает за картинку
+      var xk = XK(k), edge = W - R - 6;
+      var anc = xk > edge - 10 ? 'end' : 'middle';
+      s += '<text x="' + Math.min(xk, edge).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="' + anc + '"' + (lived ? ' style="fill:var(--nino)"' : '') + '>' + esc(c.label) + '</text>';
     });
     var cls = IRI.classes || {};
     /* САМАЯ СИЛЬНАЯ МОДЕЛЬ — ОТДЕЛЬНОЙ ЛИНИЕЙ. Владелец 04.09: «самую сильную модель выдели».
@@ -1060,7 +1063,7 @@
     s += poly(rows.map(function (r, i) { return [X(i), Y2(r.mean_err)]; }), 'var(--text)', 2);
     rows.forEach(function (r, i) { s += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y2(r.mean_err).toFixed(1) + '" r="2.6" style="fill:var(--text)"/>'; });
     [emin, (emin + emax) / 2, emax].forEach(function (g) { s += '<text x="' + (W - R - 38) + '" y="' + (Y2(g) + 4).toFixed(0) + '" style="fill:var(--soft)">' + fnum(g, 1) + '</text>'; });
-    s += '<text x="' + (W - R - 38) + '" y="' + (Tp - 6) + '" style="fill:var(--soft)">mean err, °C</text>';
+    if (!S._tight) s += '<text x="' + (W - R - 38) + '" y="' + (Tp - 6) + '" style="fill:var(--soft)">mean err, °C</text>';
     s += legend([['share below reality', 'var(--nino)', 6], ['average model error', 'var(--text)', 2]], W, H, R, Tp);
     return s + '</svg>';
   }
@@ -1074,7 +1077,15 @@
     var Y = function (v) { return Tp + (100 - v) / 100 * ph; };
     var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">Our risk index by update, and the share of models below reality</text>';
     [0, 25, 50, 75, 100].forEach(function (g) { s += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(0) + '" x2="' + (W - R - 8) + '" y2="' + Y(g).toFixed(0) + '" style="stroke:var(--grid)" stroke-width=".6"/><text x="' + (Lp - 5) + '" y="' + (Y(g) + 4).toFixed(0) + '" text-anchor="end">' + g + '</text>'; });
-    list.forEach(function (r, i) { if (n < 14 || i % Math.ceil(n / 12) === 0) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + esc(r.date.slice(5)) + '</text>'; });
+    /* Подписи по расстоянию, крайняя — прижата к краю: «09-04» уезжала за картинку. */
+    var lastHX = -1e9;
+    list.forEach(function (r, i) {
+      var xx = X(i);
+      if (xx - lastHX < 40 && i !== n - 1) return;
+      lastHX = xx;
+      var edge = W - R - 4, anc = xx > edge - 12 ? 'end' : (xx < Lp + 14 ? 'start' : 'middle');
+      s += '<text x="' + Math.min(xx, edge).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="' + anc + '">' + esc(r.date.slice(5)) + '</text>';
+    });
     s += poly(list.map(function (r, i) { return [X(i), Y(r.risk_index)]; }), 'var(--nino)', 2.2);
     list.forEach(function (r, i) { s += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(r.risk_index).toFixed(1) + '" r="3" style="fill:' + (r.shout ? 'var(--lv5)' : 'var(--nino)') + '"/>'; });
     if (list.length) { var lr = list[list.length - 1]; s += nowDot(X(list.length - 1), Y(lr.risk_index), lr.shout ? 'var(--lv5)' : 'var(--nino)', 3.5); }
@@ -1323,7 +1334,15 @@
     while ((vmax - vmin) / gstep > Math.max(3, Math.floor(ph / 22))) gstep *= 2;
     for (var g = Math.ceil(vmin / gstep) * gstep; g < vmax; g += gstep) s += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(0) + '" x2="' + (W - R - 8) + '" y2="' + Y(g).toFixed(0) + '" style="stroke:var(--grid)" stroke-width="' + (g === 100 ? 1.3 : .6) + '"/><text x="' + (Lp - 5) + '" y="' + (Y(g) + 4).toFixed(0) + '" text-anchor="end">' + g + '</text>';
     var mstep = Math.max(3, 3 * Math.ceil(n / Math.max(1, Math.floor(pw / 26)) / 3));
-    for (var i = 0; i < n; i++) { var m = from + i; if (m % mstep === 0) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + (m > 0 ? '+' : '') + m + '</text>'; }
+    /* Крайняя подпись прижимается к краю поля, иначе «+18» наполовину уезжает за картинку
+       (владелец 06.09: «подписи иногда заезжают за правый край, например Cocoa since onset»). */
+    for (var i = 0; i < n; i++) {
+      var m = from + i;
+      if (m % mstep !== 0) continue;
+      var xx = X(i), edge = W - R - 8;
+      var anc = xx > edge - 12 ? 'end' : (xx < Lp + 12 ? 'start' : 'middle');
+      s += '<text x="' + Math.min(xx, edge).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="' + anc + '">' + (m > 0 ? '+' : '') + m + '</text>';
+    }
     s += '<line x1="' + X(-from).toFixed(0) + '" y1="' + Tp + '" x2="' + X(-from).toFixed(0) + '" y2="' + (H - B) + '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="3 3"/><text x="' + (X(-from) + 3).toFixed(0) + '" y="' + (Tp + 10) + '">onset</text>';
     series.slice(1).forEach(function (r, ri) { s += segs(r[1].values.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), r[2], r[3], pickOp(r[4], .9), dashOf(ri + 1)); });
     s += segs(series[0][1].values.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), series[0][2], series[0][3], pickOp('now'));
@@ -1393,13 +1412,14 @@
      оси, надо изменить формат, достаточно трёхбуквенных месяцев, как у других». Ряд знает
      свой шаг: день → «3 Sep», месяц → «Sep 2026», всё остальное (сезоны, кварталы) уже
      приходит готовой подписью. */
-  function axisDate(d, step) {
+  function axisDate(d, step, withYear) {
     var t = String(d == null ? '' : d);
     var m = /^(\d{4})-(\d{2})(?:-(\d{2}))?$/.exec(t);
     if (!m) return t;
     var mon = MONTHS[parseInt(m[2], 10) - 1] || m[2];
-    if (step === 'day' && m[3]) return parseInt(m[3], 10) + ' ' + mon;
-    return mon + ' ' + m[1];
+    var yy = " '" + m[1].slice(2);
+    if (step === 'day' && m[3]) return parseInt(m[3], 10) + ' ' + mon + (withYear ? yy : '');
+    return mon + (withYear ? ' ' + m[1] : '');
   }
 
   function chartMetric(m, W, H, title) {
@@ -1447,7 +1467,14 @@
     });
     var step = (vmax - vmin) > 4 ? 1 : ((vmax - vmin) > 1.2 ? .5 : .25);
     s += gridY(vmin, vmax, step, Y, Lp, R, W);
-    if (dates.length === n) dates.forEach(function (d, i) { if (i === 0 || i === n - 1 || (n > 6 && i === Math.floor(n / 2))) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="' + (i === 0 ? 'start' : (i === n - 1 ? 'end' : 'middle')) + '">' + esc(axisDate(d, m.step)) + '</text>'; });
+    /* ГОД НА ОСИ — ОДИН РАЗ. Владелец 06.09: «на каких-то графиках пишешь год, на каких-то
+       нет; если пишешь, то только в одном положении». Пишем у крайней правой подписи — она
+       и есть «сегодня»; остальные подписи только день и месяц. */
+    if (dates.length === n) dates.forEach(function (d, i) {
+      if (!(i === 0 || i === n - 1 || (n > 6 && i === Math.floor(n / 2)))) return;
+      s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="' + (i === 0 ? 'start' : (i === n - 1 ? 'end' : 'middle')) + '">' +
+        esc(axisDate(d, m.step, i === n - 1)) + '</text>';
+    });
     // аналоги того же календарного окна — тонкими цветными линиями под нашим рядом
     ana.forEach(function (a, ai) {
       var off = n - a.values.length;
@@ -2227,7 +2254,7 @@
     s += gridY(vmin, vmax, 1, Y, Lp, R + 8, W, 1);
     // порог, по которому мы считаем признак сработавшим
     s += '<line x1="' + Lp + '" y1="' + Y(-0.5).toFixed(1) + '" x2="' + (W - R - 8) + '" y2="' + Y(-0.5).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1" stroke-dasharray="2 3" opacity=".7"/>' +
-      '<text x="' + (Lp + 4) + '" y="' + (Y(-0.5) - 4).toFixed(0) + '" style="fill:var(--nino)">−0.5 σ: we call the sign in place below this</text>';
+      (S._tight ? '' : '<text x="' + (Lp + 4) + '" y="' + (Y(-0.5) - 4).toFixed(0) + '" style="fill:var(--nino)">−0.5 σ: we call the sign in place below this</text>');
     var months = keep[0].series.months;
     months.forEach(function (m, i) { if (m.slice(5) === '01') s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + esc(m.slice(0, 4)) + '</text>'; });
     keep.forEach(function (p, pi) {
@@ -2286,7 +2313,8 @@
      штрихами. Ось времени общая, под нижней панелью. */
   function chartLayers(items, W, H) {
     if (!items.length) return svgOpen(W, H) + '<text x="20" y="40">no satellite layers</text></svg>';
-    var RC = Math.max(120, Math.min(210, Math.round(W * .3)));
+    // Правая колонка подписей в плитке пуста — она уехала в метку легенды: отдаём место графику.
+    var RC = S._tight ? 6 : Math.max(120, Math.min(210, Math.round(W * .3)));
     var B0 = 18, gap = 8, hh = (H - B0 - gap * (items.length - 1)) / items.length;
     var all = []; items.forEach(function (x) { all = all.concat(x.series.values.filter(fin)); });
     items.forEach(function (x) {
@@ -2765,7 +2793,11 @@
   function chartSection(cfg, W, H) {
     var cols = cfg.cols, rows = cfg.rows, get = cfg.get, nC = cols.length, nR = rows.length;
     if (!nC || !nR) return svgOpen(W, H) + '<text x="20" y="40">no section</text></svg>';
-    var Lp = 44, Rp = 108, Tp = 26, B = 26, pw = W - Lp - Rp, ph = H - Tp - B;
+    /* Колонка легенды справа нужна только на большом графике: в плитке легенда уехала в
+       метку, и держать под неё 108 пикселей — значит показывать разрез в половину ширины
+       (владелец 06.09: «график остался не на всю ширину, ты убрал легенду, но не расширил»). */
+    var Lp = S._tight ? 40 : 44, Rp = S._tight ? 10 : 108, Tp = S._tight ? 16 : 26, B = 26;
+    var pw = W - Lp - Rp, ph = H - Tp - B;
     var vmax = 0, i, j, v;
     for (i = 0; i < nC; i++) for (j = 0; j < nR; j++) { v = get(i, j); if (fin(v)) vmax = Math.max(vmax, Math.abs(v)); }
     vmax = Math.max(0.5, Math.ceil(vmax * 2) / 2);
@@ -2790,7 +2822,7 @@
     if (cfg.d20) s += segs(cfg.d20.map(function (d, k) { return [Lp + (k + .5) * cw, fin(d) ? Y(d) : NaN]; }), 'var(--text)', 2);
     if (cfg.d20clim) s += segs(cfg.d20clim.map(function (d, k) { return [Lp + (k + .5) * cw, fin(d) ? Y(d) : NaN]; }), 'var(--text)', 1.2, .8, '5 3');
     // подписи глубин слева, долгот снизу
-    (S._tight ? [0, 150, 300] : [0, 50, 100, 150, 200, 250, 300]).forEach(function (d) { if (d <= depthMax) s += '<text x="' + (Lp - 5) + '" y="' + (Y(d) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9">' + d + ' m</text>'; });
+    (S._tight ? [0, 150, 300] : [0, 50, 100, 150, 200, 250, 300]).forEach(function (d) { if (d <= depthMax) s += '<text x="' + (Lp - 5) + '" y="' + (Y(d) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9">' + d + (S._tight ? '' : ' m') + '</text>'; });
     /* В плитке обзора долготы стояли вплотную и сливались: там оставляем только края —
        первую и последнюю (владелец 06.09). Глубины слева тоже прореживаем. */
     if (S._tight) {
@@ -2889,6 +2921,7 @@
     var items = [B.ohc_2000, B.ohc_700].filter(Boolean);
     if (!items.length) return svgOpen(W, H) + '<text x="20" y="40">no series</text></svg>';
     var RC = Math.max(120, Math.min(210, Math.round(W * .3))), gap = 10, hh = (H - 20 - gap * (items.length - 1)) / items.length;
+    var OHCROWS = [];
     var s = svgOpen(W, H);
     items.forEach(function (o, xi) {
       var top = xi * (hh + gap), Lp = 50, Tp = top + 6, pw = W - Lp - RC - 10, ph = hh - 12, n = o.values.length;
@@ -2902,12 +2935,18 @@
       var seenDec = {};
       o.years.forEach(function (y, i) { var dec = Math.floor(y); if (dec % 10 === 0 && !seenDec[dec]) { seenDec[dec] = 1; s += '<text x="' + X(i).toFixed(0) + '" y="' + (Tp + ph + 12) + '" text-anchor="middle" font-size="9">' + dec + '</text>'; } });
       var lx = Lp + pw + 10, ly = Tp + 12;
-      if (S._tight) { lx = Math.min(lx, W - 96); }   // в плитке колонка подписей уезжала за край
-      s += '<text x="' + lx + '" y="' + ly + '" class="tt" font-size="11">' + esc(o.title.replace('Ocean heat content, ', '')) + '</text>';
-      s += '<text x="' + lx + '" y="' + (ly + 14) + '" font-size="10" style="fill:var(--text)">' + fnum(o.last, 1, false) + ' ×10²² J, ' + esc(o.date) + '</text>';
-      s += '<text x="' + lx + '" y="' + (ly + 27) + '" font-size="9" style="fill:var(--soft)">' + (o.record ? 'record' : 'below record') + ', +' + fnum(o.rise_10y, 1, false) + ' in 10 y</text>';
-      s += '<text x="' + lx + '" y="' + (ly + 40) + '" font-size="9" style="fill:var(--soft)">anomaly from 1955–2006, NCEI</text>';
+      /* В плитке правая колонка подписей не помещается ни при какой ширине: уводим её в
+         метку легенды, как у остальных графиков (владелец 06.09). */
+      if (S._tight) {
+        OHCROWS.push([esc(o.title.replace('Ocean heat content, ', '')) + ': ' + fnum(o.last, 1, false) + ' ×10²² J, ' + esc(o.date), 'var(--nino)', 'line']);
+      } else {
+        s += '<text x="' + lx + '" y="' + ly + '" class="tt" font-size="11">' + esc(o.title.replace('Ocean heat content, ', '')) + '</text>';
+        s += '<text x="' + lx + '" y="' + (ly + 14) + '" font-size="10" style="fill:var(--text)">' + fnum(o.last, 1, false) + ' ×10²² J, ' + esc(o.date) + '</text>';
+        s += '<text x="' + lx + '" y="' + (ly + 27) + '" font-size="9" style="fill:var(--soft)">' + (o.record ? 'record' : 'below record') + ', +' + fnum(o.rise_10y, 1, false) + ' in 10 y</text>';
+        s += '<text x="' + lx + '" y="' + (ly + 40) + '" font-size="9" style="fill:var(--soft)">anomaly from 1955–2006, NCEI</text>';
+      }
     });
+    if (S._tight && OHCROWS.length) scaleLegend(OHCROWS);
     return s + '</svg>';
   }
 
