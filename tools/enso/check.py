@@ -342,6 +342,14 @@ def check_independent(D):
                     flag(f"alert {a.get('id')}", "SHOUT, а аномалия не выше рекорда буя")
                 if a.get("level") == "WATCH" and wm.get("above_record"):
                     flag(f"alert {a.get('id')}", "выше рекорда буя, а уровень WATCH")
+    # цены: у товара с весом ≥ 3 и годовым ходом ±30 % обязана быть тревога (air.alerts)
+    aids = {a.get("id") for a in D.get("alerts") or []}
+    for c in ((D.get("air") or {}).get("commodities") or {}).get("items") or []:
+        w, yoy = c.get("weight") or 1, c.get("yoy_pct")
+        if w >= 3 and yoy is not None and abs(yoy) >= 30 and f"price_{c.get('key')}" not in aids:
+            flag(f"commodity {c.get('key')}", f"вес {w}, за год {yoy:+.0f} %, а тревоги price_{c.get('key')} нет")
+        if c.get("mom_z") is not None and abs(c["mom_z"]) >= 2 and w >= 2 and f"price_{c.get('key')}" not in aids:
+            flag(f"commodity {c.get('key')}", f"месячный скачок z={c['mom_z']} необычен, а тревоги нет")
     W = D.get("watch") or {}
     for k in ("sst_nino34", "sst_world", "t2_world"):
         w = W.get(k) or {}

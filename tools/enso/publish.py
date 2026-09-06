@@ -14,8 +14,10 @@
     python tools/enso/publish.py --no-llm   # без модели (саммари прежнее, с пометкой)
 """
 import argparse
+import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -34,7 +36,32 @@ FILES = ["data/enso/latest.json", "data/enso/history.json", "data/enso/glossary.
          "data/enso/coast.json",
          # ЭТИХ ТРЁХ ЗДЕСЬ НЕ БЫЛО (найдено 06.09): панель их читает, а выкладка не отправляла.
          # Разметка ссылок обновляется каждую неделю — без неё на сайте висела бы прошлая.
-         "data/enso/links.json", "data/enso/chain-ref.json", "data/enso/models-ref.json"]
+         "data/enso/links.json", "data/enso/chain-ref.json", "data/enso/models-ref.json",
+         # КОД ПАНЕЛИ ЕДЕТ ВМЕСТЕ С ДАННЫМИ (проверка Fable 06.09): снимок прошлого прогона ключит
+         # риски по id, историю вердиктов с поправками рисует JS — старый enso.js со свежими
+         # данными показал бы все риски как «new». Файлы статические, пересборки сайта не нужно.
+         "enso.html", "js/enso.js"]
+
+
+def stamp_asset():
+    """Версия скрипта в адресе — от содержимого скрипта, иначе выкладка бессмысленна.
+
+    Дважды за 06.09 файл js/enso.js правили, а `?v=` в enso.html оставался прежним: на
+    сайте у вернувшегося читателя оставался СТАРЫЙ скрипт из кэша края, и свежие данные он
+    читал старым кодом. Ловушка повторяемая, поэтому проверка стоит прямо перед заливкой,
+    а не в чьей-то памяти.
+    """
+    js = ROOT / "js" / "enso.js"
+    html = ROOT / "enso.html"
+    if not (js.exists() and html.exists()):
+        return
+    h = hashlib.md5(js.read_bytes()).hexdigest()[:10]
+    t = html.read_text(encoding="utf-8")
+    cur = re.search(r"/js/enso\.js\?v=([0-9a-f]+)", t)
+    if cur and cur.group(1) == h:
+        return
+    html.write_text(re.sub(r"/js/enso\.js\?v=[0-9a-f]+", "/js/enso.js?v=" + h, t), encoding="utf-8")
+    print(f"версия скрипта поднята: {cur.group(1) if cur else '—'} → {h} (иначе на сайте остался бы прежний код)")
 
 
 def main():
@@ -71,6 +98,7 @@ def main():
         if ans not in ("y", "yes", "д", "да"):
             print("не выкладываю")
             return 0
+    stamp_asset()
     env = dict(os.environ, B42_DEPLOY_OK="1", PYTHONIOENCODING="utf-8")
     rc = subprocess.run([sys.executable, "cloudflare/deploy_r2.py", "--only", *FILES], cwd=str(ROOT), env=env).returncode
     print("выкладка:", "ок" if rc == 0 else f"код {rc}")

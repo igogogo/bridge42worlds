@@ -31,6 +31,9 @@ Rules, no exceptions:
    digest. Do not put a number on the peak of the event if the digest says the analogues lead beyond the
    record of the series; then talk about "when the growth stops".
 4. Distinguish "above all analogues" from "above anything measured": these are different claims.
+3a. "Turning point" means the course of the event REVERSED: a rise became a fall, a run of records
+   ended, CUSUM turned down. A new record or a SHOUT alert is NOT a turning point; while the 14-day
+   change is positive and the record run is intact, answer false.
 4a. Units are in the "units" section of the digest. The 14-day change is a TOTAL over the last 14 days;
    never write "per day". Quote alert titles as they are; do not stretch "highest since <date>" into
    "highest in N years" or the reverse.
@@ -46,6 +49,9 @@ Rules, no exceptions:
 7. The digest has a section on the IRI forecast models: how many are already below reality and how
    they revised the peak from issue to issue. Say what that means: if models are rewriting the forecast
    upward and some have already fallen behind, their winter numbers should be read as a lower bound.
+7a. Prices: the commodity list carries a food-security weight from 1 to 5. Talk about staples (weight 4–5)
+   before niche crops, and say whether a monthly jump is unusual for the season (month_unusual_z of 2 or
+   more) or within the usual swing. A move since the event began is a coincidence in time, not a cause.
 8. Besides the overall summary, give one short summary (two or three sentences) for each block of the
    page, strictly from that block's facts: C "where we are" (Niño 3.4 against the analogues, ONI, type),
    D "risks" (levels and the index), E "models" (IRI against reality, revisions), G "dynamics" (daily
@@ -174,7 +180,13 @@ def _air_facts(A):
                              for x in L.get("items", [])},
     }
     cm = (A.get("commodities") or {}).get("items") or []
-    out["commodity_prices_since_event_began"] = {c["name"]: c["since_onset_pct"] for c in cm[:6]}
+    # ТОВАРЫ С ВЕСОМ И СЕЗОННОСТЬЮ (владелец 06.09): модель видит, что важно (вес 1–5), что
+    # необычно для месяца (month_unusual_z) и где стоит годовое изменение в истории с 1960.
+    out["commodity_prices"] = [
+        {"name": c["name"], "weight_1_to_5": c.get("weight"), "yoy_pct": c.get("yoy_pct"),
+         "yoy_percentile_since_1960": c.get("yoy_rank"), "month_pct": c.get("mom_pct"),
+         "month_unusual_z": c.get("mom_z"), "since_onset_pct": c.get("since_onset_pct")}
+        for c in cm if (c.get("weight") or 1) >= 3 or abs(c.get("mom_z") or 0) >= 2 or abs(c.get("since_onset_pct") or 0) >= 15]
     return out
 
 
@@ -215,7 +227,9 @@ def fallback_text(cur):
     return {
         "verdict": head + f"Niño 3.4 {NW['latest']['n34a']:+.1f} °C by the NOAA weekly index, rank {N['all_years_rank']} among "
                           f"all years for the same 30 days; risk index {cur['risk_index']}.",
-        "turning_point": {"happened": bool(shout), "why": "; ".join(a["detail"] for a in al) or "no detector alerts"},
+        # разворот — это смена хода (rise became fall, run ended, CUSUM turned down), а не рекорд
+        "turning_point": {"happened": any(k in (a.get("title") or "").lower() for a in al for k in ("turned", "fell", "ended", "deflating")),
+                          "why": "; ".join(a["detail"] for a in al) or "no detector alerts"},
         "changed": " ".join(cur.get("diff", [])[:3]),
         "outlook_2_3w": f"By the analogue forecast Niño 3.4 in 14 days: {f['p10']:+.2f} … {f['p50']:+.2f} … {f['p90']:+.2f} °C.",
         "watch": ["NOAA weekly Niño 3.4", "14-day slope of Niño 3.4", "the ocean's run of records", "CUSUM", "Niño 1+2"],

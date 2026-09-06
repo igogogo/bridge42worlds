@@ -208,6 +208,55 @@ EL_NINO_LINK = {
 }
 
 
+# ВЕС ДЛЯ ПРОДОВОЛЬСТВЕННОЙ БЕЗОПАСНОСТИ, 1–5 (владелец 06.09: «цены на сахар важнее цен на
+# кокосовое масло»). Основание — доля в мировом рационе по балансам FAO (FAOSTAT Food Balance
+# Sheets) и место в цепочке: сырьё для следующего урожая и корм считаются входами. Числа
+# приблизительные и подписаны как таковые; менять здесь, в одном месте.
+FOOD_WEIGHT = {
+    "wheat": (5, "about a fifth of the calories people eat worldwide (FAO food balances); Kuwait imports all of its wheat", True),
+    "rice": (5, "about a fifth of the calories people eat worldwide; the staple of South and South-East Asia; Kuwait imports all of its rice", True),
+    "maize": (4, "about a twentieth of calories eaten directly and the main feed grain, so it sets meat, poultry and egg prices", True),
+    "sugar": (4, "about 7 % of world dietary energy; the Gulf is among the highest per-capita consumers", True),
+    "palm_oil": (4, "the largest vegetable oil, about a third of world vegetable-oil supply; oils are about a tenth of calories", True),
+    "soybean_oil": (3, "the second vegetable oil; also the meal behind poultry and aquaculture feed", True),
+    "fertilizer_urea": (3, "an input, not food: nitrogen sets the cost and the size of the next cereal sowing", False),
+    "fertilizer_dap": (3, "an input, not food: phosphate for the next sowing", False),
+    "fishmeal": (2, "an input for aquaculture and poultry feed; small in the human diet but the most direct El Niño price signal", False),
+    "coconut_oil": (1, "under 1 % of world vegetable-oil supply; a niche oil", False),
+    "coffee_arabica": (1, "an income crop for exporters, not a calorie source", False),
+    "cocoa": (1, "an income crop for West Africa, not a calorie source", False),
+}
+FOOD_WEIGHT_SRC = "FAOSTAT Food Balance Sheets (share of dietary energy supply); World Bank Pink Sheet for the price series"
+
+
+def _season_stats(ser, ks):
+    """Насколько необычен последний месячный скачок для ЭТОГО календарного месяца и где стоит
+    годовое изменение среди всех годовых изменений ряда (владелец 06.09: «может быть и
+    сезонным, как-то надо разобраться»). Считается по полному ряду Pink Sheet, с 1960 года."""
+    import statistics as st
+    last = ks[-1]
+    mon = int(last[5:7])
+    moms = []
+    for k in ks[1:]:
+        if int(k[5:7]) != mon:
+            continue
+        y = int(k[:4]) if mon > 1 else int(k[:4]) - 1
+        prev = f"{y}-{(mon - 1) if mon > 1 else 12:02d}"
+        if ser.get(prev) and ser.get(k):
+            moms.append(100.0 * (ser[k] / ser[prev] - 1))
+    yoys = [100.0 * (ser[ks[i]] / ser[ks[i - 12]] - 1) for i in range(12, len(ks)) if ser.get(ks[i - 12]) and ser.get(ks[i])]
+    out = {"since_year": int(ks[0][:4])}
+    if len(moms) >= 6:
+        cur, hist = moms[-1], moms[:-1]
+        mu, sd = st.mean(hist), st.pstdev(hist)
+        out.update({"mom_typical": round(mu, 1), "mom_sd": round(sd, 1), "mom_z": round((cur - mu) / sd, 1) if sd else None})
+    if len(yoys) >= 12:
+        cur, hist = yoys[-1], yoys[:-1]
+        out["yoy_rank"] = round(100.0 * sum(1 for y in hist if y < cur) / len(hist))
+        out["yoy_max"] = round(max(hist), 1)
+    return out
+
+
 def commodities(pink, onset=None):
     """Товары поимённо: сейчас, месяц назад, год назад и от начала события."""
     out = []
@@ -233,15 +282,22 @@ def commodities(pink, onset=None):
             "since_onset_pct": round(100 * (last / base - 1), 1) if base else None,
             "onset": onset if base else None,
             "why": EL_NINO_LINK.get(key, ""),
+            "weight": FOOD_WEIGHT.get(key, (1, "", False))[0],
+            "weight_basis": FOOD_WEIGHT.get(key, (1, "", False))[1],
+            "gulf": FOOD_WEIGHT.get(key, (1, "", False))[2],
+            **_season_stats(ser, ks),
             "series": {"months": ks[-36:], "values": [ser[k] for k in ks[-36:]]},
         })
-    out.sort(key=lambda r: -(abs(r["since_onset_pct"]) if r["since_onset_pct"] is not None
-                             else abs(r["yoy_pct"] or 0)))
+    # ПОРЯДОК — ПО ИЗМЕНЕНИЮ ЗА ГОД, сверху вниз (владелец 06.09); панель умеет пересортировать
+    out.sort(key=lambda r: -(r["yoy_pct"] if r["yoy_pct"] is not None else -999))
     return {"items": out, "as_of": out[0]["date"] if out else None,
+            "weight_src": FOOD_WEIGHT_SRC,
             "note": ("World Bank Pink Sheet, monthly, free and without registration. The FAO index is one "
                      "number for all food; El Niño does not hit “food”, it hits palm oil, rice and fishmeal "
-                     "by name. Sorted by the move since the event began — which is a coincidence in time, "
-                     "not a proof of cause.")}
+                     "by name. Sorted by the change against a year ago; the weight says how much the commodity "
+                     "matters for food security (1 niche … 5 staple), the month column is compared with the usual "
+                     "swing of that calendar month since 1960, the year column with every year-on-year change since 1960. "
+                     "A coincidence in time with the event is not a proof of cause.")}
 
 
 def onset_paths(pink, onset, analog_onsets=None, span=18):
@@ -437,16 +493,63 @@ def risks(A, n34_now=None):
     return out
 
 
+def _ord(n):
+    if n is None:
+        return ""
+    n = int(n)
+    suf = "th" if 10 <= n % 100 <= 20 else {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suf}"
+
+
 def alerts(A):
-    """Тревоги по ценам поимённо: движение с начала события, а не «за год»."""
+    """Тревоги по ценам поимённо. Владелец 06.09: рост пшеницы и сахара не попадал в State,
+    потому что правило смотрело только на «с начала события». Теперь три правила, одна тревога
+    на товар (сильнейший сигнал), вес решает, что вообще стоит тревоги:
+      · за год ±30 % и больше — у товаров с весом ≥ 3 (основные продукты и входы);
+      · месячный скачок, необычный для этого календарного месяца (|z| ≥ 2 по истории с 1960) — вес ≥ 2;
+      · с начала события ±15 % — два самых крупных сдвига, любой вес (это про Эль-Ниньо, не про важность).
+    Id устойчив по товару (price_<key>): иначе смена сильнейшего сигнала рождала бы «новую» тревогу."""
+    items = ((A or {}).get("commodities") or {}).get("items", [])
     out = []
-    for c in ((A or {}).get("commodities") or {}).get("items", [])[:4]:
-        v = c.get("since_onset_pct")
-        if v is None or abs(v) < 15:
+    by_onset = sorted([c for c in items if c.get("since_onset_pct") is not None and abs(c["since_onset_pct"]) >= 15],
+                      key=lambda c: -abs(c["since_onset_pct"]))[:2]
+    onset_ok = {c["key"] for c in by_onset}
+    for c in items:
+        w = c.get("weight") or 1
+        unit = str(c.get("unit") or "").strip("()")
+        price = f"{c['value']:g} {unit} in {c['date']}"
+        yoy, mom, z, on = c.get("yoy_pct"), c.get("mom_pct"), c.get("mom_z"), c.get("since_onset_pct")
+        sig = None
+        if yoy is not None and abs(yoy) >= 30 and w >= 3:
+            sig = ("yoy", f"{c['name']}: {yoy:+.0f} % against a year ago",
+                   f"{price}; " + (f"in the {_ord(c.get('yoy_rank'))} percentile of all year-on-year changes since {c.get('since_year', 1960)}; "
+                                   if c.get("yoy_rank") is not None else "")
+                   + f"weight {w} of 5: {c.get('weight_basis', '')}.")
+        elif z is not None and abs(z) >= 2 and w >= 2 and mom is not None:
+            sig = ("month", f"{c['name']}: {mom:+.0f} % in a month, unusual for the season",
+                   f"{price}; the usual change for this calendar month since {c.get('since_year', 1960)} is {c.get('mom_typical'):+.1f} % "
+                   f"give or take {c.get('mom_sd')}, so this is about {abs(z):.0f} times the usual swing"
+                   + (f"; {yoy:+.0f} % against a year ago" if yoy is not None else "")
+                   + f". Weight {w} of 5: {c.get('weight_basis', '')}.")
+        elif c["key"] in onset_ok:
+            sig = ("onset", f"{c['name']}: {on:+.0f} % since the event began",
+                   f"{price}, against the onset month {c.get('onset')}. {c.get('why', '')} A coincidence in time "
+                   "is not a cause: prices move for many reasons at once.")
+        if not sig:
             continue
-        out.append({"level": "WATCH", "kind": "food",
-                    "title": f"{c['name']}: {v:+.0f} % since the event began",
-                    "detail": (f"{c['value']:g} {str(c['unit']).strip('()')} in {c['date']}, against the onset month "
-                               f"{c.get('onset')}. {c.get('why', '')} A coincidence in time is not a cause: "
-                               "prices move for many reasons at once.")})
+        kind, title, detail = sig
+        extra = []
+        if kind != "yoy" and yoy is not None and abs(yoy) >= 30:
+            extra.append(f"{yoy:+.0f} % against a year ago")
+        if kind != "month" and z is not None and abs(z) >= 2 and mom is not None:
+            extra.append(f"{mom:+.0f} % in a month, unusual for the season")
+        if kind != "onset" and on is not None and abs(on) >= 15:
+            extra.append(f"{on:+.0f} % since the event began")
+        if extra:
+            detail += " Also: " + "; ".join(extra) + "."
+        if kind != "onset" and c.get("why"):
+            detail += " " + c["why"]
+        out.append({"level": "WATCH", "kind": "food", "title": title, "detail": detail,
+                    "id": f"price_{c['key']}", "weight": w})
+    out.sort(key=lambda a: -a["weight"])
     return out

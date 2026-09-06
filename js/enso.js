@@ -2676,21 +2676,36 @@
       }
     } else if (k === 'goods' && CM) {
       /* ТОВАРЫ ПОИМЁННО. Индекс FAO — одно число на всю еду; Эль-Ниньо бьёт по пальмовому
-         маслу, рису и рыбной муке, и по каждому своим путём. Сортировка по движению с начала
-         события, и тут же сказано, почему этот товар вообще в списке. */
+         маслу, рису и рыбной муке, и по каждому своим путём. Владелец 06.09: сортировка по
+         изменению за год, вес продовольственной значимости, месяц против обычного размаха
+         этого месяца, шапка выровнена по числам, заголовки нажимаются (пересортировка). */
+      var GKEY = { yoy: 'yoy_pct', mom: 'mom_pct', onset: 'since_onset_pct', weight: 'weight', value: 'value' };
+      var gs = S.sub.goodsSort || 'yoy', gk = GKEY[gs] || 'yoy_pct';
+      var rows = CM.items.slice().sort(function (a, b) { return (fin(b[gk]) ? b[gk] : -1e9) - (fin(a[gk]) ? a[gk] : -1e9); });
+      function th(label, key, num) { return '<th' + (num ? ' class="num' : ' class="') + (gs === key ? ' sorted' : '') + '"' + (key ? ' data-gs="' + key + '"' : '') + '>' + label + (gs === key ? ' ↓' : '') + '</th>'; }
       var wrapG = el('div'); wrapG.style.cssText = 'flex:1;min-height:0;overflow:auto';
-      wrapG.innerHTML = '<table class="e"><thead><tr><th>commodity</th><th>price</th><th>month</th><th>year</th><th>since the event began</th><th>why it is here</th></tr></thead><tbody>' +
-        CM.items.map(function (c) {
-          var pay = { name: c.name + ' (' + c.unit + ')', def: c.why + ' Price ' + c.value + ' ' + c.unit + ' in ' + c.date + '.', src: 'World Bank Pink Sheet, monthly', date: c.date };
-          return '<tr><td>' + src(pay, c.name) + '<div class="sub">' + esc(c.unit) + '</div></td>' +
+      wrapG.innerHTML = '<table class="e goods"><thead><tr>' + th('commodity', null) + th(term('foodweight', 'weight'), 'weight', true) + th('price', 'value', true) +
+        th('month', 'mom', true) + th('year', 'yoy', true) + th('since the event began', 'onset', true) + th('why it is here', null) + '</tr></thead><tbody>' +
+        rows.map(function (c) {
+          var w = c.weight || 1;
+          var pay = { name: c.name + ' (' + c.unit + ')', def: c.why + ' Price ' + c.value + ' ' + c.unit + ' in ' + c.date + '.' + (c.gulf ? ' Imported by the Gulf states.' : ''), src: 'World Bank Pink Sheet, monthly', date: c.date };
+          var wpay = { name: c.name + ': weight ' + w + ' of 5', def: (c.weight_basis || 'no basis recorded') + '. The weight is set by hand and orders the alerts: large moves in staples raise an alert, the same move in a niche crop only shows here.', src: CM.weight_src || 'FAOSTAT food balances; our own scoring', date: c.date };
+          var mz = fin(c.mom_z) ? c.mom_z : null, yr = fin(c.yoy_rank) ? c.yoy_rank : null;
+          var mcls = mz != null && mz >= 2 ? ' top' : (mz != null && mz <= -2 ? ' dn' : ''), ycls = fin(c.yoy_pct) && c.yoy_pct >= 30 ? ' top' : (fin(c.yoy_pct) && c.yoy_pct <= -30 ? ' dn' : '');
+          return '<tr><td>' + src(pay, c.name) + '<div class="sub">' + esc(c.unit) + (c.gulf ? ' · Gulf import' : '') + '</div></td>' +
+            '<td class="num"><span class="wdots" data-src="' + esc(JSON.stringify(wpay)) + '">' + '●●●●●'.slice(0, w) + '<i>' + '○○○○○'.slice(0, 5 - w) + '</i></span></td>' +
             '<td class="num">' + fnum(c.value, c.value > 100 ? 0 : 2, false) + '</td>' +
-            '<td class="num' + ((c.mom_pct || 0) > 0 ? ' top' : '') + '">' + fnum(c.mom_pct, 1) + ' %</td>' +
-            '<td class="num">' + fnum(c.yoy_pct, 1) + ' %</td>' +
+            '<td class="num' + mcls + '">' + fnum(c.mom_pct, 1) + ' %' + (fin(c.mom_typical) ? '<div class="sub">usual ' + fnum(c.mom_typical, 1) + ' ± ' + fnum(c.mom_sd, 1, false) + '</div>' : '') + '</td>' +
+            '<td class="num' + ycls + '">' + fnum(c.yoy_pct, 1) + ' %' + (yr != null ? '<div class="sub">' + ord(yr) + ' pct since ' + (c.since_year || 1960) + '</div>' : '') + '</td>' +
             '<td class="num' + ((c.since_onset_pct || 0) > 10 ? ' top' : '') + '">' + fnum(c.since_onset_pct, 1) + ' %</td>' +
             '<td class="act">' + esc(c.why) + '</td></tr>';
         }).join('') + '</tbody></table>';
+      wrapG.addEventListener('click', function (e) {
+        var t = e.target.closest && e.target.closest('th[data-gs]');
+        if (t) { S.sub.goodsSort = t.getAttribute('data-gs'); render(); }
+      });
       body.appendChild(wrapG);
-      body.appendChild(el('div', 'cap', esc(CM.note) + ' Prices are ' + esc(CM.as_of) + ', one month fresher than the FAO index.'));
+      body.appendChild(el('div', 'cap', esc(CM.note) + ' Prices are ' + esc(CM.as_of) + ', one month fresher than the FAO index. Click a column header to sort; red marks a rise unusual for the month or of 30 % and more over the year, blue a fall of the same size.'));
     }
   }
 
