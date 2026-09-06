@@ -3276,9 +3276,23 @@
     var list = el('div', 'refs');
     if (k === 'works') {
       list.innerHTML = works.map(function (w) {
-        var pay = { name: w.title, html: '<p>' + esc(w.oneliner || '') + '</p><p><b>Used at</b></p>' + w.uses.map(function (u) { return '<p class="wk-p">' + esc(u.at) + (u.why ? '<i>' + esc(u.why) + '</i>' : '') + '</p>'; }).join(''), src: 'arXiv ' + w.id + ' · ' + w.orig, date: w.date };
-        return '<div class="ref" data-src="' + esc(JSON.stringify(pay)) + '"><div class="ref-t"><a href="/lang/en/archive/' + esc(w.date) + '/' + esc(w.folder) + '/index.html"' + tgt + '>' + esc(w.title) + '</a><span class="ref-n">' + w.uses.length + ' use' + (w.uses.length > 1 ? 's' : '') + '</span></div>' +
-          '<div class="ref-d">' + esc(w.oneliner || w.orig) + '</div><div class="ref-m"><span class="wk-num">arXiv ' + esc(w.id) + '</span> · ' + esc(w.date) + ' · ' + esc(w.uses.map(function (u) { return u.at.split(':')[0]; }).filter(function (v, i, a) { return a.indexOf(v) === i; }).join(', ')) + '</div></div>';
+        /* КАРТОЧКА РАБОТЫ — ТА ЖЕ, ЧТО ВЕЗДЕ НА ПАНЕЛИ. Владелец 06.09: «покажи карточку
+           статьи в специальном виде, мы это уже делаем, соблюдай его; и там же ссылка
+           перейти на статью». Собираем её тем же worksHtml, что и подсказки «N works»,
+           поэтому вид и ссылка «read our version ↗» одинаковые во всей панели. */
+        var card = worksHtml([{ id: w.id, date: w.date, folder: w.folder, title: w.orig,
+                                our_title: w.title, oneliner: w.oneliner }]);
+        var pay = { name: w.title, html: card + '<p><b>Used at</b></p>' + w.uses.map(function (u) { return '<p class="wk-p">' + esc(u.at) + (u.why ? '<i>' + esc(u.why) + '</i>' : '') + '</p>'; }).join(''),
+          src: 'our own retelling of this work', date: w.date };
+        /* Номер arXiv — со своей подсказкой: он ведёт в НАШ разбор, а не в архив, и это
+           должно быть видно до нажатия (владелец 06.09). Ссылка на первоисточник — там же,
+           отдельной строкой. */
+        var numPay = { name: 'Our version, not arXiv',
+          html: '<p>The number identifies the paper; the link opens <b>our retelling</b> in English.</p>' + card,
+          url: 'https://arxiv.org/abs/' + String(w.id).split('v')[0], src: 'arXiv ' + w.id, date: w.date };
+        var ourUrl = '/lang/en/archive/' + esc(w.date) + '/' + esc(w.folder) + '/index.html';
+        return '<div class="ref" data-src="' + esc(JSON.stringify(pay)) + '"><div class="ref-t"><a href="' + ourUrl + '"' + tgt + '>' + esc(w.title) + '</a><span class="ref-n">' + w.uses.length + ' use' + (w.uses.length > 1 ? 's' : '') + '</span></div>' +
+          '<div class="ref-d">' + esc(w.oneliner || w.orig) + '</div><div class="ref-m"><a class="wk-num" href="' + ourUrl + '"' + tgt + ' data-src="' + esc(JSON.stringify(numPay)) + '">our version · arXiv ' + esc(w.id) + '</a> · ' + esc(w.date) + ' · ' + esc(w.uses.map(function (u) { return u.at.split(':')[0]; }).filter(function (v, i, a) { return a.indexOf(v) === i; }).join(', ')) + '</div></div>';
       }).join('') || '<div class="note">No works attached yet.</div>';
       body.appendChild(list);
       body.appendChild(el('div', 'cap', 'Only the papers that a model judged to belong next to a statement of this panel; the full pool is our archive of parsed works. Point at a row for where it is used and why; the link opens our version. Register built from data/enso/links.json at ' + esc(S.L.built || '') + '.'));

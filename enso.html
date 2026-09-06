@@ -591,6 +591,13 @@
   [data-term],[data-src]{text-decoration:underline dotted color-mix(in srgb, var(--ochre) 55%, transparent);
     text-underline-offset:3px;cursor:help}
   .zn[data-term],.mn[data-src],.kj .jsrc [data-src],.p-meta [data-src]{text-decoration:none;cursor:default}
+  /* Пунктир — только у строчных подсказок внутри текста. На карточках (у них своя рамка)
+     он превращал список в рябь (владелец 06.09: «сам текст зачем-то подчёркнут пунктиром,
+     рябит в глазах»). */
+  .ref[data-src],.kpi[data-src],.card[data-src],.ov-kpi[data-src],.risk[data-src],
+  .anv-kpi[data-src],.chain-node[data-src],.news-i[data-src]{text-decoration:none;cursor:pointer}
+  .ref .wk-num{color:var(--ochre);text-decoration:none;cursor:help}
+  .ref .wk-num:hover{background:color-mix(in srgb, var(--ochre) 16%, transparent)}
   [data-term]:hover,[data-src]:hover{color:var(--ochre)}
   .p-meta [data-src]{text-decoration:none}
   .p-meta [data-src]:hover{color:var(--ochre)}
@@ -731,7 +738,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=bcdd9c2620"></script>
+<script src="/js/enso.js?v=39262f23a0"></script>
 <script src="/js/sitenav.js?v=cf6fd79772"></script>
 </body>
 </html>
