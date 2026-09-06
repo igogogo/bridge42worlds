@@ -468,6 +468,8 @@
   /* Заголовок плитки — ровно одна строка: от него до графика везде одинаково (владелец 06.09) */
   .ov-tile .ov-t{font-family:var(--mono);font-size:9.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px;height:13px;line-height:13px;flex:none;
     display:flex;align-items:center;gap:6px}
+  /* Название ужимается многоточием, метка легенды остаётся на месте (проверка 06.09). */
+  .ov-tile .ov-t .ov-tt{min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   /* Метка легенды — в строке названия карточки, у правого края (владелец 06.09) */
   .ov-leg{margin-inline-start:auto;flex:none;font-size:8.5px;letter-spacing:.06em;color:var(--soft);border:1px solid var(--hair);
     border-radius:7px;padding:0 6px;line-height:12px;cursor:help;background:var(--surface)}
@@ -760,7 +762,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=7f1a8624f9"></script>
+<script src="/js/enso.js?v=9b05b42c53"></script>
 <script src="/js/sitenav.js?v=cf6fd79772"></script>
 </body>
 </html>

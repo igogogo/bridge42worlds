@@ -3482,7 +3482,10 @@
     tiles.forEach(function (t) {
       var d = el('div', 'ov-tile');
       d.setAttribute('data-src', JSON.stringify({ name: t.title, def: t.meaning, why: 'Click to open the section.' }));
-      d.innerHTML = '<div class="ov-t">' + esc(t.title) + '</div><div class="ov-p"></div>';
+      /* Название — отдельным элементом, а не голым текстом: голый текст внутри flex
+         становится безымянным элементом, который не умеет ужиматься, и на телефоне длинное
+         название выталкивало метку «legend» за край плитки (проверка 06.09, 375 px). */
+      d.innerHTML = '<div class="ov-t"><span class="ov-tt">' + esc(t.title) + '</span></div><div class="ov-p"></div>';
       d.addEventListener('click', function (e) { if (e.target.closest('[data-pick]')) return; S._back = 'overview'; S.full = false; S.pick = null; if (t.go[0] === 'risk') { S.risk = t.go[1]; S.view = 'risk'; } else { S.view = t.go[0]; if (t.go[1] != null) S.sub[t.go[0]] = t.go[1]; S.risk = null; } render(); });
       grid.appendChild(d);
       t._el = d;
