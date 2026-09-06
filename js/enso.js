@@ -59,6 +59,7 @@
   var SERIES_NAME = { sst_nino34: 'Niño 3.4', sst_world: 'world ocean', t2_world: 'land+ocean' };
 
   var S = {
+    legOpen: true,          // легенда развёрнута; крестик сворачивает её на всех графиках
     D: null, G: {}, H: [], P: null, M: {}, L: {},
     view: 'now', sub: {}, risk: null, model: null, scenario: null, pick: null, region: null,
     // Режим сравнения: '' — показываем значения, 'update' — изменение с прошлого прогона,
@@ -294,6 +295,13 @@
 
   function legendAt(items, x, y) {
     if (S._tight) return legIcon(items, S._tightW || 300);
+    /* Кнопка одна на всю панель: закрыл легенду — закрылась и здесь (владелец 06.09:
+       «кнопочка раскрыть-скрыть тоже везде по всему дашборду»). Когда открыта, кнопка
+       стоит там же, в правом верхнем углу поля. */
+    var wCh = S._chartW || 600;
+    if (!S.legOpen) return legToggle(wCh, (y || 20) - 4, false);
+    if (S._chartW) x = Math.min(x, S._chartW - 150);
+    var head = legToggle(wCh, (y || 20) - 4, true);
     return items.map(function (it, i) {
       var yy = y + i * 13, key = it[4];
       var op = key && S.pick && S.pick !== key ? ' opacity=".35"' : '';
@@ -303,7 +311,7 @@
         '" style="stroke:' + it[1] + '" stroke-width="' + (it[2] || 1.4) + '"' +
         (it[3] ? ' stroke-dasharray="' + it[3] + '"' : '') + '/>' +
         '<text x="' + (x + 24) + '" y="' + (yy + 3.5) + '" font-size="10">' + it[0] + '</text></g>';
-    }).join('');
+    }).join('') + head;
   }
   /* Штриховка для отрицательных значений на тепловых картах и столбиках: знак виден и без цвета. */
   function hatchDefs() {
@@ -370,7 +378,10 @@
     return '<circle class="ring" ' + c + ' style="stroke:' + color + '"/><circle class="ring r2" ' + c + ' style="stroke:' + color + '"/>' +
       '<circle class="now-dot" ' + c + ' style="fill:' + color + '"/>';
   }
-  function legendW(w) { return w < 560 ? 0 : Math.min(240, Math.round(w * 0.27)); }
+  /* Колонки под легенду больше нет. Владелец 06.09: «график на всю ширину, а легенда
+     справа вверху, выезжающая». Возвращаем только запас, чтобы подпись последнего значения
+     не упиралась в край; сама легенда ложится поверх поля (см. legend()). */
+  function legendW(w) { return w < 560 ? 0 : 54; }
   /* Верхний отступ поля графика. В тесном режиме (плитка обзора) легенды в картинке нет —
      она уехала в метку и подсказку, и держать под неё 42 пикселя незачем: именно этот
      зазор владелец 06.09 назвал «огромным между названием и графиком». */
@@ -379,22 +390,48 @@
      отдельно выделить визуально; при нажатии на элемент легенды график её высвечивать
      отдельно, остальные делать блёклыми». Пятый элемент строки — имя того, что выделяем:
      класс моделей или конкретная модель. Обработчик один, на поле графика. */
+  /* Метка свёрнутой легенды: та же форма, что в плитке обзора, и на том же месте —
+     правый верхний угол поля. Нажатие разворачивает панель обратно. */
+  function legToggle(w, top, open) {
+    var bw = 52, x = w - bw - 6, y = Math.max(2, top - 16);
+    return '<g data-legtoggle="1" style="cursor:pointer">' +
+      '<rect x="' + x + '" y="' + y + '" width="' + bw + '" height="14" rx="7" style="fill:var(--surface);stroke:var(--soft)" stroke-width=".9" opacity=".95"/>' +
+      '<text x="' + (x + bw / 2) + '" y="' + (y + 10) + '" text-anchor="middle" font-size="8.5" style="fill:var(--soft);letter-spacing:.06em">legend ' + (open ? '×' : '▾') + '</text></g>';
+  }
+
   function legend(items, w, h, R, top) {
     if (S._tight) return legIcon(items, w);
     var s = '', i;
     if (R > 0) {
-      var ly = top + 4, maxCh = Math.max(8, Math.floor((R - 40) / 6.3));
+      /* НАКЛАДНАЯ ПАНЕЛЬ, А НЕ КОЛОНКА. Раньше под легенду отдавалась четверть ширины и
+         стояла пустой ниже последней строки (владелец 06.09: «даже когда заканчивается
+         легенда, там ещё куча места»). Теперь она лежит поверх графика справа сверху, на
+         своей подложке, и сворачивается крестиком. */
+      var rows = items.filter(function (it) { return it && it[0]; });
+      if (!S.legOpen) return legToggle(w, top, false);
+      var maxCh = 0;
+      rows.forEach(function (it) { maxCh = Math.max(maxCh, String(it[0]).length); });
+      maxCh = Math.min(maxCh, 30);
+      var bw = Math.max(96, Math.min(maxCh * 6.15 + 46, Math.round(w * 0.5)));
+      var bx = w - bw - 6, by = Math.max(2, top - 14);
+      var bh = 0;
+      items.forEach(function (it) { bh += (it && it[0]) ? 16 : 7; });
+      s += '<rect x="' + bx + '" y="' + by + '" width="' + bw + '" height="' + (bh + 20) + '" rx="8" style="fill:var(--surface);stroke:var(--hair)" stroke-width="1" opacity=".93"/>';
+      s += legToggle(w, by + 16, true);
+      var LX = bx, LW = bw;
+      var ly = by + 20;
+      maxCh = Math.max(8, Math.floor((bw - 44) / 6.15));
       for (i = 0; i < items.length; i++) {
         var it = items[i].slice();
         if (it[0] === '' || it[0] == null) { ly += 7; continue; }   // пустая строка отделяет нажимаемое от справочного
-        if (it[0] && it[0].length > maxCh) it[0] = it[0].slice(0, maxCh - 1) + '…';   // не вылезать за поле (владелец 05.09)
+        if (it[0] && it[0].length > maxCh) it[0] = it[0].slice(0, maxCh - 1) + '…';   // не вылезать за панель
         var tag = it[4] ? ' data-pick="' + esc(it[4]) + '" class="pick' + (S.pick === it[4] ? ' on' : '') + '"' : '';
         if (tag) s += '<g' + tag + '>';
-        if (it[4] && S.pick === it[4]) s += '<rect x="' + (w - R + 2) + '" y="' + (ly - 1) + '" width="' + (R - 4) + '" height="15" rx="4" style="fill:var(--ochre)" opacity=".14"/>';
-        if (it[2] === 'dot') s += '<circle cx="' + (w - R + 18) + '" cy="' + (ly + 4) + '" r="4" style="fill:' + it[1] + '"/>';
-        else s += '<line x1="' + (w - R + 8) + '" y1="' + (ly + 4) + '" x2="' + (w - R + 28) + '" y2="' + (ly + 4) + '" style="stroke:' + it[1] + '" stroke-width="' + (it[2] || 2) + '"' + (it[3] ? ' stroke-dasharray="' + it[3] + '"' : '') + '/>';
-        s += '<text x="' + (w - R + 34) + '" y="' + (ly + 8) + '"' + (it[4] ? ' style="cursor:pointer"' : '') + '>' + esc(it[0]) + '</text>';
-        if (it[4]) s += '<rect x="' + (w - R + 4) + '" y="' + ly + '" width="' + (R - 6) + '" height="15" style="fill:transparent;cursor:pointer"/></g>';
+        if (it[4] && S.pick === it[4]) s += '<rect x="' + (LX + 3) + '" y="' + (ly - 1) + '" width="' + (LW - 6) + '" height="15" rx="4" style="fill:var(--ochre)" opacity=".14"/>';
+        if (it[2] === 'dot') s += '<circle cx="' + (LX + 18) + '" cy="' + (ly + 4) + '" r="4" style="fill:' + it[1] + '"/>';
+        else s += '<line x1="' + (LX + 8) + '" y1="' + (ly + 4) + '" x2="' + (LX + 28) + '" y2="' + (ly + 4) + '" style="stroke:' + it[1] + '" stroke-width="' + (it[2] || 2) + '"' + (it[3] ? ' stroke-dasharray="' + it[3] + '"' : '') + '/>';
+        s += '<text x="' + (LX + 34) + '" y="' + (ly + 8) + '"' + (it[4] ? ' style="cursor:pointer"' : '') + '>' + esc(it[0]) + '</text>';
+        if (it[4]) s += '<rect x="' + (LX + 4) + '" y="' + ly + '" width="' + (LW - 8) + '" height="15" style="fill:transparent;cursor:pointer"/></g>';
         ly += 16;
       }
       return s;
@@ -1817,6 +1854,8 @@
     var p = el('div', 'plot');
     // Клик по элементу легенды выделяет линию (или целый класс), повторный — снимает.
     p.addEventListener('click', function (e) {
+      var lt = e.target.closest && e.target.closest('[data-legtoggle]');
+      if (lt) { S.legOpen = !S.legOpen; S.pw = 0; redrawPlot(); return; }   // размер не менялся — сбрасываем кэш размера
       var g = e.target.closest && e.target.closest('[data-pick]');
       if (!g) return;
       var v = g.getAttribute('data-pick');
@@ -1833,6 +1872,7 @@
   function redrawPlot() {
     var p = S.plotEl;
     if (!p || !S.draw || !p.isConnected) return;
+    S._chartW = p.clientWidth || 0;
     var badge = p.querySelector('.dcal-wrap');
     var w = Math.max(220, Math.round(p.clientWidth)), h = Math.max(150, Math.round(p.clientHeight));
     if (w === S.pw && h === S.ph) return;
