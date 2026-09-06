@@ -458,8 +458,62 @@ def is_allowed_license(xml_text):
 
 
 # ── PDF ──
+PDF_DIR = Path("temp")
+
+
+def pdf_ok(p):
+    """Годен ли файл в кэше: есть, не обрубок, начинается подписью PDF.
+
+    Без проверки кэш врёт. Убитый прогон (сон машины, Ctrl+C) оставлял в temp/ файл на
+    несколько килобайт, следующий прогон видел «PDF уже есть» и отдавал разбору пустой
+    текст — работа выходила без рисунков и без полного текста, молча.
+    """
+    try:
+        if not p.exists() or p.stat().st_size < 10_000:
+            return False
+        with p.open("rb") as f:
+            return f.read(5).startswith(b"%PDF")
+    except OSError:
+        return False
+
+
+def pdf_cached(aid):
+    """Путь к годному файлу в кэше или None."""
+    p = PDF_DIR / f"{aid}.pdf"
+    return p if pdf_ok(p) else None
+
+
+def prefetch_pdfs(ids, log=print):
+    """Забрать PDF списка работ в кэш ДО разбора (владелец 06.09).
+
+    Зачем отдельным шагом. Скачивание — единственное, что нельзя взять из нашей базы, и
+    единственное место, где прогон зависит от чужой доступности. Внутри генерации его
+    неудача стоит всей работы: разбор, перевод и разметка не начнутся вовсе. Здесь
+    неудача стоит ровно одного файла, а работа просто уходит в конец очереди.
+
+    Идём по одному, а не пачкой: arXiv ограничивает частоту, и параллельная качка тех же
+    двух-двадцати мегабайт скорее приблизит отказ, чем ускорит прогон. Готовое из кэша
+    пропускаем — на повторе прогона шаг отрабатывает мгновенно.
+    """
+    need = [i for i in ids if not pdf_cached(i)]
+    if not need:
+        log(f"  📥 PDF: все {len(ids)} уже в кэше")
+        return {"ready": len(ids), "got": 0, "failed": []}
+    got, failed = 0, []
+    for aid in need:
+        try:
+            download_pdf(aid)
+            got += 1
+        except Exception as e:                                   # noqa: BLE001
+            failed.append(aid)
+            log(f"  📥 PDF {aid}: не скачался ({type(e).__name__}) — попробуем позже")
+    log(f"  📥 PDF: в кэше {len(ids) - len(failed)} из {len(ids)}"
+        + (f", не далось {len(failed)}" if failed else ""))
+    return {"ready": len(ids) - len(failed), "got": got, "failed": failed}
+
+
 def download_pdf(aid):
-    p = Path(f"temp/{aid}.pdf")
+    p = PDF_DIR / f"{aid}.pdf"
     p.parent.mkdir(exist_ok=True)
     # Времянка чистится ЗДЕСЬ, при каждом обращении — а не отдельной задачей, которую
     # забудут поставить. Найдено 18 августа: temp/ не чистил никто с июля, 6306 PDF
@@ -469,19 +523,26 @@ def download_pdf(aid):
     # прогон может держать вчерашний файл.
     import time as _t
     cutoff = _t.time() - 2 * 86400
-    for old_pdf in p.parent.glob("*.pdf"):
+    for old_pdf in list(p.parent.glob("*.pdf")) + list(p.parent.glob("*.part")):
         try:
             if old_pdf.stat().st_mtime < cutoff:
                 old_pdf.unlink()
         except OSError:
             pass                     # занят параллельным прогоном — заберём в следующий раз
-    if not p.exists():
+    if not pdf_ok(p):
+        # Обрубок от убитого прогона в кэше не остаётся: либо годный файл, либо ничего.
+        p.unlink(missing_ok=True)
         # Через общий ретрай, а не голым requests.get: в файле есть _get_with_retry,
         # и все обращения к arXiv идут через него — кроме этого, единственного. Прогон
         # 2026-07-31 потерял на этом две статьи: ReadTimeout при скачивании PDF ронял
         # статью целиком, хотя повтор через десяток секунд проходит. Класс ошибки тот же,
         # что у 429 и обрыва связи, которые здесь давно обрабатываются.
-        p.write_bytes(_get_with_retry(f"https://arxiv.org/pdf/{aid}.pdf", timeout=60).content)
+        data = _get_with_retry(f"https://arxiv.org/pdf/{aid}.pdf", timeout=60).content
+        # Пишем через времянку: прогон, убитый на середине записи, не должен оставлять
+        # в кэше файл, который следующий прогон примет за целый.
+        tmp = p.with_suffix(".part")
+        tmp.write_bytes(data)
+        tmp.replace(p)
     return p
 
 

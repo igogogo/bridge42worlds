@@ -54,6 +54,23 @@ def log(msg):
         f.write(line + "\n")
 
 
+def prefetch(ids):
+    """PDF куска — в кэш до разбора (владелец 06.09: «кэшируй pdf на время прогона»).
+
+    Скачивание вынесено из генерации: сеть подводит именно на нём, а внутри разбора его
+    неудача уносит всю работу целиком. Здесь она стоит одного файла.
+    """
+    try:
+        from gen_arxiv import prefetch_pdfs
+    except Exception as e:                                       # noqa: BLE001
+        log(f"  📥 PDF: пропускаю кэш ({type(e).__name__})")
+        return
+    try:
+        prefetch_pdfs(ids, log=log)
+    except Exception as e:                                       # noqa: BLE001
+        log(f"  📥 PDF: кэш не удался ({type(e).__name__}) — генератор скачает сам")
+
+
 def wait_window(now):
     from common import deepseek_peak_status
     while True:
@@ -94,6 +111,7 @@ def main():
                B42_NO_PUBLISH="1", SKIP_R2_BACKUP="1",
                B42_SKIP_DERIVED="1")   # копия, выкладка и производные файлы — по разу, в конце
     chunks = [todo[i:i + CHUNK] for i in range(0, len(todo), CHUNK)]
+    missed = []
     try:
         for n, ch in enumerate(chunks, 1):
             wait_window(a.now)
@@ -102,10 +120,26 @@ def main():
             if not last or a.no_post:
                 cmd.append("--no-post")
             log(f"кусок {n}/{len(chunks)}: {' '.join(ch)}")
+            prefetch(ch)
             t0 = time.time()
             rc = subprocess.run(cmd, cwd=str(ROOT), env=env).returncode
             got = sum(1 for i in ch if i.split("v")[0] in have())
             log(f"  кусок {n}: код {rc}, готово {got}/{len(ch)}, {int(time.time() - t0)} с")
+            # Работы, не добравшиеся из-за сети, копим и добираем одним куском в конце:
+            # к тому времени и кэш PDF уже полон, и лимит arXiv отпустил.
+            missed += [i for i in ch if i.split("v")[0] not in have()]
+        if missed:
+            log(f"· добор потерянных: {len(missed)}")
+            prefetch(missed)
+            for n, ch in enumerate([missed[i:i + CHUNK] for i in range(0, len(missed), CHUNK)], 1):
+                wait_window(a.now)
+                log(f"добор {n}: {' '.join(ch)}")
+                t0 = time.time()
+                cmd = [sys.executable, "run.py", "ids", *ch, "--lang", a.lang,
+                       "--allow-restricted", "--no-post"]
+                rc = subprocess.run(cmd, cwd=str(ROOT), env=env).returncode
+                got = sum(1 for i in ch if i.split("v")[0] in have())
+                log(f"  добор {n}: код {rc}, готово {got}/{len(ch)}, {int(time.time() - t0)} с")
     finally:
         runlock.release("tree")
     if not quiet:
