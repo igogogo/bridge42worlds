@@ -99,6 +99,29 @@ def _age(started):
         return 0
 
 
+def _boot_time():
+    """Момент последней загрузки системы (unix-время) или None, если не смогли узнать.
+
+    ЗАЧЕМ. Замок хранит pid, а после перезагрузки система выдаёт те же номера заново:
+    06.09 замок ночного прогона (pid 3732) достался службе печати, tasklist ответил
+    «жив», и следующий прогон отказался стартовать при полностью мёртвом предыдущем.
+    Записи, сделанной ДО последней загрузки, верить нельзя ни при каком pid.
+    """
+    try:
+        if os.name == "nt":
+            import subprocess
+            out = subprocess.run(
+                ["powershell", "-NoProfile", "-Command",
+                 "[int64](((Get-CimInstance Win32_OperatingSystem).LastBootUpTime"
+                 ".ToUniversalTime()) - [datetime]'1970-01-01').TotalSeconds"],
+                capture_output=True, text=True, timeout=25).stdout.strip()
+            return float(out) if out else None
+        with open("/proc/uptime", encoding="utf-8") as f:
+            return time.time() - float(f.read().split()[0])
+    except Exception:                                            # noqa: BLE001
+        return None
+
+
 def _hms(sec):
     return f"{sec // 3600} ч {sec % 3600 // 60} мин" if sec >= 3600 else f"{sec // 60} мин"
 
@@ -111,7 +134,14 @@ def acquire(name, what=""):
     old = _read(name)
     if old:
         pid = int(old.get("pid") or 0)
-        if pid and pid != os.getpid() and _alive(pid):
+        boot = _boot_time()
+        try:
+            stale_boot = bool(boot and float(old.get("started") or 0) < boot - 60)
+        except (TypeError, ValueError):
+            stale_boot = False
+        if stale_boot:
+            print(f"· замок «{name}» пережил перезагрузку (запись старше загрузки системы) — забираю")
+        elif pid and pid != os.getpid() and _alive(pid):
             print(f"\n⛔ Замок «{name}» занят.")
             print(f"   держит: {old.get('what') or 'неизвестно'} · pid {pid} · "
                   f"идёт {_hms(_age(old.get('started')))}")
@@ -119,7 +149,7 @@ def acquire(name, what=""):
             print("   теряли пятый язык. Дождитесь конца или остановите тот процесс.")
             print(f"   Снять замок вручную: python tools/runlock.py --break {name}\n")
             sys.exit(1)
-        if pid:
+        elif pid:
             print(f"· замок «{name}» был ничей (pid {pid} мёртв) — забираю")
     _path(name).write_text(
         f"pid={os.getpid()}\nstarted={time.time()}\n"
