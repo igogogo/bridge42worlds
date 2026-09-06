@@ -2680,6 +2680,21 @@ async function handleWordSearch(request, env) {
       return feedJson({ items: found, page: 0, limit: found.length, more: false });
     }
   }
+  /* ХВОСТ НОМЕРА ТОЖЕ НОМЕР. Человек с бумагой в руках часто набирает только вторую
+     половину: «27806» вместо «2608.27806» (владелец 06.09 так и искал — и не нашёл).
+     Четыре-шесть цифр без всего остального — это почти наверняка номер работы, и
+     ищем мы его как ХВОСТ: префикс из четырёх цифр это год-месяц, он вернул бы
+     половину архива. Не нашлось — запрос идёт дальше во весь текстовый поиск. */
+  if (!arxivId && /^\d{4,6}$/.test(raw)) {
+    const tail = await env.CARDS.prepare(
+      `SELECT ${FEED_COLS} FROM cards WHERE lang = ? AND version = ? AND ` +
+      "id LIKE ? ORDER BY date DESC LIMIT 10"
+    ).bind(lang, version, "%." + raw + "%").all();
+    const found = (tail.results || []).map(feedRow);
+    if (found.length) {
+      return feedJson({ items: found, page: 0, limit: found.length, more: false });
+    }
+  }
   // Запрос читателя в синтаксис FTS не пускаем: кавычки, звёздочки и NEAR там значат
   // своё, и «C++» или «10^19» роняют разбор. Оставляем слова, каждое ищем как префикс.
   const clean = raw.replace(/["'*(){}:^-]/g, " ");

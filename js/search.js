@@ -97,7 +97,7 @@ var UI_STRINGS = {
           articlesWord: 'статей', noResults: 'Ничего не найдено', more: 'Подробнее →', profile: 'Профиль →', moreWord: 'ещё', min: 'мин',
           express: 'экспресс', expressTip: 'Экспресс: быстрый пересказ по авторской аннотации. Полные статьи мы пишем по всему тексту работы — глубже и подробнее.',
           hideExpress: 'Скрыть экспресс-статьи', onlyAdvice: 'Только с советами автору', showLess: 'Свернуть',
-          searchPh: 'Поиск: работа, автор, номер, понятие',
+          searchPh: 'Поиск: работа, автор, номер, понятие', findBtn: 'Найти',
           searchOffline: 'Поиск не отвечает — попробуйте ещё раз',
           favTitle: 'Избранное', like: 'Нравится', dislike: 'Не нравится', superlike: 'Супер!',
           refineTip: 'Отшлифовано редактором',
@@ -108,7 +108,7 @@ var UI_STRINGS = {
           articlesWord: 'articles', noResults: 'Nothing found', more: 'More →', profile: 'Profile →', moreWord: 'more', min: 'min',
           express: 'express', expressTip: 'Express: a quick take from the author\'s abstract only. Full articles are written from the whole paper — deeper and more detailed.',
           hideExpress: 'Hide express articles', onlyAdvice: 'Only with advice to authors', showLess: 'Collapse',
-          searchPh: 'Search: paper, author, number, concept',
+          searchPh: 'Search: paper, author, number, concept', findBtn: 'Find',
           searchOffline: 'Search is not responding — please try again',
           favTitle: 'Favorites', like: 'Like', dislike: 'Dislike', superlike: 'Super!',
           refineTip: 'Polished by an editor',
@@ -119,7 +119,7 @@ var UI_STRINGS = {
           articlesWord: 'artículos', noResults: 'Nada encontrado', more: 'Más →', profile: 'Perfil →', moreWord: 'más', min: 'min',
           express: 'exprés', expressTip: 'Exprés: un resumen rápido solo del abstract del autor. Los artículos completos se escriben a partir de todo el texto.',
           hideExpress: 'Ocultar artículos exprés', onlyAdvice: 'Solo con consejos al autor', showLess: 'Contraer',
-          searchPh: 'Buscar: trabajo, autor, número, concepto',
+          searchPh: 'Buscar: trabajo, autor, número, concepto', findBtn: 'Buscar',
           searchOffline: 'La búsqueda no responde, inténtelo de nuevo',
           favTitle: 'Favoritos', like: 'Me gusta', dislike: 'No me gusta', superlike: '¡Genial!',
           refineTip: 'Pulido por un editor',
@@ -129,7 +129,7 @@ var UI_STRINGS = {
           selectScientist: '选择科学家：', authorNotFound: '未找到作者', selectAuthor: '选择作者：',
           articlesWord: '篇文章', noResults: '未找到结果', more: '详情 →', profile: '主页 →', moreWord: '更多', min: '分钟',
           express: '速览', expressTip: '速览版：基于作者摘要，未解析全文', hideExpress: '隐藏速览文章', onlyAdvice: '仅含给作者的建议', showLess: '收起',
-          searchPh: '搜索：论文、作者、编号、概念',
+          searchPh: '搜索：论文、作者、编号、概念', findBtn: '搜索',
           searchOffline: '搜索无响应，请重试',
           favTitle: '收藏', like: '喜欢', dislike: '不喜欢', superlike: '太赞了！',
           refineTip: '编辑润色',
@@ -140,7 +140,7 @@ var UI_STRINGS = {
           articlesWord: 'articles', noResults: 'Aucun résultat', more: 'En savoir plus →', profile: 'Profil →', moreWord: 'autres', min: 'min',
           express: 'express', expressTip: 'Version express : basée sur le résumé de l\'auteur, pas le texte complet',
           hideExpress: 'Masquer les articles express', onlyAdvice: "Uniquement avec conseils à l'auteur", showLess: 'Réduire',
-          searchPh: 'Rechercher : travail, auteur, numéro, concept',
+          searchPh: 'Rechercher : travail, auteur, numéro, concept', findBtn: 'Chercher',
           searchOffline: 'La recherche ne répond pas, réessayez',
           favTitle: 'Favoris', like: 'J\'aime', dislike: 'Je n\'aime pas', superlike: 'Génial !',
           refineTip: 'Peaufiné par un éditeur',
@@ -151,7 +151,7 @@ var UI_STRINGS = {
           articlesWord: 'مقالات', noResults: 'لا نتائج', more: 'المزيد ←', profile: 'الملف ←', moreWord: 'آخرون', min: 'دقيقة',
           express: 'سريع', expressTip: 'سريع: ملخّص سريع من خلاصة المؤلف فقط. أما المقالات الكاملة فتُكتب من النص الكامل — أعمق وأكثر تفصيلاً.',
           hideExpress: 'إخفاء المقالات السريعة', onlyAdvice: 'فقط ما فيه نصائح للمؤلف', showLess: 'طي',
-          searchPh: 'ابحث: بحث، مؤلف، رقم، مفهوم',
+          searchPh: 'ابحث: بحث، مؤلف، رقم، مفهوم', findBtn: 'بحث',
           searchOffline: 'البحث لا يستجيب، حاولوا مرة أخرى',
           favTitle: 'المفضلة', like: 'إعجاب', dislike: 'عدم إعجاب', superlike: 'رائع!',
           refineTip: 'تم صقله بواسطة محرر',
@@ -3055,11 +3055,50 @@ document.addEventListener('DOMContentLoaded', function() {
     var real = window.doSearch;
     if (typeof real !== 'function') return;
     var timer = null;
+    // Кнопка «найти» и Enter ищут СРАЗУ: задержка нужна набору с клавиатуры, а не
+    // осознанному нажатию (владелец 06.09).
+    window._doSearchNow = function(q) { clearTimeout(timer); real(q); };
     window.doSearch = function(q) {
         clearTimeout(timer);
         timer = setTimeout(function() { real(q); }, 160);
     };
 })();
+
+/* КНОПКА «НАЙТИ» рядом с полем. Владелец 06.09: «список динамический, но нужна и кнопка
+   найти на всякий случай» — на телефоне клавиатура закрывает выдачу, и непонятно, что уже
+   ищется. Кнопка ищет немедленно, минуя задержку ввода, и убирает клавиатуру. Enter делает
+   то же. Добавляется на лету во все строки поиска: ради одного элемента пересобирать
+   двадцать тысяч страниц незачем. */
+document.addEventListener('DOMContentLoaded', function () {
+    function runNow(inp) {
+        var q = inp.value;
+        inp.blur();                                  // клавиатура уходит, выдача видна
+        var real = window._doSearchNow || window.doSearch;
+        if (typeof real === 'function') real(q);
+    }
+    function equip(row) {
+        if (!row || row.querySelector('.search-go')) return;
+        var inp = row.querySelector('input');
+        if (!inp) return;
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'search-go';
+        b.textContent = (UI && UI.findBtn) || 'Find';
+        b.addEventListener('click', function () { runNow(inp); });
+        var clear = row.querySelector('.search-clear');
+        if (clear) row.insertBefore(b, clear); else row.appendChild(b);
+        inp.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') { e.preventDefault(); runNow(inp); }
+        });
+    }
+    document.querySelectorAll('.search-row').forEach(equip);
+    /* Панель поиска на некоторых страницах собирается позже (search.js достраивает её
+       сам): доснаряжаем, когда появится. */
+    var mo = new MutationObserver(function () {
+        document.querySelectorAll('.search-row').forEach(equip);
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+});
 
 // Плавающая кнопка «наверх» — появляется после прокрутки (юзер 2026-07-25). Одна для всех страниц.
 document.addEventListener('DOMContentLoaded', function () {

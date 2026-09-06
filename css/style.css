@@ -5108,3 +5108,15 @@ body.an-wide .top-bar, body.an-wide .langs-row { max-width: 1180px; }
   .nav-live .short, .nav-live .long { display: none; }
   .hdr-onerow { display: none; }
 }
+
+/* Кнопка «найти» в строке поиска (владелец 06.09: «нужна и кнопка найти на всякий случай»).
+   Рядом с крестиком очистки, того же роста, не спорит с ним по весу. */
+.search-row .search-go {
+  flex: none; height: 30px; padding: 0 12px; margin-inline-start: 6px;
+  border: 1px solid var(--ochre); border-radius: 8px; background: var(--ochre);
+  color: var(--surface); font-family: var(--font-mono, monospace); font-size: 12px;
+  letter-spacing: .04em; cursor: pointer; transition: filter .15s ease;
+}
+.search-row .search-go:hover { filter: brightness(1.08); }
+.search-row .search-go:active { transform: translateY(1px); }
+@media (max-width: 700px) { .search-row .search-go { height: 34px; padding: 0 14px; font-size: 13px; } }
