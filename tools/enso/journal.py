@@ -433,9 +433,16 @@ def build(verbose=False):
         v = (sm.get("verdict") or "").strip()
         if not v or (verdicts and verdicts[-1]["v"] == v):
             continue
-        verdicts.append({"v": v, "d": d3.get("generated"), "seen": d3.get("stamp"),
-                         "model": sm.get("model") or ("rules" if sm.get("error") else ""),
-                         "risk_index": d3.get("risk_index"), "shout": bool(d3.get("shout"))})
+        rec = {"v": v, "d": d3.get("generated"), "seen": d3.get("stamp"),
+               "model": sm.get("model") or ("rules" if sm.get("error") else ""),
+               "risk_index": d3.get("risk_index"), "shout": bool(d3.get("shout"))}
+        # ОДНА ЗАПИСЬ НА ДЕНЬ ДАННЫХ. Модель переписывает вердикт при каждом прогоне, даже
+        # когда числа те же, и в ленте выходило по три строки «The verdict changed» за один
+        # день (06.09). Держим последнюю: она и есть вердикт этого дня.
+        if verdicts and verdicts[-1]["d"] == rec["d"]:
+            verdicts[-1] = rec
+        else:
+            verdicts.append(rec)
 
     doc = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "onset": onset,
            "snapshots": len(snaps), "metrics": out, "verdicts": verdicts[-40:]}
