@@ -32,6 +32,14 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+
+# cp1252/cp1251-консоль Windows роняет печать «°C» и кириллицы при запуске из планировщика
+# или через Start-Process: обновление панели 06.09 так и упало — на печати саммари, уже
+# посчитав всё. Тот же приём, что во всех остальных инструментах репозитория.
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "enso"
 SNAP = ROOT / "snapshots"
 
