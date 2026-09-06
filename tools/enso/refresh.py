@@ -11,6 +11,7 @@
 """
 import json
 import re
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -342,6 +343,25 @@ def compact(d):
     }
 
 
+def with_links():
+    """Обновление, а следом разметка нашими работами — один шаг вместо двух.
+
+    Владелец 06.09: «не забудь про переразметку потом опять нашими статьями». Якоря
+    берутся из свежего latest.json, поэтому порядок именно такой; разметка держит свой кэш
+    приговоров, так что повторный запуск спрашивает модель только там, где что-то сменилось.
+    """
+    cur = main(fetch="--cached" not in sys.argv, llm="--no-llm" not in sys.argv)
+    print("")
+    print("— разметка нашими работами —")
+    rc = subprocess.run([sys.executable, "-u", str(Path(__file__).parent / "links.py")],
+                        cwd=str(Path(__file__).parents[2])).returncode
+    print("разметка:", "ок" if rc == 0 else f"код {rc}")
+    return cur
+
+
 if __name__ == "__main__":
-    main(fetch="--cached" not in sys.argv, llm="--no-llm" not in sys.argv)
+    if "--links" in sys.argv:
+        with_links()
+    else:
+        main(fetch="--cached" not in sys.argv, llm="--no-llm" not in sys.argv)
 
