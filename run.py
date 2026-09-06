@@ -347,6 +347,11 @@ def _run_chain(chain):
 # `run.py check` всё равно заливал бэкап в облако (нашёл QA). Три копии одного правила
 # разойдутся обязательно, у нас это уже случалось.
 READONLY_COMMANDS = {"stats", "check", "links", "status", "ids"}
+# Команды, которые НИЧЕГО не пишут в дерево. Не путать с READONLY_COMMANDS: там список
+# тех, после кого не надо пересобирать производные файлы, и `ids` в нём есть — хотя он
+# пишет и статью, и страницы разделов, учёных, авторов. Замок берём по этому списку,
+# иначе самая частая ручная команда пройдёт мимо защиты (найдено 06.09).
+LOCKLESS = {"stats", "check", "status", "links"}
 
 
 def _is_readonly_command():
@@ -1066,6 +1071,8 @@ def cmd_stats(args):
 def build_parser():
     p = argparse.ArgumentParser(prog="run.py", description="Оркестратор Bridge For Two Worlds",
                                 formatter_class=argparse.RawDescriptionHelpFormatter, epilog=__doc__)
+    p.add_argument("--ignore-lock", action="store_true",
+                   help="идти рядом с другим прогоном (замок на дерево не проверять)")
     sub = p.add_subparsers(dest="command", required=True)
 
     s = sub.add_parser("init", help="первичная настройка с нуля")
@@ -1278,6 +1285,18 @@ if __name__ == "__main__":
         _frozen(f"run.py {getattr(args, 'cmd', '') or sys.argv[1] if len(sys.argv) > 1 else ''}")
     except ImportError:
         pass
+    # ЗАМОК НА ДЕРЕВО. tools/runlock его завёл, full_run.py его берёт, а run.py — самая
+    # частая ручная команда — шёл мимо: 06.09 точечный разбор одной работы переписывал
+    # страницы разделов, учёных и авторов ровно тогда, когда рядом шёл дневной прогон.
+    # Обошлось, но защита, которую обходит самый ходовой путь, защитой не является.
+    # Свои дети замок не берут (родитель передаёт B42_LOCKS), а осознанный параллельный
+    # запуск открывается ключом --ignore-lock.
+    if (sys.argv[1] if len(sys.argv) > 1 else "") not in LOCKLESS             and not getattr(args, "ignore_lock", False):
+        try:
+            from tools import runlock as _rl
+            _rl.acquire("tree", f"run.py {sys.argv[1] if len(sys.argv) > 1 else ''}")
+        except ImportError:
+            pass
     args.func(args)
     _build_derived_assets()
     _publish_to_r2()
