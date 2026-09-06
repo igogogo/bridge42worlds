@@ -477,6 +477,10 @@
   .ov-tile .ov-p svg text{font-family:var(--mono);font-size:11px;fill:var(--soft)}
   .ov-tile .ov-p svg text.tt{display:none}
   /* карта на весь экран: поле занимает почти всю высоту (владелец 06.09) */
+  /* Кнопка возврата на обзор (владелец 06.09) */
+  .back-go{align-self:flex-start;margin-bottom:2px;font-family:var(--mono);font-size:11px;padding:2px 9px;border-radius:999px;
+    border:1px solid var(--hair);background:var(--surface);color:var(--soft);cursor:pointer}
+  .back-go:hover{color:var(--ochre);border-color:var(--ochre)}
   .stage.full .plot{min-height:calc(100vh - 210px)}
   /* Карта — форма 2:1 (наше двойное растяжение по вертикали). Без этого в полном экране
      на телефоне поле было 600 пикселей высотой, а карта 170 — сверху и снизу пустота. */
@@ -727,7 +731,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=4f3b5ae346"></script>
+<script src="/js/enso.js?v=bcdd9c2620"></script>
 <script src="/js/sitenav.js?v=cf6fd79772"></script>
 </body>
 </html>

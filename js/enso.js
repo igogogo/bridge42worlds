@@ -358,7 +358,9 @@
       var maxLines = Math.max(3, Math.floor(hpx / 22));
       while (span / step > maxLines) step *= 2;
     }
-    var s = '', g = Math.floor(vmin / step) * step, guard = 0;
+    /* Начинаем с первой линии ВНУТРИ поля: floor давал линию ниже минимума, её подпись
+       печаталась под картинкой и обрезалась (владелец 06.09: «не видно нижнюю шкалу»). */
+    var s = '', g = Math.ceil(vmin / step) * step, guard = 0;
     for (; g < vmax && guard < 40; g += step, guard++) {
       var zero = Math.abs(g) < 1e-9;
       s += '<line x1="' + L + '" y1="' + Y(g).toFixed(0) + '" x2="' + (W - R) + '" y2="' + Y(g).toFixed(0) + '" style="stroke:var(--grid)" stroke-width="' + (zero ? 1.3 : 0.6) + '"/>';
@@ -393,7 +395,7 @@
   /* Метка свёрнутой легенды: та же форма, что в плитке обзора, и на том же месте —
      правый верхний угол поля. Нажатие разворачивает панель обратно. */
   function legToggle(w, top, open) {
-    var bw = 52, x = w - bw - 6, y = Math.max(2, top - 16);
+    var bw = 62, x = w - bw - 6, y = Math.max(2, top - 16);
     return '<g data-legtoggle="1" style="cursor:pointer">' +
       '<rect x="' + x + '" y="' + y + '" width="' + bw + '" height="14" rx="7" style="fill:var(--surface);stroke:var(--soft)" stroke-width=".9" opacity=".95"/>' +
       '<text x="' + (x + bw / 2) + '" y="' + (y + 10) + '" text-anchor="middle" font-size="8.5" style="fill:var(--soft);letter-spacing:.06em">legend ' + (open ? '×' : '▾') + '</text></g>';
@@ -941,7 +943,9 @@
     var rows = stack.slice(0, 3);
     // Легенда справа, как на остальных сценах (владелец 04.09: «month by month то же самое,
     // легенды справа»): место под неё режется у поля графиков один раз, на все три выпуска.
-    var RCs = W >= 620 ? Math.max(120, Math.min(190, Math.round(W * .24))) : 0;
+    /* Легенда теперь накладная (см. legend()), колонку под неё не держим: линии выпусков
+       занимали 75 % ширины при пунктирной оси во всю (владелец 06.09). */
+    var RCs = W >= 620 ? 12 : 0;
     var all = [obs];
     rows.forEach(function (r) {
       Object.keys(r.models).forEach(function (k) { (r.models[k].values || []).forEach(function (v) { if (fin(v)) all.push(v); }); });
@@ -1071,7 +1075,10 @@
           ['live spread', 'var(--ochre)', 6],
           ['where we stand', 'var(--nino)', 3]], W, H, RCs, Tp);
       }
-      if (!S._tight) s2 += '<text x="' + (W - R) + '" y="' + (top + 10) + '" text-anchor="end" style="fill:var(--soft)">' + below + ' of ' + tot + ' below ' + esc(lab || '') + ' as lived so far (' + fnum(ref2) + (td2 ? ', ' + td2.done + '/3 months' : '') + ')</text>';
+      /* Пояснение к выпуску — по центру поля, а не у правого края: там теперь стоит кнопка
+         легенды, и они наезжали друг на друга (владелец 06.09: «кнопка легенды наехала на
+         надпись вверху; если это надпись с пояснением, отцентрируй её по ширине»). */
+      if (!S._tight) s2 += '<text x="' + Math.round((Lp + (W - R)) / 2) + '" y="' + (top + 10) + '" text-anchor="middle" style="fill:var(--soft)">' + below + ' of ' + tot + ' below ' + esc(lab || '') + ' as lived so far (' + fnum(ref2) + (td2 ? ', ' + td2.done + '/3 months' : '') + ')</text>';
       fc.forEach(function (i, k) { if (k % 2 === 0) s2 += '<text x="' + X(i).toFixed(0) + '" y="' + (Tp + ph + 12) + '" text-anchor="middle" font-size="9">' + esc(r.seasons[i]) + '</text>'; });
     });
     return s2 + '</svg>';
@@ -1823,6 +1830,24 @@
   function stageShell(title, segs2) {
     var st = $('stage'); st.innerHTML = '';
     var head = el('div', 'stage-head');
+    /* КНОПКА ВОЗВРАТА. Владелец 06.09: «когда я с обзора ухожу на соответствующую страницу,
+       там нет кнопки назад, чтобы вернуться». Кнопка появляется только если пришли с
+       обзора, и уводит ровно туда же, откуда пришли. */
+    if (S._back && S.view !== 'overview') {
+      // класс vgo НЕ ставим: на нём висит общий обработчик переходов, и он уводил в «now»
+      var b = el('button', 'back-go', '← ' + (T.tabs.overview || 'Overview'));
+      b.type = 'button';
+      /* Возврат идём через адрес, а не прямой сменой состояния: с карточки риска прямая
+         смена приводила на «Where we are» (viewRisk при пустом S.risk сам уводит в now, и
+         порядок вызовов внутри render это подхватывал). Через хэш путь один и тот же, что
+         у кнопки «назад» браузера. */
+      b.onclick = function () {
+        S._back = null; S.full = null; S.risk = null; S.pick = null;
+        if ((location.hash || '') === '#overview') { S.view = 'overview'; render(); }
+        else location.hash = '#overview';
+      };
+      head.appendChild(b);
+    }
     head.appendChild(el('div', 'stage-h', title));
     if (segs2 && segs2.length) {
       var seg = el('div', 'seg');
@@ -2960,7 +2985,9 @@
   function chartOHC(B, W, H) {
     var items = [B.ohc_2000, B.ohc_700].filter(Boolean);
     if (!items.length) return svgOpen(W, H) + '<text x="20" y="40">no series</text></svg>';
-    var RC = Math.max(120, Math.min(210, Math.round(W * .3))), gap = 10, hh = (H - 20 - gap * (items.length - 1)) / items.length;
+    // Колонка подписей справа: на большом графике она есть, в плитке подписи уехали в метку.
+    var RC = S._tight ? 8 : Math.max(120, Math.min(210, Math.round(W * .3)));
+    var gap = 10, hh = (H - 20 - gap * (items.length - 1)) / items.length;
     var OHCROWS = [];
     var s = svgOpen(W, H);
     items.forEach(function (o, xi) {
@@ -3287,7 +3314,7 @@
     d.setAttribute('data-src', JSON.stringify(pay || { name: plainText(kn), def: plainText(big) + ' — ' + plainText(small), why: 'Click to open the section.' }));
     d.innerHTML = '<div class="kn">' + kn + '</div><div class="ov-row"><div class="kv">' + big + '</div><div class="ov-vis">' + (vis || '') + '</div></div><div class="km">' + small + '</div>' +
       (jk ? '<span class="dcal-wrap">' + (typeof jk === 'string' ? dateBadge(jk) : dateBadge(null, jk[0], jk[1])) + '</span>' : '');
-    d.addEventListener('click', function (ev) { if (ev.target.closest('.dcal')) return; S.full = false; S.view = go[0]; if (go[1]) S.sub[go[0]] = go[1]; S.risk = null; render(); });
+    d.addEventListener('click', function (ev) { if (ev.target.closest('.dcal')) return; S._back = 'overview'; S.full = false; S.view = go[0]; if (go[1]) S.sub[go[0]] = go[1]; S.risk = null; render(); });
     return d;
   }
   function arcGauge(v, max, color) {
@@ -3396,7 +3423,7 @@
       var d = el('div', 'ov-tile');
       d.setAttribute('data-src', JSON.stringify({ name: t.title, def: t.meaning, why: 'Click to open the section.' }));
       d.innerHTML = '<div class="ov-t">' + esc(t.title) + '</div><div class="ov-p"></div>';
-      d.addEventListener('click', function (e) { if (e.target.closest('[data-pick]')) return; S.full = false; S.pick = null; if (t.go[0] === 'risk') { S.risk = t.go[1]; S.view = 'risk'; } else { S.view = t.go[0]; if (t.go[1] != null) S.sub[t.go[0]] = t.go[1]; S.risk = null; } render(); });
+      d.addEventListener('click', function (e) { if (e.target.closest('[data-pick]')) return; S._back = 'overview'; S.full = false; S.pick = null; if (t.go[0] === 'risk') { S.risk = t.go[1]; S.view = 'risk'; } else { S.view = t.go[0]; if (t.go[1] != null) S.sub[t.go[0]] = t.go[1]; S.risk = null; } render(); });
       grid.appendChild(d);
       t._el = d;
     });
@@ -3657,7 +3684,15 @@
     if (S.view === 'risk') return;
     var h = '#' + S.view + (S.sub[S.view] ? '/' + S.sub[S.view] : '') +
       (S.view === 'regions' && S.sub.regions === 'place' && S.region ? '/' + S.region : '');
-    if (location.hash !== h) { try { history.replaceState(null, '', h); } catch (e) { /* file: без истории */ } }
+    if (location.hash === h) { S._hashInit = 1; return; }   // адрес уже верный — но первая запись уже сделана
+    /* СМЕНА ВИДА — ЗАПИСЬ В ИСТОРИИ. Раньше адрес переписывался на месте (replaceState), и
+       кнопка «назад» уводила со страницы целиком: ушёл с обзора в раздел — вернуться нечем
+       (владелец 06.09). Меняем страницей истории: браузерная «назад» возвращает на обзор.
+       Первую запись при загрузке по-прежнему только правим, чтобы не плодить пустой шаг. */
+    try {
+      if (S._hashInit) history.pushState(null, '', h);
+      else { history.replaceState(null, '', h); S._hashInit = 1; }
+    } catch (e) { /* file: без истории */ }
   }
   function render() {
     writeHash();
