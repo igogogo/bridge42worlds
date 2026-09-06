@@ -679,8 +679,15 @@ def matured(date, aid, days=RECO_WAIT_DAYS):
     return analysed_at(date, aid) <= edge
 
 
+# Владелец 06.09: «все на английском». Правило про арабский оставлено рядом — включается
+# сменой одной строки, когда решим писать арабскому миру на его языке.
+ARABIC_LETTERS = False
+
+
 def letter_lang(date, aid, to, default="en"):
     """Язык письма по автору: арабский арабскому миру, английский остальным."""
+    if not ARABIC_LETTERS:
+        return default
     dom = (to or "").rsplit("@", 1)[-1].lower()
     if dom.rsplit(".", 1)[-1] in ARAB_TLD:
         return "ar"
@@ -743,7 +750,9 @@ def candidates(days, limit):
     done = written()
     marked = machine_marked()
     rows, no_mark, no_mail, no_adv, no_wait = [], 0, 0, 0, 0
-    for art in sorted(fresh_articles(days), key=lambda x: x.get("date", "")):
+    # СВЕЖИЕ ПЕРВЫМИ. Владелец 06.09: «начнём с самых последних и назад — те, кто
+    # опубликовался сейчас, наверняка ищут отклик, им интересно».
+    for art in sorted(fresh_articles(days), key=lambda x: x.get("date", ""), reverse=True):
         n_con = marked.get(art["id"]) or marked.get(art["id"].split("v")[0]) or 0
         if not n_con:
             no_mark += 1
