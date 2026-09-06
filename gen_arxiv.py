@@ -130,6 +130,98 @@ def fetch_arxiv_local(date_str, category="astro-ph.*"):
     return articles
 
 
+def _bulk_month(aid):
+    """Месяц чанка по идентификатору: 2404.01572 → 2024-04, astro-ph/9901001 → 1999-01."""
+    aid = re.sub(r"v\d+$", "", (aid or "").strip())
+    m = re.match(r"^(\d{2})(\d{2})\.\d{4,5}$", aid)                 # новый вид
+    if m:
+        return f"20{m.group(1)}-{m.group(2)}"
+    m = re.match(r"^[a-z-]+(?:\.[A-Z]{2})?/(\d{2})(\d{2})\d+$", aid)  # старый вид
+    if m:
+        yy = int(m.group(1))
+        return f"{1900 + yy if yy >= 91 else 2000 + yy}-{m.group(2)}"
+    return None
+
+
+_BULK_CACHE = {}
+
+
+def local_meta(aid):
+    """Метаданные одной работы из нашего дампа. None — если её там нет.
+
+    ЗАЧЕМ. Владелец 06.09: «база у нас есть своя и обновляемая». Разбор по списку id ходил
+    за заголовком и аннотацией в живой arXiv — по два запроса на работу, и ночью 06.09
+    прогон на них встал (шесть работ из восьми потеряны на read timeout к export.arxiv.org).
+    В чанке лежит ровно то же самое: id, title, abstract, authors_parsed, categories,
+    published. К сети идём только за тем, чего в дампе нет, — за работами свежее выгрузки.
+
+    Чанк месяца читается один раз за процесс и держится словарём: файл на 4–8 тысяч работ,
+    это доли секунды и десятки мегабайт, а работы одного прогона обычно из соседних месяцев.
+    """
+    mon = _bulk_month(aid)
+    if not mon:
+        return None
+    base = re.sub(r"v\d+$", "", (aid or "").strip())
+    idx = _BULK_CACHE.get(mon)
+    if idx is None:
+        chunk = BULK_DIR / f"{mon}.jsonl"
+        if not chunk.exists():
+            _BULK_CACHE[mon] = {}
+            return None
+        idx = {}
+        try:
+            with chunk.open("r", encoding="utf-8") as f:
+                for line in f:
+                    try:
+                        d = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    if d.get("id"):
+                        idx[d["id"]] = d
+        except OSError:
+            idx = {}
+        _BULK_CACHE[mon] = idx
+    d = idx.get(base)
+    if not d or not d.get("title"):
+        return None
+    cats = d.get("categories") or []
+    return {
+        "id": aid,
+        "title": " ".join((d.get("title") or "").split()),
+        "summary": " ".join((d.get("abstract") or "").split()),
+        "authors": [_author_name(a) for a in d.get("authors_parsed") or []],
+        "published": d.get("published", ""),
+        "categories": cats,
+        "primary_category": cats[0] if cats else "",
+        "from_local": True,
+    }
+
+
+def local_atom(meta):
+    """Тот же ответ, что отдала бы ручка api/query, — собранный из нашей базы.
+
+    Файл arxiv-atom.xml в папке статьи в контенте не участвует, но из него берёт авторский
+    абстракт бэкфилл аннотаций (generate.backfill_abstracts). Поэтому не оставляем его
+    пустым, когда данные есть на диске: пишем ту же структуру, что парсит бэкфилл.
+    """
+    def esc(t):
+        return (t or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    auth = "".join(f"<author><name>{esc(n)}</name></author>" for n in meta.get("authors") or [])
+    cats = "".join(f'<category term="{esc(c)}"/>' for c in meta.get("categories") or [])
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<feed xmlns="http://www.w3.org/2005/Atom" xmlns:arxiv="http://arxiv.org/schemas/atom">\n'
+        "<!-- собрано из нашего дампа arXiv (data/arxiv-bulk), без обращения к сети -->\n"
+        "<entry>"
+        f"<id>http://arxiv.org/abs/{esc(meta.get('id'))}</id>"
+        f"<title>{esc(meta.get('title'))}</title>"
+        f"<summary>{esc(meta.get('summary'))}</summary>"
+        f"<published>{esc(meta.get('published'))}</published>"
+        f"{auth}{cats}"
+        f'<arxiv:primary_category term="{esc(meta.get("primary_category"))}"/>'
+        "</entry>\n</feed>\n")
+
+
 # ── arXiv ──
 def fetch_arxiv(date_str, category="astro-ph.*"):
     local = fetch_arxiv_local(date_str, category)

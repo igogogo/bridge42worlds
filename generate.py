@@ -5703,8 +5703,14 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
         a["license_url"], a["license_name"] = lic_url, license_label(lic_url)
         # atom.xml только сохраняется для истории, в контенте не участвует — при известной лицензии
         # не тратим на него отдельный запрос к arXiv (юзер 2026-07-24: брать из базы, меньше arXiv).
-        atom_xml = "" if known_license is not None else _get_with_retry(
-            f"https://es.arxiv.org/api/query?id_list={a['id']}", timeout=30).text
+        if known_license is not None:
+            atom_xml = ""
+        elif a.get("from_local"):
+            # метаданные уже пришли из нашего дампа — второй запрос к arXiv не нужен
+            atom_xml = local_atom(a)
+        else:
+            atom_xml = _get_with_retry(
+                f"https://es.arxiv.org/api/query?id_list={a['id']}", timeout=30).text
         if no_fetch:
             text, imgs, captions, refs = a.get("summary", ""), [], [], ""
             a["cited_arxiv"] = []
@@ -6570,7 +6576,10 @@ def delete_article(aid, rebuild=True):
 
 
 def fetch_one_arxiv(aid):
-    """Метаданные одной статьи по arXiv id."""
+    """Метаданные одной статьи по arXiv id: своя база, сеть — только если её там нет."""
+    local = local_meta(aid)
+    if local:
+        return local
     try:
         r = _get_with_retry(f"https://es.arxiv.org/api/query?id_list={aid}", timeout=30)
     except requests.exceptions.RequestException:
