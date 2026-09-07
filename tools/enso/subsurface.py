@@ -554,9 +554,15 @@ def risks(SUB):
 if __name__ == "__main__":
     import sys
     if "--records" in sys.argv:
+        import ops as OPSLOG
+        run = OPSLOG.Run("records")
         for nm, ln in STATIONS:
             print("рекорд буя до события", nm)
-            build_record_tao(nm, ln, verbose=True)
+            try:
+                build_record_tao(nm, ln, verbose=True)
+            except Exception as e:                               # noqa: BLE001
+                run.error(f"{nm}: {str(e)[:120]}")
+        run.finish("ok" if not run.errors else "partial", stations=len(STATIONS))
         print("готово")
     elif "--clim" in sys.argv:
         for nm, ln in STATIONS:

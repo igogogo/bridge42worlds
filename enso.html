@@ -8,7 +8,7 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/css/style.css?v=4d92440750">
+<link rel="stylesheet" href="/css/style.css?v=aac20c137c">
 <style>
   /* ПАНЕЛЬ, А НЕ СТРАНИЦА (владелец 03.09: «одностраничный, без прокруток, это панель, на
      ней всё должно быть динамическое»), с правками второго разбора:
@@ -358,6 +358,12 @@
     letter-spacing:.07em;text-transform:uppercase;color:var(--soft);text-align:left;padding:6px 8px;
     border-bottom:1px solid var(--line, var(--hair));white-space:nowrap;cursor:pointer}
   table.e th.sorted{color:var(--ochre)}
+  .fresh{font-family:var(--mono);font-size:10px;color:var(--soft);margin-top:6px;padding-top:5px;border-top:1px dashed var(--line, var(--hair));line-height:1.5}
+  .fresh b{color:var(--ochre);font-weight:600}
+  .fresh.hot b{color:var(--nino)}
+  .fdot{display:inline-block;width:7px;height:7px;border:1.5px dashed var(--ochre);border-radius:50%;margin-right:5px;vertical-align:middle;animation:b42-breathe 1.6s ease-in-out infinite}
+  .fresh.hot .fdot{border-color:var(--nino)}
+  table.e td.st-ok{color:var(--ok)} table.e td.st-bad{color:var(--nino)}
   table.e th.num{text-align:right}          /* заголовок над числами — по правому краю, как и числа (владелец 06.09) */
   table.goods th.act{width:34%}
   table.goods th:first-child{width:15%}
@@ -699,6 +705,7 @@
   @keyframes b42-stroke{0%,100%{stroke-width:1.8;stroke-opacity:1}50%{stroke-width:3.4;stroke-opacity:.55}}
   svg .ring{fill:none;stroke-width:1.4;transform-box:fill-box;transform-origin:center;animation:b42-ring 2.6s cubic-bezier(.15,.55,.35,1) infinite;pointer-events:none}
   svg .ring.r2{animation-delay:1.3s}
+  svg .fresh-dot{fill:none;stroke-width:1.6;stroke-dasharray:2 2;animation:b42-breathe 1.6s ease-in-out infinite;pointer-events:none}
   .ov-p svg .ring{stroke-width:1;animation-name:b42-ring-s}
   @keyframes b42-ring-s{0%{transform:scale(1);opacity:.7}100%{transform:scale(3);opacity:0}}
   svg rect.breathe{animation:b42-stroke 3s ease-in-out infinite}
@@ -770,7 +777,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=75c79ee80e"></script>
-<script src="/js/sitenav.js?v=cf6fd79772"></script>
+<script src="/js/enso.js?v=c6894b6e8f"></script>
+<script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>

@@ -40,7 +40,12 @@ FILES = ["data/enso/latest.json", "data/enso/history.json", "data/enso/glossary.
          # КОД ПАНЕЛИ ЕДЕТ ВМЕСТЕ С ДАННЫМИ (проверка Fable 06.09): снимок прошлого прогона ключит
          # риски по id, историю вердиктов с поправками рисует JS — старый enso.js со свежими
          # данными показал бы все риски как «new». Файлы статические, пересборки сайта не нужно.
-         "enso.html", "js/enso.js"]
+         "enso.html", "js/enso.js",
+         # служебный слой (владелец 06.09): свежее-не-разобранное и журнал прогонов с состоянием источников
+         "data/enso/fresh.json", "data/enso/ops.json", "data/enso/runs.json",
+         # раздел истории измерений (planet.py): медленные ряды, обновляются ежедневной обёрткой
+         "data/enso/planet.json"]
+FRESH_FILES = ["data/enso/fresh.json", "data/enso/ops.json", "data/enso/runs.json", "data/enso/planet.json"]
 
 
 def stamp_asset():
@@ -72,7 +77,19 @@ def main():
     ap.add_argument("--cached", action="store_true", help="без сети, из последних удачных копий")
     ap.add_argument("--refresh", action="store_true",
                     help="сперва обновить данные (иначе выкладывается уже посчитанное)")
+    ap.add_argument("--fresh", action="store_true",
+                    help="выложить только свежий слой и журнал прогонов (после лёгкого прогона)")
     a = ap.parse_args()
+    import ops as OPSLOG
+
+    if a.fresh:
+        # Лёгкий прогон не меняет разобранного состояния: на сайт едут только fresh/ops/runs.
+        run = OPSLOG.Run("publish-fresh")
+        env = dict(os.environ, B42_DEPLOY_OK="1", PYTHONIOENCODING="utf-8")
+        rc = subprocess.run([sys.executable, "cloudflare/deploy_r2.py", "--only", *FRESH_FILES], cwd=str(ROOT), env=env).returncode
+        run.finish("ok" if rc == 0 else "failed", files=len(FRESH_FILES))
+        print("выкладка свежего слоя:", "ок" if rc == 0 else f"код {rc}")
+        return rc
 
     if a.refresh:
         # Пересчёт переписывает вердикт моделью: то, что было просмотрено до этого, на сайт
@@ -99,8 +116,11 @@ def main():
             print("не выкладываю")
             return 0
     stamp_asset()
+    run = OPSLOG.Run("publish")
     env = dict(os.environ, B42_DEPLOY_OK="1", PYTHONIOENCODING="utf-8")
     rc = subprocess.run([sys.executable, "cloudflare/deploy_r2.py", "--only", *FILES], cwd=str(ROOT), env=env).returncode
+    run.finish("ok" if rc == 0 else "failed", stamp=cur.get("stamp"), files=len(FILES),
+               reviewed=bool((s.get("review") or {}).get("stamp") == cur.get("stamp")))
     print("выкладка:", "ок" if rc == 0 else f"код {rc}")
     return rc
 

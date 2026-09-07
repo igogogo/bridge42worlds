@@ -358,6 +358,21 @@ def check_independent(D):
     stale = [k for k, v in (D.get("sources") or {}).items() if not v.get("fresh")]
     if stale:
         flag("sources", f"не ответили: {', '.join(stale)}")
+    # служебный слой: свежее против разобранного, журнал прогонов
+    F = load("fresh.json", None)
+    if isinstance(F, dict) and F.get("stamp"):
+        same = F.get("assessed_stamp") == D.get("stamp")
+        print(f"  fresh.json: прогон {F.get('stamp')} против разбора {F.get('assessed_stamp')} "
+              f"({'совпадает' if same else 'УСТАРЕЛ'}); триггеров {len(F.get('triggers') or [])}; {F.get('summary', '')[:120]}")
+        if not same:
+            flag("fresh.json", "свежий слой считан против другого разбора: повторить python refresh.py --light")
+    O = load("ops.json", None)
+    if isinstance(O, dict):
+        runs = O.get("runs") or []
+        bad = [r for r in runs[-10:] if r.get("status") in ("failed", "partial")]   # blocking у review — не сбой
+        print(f"  ops.json: источников {len(O.get('sources') or [])}, устаревших {len(O.get('stale') or [])}, прогонов в хвосте {len(runs)}")
+        for r in bad:
+            flag(f"run {r.get('kind')} {r.get('started')}", f"статус {r.get('status')}: {'; '.join(r.get('errors') or [])[:120]}")
 
 
 # ---------------------------------------------------------------- дамп текстов

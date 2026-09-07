@@ -3,6 +3,7 @@
 
     python refresh.py            # с сетью
     python refresh.py --cached   # без сети, из последних удачных копий
+    python refresh.py --light    # лёгкий прогон: правила без модели → fresh.json (свежее, не разобранное)
 
 Каждый прогон оставляет снимок в data/snapshots/<штамп>.json, и следующий прогон
 рассказывает, что изменилось: сколько прибавил Niño 3.4, появились ли новые дни,
@@ -145,7 +146,12 @@ def step(name, finish=False, failed=None):
         pass
 
 
-def main(fetch=True, llm=True):
+def main(fetch=True, llm=True, light=False):
+    """light=True — ЛЁГКИЙ ПРОГОН (владелец 06.09): те же источники и правила, но без модели,
+    без снимка и без журнала; результат ложится в fresh.json как «свежее, не разобранное»
+    с триггерами, говорящими, нужен ли полный разбор. latest.json не трогается."""
+    import ops as OPSLOG
+    run = OPSLOG.Run("light" if light else "full")
     SNAP.mkdir(parents=True, exist_ok=True)
     snaps = sorted(SNAP.glob("*.json"))
     prev = json.loads(snaps[-1].read_text(encoding="utf-8")) if snaps else None
@@ -194,6 +200,23 @@ def main(fetch=True, llm=True):
     for a in cur["alerts"]:
         a.setdefault("id", alert_id(a.get("title") or ""))
     cur["shout"] = any(a["level"] == "SHOUT" for a in cur["alerts"])
+    stale = [k for k, v in cur["sources"].items() if not v["fresh"]]
+    if light:
+        import fresh as FR
+        assessed = json.loads((ROOT / "latest.json").read_text(encoding="utf-8")) if (ROOT / "latest.json").exists() else {}
+        fr = FR.build(clean(cur), assessed)
+        (ROOT / "fresh.json").write_text(json.dumps(fr, ensure_ascii=False, default=str, allow_nan=False), encoding="utf-8")
+        OPSLOG.build(clean(cur), fr)
+        run.finish("ok", stamp=cur["stamp"], assessed_stamp=assessed.get("stamp"), risk_index=cur["risk_index"],
+                   n_risks=len(cur["risks"]), n_alerts=len(cur["alerts"]), shout=bool(cur["shout"]), stale=stale,
+                   triggers=len(fr["triggers"]), needs_assessment=fr["needs_assessment"])
+        step("готово", finish=True, failed=["источник не ответил: " + k for k in stale])
+        print("лёгкий прогон:", cur["stamp"], "| разобранное состояние", assessed.get("stamp"),
+              "| индекс правил", cur["risk_index"], "| не ответили", len(stale), stale or "")
+        print("  ·", fr["summary"])
+        for t in fr["triggers"]:
+            print("  !", t["severity"], t["text"])
+        return cur
     step("саммари модели")
     import summary as SM
     if llm:
@@ -236,9 +259,21 @@ def main(fetch=True, llm=True):
     except Exception as e:                                       # noqa: BLE001
         print("  новости не собрались:", str(e)[:160])
         failed.append("лента новостей: " + str(e)[:90])
+    # свежий слой после полного прогона совпадает с разобранным: хвостов нет, триггеров нет
+    try:
+        import fresh as FR
+        fr = FR.build(cur, cur)
+        (ROOT / "fresh.json").write_text(json.dumps(fr, ensure_ascii=False, default=str, allow_nan=False), encoding="utf-8")
+        OPSLOG.build(cur, fr)
+    except Exception as e:                                       # noqa: BLE001
+        print("  свежий слой не записался:", str(e)[:160])
+        failed.append("свежий слой: " + str(e)[:90])
+    sm_ = cur.get("summary") or {}
+    run.finish("ok" if not failed else "partial", stamp=cur["stamp"], risk_index=cur["risk_index"],
+               n_risks=len(cur["risks"]), n_alerts=len(cur["alerts"]), shout=bool(cur["shout"]), stale=stale,
+               model=sm_.get("model"), model_error=sm_.get("error"), errors_list=failed)
     DONE[:] = list(PLAN)
-    step("готово", finish=True, failed=failed + ["источник не ответил: " + k for k, v in cur["sources"].items() if not v["fresh"]])
-    stale = [k for k, v in cur["sources"].items() if not v["fresh"]]
+    step("готово", finish=True, failed=failed + ["источник не ответил: " + k for k in stale])
     print("готово:", cur["stamp"], "| индекс риска", cur["risk_index"],
           "| рисков", len(cur["risks"]), "| не ответили источников", len(stale), stale or "")
     for d in diff:
@@ -379,5 +414,5 @@ if __name__ == "__main__":
     if "--links" in sys.argv:
         with_links()
     else:
-        main(fetch="--cached" not in sys.argv, llm="--no-llm" not in sys.argv)
+        main(fetch="--cached" not in sys.argv, llm="--no-llm" not in sys.argv, light="--light" in sys.argv)
 

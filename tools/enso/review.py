@@ -59,6 +59,14 @@ def main():
               f"· находок {a.findings} · правок {a.edits}" + (" · ЕСТЬ БЛОКИРУЮЩЕЕ" if a.blocking else ""))
     d["summary"] = sm
     LATEST.write_text(json.dumps(d, ensure_ascii=False, separators=(",", ":"), allow_nan=False), encoding="utf-8")
+    try:                                                         # в журнал прогонов (вкладка Ops)
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import ops as OPSLOG
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        OPSLOG.record_run("review", now, now, "cleared" if a.clear else ("blocking" if a.blocking else "ok"),
+                          note=a.note[:120], stamp=d.get("stamp"), findings=a.findings, edits=a.edits, model=a.model)
+    except Exception as e:                                       # noqa: BLE001
+        print("журнал прогонов не обновлён:", str(e)[:100])
     return 0
 
 

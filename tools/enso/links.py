@@ -390,6 +390,8 @@ def main():
                 print(f"   {c['score']:.3f}  {c['w']['id']}  {c['w']['title'][:80]}")
         return 0
 
+    import ops as OPSLOG
+    run = OPSLOG.Run("links", note="all archive" if a.all else "theme works")
     anc_by_id = {x["id"]: x for x in anc}
     links = verify(anc_by_id, cands)
     deny = _deny_load()
@@ -409,6 +411,7 @@ def main():
                        "statement. A link means 'this is what the research says about this', not 'this is the source "
                        "of that number'."}
     OUT.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    run.finish("ok", anchors=len(links), of=len(anc), works=len(wks), links=sum(len(v) for v in links.values()))
     print(f"\n✅ {OUT.name}: ссылки у {len(links)} якорей из {len(anc)}; работ в пуле {len(wks)}")
     return 0
 
