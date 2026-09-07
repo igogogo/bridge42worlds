@@ -353,8 +353,9 @@
   .dcal-wrap{position:absolute;inset-inline-end:0;bottom:0;width:0;height:0;z-index:2}
   .dcal-wrap .dcal{inset-inline-end:6px;bottom:6px}
   .kpi,.card,.risk,.ov-kpi{position:relative}
-  .kj .jsrc{padding-inline-end:18px}
-  .risk .rf{padding-inline-end:22px}
+  /* место под пару history + значок даты в правом нижнем углу */
+  .kj .jsrc{padding-inline-end:82px}
+  .risk .rf{padding-inline-end:82px}
   .ov-kpi .km{padding-inline-end:16px}
   .plot svg{display:block;width:100%;height:100%}
   .plot svg text{font-family:var(--mono);font-size:11px;fill:var(--soft)}
@@ -497,8 +498,14 @@
      она была в разметке, но нажать её было нельзя (владелец 04.09: «кнопки history
      где-то не нажимаются, например daily OISST»). */
   .kj .jsrc span{flex:1 1 auto;min-width:0}   /* переносится целиком, без многоточия */
-  .kj .jsrc .jh{margin-inline-start:auto;align-self:center;order:2}
-  .kj .jsrc .dcal{align-self:center;order:3}   /* history — в правом нижнем углу плашки (владелец 05.09) */
+  /* HISTORY И ЗНАЧОК ДАТЫ — ОДНОЙ ПАРОЙ В ПРАВОМ НИЖНЕМ УГЛУ КАРТОЧКИ (владелец 07.09:
+     «history приклей вниз вправо, рядом со значком data date, на одной оси»). Значок даты
+     и раньше был приклеен к углу абсолютно, а кнопка оставалась в потоке текста — и болталась
+     на своей строке, где придётся. Теперь обе стоят на одной оси: высота 14 пикселей, низ 5. */
+  .kj .jsrc .jh,.risk .rf .jh{position:absolute;inset-inline-end:25px;bottom:5px;margin:0;
+    height:14px;display:inline-flex;align-items:center;line-height:1}
+  .kj .jsrc,.risk .rf{padding-inline-end:82px;min-height:16px}
+  .kpi-card .cgo{padding-inline-end:82px}   /* ссылка внизу карточки State не уходит под кнопку */
   .risk .rf{display:flex;justify-content:flex-end;align-items:center;gap:6px;margin-top:4px}
   .chain{overflow-x:hidden}
   .chain-node .cn-s,.chain-node .cn-m{overflow-wrap:anywhere}
