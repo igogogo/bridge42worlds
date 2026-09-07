@@ -100,7 +100,8 @@
   /* Ширина строки — 100 % МИНУС отступ слева: иначе с ростом числа вкладок строка не
      переносилась, а уезжала за правый край (владелец 05.09, четырнадцать вкладок). */
   /* Меню стало большим — выравниваем влево, по оси названия вверху (владелец 05.09). */
-  .tabs{display:flex;gap:4px;flex-wrap:wrap;row-gap:4px;overflow:visible;min-width:0;
+  .tabs{display:flex;flex-direction:column;align-items:stretch;gap:4px;row-gap:4px;overflow:visible;min-width:0;
+    /* два ряда: основные пункты влево, служебные вправо (владелец 07.09) */
     flex:0 0 100%;order:9;margin-inline-start:0;
     padding-bottom:3px}
   /* значок «i» с подсказкой у пунктов меню и подменю */
@@ -113,6 +114,11 @@
   .tabs::-webkit-scrollbar{display:none}
   /* Чётче: цвет основного текста вместо приглушённого и чуть плотнее начертание —
      меню должно читаться с первого взгляда (владелец 04.09). */
+  .tabs .trow{display:flex;gap:4px;flex-wrap:wrap;row-gap:4px;min-width:0}
+  .tabs .trow.svc{justify-content:flex-end}
+  @media (max-width:900px){ .tabs .trow.svc{justify-content:flex-start} }
+  /* 8. дата — коротким жирным моноширинным, одинаково везде (владелец 07.09) */
+  .dt{font-family:var(--mono);font-size:.94em;font-weight:600;letter-spacing:.01em;white-space:nowrap}
   .tab{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:var(--text);font-weight:500;background:none;
     border:1px solid var(--line, var(--hair));border-radius:999px;padding:5px 12px;
     cursor:pointer;white-space:nowrap;transition:color .15s,background .15s,border-color .15s}
@@ -239,7 +245,7 @@
   /* Заголовок сцены — своя строка, подменю всегда под ним: раньше подменю вставало рядом с
      коротким заголовком и прыгало вниз у длинного (владелец 07.09, Ocean). */
   .stage-head{display:flex;flex-direction:column;align-items:stretch;gap:5px;padding:8px 12px 4px;flex-shrink:0}
-  .stage-top{display:flex;align-items:flex-start;gap:10px}
+  .stage-top{display:flex;align-items:center;gap:10px}
   .back-go.bright{margin-left:auto;color:var(--ochre);border-color:var(--ochre);font-weight:600;background:color-mix(in srgb, var(--ochre) 10%, var(--surface))}
   .back-go.bright:hover{background:var(--ochre);color:var(--surface)}
   /* независимые переключатели (метрика Ховмёллера, «all» у цен): прямоугольные и другого цвета, отдельно от списка */
@@ -482,14 +488,15 @@
   .kj .up{color:var(--nino)}
   .kj .dn{color:var(--nina)}
   .kj .same{color:var(--soft)}
-  .kj .jsrc{color:var(--soft);opacity:.85;display:flex;align-items:flex-start;gap:6px;
+  .kj .jsrc{color:var(--soft);opacity:.85;display:flex;align-items:center;gap:6px;
     flex-wrap:wrap;line-height:1.35}
   /* Источник ужимается, кнопка истории — никогда. Без min-width:0 длинная подпись
      источника не давала себя сжать, и кнопку выдавливало за край с overflow:hidden —
      она была в разметке, но нажать её было нельзя (владелец 04.09: «кнопки history
      где-то не нажимаются, например daily OISST»). */
   .kj .jsrc span{flex:1 1 auto;min-width:0}   /* переносится целиком, без многоточия */
-  .kj .jsrc .jh{margin-inline-start:auto;align-self:flex-end}   /* history — в правом нижнем углу плашки (владелец 05.09) */
+  .kj .jsrc .jh{margin-inline-start:auto;align-self:center;order:2}
+  .kj .jsrc .dcal{align-self:center;order:3}   /* history — в правом нижнем углу плашки (владелец 05.09) */
   .risk .rf{display:flex;justify-content:flex-end;align-items:center;gap:6px;margin-top:4px}
   .chain{overflow-x:hidden}
   .chain-node .cn-s,.chain-node .cn-m{overflow-wrap:anywhere}
@@ -525,7 +532,7 @@
   .ov-tile .ov-p svg text.tt{display:none}
   /* карта на весь экран: поле занимает почти всю высоту (владелец 06.09) */
   /* Кнопка возврата на обзор (владелец 06.09) */
-  .back-go{align-self:flex-start;margin-bottom:2px;font-family:var(--mono);font-size:11px;padding:2px 9px;border-radius:999px;
+  .back-go{align-self:center;margin-bottom:0;font-family:var(--mono);font-size:11px;padding:2px 9px;border-radius:999px;
     border:1px solid var(--hair);background:var(--surface);color:var(--soft);cursor:pointer}
   .back-go:hover{color:var(--ochre);border-color:var(--ochre)}
   .stage.full .plot{min-height:calc(100vh - 210px)}
@@ -811,7 +818,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=82c33df8b9"></script>
+<script src="/js/enso.js?v=0c612a2f5b"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>

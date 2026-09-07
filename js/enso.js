@@ -86,11 +86,20 @@
     return sign === false ? (v < 0 ? '−' : '') + s : (v > 0 ? '+' : (v < 0 ? '−' : '')) + s;
   }
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+  /* ДАТА ЧЕЛОВЕКУ (владелец 07.09: «YYYY-MM-DD читается плохо, лучше Jul 26»): «Sep 7», год
+     дописывается только если он не тот, в котором живёт панель; полная дата — в подсказке. */
+  var MON3 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function dt(v) {
+    var t = String(v == null ? '' : v), m = t.match(/^(\d{4})-(\d{2})(?:-(\d{2}))?/);
+    if (!m) return esc(t);
+    var y = +m[1], mo = +m[2], d = m[3] ? +m[3] : null, cy = +String((S.D || {}).stamp || '').slice(0, 4) || new Date().getFullYear();
+    return '<span class="dt" title="' + esc(t) + '">' + MON3[mo - 1] + (d ? ' ' + d : '') + (y !== cy ? " '" + String(y).slice(2) : '') + '</span>';
+  }
   function term(key, text) { return '<span data-term="' + esc(key) + '">' + esc(text) + '</span>'; }
   /* АББРЕВИАТУРА В РАМКЕ (владелец 07.09): как зоны, но другим цветом; подсказка из словаря. */
   function ab(key, text) { return '<span class="zn ab" data-term="' + esc(key) + '">' + esc(text) + '</span>'; }
   /* ДИАПАЗОН В СКОБКАХ (владелец 07.09): «[2026-08-06 … 2026-09-04]» вместо «to …; 30 days». */
-  function span(to, days) { return '<span class="mono">[' + esc(addDays(to, -(days - 1))) + ' … ' + esc(to) + ']</span>'; }
+  function span(to, days) { return '<span class="mono">[' + dt(addDays(to, -(days - 1))) + ' … ' + dt(to) + ']</span>'; }
   /* ЗОНА — НЕ ЧИСЛО. Владелец 04.09: «наши номера зон типа 1+2, 3.4 путаются с температурами,
      если рядом в строках; писать в рамочке, с префиксом, чтобы понятно было, что это зона».
      Код зоны идёт в рамке, моноширинным, с буквой Z впереди: «Z3.4» уже не прочитать как
@@ -674,7 +683,7 @@
     var vmin = Math.min.apply(null, all) - .2, vmax = Math.max.apply(null, all) + .3;
     var X = function (i) { return Lp + i / (n - 1) * pw; };
     var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
-    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">NOAA weekly indices, last ' + n + ' weeks (anomaly, °C)' + (RC ? ' — and the same four, over their last ' + ((NW.analog_series[years[0]] || []).length || '') + ' weeks to the same week of the year, in the strongest past events' : '') + '</text>';
+    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">NOAA weekly indices, last ' + n + ' weeks, °C' + (RC ? '; right: the same four in the strongest past events, to the same week of the year' : '') + '</text>';
     s += gridY(vmin, vmax, .5, Y, Lp, RC + R + 16, W, 1);
     /* Подписи месяцев ставим не «каждый первый в месяце», а столько, сколько влезает: в
        плитке обзора шириной 240 их выходило семь подряд и они слипались в кашу (владелец
@@ -1586,6 +1595,7 @@
   }
 
   function spark(m, W, H) {
+    W = W || 60; H = H || 26;   // без размеров получался viewBox "undefined" и точка с NaN (07.09)
     if (!m || !m.values) return '';
     var vals = m.values, xs = [];
     vals.forEach(function (v, i) { if (fin(v)) xs.push(i); });
@@ -1693,6 +1703,8 @@
     var list = [];
     if (window.matchMedia('(max-width:900px)').matches) list.push(['state', T.railTabs.state], ['risks', T.railTabs.risks]);
     Object.keys(T.tabs).forEach(function (k) { list.push([k, T.tabs[k]]); });
+    /* ДВА РЯДА (владелец 07.09: «меню разрослось; основные вверху влево, служебные ниже вправо»). */
+    var rowMain = el('div', 'trow'), rowSvc = el('div', 'trow svc');
     list.forEach(function (v) {
       /* Служебные вкладки (метод, цепочка, о панели) выглядят иначе: пунктирная рамка,
          приглушённый цвет; вердикт — контрастный чёрно-белый. У каждой — подсказка,
@@ -1704,8 +1716,9 @@
         esc(v[1]) + (T.tabHelp[v[0]] ? '<i class="ti" data-src="' + esc(JSON.stringify({ name: v[1], def: T.tabHelp[v[0]] })) + '">i</i>' : ''));
       b.type = 'button';
       b.onclick = function (e) { if (e.target.closest && e.target.closest('.ti')) return; S.view = v[0]; S.risk = null; render(); };
-      host.appendChild(b);
+      (svc ? rowSvc : rowMain).appendChild(b);
     });
+    host.appendChild(rowMain); host.appendChild(rowSvc);
     var t = $('deltaBtn');
     if (t) {
       t.className = 'tab delta' + (S.delta ? ' on' : '');
@@ -1725,7 +1738,7 @@
       sp.innerHTML = text;
       host.appendChild(sp);
     }
-    item('<b>updated</b> ' + esc((D.stamp || '').slice(0, 10)), { name: 'This update', def: 'The panel was recomputed at ' + D.stamp + (P ? '; the previous update was at ' + P.stamp + '.' : '.') + ' Updating is semi-automatic: a person runs it and looks at the result before it goes out.', src: 'this panel, recomputed by hand after each release', date: D.generated });
+    item('<b>updated</b> ' + dt((D.stamp || '').slice(0, 10)), { name: 'This update', def: 'The panel was recomputed at ' + D.stamp + (P ? '; the previous update was at ' + P.stamp + '.' : '.') + ' Updating is semi-automatic: a person runs it and looks at the result before it goes out.', src: 'this panel, recomputed by hand after each release', date: D.generated });
     item('<b>daily</b> ' + esc(n34.last_date) + ' <i>' + n34.days_stale + ' d ago</i>', { name: 'Daily series', def: 'Niño 3.4 and the world ocean: final OISST from climatereanalyzer' + (n34.prelim_from ? ' to ' + addDays(n34.prelim_from, -1) + ', then the preliminary NOAA grid (NRT) spliced on directly, one day behind; the last two weeks are re-pulled every update' : ', which lags one to three weeks') + '. Land+ocean (ERA5) reaches ' + tw.last_date + '.', src: n34.prelim_from ? 'climatereanalyzer.org + NOAA OISST NRT via ERDDAP' : 'climatereanalyzer.org', date: n34.last_date }, n34.days_stale > 14 ? 'bad' : '');
     item('<b>NOAA week</b> ' + esc(D.noaa.date), { name: 'NOAA weekly indices', def: 'Published every Wednesday for the previous week; always fresher than the daily OISST, and where they disagree the panel trusts the weekly.', src: 'NOAA CPC wksst9120.for', date: D.noaa.date });
     if (D.iri && D.iri.issued) item('<b>IRI</b> ' + esc(D.iri.issued), { name: 'IRI model plume', def: 'The forecasts of two dozen centres, published around the 19th of each month. ' + ((D.iri.class_issues || []).length) + ' issues are stored here, which is what makes the model scoreboard possible.', src: 'iri.columbia.edu', date: D.iri.issued });
@@ -1735,14 +1748,14 @@
        строка и только когда есть о чём сказать: источник не ответил. */
     /* В шапке — только «updated» (владелец 05.09: «источников много — просто updated
        оставить, всё убрать»); свежесть каждого источника живёт на Data chain и References. */
-    Array.prototype.slice.call(host.children, 0).forEach(function (c) { host.removeChild(c); });   // владелец 07.09: «updated уберём, хватит fresh»
+    Array.prototype.slice.call(host.children, 1).forEach(function (c) { host.removeChild(c); });   // владелец 07.09: дата обновления панели остаётся, остальное — на Data chain
     /* СВЕЖЕЕ, НЕ РАЗОБРАННОЕ (владелец 06.09): лёгкий прогон без модели; пунктирная точка дышит,
        пока данные не прошли разбор. Показывается только если слой считан против ЭТОГО разбора. */
     var F = S.F || {};
     if (F.stamp && F.assessed_stamp === D.stamp && F.stamp !== D.stamp) {
       var latestF = Object.keys(F.series || {}).map(function (q) { return (F.series[q] || {}).last_date || ''; }).sort().pop() || '';
       var nT = (F.triggers || []).length;
-      item('<span class="fdot"></span><b>fresh</b> to ' + esc(latestF) + (nT ? ' · ' + nT + ' trigger' + (nT > 1 ? 's' : '') : ''),
+      item('<span class="fdot"></span><b>fresh</b> to ' + dt(latestF) + (nT ? ' · ' + nT + ' trigger' + (nT > 1 ? 's' : '') : ''),
         { name: 'Fresh, not yet assessed', def: (F.summary || '') + ' ' + (F.note || ''), src: 'light run ' + F.stamp + ', rules only, no model', date: latestF }, F.needs_assessment ? 'bad' : '');
     }
     var stale = Object.keys(D.sources).filter(function (q) { return !D.sources[q].fresh; });
@@ -1973,10 +1986,17 @@
        четырнадцать мест сборки строк — напрашиваться на опечатку (одну уже поймали), поэтому
        чиним готовую картинку: у заголовка своя примета (class="tt" на строке y="13"), и
        только он подрезается по числу знаков, которые влезают. */
+    /* НАДПИСИ НЕ ОБРЫВАЮТСЯ (владелец 07.09: «надписи если есть, никогда не обрываются»).
+       Раньше заголовок резался по числу знаков и получалось «…». Теперь сначала уменьшается
+       кегль (12 → 8), и только если и этого мало, текст режется. */
     p.innerHTML = String(S.draw(w, h)).replace(
-      /(<text class="tt"[^>]*y="13"[^>]*>)([^<]{1,400})(<\/text>)/,
-      // текст уже экранирован сборщиком — повторно не экранируем, только режем
-      function (all, head, txt, tail) { return head + fitText(txt, w, 12) + tail; });
+      /(<text class="tt")([^>]*>)([^<]{1,400})(<\/text>)/,
+      // текст уже экранирован сборщиком — повторно не экранируем
+      function (all, a, head, txt, tail) {
+        var px = 12, fits = function (q) { return Math.floor((w - 60) / (q * .58)); };
+        while (txt.length > fits(px) && px > 8) px -= .5;
+        return a + ' font-size="' + px + '"' + head + (txt.length > fits(px) ? fitText(txt, w, px) : txt) + tail;
+      });
     if (badge) p.appendChild(badge);           // значок даты данных переживает перерисовку
   }
   /* ══ ЖУРНАЛ ЗНАЧЕНИЙ НА КИРПИЧЕ ══════════════════════════════════════════════
@@ -1988,7 +2008,7 @@
      запись появляется только при смене САМОГО ЗНАЧЕНИЯ или даты данных под ним. */
   function jrec(k) { var m = (S.J || {}).metrics || {}; return k && m[k] ? m[k] : null; }
   function jsign(dv) { return dv > 0 ? 'up' : (dv < 0 ? 'dn' : 'same'); }
-  function jarrow(dv) { return dv > 0 ? '↑' : (dv < 0 ? '↓' : '='); }
+  function jarrow(dv) { return dv > 0 ? '↑' : (dv < 0 ? '↓' : '±'); }
   function jval(v, dg) { return (typeof v === 'number') ? v.toFixed(dg == null ? 2 : dg) : esc(String(v)); }
   function jdelta(a, b, dg) {
     // Не всякий показатель — число: «сценарий в силе» это слово. Для слов стрелка не имеет
@@ -1996,6 +2016,7 @@
     if (typeof a !== 'number' || typeof b !== 'number')
       return '<b class="same">' + esc(String(b)) + ' → ' + esc(String(a)) + '</b>';
     var dv = a - b;
+    if (dv === 0) return '<b class="same" title="unchanged">±0</b>';
     return '<b class="' + jsign(dv) + '">' + jarrow(dv) + ' ' + (dv > 0 ? '+' : '') + jval(dv, dg) + '</b>';
   }
   /* Подпись под числом. src0/date0 — для кирпичей, у которых своего ряда в журнале нет
@@ -2032,13 +2053,13 @@
     var r = jrec(k), out = '<div class="kj">';
     if (!r) {
       if (!src0 && !date0) return '';
-      return out + '<div class="jsrc"><span>' + mark(src0 || '') + (date0 ? ' · ' + esc(date0) : '') + '</span>' + dateBadge(null, src0, date0) + '</div></div>';
+      return out + '<div class="jsrc"><span>' + mark(src0 || '') + (date0 ? ' · ' + dt(date0) : '') + '</span>' + dateBadge(null, src0, date0) + '</div></div>';
     }
     var e = r.entries || [], last = e[e.length - 1], prev = e[e.length - 2], dg = r.digits;
-    if (last && prev) out += '<div class="jr">' + jdelta(last.v, prev.v, dg) + ' since ' + esc(prev.d) + '</div>';
+    if (last && prev) out += '<div class="jr">' + jdelta(last.v, prev.v, dg) + ' since ' + dt(prev.d) + '</div>';
     else out += '<div class="jr same">first reading we hold</div>';
     if (last && r.since_event)
-      out += '<div class="jr">' + jdelta(last.v, r.since_event.v, dg) + ' since the event began, ' + esc(r.since_event.d) + '</div>';
+      out += '<div class="jr">' + jdelta(last.v, r.since_event.v, dg) + ' since the event began, ' + dt(r.since_event.d) + '</div>';
     /* СТРОКА ИСТОЧНИКА — ТОЖЕ ПОДСКАЗКА, И БЕЗ ОБРЫВА. Владелец 04.09: «что там за многоточия
        в тексте, немного почётче пиши». Многоточие рисовала обрезка по ширине: длинное имя
        источника не влезало в строку кирпича. Теперь подпись переносится и сама стала якорем:
@@ -2050,7 +2071,7 @@
           : 'This is the first reading we hold.'),
       src: r.src || '', date: last ? last.d : '' };
     out += '<div class="jsrc"><span data-src="' + esc(JSON.stringify(srcPay)) + '">' + mark(r.src || '') +
-      (last ? ' · ' + esc(last.d) : '') + '</span>' +
+      (last ? ' · ' + dt(last.d) : '') + '</span>' +
       '<button type="button" class="jh" data-hist="' + esc(k) + '">history</button>' + dateBadge(k) + '</div>';
     return out + '</div>';
   }
@@ -3285,8 +3306,8 @@
     if (k === 'surface') head = fin(T34.last_anom) ? 'Niño 3.4 today: ' + fnum(T34.last_anom) + ' °C on our box, ' + (T34.days_stale === 1 ? 'one day' : T34.days_stale + ' days') + ' behind' : 'Daily boxes straight from the NOAA grid';
     else if (k === 'moorings') head = TAO.warmest ? 'Water ' + fnum(TAO.warmest.value, 1) + ' °C above normal is sitting at ' + TAO.warmest.depth + ' m under ' + TAO.warmest.station : 'Below the surface: the moorings';
     else head = GD.max_anom ? 'Reanalysis, ' + esc(GD.month) + ': up to ' + fnum(GD.max_anom.value, 1) + ' °C above normal at ' + GD.max_anom.depth + ' m, ' + esc(GD.max_anom.label) : 'Reanalysis section along the equator';
-    if (k === 'hovmoller') head = 'How the heat moves under the equator: month by month, this event beside a past one';
-    if (k === 'motion') head = 'The section month by month: play the warm water sliding east';
+    if (k === 'hovmoller') head = 'How the heat moves: month by month, beside a past event';
+    if (k === 'motion') head = 'The section month by month';
     var body = stageShell(head, [segBtn('ocean', 'surface', 'Surface, daily', 'surface'), segBtn('ocean', 'moorings', 'Below the surface', 'surface'), segBtn('ocean', 'section', 'Reanalysis section', 'surface'), segBtn('ocean', 'hovmoller', 'Heat on the move', 'surface'), segBtn('ocean', 'motion', 'Month by month', 'surface')]);
     if (O.error) { body.appendChild(el('div', 'note warn', 'The direct OISST block did not load: ' + esc(O.error))); }
     if (k === 'motion') { viewOceanMotion(body); return; }
@@ -4553,7 +4574,7 @@
       var list = arts.filter(function (a) { return lf === 'all' || a.lang === lf; }).slice(0, 120);
       var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
       wrap.innerHTML = '<table class="e"><thead><tr><th>date</th><th>language</th><th>source</th><th>headline</th></tr></thead><tbody>' +
-        list.map(function (a) { return '<tr><td style="white-space:nowrap">' + esc(a.date || '') + '</td><td>' + esc(a.lang) + '</td><td>' + esc(a.source || '') + '</td><td class="act"><a href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.title) + '</a></td></tr>'; }).join('') + '</tbody></table>';
+        list.map(function (a) { return '<tr><td style="white-space:nowrap">' + dt(a.date || '') + '</td><td>' + esc(a.lang) + '</td><td>' + esc(a.source || '') + '</td><td class="act"><a href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.title) + '</a></td></tr>'; }).join('') + '</tbody></table>';
       body.appendChild(wrap);
       body.appendChild(el('div', 'cap', 'Headlines as written by the publishers, newest first, duplicates removed; a link goes to the publisher through Google News or Bing News. Not our words and not a source of numbers.'));
     } else {
