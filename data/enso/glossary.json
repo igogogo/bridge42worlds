@@ -342,6 +342,54 @@
    "def": "The service register of the panel: every run (full update, light run, links, mooring records, publish, review mark) with its start, duration and outcome, and every source with its date range, last update and any error.",
    "why": "Written at the end of each run, not live. It answers the question a maintainer asks first: what ran, when, did it finish, and which source is behind.",
    "src": "tools/enso/ops.py → data/enso/ops.json and runs.json"
+  },
+  "spectral": {
+   "name": "Spectral watch",
+   "def": "For each daily series the last 30 days are tested for a spectral line at 2, 3, 4, 5, 6 or 7 days above a red-noise background (χ² test); the line is compared with every past 30-day window and with the same window of 1982, 1997, 2015 and 2023.",
+   "why": "The owner's hypothesis: a comb of short periods appears when a system reaches the edge of its stability. It is watched, not assumed; by chance one or two 99 % lines are always present among two dozen series, so a signal needs 99.9 % or a comb, nine days of persistence and the top percentile of history.",
+   "src": "tools/enso/spectral.py → data/enso/spectral.json"
+  },
+  "landbox": {
+   "name": "Land regions (ERA5 boxes)",
+   "def": "Six boxes over land (northern Gulf, central Europe, Peru coast, Java, East Africa, northern India): the mean of a 3×3 grid of ERA5 points inside the box, cosine-weighted, daily since 1981, treated exactly like the global series.",
+   "why": "The impacts of El Niño land on regions; a box mean is weather averaged over a country-sized area, not a point, but it still swings more than the ocean boxes.",
+   "src": "ERA5 via Open-Meteo archive; tools/enso/regions_daily.py"
+  },
+  "rain": {
+   "name": "Rain, ERA5 and GPCP",
+   "def": "Regions: ERA5 daily precipitation summed over the box, the last 30 and 90 days against the 1991–2020 normal of the same calendar window and against every year since 1981. Planet: GPCP monthly, satellites and gauges over land and ocean, since 1979.",
+   "why": "Drought and flood are how El Niño reaches food and people. A reanalysis is biased in the tropics, so the panel shows percentages of normal, not millimetres; GPCP is the second source and the only one for the planet as a whole.",
+   "src": "Open-Meteo archive (ERA5); NOAA PSL GPCP v2.3; tools/enso/precip.py"
+  },
+  "radiance": {
+   "name": "Raw satellite granules (NOAA-21)",
+   "def": "Level-1 radiances read straight from the NOAA-21 granules in the open NODD bucket: CrIS infrared spectra (blind under cloud, which is itself the convection signal) and ATMS microwave brightness temperatures (through cloud), two boxes, day and night, the window 1 July to 6 September of 2023–2026.",
+   "why": "The first measurement on this panel made by us from raw data rather than taken as somebody's product. Everything called temperature there is brightness temperature; the base starts in February 2023, so the sigmas are short.",
+   "src": "external collector C:\\CL\\radiance (its author updates it); data/enso/radiance.json"
+  },
+  "walkerraw": {
+   "name": "Raw Walker contrast",
+   "def": "Brightness temperature at 900 cm⁻¹ over the Niño 3.4 box minus the same over the warm pool, in kelvin, from the raw CrIS granules. In a normal year the east is 19–26 K warmer at the top of the atmosphere because the west is under deep cloud.",
+   "why": "A fall to zero means the deep convection has moved east: the Walker circulation has collapsed or reversed, which is the atmospheric half of a strong El Niño.",
+   "src": "data/enso/radiance.json, formula in meta.formulas"
+  },
+  "hovmoller": {
+   "name": "Hovmöller diagram",
+   "def": "Time runs down the page, longitude across; each row is one month of the subsurface anomaly along the equator from the GODAS reanalysis, at about 95 m or as the depth of the 20 °C isotherm.",
+   "why": "A Kelvin wave shows as a warm band sliding from west to east over two to three months; the diagram is the standard way to see the heat move, and the past strong events sit beside it on the same calendar months.",
+   "src": "GODAS via NOAA PSL; tools/enso/subsurface.py --hov"
+  },
+  "mentions": {
+   "name": "Mentions feed",
+   "def": "Headlines from the Google News editions in nine languages and Bing News, deduplicated; Wikipedia page views of the El Niño article in nine languages; the posts of agencies and forecast centres that mention ENSO.",
+   "why": "Talk about the event, not a measurement of it: how much attention it gets, where, and what the centres say. Headlines are shown as written by the publishers.",
+   "src": "tools/enso/mentions.py → data/enso/mentions.json"
+  },
+  "gpcp": {
+   "name": "GPCP",
+   "def": "The Global Precipitation Climatology Project monthly product: satellites and rain gauges merged on a 2.5° grid over land and ocean since 1979, in millimetres per day.",
+   "why": "The only long series that says whether the planet as a whole received more or less rain; used here for the planet and as a second source beside ERA5 for the land boxes.",
+   "src": "NOAA PSL, precip.mon.mean.nc"
   }
  }
 }

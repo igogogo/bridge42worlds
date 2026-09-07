@@ -234,7 +234,7 @@ def check_links(D, show):
     valid |= {"alert:" + (a.get("id") or "") for a in D.get("alerts") or []}
     valid |= {"region:" + (r.get("id") or "") for r in ((D.get("regions") or {}).get("items") or [])}
     valid |= {"term:" + k for k in G}
-    valid |= {"block:models", "block:peak", "block:food", "block:type"}
+    valid |= {"block:models", "block:peak", "block:food", "block:type", "block:radiance", "block:spectral", "block:rain", "block:landbox"}
     per_work = {}
     n = 0
     for a, ls in anchors.items():

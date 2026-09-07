@@ -49,7 +49,7 @@
       'air/coupling': 'The three atmospheric signs that the ocean and the air are coupled.', 'air/fuel': 'The warm water volume under the equator: the fuel gauge and its lead.', 'air/layers': 'The four satellite floors of the atmosphere and their delay.', 'air/wind': 'Daily zonal wind over the western Pacific and the westerly bursts.', 'air/mjo': 'The Madden–Julian Oscillation: phase and amplitude.', 'air/indices': 'MEI, the Indian Ocean Dipole and RONI next to our coupling score.',
       'trend/sst_nino34': 'Niño 3.4 daily: 400 days, the band of all years, the 14-day forecast, where past events went from here.', 'trend/sst_world': 'The world ocean, daily.', 'trend/t2_world': 'Land and ocean, daily.', 'trend/index': 'Our risk index by update, and the comparable core against past events.', 'trend/months': 'Thirteen months of the three series with their ranks.', 'trend/background': 'Ocean heat content and the energy imbalance: the state of the whole system.',
       'regions/table': 'Every region by season and scenario, with food vulnerability and what to do.', 'regions/place': 'One region at a time; the Gulf with its own measurements.',
-      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.', 'radiance/convection': 'Share of satellite footprints colder than 235 K: deep convection over Niño 3.4 and the warm pool, this year against 2023–2025.', 'radiance/walker': 'Brightness-temperature contrast east minus west: the Walker circulation read raw; a fall to zero means the convection moved east.', 'radiance/profile': 'Temperature layers: infrared (blind under cloud) and microwave (through cloud), the last 14 days against each analogue year.', 'radiance/seismic': 'Earthquakes by Pacific-rim zone and solar activity from the same collector; side series, not El Niño physics.', 'trend/rain': 'Rain by region (ERA5 box sums against the normal and against every year since 1981) and for the whole planet (GPCP monthly).', 'trend/spectral': 'A line at 2–7 days appearing in any daily series over the last 30 days: the owner’s hypothesis of a comb before a spontaneous transition, watched, not assumed.',
+      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.', 'radiance/convection': 'Share of satellite footprints colder than 235 K: deep convection over Niño 3.4 and the warm pool, this year against 2023–2025.', 'radiance/walker': 'Brightness-temperature contrast east minus west: the Walker circulation read raw; a fall to zero means the convection moved east.', 'radiance/profile': 'Temperature layers: infrared (blind under cloud) and microwave (through cloud), the last 14 days against each analogue year.', 'radiance/seismic': 'Earthquakes by Pacific-rim zone and solar activity from the same collector; side series, not El Niño physics.', 'models/board': 'Every model of the plume as a card: latest forecast, class, how far below reality.', 'models/revision': 'How each centre revised its forecast issue after issue.', 'refs/works': 'Our parsed arXiv works attached to the claims of this panel, with the reason for each link.', 'refs/sources': 'Every data source with its address, cadence and last date.', 'refs/literature': 'Literature and reports quoted on the panel, not measured by us.', 'trend/rain': 'Rain by region (ERA5 box sums against the normal and against every year since 1981) and for the whole planet (GPCP monthly).', 'trend/spectral': 'A line at 2–7 days appearing in any daily series over the last 30 days: the owner’s hypothesis of a comb before a spontaneous transition, watched, not assumed.',
       'planet/gases': 'CO₂, CH₄ and N₂O since the start of measurement, with the annual growth of CO₂.', 'planet/ice': 'Arctic and Antarctic sea ice extent, every year as a line against the 1981–2010 median.', 'planet/temperature': 'Land+ocean and ocean daily temperature every year since 1940 and 1981; global annual means since 1850.', 'planet/sea': 'Global mean sea level from satellites since 1993.',
       'how/glossary': 'Every underlined term explained.', 'how/method': 'How things are computed, and which numbers are parameters.', 'how/sources': 'Every source, whether it answered, and when its data last changed.', 'how/calendar': 'When each source publishes next.', 'how/changed': 'What changed since the previous update.',
       'ops/runs': 'Every run on record: when, what kind, how long, how it ended.', 'ops/sources': 'Every source: date range held, last update, answered or stale, errors.', 'ops/fresh': 'Fresh data since the last assessment and the triggers that decide whether it deserves one.'
@@ -87,6 +87,10 @@
   }
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
   function term(key, text) { return '<span data-term="' + esc(key) + '">' + esc(text) + '</span>'; }
+  /* АББРЕВИАТУРА В РАМКЕ (владелец 07.09): как зоны, но другим цветом; подсказка из словаря. */
+  function ab(key, text) { return '<span class="zn ab" data-term="' + esc(key) + '">' + esc(text) + '</span>'; }
+  /* ДИАПАЗОН В СКОБКАХ (владелец 07.09): «[2026-08-06 … 2026-09-04]» вместо «to …; 30 days». */
+  function span(to, days) { return '<span class="mono">[' + esc(addDays(to, -(days - 1))) + ' … ' + esc(to) + ']</span>'; }
   /* ЗОНА — НЕ ЧИСЛО. Владелец 04.09: «наши номера зон типа 1+2, 3.4 путаются с температурами,
      если рядом в строках; писать в рамочке, с префиксом, чтобы понятно было, что это зона».
      Код зоны идёт в рамке, моноширинным, с буквой Z впереди: «Z3.4» уже не прочитать как
@@ -225,7 +229,7 @@
   function chg(now, before, d) {
     if (!fin(now) || !fin(before)) return '';
     var c = now - before;
-    return '<span class="' + upDown(c) + '">' + (c === 0 ? '=' : fnum(c, d == null ? 2 : d)) + '</span>';
+    return '<span class="' + upDown(c) + '"' + (c === 0 ? ' title="unchanged since the previous update"' : '') + '>' + (c === 0 ? '±0' : fnum(c, d == null ? 2 : d)) + '</span>';
   }
 
   // ---------------------------------------------------------------- svg helpers
@@ -417,7 +421,7 @@
   /* Метка свёрнутой легенды: та же форма, что в плитке обзора, и на том же месте —
      правый верхний угол поля. Нажатие разворачивает панель обратно. */
   function legToggle(w, top, open) {
-    var bw = 62, x = w - bw - 6, y = Math.max(2, top - 16);
+    var bw = 72, x = w - bw - 6, y = Math.max(2, top - 16);
     return '<g data-legtoggle="1" style="cursor:pointer">' +
       '<rect x="' + x + '" y="' + y + '" width="' + bw + '" height="14" rx="7" style="fill:var(--surface);stroke:var(--soft)" stroke-width=".9" opacity=".95"/>' +
       '<text x="' + (x + bw / 2) + '" y="' + (y + 10) + '" text-anchor="middle" font-size="8.5" style="fill:var(--soft);letter-spacing:.06em">legend ' + (open ? '×' : '▾') + '</text></g>';
@@ -1731,7 +1735,7 @@
        строка и только когда есть о чём сказать: источник не ответил. */
     /* В шапке — только «updated» (владелец 05.09: «источников много — просто updated
        оставить, всё убрать»); свежесть каждого источника живёт на Data chain и References. */
-    Array.prototype.slice.call(host.children, 1).forEach(function (c) { host.removeChild(c); });
+    Array.prototype.slice.call(host.children, 0).forEach(function (c) { host.removeChild(c); });   // владелец 07.09: «updated уберём, хватит fresh»
     /* СВЕЖЕЕ, НЕ РАЗОБРАННОЕ (владелец 06.09): лёгкий прогон без модели; пунктирная точка дышит,
        пока данные не прошли разбор. Показывается только если слой считан против ЭТОГО разбора. */
     var F = S.F || {};
@@ -1788,7 +1792,7 @@
     // (владелец 03.09: «в кружок текст не поместился, вынеси его»).
     k1.innerHTML = '<div class="gauge-row"><div class="gauge' + (idx >= 70 ? ' hot' : '') + '" data-term="riskindex" style="--v:' + idx + ';--c:' + gc + '"><div class="gv">' + idx + '</div></div>' +
       '<div class="g-side">' + '<button type="button" class="vgo" data-view="verdict">read the verdict →</button>' + '<b>' + zone('nino34') + ' ' + fnum(NW.latest.n34a, 1) + ' °C</b>' +
-      'rank ' + N.all_years_rank + ' of all years on the same 30 days. ' + term('oni', 'ONI') + ' ' + fnum(ONI.current[ls]) + ' (' + esc(ls) + ').' +
+      'rank ' + N.all_years_rank + ' of all years on the same 30 days. ' + ab('oni', 'ONI') + ' ' + fnum(ONI.current[ls]) + ' ' + ab('seasons', ls) + '.' +
       '' + kmeta('risk_index') + freshLine() +
       '<div class="cgo" data-go="now" data-gosub="analogs">see where we are \u2192</div></div></div>';
     box.appendChild(k1);
@@ -1904,6 +1908,11 @@
       };
       top.appendChild(b);
     }
+    /* ⛶ у любой сцены, справа от back (владелец 07.09) */
+    var fb = el('button', 'back-go bright', S.full ? '✕ full screen' : '⛶'); fb.type = 'button'; fb.title = S.full ? 'back to three columns (Esc)' : 'this scene full screen';
+    if (!(S._back && S.view !== 'overview') && !(S._navN > 0)) fb.style.marginLeft = 'auto';
+    fb.onclick = function () { S.full = !S.full; render(); };
+    top.appendChild(fb);
     head.appendChild(top);
     requestAnimationFrame(fitStageTitle);
     if (segs2 && segs2.length) {
@@ -2714,12 +2723,12 @@
       var lv = pair(w0.last_value, P && P.daily ? P.daily[k] : null, 2, '°C');
       var p50 = pair(w0.forecast14.p50, P && P.p50 ? P.p50[k] : null, 2, '°C');
       var kp = el('div', 'kpis');
-      kp.innerHTML = '<div class="kpi"><div class="kn">last day</div><div class="kv">' + lv.big + '</div><div class="km">to ' + esc(w0.last_date) + '; 30 days ' + fnum(w0.level30.anom) + ', ' + term('rank', 'rank ' + w0.level30.rank_raw + ' of ' + w0.level30.of) + '</div>' + kmeta(JK[k]) + '</div>' +
+      kp.innerHTML = '<div class="kpi"><div class="kn">last day</div><div class="kv">' + lv.big + '</div><div class="km">' + span(w0.last_date, 30) + ' ' + fnum(w0.level30.anom) + ', ' + term('rank', 'rank ' + w0.level30.rank_raw + ' of ' + w0.level30.of) + '</div>' + kmeta(JK[k]) + '</div>' +
         '<div class="kpi"><div class="kn">' + term('analog', 'forecast +14 days') + '</div><div class="kv">' + p50.big + '</div><div class="km">' + term('p10p50p90', 'p10 … p90') + ': ' + fnum(w0.forecast14.p10) + ' … ' + fnum(w0.forecast14.p90) + '</div>' + kmeta('fc14_' + k) + '</div>' +
         '<div class="kpi"><div class="kn">records and CUSUM</div><div class="kv" style="font-size:17px">' + w0.records.streak + '<small>days in a row</small></div><div class="km">' + w0.records.last30 + ' record days of 30; ' + term('cusum', 'CUSUM') + ' ' + (w0.cusum.alarm ? 'alarm' : 'quiet') + ', ' + term('trend', 'above trend') + ' ' + fnum(w0.level30.det) + '</div>' +
         kmeta('rec_' + k) + '</div>';
       body.appendChild(kp);
-      if (isLand) body.appendChild(el('div', 'cap', esc((S.RD || {}).note || '') + ' Box ' + esc(boxLabel(w0.box)) + '; ' + esc(w0.source) + '; built ' + esc((S.RD || {}).built || '') + '. ' + (w0.region ? vLink('this region on the Regions tab', 'regions', 'place') : '')));
+      if (isLand) { body.appendChild(el('div', 'cap', esc((S.RD || {}).note || '') + ' Box ' + esc(boxLabel(w0.box)) + '; ' + esc(w0.source) + '; built ' + esc((S.RD || {}).built || '') + '. ' + (w0.region ? vLink('this region on the Regions tab', 'regions', 'place') : ''))); var ll = el('div'); ll.innerHTML = linksHtml('block:landbox'); while (ll.firstChild) body.appendChild(ll.firstChild); }
     }
   }
 
@@ -3050,7 +3059,7 @@
     if (k.wind && k.wind.date && k.wind.date !== (((D.wind || {}).era5 || {}).last_date)) parts.push('wind ' + fnum(k.wind.mean7, 1) + ' m/s (' + esc(k.wind.date) + ')');
     var nT = (F.triggers || []).length;
     return '<div class="fresh' + (F.needs_assessment ? ' hot' : '') + '"><span class="fdot"></span>' + term('fresh', 'fresh, not yet assessed') + (parts.length ? ': ' + parts.join(' · ') : ': no newer days yet') +
-      ' · ' + (nT ? '<b>' + nT + ' trigger' + (nT > 1 ? 's' : '') + (F.needs_assessment ? ', assessment needed' : '') + '</b>' : 'no triggers') + ' <span class="cgo" data-go="ops" data-gosub="fresh">details →</span></div>';
+      ' · ' + (nT ? '<b>' + nT + ' trigger' + (nT > 1 ? 's' : '') + (F.needs_assessment ? ', assessment needed' : '') + '</b>' : 'triggers:&nbsp;none') + ' <span class="cgo" data-go="ops" data-gosub="fresh">details →</span></div>';
   }
 
   /* ПРОВЕРКА — ФАКТ, А НЕ ОБЕЩАНИЕ. review.py кладёт в summary.review, кто проверил и при
@@ -3454,7 +3463,7 @@
      справочников регионов, Залива, фона и глоссария). Ничего не дублируется руками: реестр
      собирается из тех же файлов, которые кормят сцены, и у каждой строки — где она
      использована и зачем. */
-  var BLOCK_LBL = { models: 'How the forecast models break', peak: 'When the growth stops', food: 'El Niño and food prices', type: 'Eastern-type El Niño' };
+  var BLOCK_LBL = { models: 'How the forecast models break', peak: 'When the growth stops', food: 'El Niño and food prices', type: 'Eastern-type El Niño', radiance: 'Convection and the Walker circulation in raw radiances', spectral: 'Early-warning signals before a transition', rain: 'El Niño and regional rainfall', landbox: 'Regional temperature response' };
   function anchorLabel(key) {
     var D = S.D, i = key.indexOf(':'), kind = key.slice(0, i), id = key.slice(i + 1);
     if (kind === 'risk') { var r = (D.risks || []).filter(function (x) { return x.id === id; })[0]; return r ? 'risk: ' + r.title : (/^\d+$/.test(id) && D.risks[id] ? 'risk: ' + D.risks[id].title : null); }
@@ -3651,12 +3660,23 @@
     ((A.onset_paths || {}).items || []).slice(0, 4).forEach(function (it) {
       add(it.name + ' since onset', fnum(it.now_pct, 1) + ' % since the onset month.', ['food', 'onset'], function (w, h) { return chartOverlay({ onset: it.current.onset, current: it.current, analogs: it.analogs || {} }, w, h, { title: it.name + ' since onset', noProject: true }); });
     });
+    /* плитки новых источников 07.09 */
+    var RA1 = S.RA || {}, PR1 = S.PR || {}, RD1 = (S.RD || {}).series || {}, HV1 = S.HV || {}, MN1 = S.MN || {};
+    var cr1 = ((RA1.sources || {}).n21_cris || {}).series || {}, cur1 = String((RA1.window || {}).current || 2026), dl1 = RA1.window ? radDays(RA1) : null;
+    if (cr1.walker_A) add('Raw Walker contrast', 'East minus west brightness temperature from raw granules; near zero this year.', ['radiance', 'walker'], function (w, h) { return chartRadSeries({ byYear: cr1.walker_A, cur: cur1, n: 68, dayLabel: dl1, zero: true, title: 'Raw Walker, K, day' }, w, h); });
+    if (cr1.nino34_A && cr1.nino34_A.conv_frac) add('Deep convection over Niño 3.4', 'Share of cold cloud tops, this year against 2023–2025.', ['radiance', 'convection'], function (w, h) { var by = {}; Object.keys(cr1.nino34_A.conv_frac).forEach(function (y) { by[y] = {}; Object.keys(cr1.nino34_A.conv_frac[y]).forEach(function (d) { by[y][d] = cr1.nino34_A.conv_frac[y][d] * 100; }); }); return chartRadSeries({ byYear: by, cur: cur1, n: 68, dayLabel: dl1, zero: true, title: 'Convection, % of footprints, day' }, w, h); });
+    var gp1 = (PR1.gpcp || {}).global;
+    if (gp1) add('Rain over the planet', gp1.pct_of_normal + ' % of normal in ' + gp1.last + '.', ['trend', 'rain'], function (w, h) { return chartRainBars({ ym: gp1.ym, values: gp1.values, normal: gp1.normal_series, title: 'Planet, mm per day, GPCP', unit: 'mm/day' }, w, h); });
+    Object.keys(PR1.regions || {}).slice(0, 2).forEach(function (k) { var r0 = PR1.regions[k]; add('Rain, ' + (LAND_NAME[k] || k), r0.sum30.pct_of_normal + ' % of normal over 30 days.', ['trend', 'rain'], function (w, h) { return chartRainBars({ ym: r0.months.map(function (m) { return m.ym; }), values: r0.months.map(function (m) { return m.mm; }), normal: r0.months_normal, title: (LAND_NAME[k] || k) + ', mm per month', unit: 'mm', partialLast: true }, w, h); }); });
+    ['land_peru_coast', 'land_gulf_north'].forEach(function (k) { var r1 = RD1[k]; if (r1) add((LAND_NAME[k] || k) + ', air', fnum(r1.level30.anom) + ' °C over 30 days, rank ' + r1.level30.rank_raw + '.', ['trend', k], function (w, h) { return chartRecent(r1, w, h); }); });
+    if (HV1.current && HV1.current.months) add('Heat on the move (Hovmöller)', 'Subsurface anomaly along the equator, month by month.', ['ocean', 'hovmoller'], function (w, h) { return chartHovmoller(HV1, w, h, { metric: 'anom100', analog: null }); });
+    if ((MN1.per_day || {}).dates) add('In the news', (MN1.articles || []).length + ' headlines in nine languages.', ['mentions', 'attention'], function (w, h) { return chartDaysPanels([{ title: 'Articles per day', dates: MN1.per_day.dates, series: [{ name: 'articles', values: MN1.per_day.counts, bars: true, color: 'var(--ochre)' }] }], w, h); });
     (D.risks || []).forEach(function (r, i) {
-      if (!r.metric || !r.metric.values || T2.length >= 42) return;
+      if (!r.metric || !r.metric.values || T2.length >= 48) return;
       if (T2.some(function (t) { return t.title === r.title; })) return;
       add(r.title, 'Level ' + r.level + ' · ' + r.horizon + '. ' + (r.plain || '').slice(0, 160), ['risk', i], function (w, h) { return chartMetric(r.metric, w, h, r.metric.name); });
     });
-    return T2.slice(0, 42);
+    return T2.slice(0, 48);
   }
 
   function viewOverview() {
@@ -3680,6 +3700,19 @@
     if (FO) strip.appendChild(ovKpi(term('fao', 'food index'), fnum(FO.index, 1, false) + '<small>' + esc(FO.last_month) + '</small>', 'year ' + arrow(FO.yoy_pct, 1) + ' % · month ' + arrow(FO.mom, 1), spark({ values: FO.series.index.slice(-24) }, 60, 26), ['food', 'prices'], null, 'food_index'));
     if (coreNow && core97) strip.appendChild(ovKpi('core vs 1997', coreNow.core + '<small>vs ' + core97.core + '</small>', 'comparable rules only; by RONI 1997 is still ahead', twoBars(coreNow.core, core97.core, 'now', '1997', 'var(--nino)'), ['trend', 'index'], null, ['our core index', coreNow.date || '']));
     if (G.sea && fin(G.sea.last_sst)) strip.appendChild(ovKpi(term('gulfbox', 'the Gulf'), fnum(G.sea.last_sst, 1, false) + '<small>°C</small>', 'anomaly ' + fnum(Math.abs(G.sea.last_anom) < .005 ? 0 : G.sea.last_anom) + ' · ' + (G.sea.days_over_35 || 0) + ' d above 35', barFill((G.sea.last_sst - 20) * 100 / 16, 'var(--ochre)'), ['regions', 'place'], null, 'gulf_sst'));
+    /* НОВЫЕ ПОКАЗАТЕЛИ 07.09 (владелец: «пройдись по overview, наверняка появились новые KPI»). */
+    var RA0 = S.RA || {}, PR0 = S.PR || {}, SP0 = S.SP || {}, MN0 = S.MN || {}, RD0 = (S.RD || {}).series || {};
+    var wkA = (((RA0.sources || {}).n21_cris || {}).series || {}).walker_A || {}, wkCur = wkA[String((RA0.window || {}).current || 2026)] || {};
+    var wkKeys = Object.keys(wkCur).map(Number).sort(function (a, b) { return a - b; }), wkLast = wkKeys.length ? wkCur[String(wkKeys[wkKeys.length - 1])] : null;
+    if (fin(wkLast)) strip.appendChild(ovKpi(term('walkerraw', 'raw Walker'), fnum(wkLast, 1, false) + '<small>K east−west</small>', 'past years +19…+26 K; near zero = convection moved east', spark({ values: wkKeys.map(function (d) { return wkCur[String(d)]; }) }, 60, 26), ['radiance', 'walker'], null, ['NOAA-21 CrIS, raw granules', String(RA0.updated || '').slice(0, 10)]));
+    var gp = (PR0.gpcp || {}).global;
+    if (gp && fin(gp.pct_of_normal)) strip.appendChild(ovKpi(term('gpcp', 'rain, planet'), gp.pct_of_normal + '<small>% of normal</small>', esc(gp.last) + ' · wetter than ' + gp.rank_pct + ' % of years', spark({ values: gp.values.slice(-24) }, 60, 26), ['trend', 'rain'], null, ['GPCP monthly', gp.last]));
+    var dryK = Object.keys(PR0.regions || {}).sort(function (a, b) { return PR0.regions[a].sum30.pct_of_normal - PR0.regions[b].sum30.pct_of_normal; })[0];
+    if (dryK) strip.appendChild(ovKpi('driest region, 30 d', esc(LAND_NAME[dryK] || dryK) + '<small>' + PR0.regions[dryK].sum30.pct_of_normal + ' % of normal</small>', 'drier than ' + (100 - PR0.regions[dryK].sum30.rank_pct) + ' % of years since 1981', barFill(PR0.regions[dryK].sum30.pct_of_normal, 'var(--nino)'), ['trend', 'rain'], null, ['ERA5 box sum', PR0.regions[dryK].last_date]));
+    var peru = RD0.land_peru_coast;
+    if (peru) strip.appendChild(ovKpi(term('landbox', 'Peru coast, air'), fnum(peru.level30.anom) + '<small>°C, 30 d</small>', 'rank ' + peru.level30.rank_raw + ' of ' + peru.level30.of + ' years; ' + peru.records.streak + ' record days running', spark({ values: (peru.recent || []).slice(-60) }, 60, 26), ['trend', 'land_peru_coast'], null, ['ERA5 box mean', peru.last_date]));
+    if (SP0.built) strip.appendChild(ovKpi(term('spectral', 'spectral watch'), (SP0.signals || []).length ? '<span class="dn">SIGNAL</span>' : 'quiet<small>' + SP0.lines_99_now + ' vs ' + SP0.lines_99_expected_by_chance + ' by chance</small>', (SP0.candidates || []).length ? 'candidate: ' + SP0.candidates.map(function (q) { return q.replace(/^land_/, ''); }).join(', ') : 'no line at 2–7 days in ' + (SP0.series || []).length + ' series', '', ['trend', 'spectral'], null, ['our own test', String(SP0.built || '').slice(0, 10)]));
+    if (MN0.built) strip.appendChild(ovKpi(term('mentions', 'in the news'), (MN0.articles || []).length + '<small>headlines</small>', ((MN0.languages || []).filter(function (l) { return l.n; }).length) + ' languages · Wikipedia ' + (((MN0.wiki || {}).en || {}).last7_per_day || '…') + ' views a day', spark({ values: ((MN0.per_day || {}).counts || []) }, 60, 26), ['mentions', 'attention'], null, ['Google News, Wikipedia', String(MN0.built || '').slice(0, 10)]));
     body.appendChild(strip);
     var tiles = ovTiles();
     var grid = el('div', 'ov-grid');
@@ -4237,6 +4270,7 @@
       }).join('') + '</tbody></table>';
     body.appendChild(wrap);
     body.appendChild(el('div', 'cap', esc(SP.note || '') + ' Cells: power over the red-noise background at that period; red at 99 %, amber at 95 %. Verdict: none / weak (95 %) / candidate (99 %, first time) / signal (99.9 % or a comb of two independent periods, three updates running on the same period, above the 99th percentile of history). Built ' + esc(SP.built) + ', ' + ser.length + ' series, window ' + SP.window_days + ' days. One-day periods need hourly data and are not tested here.'));
+    var lw = el('div'); lw.innerHTML = linksHtml('block:spectral'); while (lw.firstChild) body.appendChild(lw.firstChild);
   }
 
   /* РЕГИОНАЛЬНЫЕ БОКСЫ: имена и привязка к вкладке Regions. */
@@ -4333,13 +4367,14 @@
     }
     // сводная таблица по регионам — только в табличном режиме
     var wrap = el('div');
-    if (mode !== 'table') { body.appendChild(el('div', 'cap', esc(PR.note || ''))); return; }
+    if (mode !== 'table') { body.appendChild(el('div', 'cap', esc(PR.note || ''))); var lr0 = el('div'); lr0.innerHTML = linksHtml('block:rain'); while (lr0.firstChild) body.appendChild(lr0.firstChild); return; }
     wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
     wrap.innerHTML = '<table class="e rain"><thead><tr><th>region</th><th class="num">30 d, mm</th><th class="num">% of normal</th><th class="num">wetter than</th><th class="num">90 d, % of normal</th><th>same 30 d in our years, mm</th><th class="num">GPCP last month</th></tr></thead><tbody>' +
       keys.map(function (k) { var r2 = RG[k], a = r2.sum30, b = r2.sum90, gb2 = G && G.boxes ? G.boxes[k] : null; var cls = fin(a.pct_of_normal) ? (a.pct_of_normal < 60 ? ' top' : (a.pct_of_normal > 160 ? ' warn' : '')) : '';
         return '<tr><td style="white-space:nowrap;min-width:190px">' + esc(LAND_NAME[k] || k) + '<div class="sub">' + esc(boxLabel(r2.box)) + '</div></td><td class="num">' + fnum(a.now, 0, false) + '</td><td class="num' + cls + '">' + a.pct_of_normal + ' %</td><td class="num">' + a.rank_pct + ' % of years</td><td class="num">' + b.pct_of_normal + ' %</td><td class="act">' + Object.keys(a.analogs).sort().map(function (y) { return y + ': ' + fnum(a.analogs[y], 0, false); }).join(' · ') + '</td><td class="num">' + (gb2 ? gb2.pct_of_normal + ' %' : '·') + '</td></tr>'; }).join('') + '</tbody></table>';
     body.appendChild(wrap);
     body.appendChild(el('div', 'cap', esc(PR.note || '') + ' Red: under 60 % of normal over 30 days, amber: over 160 %. Built ' + esc(PR.built) + (PR.chirps_reachable ? '; CHIRPS reachable, not yet wired' : '; CHIRPS not reachable') + '.'));
+    var lr = el('div'); lr.innerHTML = linksHtml('block:rain'); while (lr.firstChild) body.appendChild(lr.firstChild);
   }
 
   function rainHead() {
@@ -4399,7 +4434,7 @@
     body.classList.add('scroll');
     var kind = (RA.meta || {}).kind || '', cav = (RA.meta || {}).caveats || [], F = (RA.meta || {}).formulas || {}, W0 = RA.window || {}, dl = radDays(RA), cur = String(W0.current || 2026);
     var badge = '<div class="note"><strong>Measured by us, from raw granules.</strong> ' + esc(kind) + '. Window ' + esc(W0.start) + ' → ' + esc(W0.end) + ', years ' + (W0.years || []).join(', ') + '; updated ' + esc(RA.updated) + '. ' + (alerts.length ? alerts.map(function (a) { return '<b>' + esc(a.metric) + '</b>: ' + esc(a.text); }).join(' ') : 'No alerts from the collector.') + '</div>';
-    var tmp = el('div'); tmp.innerHTML = badge; body.appendChild(tmp.firstChild);
+    var tmp = el('div'); tmp.innerHTML = badge + linksHtml('block:radiance'); while (tmp.firstChild) body.appendChild(tmp.firstChild);
     function detLine(keys) { return keys.filter(function (q) { return dets[q]; }).map(function (q) { var d = dets[q]; return esc(q) + ' ' + fnum(d.sigma_units, 2) + 'σ' + (d.triggered ? ' <b>fired</b>' : ''); }).join(' · '); }
     if (k === 'convection') {
       var node = S.sub.radNode || 'A', boxk = S.sub.radBox || 'nino34';
@@ -4655,7 +4690,7 @@
       if (LB) {
         plot(body, function (w, h) { return chartRecent(LB, w, h); });
         var kl = el('div', 'kpis');
-        kl.innerHTML = '<div class="kpi"><div class="kn">air over the region, last day</div><div class="kv">' + fnum(LB.last_value) + '<small> °C</small></div><div class="km">to ' + esc(LB.last_date) + '; 30 days ' + fnum(LB.level30.anom) + ', rank ' + LB.level30.rank_raw + ' of ' + LB.level30.of + '</div>' + kmeta(null, 'ERA5 box mean via Open-Meteo', LB.last_date) + '</div>' +
+        kl.innerHTML = '<div class="kpi"><div class="kn">air over the region, last day</div><div class="kv">' + fnum(LB.last_value) + '<small> °C</small></div><div class="km">' + span(LB.last_date, 30) + ' ' + fnum(LB.level30.anom) + ', rank ' + LB.level30.rank_raw + ' of ' + LB.level30.of + '</div>' + kmeta(null, 'ERA5 box mean via Open-Meteo', LB.last_date) + '</div>' +
           '<div class="kpi"><div class="kn">forecast +14 days</div><div class="kv">' + fnum(LB.forecast14.p50) + '</div><div class="km">p10 … p90: ' + fnum(LB.forecast14.p10) + ' … ' + fnum(LB.forecast14.p90) + '</div>' + kmeta(null, 'analogues of past days', LB.last_date) + '</div>' +
           '<div class="kpi"><div class="kn">record days</div><div class="kv" style="font-size:17px">' + LB.records.last30 + '<small> of 30</small></div><div class="km">warmest of that calendar day since 1981; streak ' + LB.records.streak + '</div>' + kmeta(null, 'ERA5 box mean', LB.last_date) + '</div>';
         var PRr = ((S.PR || {}).regions || {})[landKeyOfRegion(rid)];
@@ -4714,8 +4749,8 @@
     if (S._scene !== scene) { S.pick = (scene === 'models/plume' || scene === 'models/stack') ? 'ok' : null; S._scene = scene; }
     if (S.view === 'overview' && S.full == null) S.full = true;   // обзор открывается сразу на весь экран
     var mapScene = S.view === 'now' && (S.sub.now || 'analogs') === 'map';
-    if (S.view !== 'overview' && S.view !== 'chain' && !mapScene) S.full = null;
-    $('stage').classList.toggle('full', !!(S.full && (S.view === 'chain' || S.view === 'overview' || mapScene)));
+    if (S._fullView !== S.view) { if (S.view !== 'overview') S.full = null; S._fullView = S.view; }   // смена сцены снимает полный экран
+    $('stage').classList.toggle('full', !!S.full);
     var narrow = window.matchMedia('(max-width:900px)').matches;
     // База сравнения выбирается режимом, но код блоков читает S.P — подменяем на время отрисовки.
     S.P = S.delta ? baseline() : (S.D || {}).prev || null;

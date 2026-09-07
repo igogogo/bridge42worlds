@@ -145,6 +145,28 @@ def anchors():
         out.append({"id": "block:food", "kind": "block", "label": "El Niño and food prices",
                     "text": ("How El Niño moves world food prices and crop yields: teleconnections to harvests, the "
                              "lag between the ocean and the market, and which crops and regions carry the shock.")})
+    # НОВЫЕ ИСТОЧНИКИ 07.09 (владелец: «чтобы новые источники вписались так же, как у нас было»)
+    out.append({"id": "block:radiance", "kind": "block", "label": "Convection and the Walker circulation seen in raw radiances",
+                "text": ("Deep convection over the central and eastern equatorial Pacific read from satellite infrared "
+                         "brightness temperature (cold cloud tops below 235 K) and the east-west contrast of outgoing "
+                         "longwave radiation as a measure of the Walker circulation; microwave sounders show the tropical "
+                         "troposphere warming through cloud during El Niño. How the Walker cell weakens or reverses in a "
+                         "strong event, and what satellite radiances and OLR say about the shift of convection.")})
+    out.append({"id": "block:spectral", "kind": "block", "label": "Early-warning signals and short-period oscillations before a transition",
+                "text": ("Early-warning signals of critical transitions in climate series: critical slowing down, rising "
+                         "variance and autocorrelation, spectral reddening, and the appearance of discrete short-period "
+                         "oscillations (days) as a system nears the edge of stability; period doubling and subharmonics "
+                         "of the diurnal forcing in tropical convection; detection of such signals in daily sea surface "
+                         "temperature and air temperature.")})
+    out.append({"id": "block:rain", "kind": "block", "label": "El Niño and regional rainfall",
+                "text": ("Teleconnections of El Niño to rainfall by region: drought over Indonesia and the Maritime "
+                         "Continent, East Africa short rains, the Peru coast floods, the Indian monsoon, and rain over "
+                         "the Gulf and Europe; reanalysis and satellite precipitation products (ERA5, GPCP, CHIRPS) and "
+                         "their biases in the tropics.")})
+    out.append({"id": "block:landbox", "kind": "block", "label": "Regional temperature response to El Niño",
+                "text": ("How near-surface air temperature over land regions responds to a strong El Niño: the Peru coast, "
+                         "Indonesia, East Africa, the Arabian Gulf, India and Europe; lags of months between the ocean and "
+                         "the land, and the year after the peak being warmer than the peak year.")})
     out.append({"id": "block:type", "kind": "block", "label": "Eastern-type El Niño",
                 "text": ("Eastern Pacific (canonical) El Niño against central Pacific (Modoki): what makes the warm "
                          "pool sit off South America, how the two flavours differ in their impacts, and why the "

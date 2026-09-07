@@ -105,7 +105,7 @@
     padding-bottom:3px}
   /* значок «i» с подсказкой у пунктов меню и подменю */
   .ti{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:50%;
-    border:1px solid currentColor;font:italic 600 8.5px Georgia,serif;line-height:1;margin-inline-start:6px;opacity:.55;
+    border:1px solid currentColor;font:italic 600 8.5px/1 Georgia,serif;padding:0 0 1px 0;box-sizing:border-box;margin-inline-start:6px;opacity:.55;
     cursor:help;vertical-align:1px}
   .ti:hover{opacity:1}
   .tab.on .ti,.seg button.on .ti{opacity:.85}
@@ -137,7 +137,7 @@
   /* Строка обновлений живёт в шапке справа: прижата авто-отступом, в одну строку,
      при нехватке места прокручивается вбок, а не ломает шапку. */
   .p-meta{display:flex;align-items:center;gap:4px 14px;flex-wrap:nowrap;font-family:var(--mono);
-    margin-inline-start:auto;justify-content:flex-end;min-width:0;max-width:62%;
+    margin-inline-start:auto;justify-content:flex-end;min-width:0;max-width:62%;padding-inline-end:12px;
     overflow-x:auto;scrollbar-width:none;
     font-size:10.5px;color:var(--soft);padding:0 2px;min-height:16px}
   .p-meta > span{white-space:nowrap}
@@ -156,7 +156,9 @@
     text-transform:uppercase;color:var(--soft);flex-shrink:0}
   .tile > .th .rt{letter-spacing:0;text-transform:none;font-size:11px}
   /* рельсы во весь экран (владелец 07.09): кнопка в шапке плитки; класс на .mid прячет остальные колонки, меню остаётся */
-  .rail-full{margin-left:8px;font-family:var(--mono);font-size:11px;line-height:1;padding:2px 6px;border-radius:6px;border:1px solid var(--hair);background:var(--surface);color:var(--soft);cursor:pointer;vertical-align:middle}
+  .tile{position:relative}
+  .rail-full{position:absolute;top:5px;right:8px;font-family:var(--mono);font-size:11px;line-height:1;padding:2px 6px;border-radius:6px;border:1px solid var(--hair);background:var(--surface);color:var(--soft);cursor:pointer}
+  .tile > .th{padding-right:36px}
   .rail-full:hover{color:var(--ochre);border-color:var(--ochre)}
   .mid.rf-L{grid-template-columns:minmax(0,1fr)} .mid.rf-L #stage,.mid.rf-L #railR{display:none}
   .mid.rf-R{grid-template-columns:minmax(0,1fr)} .mid.rf-R #stage,.mid.rf-R #railL{display:none}
@@ -625,6 +627,7 @@
     color:var(--ochre);background:none;border:1px solid color-mix(in srgb, var(--ochre) 35%, var(--hair));
     border-radius:999px;padding:2px 8px;cursor:pointer;margin-inline-end:6px;margin-top:4px}
   .vgo:hover{border-color:var(--ochre);background:color-mix(in srgb, var(--ochre) 10%, transparent)}
+  .zn.ab{border-color:color-mix(in srgb, var(--cyan) 45%, var(--hair));background:color-mix(in srgb, var(--cyan) 8%, transparent);cursor:help}
   .zn{display:inline-block;font-family:var(--mono);font-size:.92em;letter-spacing:.02em;
     border:1px solid color-mix(in srgb, var(--ochre) 45%, var(--hair));border-radius:4px;
     padding:0 4px;white-space:nowrap;text-decoration:none;
@@ -789,7 +792,9 @@
 <script>
   (function(){
     var root=document.documentElement, key='b42_theme';
-    try{ var s=localStorage.getItem(key); if(s) root.setAttribute('data-theme', s); }catch(e){}
+    // тёмная тема по умолчанию (владелец 07.09); выбор человека в localStorage главнее
+    var s=null; try{ s=localStorage.getItem(key); }catch(e){}
+    root.setAttribute('data-theme', s||'dark');
     var b=document.getElementById('theme-toggle');
     if(b) b.addEventListener('click', function(){
       var cur=root.getAttribute('data-theme');
@@ -806,7 +811,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=d923d6abf4"></script>
+<script src="/js/enso.js?v=82c33df8b9"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>

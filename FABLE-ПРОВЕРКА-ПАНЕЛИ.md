@@ -83,6 +83,7 @@
 | `tools\enso\regions_daily.py`, `data\enso\regions-daily.json` | точки суши на Dynamics тем же кирпичом `watch.series_watch` (ERA5 из склада сторожа); точка сетки, не среднее по региону |
 | `tools\enso\precip.py`, `data\enso\precip.json`, `data\enso\precip\` | осадки: ERA5 по боксам (30/90 дней против нормы и всех лет, склад `spectral\*-precip.json`) и GPCP планета/боксы (Dynamics · Rain, плашки на Regions); проценты от нормы, не миллиметры |
 | `tools\enso\radiance_take.py`, `data\enso\radiance.json` | сырые спутниковые гранулы NOAA-21 (внешний сборщик `C:\CL\radiance`, обновляет его автор): вкладка Satellite raw; берём только полный файл; проверять, что оговорки meta.caveats стоят и сейсмика не попала в State |
+| `tools\enso\check_ui.py` | согласованность панели без сети: термины, подсказки подменю, файлы загрузчика/выкладки, обёртка, свежесть, вкладки; гонять перед каждой выкладкой |
 | `tools\enso\light_daily.ps1` | обёртка лёгкого прогона: light → planet → mentions → spectral → regions_daily → при high полный прогон без выкладки → `publish.py --fresh`. С 07.09 задача планировщика `b42_enso_light` ОТКЛЮЧЕНА: запускать только по слову владельца, не чаще раза в день; полный прогон с моделью — по решению в диалоге после взгляда на Ops · sources |
 | `tools\enso\watch.py` | ряды, риски 1–11 и их тексты; `_next_year_risks` |
 | `tools\enso\air.py`, `subsurface.py`, `wind.py`, `gulf.py`, `background.py` | риски своих блоков (`risks()`), тексты товаров (`EL_NINO_LINK`), справочник Залива (`WINTER`, `IMPORTS`) |
@@ -259,6 +260,7 @@ python review.py --model claude-fable-5-1 --findings 3 --edits 5 --note "две 
 
 ## 7а. Порядок прогонов с 07.09
 
+0. `python check_ui.py` — согласованность панели (термины, подсказки, файлы, обёртка).
 1. Лёгкий прогон только по слову владельца, не чаще раза в день: `powershell -File tools\enso\light_daily.ps1`.
 2. После него открыть Ops · sources и fresh layer: какие источники обновились, есть ли триггеры.
 3. Полный прогон с разбором (`refresh.py`, при необходимости `--links`) — только по решению
