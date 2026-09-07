@@ -1974,11 +1974,52 @@
      (getComputedTextLength), кегль уменьшается 12 → 7.5, и только если и этого мало —
      режется. Заодно единственный заголовок прижимается к левому краю поля, а справа
      оставляется место под кнопку «legend», если она на этом графике есть. */
-  function fitSvgTitles(host) {
+  /* ГОД ДВУМЯ ЦИФРАМИ ВЕЗДЕ (владелец 07.09: «год нужно везде писать только 26»), а месяц —
+     словом: подписи осей приводятся к одному виду уже в готовой картинке, чтобы не править
+     два десятка сборщиков. «2026» → «'26», «2026-01» → «Jan '26». */
+  function tidyAxisText(t) {
+    var v = (t.textContent || '').trim(), m;
+    if ((m = v.match(/^(19|20)(\d{2})$/))) { t.textContent = "'" + m[2]; return; }
+    if ((m = v.match(/^(19|20)(\d{2})-(\d{2})$/))) { t.textContent = MON3[+m[3] - 1] + " '" + m[2]; return; }
+    if ((m = v.match(/^(19|20)(\d{2})-(\d{2})-(\d{2})$/))) { t.textContent = MON3[+m[3] - 1] + ' ' + (+m[4]); return; }
+    if ((m = v.match(/^(19|20)(\d{2})[–-](19|20)?(\d{2})$/))) { t.textContent = "'" + m[2] + '–' + m[4]; return; }
+    // «Jul 2026» и «6 Sep 2026» — тот же вид, что и остальные даты
+    if (v.length <= 14 && (m = v.match(/^(.*?)(19|20)(\d{2})$/)) && /[A-Za-z]/.test(m[1])) t.textContent = m[1].trim() + " '" + m[3];
+  }
+
+  /* ПЛИТКА ОБЗОРА — ТОЛЬКО ЛИНИЯ (владелец 07.09: «никаких надписей на миниграфиках; тексты
+     was… after… наезжают друг на друга, убери их в легенду; на осях оставь начальную и
+     конечную, кегль уменьши»). Разбор по месту: подписи осей узнаются по геометрии (низ поля
+     и левая колонка), всё словесное внутри поля снимается — это пояснения, у них есть своё
+     место в подсказке плитки и на большой сцене. */
+  function tidyTileSvg(svg, W, H) {
+    var texts = [].slice.call(svg.querySelectorAll('text'));
+    var bottom = [], left = [];
+    texts.forEach(function (t) {
+      var x = parseFloat(t.getAttribute('x')) || 0, y = parseFloat(t.getAttribute('y')) || 0;
+      var v = (t.textContent || '').trim();
+      // длинная подпись внизу — не ось, а пояснение шкалы: в плитке ей места нет
+      if (y > H - 22) { if (v.length > 12 || v.indexOf('·') >= 0) t.remove(); else bottom.push({ t: t, x: x }); return; }
+      if (x < 62 && (t.getAttribute('text-anchor') || '') === 'end') { left.push({ t: t, y: y }); return; }
+      // внутри поля оставляем только числа: слова — это пояснения
+      if (/[A-Za-zА-Яа-я]{3}/.test(v) || t.classList.contains('tt')) t.remove();
+    });
+    function thin(arr, key) {
+      if (arr.length < 3) return;
+      arr.sort(function (p, q) { return p[key] - q[key]; });
+      arr.forEach(function (o, i) { if (i !== 0 && i !== arr.length - 1) o.t.remove(); });
+    }
+    thin(bottom, 'x'); thin(left, 'y');
+    [].forEach.call(svg.querySelectorAll('text'), function (t) { t.style.fontSize = '8px'; });
+  }
+
+  function fitSvgTitles(host, tight) {
     if (!host) return;
     [].forEach.call(host.querySelectorAll('svg'), function (svg) {
       var vb = (svg.getAttribute('viewBox') || '').split(/[\s,]+/), W = parseFloat(vb[2]) || 0;
       if (!W) return;
+      [].forEach.call(svg.querySelectorAll('text'), tidyAxisText);
+      if (tight) { tidyTileSvg(svg, W, parseFloat(vb[3]) || 0); return; }
       var tts = [].slice.call(svg.querySelectorAll('text.tt'));
       if (!tts.length) return;
       var hasLeg = !!svg.querySelector('[data-legtoggle]');
@@ -3786,7 +3827,7 @@
            картинку и подписи (владелец 06.09: «легенды везде сделать иконкой и открывать в
            тултипе»). Флаг включает у всех графиков одно поведение — значок вместо столбца. */
         S._tight = w < 420; S._tightW = w; S._legend = null;
-        try { host.innerHTML = t.draw(w, h); fitSvgTitles(host); } catch (err) { host.innerHTML = '<div class="note warn">' + esc(String(err.message || err)) + '</div>'; }
+        try { host.innerHTML = t.draw(w, h); fitSvgTitles(host, true); } catch (err) { host.innerHTML = '<div class="note warn">' + esc(String(err.message || err)) + '</div>'; }
         /* Метка «legend» — в строке названия карточки (владелец 06.09), а не в картинке:
            там она отнимала место у самого графика. Список рядов график сложил в S._legend. */
         var head = t._el && t._el.querySelector('.ov-t');
