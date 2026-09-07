@@ -245,11 +245,14 @@
   /* ЗАГОЛОВОК ПО ШИРИНЕ. Текст в SVG не переносится и не обрезается сам: на телефоне
      подписи графиков уезжали за правый край. Считаем, сколько знаков влезает при нашем
      моноширинном кегле, и режем по слову с многоточием. */
+  /* РАННЕЙ ОБРЕЗКИ БОЛЬШЕ НЕТ (владелец 07.09: «надписи никогда не обрываются»). Оценка по
+     числу знаков врала — у одного кегля буквы разной ширины, и заголовок то резался зря, то
+     всё равно уезжал. Теперь текст отдаётся целиком, а по месту его меряет и ужимает
+     fitSvgTitles() уже в документе. Крайний предохранитель — совсем немыслимая длина. */
   function fitText(text, w, px) {
-    var max = Math.max(8, Math.floor((w - 60) / ((px || 12) * .58)));
-    if (!text || text.length <= max) return text || '';
-    var cut = text.slice(0, max - 1), sp = cut.lastIndexOf(' ');
-    return (sp > max * .5 ? cut.slice(0, sp) : cut) + '…';
+    if (!text) return '';
+    if (text.length <= 400) return text;
+    return text.slice(0, 399) + '…';
   }
   function svgOpen(w, h) { return '<svg viewBox="0 0 ' + w + ' ' + h + '" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img">'; }
   function poly(pts, color, w, op, dash) {
@@ -314,26 +317,15 @@
     return true;
   }
 
+  /* ЛЕГЕНДА ОТКРЫВАЕТСЯ ПОД СВОЕЙ КНОПКОЙ (владелец 07.09: «легенда должна открываться под
+     кнопкой легенда, и кнопка не наезжать на текст описания»). Раньше здесь рисовался список
+     прямо в поле графика слева, а кнопка стояла справа — открывалось не там, где нажимали.
+     Теперь путь один на все графики: та же накладная панель, что у legend(), правым верхним
+     углом под кнопкой. Место под кнопку заголовку освобождает fitSvgTitles(). */
   function legendAt(items, x, y) {
-    if (S._tight) return legIcon(items, S._tightW || 300);
-    /* Кнопка одна на всю панель: закрыл легенду — закрылась и здесь (владелец 06.09:
-       «кнопочка раскрыть-скрыть тоже везде по всему дашборду»). Когда открыта, кнопка
-       стоит там же, в правом верхнем углу поля. */
-    var wCh = S._chartW || 600;
-    if (!S.legOpen) return legToggle(wCh, (y || 20) - 4, false);
-    if (S._chartW) x = Math.min(x, S._chartW - 150);
-    var head = legToggle(wCh, (y || 20) - 4, true);
-    return items.map(function (it, i) {
-      var yy = y + i * 13, key = it[4];
-      var op = key && S.pick && S.pick !== key ? ' opacity=".35"' : '';
-      var open = key ? '<g data-pick="' + esc(key) + '" class="pick' + (S.pick === key ? ' on' : '') + '"' + op + ' style="cursor:pointer">' : '<g>';
-      return open + (key ? '<rect x="' + (x - 2) + '" y="' + (yy - 7) + '" width="' + (26 + it[0].length * 5.8) + '" height="14" style="fill:transparent"/>' : '') +
-        '<line x1="' + x + '" y1="' + yy + '" x2="' + (x + 18) + '" y2="' + yy +
-        '" style="stroke:' + it[1] + '" stroke-width="' + (it[2] || 1.4) + '"' +
-        (it[3] ? ' stroke-dasharray="' + it[3] + '"' : '') + '/>' +
-        '<text x="' + (x + 24) + '" y="' + (yy + 3.5) + '" font-size="10">' + it[0] + '</text></g>';
-    }).join('') + head;
+    return legend(items, S._chartW || 600, 0, 1, (y == null ? 20 : y) + 2);
   }
+
   /* Штриховка для отрицательных значений на тепловых картах и столбиках: знак виден и без цвета. */
   function hatchDefs() {
     return '<defs><pattern id="hneg" patternUnits="userSpaceOnUse" width="6" height="6"><path d="M0 6 L6 0" style="stroke:var(--ink)" stroke-width="1" opacity=".55"/></pattern></defs>';
@@ -1805,7 +1797,10 @@
     // (владелец 03.09: «в кружок текст не поместился, вынеси его»).
     k1.innerHTML = '<div class="gauge-row"><div class="gauge' + (idx >= 70 ? ' hot' : '') + '" data-term="riskindex" style="--v:' + idx + ';--c:' + gc + '"><div class="gv">' + idx + '</div></div>' +
       '<div class="g-side">' + '<button type="button" class="vgo" data-view="verdict">read the verdict →</button>' + '<b>' + zone('nino34') + ' ' + fnum(NW.latest.n34a, 1) + ' °C</b>' +
-      'rank ' + N.all_years_rank + ' of all years on the same 30 days. ' + ab('oni', 'ONI') + ' ' + fnum(ONI.current[ls]) + ' ' + ab('seasons', ls) + '.' +
+      /* Каждое утверждение — своей строкой и без точки в конце (владелец 07.09:
+         «точки после предложений на карточках убрать, просто перенос строки»). */
+      '<div class="ln">rank ' + N.all_years_rank + ' of all years on the same 30 days</div>' +
+      '<div class="ln">' + ab('oni', 'ONI') + ' ' + fnum(ONI.current[ls]) + ' ' + ab('seasons', ls) + '</div>' +
       '' + kmeta('risk_index') + freshLine() +
       '<div class="cgo" data-go="now" data-gosub="analogs">see where we are \u2192</div></div></div>';
     box.appendChild(k1);
@@ -1973,6 +1968,47 @@
     p.appendChild(wrapB);
     if (plotRO) { plotRO.disconnect(); plotRO.observe(p); }
   }
+  /* ЗАГОЛОВКИ ГРАФИКОВ НЕ ОБРЫВАЮТСЯ И НЕ ЛЕЗУТ ПОД КНОПКУ (владелец 07.09, дважды).
+     Оценка «сколько знаков влезет» врала: у одного и того же кегля буквы разной ширины,
+     и текст уезжал за край. Здесь он меряется по-настоящему, уже в документе
+     (getComputedTextLength), кегль уменьшается 12 → 7.5, и только если и этого мало —
+     режется. Заодно единственный заголовок прижимается к левому краю поля, а справа
+     оставляется место под кнопку «legend», если она на этом графике есть. */
+  function fitSvgTitles(host) {
+    if (!host) return;
+    [].forEach.call(host.querySelectorAll('svg'), function (svg) {
+      var vb = (svg.getAttribute('viewBox') || '').split(/[\s,]+/), W = parseFloat(vb[2]) || 0;
+      if (!W) return;
+      var tts = [].slice.call(svg.querySelectorAll('text.tt'));
+      if (!tts.length) return;
+      var hasLeg = !!svg.querySelector('[data-legtoggle]');
+      /* Сосед справа мешает только если он на ТОЙ ЖЕ строке: у разреза и недельных индексов
+         подписи мини-панелей тоже помечены как заголовки, но лежат ниже (07.09). */
+      var pos = tts.map(function (t) { return { t: t, x: parseFloat(t.getAttribute('x')) || 0, y: parseFloat(t.getAttribute('y')) || 0 }; });
+      pos.sort(function (p, q) { return p.y - q.y || p.x - q.x; });
+      var topY = pos[0].y, alone = pos.filter(function (q) { return Math.abs(q.y - topY) < 8; }).length === 1;
+      pos.forEach(function (o) {
+        var t = o.t, x = o.x;
+        if ((t.getAttribute('text-anchor') || '') === 'end') return;   // подпись у правого края — не заголовок
+        if (alone && Math.abs(o.y - topY) < 8 && x > 8) { x = 8; t.setAttribute('x', 8); }
+        var near = pos.filter(function (q) { return q !== o && Math.abs(q.y - o.y) < 8 && q.x > x; });
+        var next = near.length ? Math.min.apply(null, near.map(function (q) { return q.x; })) : 0;
+        var avail = next ? next - x - 10 : W - x - (hasLeg && Math.abs(o.y - topY) < 8 ? 86 : 8);
+        if (avail <= 20) return;
+        /* Кегль задаём СТИЛЕМ, а не атрибутом: правило .plot svg text{font-size:11px} сильнее
+           презентационного атрибута, и уменьшение молча не срабатывало (07.09). */
+        var px = parseFloat(getComputedStyle(t).fontSize) || parseFloat(t.getAttribute('font-size')) || 12, len = 0;
+        try { len = t.getComputedTextLength(); } catch (e) { return; }
+        while (len > avail && px > 7) { px -= .5; t.style.fontSize = px + 'px'; try { len = t.getComputedTextLength(); } catch (e) { return; } }
+        if (len > avail) {
+          var full = t.textContent, k = Math.max(4, Math.floor(full.length * avail / len) - 1);
+          t.textContent = full.slice(0, k).replace(/[\s,;:.\u2014-]+$/, '') + '…';
+          t.setAttribute('title', full);
+        }
+      });
+    });
+  }
+
   function redrawPlot() {
     var p = S.plotEl;
     if (!p || !S.draw || !p.isConnected) return;
@@ -1986,17 +2022,8 @@
        четырнадцать мест сборки строк — напрашиваться на опечатку (одну уже поймали), поэтому
        чиним готовую картинку: у заголовка своя примета (class="tt" на строке y="13"), и
        только он подрезается по числу знаков, которые влезают. */
-    /* НАДПИСИ НЕ ОБРЫВАЮТСЯ (владелец 07.09: «надписи если есть, никогда не обрываются»).
-       Раньше заголовок резался по числу знаков и получалось «…». Теперь сначала уменьшается
-       кегль (12 → 8), и только если и этого мало, текст режется. */
-    p.innerHTML = String(S.draw(w, h)).replace(
-      /(<text class="tt")([^>]*>)([^<]{1,400})(<\/text>)/,
-      // текст уже экранирован сборщиком — повторно не экранируем
-      function (all, a, head, txt, tail) {
-        var px = 12, fits = function (q) { return Math.floor((w - 60) / (q * .58)); };
-        while (txt.length > fits(px) && px > 8) px -= .5;
-        return a + ' font-size="' + px + '"' + head + (txt.length > fits(px) ? fitText(txt, w, px) : txt) + tail;
-      });
+    p.innerHTML = String(S.draw(w, h));
+    fitSvgTitles(p);                            // заголовок меряется по-настоящему, уже в документе
     if (badge) p.appendChild(badge);           // значок даты данных переживает перерисовку
   }
   /* ══ ЖУРНАЛ ЗНАЧЕНИЙ НА КИРПИЧЕ ══════════════════════════════════════════════
@@ -2673,7 +2700,7 @@
     var RD = (S.RD || {}).series || {}, RDK = Object.keys(RD);
     var RNAME = LAND_NAME;
     var opts = [['sst_nino34', 'Niño 3.4'], ['sst_world', 'Ocean'], ['t2_world', 'Land+ocean']].concat(RDK.map(function (q) { return [q, RNAME[q] || q]; })).concat([['index', 'Our index'], ['months', '13 months'], ['rain', 'Rain'], ['background', 'Background'], ['spectral', 'Spectral watch']]);
-    var body = stageShell(k === 'spectral' ? ('Spectral watch: ' + esc((S.SP || {}).summary || 'no data yet')) : k === 'rain' ? rainHead() : 'The world ocean has broken daily records for ' + W.sst_world.records.streak + ' days running, land+ocean for ' + W.t2_world.records.streak,
+    var body = stageShell(k === 'spectral' ? spectralHead() : k === 'rain' ? rainHead() : 'The world ocean has broken daily records for ' + W.sst_world.records.streak + ' days running, land+ocean for ' + W.t2_world.records.streak,
       opts.map(function (o) { return segBtn('trend', o[0], o[1], 'sst_nino34'); }));
     if (k === 'spectral') { viewSpectral(body); return; }
     if (k === 'rain') { viewRain(body); return; }
@@ -2833,7 +2860,7 @@
         body.appendChild(grid);
         var drawGrid = function () {
           if (!grid.isConnected) return;
-          [].forEach.call(grid.children, function (cell) { var w = Math.max(160, cell.clientWidth), h = Math.max(110, cell.clientHeight); cell.innerHTML = chartPrice(cell._it, w, h, { mini: true, paths: pathsOf(cell._it.key), align: align }); });
+          [].forEach.call(grid.children, function (cell) { var w = Math.max(160, cell.clientWidth), h = Math.max(110, cell.clientHeight); cell.innerHTML = chartPrice(cell._it, w, h, { mini: true, paths: pathsOf(cell._it.key), align: align }); fitSvgTitles(cell); });
         };
         requestAnimationFrame(drawGrid);
         if (window.ResizeObserver) { var ro = new ResizeObserver(function () { drawGrid(); }); ro.observe(grid); }
@@ -3759,7 +3786,7 @@
            картинку и подписи (владелец 06.09: «легенды везде сделать иконкой и открывать в
            тултипе»). Флаг включает у всех графиков одно поведение — значок вместо столбца. */
         S._tight = w < 420; S._tightW = w; S._legend = null;
-        try { host.innerHTML = t.draw(w, h); } catch (err) { host.innerHTML = '<div class="note warn">' + esc(String(err.message || err)) + '</div>'; }
+        try { host.innerHTML = t.draw(w, h); fitSvgTitles(host); } catch (err) { host.innerHTML = '<div class="note warn">' + esc(String(err.message || err)) + '</div>'; }
         /* Метка «legend» — в строке названия карточки (владелец 06.09), а не в картинке:
            там она отнимала место у самого графика. Список рядов график сложил в S._legend. */
         var head = t._el && t._el.querySelector('.ov-t');
@@ -4396,6 +4423,15 @@
     body.appendChild(wrap);
     body.appendChild(el('div', 'cap', esc(PR.note || '') + ' Red: under 60 % of normal over 30 days, amber: over 160 %. Built ' + esc(PR.built) + (PR.chirps_reachable ? '; CHIRPS reachable, not yet wired' : '; CHIRPS not reachable') + '.'));
     var lr = el('div'); lr.innerHTML = linksHtml('block:rain'); while (lr.firstChild) body.appendChild(lr.firstChild);
+  }
+
+  /* Короткий заголовок сцены: длинная сводка уезжала в две-три строки (владелец 07.09). */
+  function spectralHead() {
+    var SP = S.SP || {};
+    if (!SP.built) return 'Spectral watch: no data yet';
+    if ((SP.signals || []).length) return 'Spectral watch: SIGNAL in ' + SP.signals.join(', ');
+    return 'Spectral watch: no signal in ' + (SP.series || []).length + ' series, '
+      + SP.lines_99_now + ' line at 99 % against ' + SP.lines_99_expected_by_chance + ' by chance';
   }
 
   function rainHead() {

@@ -265,7 +265,7 @@
      высоту графика (поймано на 1280×720). */
   /* в одну строку всегда: JS уменьшает кегль до влезания (владелец 07.09), чтобы подменю не прыгало */
   .stage-h{font-family:var(--font-display);font-size:clamp(14px,1.7vw,18px);font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;
-    min-width:0;flex:1 1 320px;text-wrap:balance}
+    min-width:0;flex:1 1 320px}   /* без text-wrap:balance: он снова разрешал перенос и ломал строку (07.09) */
   .seg{display:flex;gap:3px;flex-shrink:0;flex-wrap:wrap}
   .seg.sub{padding:0 0 2px}
   /* Планшет цепочки данных и страница «About» (владелец 04.09, ночь) */
@@ -353,9 +353,9 @@
   .dcal-wrap{position:absolute;inset-inline-end:0;bottom:0;width:0;height:0;z-index:2}
   .dcal-wrap .dcal{inset-inline-end:6px;bottom:6px}
   .kpi,.card,.risk,.ov-kpi{position:relative}
-  /* место под пару history + значок даты в правом нижнем углу */
-  .kj .jsrc{padding-inline-end:82px}
-  .risk .rf{padding-inline-end:82px}
+  /* место под пару history + значок даты в правом нижнем углу карточки */
+  .kj .jsrc{padding-inline-end:0}
+  .risk .rf{padding-inline-end:0}
   .ov-kpi .km{padding-inline-end:16px}
   .plot svg{display:block;width:100%;height:100%}
   .plot svg text{font-family:var(--mono);font-size:11px;fill:var(--soft)}
@@ -504,7 +504,10 @@
      на своей строке, где придётся. Теперь обе стоят на одной оси: высота 14 пикселей, низ 5. */
   .kj .jsrc .jh,.risk .rf .jh{position:absolute;inset-inline-end:25px;bottom:5px;margin:0;
     height:14px;display:inline-flex;align-items:center;line-height:1}
-  .kj .jsrc,.risk .rf{padding-inline-end:82px;min-height:16px}
+  /* Текст не сжимаем колонкой справа — узкие карточки от этого ломались построчно
+     (владелец 07.09). Вместо этого внизу оставлена полоса, в которой и стоит пара. */
+  .kj .jsrc,.risk .rf{padding-inline-end:0;padding-bottom:17px;min-height:16px}
+  .g-side .ln{display:block;line-height:1.45}   /* утверждения карточки State — по строке, без точек */
   .kpi-card .cgo{padding-inline-end:82px}   /* ссылка внизу карточки State не уходит под кнопку */
   .risk .rf{display:flex;justify-content:flex-end;align-items:center;gap:6px;margin-top:4px}
   .chain{overflow-x:hidden}
@@ -827,7 +830,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=0c612a2f5b"></script>
+<script src="/js/enso.js?v=a8809e0e98"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>
