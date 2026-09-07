@@ -48,7 +48,7 @@
       'air/coupling': 'The three atmospheric signs that the ocean and the air are coupled.', 'air/fuel': 'The warm water volume under the equator: the fuel gauge and its lead.', 'air/layers': 'The four satellite floors of the atmosphere and their delay.', 'air/wind': 'Daily zonal wind over the western Pacific and the westerly bursts.', 'air/mjo': 'The Madden–Julian Oscillation: phase and amplitude.', 'air/indices': 'MEI, the Indian Ocean Dipole and RONI next to our coupling score.',
       'trend/sst_nino34': 'Niño 3.4 daily: 400 days, the band of all years, the 14-day forecast, where past events went from here.', 'trend/sst_world': 'The world ocean, daily.', 'trend/t2_world': 'Land and ocean, daily.', 'trend/index': 'Our risk index by update, and the comparable core against past events.', 'trend/months': 'Thirteen months of the three series with their ranks.', 'trend/background': 'Ocean heat content and the energy imbalance: the state of the whole system.',
       'regions/table': 'Every region by season and scenario, with food vulnerability and what to do.', 'regions/place': 'One region at a time; the Gulf with its own measurements.',
-      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.', 'trend/spectral': 'A line at 2–7 days appearing in any daily series over the last 30 days: the owner’s hypothesis of a comb before a spontaneous transition, watched, not assumed.',
+      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.', 'trend/rain': 'Rain by region (ERA5 box sums against the normal and against every year since 1981) and for the whole planet (GPCP monthly).', 'trend/spectral': 'A line at 2–7 days appearing in any daily series over the last 30 days: the owner’s hypothesis of a comb before a spontaneous transition, watched, not assumed.',
       'planet/gases': 'CO₂, CH₄ and N₂O since the start of measurement, with the annual growth of CO₂.', 'planet/ice': 'Arctic and Antarctic sea ice extent, every year as a line against the 1981–2010 median.', 'planet/temperature': 'Land+ocean and ocean daily temperature every year since 1940 and 1981; global annual means since 1850.', 'planet/sea': 'Global mean sea level from satellites since 1993.',
       'how/glossary': 'Every underlined term explained.', 'how/method': 'How things are computed, and which numbers are parameters.', 'how/sources': 'Every source, whether it answered, and when its data last changed.', 'how/calendar': 'When each source publishes next.', 'how/changed': 'What changed since the previous update.',
       'ops/runs': 'Every run on record: when, what kind, how long, how it ended.', 'ops/sources': 'Every source: date range held, last update, answered or stale, errors.', 'ops/fresh': 'Fresh data since the last assessment and the triggers that decide whether it deserves one.'
@@ -2641,10 +2641,11 @@
     /* ТОЧКИ СУШИ КАК У NIÑO 3.4 (владелец 07.09): те же кирпичи watch, данные regions-daily.json. */
     var RD = (S.RD || {}).series || {}, RDK = Object.keys(RD);
     var RNAME = LAND_NAME;
-    var opts = [['sst_nino34', 'Niño 3.4'], ['sst_world', 'Ocean'], ['t2_world', 'Land+ocean']].concat(RDK.map(function (q) { return [q, RNAME[q] || q]; })).concat([['index', 'Our index'], ['months', '13 months'], ['background', 'Background'], ['spectral', 'Spectral watch']]);
-    var body = stageShell(k === 'spectral' ? ('Spectral watch: ' + esc((S.SP || {}).summary || 'no data yet')) : 'The world ocean has broken daily records for ' + W.sst_world.records.streak + ' days running, land+ocean for ' + W.t2_world.records.streak,
+    var opts = [['sst_nino34', 'Niño 3.4'], ['sst_world', 'Ocean'], ['t2_world', 'Land+ocean']].concat(RDK.map(function (q) { return [q, RNAME[q] || q]; })).concat([['index', 'Our index'], ['months', '13 months'], ['rain', 'Rain'], ['background', 'Background'], ['spectral', 'Spectral watch']]);
+    var body = stageShell(k === 'spectral' ? ('Spectral watch: ' + esc((S.SP || {}).summary || 'no data yet')) : k === 'rain' ? rainHead() : 'The world ocean has broken daily records for ' + W.sst_world.records.streak + ' days running, land+ocean for ' + W.t2_world.records.streak,
       opts.map(function (o) { return segBtn('trend', o[0], o[1], 'sst_nino34'); }));
     if (k === 'spectral') { viewSpectral(body); return; }
+    if (k === 'rain') { viewRain(body); return; }
     if (k === 'index') {
       plot(body, function (w, h) { return chartHistory(S.H, w, h); });
       /* ЯДРО ИНДЕКСА У ПРОШЛЫХ СОБЫТИЙ. Владелец 04.09: «риск-индекс посчитать для других
@@ -4269,6 +4270,77 @@
     while (h.scrollWidth > h.clientWidth + 1 && px > 10.5 && guard++ < 24) { px -= 0.5; h.style.fontSize = px + 'px'; }
   }
 
+  /* ОСАДКИ (владелец 07.09: «нет источников по осадкам? бери всё что есть»). Данные precip.json:
+     регионы — ERA5 по боксам (суммы за 30/90 дней против нормы и всех лет), планета — GPCP месячный.
+     Столбики месяцев с нормой пунктиром: красный столбик суше нормы, синий влажнее. */
+  function chartRainBars(cfg, W, H) {
+    var ym = cfg.ym || [], v = cfg.values || [], nm = cfg.normal || [], n = ym.length;
+    if (!n) return svgOpen(W, H) + '<text x="20" y="40">no series</text></svg>';
+    var Lp = 46, R = 14, Tp = 26, B = 26, pw = W - Lp - R, ph = H - Tp - B;
+    var all = v.concat(nm).filter(fin), vmax = Math.max.apply(null, all) * 1.15 || 1;
+    var X = function (i) { return Lp + (i + .5) / n * pw; }, Y = function (x) { return Tp + (vmax - x) / vmax * ph; };
+    var s = svgOpen(W, H) + hatchDefs() + '<text class="tt" x="' + Lp + '" y="15">' + fitText(esc(cfg.title || ''), W, 12) + '</text>';
+    var step = niceStep(vmax, Math.max(3, Math.floor(ph / 26)));
+    for (var g = 0; g < vmax; g += step) s += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".6"/><text x="' + (Lp - 5) + '" y="' + (Y(g) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9">' + fnum(g, step < 1 ? 1 : 0, false) + '</text>';
+    var bw = Math.max(2, pw / n * .7);
+    v.forEach(function (x, i) {
+      if (!fin(x)) return;
+      var dry = fin(nm[i]) && x < nm[i], col = dry ? 'var(--nino)' : 'var(--nina)';
+      s += '<rect x="' + (X(i) - bw / 2).toFixed(1) + '" y="' + Y(x).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + (Y(0) - Y(x)).toFixed(1) + '" style="fill:' + col + '" opacity="' + (cfg.partialLast && i === n - 1 ? .45 : .8) + '"/>' + (dry ? '<rect x="' + (X(i) - bw / 2).toFixed(1) + '" y="' + Y(x).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + (Y(0) - Y(x)).toFixed(1) + '" fill="url(#hneg)" opacity=".5"/>' : '');
+      if (ym[i].slice(5) === '01' || n <= 12) s += '<text x="' + X(i).toFixed(1) + '" y="' + (H - 9) + '" text-anchor="middle" font-size="9">' + (n <= 12 ? ym[i].slice(5) : ym[i].slice(0, 4)) + '</text>';
+    });
+    s += segs(nm.map(function (x, i) { return [X(i), fin(x) ? Y(x) : NaN]; }), 'var(--text)', 1.4, .9, '5 3');
+    s += '<text x="' + (W - R) + '" y="' + (Tp - 8) + '" text-anchor="end" font-size="9" style="fill:var(--soft)">' + esc(cfg.unit || '') + ' · dashed: 1991–2020 normal · red hatched: drier than normal' + (cfg.partialLast ? ' · last bar incomplete' : '') + '</text>';
+    return s + '</svg>';
+  }
+
+  function viewRain(body) {
+    var PR = S.PR || {}, RG = PR.regions || {}, G = PR.gpcp || null, keys = Object.keys(RG);
+    if (!PR.built) { body.appendChild(el('div', 'note', 'No rain data yet: run python tools/enso/precip.py.')); return; }
+    var pick = S.sub.rain || 'planet';
+    var row = el('div', 'seg sub');
+    [['planet', 'planet (GPCP)']].concat(keys.map(function (k) { return [k, LAND_NAME[k] || k]; })).forEach(function (o, i) {
+      var b = el('button', (pick === o[0] ? 'on' : '') + (i === 0 ? ' sq' : ''), o[1]); b.type = 'button'; b.onclick = function () { S.sub.rain = o[0]; render(); }; row.appendChild(b);
+      if (i === 0) row.appendChild(el('span', 'seg-gap', ''));
+    });
+    body.appendChild(row);
+    body.classList.add('scroll');
+    if (pick === 'planet') {
+      if (!G) { body.appendChild(el('div', 'note warn', 'GPCP did not load.')); }
+      else {
+        var g = G.global;
+        plot(body, function (w, h) { return chartRainBars({ ym: g.ym, values: g.values, normal: g.normal_series, title: 'Rain over the whole planet, land and ocean, monthly mean, GPCP', unit: 'mm per day' }, w, h); });
+        var kg = el('div', 'kpis');
+        kg.innerHTML = '<div class="kpi"><div class="kn">planet · ' + esc(g.last) + '</div><div class="kv">' + fnum(g.now, 2, false) + '<small> mm/day</small></div><div class="km">' + g.pct_of_normal + ' % of the normal for that month; rank ' + g.rank_pct + ' % of ' + g.of_years + ' years</div>' + kmeta(null, G.source, g.last) + '</div>' +
+          '<div class="kpi"><div class="kn">same month in our years</div><div class="kv" style="font-size:14px">' + Object.keys(g.analogs).sort().map(function (y) { return y + ': ' + fnum(g.analogs[y], 2, false); }).join(' · ') + '</div><div class="km">mm per day, planet</div>' + kmeta(null, G.source, g.last) + '</div>';
+        body.appendChild(kg);
+      }
+    } else {
+      var r = RG[pick], s30 = r.sum30, s90 = r.sum90, gb = G && G.boxes ? G.boxes[pick] : null;
+      plot(body, function (w, h) { return chartRainBars({ ym: r.months.map(function (m) { return m.ym; }), values: r.months.map(function (m) { return m.mm; }), normal: r.months_normal, title: esc(r.label) + ': monthly totals, last 24 months', unit: 'mm per month', partialLast: true }, w, h); });
+      var kr = el('div', 'kpis');
+      kr.innerHTML = '<div class="kpi"><div class="kn">last 30 days to ' + esc(r.last_date) + '</div><div class="kv">' + fnum(s30.now, 0, false) + '<small> mm</small></div><div class="km">' + s30.pct_of_normal + ' % of the normal ' + fnum(s30.normal, 0, false) + ' mm; wetter than ' + s30.rank_pct + ' % of ' + s30.of_years + ' years</div>' + kmeta(null, 'ERA5 box sum via Open-Meteo', r.last_date) + '</div>' +
+        '<div class="kpi"><div class="kn">last 90 days</div><div class="kv">' + fnum(s90.now, 0, false) + '<small> mm</small></div><div class="km">' + s90.pct_of_normal + ' % of the normal ' + fnum(s90.normal, 0, false) + ' mm; wetter than ' + s90.rank_pct + ' % of years</div>' + kmeta(null, 'ERA5 box sum via Open-Meteo', r.last_date) + '</div>' +
+        '<div class="kpi"><div class="kn">same 30 days in our years</div><div class="kv" style="font-size:14px">' + Object.keys(s30.analogs).sort().map(function (y) { return y + ': ' + fnum(s30.analogs[y], 0, false); }).join(' · ') + '</div><div class="km">mm, ERA5</div>' + kmeta(null, 'ERA5 box sum', r.last_date) + '</div>' +
+        (gb ? '<div class="kpi"><div class="kn">GPCP, last month ' + esc(gb.last) + '</div><div class="kv">' + gb.pct_of_normal + '<small> % of normal</small></div><div class="km">' + fnum(gb.now, 2, false) + ' mm/day against ' + fnum(gb.normal, 2, false) + '; satellites and gauges, a second source</div>' + kmeta(null, G.source, gb.last) + '</div>' : '');
+      body.appendChild(kr);
+    }
+    // сводная таблица по регионам
+    var wrap = el('div');
+    wrap.innerHTML = '<table class="e"><thead><tr><th>region</th><th class="num">30 d, mm</th><th class="num">% of normal</th><th class="num">wetter than</th><th class="num">90 d, % of normal</th><th>same 30 d in our years, mm</th><th class="num">GPCP last month</th></tr></thead><tbody>' +
+      keys.map(function (k) { var r2 = RG[k], a = r2.sum30, b = r2.sum90, gb2 = G && G.boxes ? G.boxes[k] : null; var cls = fin(a.pct_of_normal) ? (a.pct_of_normal < 60 ? ' top' : (a.pct_of_normal > 160 ? ' warn' : '')) : '';
+        return '<tr><td>' + esc(LAND_NAME[k] || k) + '<div class="sub">' + esc(boxLabel(r2.box)) + '</div></td><td class="num">' + fnum(a.now, 0, false) + '</td><td class="num' + cls + '">' + a.pct_of_normal + ' %</td><td class="num">' + a.rank_pct + ' % of years</td><td class="num">' + b.pct_of_normal + ' %</td><td class="act">' + Object.keys(a.analogs).sort().map(function (y) { return y + ': ' + fnum(a.analogs[y], 0, false); }).join(' · ') + '</td><td class="num">' + (gb2 ? gb2.pct_of_normal + ' %' : '·') + '</td></tr>'; }).join('') + '</tbody></table>';
+    body.appendChild(wrap);
+    body.appendChild(el('div', 'cap', esc(PR.note || '') + ' Red: under 60 % of normal over 30 days, amber: over 160 %. Built ' + esc(PR.built) + (PR.chirps_reachable ? '; CHIRPS reachable, not yet wired' : '; CHIRPS not reachable') + '.'));
+  }
+
+  function rainHead() {
+    var PR = S.PR || {}, G = (PR.gpcp || {}).global, RG = PR.regions || {};
+    var dry = Object.keys(RG).filter(function (k) { return fin(RG[k].sum30.pct_of_normal) && RG[k].sum30.pct_of_normal < 60; }).map(function (k) { return LAND_NAME[k] || k; });
+    var wet = Object.keys(RG).filter(function (k) { return fin(RG[k].sum30.pct_of_normal) && RG[k].sum30.pct_of_normal > 160; }).map(function (k) { return LAND_NAME[k] || k; });
+    return 'Rain: ' + (G ? 'the planet at ' + G.pct_of_normal + ' % of normal in ' + G.last : 'no planet series') + (dry.length ? '; dry: ' + dry.join(', ') : '') + (wet.length ? '; wet: ' + wet.join(', ') : '');
+  }
+
   /* ЛЕНТА УПОМИНАНИЙ (владелец 07.09): разговор о событии, не измерение. Данные mentions.json. */
   function chartDaysPanels(items, W, H) {
     if (!items.length) return svgOpen(W, H) + '<text x="20" y="40">no series</text></svg>';
@@ -4470,6 +4542,13 @@
         kl.innerHTML = '<div class="kpi"><div class="kn">air over the region, last day</div><div class="kv">' + fnum(LB.last_value) + '<small> °C</small></div><div class="km">to ' + esc(LB.last_date) + '; 30 days ' + fnum(LB.level30.anom) + ', rank ' + LB.level30.rank_raw + ' of ' + LB.level30.of + '</div>' + kmeta(null, 'ERA5 box mean via Open-Meteo', LB.last_date) + '</div>' +
           '<div class="kpi"><div class="kn">forecast +14 days</div><div class="kv">' + fnum(LB.forecast14.p50) + '</div><div class="km">p10 … p90: ' + fnum(LB.forecast14.p10) + ' … ' + fnum(LB.forecast14.p90) + '</div>' + kmeta(null, 'analogues of past days', LB.last_date) + '</div>' +
           '<div class="kpi"><div class="kn">record days</div><div class="kv" style="font-size:17px">' + LB.records.last30 + '<small> of 30</small></div><div class="km">warmest of that calendar day since 1981; streak ' + LB.records.streak + '</div>' + kmeta(null, 'ERA5 box mean', LB.last_date) + '</div>';
+        var PRr = ((S.PR || {}).regions || {})[landKeyOfRegion(rid)];
+        if (PRr) {
+          var kr2 = el('div', 'kpis'), a2 = PRr.sum30, b2 = PRr.sum90;
+          kr2.innerHTML = '<div class="kpi"><div class="kn">rain, last 30 days</div><div class="kv">' + fnum(a2.now, 0, false) + '<small> mm · ' + a2.pct_of_normal + ' % of normal</small></div><div class="km">wetter than ' + a2.rank_pct + ' % of years since 1981; 90 days at ' + b2.pct_of_normal + ' % of normal</div>' + kmeta(null, 'ERA5 box sum via Open-Meteo', PRr.last_date) + '</div>' +
+            '<div class="kpi"><div class="kn">same 30 days in our years</div><div class="kv" style="font-size:14px">' + Object.keys(a2.analogs).sort().map(function (y) { return y + ': ' + fnum(a2.analogs[y], 0, false); }).join(' · ') + '</div><div class="km">mm; ' + vLink('monthly bars and the planet', 'trend', 'rain') + '</div>' + kmeta(null, 'ERA5 box sum', PRr.last_date) + '</div>';
+          body.appendChild(kr2);
+        }
         body.appendChild(kl);
         body.appendChild(el('div', 'cap', 'Box ' + esc(boxLabel(LB.box)) + ', 2 m air, ERA5 box mean; the same series with all its numbers is on ' + vLink('Dynamics', 'trend', landKeyOfRegion(rid)) + '. Below it, the reference: typical impacts by season, food exposure and the sources.'));
       } else body.appendChild(el('div', 'note', 'No local measurements for this region yet — below is the reference: typical impacts by season, food exposure and the sources. The Gulf is the first region with measured series (sea, weather, imports); others follow as sources are found.'));
@@ -4773,10 +4852,11 @@
     get('/data/enso/hovmoller.json').catch(function () { return {}; }),
     get('/data/enso/mentions.json').catch(function () { return {}; }),
     get('/data/enso/spectral.json').catch(function () { return {}; }),
-    get('/data/enso/regions-daily.json').catch(function () { return {}; })])
+    get('/data/enso/regions-daily.json').catch(function () { return {}; }),
+    get('/data/enso/precip.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {};
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {};
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');

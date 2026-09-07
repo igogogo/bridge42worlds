@@ -36,6 +36,9 @@ Say "=== spectral watch (spectral.py)"
 Say "=== land points on Dynamics (regions_daily.py)"
 & $py -u regions_daily.py 2>&1 | Out-File $log -Append -Encoding utf8
 
+Say "=== rain (precip.py)"
+& $py -u precip.py 2>&1 | Out-File $log -Append -Encoding utf8
+
 $fresh = $null
 try { $fresh = Get-Content "$root\data\enso\fresh.json" -Raw -Encoding utf8 | ConvertFrom-Json } catch { Say "fresh.json unreadable: $_" }
 if ($fresh -and $fresh.needs_assessment) {
