@@ -2193,7 +2193,34 @@
         zrow.appendChild(b);
       });
       body.appendChild(zrow);
-      plot(body, function (w, h) { return pacific(NW, w, h); });
+      /* НЕДЕЛЯ ЗА НЕДЕЛЕЙ (владелец 07.09: «с анимацией супер наглядно, примени где ещё можно»):
+         те же участки, но по неделям последних двадцати, рядом та же неделя года-сравнения
+         (analog_series выровнен по концу ряда на ту же неделю года). Кадр = подмена latest. */
+      var ser = NW.series || [], AS = (NW.analog_series || {})[cmp] || [], nF = Math.min(ser.length, AS.length || ser.length), off = ser.length - nF;
+      if (S.mapI == null || S.mapI >= nF) S.mapI = nF - 1;
+      function frameNW(i) {
+        var wk = ser[off + i], aw2 = {}; aw2[cmp] = AS[i + (AS.length - nF)] || {};
+        return Object.assign({}, NW, { date: wk.date, latest: wk, analog_week: Object.assign({}, NW.analog_week || {}, aw2) });
+      }
+      var prow = el('div', 'seg sub');
+      var bPlay = el('button', 'sq', '▶ play the weeks'); bPlay.type = 'button';
+      var rng = document.createElement('input'); rng.type = 'range'; rng.min = 0; rng.max = nF - 1; rng.value = S.mapI; rng.style.cssText = 'flex:1;min-width:120px;max-width:320px;align-self:center';
+      var lab = el('span', 'mono', 'week of ' + (ser[off + S.mapI] || {}).date); lab.style.cssText = 'align-self:center;font-size:12px;min-width:120px';
+      function showFrame() { lab.textContent = 'week of ' + (ser[off + S.mapI] || {}).date; rng.value = S.mapI; S.pw = 0; redrawPlot(); }
+      bPlay.onclick = function () {
+        if (S.animT) { animStop(); bPlay.textContent = '▶ play the weeks'; bPlay.className = 'sq'; return; }
+        if (S.mapI >= nF - 1) S.mapI = 0;
+        S.animT = setInterval(function () {
+          if (!S.plotEl || !S.plotEl.isConnected) { animStop(); return; }
+          S.mapI = (S.mapI + 1) % nF; showFrame();
+          if (S.mapI === nF - 1) { animStop(); bPlay.textContent = '▶ play the weeks'; bPlay.className = 'sq'; }
+        }, 600);
+        bPlay.textContent = '❚❚ pause'; bPlay.className = 'sq on';
+      };
+      rng.oninput = function () { animStop(); bPlay.textContent = '▶ play the weeks'; bPlay.className = 'sq'; S.mapI = +rng.value; showFrame(); };
+      prow.appendChild(bPlay); prow.appendChild(rng); prow.appendChild(lab);
+      body.appendChild(prow);
+      plot(body, function (w, h) { return pacific(nF && S.mapI < nF - 1 ? frameNW(S.mapI) : NW, w, h); });
       // поле карты держит форму 2:1, иначе в полном экране вокруг неё пустота
       if (S.plotEl) S.plotEl.classList.add('map-fit');
       /* Под картой ещё два ряда кнопок и четыре плашки: на невысоком экране они не влезают

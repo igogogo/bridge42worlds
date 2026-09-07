@@ -342,7 +342,10 @@
   .plot svg g.pick text{cursor:pointer}
   .plot svg g.pick:hover text{fill:var(--ochre)}
   .plot svg g.pick.on text{fill:var(--ochre);font-weight:600}
-  .cap{font-size:11.5px;color:var(--soft);line-height:1.5;flex-shrink:0}
+  /* Подпись под графиком чуть ярче (владелец 07.09: «в подвале существенная информация») и в
+     прокручиваемых сценах прилипает к низу, чтобы не теряться под длинным списком. */
+  .cap{font-size:11.5px;color:var(--text);opacity:.8;line-height:1.5;flex-shrink:0}
+  .stage-body.scroll > .cap:last-child{position:sticky;bottom:-8px;background:var(--surface);padding:5px 0 8px;border-top:1px solid var(--hair);opacity:.92;z-index:2}
   .tbl-inline{max-height:38%;overflow:auto;flex-shrink:0;border-top:1px solid var(--line, var(--hair));padding-top:4px}
 
   .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:7px;flex-shrink:0}
