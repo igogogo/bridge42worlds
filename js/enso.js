@@ -249,6 +249,8 @@
      длины штриха. Это же спасает при печати, на плохом экране и при дальтонизме. */
   var DASH = ['', '5 3', '2 2', '8 3 2 3', '1 3', '6 2 1 2'];
   function dashOf(i) { return DASH[i % DASH.length]; }
+  var YEAR_DASH = { '1982': '2 3', '1997': '', '2015': '7 3', '2023': '2 2 7 2' };   // год читается штрихом, не только цветом
+  function yearDash(y) { return YEAR_DASH[y] != null ? YEAR_DASH[y] : dashOf(parseInt(y, 10) % 4); }
 
   /* Расшифровка внутри поля, слева вверху: справа теперь стоят мини-графики прошлых
      событий, и место занято ими (владелец 04.09). */
@@ -2761,7 +2763,7 @@
       function pathsOf(key) { var it = opa.filter(function (x) { return x.key === key; })[0]; return it ? { span: OPa.span || 18, analogs: it.analogs || {} } : null; }
       var rowA = el('div', 'seg sub');
       [['all', 'all together'], ['bundle', 'one bundle']].concat(items.map(function (it) { return [it.key, it.name.replace(/,.*$/, '')]; })).forEach(function (o, i) {
-        var b = el('button', (pk2 === o[0] ? 'on' : '') + (i < 2 ? ' sq' : ''), o[1]); b.type = 'button'; b.onclick = function () { S.sub.absc = o[0]; render(); }; rowA.appendChild(b);
+        var b = el('button', (pk2 === o[0] ? 'on' : '') + (i < 2 ? ' sq' : ''), o[1]); b.type = 'button'; b.onclick = function () { S.sub.absc = o[0]; S.pick = null; render(); }; rowA.appendChild(b);   // выбор в легенде не тащим между видами
         if (i === 1) rowA.appendChild(el('span', 'seg-gap', ''));
       });
       body.appendChild(rowA);
@@ -2776,6 +2778,15 @@
         body.appendChild(rowB);
       }
       if (pk2 === 'all') {
+        var yrs = Object.keys((pathsOf(items[0].key) || {}).analogs || {}).sort();
+        var leg = el('div', 'seg sub'); leg.style.alignItems = 'center';
+        leg.appendChild(el('span', 'sub', 'legend, click to pick out:')); leg.lastChild.style.cssText = 'font-size:11px;color:var(--muted)';
+        [['now', 'this event, $', 'var(--text)', '']].concat(yrs.map(function (y) { return [y, 'after ' + y + ' onset', 'var(--a' + y + ')', yearDash(y)]; })).forEach(function (o) {
+          var b = el('button', 'leg' + (S.pick === o[0] ? ' on' : ''), '<svg width="30" height="10" viewBox="0 0 30 10"><line x1="1" y1="5" x2="29" y2="5" style="stroke:' + o[2] + '" stroke-width="' + (o[0] === 'now' ? 2.4 : 1.8) + '"' + (o[3] ? ' stroke-dasharray="' + o[3] + '"' : '') + '/></svg> ' + esc(o[1]));
+          b.type = 'button'; b.onclick = function () { S.pick = S.pick === o[0] ? null : o[0]; [].forEach.call(leg.querySelectorAll('button'), function (q) { q.classList.remove('on'); }); if (S.pick) b.classList.add('on'); drawGrid(); };
+          leg.appendChild(b);
+        });
+        body.appendChild(leg);
         var grid = el('div', 'pgrid fit');
         items.slice(0, 12).forEach(function (it) { var cell = el('div', 'pcell'); cell._it = it; grid.appendChild(cell); });
         body.appendChild(grid);
@@ -4092,7 +4103,7 @@
       if (n > nS) s += '<rect x="' + X(nS - 1).toFixed(1) + '" y="' + Tp + '" width="' + (X(n - 1) - X(nS - 1)).toFixed(1) + '" height="' + ph + '" style="fill:var(--ink)" opacity=".035"/>' + (mini ? '' : '<text x="' + (X(n - 1) - 4).toFixed(1) + '" y="' + (Tp + ph - 6) + '" text-anchor="end" font-size="9" style="fill:var(--soft)">ahead: where the past events went, in today’s dollars</text>');
       s += '<line x1="' + X(io).toFixed(1) + '" y1="' + Tp + '" x2="' + X(io).toFixed(1) + '" y2="' + (Tp + ph) + '" style="stroke:var(--ochre)" stroke-dasharray="5 3" stroke-width="1.2"/>' + (mini ? '' : '<text x="' + (X(io) + (X(io) > W - 130 ? -4 : 4)).toFixed(1) + '" y="' + (Tp + 11) + '" font-size="9" text-anchor="' + (X(io) > W - 130 ? 'end' : 'start') + '" style="fill:var(--ochre)">event began ' + esc(c.onset) + '</text>');
     }
-    an.forEach(function (a) { s += segs(a.pts.map(function (q) { return [X(q[0]), fin(q[1]) ? Y(q[1]) : NaN]; }), 'var(--a' + a.y + ')', mini ? 1.1 : 1.5, pickOp(a.y, 1)); });
+    an.forEach(function (a) { s += segs(a.pts.map(function (q) { return [X(q[0]), fin(q[1]) ? Y(q[1]) : NaN]; }), 'var(--a' + a.y + ')', (mini ? 1.2 : 1.6) * (S.pick === a.y ? 1.8 : 1), pickOp(a.y, 1), yearDash(a.y)); });
     s += poly(v.map(function (x, i) { return [X(i), fin(x) ? Y(x) : NaN]; }), 'var(--text)', mini ? 1.8 : 2.4, pickOp('now', 1));
     var lo = v.indexOf(Math.min.apply(null, v.filter(fin))), hiI = v.indexOf(Math.max.apply(null, v.filter(fin)));
     if (!mini) {
@@ -4101,7 +4112,7 @@
       if (nS > 13 && fin(v[nS - 13])) s += '<circle cx="' + X(nS - 13).toFixed(1) + '" cy="' + Y(v[nS - 13]).toFixed(1) + '" r="3" fill="none" style="stroke:var(--text)" stroke-width="1.2"/><text x="' + X(nS - 13).toFixed(1) + '" y="' + (Y(v[nS - 13]) - 7).toFixed(1) + '" text-anchor="middle" font-size="9">a year ago ' + fnum(v[nS - 13], v[nS - 13] > 100 ? 0 : 2, false) + '</text>';
     }
     s += nowDot(X(nS - 1), Y(v[nS - 1]), 'var(--text)', mini ? 3 : 4) + '<text x="' + (X(nS - 1) - 6).toFixed(1) + '" y="' + (Y(v[nS - 1]) - 8).toFixed(1) + '" text-anchor="end" font-size="' + (mini ? 9 : 10) + '" font-weight="600">' + fnum(v[nS - 1], v[nS - 1] > 100 ? 0 : 2, false) + '</text>';
-    if (an.length && !mini) s += legendAt([['now', 'var(--text)', 2.4, '', 'now']].concat(an.map(function (a) { return [a.y + ' (' + P.analogs[a.y].onset + ')', 'var(--a' + a.y + ')', 1.5, '', a.y]; })), Lp + 8, Tp + 14);
+    if (an.length && !mini) s += legendAt([['now', 'var(--text)', 2.4, '', 'now']].concat(an.map(function (a) { return [a.y + ' (' + P.analogs[a.y].onset + ')', 'var(--a' + a.y + ')', 1.6, yearDash(a.y), a.y]; })), Lp + 8, Tp + 14);
     return s + '</svg>';
   }
 
@@ -4110,7 +4121,7 @@
   function chartBundle(items, W, H) {
     var rows = items.map(function (it, i) {
       var ser = it.series || {}, m = ser.months || [], v = ser.values || [], io = it.onset ? m.indexOf(it.onset) : -1, base = io >= 0 ? v[io] : null;
-      return { it: it, m: m, io: io, vals: base ? v.map(function (x) { return fin(x) ? 100 * x / base : NaN; }) : [], color: BUNDLE_COLORS[i % BUNDLE_COLORS.length] };
+      return { it: it, m: m, io: io, vals: base ? v.map(function (x) { return fin(x) ? 100 * x / base : NaN; }) : [], color: BUNDLE_COLORS[i % BUNDLE_COLORS.length], dash: dashOf(Math.floor(i / 3)) };
     }).filter(function (r) { return r.vals.length && r.io >= 0; });
     if (!rows.length) return svgOpen(W, H) + '<text x="20" y="40">no onset yet</text></svg>';
     var m = rows[0].m, n = m.length, io = rows[0].io;
@@ -4129,11 +4140,11 @@
     s += '<rect x="' + X(io).toFixed(1) + '" y="' + Tp + '" width="' + (X(n - 1) - X(io)).toFixed(1) + '" height="' + ph + '" style="fill:var(--nino)" opacity=".07"/>';
     s += '<line x1="' + X(io).toFixed(1) + '" y1="' + Tp + '" x2="' + X(io).toFixed(1) + '" y2="' + (Tp + ph) + '" style="stroke:var(--ochre)" stroke-dasharray="5 3" stroke-width="1.2"/><text x="' + (X(io) + 4).toFixed(1) + '" y="' + (Tp + 11) + '" font-size="9" style="fill:var(--ochre)">event began ' + esc(m[io]) + '</text>';
     rows.forEach(function (r) {
-      s += segs(r.vals.map(function (x, i) { return [X(i), fin(x) ? Y(x) : NaN]; }), r.color, S.pick === r.it.key ? 2.6 : 1.5, pickOp(r.it.key, 1));
+      s += segs(r.vals.map(function (x, i) { return [X(i), fin(x) ? Y(x) : NaN]; }), r.color, S.pick === r.it.key ? 2.8 : 1.5, pickOp(r.it.key, 1), r.dash);
       var last = r.vals[n - 1];
       if (fin(last)) s += '<text x="' + (X(n - 1) + 3) + '" y="' + (Y(last) + 3).toFixed(1) + '" font-size="8.5" style="fill:' + r.color + '" opacity="' + pickOp(r.it.key, 1) + '">' + fnum(last, 0, false) + '</text>';
     });
-    s += legendAt(rows.map(function (r) { return [r.it.name.replace(/,.*$/, '') + ' ' + fnum(r.vals[n - 1], 0, false), r.color, 1.5, '', r.it.key]; }), Lp + 8, Tp + 14);
+    s += legendAt(rows.map(function (r) { return [r.it.name.replace(/,.*$/, '') + ' ' + fnum(r.vals[n - 1], 0, false), r.color, 1.5, r.dash, r.it.key]; }), Lp + 8, Tp + 14);
     return s + '</svg>';
   }
 
