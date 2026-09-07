@@ -306,6 +306,34 @@ def _pid_alive(pid):
         return False
 
 
+def _publish_chunk(lock, paths, what):
+    """Выложить часть дерева, пока сборка идёт дальше.
+
+    Замок сборки на это время снимается: он существует, чтобы заливка не прочитала
+    наполовину переписанное дерево, а здесь запись как раз закончена — статьи готовы
+    целиком. После выкладки замок возвращается, чтобы остальная сборка шла под ним.
+    """
+    if _publish_off():
+        return
+    script = Path(__file__).resolve().parent / "cloudflare" / "deploy_r2.py"
+    if not script.exists():
+        return
+    had = lock.exists()
+    if had:
+        lock.unlink(missing_ok=True)
+    print(f"\n{'=' * 60}\n▶️  выкладка части: {what}\n{'=' * 60}")
+    try:
+        subprocess.run([sys.executable, str(script), "--only", *paths],
+                       env={**os.environ, "PYTHONIOENCODING": "utf-8", "B42_DEPLOY_OK": "1"})
+    except Exception as e:                                       # noqa: BLE001
+        # Часть не уехала — не беда: полная выкладка в хвосте прогона возьмёт всё.
+        print(f"⚠️  часть «{what}» не выложена ({type(e).__name__}) — уедет в конце прогона")
+    finally:
+        if had:
+            lock.write_text(f"продолжена {datetime.now():%H:%M}, pid {os.getpid()}",
+                            encoding="utf-8")
+
+
 def cmd_html(args):
     """Пересборка HTML. На время работы ставим файл-замок: заливка в R2, запущенная
     параллельно, прочитает наполовину переписанное дерево и зальёт смесь версий."""
@@ -319,6 +347,11 @@ def cmd_html(args):
     try:
         generate.regenerate_all_html(only=getattr(args, "only", None),
                                      force=getattr(args, "force", False))
+        # ПЕРВЫЙ КУСОК — СТАТЬИ. Они самодостаточны: страница статьи не ссылается на ещё
+        # не собранные агрегаты. Дальше идёт сборка тегов, законов, учёных, архива и карт
+        # сайта, и она долгая — обрыв на ней раньше означал, что читателю не досталось
+        # ничего (07.09: шестьдесят готовых статей остались на диске).
+        _publish_chunk(lock, ["lang"], "страницы статей")
         generate.rebuild_indexes()
         _ensure_webp()   # догнать .webp для новых картинок (сайт отдаёт webp, генератор пишет jpg)
     finally:
@@ -408,6 +441,12 @@ def _build_derived_assets():
                   f"перезапустите {rel}")
 
 
+def _publish_off():
+    """Публикация выключена: дев-режим на разовый запуск или на сессию."""
+    return (os.environ.get("B42_NO_PUBLISH") == "1"
+            or (Path(__file__).resolve().parent / ".no-publish").exists())
+
+
 def _publish_to_r2():
     """Публикует изменения сайта в R2 — вызывается автоматически после КАЖДОЙ команды run.py
     (см. ПРАВИЛА-РАБОТЫ.md: публикацию больше никто не запускает руками). Дёшево: дельта по md5,
@@ -437,7 +476,7 @@ def _publish_to_r2():
     # флаг живёт ровно один запуск, а намерение «сейчас не публикуем» живёт весь вечер.
     # Поэтому есть и файл-замок: он переживает команды и снимается только руками.
     marker = Path(__file__).resolve().parent / ".no-publish"
-    if os.environ.get("B42_NO_PUBLISH") == "1" or marker.exists():
+    if _publish_off():                       # одно правило на хвост и на куски (07.09)
         why = "файл .no-publish" if marker.exists() else "B42_NO_PUBLISH=1"
         print(f"\n{'=' * 60}\n⏸️  публикация ПРОПУЩЕНА: {why} (дев-режим)\n"
               f"   Контент сгенерирован и лежит локально. Выкатить осознанно: run.py publish"
