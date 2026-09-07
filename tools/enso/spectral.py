@@ -92,34 +92,53 @@ def _era5_wind():
     return _dict_series(cur), {int(y): _doy_series(int(y), a) for y, a in an.items()}
 
 
-# РЕГИОНЫ СУШИ (владелец 07.09: «средней температуры по регионам нет, кроме регионов Эль-Ниньо»).
-# ERA5 по дням через Open-Meteo, одна точка на регион, с 1981 года; склад data/enso/spectral/<ключ>.json,
-# при каждом прогоне дотягиваются последние 90 дней. История даёт процентиль и те же годы-аналоги.
-REGIONS = [("kuwait", "Kuwait, 2 m air (ERA5)", 29.35, 47.96), ("europe", "Central Europe 50°N 10°E, 2 m air", 50.0, 10.0),
-           ("lima", "Lima, Peru coast, 2 m air", -12.05, -77.04), ("jakarta", "Jakarta, 2 m air", -6.2, 106.8),
-           ("nairobi", "Nairobi, East Africa, 2 m air", -1.29, 36.82), ("delhi", "Delhi, India, 2 m air", 28.6, 77.2)]
+# РЕГИОНЫ СУШИ БОКСАМИ (владелец 07.09: «настоящие региональные средние боксами вместо точек»).
+# ERA5 по дням через Open-Meteo: сетка 3×3 точек внутри бокса, среднее с весом cos(широты), с 1981
+# года; склад data/enso/spectral/<ключ>-box.json, при каждом прогоне дотягиваются последние 90 дней.
+# История даёт процентиль и те же годы-аналоги. Поле `region` — id региона на вкладке Regions.
+REGIONS = [("gulf_north", "Kuwait and the northern Gulf, 27–31°N 46–50°E, 2 m air (ERA5 box mean)", (27, 31, 46, 50), "gulf_arabia"),
+           ("europe_central", "Central Europe, 45–55°N 5–20°E, 2 m air (ERA5 box mean)", (45, 55, 5, 20), "europe"),
+           ("peru_coast", "Peru coast, 16–6°S 80–76°W, 2 m air (ERA5 box mean)", (-16, -6, -80, -76), "andes_peru"),
+           ("java", "Java, 8–6°S 105–112°E, 2 m air (ERA5 box mean)", (-8, -6, 105, 112), "sea_indonesia"),
+           ("east_africa", "East Africa, 3°S–2°N 35–40°E, 2 m air (ERA5 box mean)", (-3, 2, 35, 40), "east_africa"),
+           ("north_india", "Northern India, 26–31°N 74–80°E, 2 m air (ERA5 box mean)", (26, 31, 74, 80), "south_asia")]
 RCACHE = ROOT / "spectral"
+GRID = 3                    # точек по каждой оси внутри бокса
 
 
-def _om(lat, lon, d0, d1):
+def _om_box(box, d0, d1):
+    """Среднее по сетке GRID×GRID точек бокса, вес cos(широты); один запрос на все точки."""
     import urllib.request
-    u = (f"https://archive-api.open-meteo.com/v1/archive?latitude={lat}&longitude={lon}&start_date={d0}&end_date={d1}"
-         "&daily=temperature_2m_mean&timezone=UTC")
-    with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "bridge42worlds enso"}), timeout=120) as r:
-        d = json.loads(r.read().decode("utf-8"))["daily"]
-    return {t: v for t, v in zip(d["time"], d["temperature_2m_mean"]) if v is not None}
+    la0, la1, lo0, lo1 = box
+    lats = [la0 + (la1 - la0) * (i + .5) / GRID for i in range(GRID)]
+    lons = [lo0 + (lo1 - lo0) * (j + .5) / GRID for j in range(GRID)]
+    pts = [(la, lo) for la in lats for lo in lons]
+    u = ("https://archive-api.open-meteo.com/v1/archive?latitude=" + ",".join(f"{p[0]:.3f}" for p in pts) +
+         "&longitude=" + ",".join(f"{p[1]:.3f}" for p in pts) + f"&start_date={d0}&end_date={d1}&daily=temperature_2m_mean&timezone=UTC")
+    with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "bridge42worlds enso"}), timeout=180) as r:
+        res = json.loads(r.read().decode("utf-8"))
+    if isinstance(res, dict):
+        res = [res]
+    acc, wsum = {}, {}
+    for (la, lo), one in zip(pts, res):
+        w = float(np.cos(np.radians(la))); d = one["daily"]
+        for t, v in zip(d["time"], d["temperature_2m_mean"]):
+            if v is None:
+                continue
+            acc[t] = acc.get(t, 0.0) + w * v; wsum[t] = wsum.get(t, 0.0) + w
+    return {t: round(acc[t] / wsum[t], 3) for t in acc}
 
 
-def _region(key, lat, lon):
+def _region(key, box):
     RCACHE.mkdir(parents=True, exist_ok=True)
-    p = RCACHE / f"{key}.json"
+    p = RCACHE / f"{key}-box.json"
     m = json.load(open(p, encoding="utf-8")) if p.exists() else {}
     today = date.today()
     err = None
     for attempt in range(3):                                     # Open-Meteo иногда отдаёт пустой ответ: три попытки
         try:
             d0 = "1981-01-01" if not m else (today - timedelta(days=90)).isoformat()
-            m.update(_om(lat, lon, d0, today.isoformat()))
+            m.update(_om_box(box, d0, today.isoformat()))
             p.write_text(json.dumps(m), encoding="utf-8")
             err = None
             break
@@ -306,9 +325,9 @@ def build(verbose=True):
         series.append(analyze("wind_west", "Zonal wind 850 hPa, 130°E–180°, daily (ERA5)", cur, an))
     except Exception as e:                                       # noqa: BLE001
         series.append({"key": "wind_west", "label": "wind", "error": str(e)[:120]})
-    for key, label, lat, lon in REGIONS:
+    for key, label, box, _rid in REGIONS:
         try:
-            cur, an = _region(key, lat, lon)
+            cur, an = _region(key, box)
             series.append(analyze("land_" + key, label, cur, an, history=cur))
         except Exception as e:                                   # noqa: BLE001
             series.append({"key": "land_" + key, "label": label, "error": str(e)[:120]})

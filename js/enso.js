@@ -1775,7 +1775,7 @@
   function railState() {
     var D = S.D, N = D.nino34, NW = D.noaa, ONI = D.oni, sm = D.summary || {}, P = S.P;
     var col = $('railL'); col.innerHTML = '';
-    var t = tile('State', term('type', 'event type: ' + NW.type), 'grow');
+    var t = tile('State', term('type', 'event type: ' + NW.type) + railFullBtn('L'), 'grow');
     var idx = D.risk_index, gc = idx >= 80 ? 'var(--lv5)' : (idx >= 60 ? 'var(--lv4)' : (idx >= 40 ? 'var(--lv3)' : 'var(--ok)'));
     var ls = ONI.last_season;
     var ri = pair(idx, P ? P.risk_index : null, 0);
@@ -1846,7 +1846,7 @@
   function railRisks() {
     var D = S.D, col = $('railR'); col.innerHTML = '';
     var risks = D.risks || [], P = S.P;
-    var t = tile('Risks', risks.length + ' · index ' + D.risk_index + (P ? ' ' + chg(D.risk_index, P.risk_index, 0) : ''), 'grow');
+    var t = tile('Risks', risks.length + ' · index ' + D.risk_index + (P ? ' ' + chg(D.risk_index, P.risk_index, 0) : '') + railFullBtn('R'), 'grow');
     t._b.classList.add('flush');
     var box = el('div'); box.style.padding = '0 10px 8px';
     risks.forEach(function (r, i) {
@@ -1904,6 +1904,7 @@
       top.appendChild(b);
     }
     head.appendChild(top);
+    requestAnimationFrame(fitStageTitle);
     if (segs2 && segs2.length) {
       var seg = el('div', 'seg');
       segs2.forEach(function (b) {
@@ -2639,7 +2640,7 @@
     var k = sub('trend', 'sst_nino34');
     /* ТОЧКИ СУШИ КАК У NIÑO 3.4 (владелец 07.09): те же кирпичи watch, данные regions-daily.json. */
     var RD = (S.RD || {}).series || {}, RDK = Object.keys(RD);
-    var RNAME = { land_kuwait: 'Kuwait', land_europe: 'Europe', land_lima: 'Lima', land_jakarta: 'Jakarta', land_nairobi: 'Nairobi', land_delhi: 'Delhi' };
+    var RNAME = LAND_NAME;
     var opts = [['sst_nino34', 'Niño 3.4'], ['sst_world', 'Ocean'], ['t2_world', 'Land+ocean']].concat(RDK.map(function (q) { return [q, RNAME[q] || q]; })).concat([['index', 'Our index'], ['months', '13 months'], ['background', 'Background'], ['spectral', 'Spectral watch']]);
     var body = stageShell(k === 'spectral' ? ('Spectral watch: ' + esc((S.SP || {}).summary || 'no data yet')) : 'The world ocean has broken daily records for ' + W.sst_world.records.streak + ' days running, land+ocean for ' + W.t2_world.records.streak,
       opts.map(function (o) { return segBtn('trend', o[0], o[1], 'sst_nino34'); }));
@@ -2716,7 +2717,7 @@
         '<div class="kpi"><div class="kn">records and CUSUM</div><div class="kv" style="font-size:17px">' + w0.records.streak + '<small>days in a row</small></div><div class="km">' + w0.records.last30 + ' record days of 30; ' + term('cusum', 'CUSUM') + ' ' + (w0.cusum.alarm ? 'alarm' : 'quiet') + ', ' + term('trend', 'above trend') + ' ' + fnum(w0.level30.det) + '</div>' +
         kmeta('rec_' + k) + '</div>';
       body.appendChild(kp);
-      if (isLand) body.appendChild(el('div', 'cap', esc((S.RD || {}).note || '') + ' Point ' + fnum(w0.point[0], 2, false) + '°, ' + fnum(w0.point[1], 2, false) + '°; ' + esc(w0.source) + '; built ' + esc((S.RD || {}).built || '') + '.'));
+      if (isLand) body.appendChild(el('div', 'cap', esc((S.RD || {}).note || '') + ' Box ' + esc(boxLabel(w0.box)) + '; ' + esc(w0.source) + '; built ' + esc((S.RD || {}).built || '') + '. ' + (w0.region ? vLink('this region on the Regions tab', 'regions', 'place') : '')));
     }
   }
 
@@ -4236,6 +4237,38 @@
     body.appendChild(el('div', 'cap', esc(SP.note || '') + ' Cells: power over the red-noise background at that period; red at 99 %, amber at 95 %. Verdict: none / weak (95 %) / candidate (99 %, first time) / signal (99.9 % or a comb of two independent periods, three updates running on the same period, above the 99th percentile of history). Built ' + esc(SP.built) + ', ' + ser.length + ' series, window ' + SP.window_days + ' days. One-day periods need hourly data and are not tested here.'));
   }
 
+  /* РЕГИОНАЛЬНЫЕ БОКСЫ: имена и привязка к вкладке Regions. */
+  var LAND_NAME = { land_gulf_north: 'N. Gulf', land_europe_central: 'Europe', land_peru_coast: 'Peru coast', land_java: 'Java', land_east_africa: 'E. Africa', land_north_india: 'N. India' };
+  function boxLabel(b) { if (!b || b.length < 4) return ''; function la(x) { return Math.abs(x) + '°' + (x < 0 ? 'S' : 'N'); } function lo(x) { return Math.abs(x) + '°' + (x < 0 ? 'W' : 'E'); } return la(b[0]) + '–' + la(b[1]) + ', ' + lo(b[2]) + '–' + lo(b[3]); }
+  function landKeyOfRegion(rid) { var RD = (S.RD || {}).series || {}; for (var k in RD) if (RD[k].region === rid) return k; return null; }
+  function landOfRegion(rid) { var k = landKeyOfRegion(rid); return k ? S.RD.series[k] : null; }
+
+  /* РЕЛЬСЫ ВО ВЕСЬ ЭКРАН (владелец 07.09: «state выезжает во весь экран, то же с risks;
+     меню остаётся»). Класс на .mid прячет две другие колонки; Esc и повторное нажатие возвращают. */
+  function railFullBtn(side) {
+    var on = S.railFull === side;
+    return '<button type="button" class="rail-full" data-side="' + side + '" title="' + (on ? 'back to three columns (Esc)' : 'this column full screen') + '">' + (on ? '✕' : '⛶') + '</button>';
+  }
+  function applyRailFull() {
+    var mid = $('mid'); if (!mid) return;
+    mid.classList.toggle('rf-L', S.railFull === 'L'); mid.classList.toggle('rf-R', S.railFull === 'R');
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.rail-full');
+    if (!b) return;
+    var side = b.getAttribute('data-side');
+    S.railFull = S.railFull === side ? null : side; render();
+  });
+
+  /* ЗАГОЛОВОК СЦЕНЫ В ОДНУ СТРОКУ (владелец 07.09: «не надо в две, просто уменьшай шрифт,
+     иначе подменю скачет»): после раскладки уменьшаем кегль, пока текст не влезет. */
+  function fitStageTitle() {
+    var h = document.querySelector('.stage-h'); if (!h) return;
+    h.style.fontSize = '';
+    var px = parseFloat(getComputedStyle(h).fontSize) || 18, guard = 0;
+    while (h.scrollWidth > h.clientWidth + 1 && px > 10.5 && guard++ < 24) { px -= 0.5; h.style.fontSize = px + 'px'; }
+  }
+
   /* ЛЕНТА УПОМИНАНИЙ (владелец 07.09): разговор о событии, не измерение. Данные mentions.json. */
   function chartDaysPanels(items, W, H) {
     if (!items.length) return svgOpen(W, H) + '<text x="20" y="40">no series</text></svg>';
@@ -4428,7 +4461,18 @@
       gulfBody(body, gk, G);
       if (gk !== 'ref') return;
     } else {
-      body.appendChild(el('div', 'note', 'No local measurements for this region yet — below is the reference: typical impacts by season, food exposure and the sources. The Gulf is the first region with measured series (sea, weather, imports); others follow as sources are found.'));
+      /* БОКС РЕГИОНА (владелец 07.09: «подключи к регионам»): дневной ряд воздуха по боксу ERA5,
+         тем же кирпичом, что Niño 3.4, если у региона есть свой бокс в regions-daily.json. */
+      var LB = landOfRegion(rid);
+      if (LB) {
+        plot(body, function (w, h) { return chartRecent(LB, w, h); });
+        var kl = el('div', 'kpis');
+        kl.innerHTML = '<div class="kpi"><div class="kn">air over the region, last day</div><div class="kv">' + fnum(LB.last_value) + '<small> °C</small></div><div class="km">to ' + esc(LB.last_date) + '; 30 days ' + fnum(LB.level30.anom) + ', rank ' + LB.level30.rank_raw + ' of ' + LB.level30.of + '</div>' + kmeta(null, 'ERA5 box mean via Open-Meteo', LB.last_date) + '</div>' +
+          '<div class="kpi"><div class="kn">forecast +14 days</div><div class="kv">' + fnum(LB.forecast14.p50) + '</div><div class="km">p10 … p90: ' + fnum(LB.forecast14.p10) + ' … ' + fnum(LB.forecast14.p90) + '</div>' + kmeta(null, 'analogues of past days', LB.last_date) + '</div>' +
+          '<div class="kpi"><div class="kn">record days</div><div class="kv" style="font-size:17px">' + LB.records.last30 + '<small> of 30</small></div><div class="km">warmest of that calendar day since 1981; streak ' + LB.records.streak + '</div>' + kmeta(null, 'ERA5 box mean', LB.last_date) + '</div>';
+        body.appendChild(kl);
+        body.appendChild(el('div', 'cap', 'Box ' + esc(boxLabel(LB.box)) + ', 2 m air, ERA5 box mean; the same series with all its numbers is on ' + vLink('Dynamics', 'trend', landKeyOfRegion(rid)) + '. Below it, the reference: typical impacts by season, food exposure and the sources.'));
+      } else body.appendChild(el('div', 'note', 'No local measurements for this region yet — below is the reference: typical impacts by season, food exposure and the sources. The Gulf is the first region with measured series (sea, weather, imports); others follow as sources are found.'));
     }
     regionCard(body, r, RG);
   }
@@ -4492,6 +4536,7 @@
     railState(); railRisks();
     railTopSet('railL', keepL); railTopSet('railR', keepR);
     var stage = $('stage'), L = $('railL'), R = $('railR');
+    applyRailFull();
     L.classList.toggle('show', narrow && S.view === 'state');
     R.classList.toggle('show', narrow && (S.view === 'risks' || S.view === 'risk'));
     stage.classList.toggle('hide', narrow && (S.view === 'state' || S.view === 'risks'));
@@ -4709,7 +4754,7 @@
          пришёл, и после подмены разметки. */
       if (S.pinned && !inTip(e)) { S.pinned = null; hide(); }
     });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { S.pinned = null; hide(); if (S.full) { S.full = false; render(); } } });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { S.pinned = null; hide(); if (S.full || S.railFull) { S.full = false; S.railFull = null; render(); } } });
     hide();
   }
 

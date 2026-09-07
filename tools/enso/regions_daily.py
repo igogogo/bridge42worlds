@@ -59,15 +59,15 @@ def dataset(store):
 def build(verbose=True):
     t0 = time.time()
     out = {}
-    for key, label, lat, lon in SPX.REGIONS:
-        p = SPX.RCACHE / f"{key}.json"
+    for key, label, box, rid in SPX.REGIONS:
+        p = SPX.RCACHE / f"{key}-box.json"
         if not p.exists():
             continue
         try:
             ds = dataset(json.load(open(p, encoding="utf-8")))
             w = WT.series_watch(ds, label + ", daily", analog_years=WT.ANALOGS)
-            w["source"] = "ERA5 via Open-Meteo archive, one grid point"
-            w["point"] = [lat, lon]
+            w["source"] = f"ERA5 via Open-Meteo archive, mean of a {SPX.GRID}×{SPX.GRID} grid inside the box, cos-latitude weights"
+            w["box"] = list(box); w["region"] = rid
             out["land_" + key] = w
             if verbose:
                 print(f"  {key:<8} to {w['last_date']}: last {w['last_value']:+.2f}, 30 d {w['level30']['anom']:+.2f} °C rank {w['level30']['rank_raw']}/{w['level30']['of']}, streak {w['records']['streak']}")
@@ -75,10 +75,10 @@ def build(verbose=True):
             if verbose:
                 print(f"  {key}: {str(e)[:120]}")
     doc = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "series": out,
-           "note": ("Six land points from ERA5 (one grid cell each, via Open-Meteo), treated exactly like the global "
-                    "series: anomaly against the 1991–2020 mean of the same calendar day, the band of all years since "
-                    "1981, records, CUSUM and a 14-day analogue forecast. A point is weather, not a region mean: "
-                    "day-to-day swings are larger than for the ocean boxes."),
+           "note": ("Six land regions from ERA5 (box means of a 3×3 grid, via Open-Meteo), treated exactly like the "
+                    "global series: anomaly against the 1991–2020 mean of the same calendar day, the band of all years "
+                    "since 1981, records, CUSUM and a 14-day analogue forecast. Air over land swings more day to day "
+                    "than the ocean boxes; the band is wider for that reason, not because the data are worse."),
            "secs": int(time.time() - t0)}
     OUT.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
     if verbose:
