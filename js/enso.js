@@ -4303,9 +4303,13 @@
       var b = el('button', (pick === o[0] ? 'on' : '') + (i === 0 ? ' sq' : ''), o[1]); b.type = 'button'; b.onclick = function () { S.sub.rain = o[0]; render(); }; row.appendChild(b);
       if (i === 0) row.appendChild(el('span', 'seg-gap', ''));
     });
+    // график или таблица — переключатель, а не всё сразу (владелец 07.09)
+    var mode = S.sub.rainMode || 'chart';
+    row.appendChild(el('span', 'seg-gap', ''));
+    [['chart', 'chart'], ['table', 'table']].forEach(function (o) { var b = el('button', (mode === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.rainMode = o[0]; render(); }; row.appendChild(b); });
     body.appendChild(row);
     body.classList.add('scroll');
-    if (pick === 'planet') {
+    if (mode === 'chart' && pick === 'planet') {
       if (!G) { body.appendChild(el('div', 'note warn', 'GPCP did not load.')); }
       else {
         var g = G.global;
@@ -4315,7 +4319,7 @@
           '<div class="kpi"><div class="kn">same month in our years</div><div class="kv" style="font-size:14px">' + Object.keys(g.analogs).sort().map(function (y) { return y + ': ' + fnum(g.analogs[y], 2, false); }).join(' · ') + '</div><div class="km">mm per day, planet</div>' + kmeta(null, G.source, g.last) + '</div>';
         body.appendChild(kg);
       }
-    } else {
+    } else if (mode === 'chart') {
       var r = RG[pick], s30 = r.sum30, s90 = r.sum90, gb = G && G.boxes ? G.boxes[pick] : null;
       plot(body, function (w, h) { return chartRainBars({ ym: r.months.map(function (m) { return m.ym; }), values: r.months.map(function (m) { return m.mm; }), normal: r.months_normal, title: esc(r.label) + ': monthly totals, last 24 months', unit: 'mm per month', partialLast: true }, w, h); });
       var kr = el('div', 'kpis');
@@ -4325,11 +4329,13 @@
         (gb ? '<div class="kpi"><div class="kn">GPCP, last month ' + esc(gb.last) + '</div><div class="kv">' + gb.pct_of_normal + '<small> % of normal</small></div><div class="km">' + fnum(gb.now, 2, false) + ' mm/day against ' + fnum(gb.normal, 2, false) + '; satellites and gauges, a second source</div>' + kmeta(null, G.source, gb.last) + '</div>' : '');
       body.appendChild(kr);
     }
-    // сводная таблица по регионам
+    // сводная таблица по регионам — только в табличном режиме
     var wrap = el('div');
-    wrap.innerHTML = '<table class="e"><thead><tr><th>region</th><th class="num">30 d, mm</th><th class="num">% of normal</th><th class="num">wetter than</th><th class="num">90 d, % of normal</th><th>same 30 d in our years, mm</th><th class="num">GPCP last month</th></tr></thead><tbody>' +
+    if (mode !== 'table') { body.appendChild(el('div', 'cap', esc(PR.note || ''))); return; }
+    wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
+    wrap.innerHTML = '<table class="e rain"><thead><tr><th>region</th><th class="num">30 d, mm</th><th class="num">% of normal</th><th class="num">wetter than</th><th class="num">90 d, % of normal</th><th>same 30 d in our years, mm</th><th class="num">GPCP last month</th></tr></thead><tbody>' +
       keys.map(function (k) { var r2 = RG[k], a = r2.sum30, b = r2.sum90, gb2 = G && G.boxes ? G.boxes[k] : null; var cls = fin(a.pct_of_normal) ? (a.pct_of_normal < 60 ? ' top' : (a.pct_of_normal > 160 ? ' warn' : '')) : '';
-        return '<tr><td>' + esc(LAND_NAME[k] || k) + '<div class="sub">' + esc(boxLabel(r2.box)) + '</div></td><td class="num">' + fnum(a.now, 0, false) + '</td><td class="num' + cls + '">' + a.pct_of_normal + ' %</td><td class="num">' + a.rank_pct + ' % of years</td><td class="num">' + b.pct_of_normal + ' %</td><td class="act">' + Object.keys(a.analogs).sort().map(function (y) { return y + ': ' + fnum(a.analogs[y], 0, false); }).join(' · ') + '</td><td class="num">' + (gb2 ? gb2.pct_of_normal + ' %' : '·') + '</td></tr>'; }).join('') + '</tbody></table>';
+        return '<tr><td style="white-space:nowrap;min-width:190px">' + esc(LAND_NAME[k] || k) + '<div class="sub">' + esc(boxLabel(r2.box)) + '</div></td><td class="num">' + fnum(a.now, 0, false) + '</td><td class="num' + cls + '">' + a.pct_of_normal + ' %</td><td class="num">' + a.rank_pct + ' % of years</td><td class="num">' + b.pct_of_normal + ' %</td><td class="act">' + Object.keys(a.analogs).sort().map(function (y) { return y + ': ' + fnum(a.analogs[y], 0, false); }).join(' · ') + '</td><td class="num">' + (gb2 ? gb2.pct_of_normal + ' %' : '·') + '</td></tr>'; }).join('') + '</tbody></table>';
     body.appendChild(wrap);
     body.appendChild(el('div', 'cap', esc(PR.note || '') + ' Red: under 60 % of normal over 30 days, amber: over 160 %. Built ' + esc(PR.built) + (PR.chirps_reachable ? '; CHIRPS reachable, not yet wired' : '; CHIRPS not reachable') + '.'));
   }
