@@ -475,10 +475,35 @@ def main():
     ap.add_argument("--full", action="store_true",
                     help="недельный прогон: добрать шаги по всему корпусу "
                          "(переразметка, суперпонятия, связи знанием, подсветка)")
+    ap.add_argument("--resume", action="store_true",
+                    help="продолжить прежний незаконченный прогон, а не начинать заново")
     a = ap.parse_args()
 
     global FULL
     FULL = a.full
+
+    # НОВЫЙ ПРОГОН НАЧИНАЕТСЯ С ЧИСТОГО ЛИСТА. Состояние жило в файле вечно, и прогон
+    # 06.09 подобрал список сделанного от 31 августа: 51 шаг числился пройденным, поэтому
+    # насыщение, сборка страниц, облако и выкладка были пропущены — шестьдесят новых
+    # статей остались на диске, а конвейер отчитался «ПОЛНЫЙ ПРОГОН ЗАВЕРШЁН».
+    # Продолжение с места обрыва осталось, но теперь по прямой просьбе (--resume) или
+    # если прежний прогон не закончен и начат меньше двенадцати часов назад.
+    st0 = state()
+    if not a.resume and st0.get("done"):
+        import datetime as _dt
+        fresh = False
+        if not st0.get("finished"):
+            try:
+                age = (_dt.datetime.now() - _dt.datetime.strptime(
+                    st0.get("started") or "", "%Y-%m-%d %H:%M")).total_seconds()
+                fresh = age < 12 * 3600
+            except ValueError:
+                fresh = False
+        if not fresh:
+            why = ("прежний прогон завершён " + str(st0.get("finished"))
+                   if st0.get("finished") else "прежний прогон начат " + str(st0.get("started")))
+            log(f"состояние прошлого прогона отброшено ({why}, шагов в нём {len(st0['done'])})")
+            save({"done": []})
     days = ([d.strip() for d in a.days.split(",") if d.strip()] if a.days
             else missing_days() if a.catch_up else [])
     log("═══ ПРОГОН КОНВЕЙЕРА: " + ("НЕДЕЛЬНЫЙ (всё)" if FULL else "обычный (точечный)") + " ═══")
