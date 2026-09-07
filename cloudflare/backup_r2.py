@@ -39,6 +39,31 @@ MANIFEST = ROOT / "cloudflare" / ".backup-manifest.json"
 BUCKET = os.environ.get("R2_BACKUP_BUCKET", "bridge42worlds-backup")
 
 
+
+def save_manifest(path, data, quiet=False):
+    """Записать опись целиком и безопасно: временный файл рядом, потом подмена.
+
+    Прямая запись большого файла однажды упала на ровном месте (07.09, Errno 22) и
+    унесла с собой учёт уже отправленного. Ошибку записи наружу не пускаем: опись —
+    учёт работы, а не работа.
+    """
+    import json as _json
+    import os as _os
+    tmp = path.with_suffix(path.suffix + ".part")
+    try:
+        tmp.write_text(_json.dumps(data, ensure_ascii=False), encoding="utf-8")
+        _os.replace(tmp, path)
+        return True
+    except OSError as e:
+        if not quiet:
+            print(f"⚠️  опись не записана ({e.__class__.__name__}: {e}) — "
+                  f"следующий прогон пересчитает эти файлы заново")
+        try:
+            tmp.unlink(missing_ok=True)
+        except OSError:
+            pass
+        return False
+
 def iter_sources():
     """Только невосстановимое. Собранные страницы сюда НЕ попадают — они производные."""
     for p in (ROOT / "lang").glob("*/archive/*/*/data.json"):
@@ -111,7 +136,7 @@ def backup():
 
     # Намеренно НЕ удаляем из бакета то, чего не стало локально: бэкап должен переживать
     # случайное «удалил не то» на рабочей машине. Мусор здесь дешевле потери.
-    MANIFEST.write_text(json.dumps(new, ensure_ascii=False), encoding="utf-8")
+    save_manifest(MANIFEST, new)
     print(f"✅ резервная копия готова: +{len(todo)} обновлено, всего {len(new)} файлов.")
     return 0
 

@@ -34,6 +34,31 @@ LANGS = ("en", "es", "ar", "fr")
 PREFIX = "pages"
 
 
+
+def save_manifest(path, data, quiet=False):
+    """Записать опись целиком и безопасно: временный файл рядом, потом подмена.
+
+    Прямая запись большого файла однажды упала на ровном месте (07.09, Errno 22) и
+    унесла с собой учёт уже отправленного. Ошибку записи наружу не пускаем: опись —
+    учёт работы, а не работа.
+    """
+    import json as _json
+    import os as _os
+    tmp = path.with_suffix(path.suffix + ".part")
+    try:
+        tmp.write_text(_json.dumps(data, ensure_ascii=False), encoding="utf-8")
+        _os.replace(tmp, path)
+        return True
+    except OSError as e:
+        if not quiet:
+            print(f"⚠️  опись не записана ({e.__class__.__name__}: {e}) — "
+                  f"следующий прогон пересчитает эти файлы заново")
+        try:
+            tmp.unlink(missing_ok=True)
+        except OSError:
+            pass
+        return False
+
 def iter_pages():
     for lang in LANGS:
         d = ROOT / "lang" / lang
@@ -130,8 +155,7 @@ def main():
                     print(f"  отправлено {i}/{len(todo)} · {sent[0] / 2 ** 20:.0f} МБ"
                           + (f" · не удалось {len(failed)}" if failed else ""))
                 if done_since_save >= SAVE_EVERY:
-                    MANIFEST.write_text(json.dumps(new, ensure_ascii=False),
-                                        encoding="utf-8")
+                    save_manifest(MANIFEST, new)
                     done_since_save = 0
     if failed:
         print(f"⚠️  не удалось отправить {len(failed)} страниц — в опись они НЕ "
@@ -141,7 +165,7 @@ def main():
 
     # Как и в backup_r2.py: из бакета ничего не удаляем. Копия должна переживать
     # случайное «снёс не ту папку» на рабочей машине.
-    MANIFEST.write_text(json.dumps(new, ensure_ascii=False), encoding="utf-8")
+    save_manifest(MANIFEST, new)
     print(f"✅ переводы скопированы: +{len(todo) - len(failed)} обновлено "
           f"({sent[0] / 2 ** 20:.0f} МБ сжатыми), всего {len(new)} страниц."
           + (f" Не удалось: {len(failed)}." if failed else ""))

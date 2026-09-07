@@ -100,6 +100,31 @@ mimetypes.add_type("text/html; charset=utf-8", ".html")
 _gitignore_spec = None
 
 
+
+def save_manifest(path, data, quiet=False):
+    """Записать опись целиком и безопасно: временный файл рядом, потом подмена.
+
+    Прямая запись большого файла однажды упала на ровном месте (07.09, Errno 22) и
+    унесла с собой учёт уже отправленного. Ошибку записи наружу не пускаем: опись —
+    учёт работы, а не работа.
+    """
+    import json as _json
+    import os as _os
+    tmp = path.with_suffix(path.suffix + ".part")
+    try:
+        tmp.write_text(_json.dumps(data, ensure_ascii=False), encoding="utf-8")
+        _os.replace(tmp, path)
+        return True
+    except OSError as e:
+        if not quiet:
+            print(f"⚠️  опись не записана ({e.__class__.__name__}: {e}) — "
+                  f"следующий прогон пересчитает эти файлы заново")
+        try:
+            tmp.unlink(missing_ok=True)
+        except OSError:
+            pass
+        return False
+
 def _internal_by_gitignore(rel):
     """Правила .gitignore с вердиктом «внутреннее» — применяем их напрямую.
 
@@ -530,8 +555,7 @@ def main():
                     print(f"  залито {i}/{len(to_upload)}" +
                           (f" · не удалось {len(failed)}" if failed else ""))
                 if done_since_save >= 2000 and not no_manifest:
-                    MANIFEST.write_text(json.dumps(new, ensure_ascii=False),
-                                        encoding="utf-8")
+                    save_manifest(MANIFEST, new)
                     done_since_save = 0
     if failed:
         print(f"⚠️  не удалось залить {len(failed)} файлов — они НЕ записаны в опись, "
@@ -562,7 +586,7 @@ def main():
         print(f"удалено устаревших: {len(removed)}")
 
     if not no_manifest:
-        MANIFEST.write_text(json.dumps(new, ensure_ascii=False), encoding="utf-8")
+        save_manifest(MANIFEST, new)
     print(f"✅ delta-деплой готов: +{len(to_upload)} обновлено"
           + (", опись не тронута." if no_manifest else ", манифест сохранён."))
     if to_upload:
