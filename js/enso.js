@@ -4212,21 +4212,21 @@
     body.classList.add('scroll');
     function cell(v) { if (!fin(v)) return '<td class="num">·</td>'; var c = v >= TH.chi99 ? ' top' : (v >= TH.chi95 ? ' warn' : ''); return '<td class="num' + c + '">' + fnum(v, 1, false) + '</td>'; }
     var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
-    wrap.innerHTML = '<table class="e goods"><thead><tr><th>series</th><th>verdict</th>' + per.map(function (p) { return '<th class="num">' + p + ' d</th>'; }).join('') +
+    wrap.innerHTML = '<table class="e"><thead><tr><th>series</th><th>verdict</th>' + per.map(function (p) { return '<th class="num">' + p + ' d</th>'; }).join('') +
       '<th class="num">band 2–7 d</th><th class="num">history pct</th><th>same window in our years</th></tr></thead><tbody>' +
       ser.map(function (s) {
         if (s.error) return '<tr><td>' + esc(s.label) + '</td><td class="st-bad" colspan="' + (per.length + 4) + '">' + esc(s.error) + '</td></tr>';
         var nw = s.now, h = s.history, an = s.analogs || {};
         var vcls = s.verdict === 'signal' ? ' st-bad' : (s.verdict === 'candidate' ? ' top' : (s.verdict === 'weak' ? ' warn' : ' st-ok'));
         return '<tr><td>' + esc(s.label) + '<div class="sub">' + esc(s.window[0]) + ' → ' + esc(s.window[1]) + '</div></td>' +
-          '<td class="' + vcls + '"><b>' + esc(s.verdict) + '</b>' + (s.persistent ? '<div class="sub">two updates running</div>' : '') + '</td>' +
+          '<td class="' + vcls + '"><b>' + esc(s.verdict) + '</b>' + (s.persist_updates ? '<div class="sub">' + s.persist_updates + ' update(s) at 99 %</div>' : '') + '</td>' +
           per.map(function (p) { return cell(nw.lines[String(p)]); }).join('') +
           '<td class="num">' + fnum(nw.band_share * 100, 0, false) + ' %</td>' +
           '<td class="num">' + (h ? h.max_line_pct + ' %<div class="sub">p95 ' + fnum(h.max_line_p95, 1, false) + ' · ' + h.share_of_windows_with_line_99 + ' % of windows had a 99 % line</div>' : '<span class="sub">no history</span>') + '</td>' +
           '<td class="act">' + (Object.keys(an).length ? Object.keys(an).sort().map(function (y) { return y + ': ' + fnum(an[y].max_line, 1, false) + ' at ' + an[y].max_period + ' d'; }).join(' · ') : '<span class="sub">none</span>') + '</td></tr>';
       }).join('') + '</tbody></table>';
     body.appendChild(wrap);
-    body.appendChild(el('div', 'cap', esc(SP.note || '') + ' Cells: power over the red-noise background at that period; red at 99 %, amber at 95 %. Verdict: none / weak (95 %) / candidate (99 %, first time) / signal (99 % on the same period two updates running and above the 95th percentile of history). Built ' + esc(SP.built) + ', ' + ser.length + ' series, window ' + SP.window_days + ' days. One-day periods need hourly data and are not tested here.'));
+    body.appendChild(el('div', 'cap', esc(SP.note || '') + ' Cells: power over the red-noise background at that period; red at 99 %, amber at 95 %. Verdict: none / weak (95 %) / candidate (99 %, first time) / signal (99.9 % or a comb of two independent periods, three updates running on the same period, above the 99th percentile of history). Built ' + esc(SP.built) + ', ' + ser.length + ' series, window ' + SP.window_days + ' days. One-day periods need hourly data and are not tested here.'));
   }
 
   /* ЛЕНТА УПОМИНАНИЙ (владелец 07.09): разговор о событии, не измерение. Данные mentions.json. */
