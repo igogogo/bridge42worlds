@@ -4276,7 +4276,7 @@
   function chartRainBars(cfg, W, H) {
     var ym = cfg.ym || [], v = cfg.values || [], nm = cfg.normal || [], n = ym.length;
     if (!n) return svgOpen(W, H) + '<text x="20" y="40">no series</text></svg>';
-    var Lp = 46, R = 14, Tp = 26, B = 26, pw = W - Lp - R, ph = H - Tp - B;
+    var Lp = 46, R = 14, Tp = 26, B = 32, pw = W - Lp - R, ph = H - Tp - B;
     var all = v.concat(nm).filter(fin), vmax = Math.max.apply(null, all) * 1.15 || 1;
     var X = function (i) { return Lp + (i + .5) / n * pw; }, Y = function (x) { return Tp + (vmax - x) / vmax * ph; };
     var s = svgOpen(W, H) + hatchDefs() + '<text class="tt" x="' + Lp + '" y="15">' + fitText(esc(cfg.title || ''), W, 12) + '</text>';
@@ -4287,10 +4287,11 @@
       if (!fin(x)) return;
       var dry = fin(nm[i]) && x < nm[i], col = dry ? 'var(--nino)' : 'var(--nina)';
       s += '<rect x="' + (X(i) - bw / 2).toFixed(1) + '" y="' + Y(x).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + (Y(0) - Y(x)).toFixed(1) + '" style="fill:' + col + '" opacity="' + (cfg.partialLast && i === n - 1 ? .45 : .8) + '"/>' + (dry ? '<rect x="' + (X(i) - bw / 2).toFixed(1) + '" y="' + Y(x).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + (Y(0) - Y(x)).toFixed(1) + '" fill="url(#hneg)" opacity=".5"/>' : '');
-      if (ym[i].slice(5) === '01' || n <= 12) s += '<text x="' + X(i).toFixed(1) + '" y="' + (H - 9) + '" text-anchor="middle" font-size="9">' + (n <= 12 ? ym[i].slice(5) : ym[i].slice(0, 4)) + '</text>';
+      if (ym[i].slice(5) === '01' || n <= 12) s += '<text x="' + X(i).toFixed(1) + '" y="' + (H - 15) + '" text-anchor="middle" font-size="9">' + (n <= 12 ? ym[i].slice(5) : ym[i].slice(0, 4)) + '</text>';
     });
     s += segs(nm.map(function (x, i) { return [X(i), fin(x) ? Y(x) : NaN]; }), 'var(--text)', 1.4, .9, '5 3');
-    s += '<text x="' + (W - R) + '" y="' + (Tp - 8) + '" text-anchor="end" font-size="9" style="fill:var(--soft)">' + esc(cfg.unit || '') + ' · dashed: 1991–2020 normal · red hatched: drier than normal' + (cfg.partialLast ? ' · last bar incomplete' : '') + '</text>';
+    // подпись шкалы внизу справа, не в строке заголовка (владелец 07.09: «тексты наезжают»)
+    s += '<text x="' + (W - R) + '" y="' + (H - 4) + '" text-anchor="end" font-size="9" style="fill:var(--soft)">' + esc(cfg.unit || '') + ' · dashed: 1991–2020 normal · red hatched: drier than normal' + (cfg.partialLast ? ' · last bar incomplete' : '') + '</text>';
     return s + '</svg>';
   }
 
@@ -4321,7 +4322,7 @@
       }
     } else if (mode === 'chart') {
       var r = RG[pick], s30 = r.sum30, s90 = r.sum90, gb = G && G.boxes ? G.boxes[pick] : null;
-      plot(body, function (w, h) { return chartRainBars({ ym: r.months.map(function (m) { return m.ym; }), values: r.months.map(function (m) { return m.mm; }), normal: r.months_normal, title: esc(r.label) + ': monthly totals, last 24 months', unit: 'mm per month', partialLast: true }, w, h); });
+      plot(body, function (w, h) { return chartRainBars({ ym: r.months.map(function (m) { return m.ym; }), values: r.months.map(function (m) { return m.mm; }), normal: r.months_normal, title: (LAND_NAME[pick] || pick) + ', ' + boxLabel(r.box) + ': rain by month, last 24 months, ERA5 box sum', unit: 'mm per month', partialLast: true }, w, h); });
       var kr = el('div', 'kpis');
       kr.innerHTML = '<div class="kpi"><div class="kn">last 30 days to ' + esc(r.last_date) + '</div><div class="kv">' + fnum(s30.now, 0, false) + '<small> mm</small></div><div class="km">' + s30.pct_of_normal + ' % of the normal ' + fnum(s30.normal, 0, false) + ' mm; wetter than ' + s30.rank_pct + ' % of ' + s30.of_years + ' years</div>' + kmeta(null, 'ERA5 box sum via Open-Meteo', r.last_date) + '</div>' +
         '<div class="kpi"><div class="kn">last 90 days</div><div class="kv">' + fnum(s90.now, 0, false) + '<small> mm</small></div><div class="km">' + s90.pct_of_normal + ' % of the normal ' + fnum(s90.normal, 0, false) + ' mm; wetter than ' + s90.rank_pct + ' % of years</div>' + kmeta(null, 'ERA5 box sum via Open-Meteo', r.last_date) + '</div>' +
