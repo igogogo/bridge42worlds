@@ -48,7 +48,7 @@
       'air/coupling': 'The three atmospheric signs that the ocean and the air are coupled.', 'air/fuel': 'The warm water volume under the equator: the fuel gauge and its lead.', 'air/layers': 'The four satellite floors of the atmosphere and their delay.', 'air/wind': 'Daily zonal wind over the western Pacific and the westerly bursts.', 'air/mjo': 'The Madden–Julian Oscillation: phase and amplitude.', 'air/indices': 'MEI, the Indian Ocean Dipole and RONI next to our coupling score.',
       'trend/sst_nino34': 'Niño 3.4 daily: 400 days, the band of all years, the 14-day forecast, where past events went from here.', 'trend/sst_world': 'The world ocean, daily.', 'trend/t2_world': 'Land and ocean, daily.', 'trend/index': 'Our risk index by update, and the comparable core against past events.', 'trend/months': 'Thirteen months of the three series with their ranks.', 'trend/background': 'Ocean heat content and the energy imbalance: the state of the whole system.',
       'regions/table': 'Every region by season and scenario, with food vulnerability and what to do.', 'regions/place': 'One region at a time; the Gulf with its own measurements.',
-      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.',
+      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.', 'trend/spectral': 'A line at 2–7 days appearing in any daily series over the last 30 days: the owner’s hypothesis of a comb before a spontaneous transition, watched, not assumed.',
       'planet/gases': 'CO₂, CH₄ and N₂O since the start of measurement, with the annual growth of CO₂.', 'planet/ice': 'Arctic and Antarctic sea ice extent, every year as a line against the 1981–2010 median.', 'planet/temperature': 'Land+ocean and ocean daily temperature every year since 1940 and 1981; global annual means since 1850.', 'planet/sea': 'Global mean sea level from satellites since 1993.',
       'how/glossary': 'Every underlined term explained.', 'how/method': 'How things are computed, and which numbers are parameters.', 'how/sources': 'Every source, whether it answered, and when its data last changed.', 'how/calendar': 'When each source publishes next.', 'how/changed': 'What changed since the previous update.',
       'ops/runs': 'Every run on record: when, what kind, how long, how it ended.', 'ops/sources': 'Every source: date range held, last update, answered or stale, errors.', 'ops/fresh': 'Fresh data since the last assessment and the triggers that decide whether it deserves one.'
@@ -2637,9 +2637,10 @@
   function viewTrend() {
     var D = S.D, W = D.watch, P = S.P;
     var k = sub('trend', 'sst_nino34');
-    var opts = [['sst_nino34', 'Niño 3.4'], ['sst_world', 'Ocean'], ['t2_world', 'Land+ocean'], ['index', 'Our index'], ['months', '13 months'], ['background', 'Background']];
-    var body = stageShell('The world ocean has broken daily records for ' + W.sst_world.records.streak + ' days running, land+ocean for ' + W.t2_world.records.streak,
+    var opts = [['sst_nino34', 'Niño 3.4'], ['sst_world', 'Ocean'], ['t2_world', 'Land+ocean'], ['index', 'Our index'], ['months', '13 months'], ['background', 'Background'], ['spectral', 'Spectral watch']];
+    var body = stageShell(k === 'spectral' ? ('Spectral watch: ' + esc((S.SP || {}).summary || 'no data yet')) : 'The world ocean has broken daily records for ' + W.sst_world.records.streak + ' days running, land+ocean for ' + W.t2_world.records.streak,
       opts.map(function (o) { return segBtn('trend', o[0], o[1], 'sst_nino34'); }));
+    if (k === 'spectral') { viewSpectral(body); return; }
     if (k === 'index') {
       plot(body, function (w, h) { return chartHistory(S.H, w, h); });
       /* ЯДРО ИНДЕКСА У ПРОШЛЫХ СОБЫТИЙ. Владелец 04.09: «риск-индекс посчитать для других
@@ -4201,6 +4202,33 @@
     body.appendChild(el('div', 'cap', 'The reanalysis section along the equator, one frame per month: red warmer than normal, blue colder with hatching, the solid line the 20 °C isotherm now and the dashed one its normal depth. Play it and watch the warm water slide east and up along the thermocline. Beside it the same calendar month of a past strong event, shifted by whole years. ' + (ha && (S.SECload || {})[ha] === 'failed' ? 'The ' + esc(ha) + ' frames did not load. ' : '') + vLink('the Hovmöller diagram of the same motion', 'ocean', 'hovmoller') + ' ' + vLink('the last month in full', 'ocean', 'section')));
   }
 
+  /* СПЕКТРАЛЬНЫЙ СТОРОЖ (владелец 07.09: «ищем не под фонарём, просто появление сигнала на
+     какой-то частоте, пока его нет и это хорошо»). Таблица из data/enso/spectral.json: у каждого
+     дневного ряда отношение мощности к красному фону на периодах 2…7 суток за последние 30 дней,
+     процентиль истории, те же окна в наши годы. Числа считает spectral.py, здесь только показ. */
+  function viewSpectral(body) {
+    var SP = S.SP || {}, ser = SP.series || [], TH = SP.thresholds || { chi95: 3.0, chi99: 4.6 }, per = SP.periods || [2, 3, 4, 5, 6, 7];
+    if (!SP.built) { body.appendChild(el('div', 'note', 'No spectral watch yet: run python tools/enso/spectral.py.')); return; }
+    body.classList.add('scroll');
+    function cell(v) { if (!fin(v)) return '<td class="num">·</td>'; var c = v >= TH.chi99 ? ' top' : (v >= TH.chi95 ? ' warn' : ''); return '<td class="num' + c + '">' + fnum(v, 1, false) + '</td>'; }
+    var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
+    wrap.innerHTML = '<table class="e goods"><thead><tr><th>series</th><th>verdict</th>' + per.map(function (p) { return '<th class="num">' + p + ' d</th>'; }).join('') +
+      '<th class="num">band 2–7 d</th><th class="num">history pct</th><th>same window in our years</th></tr></thead><tbody>' +
+      ser.map(function (s) {
+        if (s.error) return '<tr><td>' + esc(s.label) + '</td><td class="st-bad" colspan="' + (per.length + 4) + '">' + esc(s.error) + '</td></tr>';
+        var nw = s.now, h = s.history, an = s.analogs || {};
+        var vcls = s.verdict === 'signal' ? ' st-bad' : (s.verdict === 'candidate' ? ' top' : (s.verdict === 'weak' ? ' warn' : ' st-ok'));
+        return '<tr><td>' + esc(s.label) + '<div class="sub">' + esc(s.window[0]) + ' → ' + esc(s.window[1]) + '</div></td>' +
+          '<td class="' + vcls + '"><b>' + esc(s.verdict) + '</b>' + (s.persistent ? '<div class="sub">two updates running</div>' : '') + '</td>' +
+          per.map(function (p) { return cell(nw.lines[String(p)]); }).join('') +
+          '<td class="num">' + fnum(nw.band_share * 100, 0, false) + ' %</td>' +
+          '<td class="num">' + (h ? h.max_line_pct + ' %<div class="sub">p95 ' + fnum(h.max_line_p95, 1, false) + ' · ' + h.share_of_windows_with_line_99 + ' % of windows had a 99 % line</div>' : '<span class="sub">no history</span>') + '</td>' +
+          '<td class="act">' + (Object.keys(an).length ? Object.keys(an).sort().map(function (y) { return y + ': ' + fnum(an[y].max_line, 1, false) + ' at ' + an[y].max_period + ' d'; }).join(' · ') : '<span class="sub">none</span>') + '</td></tr>';
+      }).join('') + '</tbody></table>';
+    body.appendChild(wrap);
+    body.appendChild(el('div', 'cap', esc(SP.note || '') + ' Cells: power over the red-noise background at that period; red at 99 %, amber at 95 %. Verdict: none / weak (95 %) / candidate (99 %, first time) / signal (99 % on the same period two updates running and above the 95th percentile of history). Built ' + esc(SP.built) + ', ' + ser.length + ' series, window ' + SP.window_days + ' days. One-day periods need hourly data and are not tested here.'));
+  }
+
   /* ЛЕНТА УПОМИНАНИЙ (владелец 07.09): разговор о событии, не измерение. Данные mentions.json. */
   function chartDaysPanels(items, W, H) {
     if (!items.length) return svgOpen(W, H) + '<text x="20" y="40">no series</text></svg>';
@@ -4691,10 +4719,11 @@
     get('/data/enso/ops.json').catch(function () { return {}; }),
     get('/data/enso/planet.json').catch(function () { return {}; }),
     get('/data/enso/hovmoller.json').catch(function () { return {}; }),
-    get('/data/enso/mentions.json').catch(function () { return {}; })])
+    get('/data/enso/mentions.json').catch(function () { return {}; }),
+    get('/data/enso/spectral.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {};
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {};
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');

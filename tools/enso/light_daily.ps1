@@ -30,6 +30,9 @@ Say "=== long record (planet.py)"
 Say "=== mentions feed (mentions.py)"
 & $py -u mentions.py 2>&1 | Out-File $log -Append -Encoding utf8
 
+Say "=== spectral watch (spectral.py)"
+& $py -u spectral.py 2>&1 | Out-File $log -Append -Encoding utf8
+
 $fresh = $null
 try { $fresh = Get-Content "$root\data\enso\fresh.json" -Raw -Encoding utf8 | ConvertFrom-Json } catch { Say "fresh.json unreadable: $_" }
 if ($fresh -and $fresh.needs_assessment) {

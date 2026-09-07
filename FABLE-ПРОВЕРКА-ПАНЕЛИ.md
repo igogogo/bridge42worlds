@@ -79,6 +79,7 @@
 | `tools\enso\planet.py`, `data\enso\planet.json` | раздел истории измерений (вкладка Long record): газы, лёд, температура, уровень моря; подписи правилами, без модели |
 | `tools\enso\mentions.py`, `data\enso\mentions.json` | лента упоминаний (вкладка Mentions): Google News RSS по девяти языковым выпускам, Bing, просмотры Википедии, RSS центров прогноза; разговор о событии, не измерение; GDELT необязателен (429) |
 | `tools\enso\subsurface.py --hov`, `data\enso\hovmoller.json`, `sections-<год>.json` | Ховмёллер (Ocean · Heat on the move) и кадры анимации разреза (Ocean · Month by month): GODAS помесячно, аналоги 1982/1997/2015/2023 в кэше `subsurface\hov_analogs.json`; текущее окно пишется при каждом `godas()` |
+| `tools\enso\spectral.py`, `data\enso\spectral.json`, `data\enso\spectral\` | спектральный сторож (Dynamics · Spectral watch): линия на 2…7 сутках в 24 дневных рядах за 30 дней против красного шума, истории и наших годов; «signal» только при 99.9 % или гребёнке, 3 обновления подряд, 99-й процентиль; 1–2 линии 99 % всегда есть случайно |
 | `tools\enso\light_daily.ps1` | ежедневная обёртка планировщика `b42_enso_light` (09:30): light → planet → mentions → при high полный прогон без выкладки → `publish.py --fresh` |
 | `tools\enso\watch.py` | ряды, риски 1–11 и их тексты; `_next_year_risks` |
 | `tools\enso\air.py`, `subsurface.py`, `wind.py`, `gulf.py`, `background.py` | риски своих блоков (`risks()`), тексты товаров (`EL_NINO_LINK`), справочник Залива (`WINTER`, `IMPORTS`) |
