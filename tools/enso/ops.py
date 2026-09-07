@@ -33,6 +33,9 @@ KIND_LABEL = {
     "publish": "publish to the site",
     "publish-fresh": "publish the fresh layer only",
     "review": "review mark (Fable)",
+    "planet": "long record (gases, ice, temperature, sea level)",
+    "mentions": "mentions feed (GDELT, Wikipedia, official feeds)",
+    "hovmoller": "Hovmöller diagram (GODAS)",
 }
 
 

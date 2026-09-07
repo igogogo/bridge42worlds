@@ -77,7 +77,9 @@
 | `tools\enso\fresh.py`, `data\enso\fresh.json` | свежий слой: хвосты рядов после разбора и триггеры (раздел 5б) |
 | `tools\enso\ops.py`, `data\enso\ops.json`, `runs.json` | журнал прогонов и состояние источников, вкладка Ops (раздел 5в) |
 | `tools\enso\planet.py`, `data\enso\planet.json` | раздел истории измерений (вкладка Long record): газы, лёд, температура, уровень моря; подписи правилами, без модели |
-| `tools\enso\light_daily.ps1` | ежедневная обёртка планировщика `b42_enso_light` (09:30): light → planet → при high полный прогон без выкладки → `publish.py --fresh` |
+| `tools\enso\mentions.py`, `data\enso\mentions.json` | лента упоминаний (вкладка Mentions): Google News RSS по девяти языковым выпускам, Bing, просмотры Википедии, RSS центров прогноза; разговор о событии, не измерение; GDELT необязателен (429) |
+| `tools\enso\subsurface.py --hov`, `data\enso\hovmoller.json`, `sections-<год>.json` | Ховмёллер (Ocean · Heat on the move) и кадры анимации разреза (Ocean · Month by month): GODAS помесячно, аналоги 1982/1997/2015/2023 в кэше `subsurface\hov_analogs.json`; текущее окно пишется при каждом `godas()` |
+| `tools\enso\light_daily.ps1` | ежедневная обёртка планировщика `b42_enso_light` (09:30): light → planet → mentions → при high полный прогон без выкладки → `publish.py --fresh` |
 | `tools\enso\watch.py` | ряды, риски 1–11 и их тексты; `_next_year_risks` |
 | `tools\enso\air.py`, `subsurface.py`, `wind.py`, `gulf.py`, `background.py` | риски своих блоков (`risks()`), тексты товаров (`EL_NINO_LINK`), справочник Залива (`WINTER`, `IMPORTS`) |
 | `tools\enso\alerts.py`, `food.py`, `models.py`, `refresh.py::new_block_alerts` | тревоги и их тексты |
@@ -283,6 +285,16 @@ python review.py --model claude-fable-5-1 --findings 3 --edits 5 --note "две 
   тревоги по ценам с весом (пшеница +43 % за год вошла в State, сахар нет: сезонный размах).
 - `publish.py` отправляет `enso.html` и `js/enso.js` вместе с данными: код панели и данные
   связаны (ключи по id, поправки, рекорды буёв, вес товаров).
+
+- 07.09: вкладка Mentions (лента упоминаний в девяти языках, внимание по дням, Википедия,
+  центры прогноза); Ocean · Heat on the move (Ховмёллер: аномалия на ~95 м и глубина изотермы
+  20 °C по долготе, это событие рядом с 1982/1997/2015/2023); Ocean · Month by month (анимация
+  разреза по месяцам, прошлое событие рядом на тех же календарных месяцах); Food · Price, $ per
+  tonne (одна линия в долларах за тонну, начало события отмечено; пять лет после следующего
+  полного прогона, пока 36 месяцев в `latest.json`).
+  Что проверять там: заголовки ленты не наши слова (подпись об этом есть); у Ховмёллера
+  подпись «warmest at N m» — максимум последней строки, не всего окна; в анимации кадр
+  аналога берётся сдвигом на целые годы, при отсутствии месяца пишется «no frame».
 
 **Открыто:** ссылки без адреса у SENAMHI/ENFEN и саудовской GFSA (только названия); работа
 2405.19986 (альбедо) стоит у семи якорей, спорно, оставлена.

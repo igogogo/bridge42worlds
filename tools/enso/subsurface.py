@@ -435,6 +435,81 @@ def build_analogs_godas(verbose=False):
     return cl
 
 
+HOV_FILE = ROOT / "hovmoller.json"
+HOV_LEVEL = 100.0
+
+
+def _hov_rows(months_ym, secs, clim, lev):
+    """Строки Ховмёллера: аномалия на ~100 м по долготе и аномалия глубины изотермы 20 °C, по месяцам."""
+    i100 = int(np.argmin(np.abs(np.asarray(lev) - HOV_LEVEL)))
+    a100, d20a = [], []
+    for ym, sec in zip(months_ym, secs):
+        m = int(ym[5:7])
+        a = sec - clim[m - 1]
+        a100.append([None if not np.isfinite(v) else round(float(v), 2) for v in a[i100]])
+        d = _d20_by_lon(sec, lev); dc = _d20_by_lon(clim[m - 1], lev)
+        d20a.append([None if x is None or y is None else round(x - y, 1) for x, y in zip(d, dc)])
+    return {"months": list(months_ym), "anom100": a100, "d20_anom": d20a, "level": float(lev[i100])}
+
+
+SEC_STEP = 2                   # каждая вторая долгота: кадр анимации 26 уровней x 75 долгот
+
+
+def _sec_pack(months_ym, secs, clim, lev, lon):
+    """Полные разрезы по месяцам для анимации (владелец 07.09: «динамику показывать»):
+    аномалия (уровень x долгота), долготы прорежены, один знак после запятой, плюс глубина
+    изотермы 20 °C сейчас и в норме. Один кадр ~ 4 КБ."""
+    out = {"months": list(months_ym), "levels": [float(x) for x in lev],
+           "lons": [float(x) for x in lon[::SEC_STEP]], "labels": [lon_label(x) for x in lon[::SEC_STEP]],
+           "anom": [], "d20": [], "d20_clim": [], "max": []}
+    for ym, sec in zip(months_ym, secs):
+        m = int(ym[5:7]); a = sec - clim[m - 1]
+        out["anom"].append([[None if not np.isfinite(v) else round(float(v), 1) for v in row[::SEC_STEP]] for row in a])
+        out["d20"].append(_d20_by_lon(sec, lev)[::SEC_STEP])
+        out["d20_clim"].append(_d20_by_lon(clim[m - 1], lev)[::SEC_STEP])
+        if np.isfinite(a).any():
+            i, j = np.unravel_index(int(np.nanargmax(np.where(np.isfinite(a), a, -99))), a.shape)
+            out["max"].append({"value": round(float(a[i, j]), 1), "depth": float(lev[i]), "label": lon_label(float(lon[j]))})
+        else:
+            out["max"].append(None)
+    return out
+
+
+def build_hov_analogs(verbose=False):
+    """Ховмёллер прошлых сильных событий: от января года до начала до декабря следующего
+    (три года GODAS на событие), один раз в кэш. Владелец 07.09: «как движется тепло — самый
+    важный фактор для прогноза»; диаграмма Ховмёллера показывает волну Кельвина косой полосой."""
+    p = CACHE / "hov_analogs.json"
+    cl = _load(p, {})
+    clim_d = _load(CACHE / "clim_godas.json", {})
+    if not clim_d.get("clim"):
+        return cl
+    C = np.array([[[np.nan if v is None else v for v in row] for row in mm] for mm in clim_d["clim"]], float)
+    for y in ANALOG_YEARS:
+        sec_file = ROOT / f"sections-{y}.json"
+        if str(y) in cl and sec_file.exists():
+            continue
+        months_ym, secs, lev, lon = [], [], None, None
+        for yy in (y - 1, y, y + 1):
+            try:
+                months, lev, lon, sec = _godas_year(yy)
+            except Exception as e:                               # noqa: BLE001
+                if verbose:
+                    print(f"  GODAS {yy}: {str(e)[:80]}")
+                continue
+            for k, m in enumerate(months):
+                months_ym.append(f"{yy}-{m:02d}"); secs.append(sec[k])
+        if secs:
+            cl[str(y)] = _hov_rows(months_ym, secs, C, np.array(lev))
+            pk = _sec_pack(months_ym, secs, C, np.array(lev), np.array(lon))
+            pk["built"] = datetime.now().strftime("%Y-%m-%d %H:%M"); pk["event"] = y
+            sec_file.write_text(json.dumps(pk, ensure_ascii=False), encoding="utf-8")
+            if verbose:
+                print(f"  Ховмёллер {y}: {len(months_ym)} мес; разрезы -> {sec_file.name}")
+    _save(p, cl)
+    return cl
+
+
 def _d20_by_lon(sec, lev):
     out = []
     for j in range(sec.shape[1]):
@@ -498,6 +573,25 @@ def godas(today=None, verbose=False):
                 w = np.where(np.isfinite(col), thick[:, None], 0.0)
                 v = np.nansum(np.where(np.isfinite(col), col, 0.0) * w) / max(w.sum(), 1e-9)
             hc.append(round(float(v), 3))
+        # ХОВМЁЛЛЕР: текущее окно (два года) пишется при каждом прогоне в data/enso/hovmoller.json,
+        # аналоги — из кэша hov_analogs.json (python subsurface.py --hov). Отдельный файл, чтобы
+        # лёгкий прогон тоже обновлял его, не трогая latest.json.
+        try:
+            hov = _hov_rows([f"{y}-{m:02d}" for y, m in zip(years, months_all)], secs, clim, lev)
+            hov["lons"] = [float(x) for x in lon]; hov["labels"] = [lon_label(x) for x in lon]
+            sections = _sec_pack([f"{y}-{m:02d}" for y, m in zip(years, months_all)], secs, clim, lev, lon)
+            HOV_FILE.write_text(json.dumps({"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "current": hov,
+                                            "sections": sections,
+                                            "analogs": _load(CACHE / "hov_analogs.json", {}), "level": hov["level"],
+                                            "note": ("Time runs down the page, longitude across: the warm anomaly of a "
+                                                     "Kelvin wave shows as a band sliding from west to east over two to "
+                                                     "three months. Left: this event; right: a past strong event on the "
+                                                     "same calendar months. GODAS reanalysis, monthly, anomaly against "
+                                                     f"our {CLIM_YEARS[0]}–{CLIM_YEARS[1]} climatology.")},
+                                           ensure_ascii=False), encoding="utf-8")
+            out["hovmoller_file"] = "data/enso/hovmoller.json"
+        except Exception as e:                                   # noqa: BLE001
+            out["hovmoller_error"] = str(e)[:120]
         an = _load(CACHE / "analogs_godas.json", {})
         mm_last = f"{months_all[-1]:02d}"
         out["heat_content"] = {"months": [f"{y}-{m:02d}" for y, m in zip(years, months_all)], "values": hc,
@@ -553,7 +647,16 @@ def risks(SUB):
 
 if __name__ == "__main__":
     import sys
-    if "--records" in sys.argv:
+    if "--hov" in sys.argv:
+        import ops as OPSLOG
+        run = OPSLOG.Run("hovmoller")
+        print("Ховмёллер прошлых событий (кэш)")
+        build_hov_analogs(verbose=True)
+        print("текущее окно")
+        g = godas(verbose=True)
+        run.finish("ok" if not g.get("hovmoller_error") else "partial", note=g.get("hovmoller_error") or "")
+        print("готово")
+    elif "--records" in sys.argv:
         import ops as OPSLOG
         run = OPSLOG.Run("records")
         for nm, ln in STATIONS:

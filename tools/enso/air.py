@@ -286,7 +286,7 @@ def commodities(pink, onset=None):
             "weight_basis": FOOD_WEIGHT.get(key, (1, "", False))[1],
             "gulf": FOOD_WEIGHT.get(key, (1, "", False))[2],
             **_season_stats(ser, ks),
-            "series": {"months": ks[-36:], "values": [ser[k] for k in ks[-36:]]},
+            "series": {"months": ks[-60:], "values": [ser[k] for k in ks[-60:]]},   # пять лет: график в абсолютных ценах
         })
     # ПОРЯДОК — ПО ИЗМЕНЕНИЮ ЗА ГОД, сверху вниз (владелец 06.09); панель умеет пересортировать
     out.sort(key=lambda r: -(r["yoy_pct"] if r["yoy_pct"] is not None else -999))

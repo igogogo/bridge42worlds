@@ -44,8 +44,13 @@ FILES = ["data/enso/latest.json", "data/enso/history.json", "data/enso/glossary.
          # служебный слой (владелец 06.09): свежее-не-разобранное и журнал прогонов с состоянием источников
          "data/enso/fresh.json", "data/enso/ops.json", "data/enso/runs.json",
          # раздел истории измерений (planet.py): медленные ряды, обновляются ежедневной обёрткой
-         "data/enso/planet.json"]
-FRESH_FILES = ["data/enso/fresh.json", "data/enso/ops.json", "data/enso/runs.json", "data/enso/planet.json"]
+         "data/enso/planet.json",
+         # лента упоминаний (mentions.py) и Ховмёллер (subsurface.godas), тоже из ежедневной обёртки
+         "data/enso/mentions.json", "data/enso/hovmoller.json",
+         # кадры анимации разреза прошлых событий (subsurface.py --hov), грузятся по требованию
+         "data/enso/sections-1982.json", "data/enso/sections-1997.json", "data/enso/sections-2015.json", "data/enso/sections-2023.json"]
+FRESH_FILES = ["data/enso/fresh.json", "data/enso/ops.json", "data/enso/runs.json", "data/enso/planet.json",
+               "data/enso/mentions.json", "data/enso/hovmoller.json", "data/enso/sections-1982.json", "data/enso/sections-1997.json", "data/enso/sections-2015.json", "data/enso/sections-2023.json"]
 
 
 def stamp_asset():

@@ -17,11 +17,12 @@
 
   var T = {
     fresh: 'fresh', stale: 'stale',
-    tabs: { verdict: 'Verdict', overview: 'Overview', news: 'News', now: 'Where we are', ocean: 'Ocean', models: 'Models', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long record', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
+    tabs: { verdict: 'Verdict', overview: 'Overview', news: 'News', mentions: 'Mentions', now: 'Where we are', ocean: 'Ocean', models: 'Models', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long record', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
     tabHelp: {
       verdict: 'What the machine makes of it today: the verdict written from the numbers on this page, the turning point, the outlook, what to watch, the caveats.',
       overview: 'One screen with everything: a strip of key indicators and a mosaic of every chart, each a door into its section.',
       news: 'What changed in the last week — values, risks, alerts, the verdict — and what is due next week.',
+      mentions: 'Who is talking about El Niño: news feeds in nine languages, Wikipedia readers, the forecast centres. Talk about the event, not a measurement of it.',
       now: 'Where the event stands: the daily and weekly Niño indices against the strongest past events, the map of the Pacific, ONI and RONI.',
       ocean: 'The ocean itself: daily boxes straight from the NOAA grid, the water under the equator by mooring, the reanalysis section.',
       models: 'The forecast models: the plume, three issues stacked, the scoreboard of who keeps up, how they break, how they revise.',
@@ -42,12 +43,12 @@
       'verdict/now': 'Today\'s verdict.', 'verdict/history': 'Every verdict that actually changed, in order.',
       'now/analogs': 'Daily Niño 3.4 this year against the four strongest past events on the same days.', 'now/map': 'The four Niño boxes on the map, this week against the same week of a past event.',
       'now/weekly': 'The four weekly indices over the last weeks, with the same weeks of past events beside them.', 'now/weekly_a': 'One weekly index against the strongest events on the same calendar.',
-      'ocean/surface': 'Daily box means from the NOAA grid, one day behind, with own climatologies.', 'ocean/moorings': 'Temperature by depth under the equator, mooring by mooring, every day.', 'ocean/section': 'The reanalysis section along the equator, monthly.',
+      'ocean/surface': 'Daily box means from the NOAA grid, one day behind, with own climatologies.', 'ocean/hovmoller': 'How the heat moves: the subsurface anomaly along the equator month by month, this event beside a past one.', 'mentions/attention': 'How much the world talks about it: articles per day, Wikipedia views, share of world news.', 'mentions/articles': 'Latest headlines in nine languages, with the publisher.', 'mentions/official': 'What the forecast centres publish.', 'ocean/moorings': 'Temperature by depth under the equator, mooring by mooring, every day.', 'ocean/section': 'The reanalysis section along the equator, monthly.',
       'models/plume': 'All models\' seasonal forecasts, the live-model centre, where we stand in the season.', 'models/stack': 'The last three issues, one under the other, against the same reality.', 'models/scoreboard': 'Each model against the official value it forecast.', 'models/breakdown': 'How many models fell below reality, issue by issue; the chronic ones.', 'models/revisions': 'How each model moved its peak between issues.',
       'air/coupling': 'The three atmospheric signs that the ocean and the air are coupled.', 'air/fuel': 'The warm water volume under the equator: the fuel gauge and its lead.', 'air/layers': 'The four satellite floors of the atmosphere and their delay.', 'air/wind': 'Daily zonal wind over the western Pacific and the westerly bursts.', 'air/mjo': 'The Madden–Julian Oscillation: phase and amplitude.', 'air/indices': 'MEI, the Indian Ocean Dipole and RONI next to our coupling score.',
       'trend/sst_nino34': 'Niño 3.4 daily: 400 days, the band of all years, the 14-day forecast, where past events went from here.', 'trend/sst_world': 'The world ocean, daily.', 'trend/t2_world': 'Land and ocean, daily.', 'trend/index': 'Our risk index by update, and the comparable core against past events.', 'trend/months': 'Thirteen months of the three series with their ranks.', 'trend/background': 'Ocean heat content and the energy imbalance: the state of the whole system.',
       'regions/table': 'Every region by season and scenario, with food vulnerability and what to do.', 'regions/place': 'One region at a time; the Gulf with its own measurements.',
-      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.',
+      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.',
       'planet/gases': 'CO₂, CH₄ and N₂O since the start of measurement, with the annual growth of CO₂.', 'planet/ice': 'Arctic and Antarctic sea ice extent, every year as a line against the 1981–2010 median.', 'planet/temperature': 'Land+ocean and ocean daily temperature every year since 1940 and 1981; global annual means since 1850.', 'planet/sea': 'Global mean sea level from satellites since 1993.',
       'how/glossary': 'Every underlined term explained.', 'how/method': 'How things are computed, and which numbers are parameters.', 'how/sources': 'Every source, whether it answered, and when its data last changed.', 'how/calendar': 'When each source publishes next.', 'how/changed': 'What changed since the previous update.',
       'ops/runs': 'Every run on record: when, what kind, how long, how it ended.', 'ops/sources': 'Every source: date range held, last update, answered or stale, errors.', 'ops/fresh': 'Fresh data since the last assessment and the triggers that decide whether it deserves one.'
@@ -2686,7 +2687,7 @@
     var segs2 = [];
     if (FO) segs2.push(segBtn('food', 'prices', 'Food prices', 'prices'), segBtn('food', 'onset', 'Since onset', 'prices'));
     var CM = (D.air || {}).commodities;
-    if (CM && CM.items && CM.items.length) segs2.push(segBtn('food', 'goods', 'By commodity', 'prices'));
+    if (CM && CM.items && CM.items.length) segs2.push(segBtn('food', 'goods', 'By commodity', 'prices'), segBtn('food', 'abs', 'Price, $ per tonne', 'prices'));
     var body = stageShell(FO ? 'World food prices: index ' + fnum(FO.index, 1, false) + ' in ' + esc(FO.last_month) + ', ' + fnum(FO.yoy_pct, 1) + ' % on the year'
       : 'What it means for food', segs2);
 
@@ -2717,6 +2718,19 @@
           'El Niño hits the harvests of particular crops; the aggregate is harvests plus everything else. Switch to a commodity above to see the paths the event actually touches. ' +
           'The bold dotted lines carry today’s index along the past paths; the pale band scales them to the strength of the event (this one is heading for ' + fnum(peakExpected(S.D)) + ' °C against +2.37, +2.59 and +1.99 then) — a hint, not a forecast.'));
       }
+    } else if (k === 'abs' && CM) {
+      /* АБСОЛЮТНЫЕ ЦЕНЫ (владелец 07.09): товар — линия в долларах за тонну за пять лет. */
+      var items = CM.items.slice().sort(function (a, b) { return (b.weight || 0) - (a.weight || 0) || a.name.localeCompare(b.name); }), pk2 = S.sub.absc || items[0].key;
+      var rowA = el('div', 'seg sub');
+      items.forEach(function (it) { var b = el('button', pk2 === it.key ? 'on' : '', it.name.replace(/,.*$/, '')); b.type = 'button'; b.onclick = function () { S.sub.absc = it.key; render(); }; rowA.appendChild(b); });
+      body.appendChild(rowA);
+      var itA = items.filter(function (x) { return x.key === pk2; })[0] || items[0], serA = itA.series || {}, nA = (serA.months || []).length;
+      plot(body, function (w, h) { return chartPrice(itA, w, h); });
+      var kA = el('div', 'kpis');
+      kA.innerHTML = '<div class="kpi"><div class="kn">' + esc(itA.name) + ' · ' + esc(itA.date) + '</div><div class="kv">' + fnum(itA.value, itA.value > 100 ? 0 : 2, false) + '<small> ' + esc(itA.unit.replace(/[()]/g, '')) + '</small></div><div class="km">month ' + fnum(itA.mom_pct, 1) + ' %, year ' + fnum(itA.yoy_pct, 1) + ' %' + (fin(itA.since_onset_pct) ? ', since the event began ' + fnum(itA.since_onset_pct, 1) + ' %' : '') + '</div>' + kmeta(null, 'World Bank Pink Sheet', itA.date) + '</div>' +
+        '<div class="kpi"><div class="kn">' + term('foodweight', 'food-security weight') + '</div><div class="kv">' + (itA.weight || 1) + '<small> of 5</small></div><div class="km">' + esc(itA.weight_basis || '') + '</div>' + kmeta(null, CM.weight_src || '', itA.date) + '</div>';
+      body.appendChild(kA);
+      body.appendChild(el('div', 'cap', '<strong>' + esc(itA.name) + ':</strong> ' + esc(itA.why) + ' The line is the World Bank Pink Sheet monthly price in ' + esc(itA.unit.replace(/[()]/g, '')) + ' over the last ' + (nA > 48 ? 'five years' : Math.round(nA / 12) + ' years') + ', nominal dollars, no inflation adjustment; the shaded part is since the event began. The same prices as percentages of the onset month, beside past events, are on the “Since onset” tab.'));
     } else if (k === 'goods' && CM) {
       /* ТОВАРЫ ПОИМЁННО. Индекс FAO — одно число на всю еду; Эль-Ниньо бьёт по пальмовому
          маслу, рису и рыбной муке, и по каждому своим путём. Владелец 06.09: сортировка по
@@ -2985,7 +2999,7 @@
     var pw = W - Lp - Rp, ph = H - Tp - B;
     var vmax = 0, i, j, v;
     for (i = 0; i < nC; i++) for (j = 0; j < nR; j++) { v = get(i, j); if (fin(v)) vmax = Math.max(vmax, Math.abs(v)); }
-    vmax = Math.max(0.5, Math.ceil(vmax * 2) / 2);
+    vmax = cfg.vmax || Math.max(0.5, Math.ceil(vmax * 2) / 2);   // общая шкала для двух кадров рядом
     var depthMax = rows[nR - 1] + (rows[nR - 1] - rows[nR - 2]) / 2;
     var Y = function (d) { return Tp + d / depthMax * ph; };
     var cw = pw / nC;
@@ -3172,8 +3186,26 @@
     if (k === 'surface') head = fin(T34.last_anom) ? 'Niño 3.4 today: ' + fnum(T34.last_anom) + ' °C on our box, ' + (T34.days_stale === 1 ? 'one day' : T34.days_stale + ' days') + ' behind' : 'Daily boxes straight from the NOAA grid';
     else if (k === 'moorings') head = TAO.warmest ? 'Water ' + fnum(TAO.warmest.value, 1) + ' °C above normal is sitting at ' + TAO.warmest.depth + ' m under ' + TAO.warmest.station : 'Below the surface: the moorings';
     else head = GD.max_anom ? 'Reanalysis, ' + esc(GD.month) + ': up to ' + fnum(GD.max_anom.value, 1) + ' °C above normal at ' + GD.max_anom.depth + ' m, ' + esc(GD.max_anom.label) : 'Reanalysis section along the equator';
-    var body = stageShell(head, [segBtn('ocean', 'surface', 'Surface, daily', 'surface'), segBtn('ocean', 'moorings', 'Below the surface', 'surface'), segBtn('ocean', 'section', 'Reanalysis section', 'surface')]);
+    if (k === 'hovmoller') head = 'How the heat moves under the equator: month by month, this event beside a past one';
+    if (k === 'motion') head = 'The section month by month: play the warm water sliding east';
+    var body = stageShell(head, [segBtn('ocean', 'surface', 'Surface, daily', 'surface'), segBtn('ocean', 'moorings', 'Below the surface', 'surface'), segBtn('ocean', 'section', 'Reanalysis section', 'surface'), segBtn('ocean', 'hovmoller', 'Heat on the move', 'surface'), segBtn('ocean', 'motion', 'Month by month', 'surface')]);
     if (O.error) { body.appendChild(el('div', 'note warn', 'The direct OISST block did not load: ' + esc(O.error))); }
+    if (k === 'motion') { viewOceanMotion(body); return; }
+    if (k === 'hovmoller') {
+      var HV = S.HV || {}, hm = S.sub.hovMetric || 'anom100', ha = S.sub.hovAnalog == null ? '1997' : S.sub.hovAnalog;
+      var row1 = el('div', 'seg sub');
+      [['anom100', 'anomaly at 100 m'], ['d20_anom', 'thermocline depth']].forEach(function (o) { var b = el('button', hm === o[0] ? 'on' : '', o[1]); b.type = 'button'; b.onclick = function () { S.sub.hovMetric = o[0]; render(); }; row1.appendChild(b); });
+      [['', 'this event alone']].concat(Object.keys(HV.analogs || {}).sort().map(function (y) { return [y, 'beside ' + y]; })).forEach(function (o) { var b = el('button', ha === o[0] ? 'on' : '', o[1]); b.type = 'button'; b.onclick = function () { S.sub.hovAnalog = o[0]; render(); }; row1.appendChild(b); });
+      body.appendChild(row1);
+      plot(body, function (w, h) { return chartHovmoller(HV, w, h, { metric: hm, analog: ha || null }); });
+      var cur = HV.current || {}, lastRow = (cur[hm] || [])[(cur.months || []).length - 1] || [], mx = -Infinity, mj = -1;
+      lastRow.forEach(function (v, j) { if (fin(v) && v > mx) { mx = v; mj = j; } });
+      var kh = el('div', 'kpis');
+      if (mj >= 0) kh.innerHTML = '<div class="kpi"><div class="kn">' + (hm === 'anom100' ? 'warmest at ' + Math.round(cur.level) + ' m' : 'deepest thermocline anomaly') + ' · ' + esc(cur.months[cur.months.length - 1]) + '</div><div class="kv">' + fnum(mx, 1) + '<small>' + (hm === 'anom100' ? ' °C' : ' m') + ' at ' + esc(cur.labels[mj]) + '</small></div><div class="km">the eastern edge of the warm band is where the wave surfaces</div>' + kmeta(null, 'GODAS via PSL', cur.months[cur.months.length - 1]) + '</div>';
+      body.appendChild(kh);
+      body.appendChild(el('div', 'cap', esc(HV.note || '') + ' Built ' + esc(HV.built || '') + '. ' + vLink('the reanalysis section for the last month', 'ocean', 'section') + ' ' + vLink('the moorings, daily', 'ocean', 'moorings')));
+      return;
+    }
 
     if (k === 'surface') {
       var pick = S.sub.obox || 'nino34', absolute = !!S.sub.oabs;
@@ -3899,6 +3931,209 @@
     body.appendChild(el('div', 'cap', caps.join(' ') + ' ' + esc(PL.note || '') + ' Built ' + esc(PL.built || '') + (srcs.length ? '; did not answer this time: ' + esc(srcs.join('; ')) : '') + '. ' + vLink('sources and their date ranges', 'ops', 'sources')));
   }
 
+  /* ХОВМЁЛЛЕР (владелец 07.09: «как движется тепло — самый важный фактор для прогноза»).
+     Время вниз по странице, долгота поперёк; волна Кельвина — тёплая полоса, сползающая с запада
+     на восток. Слева это событие, справа прошлое сильное на тех же календарных месяцах,
+     сдвинутых на годы. Данные data/enso/hovmoller.json (GODAS, месяц, наша климатология). */
+  function chartHovmoller(HV, W, H, opts) {
+    var cur = HV.current || {}, metric = (opts && opts.metric) || 'anom100', an = (opts && opts.analog) ? (HV.analogs || {})[opts.analog] : null;
+    if (!cur.months || !cur.months.length) return svgOpen(W, H) + '<text x="20" y="40">no Hovmöller data yet</text></svg>';
+    var lons = cur.lons, nL = lons.length, vmax = metric === 'anom100' ? 4 : 40, unit = metric === 'anom100' ? '°C' : 'm';
+    var months = cur.months.slice(), curY = parseInt(months[months.length - 1].slice(0, 4), 10);
+    var ahead = an ? 12 : 0;                       // у аналога показываем ещё год вперёд: что было дальше
+    var lastYm = months[months.length - 1], ly = parseInt(lastYm.slice(0, 4), 10), lm = parseInt(lastYm.slice(5, 7), 10);
+    for (var k = 1; k <= ahead; k++) { var mm = lm + k, yy = ly + Math.floor((mm - 1) / 12); mm = ((mm - 1) % 12) + 1; months.push(yy + '-' + (mm < 10 ? '0' : '') + mm); }
+    var nR = months.length, panels = an ? 2 : 1;
+    var Lp = 52, R = 12, Tp = 30, B = 36, gap = 26, pw = (W - Lp - R - gap * (panels - 1)) / panels, ph = H - Tp - B;
+    var cw = pw / nL, rh = ph / nR;
+    var s = svgOpen(W, H) + hatchDefs();
+    function cell(v) { var a = Math.min(1, Math.abs(v) / vmax); return { fill: v >= 0 ? 'var(--nino)' : 'var(--nina)', op: (.08 + .92 * a).toFixed(2), neg: v < 0 }; }
+    function panel(x0, rows, title, offsetYears) {
+      s += '<text class="tt" x="' + x0 + '" y="' + (Tp - 14) + '" font-size="11">' + fitText(title, pw, 11) + '</text>';
+      s += '<rect x="' + x0 + '" y="' + Tp + '" width="' + pw.toFixed(1) + '" height="' + ph.toFixed(1) + '" style="fill:var(--ink)" opacity=".03"/>';
+      months.forEach(function (ym, r) {
+        var key = offsetYears ? (parseInt(ym.slice(0, 4), 10) + offsetYears) + ym.slice(4) : ym;
+        var i = rows.months ? rows.months.indexOf(key) : -1;
+        var row = i >= 0 ? rows[metric][i] : null;
+        var y = Tp + r * rh;
+        if (row) row.forEach(function (v, j) {
+          if (!fin(v)) return;
+          var c = cell(v), g = 'x="' + (x0 + j * cw).toFixed(2) + '" y="' + y.toFixed(2) + '" width="' + (cw + .3).toFixed(2) + '" height="' + (rh + .3).toFixed(2) + '"';
+          s += '<rect ' + g + ' style="fill:' + c.fill + '" opacity="' + c.op + '"/>' + (c.neg && Math.abs(v) > vmax * .25 ? '<rect ' + g + ' fill="url(#hneg)" opacity=".5"/>' : '');
+        });
+        if (ym.slice(5) === '01' || r === 0) s += '<line x1="' + x0 + '" y1="' + y.toFixed(1) + '" x2="' + (x0 + pw).toFixed(1) + '" y2="' + y.toFixed(1) + '" style="stroke:var(--soft)" stroke-width=".6" opacity=".7"/>';
+      });
+      // подписи долгот: каждые 30°
+      lons.forEach(function (L, j) { if (Math.abs(L % 30) < .6) s += '<line x1="' + (x0 + j * cw).toFixed(1) + '" y1="' + Tp + '" x2="' + (x0 + j * cw).toFixed(1) + '" y2="' + (Tp + ph).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".5"/><text x="' + (x0 + j * cw).toFixed(0) + '" y="' + (H - 20) + '" text-anchor="middle">' + esc(cur.labels[j]) + '</text>'; });
+    }
+    panel(Lp, cur, (metric === 'anom100' ? 'Anomaly at ' + Math.round(cur.level) + ' m' : 'Thermocline (20 °C) depth anomaly') + ', this event, ' + months[0] + ' → ' + lastYm, 0);
+    if (an) {
+      var ay = parseInt(opts.analog, 10), off = ay - curY;
+      panel(Lp + pw + gap, an, 'Beside ' + opts.analog + '–' + (ay + 1) + ', same months, plus the year after', off);
+    }
+    // подписи месяцев слева и строка «сейчас»
+    months.forEach(function (ym, r) {
+      var y = Tp + r * rh;
+      if (ym.slice(5) === '01' || ym.slice(5) === '07' || r === nR - 1) s += '<text x="' + (Lp - 6) + '" y="' + (y + rh * .5 + 3).toFixed(1) + '" text-anchor="end" font-size="9">' + esc(ym) + '</text>';
+      if (ym === lastYm) s += '<rect x="' + (Lp - 2) + '" y="' + y.toFixed(1) + '" width="' + (pw + 4).toFixed(1) + '" height="' + rh.toFixed(1) + '" fill="none" style="stroke:var(--ochre)" stroke-width="1.4"/>' + '<text x="' + (Lp + pw + 4) + '" y="' + (y + rh * .5 + 3).toFixed(1) + '" font-size="9" style="fill:var(--ochre)">' + (an ? '' : 'now') + '</text>';
+    });
+    s += '<text x="' + (W - R) + '" y="' + (H - 4) + '" text-anchor="end" font-size="9" style="fill:var(--soft)">red warm · blue cold (hatched) · full colour at ±' + vmax + ' ' + unit + '</text>';
+    return s + '</svg>';
+  }
+
+  /* ЦЕНЫ В АБСОЛЮТНЫХ ЧИСЛАХ (владелец 07.09: «привык видеть в абсолютных ценах»). Один товар —
+     одна линия за пять лет в долларах за тонну, начало события отмечено; никаких процентов. */
+  function chartPrice(c, W, H) {
+    var ser = c.series || {}, m = ser.months || [], v = ser.values || [], n = m.length;
+    if (n < 2) return svgOpen(W, H) + '<text x="20" y="40">no series</text></svg>';
+    var Lp = 56, R = 16, Tp = 26, B = 26, pw = W - Lp - R, ph = H - Tp - B;
+    var vv = v.filter(fin), vmin = Math.min.apply(null, vv), vmax = Math.max.apply(null, vv), pad = (vmax - vmin) * .12 || 1;
+    vmin = Math.max(0, vmin - pad); vmax += pad * 1.6;
+    var X = function (i) { return Lp + i / (n - 1) * pw; }, Y = function (x) { return Tp + (vmax - x) / (vmax - vmin) * ph; };
+    var s = svgOpen(W, H) + hatchDefs() + '<text class="tt" x="' + Lp + '" y="15">' + fitText(esc(c.name + ', ' + c.unit.replace(/[()]/g, '') + ', monthly, ' + m[0] + ' → ' + m[n - 1]), W, 12) + '</text>';
+    var step = niceStep(vmax - vmin, Math.max(3, Math.floor(ph / 26)));
+    for (var g = Math.ceil(vmin / step) * step; g < vmax; g += step) s += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".6"/><text x="' + (Lp - 5) + '" y="' + (Y(g) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9">' + fnum(g, g < 10 ? 1 : 0, false) + '</text>';
+    for (var i = 0; i < n; i++) if (m[i].slice(5) === '01' || (n <= 24 && m[i].slice(5) === '07')) s += '<line x1="' + X(i).toFixed(1) + '" y1="' + Tp + '" x2="' + X(i).toFixed(1) + '" y2="' + (Tp + ph) + '" style="stroke:var(--grid)" stroke-width=".5"/><text x="' + X(i).toFixed(1) + '" y="' + (H - 9) + '" text-anchor="middle" font-size="9">' + m[i].slice(0, 4) + '</text>';
+    // год назад и пять лет: тонкие уровни для глаза
+    var lo = v.indexOf(Math.min.apply(null, vv)), hiI = v.indexOf(Math.max.apply(null, vv));
+    var io = c.onset ? m.indexOf(c.onset) : -1;
+    if (io >= 0) {
+      s += '<rect x="' + X(io).toFixed(1) + '" y="' + Tp + '" width="' + (X(n - 1) - X(io)).toFixed(1) + '" height="' + ph + '" style="fill:var(--nino)" opacity=".07"/>';
+      s += '<line x1="' + X(io).toFixed(1) + '" y1="' + Tp + '" x2="' + X(io).toFixed(1) + '" y2="' + (Tp + ph) + '" style="stroke:var(--ochre)" stroke-dasharray="5 3" stroke-width="1.2"/><text x="' + (X(io) + (X(io) > W - 130 ? -4 : 4)).toFixed(1) + '" y="' + (Tp + 11) + '" font-size="9" text-anchor="' + (X(io) > W - 130 ? 'end' : 'start') + '" style="fill:var(--ochre)">event began ' + esc(c.onset) + '</text>';
+    }
+    s += poly(v.map(function (x, i) { return [X(i), fin(x) ? Y(x) : NaN]; }), 'var(--text)', 2.2);
+    s += '<line x1="' + Lp + '" y1="' + Y(v[hiI]).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(v[hiI]).toFixed(1) + '" style="stroke:var(--nino)" stroke-width=".8" stroke-dasharray="2 3"/><text x="' + (W - R) + '" y="' + (Y(v[hiI]) - 3).toFixed(1) + '" text-anchor="end" font-size="9" style="fill:var(--nino)">five-year high ' + fnum(v[hiI], v[hiI] > 100 ? 0 : 2, false) + ' · ' + m[hiI] + '</text>';
+    s += '<line x1="' + Lp + '" y1="' + Y(v[lo]).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(v[lo]).toFixed(1) + '" style="stroke:var(--nina)" stroke-width=".8" stroke-dasharray="2 3"/><text x="' + (W - R) + '" y="' + (Y(v[lo]) + 10).toFixed(1) + '" text-anchor="end" font-size="9" style="fill:var(--nina)">low ' + fnum(v[lo], v[lo] > 100 ? 0 : 2, false) + ' · ' + m[lo] + '</text>';
+    if (n > 13 && fin(v[n - 13])) s += '<circle cx="' + X(n - 13).toFixed(1) + '" cy="' + Y(v[n - 13]).toFixed(1) + '" r="3" fill="none" style="stroke:var(--text)" stroke-width="1.2"/><text x="' + X(n - 13).toFixed(1) + '" y="' + (Y(v[n - 13]) - 7).toFixed(1) + '" text-anchor="middle" font-size="9">a year ago ' + fnum(v[n - 13], v[n - 13] > 100 ? 0 : 2, false) + '</text>';
+    s += nowDot(X(n - 1), Y(v[n - 1]), 'var(--text)', 4) + '<text x="' + (X(n - 1) - 6).toFixed(1) + '" y="' + (Y(v[n - 1]) - 8).toFixed(1) + '" text-anchor="end" font-size="10" font-weight="600">' + fnum(v[n - 1], v[n - 1] > 100 ? 0 : 2, false) + '</text>';
+    return s + '</svg>';
+  }
+
+  /* РАЗРЕЗ МЕСЯЦ ЗА МЕСЯЦЕМ (владелец 07.09: «динамику показывать, тепловую карту анимировать»).
+     Кадры — полные разрезы GODAS из hovmoller.json (это событие) и sections-<год>.json (прошлые,
+     грузятся по требованию). Таймер двигает кадр и перерисовывает график; уход со сцены
+     останавливает таймер (render). */
+  function animStop() { if (S.animT) { clearInterval(S.animT); S.animT = null; } }
+  function sectionFrames() { return ((S.HV || {}).sections) || null; }
+  function viewOceanMotion(body) {
+    var SC = sectionFrames();
+    if (!SC || !SC.months || !SC.months.length) { body.appendChild(el('div', 'note', 'The month-by-month frames are not built yet: run subsurface.py --hov.')); return; }
+    var n = SC.months.length, ha = S.sub.animAnalog == null ? '1997' : S.sub.animAnalog;
+    if (S.animI == null || S.animI >= n) S.animI = n - 1;
+    var AN = ha ? (S.SEC || {})[ha] : null;
+    if (ha && !AN && !(S.SECload || {})[ha]) {
+      S.SECload = S.SECload || {}; S.SECload[ha] = true;
+      get('/data/enso/sections-' + ha + '.json').then(function (d) { S.SEC = S.SEC || {}; S.SEC[ha] = d; if (S.view === 'ocean') render(); }).catch(function () { S.SECload[ha] = 'failed'; if (S.view === 'ocean') render(); });
+    }
+    var row = el('div', 'seg sub');
+    var bPlay = el('button', S.animT ? 'on' : '', S.animT ? '❚❚ pause' : '▶ play'); bPlay.type = 'button';
+    bPlay.onclick = function () {
+      if (S.animT) { animStop(); bPlay.textContent = '▶ play'; bPlay.className = ''; return; }
+      if (S.animI >= n - 1) S.animI = 0;
+      S.animT = setInterval(function () {
+        if (!S.plotEl || !S.plotEl.isConnected) { animStop(); return; }
+        S.animI = (S.animI + 1) % n; rng.value = S.animI; lab.textContent = SC.months[S.animI]; S.pw = 0; redrawPlot();
+        if (S.animI === n - 1) { animStop(); bPlay.textContent = '▶ play'; bPlay.className = ''; }
+      }, 650);
+      bPlay.textContent = '❚❚ pause'; bPlay.className = 'on';
+    };
+    row.appendChild(bPlay);
+    var rng = document.createElement('input'); rng.type = 'range'; rng.min = 0; rng.max = n - 1; rng.value = S.animI; rng.style.cssText = 'flex:1;min-width:120px;max-width:360px;align-self:center';
+    var lab = el('span', 'mono', SC.months[S.animI]); lab.style.cssText = 'align-self:center;font-size:12px;min-width:56px';
+    rng.oninput = function () { animStop(); bPlay.textContent = '▶ play'; bPlay.className = ''; S.animI = +rng.value; lab.textContent = SC.months[S.animI]; S.pw = 0; redrawPlot(); };
+    row.appendChild(rng); row.appendChild(lab);
+    [['', 'this event alone']].concat(Object.keys((S.HV || {}).analogs || {}).sort().map(function (y) { return [y, 'beside ' + y]; })).forEach(function (o) { var b = el('button', ha === o[0] ? 'on' : '', o[1]); b.type = 'button'; b.onclick = function () { animStop(); S.sub.animAnalog = o[0]; render(); }; row.appendChild(b); });
+    body.appendChild(row);
+    plot(body, function (w, h) {
+      var i = S.animI, ym = SC.months[i], cur = { title: 'This event · ' + ym, cols: SC.labels, rows: SC.levels, get: function (a, b) { return SC.anom[i][b][a]; }, d20: SC.d20[i], d20clim: SC.d20_clim[i], legendNote: 'GODAS, monthly', vmax: 10 };
+      var A2 = ha ? (S.SEC || {})[ha] : null;
+      if (!A2) return chartSection(cur, w, h);
+      var ay = parseInt(ha, 10), cy = parseInt(SC.months[n - 1].slice(0, 4), 10), key = (parseInt(ym.slice(0, 4), 10) + (ay - cy)) + ym.slice(4), j = A2.months.indexOf(key);
+      var half = (w - 10) / 2, left = chartSection(cur, half, h), right;
+      if (j < 0) right = svgOpen(half, h) + '<text x="20" y="40" font-size="11">' + esc(ha) + ': no frame for ' + esc(key) + '</text></svg>';
+      else right = chartSection({ title: ha + ' event · ' + key, cols: A2.labels, rows: A2.levels, get: function (a, b) { return A2.anom[j][b][a]; }, d20: A2.d20[j], d20clim: A2.d20_clim[j], legendNote: 'same month', vmax: 10 }, half, h);
+      // два SVG в одной картинке: вкладываем как <svg x=…>
+      return svgOpen(w, h) + left.replace(/^<svg /, '<svg x="0" width="' + half + '" height="' + h + '" ') + right.replace(/^<svg /, '<svg x="' + (half + 10) + '" width="' + half + '" height="' + h + '" ') + '</svg>';
+    });
+    var mx = SC.max[S.animI], kh = el('div', 'kpis');
+    kh.innerHTML = (mx ? '<div class="kpi"><div class="kn">warmest anomaly · ' + esc(SC.months[S.animI]) + '</div><div class="kv">' + fnum(mx.value, 1) + '<small> °C at ' + mx.depth + ' m</small></div><div class="km">' + esc(mx.label) + '</div>' + kmeta(null, 'GODAS via PSL', SC.months[S.animI]) + '</div>' : '') +
+      '<div class="kpi"><div class="kn">frames</div><div class="kv" style="font-size:17px">' + n + ' months</div><div class="km">' + esc(SC.months[0]) + ' → ' + esc(SC.months[n - 1]) + (ha ? '; the ' + esc(ha) + ' event on the same calendar months' : '') + '</div>' + kmeta(null, 'GODAS, our climatology', SC.months[n - 1]) + '</div>';
+    body.appendChild(kh);
+    body.appendChild(el('div', 'cap', 'The reanalysis section along the equator, one frame per month: red warmer than normal, blue colder with hatching, the solid line the 20 °C isotherm now and the dashed one its normal depth. Play it and watch the warm water slide east and up along the thermocline. Beside it the same calendar month of a past strong event, shifted by whole years. ' + (ha && (S.SECload || {})[ha] === 'failed' ? 'The ' + esc(ha) + ' frames did not load. ' : '') + vLink('the Hovmöller diagram of the same motion', 'ocean', 'hovmoller') + ' ' + vLink('the last month in full', 'ocean', 'section')));
+  }
+
+  /* ЛЕНТА УПОМИНАНИЙ (владелец 07.09): разговор о событии, не измерение. Данные mentions.json. */
+  function chartDaysPanels(items, W, H) {
+    if (!items.length) return svgOpen(W, H) + '<text x="20" y="40">no series</text></svg>';
+    var RC = S._tight ? 8 : 60, gap = 16, hh = (H - 18 - gap * (items.length - 1)) / items.length;
+    var s = svgOpen(W, H) + hatchDefs();
+    items.forEach(function (o, xi) {
+      var top = 6 + xi * (hh + gap), Lp = 46, Tp = top + 14, pw = W - Lp - RC - 10, ph = hh - 26, n = o.dates.length;
+      var vv = []; (o.series || []).forEach(function (q) { vv = vv.concat(q.values.filter(fin)); });
+      if (!vv.length) return;
+      var vmax = Math.max.apply(null, vv) * 1.1, vmin = 0;
+      var X = function (i) { return Lp + (n > 1 ? i / (n - 1) : 0) * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
+      s += '<rect x="' + Lp + '" y="' + Tp + '" width="' + pw.toFixed(1) + '" height="' + ph.toFixed(1) + '" rx="5" style="fill:var(--ink)" opacity=".03"/>';
+      s += '<text class="tt" x="' + Lp + '" y="' + (top + 9) + '" font-size="10">' + fitText(o.title, W - RC, 10) + '</text>';
+      s += gridY(vmin, vmax, niceStep(vmax - vmin), Y, Lp, RC + 10, W, 0);
+      o.dates.forEach(function (d, i) { if (d.slice(8) === '01' || i === 0 || i === n - 1) s += '<text x="' + X(i).toFixed(0) + '" y="' + (Tp + ph + 11) + '" text-anchor="' + (i === 0 ? 'start' : (i === n - 1 ? 'end' : 'middle')) + '" font-size="9">' + esc(d.slice(5)) + '</text>'; });
+      (o.series || []).forEach(function (q, k) {
+        if (q.bars) {
+          var bw = Math.max(2, pw / n - 2);
+          q.values.forEach(function (v, i) { if (fin(v)) s += '<rect x="' + (X(i) - bw / 2).toFixed(1) + '" y="' + Y(v).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + (Y(0) - Y(v)).toFixed(1) + '" style="fill:' + (q.color || 'var(--nino)') + '" opacity=".75"/>'; });
+        } else {
+          s += segs(q.values.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), q.color || 'var(--text)', q.w || 1.4, pickOp(q.key || q.name, 1), q.dash || '');
+        }
+      });
+      var legs = (o.series || []).map(function (q, k) { return [q.name, q.color || 'var(--text)', q.w || 1.4, q.dash || '', q.key || q.name]; });
+      if (legs.length > 1 && !S._tight) s += legendAt(legs, Lp + 8, Tp + 12);
+    });
+    return s + '</svg>';
+  }
+
+  function viewMentions() {
+    var M = S.MN || {}, k = sub('mentions', 'attention');
+    var arts = M.articles || [], langs = M.languages || [];
+    var body = stageShell('Who is talking about El Niño: ' + arts.length + ' articles in ' + langs.filter(function (l) { return l.n; }).length + ' languages',
+      [segBtn('mentions', 'attention', 'Attention', 'attention'), segBtn('mentions', 'articles', 'Headlines (' + arts.length + ')', 'attention'), segBtn('mentions', 'official', 'Forecast centres', 'attention')]);
+    if (!M.built) { body.appendChild(el('div', 'note', 'No mentions data yet: run python tools/enso/mentions.py.')); return; }
+    body.classList.add('scroll');
+    if (k === 'attention') {
+      var items = [];
+      var pd = M.per_day || {};
+      if ((pd.dates || []).length) items.push({ title: 'Articles per day in the nine news feeds (latest hundred per language, so older days are undercounted)', dates: pd.dates, series: [{ name: 'articles', values: pd.counts, bars: true, color: 'var(--ochre)' }] });
+      var wk = M.wiki || {}, wl = Object.keys(wk);
+      if (wl.length) {
+        var base = wk.en || wk[wl[0]];
+        items.push({ title: 'Wikipedia article views per day, ' + wl.length + ' languages', dates: base.dates, series: wl.map(function (l, i) { return { name: l, values: wk[l].views, color: l === 'en' ? 'var(--text)' : (l === 'es' ? 'var(--nino)' : (l === 'ar' ? 'var(--ochre)' : 'var(--soft)')), w: l === 'en' ? 1.8 : 1, dash: dashOf(i), key: 'w' + l }; }) });
+      }
+      if (M.gdelt && (M.gdelt.values || []).length) items.push({ title: 'GDELT: share of all monitored world news mentioning El Niño, %', dates: M.gdelt.dates, series: [{ name: '% of news', values: M.gdelt.values, color: 'var(--nina)' }] });
+      plot(body, function (w, h) { return chartDaysPanels(items, w, h); });
+      var kp = el('div', 'kpis');
+      kp.innerHTML = '<div class="kpi"><div class="kn">languages</div><div class="kv" style="font-size:15px">' + langs.map(function (l) { return esc(l.name) + ' ' + l.n; }).join(' · ') + '</div><div class="km">articles now in each feed</div>' + kmeta(null, 'Google News RSS', (M.built || '').slice(0, 10)) + '</div>' +
+        '<div class="kpi"><div class="kn">who publishes most</div><div class="kv" style="font-size:15px">' + (M.top_sources || []).slice(0, 8).map(function (t) { return esc(t.source) + ' ' + t.n; }).join(' · ') + '</div><div class="km">across all feeds, duplicates removed</div>' + kmeta(null, 'Google News, Bing News', (M.built || '').slice(0, 10)) + '</div>' +
+        (wk.en ? '<div class="kpi"><div class="kn">Wikipedia, English</div><div class="kv">' + wk.en.last7_per_day + '<small> views a day</small></div><div class="km">this week, against ' + wk.en.base_per_day + ' a day before</div>' + kmeta(null, 'Wikimedia pageviews', (M.built || '').slice(0, 10)) + '</div>' : '');
+      body.appendChild(kp);
+      body.appendChild(el('div', 'cap', esc(M.summary || '') + ' ' + esc(M.note || '')));
+    } else if (k === 'articles') {
+      var lf = S.sub.mentLang || 'all';
+      var row = el('div', 'seg sub');
+      [['all', 'all']].concat(langs.filter(function (l) { return l.n; }).map(function (l) { return [l.lang, l.name]; })).forEach(function (o) { var b = el('button', lf === o[0] ? 'on' : '', o[1]); b.type = 'button'; b.onclick = function () { S.sub.mentLang = o[0]; render(); }; row.appendChild(b); });
+      body.appendChild(row);
+      var list = arts.filter(function (a) { return lf === 'all' || a.lang === lf; }).slice(0, 120);
+      var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
+      wrap.innerHTML = '<table class="e"><thead><tr><th>date</th><th>language</th><th>source</th><th>headline</th></tr></thead><tbody>' +
+        list.map(function (a) { return '<tr><td>' + esc(a.date || '') + '</td><td>' + esc(a.lang) + '</td><td>' + esc(a.source || '') + '</td><td class="act"><a href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.title) + '</a></td></tr>'; }).join('') + '</tbody></table>';
+      body.appendChild(wrap);
+      body.appendChild(el('div', 'cap', 'Headlines as written by the publishers, newest first, duplicates removed; a link goes to the publisher through Google News or Bing News. Not our words and not a source of numbers.'));
+    } else {
+      var g = el('div', 'gloss'), off = M.official || {};
+      g.innerHTML = Object.keys(off).map(function (key) { var o = off[key]; return '<div class="gl-i"><b>' + esc(o.label) + (o.enso_only ? '' : ' (latest posts, none about ENSO right now)') + '</b><ul>' + o.items.map(function (x) { return '<li><a href="' + esc(x.url) + '" target="_blank" rel="noopener">' + esc(x.title) + '</a> <span class="s">' + esc(x.date || '') + '</span></li>'; }).join('') + '</ul></div>'; }).join('') || '<div class="note">No official feed answered.</div>';
+      body.appendChild(g);
+      body.appendChild(el('div', 'cap', 'Forecast centres with an open feed. NOAA CPC publishes its ENSO discussion on the second Thursday of the month and BoM its wrap-up fortnightly; neither has a feed we can read, see ' + vLink('the release calendar', 'how', 'calendar') + '.'));
+    }
+  }
+
   /* ВКЛАДКА OPS (владелец 06.09): журнал прогонов, состояние источников, свежий слой с триггерами.
      Всё из data/enso/ops.json и fresh.json, которые пишутся в конце каждого прогона, не живьём. */
   function viewOps() {
@@ -4056,6 +4291,7 @@
     } catch (e) { /* file: без истории */ }
   }
   function render() {
+    animStop();
     writeHash();
     /* ВЫБОР В ЛЕГЕНДЕ ЖИВЁТ ТОЛЬКО НА СВОЕЙ СЦЕНЕ. Владелец 05.09: «походил, вернулся на
        Against analogues — всё блёклое, не могу вернуть яркость». Уход со сцены снимает выбор. */
@@ -4095,6 +4331,7 @@
     else if (S.view === 'overview') viewOverview();
     else if (S.view === 'refs') viewRefs();
     else if (S.view === 'planet') viewPlanet();
+    else if (S.view === 'mentions') viewMentions();
     else if (S.view === 'ops') viewOps();
     else if (S.view === 'about') viewAbout();
     else if (S.view === 'trend') viewTrend();
@@ -4311,10 +4548,12 @@
     get('/data/enso/news.json').catch(function () { return {}; }),
     get('/data/enso/fresh.json').catch(function () { return {}; }),
     get('/data/enso/ops.json').catch(function () { return {}; }),
-    get('/data/enso/planet.json').catch(function () { return {}; })])
+    get('/data/enso/planet.json').catch(function () { return {}; }),
+    get('/data/enso/hovmoller.json').catch(function () { return {}; }),
+    get('/data/enso/mentions.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {};
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {};
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');
