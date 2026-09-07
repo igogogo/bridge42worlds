@@ -300,7 +300,7 @@ def commodities(pink, onset=None):
                      "A coincidence in time with the event is not a proof of cause.")}
 
 
-def onset_paths(pink, onset, analog_onsets=None, span=18):
+def onset_paths(pink, onset, analog_onsets=None, span=24):   # владелец 07.09: и следующий год после события
     """Цена товара в процентах к месяцу начала события, от −6 до +span месяцев: сейчас и в
     прошлые события. Владелец 04.09 (вечер): «since onset не понимаю: почему у нас риски
     растут, а цены падают». Падал АГРЕГАТ (индекс FAO) — от азиатского кризиса 1998-го и

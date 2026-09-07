@@ -1879,22 +1879,29 @@
     /* КНОПКА ВОЗВРАТА. Владелец 06.09: «когда я с обзора ухожу на соответствующую страницу,
        там нет кнопки назад, чтобы вернуться». Кнопка появляется только если пришли с
        обзора, и уводит ровно туда же, откуда пришли. */
-    if (S._back && S.view !== 'overview') {
+    var top = el('div', 'stage-top');
+    top.appendChild(el('div', 'stage-h', title));
+    /* Владелец 07.09: «яркую кнопку back в правом верхнем углу поля графиков». Кнопка стоит
+       всегда, когда есть куда вернуться: с обзора — на обзор, иначе на прошлую сцену
+       (по истории адреса, как браузерная «назад»). */
+    if ((S._back && S.view !== 'overview') || S._navN > 0) {
       // класс vgo НЕ ставим: на нём висит общий обработчик переходов, и он уводил в «now»
-      var b = el('button', 'back-go', '← ' + (T.tabs.overview || 'Overview'));
+      var b = el('button', 'back-go bright', '← ' + (S._back && S.view !== 'overview' ? (T.tabs.overview || 'Overview') : 'back'));
       b.type = 'button';
       /* Возврат идём через адрес, а не прямой сменой состояния: с карточки риска прямая
          смена приводила на «Where we are» (viewRisk при пустом S.risk сам уводит в now, и
          порядок вызовов внутри render это подхватывал). Через хэш путь один и тот же, что
          у кнопки «назад» браузера. */
+      var toOverview = S._back && S.view !== 'overview';
       b.onclick = function () {
-        S._back = null; S.full = null; S.risk = null; S.pick = null;
-        if ((location.hash || '') === '#overview') { S.view = 'overview'; render(); }
-        else location.hash = '#overview';
+        S.full = null; S.risk = null; S.pick = null;
+        if (toOverview) { S._back = null; if ((location.hash || '') === '#overview') { S.view = 'overview'; render(); } else location.hash = '#overview'; return; }
+        S._navN = Math.max(0, (S._navN || 0) - 2);   // шаг назад по истории сам вызовет render через hashchange
+        history.back();
       };
-      head.appendChild(b);
+      top.appendChild(b);
     }
-    head.appendChild(el('div', 'stage-h', title));
+    head.appendChild(top);
     if (segs2 && segs2.length) {
       var seg = el('div', 'seg');
       segs2.forEach(function (b) {
@@ -2719,18 +2726,30 @@
           'The bold dotted lines carry today’s index along the past paths; the pale band scales them to the strength of the event (this one is heading for ' + fnum(peakExpected(S.D)) + ' °C against +2.37, +2.59 and +1.99 then) — a hint, not a forecast.'));
       }
     } else if (k === 'abs' && CM) {
-      /* АБСОЛЮТНЫЕ ЦЕНЫ (владелец 07.09): товар — линия в долларах за тонну за пять лет. */
-      var items = CM.items.slice().sort(function (a, b) { return (b.weight || 0) - (a.weight || 0) || a.name.localeCompare(b.name); }), pk2 = S.sub.absc || items[0].key;
+      /* АБСОЛЮТНЫЕ ЦЕНЫ (владелец 07.09): товар — линия в долларах за тонну за пять лет; «all» —
+         все товары сеткой; на каждом тонкие пути прошлых событий в сегодняшних долларах и год вперёд. */
+      var items = CM.items.slice().sort(function (a, b) { return (b.weight || 0) - (a.weight || 0) || a.name.localeCompare(b.name); }), pk2 = S.sub.absc || 'all';
+      var OPa = ((D.air || {}).onset_paths || {}), opa = OPa.items || [];
+      function pathsOf(key) { var it = opa.filter(function (x) { return x.key === key; })[0]; return it ? { span: OPa.span || 18, analogs: it.analogs || {} } : null; }
       var rowA = el('div', 'seg sub');
-      items.forEach(function (it) { var b = el('button', pk2 === it.key ? 'on' : '', it.name.replace(/,.*$/, '')); b.type = 'button'; b.onclick = function () { S.sub.absc = it.key; render(); }; rowA.appendChild(b); });
+      [['all', 'all together']].concat(items.map(function (it) { return [it.key, it.name.replace(/,.*$/, '')]; })).forEach(function (o) { var b = el('button', (pk2 === o[0] ? 'on' : '') + (o[0] === 'all' ? ' sq' : ''), o[1]); b.type = 'button'; b.onclick = function () { S.sub.absc = o[0]; render(); }; rowA.appendChild(b); });
       body.appendChild(rowA);
-      var itA = items.filter(function (x) { return x.key === pk2; })[0] || items[0], serA = itA.series || {}, nA = (serA.months || []).length;
-      plot(body, function (w, h) { return chartPrice(itA, w, h); });
-      var kA = el('div', 'kpis');
-      kA.innerHTML = '<div class="kpi"><div class="kn">' + esc(itA.name) + ' · ' + esc(itA.date) + '</div><div class="kv">' + fnum(itA.value, itA.value > 100 ? 0 : 2, false) + '<small> ' + esc(itA.unit.replace(/[()]/g, '')) + '</small></div><div class="km">month ' + fnum(itA.mom_pct, 1) + ' %, year ' + fnum(itA.yoy_pct, 1) + ' %' + (fin(itA.since_onset_pct) ? ', since the event began ' + fnum(itA.since_onset_pct, 1) + ' %' : '') + '</div>' + kmeta(null, 'World Bank Pink Sheet', itA.date) + '</div>' +
-        '<div class="kpi"><div class="kn">' + term('foodweight', 'food-security weight') + '</div><div class="kv">' + (itA.weight || 1) + '<small> of 5</small></div><div class="km">' + esc(itA.weight_basis || '') + '</div>' + kmeta(null, CM.weight_src || '', itA.date) + '</div>';
-      body.appendChild(kA);
-      body.appendChild(el('div', 'cap', '<strong>' + esc(itA.name) + ':</strong> ' + esc(itA.why) + ' The line is the World Bank Pink Sheet monthly price in ' + esc(itA.unit.replace(/[()]/g, '')) + ' over the last ' + (nA > 48 ? 'five years' : Math.round(nA / 12) + ' years') + ', nominal dollars, no inflation adjustment; the shaded part is since the event began. The same prices as percentages of the onset month, beside past events, are on the “Since onset” tab.'));
+      if (pk2 === 'all') {
+        body.classList.add('scroll');
+        var grid = el('div', 'pgrid');
+        grid.innerHTML = items.map(function (it) { return '<div class="pcell">' + chartPrice(it, 430, 210, { mini: true, paths: pathsOf(it.key) }) + '</div>'; }).join('');
+        body.appendChild(grid);
+        body.appendChild(el('div', 'cap', 'Every commodity in dollars per tonne (coconut oil, cocoa, coffee and fishmeal likewise per tonne), World Bank Pink Sheet, nominal, ordered by food-security weight. The dashed line is the month the event began; the thin coloured lines are what the same commodity did after the onset of 1982, 1997, 2015 and 2023, scaled to this event’s onset price and drawn to two years ahead. Click a commodity above for the full chart.'));
+      } else {
+        var itA = items.filter(function (x) { return x.key === pk2; })[0] || items[0], serA = itA.series || {}, nA = (serA.months || []).length, PA = pathsOf(itA.key);
+        plot(body, function (w, h) { return chartPrice(itA, w, h, { paths: PA }); });
+        var kA = el('div', 'kpis');
+        kA.innerHTML = '<div class="kpi"><div class="kn">' + esc(itA.name) + ' · ' + esc(itA.date) + '</div><div class="kv">' + fnum(itA.value, itA.value > 100 ? 0 : 2, false) + '<small> ' + esc(itA.unit.replace(/[()]/g, '')) + '</small></div><div class="km">month ' + fnum(itA.mom_pct, 1) + ' %, year ' + fnum(itA.yoy_pct, 1) + ' %' + (fin(itA.since_onset_pct) ? ', since the event began ' + fnum(itA.since_onset_pct, 1) + ' %' : '') + '</div>' + kmeta(null, 'World Bank Pink Sheet', itA.date) + '</div>' +
+          (PA && itA.onset && fin(itA.value) ? '<div class="kpi"><div class="kn">where the past events went</div><div class="kv" style="font-size:14px">' + Object.keys(PA.analogs).sort().map(function (y) { var r = PA.analogs[y], k12 = 6 + 12, k24 = 6 + 24, b0 = (itA.series.values || [])[(itA.series.months || []).indexOf(itA.onset)]; return y + ': ' + (fin(r.values[k12]) && b0 ? fnum(b0 * r.values[k12] / 100, 0, false) : '…') + ' at +12, ' + (fin(r.values[k24]) && b0 ? fnum(b0 * r.values[k24] / 100, 0, false) : '…') + ' at +24'; }).join(' · ') + '</div><div class="km">months after the onset, in today’s dollars through the onset price</div>' + kmeta(null, 'Pink Sheet, our onset dates', itA.date) + '</div>' : '') +
+          '<div class="kpi"><div class="kn">' + term('foodweight', 'food-security weight') + '</div><div class="kv">' + (itA.weight || 1) + '<small> of 5</small></div><div class="km">' + esc(itA.weight_basis || '') + '</div>' + kmeta(null, CM.weight_src || '', itA.date) + '</div>';
+        body.appendChild(kA);
+        body.appendChild(el('div', 'cap', '<strong>' + esc(itA.name) + ':</strong> ' + esc(itA.why) + ' The bold line is the World Bank Pink Sheet monthly price in ' + esc(itA.unit.replace(/[()]/g, '')) + ' over the last ' + (nA > 48 ? 'five years' : Math.round(nA / 12) + ' years') + ', nominal dollars, no inflation adjustment; the shaded part is since the event began. The thin lines carry the same commodity along its path after the past onsets, scaled to this onset price, two years ahead: a hint of the range, not a forecast. The same paths in percentages are on the “Since onset” tab.'));
+      }
     } else if (k === 'goods' && CM) {
       /* ТОВАРЫ ПОИМЁННО. Индекс FAO — одно число на всю еду; Эль-Ниньо бьёт по пальмовому
          маслу, рису и рыбной муке, и по каждому своим путём. Владелец 06.09: сортировка по
@@ -3194,7 +3213,8 @@
     if (k === 'hovmoller') {
       var HV = S.HV || {}, hm = S.sub.hovMetric || 'anom100', ha = S.sub.hovAnalog == null ? '1997' : S.sub.hovAnalog;
       var row1 = el('div', 'seg sub');
-      [['anom100', 'anomaly at 100 m'], ['d20_anom', 'thermocline depth']].forEach(function (o) { var b = el('button', hm === o[0] ? 'on' : '', o[1]); b.type = 'button'; b.onclick = function () { S.sub.hovMetric = o[0]; render(); }; row1.appendChild(b); });
+      [['anom100', 'anomaly at 100 m'], ['d20_anom', 'thermocline depth']].forEach(function (o) { var b = el('button', (hm === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.hovMetric = o[0]; render(); }; row1.appendChild(b); });
+      row1.appendChild(el('span', 'seg-gap', ''));
       [['', 'this event alone']].concat(Object.keys(HV.analogs || {}).sort().map(function (y) { return [y, 'beside ' + y]; })).forEach(function (o) { var b = el('button', ha === o[0] ? 'on' : '', o[1]); b.type = 'button'; b.onclick = function () { S.sub.hovAnalog = o[0]; render(); }; row1.appendChild(b); });
       body.appendChild(row1);
       plot(body, function (w, h) { return chartHovmoller(HV, w, h, { metric: hm, analog: ha || null }); });
@@ -3981,31 +4001,52 @@
     return s + '</svg>';
   }
 
-  /* ЦЕНЫ В АБСОЛЮТНЫХ ЧИСЛАХ (владелец 07.09: «привык видеть в абсолютных ценах»). Один товар —
-     одна линия за пять лет в долларах за тонну, начало события отмечено; никаких процентов. */
-  function chartPrice(c, W, H) {
-    var ser = c.series || {}, m = ser.months || [], v = ser.values || [], n = m.length;
-    if (n < 2) return svgOpen(W, H) + '<text x="20" y="40">no series</text></svg>';
-    var Lp = 56, R = 16, Tp = 26, B = 26, pw = W - Lp - R, ph = H - Tp - B;
-    var vv = v.filter(fin), vmin = Math.min.apply(null, vv), vmax = Math.max.apply(null, vv), pad = (vmax - vmin) * .12 || 1;
-    vmin = Math.max(0, vmin - pad); vmax += pad * 1.6;
-    var X = function (i) { return Lp + i / (n - 1) * pw; }, Y = function (x) { return Tp + (vmax - x) / (vmax - vmin) * ph; };
-    var s = svgOpen(W, H) + hatchDefs() + '<text class="tt" x="' + Lp + '" y="15">' + fitText(esc(c.name + ', ' + c.unit.replace(/[()]/g, '') + ', monthly, ' + m[0] + ' → ' + m[n - 1]), W, 12) + '</text>';
-    var step = niceStep(vmax - vmin, Math.max(3, Math.floor(ph / 26)));
-    for (var g = Math.ceil(vmin / step) * step; g < vmax; g += step) s += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".6"/><text x="' + (Lp - 5) + '" y="' + (Y(g) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9">' + fnum(g, g < 10 ? 1 : 0, false) + '</text>';
-    for (var i = 0; i < n; i++) if (m[i].slice(5) === '01' || (n <= 24 && m[i].slice(5) === '07')) s += '<line x1="' + X(i).toFixed(1) + '" y1="' + Tp + '" x2="' + X(i).toFixed(1) + '" y2="' + (Tp + ph) + '" style="stroke:var(--grid)" stroke-width=".5"/><text x="' + X(i).toFixed(1) + '" y="' + (H - 9) + '" text-anchor="middle" font-size="9">' + m[i].slice(0, 4) + '</text>';
-    // год назад и пять лет: тонкие уровни для глаза
-    var lo = v.indexOf(Math.min.apply(null, vv)), hiI = v.indexOf(Math.max.apply(null, vv));
-    var io = c.onset ? m.indexOf(c.onset) : -1;
-    if (io >= 0) {
-      s += '<rect x="' + X(io).toFixed(1) + '" y="' + Tp + '" width="' + (X(n - 1) - X(io)).toFixed(1) + '" height="' + ph + '" style="fill:var(--nino)" opacity=".07"/>';
-      s += '<line x1="' + X(io).toFixed(1) + '" y1="' + Tp + '" x2="' + X(io).toFixed(1) + '" y2="' + (Tp + ph) + '" style="stroke:var(--ochre)" stroke-dasharray="5 3" stroke-width="1.2"/><text x="' + (X(io) + (X(io) > W - 130 ? -4 : 4)).toFixed(1) + '" y="' + (Tp + 11) + '" font-size="9" text-anchor="' + (X(io) > W - 130 ? 'end' : 'start') + '" style="fill:var(--ochre)">event began ' + esc(c.onset) + '</text>';
+  /* ЦЕНЫ В АБСОЛЮТНЫХ ЧИСЛАХ (владелец 07.09: «привык видеть в абсолютных ценах», затем «сравнение
+     с нашими годами и следующий год тоже»). Один товар — линия в долларах за тонну за пять лет,
+     начало события полосой; тонкие линии — те же месяцы после начала прошлых событий, переведённые
+     в сегодняшние доллары через цену месяца начала (в процентах они лежат на вкладке Since onset).
+     Ось времени тянется до +24 месяцев от начала: видно, куда шли цены и на следующий год. */
+  function chartPrice(c, W, H, opts) {
+    opts = opts || {};
+    var mini = !!opts.mini, P = opts.paths || null;
+    var ser = c.series || {}, m = (ser.months || []).slice(), v = (ser.values || []).slice(), nS = m.length;
+    if (nS < 2) return svgOpen(W, H) + '<text x="20" y="40">no series</text></svg>';
+    var io = c.onset ? m.indexOf(c.onset) : -1, span = P && P.span ? P.span : 24;
+    // хвост будущих месяцев до +span от начала, чтобы прошлые пути дошли до следующего года
+    if (io >= 0 && P) {
+      var ly = parseInt(m[nS - 1].slice(0, 4), 10), lm = parseInt(m[nS - 1].slice(5, 7), 10);
+      while (m.length < io + span + 1) { lm += 1; if (lm > 12) { lm = 1; ly += 1; } m.push(ly + '-' + (lm < 10 ? '0' : '') + lm); }
     }
-    s += poly(v.map(function (x, i) { return [X(i), fin(x) ? Y(x) : NaN]; }), 'var(--text)', 2.2);
-    s += '<line x1="' + Lp + '" y1="' + Y(v[hiI]).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(v[hiI]).toFixed(1) + '" style="stroke:var(--nino)" stroke-width=".8" stroke-dasharray="2 3"/><text x="' + (W - R) + '" y="' + (Y(v[hiI]) - 3).toFixed(1) + '" text-anchor="end" font-size="9" style="fill:var(--nino)">five-year high ' + fnum(v[hiI], v[hiI] > 100 ? 0 : 2, false) + ' · ' + m[hiI] + '</text>';
-    s += '<line x1="' + Lp + '" y1="' + Y(v[lo]).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(v[lo]).toFixed(1) + '" style="stroke:var(--nina)" stroke-width=".8" stroke-dasharray="2 3"/><text x="' + (W - R) + '" y="' + (Y(v[lo]) + 10).toFixed(1) + '" text-anchor="end" font-size="9" style="fill:var(--nina)">low ' + fnum(v[lo], v[lo] > 100 ? 0 : 2, false) + ' · ' + m[lo] + '</text>';
-    if (n > 13 && fin(v[n - 13])) s += '<circle cx="' + X(n - 13).toFixed(1) + '" cy="' + Y(v[n - 13]).toFixed(1) + '" r="3" fill="none" style="stroke:var(--text)" stroke-width="1.2"/><text x="' + X(n - 13).toFixed(1) + '" y="' + (Y(v[n - 13]) - 7).toFixed(1) + '" text-anchor="middle" font-size="9">a year ago ' + fnum(v[n - 13], v[n - 13] > 100 ? 0 : 2, false) + '</text>';
-    s += nowDot(X(n - 1), Y(v[n - 1]), 'var(--text)', 4) + '<text x="' + (X(n - 1) - 6).toFixed(1) + '" y="' + (Y(v[n - 1]) - 8).toFixed(1) + '" text-anchor="end" font-size="10" font-weight="600">' + fnum(v[n - 1], v[n - 1] > 100 ? 0 : 2, false) + '</text>';
+    var n = m.length, base = io >= 0 ? v[io] : null;
+    var an = P && base ? Object.keys(P.analogs || {}).sort().map(function (y) {
+      var r = P.analogs[y], from = r.from != null ? r.from : -6;
+      return { y: y, pts: r.values.map(function (pv, k) { var i = io + from + k; return [i, fin(pv) && i >= 0 && i < n ? base * pv / 100 : NaN]; }) };
+    }) : [];
+    var Lp = mini ? 44 : 56, R = mini ? 10 : 16, Tp = mini ? 20 : 26, B = mini ? 18 : 26, pw = W - Lp - R, ph = H - Tp - B;
+    var vv = v.filter(fin); an.forEach(function (a) { a.pts.forEach(function (q) { if (fin(q[1])) vv.push(q[1]); }); });
+    var vmin = Math.min.apply(null, vv), vmax = Math.max.apply(null, vv), pad = (vmax - vmin) * .12 || 1;
+    vmin = Math.max(0, vmin - pad); vmax += pad * (mini ? 1.2 : 1.6);
+    var X = function (i) { return Lp + i / (n - 1) * pw; }, Y = function (x) { return Tp + (vmax - x) / (vmax - vmin) * ph; };
+    var unit = (c.unit || '').replace(/[()]/g, '');
+    var s = svgOpen(W, H) + hatchDefs() + '<text class="tt" x="' + Lp + '" y="' + (mini ? 12 : 15) + '" font-size="' + (mini ? 11 : 12) + '"' + (mini ? ' font-weight="600"' : '') + '>' + fitText(esc(mini ? c.name.replace(/,.*$/, '') + ', ' + unit : c.name + ', ' + unit + ', monthly, ' + m[0] + ' → ' + m[nS - 1]), W, mini ? 11 : 12) + '</text>';
+    var step = niceStep(vmax - vmin, Math.max(3, Math.floor(ph / (mini ? 30 : 26))));
+    for (var g = Math.ceil(vmin / step) * step; g < vmax; g += step) s += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".6"/><text x="' + (Lp - 5) + '" y="' + (Y(g) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9">' + fnum(g, g < 10 ? 1 : 0, false) + '</text>';
+    for (var i = 0; i < n; i++) if (m[i].slice(5) === '01') s += '<line x1="' + X(i).toFixed(1) + '" y1="' + Tp + '" x2="' + X(i).toFixed(1) + '" y2="' + (Tp + ph) + '" style="stroke:var(--grid)" stroke-width=".5"/><text x="' + X(i).toFixed(1) + '" y="' + (H - (mini ? 5 : 9)) + '" text-anchor="middle" font-size="9">' + m[i].slice(0, 4) + '</text>';
+    if (io >= 0) {
+      s += '<rect x="' + X(io).toFixed(1) + '" y="' + Tp + '" width="' + (X(nS - 1) - X(io)).toFixed(1) + '" height="' + ph + '" style="fill:var(--nino)" opacity=".07"/>';
+      if (n > nS) s += '<rect x="' + X(nS - 1).toFixed(1) + '" y="' + Tp + '" width="' + (X(n - 1) - X(nS - 1)).toFixed(1) + '" height="' + ph + '" style="fill:var(--ink)" opacity=".035"/>' + (mini ? '' : '<text x="' + (X(n - 1) - 4).toFixed(1) + '" y="' + (Tp + ph - 6) + '" text-anchor="end" font-size="9" style="fill:var(--soft)">ahead: where the past events went, in today’s dollars</text>');
+      s += '<line x1="' + X(io).toFixed(1) + '" y1="' + Tp + '" x2="' + X(io).toFixed(1) + '" y2="' + (Tp + ph) + '" style="stroke:var(--ochre)" stroke-dasharray="5 3" stroke-width="1.2"/>' + (mini ? '' : '<text x="' + (X(io) + (X(io) > W - 130 ? -4 : 4)).toFixed(1) + '" y="' + (Tp + 11) + '" font-size="9" text-anchor="' + (X(io) > W - 130 ? 'end' : 'start') + '" style="fill:var(--ochre)">event began ' + esc(c.onset) + '</text>');
+    }
+    an.forEach(function (a) { s += segs(a.pts.map(function (q) { return [X(q[0]), fin(q[1]) ? Y(q[1]) : NaN]; }), 'var(--a' + a.y + ')', mini ? 1.1 : 1.5, pickOp(a.y, 1)); });
+    s += poly(v.map(function (x, i) { return [X(i), fin(x) ? Y(x) : NaN]; }), 'var(--text)', mini ? 1.8 : 2.4, pickOp('now', 1));
+    var lo = v.indexOf(Math.min.apply(null, v.filter(fin))), hiI = v.indexOf(Math.max.apply(null, v.filter(fin)));
+    if (!mini) {
+      s += '<line x1="' + Lp + '" y1="' + Y(v[hiI]).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(v[hiI]).toFixed(1) + '" style="stroke:var(--nino)" stroke-width=".8" stroke-dasharray="2 3"/><text x="' + (W - R) + '" y="' + (Y(v[hiI]) - 3).toFixed(1) + '" text-anchor="end" font-size="9" style="fill:var(--nino)">five-year high ' + fnum(v[hiI], v[hiI] > 100 ? 0 : 2, false) + ' · ' + m[hiI] + '</text>';
+      s += '<line x1="' + Lp + '" y1="' + Y(v[lo]).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(v[lo]).toFixed(1) + '" style="stroke:var(--nina)" stroke-width=".8" stroke-dasharray="2 3"/><text x="' + (W - R) + '" y="' + (Y(v[lo]) + 10).toFixed(1) + '" text-anchor="end" font-size="9" style="fill:var(--nina)">low ' + fnum(v[lo], v[lo] > 100 ? 0 : 2, false) + ' · ' + m[lo] + '</text>';
+      if (nS > 13 && fin(v[nS - 13])) s += '<circle cx="' + X(nS - 13).toFixed(1) + '" cy="' + Y(v[nS - 13]).toFixed(1) + '" r="3" fill="none" style="stroke:var(--text)" stroke-width="1.2"/><text x="' + X(nS - 13).toFixed(1) + '" y="' + (Y(v[nS - 13]) - 7).toFixed(1) + '" text-anchor="middle" font-size="9">a year ago ' + fnum(v[nS - 13], v[nS - 13] > 100 ? 0 : 2, false) + '</text>';
+    }
+    s += nowDot(X(nS - 1), Y(v[nS - 1]), 'var(--text)', mini ? 3 : 4) + '<text x="' + (X(nS - 1) - 6).toFixed(1) + '" y="' + (Y(v[nS - 1]) - 8).toFixed(1) + '" text-anchor="end" font-size="' + (mini ? 9 : 10) + '" font-weight="600">' + fnum(v[nS - 1], v[nS - 1] > 100 ? 0 : 2, false) + '</text>';
+    if (an.length && !mini) s += legendAt([['now', 'var(--text)', 2.4, '', 'now']].concat(an.map(function (a) { return [a.y + ' (' + P.analogs[a.y].onset + ')', 'var(--a' + a.y + ')', 1.5, '', a.y]; })), Lp + 8, Tp + 14);
     return s + '</svg>';
   }
 
@@ -4041,7 +4082,7 @@
     var rng = document.createElement('input'); rng.type = 'range'; rng.min = 0; rng.max = n - 1; rng.value = S.animI; rng.style.cssText = 'flex:1;min-width:120px;max-width:360px;align-self:center';
     var lab = el('span', 'mono', SC.months[S.animI]); lab.style.cssText = 'align-self:center;font-size:12px;min-width:56px';
     rng.oninput = function () { animStop(); bPlay.textContent = '▶ play'; bPlay.className = ''; S.animI = +rng.value; lab.textContent = SC.months[S.animI]; S.pw = 0; redrawPlot(); };
-    row.appendChild(rng); row.appendChild(lab);
+    row.appendChild(rng); row.appendChild(lab); row.appendChild(el('span', 'seg-gap', ''));
     [['', 'this event alone']].concat(Object.keys((S.HV || {}).analogs || {}).sort().map(function (y) { return [y, 'beside ' + y]; })).forEach(function (o) { var b = el('button', ha === o[0] ? 'on' : '', o[1]); b.type = 'button'; b.onclick = function () { animStop(); S.sub.animAnalog = o[0]; render(); }; row.appendChild(b); });
     body.appendChild(row);
     plot(body, function (w, h) {
@@ -4086,7 +4127,7 @@
         }
       });
       var legs = (o.series || []).map(function (q, k) { return [q.name, q.color || 'var(--text)', q.w || 1.4, q.dash || '', q.key || q.name]; });
-      if (legs.length > 1 && !S._tight) s += legendAt(legs, Lp + 8, Tp + 12);
+      if (legs.length > 1 && !S._tight) s += legendAt(legs, W - RC - 150, Tp + 12);   // под кнопкой legend, а не слева
     });
     return s + '</svg>';
   }
@@ -4110,8 +4151,8 @@
       if (M.gdelt && (M.gdelt.values || []).length) items.push({ title: 'GDELT: share of all monitored world news mentioning El Niño, %', dates: M.gdelt.dates, series: [{ name: '% of news', values: M.gdelt.values, color: 'var(--nina)' }] });
       plot(body, function (w, h) { return chartDaysPanels(items, w, h); });
       var kp = el('div', 'kpis');
-      kp.innerHTML = '<div class="kpi"><div class="kn">languages</div><div class="kv" style="font-size:15px">' + langs.map(function (l) { return esc(l.name) + ' ' + l.n; }).join(' · ') + '</div><div class="km">articles now in each feed</div>' + kmeta(null, 'Google News RSS', (M.built || '').slice(0, 10)) + '</div>' +
-        '<div class="kpi"><div class="kn">who publishes most</div><div class="kv" style="font-size:15px">' + (M.top_sources || []).slice(0, 8).map(function (t) { return esc(t.source) + ' ' + t.n; }).join(' · ') + '</div><div class="km">across all feeds, duplicates removed</div>' + kmeta(null, 'Google News, Bing News', (M.built || '').slice(0, 10)) + '</div>' +
+      kp.innerHTML = '<div class="kpi"><div class="kn">languages</div><div class="kv" style="font-size:12px;line-height:1.5">' + langs.map(function (l) { return (l.url ? '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.name) + '</a>' : esc(l.name)) + ' ' + l.n; }).join(' · ') + '</div><div class="km">articles now in each feed</div>' + kmeta(null, 'Google News RSS', (M.built || '').slice(0, 10)) + '</div>' +
+        '<div class="kpi"><div class="kn">who publishes most</div><div class="kv" style="font-size:12px;line-height:1.5">' + (M.top_sources || []).slice(0, 8).map(function (t) { return (t.url ? '<a href="' + esc(t.url) + '" target="_blank" rel="noopener">' + esc(t.source) + '</a>' : esc(t.source)) + ' ' + t.n; }).join(' · ') + '</div><div class="km">across all feeds, duplicates removed</div>' + kmeta(null, 'Google News, Bing News', (M.built || '').slice(0, 10)) + '</div>' +
         (wk.en ? '<div class="kpi"><div class="kn">Wikipedia, English</div><div class="kv">' + wk.en.last7_per_day + '<small> views a day</small></div><div class="km">this week, against ' + wk.en.base_per_day + ' a day before</div>' + kmeta(null, 'Wikimedia pageviews', (M.built || '').slice(0, 10)) + '</div>' : '');
       body.appendChild(kp);
       body.appendChild(el('div', 'cap', esc(M.summary || '') + ' ' + esc(M.note || '')));
@@ -4123,14 +4164,16 @@
       var list = arts.filter(function (a) { return lf === 'all' || a.lang === lf; }).slice(0, 120);
       var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
       wrap.innerHTML = '<table class="e"><thead><tr><th>date</th><th>language</th><th>source</th><th>headline</th></tr></thead><tbody>' +
-        list.map(function (a) { return '<tr><td>' + esc(a.date || '') + '</td><td>' + esc(a.lang) + '</td><td>' + esc(a.source || '') + '</td><td class="act"><a href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.title) + '</a></td></tr>'; }).join('') + '</tbody></table>';
+        list.map(function (a) { return '<tr><td style="white-space:nowrap">' + esc(a.date || '') + '</td><td>' + esc(a.lang) + '</td><td>' + esc(a.source || '') + '</td><td class="act"><a href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.title) + '</a></td></tr>'; }).join('') + '</tbody></table>';
       body.appendChild(wrap);
       body.appendChild(el('div', 'cap', 'Headlines as written by the publishers, newest first, duplicates removed; a link goes to the publisher through Google News or Bing News. Not our words and not a source of numbers.'));
     } else {
       var g = el('div', 'gloss'), off = M.official || {};
-      g.innerHTML = Object.keys(off).map(function (key) { var o = off[key]; return '<div class="gl-i"><b>' + esc(o.label) + (o.enso_only ? '' : ' (latest posts, none about ENSO right now)') + '</b><ul>' + o.items.map(function (x) { return '<li><a href="' + esc(x.url) + '" target="_blank" rel="noopener">' + esc(x.title) + '</a> <span class="s">' + esc(x.date || '') + '</span></li>'; }).join('') + '</ul></div>'; }).join('') || '<div class="note">No official feed answered.</div>';
+      var withE = Object.keys(off).filter(function (key) { return (off[key].items || []).length; }), without = Object.keys(off).filter(function (key) { return !(off[key].items || []).length; });
+      g.innerHTML = withE.map(function (key) { var o = off[key]; return '<div class="gl-i"><b>' + esc(o.label) + '</b> <span class="s">' + o.items.length + ' of the latest ' + (o.n_all || o.items.length) + ' posts mention El Niño</span><ul>' + o.items.map(function (x) { return '<li><a href="' + esc(x.url) + '" target="_blank" rel="noopener">' + esc(x.title) + '</a> <span class="s">' + esc(x.date || '') + '</span></li>'; }).join('') + '</ul></div>'; }).join('') +
+        (without.length ? '<div class="gl-i"><b>Nothing about El Niño in the latest posts</b><ul>' + without.map(function (key) { var o = off[key]; return '<li><a href="' + esc(o.url || '#') + '" target="_blank" rel="noopener">' + esc(o.label) + '</a> <span class="s">' + (o.n_all || 0) + ' posts checked</span></li>'; }).join('') + '</ul></div>' : '') || '<div class="note">No official feed answered.</div>';
       body.appendChild(g);
-      body.appendChild(el('div', 'cap', 'Forecast centres with an open feed. NOAA CPC publishes its ENSO discussion on the second Thursday of the month and BoM its wrap-up fortnightly; neither has a feed we can read, see ' + vLink('the release calendar', 'how', 'calendar') + '.'));
+      body.appendChild(el('div', 'cap', 'Agencies and forecast centres with an open feed, only the posts that mention El Niño or ENSO; feeds with nothing on the subject are listed at the end so the silence is visible too. NOAA CPC publishes its ENSO discussion on the second Thursday of the month and BoM its wrap-up fortnightly; neither has a feed we can read, see ' + vLink('the release calendar', 'how', 'calendar') + '.'));
     }
   }
 
@@ -4286,7 +4329,7 @@
        (владелец 06.09). Меняем страницей истории: браузерная «назад» возвращает на обзор.
        Первую запись при загрузке по-прежнему только правим, чтобы не плодить пустой шаг. */
     try {
-      if (S._hashInit) history.pushState(null, '', h);
+      if (S._hashInit) { history.pushState(null, '', h); S._navN = (S._navN || 0) + 1; }
       else { history.replaceState(null, '', h); S._hashInit = 1; }
     } catch (e) { /* file: без истории */ }
   }
@@ -4561,7 +4604,7 @@
       };
       readHash();
       buildMeta(); initDock(); render();
-      window.addEventListener('hashchange', function () { readHash(); render(); });
+      window.addEventListener('hashchange', function () { S._navN = (S._navN || 0) + 1; readHash(); render(); });   // адрес сменил браузер: шаг в истории уже есть
       var ro = new ResizeObserver(function () { redrawPlot(); });
       ro.observe($('stage'));
       var t = null;

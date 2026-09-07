@@ -225,7 +225,18 @@
 
   /* ── сцена ───────────────────────────────────────────────────────────────── */
   .stage{display:flex;flex-direction:column;min-height:0;min-width:0}
-  .stage-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px 4px;flex-shrink:0}
+  /* Заголовок сцены — своя строка, подменю всегда под ним: раньше подменю вставало рядом с
+     коротким заголовком и прыгало вниз у длинного (владелец 07.09, Ocean). */
+  .stage-head{display:flex;flex-direction:column;align-items:stretch;gap:5px;padding:8px 12px 4px;flex-shrink:0}
+  .stage-top{display:flex;align-items:flex-start;gap:10px}
+  .back-go.bright{margin-left:auto;color:var(--ochre);border-color:var(--ochre);font-weight:600;background:color-mix(in srgb, var(--ochre) 10%, var(--surface))}
+  .back-go.bright:hover{background:var(--ochre);color:var(--surface)}
+  /* независимые переключатели (метрика Ховмёллера, «all» у цен): прямоугольные и другого цвета, отдельно от списка */
+  .seg button.sq{border-radius:5px;border-color:var(--cyan);color:var(--cyan)}
+  .seg button.sq.on{background:var(--cyan);border-color:var(--cyan);color:var(--surface)}
+  .seg-gap{width:10px;border-left:1px solid var(--hair);margin:2px 2px}
+  .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px}
+  .pcell svg{width:100%;height:auto;display:block}
   /* Заголовок сцены и переключатели: если заголовку остаётся меньше 320 пикселей, он
      уезжает на свою строку целиком — иначе он вставал колонкой в три-четыре этажа и съедал
      высоту графика (поймано на 1280×720). */
@@ -665,8 +676,8 @@
     .dock{height:auto;min-height:0;padding:6px 10px}
     .p-meta{font-size:9.5px;gap:2px 10px;flex-wrap:wrap;justify-content:flex-start}
     .p-title{display:none}
-    .stage-head{flex-direction:column;align-items:flex-start;gap:6px}
-    .stage-h{font-size:15px;flex:none;width:100%}
+    .stage-head{gap:6px}
+    .stage-h{font-size:15px}
     /* НИЧЕГО НЕ ЕЗДИТ ВБОК. Сцена прокручивалась горизонтально (518 пикселей в 366), потому
        что ряд кирпичей стоял в две колонки и не влезал. По вертикали листать нормально, а
        вбок — нет: половина числа за краем экрана читается как ошибка вёрстки. */

@@ -51,7 +51,16 @@ EDITIONS = {
 }
 WIKI = {"en": "El_Niño", "es": "El_Niño", "ar": "النينيو", "ru": "Эль-Ниньо", "fr": "El_Niño", "pt": "El_Niño",
         "id": "El_Niño", "zh": "厄尔尼诺现象", "de": "El_Niño"}
-RSS = {"iri": ("IRI Columbia, news", "https://iri.columbia.edu/feed/")}
+# Ленты центров и агентств, которые открываются без ключа (проверено 07.09; NOAA CPC, BoM, WMO, ECMWF,
+# Met Office ленты не отдают). Показываем только записи про ENSO; остальное считаем, но не показываем.
+RSS = {
+    "iri": ("IRI Columbia, news", "https://iri.columbia.edu/feed/"),
+    "noaa": ("NOAA, news releases", "https://www.noaa.gov/rss.xml"),
+    "climategov": ("NOAA Climate.gov, features and the ENSO blog", "https://www.climate.gov/rss.xml"),
+    "nasa_earth": ("NASA Earth, news", "https://www.nasa.gov/earth/feed/"),
+    "copernicus": ("Copernicus Climate Change Service, news", "https://climate.copernicus.eu/rss.xml"),
+    "reliefweb": ("ReliefWeb, humanitarian updates mentioning El Niño", "https://www.reliefweb.int/updates/rss.xml?search=el+nino"),
+}
 DAYS_WIKI = 90
 
 
@@ -139,8 +148,10 @@ def gdelt_volume():
 
 def official(url):
     items = _rss(_get(url, tries=1))
-    enso = [x for x in items if re.search(r"ni[nñ]o|enso|la ni[nñ]a", x["title"], re.I)]
-    return {"items": (enso or items)[:12], "enso_only": bool(enso)}
+    enso = [x for x in items if re.search(r"ni[nñ]o|enso|la ni[nñ]a", x["title"] + " " + str(x.get("summary") or ""), re.I)]
+    if "search=el+nino" in url:                                  # лента уже отфильтрована поиском
+        enso = items
+    return {"items": enso[:12], "n_all": len(items), "enso_only": True}
 
 
 def _fmt(d8):
@@ -180,8 +191,13 @@ def build(verbose=True):
     doc["articles"] = uniq[:300]
     # 2. кто говорит: издания и языки; счёт по дням (только дни, покрытые всеми редакциями)
     by_source = Counter((a.get("source") or a.get("source_url") or "?") for a in uniq)
-    doc["top_sources"] = [{"source": s, "n": n} for s, n in by_source.most_common(20)]
-    doc["languages"] = [{"lang": l, "name": v["name"], "n": v["n"], "from": v["days"][0] if v["days"] else None}
+    # ссылки на карточках (владелец 07.09): у издателя — его свежая статья, у языка — та же выборка в Google News
+    first_url = {}
+    for a in uniq:
+        first_url.setdefault(a.get("source") or a.get("source_url") or "?", a.get("url"))
+    doc["top_sources"] = [{"source": s, "n": n, "url": first_url.get(s)} for s, n in by_source.most_common(20)]
+    doc["languages"] = [{"lang": l, "name": v["name"], "n": v["n"], "from": v["days"][0] if v["days"] else None,
+                         "url": "https://news.google.com/search?q=" + urllib.parse.quote(EDITIONS[l][0]) + "&hl=" + EDITIONS[l][1] + "&gl=" + EDITIONS[l][2] + "&ceid=" + EDITIONS[l][3]}
                         for l, v in per_lang.items()]
     by_day = Counter(a["date"] for a in uniq if a.get("date"))
     days = sorted(by_day)[-14:]
@@ -210,8 +226,8 @@ def build(verbose=True):
     doc["official"] = {}
     for key, (label, url) in RSS.items():
         r = src(f"rss_{key}", label, url, _cached(f"rss_{key}", lambda url=url: official(url)))
-        if r and r.get("items"):
-            doc["official"][key] = {"label": label, "items": r["items"], "enso_only": r.get("enso_only")}
+        if r is not None:
+            doc["official"][key] = {"label": label, "items": r.get("items") or [], "n_all": r.get("n_all", 0), "url": url}
     # сводка правилами
     parts = []
     if uniq:
