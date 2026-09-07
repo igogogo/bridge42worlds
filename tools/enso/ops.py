@@ -37,6 +37,8 @@ KIND_LABEL = {
     "mentions": "mentions feed (GDELT, Wikipedia, official feeds)",
     "hovmoller": "Hovmöller diagram (GODAS)",
     "spectral": "spectral watch: a line at 2–7 days in the daily series",
+    "regions-daily": "land points on Dynamics (ERA5, like Niño 3.4)",
+    "regions-daily": "land points on Dynamics (ERA5, like Niño 3.4)",
 }
 
 

@@ -2637,7 +2637,10 @@
   function viewTrend() {
     var D = S.D, W = D.watch, P = S.P;
     var k = sub('trend', 'sst_nino34');
-    var opts = [['sst_nino34', 'Niño 3.4'], ['sst_world', 'Ocean'], ['t2_world', 'Land+ocean'], ['index', 'Our index'], ['months', '13 months'], ['background', 'Background'], ['spectral', 'Spectral watch']];
+    /* ТОЧКИ СУШИ КАК У NIÑO 3.4 (владелец 07.09): те же кирпичи watch, данные regions-daily.json. */
+    var RD = (S.RD || {}).series || {}, RDK = Object.keys(RD);
+    var RNAME = { land_kuwait: 'Kuwait', land_europe: 'Europe', land_lima: 'Lima', land_jakarta: 'Jakarta', land_nairobi: 'Nairobi', land_delhi: 'Delhi' };
+    var opts = [['sst_nino34', 'Niño 3.4'], ['sst_world', 'Ocean'], ['t2_world', 'Land+ocean']].concat(RDK.map(function (q) { return [q, RNAME[q] || q]; })).concat([['index', 'Our index'], ['months', '13 months'], ['background', 'Background'], ['spectral', 'Spectral watch']]);
     var body = stageShell(k === 'spectral' ? ('Spectral watch: ' + esc((S.SP || {}).summary || 'no data yet')) : 'The world ocean has broken daily records for ' + W.sst_world.records.streak + ' days running, land+ocean for ' + W.t2_world.records.streak,
       opts.map(function (o) { return segBtn('trend', o[0], o[1], 'sst_nino34'); }));
     if (k === 'spectral') { viewSpectral(body); return; }
@@ -2686,19 +2689,22 @@
       body.appendChild(kb);
       body.appendChild(el('div', 'note warn', '<strong>Quoted, not measured.</strong> ' + esc(E.note)));
     } else if (k === 'months') {
-      var keys = [['sst_nino34', 'Niño 3.4'], ['sst_world', 'ocean'], ['t2_world', 'land+ocean']];
+      var keys = [['sst_nino34', 'Niño 3.4'], ['sst_world', 'ocean'], ['t2_world', 'land+ocean']].concat(RDK.map(function (q) { return [q, RNAME[q] || q]; }));
+      var WM = Object.assign({}, W, RD);
       var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
       wrap.innerHTML = '<table class="e"><thead><tr><th>month</th>' + keys.map(function (x) { return '<th colspan="2">' + x[1] + '</th>'; }).join('') + '</tr></thead><tbody>' +
         (W.sst_nino34.months13 || []).map(function (m) {
           return '<tr><td>' + MONTHS[m.m - 1] + ' ' + m.y + '</td>' + keys.map(function (x) {
-            var mm = (W[x[0]].months13 || []).filter(function (q) { return q.y === m.y && q.m === m.m; })[0];
+            var mm = ((WM[x[0]] || {}).months13 || []).filter(function (q) { return q.y === m.y && q.m === m.m; })[0];
             return mm ? '<td class="num' + (mm.rank === 1 ? ' top' : '') + '">' + fnum(mm.anom) + '</td><td class="num src">' + mm.rank + '/' + mm.of + '</td>' : '<td>—</td><td>—</td>';
           }).join('') + '</tr>';
         }).join('') + '</tbody></table>';
       body.appendChild(wrap);
-      body.appendChild(el('div', 'cap', 'Red marks a month that became the warmest of its calendar month in the whole record. The current month is incomplete.'));
+      body.appendChild(el('div', 'cap', 'Red marks a month that became the warmest of its calendar month in the whole record. The current month is incomplete. Land columns are single ERA5 grid points (2 m air), not regional means.'));
     } else {
-      var w0 = W[k];
+      var w0 = W[k] || RD[k];
+      if (!w0) { body.appendChild(el('div', 'note', 'No series for ' + esc(k) + '.')); return; }
+      var isLand = !W[k];
       // ряд сцены → показатель журнала: один и тот же кирпич обслуживает три ряда
       var JK = { sst_nino34: 'n34_daily', sst_world: 'sst_world', t2_world: 't2_world' };
       plot(body, function (w, h) { return chartRecent(w0, w, h); });
@@ -2710,6 +2716,7 @@
         '<div class="kpi"><div class="kn">records and CUSUM</div><div class="kv" style="font-size:17px">' + w0.records.streak + '<small>days in a row</small></div><div class="km">' + w0.records.last30 + ' record days of 30; ' + term('cusum', 'CUSUM') + ' ' + (w0.cusum.alarm ? 'alarm' : 'quiet') + ', ' + term('trend', 'above trend') + ' ' + fnum(w0.level30.det) + '</div>' +
         kmeta('rec_' + k) + '</div>';
       body.appendChild(kp);
+      if (isLand) body.appendChild(el('div', 'cap', esc((S.RD || {}).note || '') + ' Point ' + fnum(w0.point[0], 2, false) + '°, ' + fnum(w0.point[1], 2, false) + '°; ' + esc(w0.source) + '; built ' + esc((S.RD || {}).built || '') + '.'));
     }
   }
 
@@ -4720,10 +4727,11 @@
     get('/data/enso/planet.json').catch(function () { return {}; }),
     get('/data/enso/hovmoller.json').catch(function () { return {}; }),
     get('/data/enso/mentions.json').catch(function () { return {}; }),
-    get('/data/enso/spectral.json').catch(function () { return {}; })])
+    get('/data/enso/spectral.json').catch(function () { return {}; }),
+    get('/data/enso/regions-daily.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {};
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {};
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');
