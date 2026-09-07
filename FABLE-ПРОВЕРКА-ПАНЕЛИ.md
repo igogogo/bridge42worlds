@@ -81,7 +81,7 @@
 | `tools\enso\subsurface.py --hov`, `data\enso\hovmoller.json`, `sections-<год>.json` | Ховмёллер (Ocean · Heat on the move) и кадры анимации разреза (Ocean · Month by month): GODAS помесячно, аналоги 1982/1997/2015/2023 в кэше `subsurface\hov_analogs.json`; текущее окно пишется при каждом `godas()` |
 | `tools\enso\spectral.py`, `data\enso\spectral.json`, `data\enso\spectral\` | спектральный сторож (Dynamics · Spectral watch): линия на 2…7 сутках в 24 дневных рядах за 30 дней против красного шума, истории и наших годов; «signal» только при 99.9 % или гребёнке, 3 обновления подряд, 99-й процентиль; 1–2 линии 99 % всегда есть случайно |
 | `tools\enso\regions_daily.py`, `data\enso\regions-daily.json` | точки суши на Dynamics тем же кирпичом `watch.series_watch` (ERA5 из склада сторожа); точка сетки, не среднее по региону |
-| `tools\enso\light_daily.ps1` | ежедневная обёртка планировщика `b42_enso_light` (09:30): light → planet → mentions → при high полный прогон без выкладки → `publish.py --fresh` |
+| `tools\enso\light_daily.ps1` | обёртка лёгкого прогона: light → planet → mentions → spectral → regions_daily → при high полный прогон без выкладки → `publish.py --fresh`. С 07.09 задача планировщика `b42_enso_light` ОТКЛЮЧЕНА: запускать только по слову владельца, не чаще раза в день; полный прогон с моделью — по решению в диалоге после взгляда на Ops · sources |
 | `tools\enso\watch.py` | ряды, риски 1–11 и их тексты; `_next_year_risks` |
 | `tools\enso\air.py`, `subsurface.py`, `wind.py`, `gulf.py`, `background.py` | риски своих блоков (`risks()`), тексты товаров (`EL_NINO_LINK`), справочник Залива (`WINTER`, `IMPORTS`) |
 | `tools\enso\alerts.py`, `food.py`, `models.py`, `refresh.py::new_block_alerts` | тревоги и их тексты |
@@ -255,6 +255,14 @@ python review.py --model claude-fable-5-1 --findings 3 --edits 5 --note "две 
 держит их как журнал проверок и отдаёт разработчикам вместе с выкладкой. В файле, помимо находок и
 правок, таблица изменений по файлам для ревью диффа, что запускалось и когда, открытые вопросы.
 
+## 7а. Порядок прогонов с 07.09
+
+1. Лёгкий прогон только по слову владельца, не чаще раза в день: `powershell -File tools\enso\light_daily.ps1`.
+2. После него открыть Ops · sources и fresh layer: какие источники обновились, есть ли триггеры.
+3. Полный прогон с разбором (`refresh.py`, при необходимости `--links`) — только по решению
+   владельца в диалоге, затем проверка по этому заданию, `review.py`, `publish.py --yes`.
+4. Планировщик ничего не запускает сам (`b42_enso_light` выключена; включить: `schtasks /Change /TN b42_enso_light /ENABLE`).
+
 ## 8. Уже найдено и починено 06.09 (не искать заново)
 
 - Вердикт: «per day» у 14-дневного изменения. Дайджест и промпт исправлены.
@@ -288,6 +296,11 @@ python review.py --model claude-fable-5-1 --findings 3 --edits 5 --note "две 
 - `publish.py` отправляет `enso.html` и `js/enso.js` вместе с данными: код панели и данные
   связаны (ключи по id, поправки, рекорды буёв, вес товаров).
 
+- 07.09 (вечер): спектральный сторож (Dynamics · Spectral watch, `spectral.py`), регионы суши
+  боксами ERA5 (`regions_daily.py`, Dynamics и Regions), State/Risks во весь экран, заголовок
+  сцены в одну строку, подпись прилипает к низу, цены с путями прошлых событий и лог-пучком,
+  анимация недель на карте. Проверять там: сторож обязан писать «expected by chance» рядом с
+  числом линий; регион на Regions берётся по полю `region` в regions-daily.json.
 - 07.09: вкладка Mentions (лента упоминаний в девяти языках, внимание по дням, Википедия,
   центры прогноза); Ocean · Heat on the move (Ховмёллер: аномалия на ~95 м и глубина изотермы
   20 °C по долготе, это событие рядом с 1982/1997/2015/2023); Ocean · Month by month (анимация
