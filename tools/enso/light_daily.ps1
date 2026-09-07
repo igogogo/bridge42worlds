@@ -39,6 +39,12 @@ Say "=== land points on Dynamics (regions_daily.py)"
 Say "=== rain (precip.py)"
 & $py -u precip.py 2>&1 | Out-File $log -Append -Encoding utf8
 
+# СПУТНИК, СЫРЫЕ ГРАНУЛЫ: внешний сборщик C:\CL\radiance пишет radiance.json сам (владелец 07.09:
+# «они сами будут обновлять, мы просто берём результат»). Берём копию, если файл полный:
+# в нём есть детекторы и ряды за несколько лет; частичный (в середине их пересборки) не берём.
+Say "=== radiance.json from the external collector"
+& $py -u radiance_take.py 2>&1 | Out-File $log -Append -Encoding utf8
+
 $fresh = $null
 try { $fresh = Get-Content "$root\data\enso\fresh.json" -Raw -Encoding utf8 | ConvertFrom-Json } catch { Say "fresh.json unreadable: $_" }
 if ($fresh -and $fresh.needs_assessment) {

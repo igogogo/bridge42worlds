@@ -546,9 +546,10 @@
    "def": "Everything above in one JSON, plus a compact copy of the previous update for the change arrows.",
    "why": "The site is not rebuilt: updating the panel is updating this file.",
    "in": [
-    "t_risks",
+    "c_rad",
+    "t_bg",
     "t_core",
-    "t_bg"
+    "t_risks"
    ],
    "code": "refresh.main"
   },
@@ -602,6 +603,42 @@
     "o_verdict"
    ],
    "code": "enso.html, js/enso.js"
+  },
+  {
+   "id": "s_n21",
+   "layer": "src",
+   "name": "NOAA-21 CrIS + ATMS granules (NODD S3)",
+   "sub": "level-1 radiances, anonymous bucket noaa-nesdis-n21-pds, ~40 min behind",
+   "cadence": "every orbit; we read two boxes, day and night",
+   "url": "https://noaa-nesdis-n21-pds.s3.amazonaws.com/",
+   "src_keys": [],
+   "jkey": null,
+   "def": "Calibrated infrared spectra (CrIS, 2223 channels, we read the long-wave band) and microwave brightness temperatures (ATMS, 22 channels) straight from the granules; nothing closer to the instrument exists in usable form.",
+   "why": "The first measurement on this panel made by us from raw data rather than taken as somebody's product."
+  },
+  {
+   "id": "s_usgs",
+   "layer": "src",
+   "name": "USGS earthquake catalogue; GFZ Kp/Ap, sunspots, F10.7",
+   "sub": "side series of the same collector",
+   "cadence": "daily",
+   "url": "https://earthquake.usgs.gov/fdsnws/event/1/",
+   "src_keys": [],
+   "jkey": null,
+   "def": "Events M ≥ 4.5 by Pacific-rim zone since 2000; solar and geomagnetic daily indices since 1932.",
+   "why": "Kept beside the climate series so the question is answered rather than asked; no physical link to El Niño is claimed."
+  },
+  {
+   "id": "c_rad",
+   "layer": "collect",
+   "name": "C:\\CL\\radiance (external module)",
+   "sub": "orbit windows from file names, HTTP-Range reads of HDF5, box means; writes radiance.json",
+   "in": [
+    "s_n21",
+    "s_usgs"
+   ],
+   "def": "Finds the granules crossing each box from orbit timing, reads only the long-wave band by HTTP Range, aggregates day × box × node × channel; keeps the granule ids for every row so any number can be recomputed.",
+   "why": "Run and updated by its own author; the panel only copies the result file when it is complete."
   }
  ]
 }
