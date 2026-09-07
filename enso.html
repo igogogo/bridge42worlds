@@ -544,7 +544,7 @@
   .ov-tile .ov-p svg text.tt{display:none}
   /* карта на весь экран: поле занимает почти всю высоту (владелец 06.09) */
   /* Кнопка возврата на обзор (владелец 06.09) */
-  .back-go{align-self:center;margin-bottom:0;font-family:var(--mono);font-size:11px;padding:2px 9px;border-radius:999px;
+  .back-go{align-self:center;margin-bottom:0;white-space:nowrap;font-family:var(--mono);font-size:11px;padding:2px 9px;border-radius:999px;
     border:1px solid var(--hair);background:var(--surface);color:var(--soft);cursor:pointer}
   .back-go:hover{color:var(--ochre);border-color:var(--ochre)}
   .stage.full .plot{min-height:calc(100vh - 210px)}
@@ -717,7 +717,11 @@
     .p-meta{font-size:9.5px;gap:2px 10px;flex-wrap:wrap;justify-content:flex-start}
     .p-title{display:none}
     .stage-head{gap:6px}
-    .stage-h{font-size:15px}
+    /* На телефоне подменю и так на своей строке, а длинный заголовок в одну строку не влезает
+       ни при каком кегле — пусть переносится целиком, чем обрывается (владелец 07.09). */
+    .stage-h{font-size:15px;white-space:normal;overflow:visible}
+    /* Липкая подпись на телефоне закрывала низ графика: там она просто идёт следом. */
+    .stage-body.scroll > .cap:last-child{position:static;border-top:0;padding-top:2px}
     /* НИЧЕГО НЕ ЕЗДИТ ВБОК. Сцена прокручивалась горизонтально (518 пикселей в 366), потому
        что ряд кирпичей стоял в две колонки и не влезал. По вертикали листать нормально, а
        вбок — нет: половина числа за краем экрана читается как ошибка вёрстки. */
@@ -830,7 +834,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=7307bfcb7d"></script>
+<script src="/js/enso.js?v=7ac99ba429"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>

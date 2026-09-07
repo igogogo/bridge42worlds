@@ -1917,12 +1917,13 @@
       top.appendChild(b);
     }
     /* ⛶ у любой сцены, справа от back (владелец 07.09) */
-    var fb = el('button', 'back-go bright', S.full ? '✕ full screen' : '⛶'); fb.type = 'button'; fb.title = S.full ? 'back to three columns (Esc)' : 'this scene full screen';
+    var narrowFb = window.matchMedia('(max-width:700px)').matches;
+    var fb = el('button', 'back-go bright', S.full ? (narrowFb ? '✕' : '✕ full screen') : '⛶'); fb.type = 'button'; fb.title = S.full ? 'back to three columns (Esc)' : 'this scene full screen';
     if (!(S._back && S.view !== 'overview') && !(S._navN > 0)) fb.style.marginLeft = 'auto';
     fb.onclick = function () { S.full = !S.full; render(); };
     top.appendChild(fb);
     head.appendChild(top);
-    requestAnimationFrame(fitStageTitle);
+    requestAnimationFrame(fitStageTitle); setTimeout(fitStageTitle, 120);
     if (segs2 && segs2.length) {
       var seg = el('div', 'seg');
       segs2.forEach(function (b) {
@@ -2011,6 +2012,25 @@
     }
     thin(bottom, 'x'); thin(left, 'y');
     [].forEach.call(svg.querySelectorAll('text'), function (t) { t.style.fontSize = '8px'; });
+    /* ПУСТЫЕ ПОЛЯ СЛЕВА И СПРАВА (владелец 07.09: «много места пропадает, график должен идти
+       по полной ширине с учётом подписей оси»). Поля закладывались под подписи и легенду,
+       которых в плитке больше нет. Вместо правки двадцати сборщиков подрезаем окно картинки
+       по тому, что в ней действительно нарисовано: viewBox = рамка содержимого, и рисунок
+       сам растягивается на всю плитку. */
+    try {
+      var bb = svg.getBBox();
+      if (bb.width > 20 && bb.height > 10) {
+        svg.setAttribute('viewBox', (bb.x - 2).toFixed(1) + ' ' + (bb.y - 2).toFixed(1) + ' ' +
+          (bb.width + 4).toFixed(1) + ' ' + (bb.height + 4).toFixed(1));
+        /* Тянем по обеим осям только ряды и сетки: у карты искажались бы очертания суши,
+           поэтому географию (много многоугольников) оставляем в своих пропорциях. */
+        var geo = svg.querySelectorAll('polygon').length > 3;
+        svg.setAttribute('preserveAspectRatio', geo ? 'xMidYMid meet' : 'none');
+        [].forEach.call(svg.querySelectorAll('text'), function (t) {
+          t.style.fontSize = (8 * bb.width / (W || bb.width)).toFixed(1) + 'px';   // кегль обратно к 8 на экране
+        });
+      }
+    } catch (e) { /* картинка ещё не в документе — оставляем как есть */ }
   }
 
   function fitSvgTitles(host, tight) {
@@ -4390,9 +4410,14 @@
   function fitStageTitle() {
     var h = document.querySelector('.stage-h'); if (!h) return;
     h.style.fontSize = '';
+    if (window.matchMedia('(max-width:900px)').matches) return;   // на телефоне заголовок переносится, а не ужимается
+    /* На телефоне заголовок обрезался: замер шёл до того, как колонка получила ширину, и
+       нижний предел кегля был великоват (владелец 07.09). Меряем ещё раз кадром позже и
+       по изменению ширины окна, вниз пускаем до 9 пикселей. */
     var px = parseFloat(getComputedStyle(h).fontSize) || 18, guard = 0;
-    while (h.scrollWidth > h.clientWidth + 1 && px > 10.5 && guard++ < 24) { px -= 0.5; h.style.fontSize = px + 'px'; }
+    while (h.scrollWidth > h.clientWidth + 1 && px > 9 && guard++ < 32) { px -= 0.5; h.style.fontSize = px + 'px'; }
   }
+  window.addEventListener('resize', function () { fitStageTitle(); });
 
   /* ОСАДКИ (владелец 07.09: «нет источников по осадкам? бери всё что есть»). Данные precip.json:
      регионы — ERA5 по боксам (суммы за 30/90 дней против нормы и всех лет), планета — GPCP месячный.
