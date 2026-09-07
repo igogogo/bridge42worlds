@@ -4129,13 +4129,13 @@
     var all = []; rows.forEach(function (r) { r.vals.forEach(function (x) { if (fin(x)) all.push(x); }); });
     /* Шкала по 95-му процентилю: один пик какао в 400 % сплющивал остальные одиннадцать
        линий в полосу; что выше — обрезается, и об этом сказано в заголовке. */
-    all.sort(function (a, b) { return a - b; });
-    var vmin = all[0], vmax = all[Math.min(all.length - 1, Math.floor(all.length * .95))], pad = (vmax - vmin) * .1 || 5, clipped = all[all.length - 1] > vmax;
-    vmin -= pad; vmax += pad * 1.6;
-    var X = function (i) { return Lp + i / (n - 1) * pw; }, Y = function (x) { return Tp + Math.max(-4, (vmax - x) / (vmax - vmin) * ph); };
-    var s = svgOpen(W, H) + hatchDefs() + '<text class="tt" x="' + Lp + '" y="15">' + fitText('All commodities as % of their price in the onset month (' + m[io] + ' = 100), this event only' + (clipped ? '; the scale stops at ' + fnum(vmax, 0, false) + ' %, a spike above it is cut' : ''), W, 12) + '</text>';
-    var step = niceStep(vmax - vmin, Math.max(3, Math.floor(ph / 26)));
-    for (var g = Math.ceil(vmin / step) * step; g < vmax; g += step) s += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width="' + (g === 100 ? 1.4 : .6) + '"/><text x="' + (Lp - 5) + '" y="' + (Y(g) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9">' + fnum(g, 0, false) + '</text>';
+    /* ЛОГАРИФМИЧЕСКАЯ ШКАЛА (владелец 07.09: «какао упёрлось в потолок»): проценты к базе
+       естественно читаются по логарифму — вдвое вверх и вдвое вниз на одинаковом расстоянии;
+       пик какао в 400 % влезает целиком, а остальные не сплющиваются в полосу. */
+    var vmin = Math.min.apply(null, all) / 1.08, vmax = Math.max.apply(null, all) * 1.25, L0 = Math.log(vmin), L1 = Math.log(vmax);
+    var X = function (i) { return Lp + i / (n - 1) * pw; }, Y = function (x) { return Tp + (L1 - Math.log(x)) / (L1 - L0) * ph; };
+    var s = svgOpen(W, H) + hatchDefs() + '<text class="tt" x="' + Lp + '" y="15">' + fitText('All commodities as % of their price in the onset month (' + m[io] + ' = 100), this event only; log scale', W, 12) + '</text>';
+    [30, 40, 50, 60, 70, 80, 90, 100, 120, 150, 200, 250, 300, 400, 500].forEach(function (g) { if (g > vmin && g < vmax) s += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width="' + (g === 100 ? 1.4 : .6) + '"/><text x="' + (Lp - 5) + '" y="' + (Y(g) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9">' + g + '</text>'; });
     for (var i = 0; i < n; i++) if (m[i].slice(5) === '01') s += '<line x1="' + X(i).toFixed(1) + '" y1="' + Tp + '" x2="' + X(i).toFixed(1) + '" y2="' + (Tp + ph) + '" style="stroke:var(--grid)" stroke-width=".5"/><text x="' + X(i).toFixed(1) + '" y="' + (H - 9) + '" text-anchor="middle" font-size="9">' + m[i].slice(0, 4) + '</text>';
     s += '<rect x="' + X(io).toFixed(1) + '" y="' + Tp + '" width="' + (X(n - 1) - X(io)).toFixed(1) + '" height="' + ph + '" style="fill:var(--nino)" opacity=".07"/>';
     s += '<line x1="' + X(io).toFixed(1) + '" y1="' + Tp + '" x2="' + X(io).toFixed(1) + '" y2="' + (Tp + ph) + '" style="stroke:var(--ochre)" stroke-dasharray="5 3" stroke-width="1.2"/><text x="' + (X(io) + 4).toFixed(1) + '" y="' + (Tp + 11) + '" font-size="9" style="fill:var(--ochre)">event began ' + esc(m[io]) + '</text>';
