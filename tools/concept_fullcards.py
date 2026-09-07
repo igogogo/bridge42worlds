@@ -32,7 +32,7 @@ import sys
 import time
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -77,8 +77,23 @@ Output ONLY the JSON array."""
 
 
 def cheap_window(now=None):
-    """Дешёвое окно DeepSeek: 16:30-00:30 UTC, скидка 50%."""
+    """Дешёвое окно DeepSeek: будни 16:30-00:30 UTC и ВСЕ выходные целиком.
+
+    С 23.08.2026 DeepSeek считает выходные (субботу и воскресенье по Пекину) дешёвыми
+    круглосуточно — владелец прислал их уведомление 07.09. До этой правки семь наших
+    инструментов отказывались работать в субботу днём, хотя платить пришлось бы по
+    скидке: окно было только «16:30-00:30 UTC».
+
+    Граница выходных считается ПО ПЕКИНУ (UTC+8), а не по нашему часовому поясу:
+    суббота там начинается в пятницу 16:00 UTC и кончается в воскресенье 16:00 UTC.
+
+    Функция одна на все инструменты (её импортируют formula_anatomy, bc_run,
+    night_run, group_names, cards_translate_ru, unit_systems_seed): правило про деньги
+    должно жить в одном месте, иначе следующее изменение тарифа найдут не везде.
+    """
     now = now or datetime.now(timezone.utc)
+    if (now + timedelta(hours=8)).weekday() >= 5:      # суббота-воскресенье по Пекину
+        return True
     m = now.hour * 60 + now.minute
     return m >= 16 * 60 + 30 or m < 30
 
