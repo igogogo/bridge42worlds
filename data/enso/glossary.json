@@ -330,6 +330,18 @@
    "def": "A hand-set score from 1 to 5 for each commodity in the price table: 5 for the staples that carry about a fifth of the world's calories each (wheat, rice), 4 for sugar, maize and palm oil, 3 for soybean oil and the fertilisers that set the next sowing, 2 for fish meal (feed), 1 for niche and income crops (coconut oil, coffee, cocoa). The basis is the share of world dietary energy in the FAO food balance sheets and the place in the food chain.",
    "why": "A 30 % move in wheat and a 30 % move in coconut oil are not the same news. The weight orders the table and the alerts: a large yearly move in a staple raises an alert, the same move in a niche crop only shows in the table.",
    "src": "FAOSTAT Food Balance Sheets; our own scoring in tools/enso/air.py (FOOD_WEIGHT)"
+  },
+  "fresh": {
+   "name": "Fresh, not yet assessed",
+   "def": "Data that arrived after the last assessment. A light run pulls every source and applies the same rules, but does not call the model, write a snapshot or touch the verdict; its result is kept apart as the fresh layer and drawn with a hollow pulsing dot.",
+   "why": "Sources move daily, assessments every few days. The fresh layer shows what has come in since, and its triggers say whether it deserves a new assessment: a new record or SHOUT, a daily value outside the assessed forecast band, a new weekly or monthly release, a changed risk level, the risk index moving by three points or more.",
+   "src": "tools/enso/fresh.py (thresholds at the top of the file); the Ops tab lists the triggers"
+  },
+  "ops": {
+   "name": "Runs and sources",
+   "def": "The service register of the panel: every run (full update, light run, links, mooring records, publish, review mark) with its start, duration and outcome, and every source with its date range, last update and any error.",
+   "why": "Written at the end of each run, not live. It answers the question a maintainer asks first: what ran, when, did it finish, and which source is behind.",
+   "src": "tools/enso/ops.py → data/enso/ops.json and runs.json"
   }
  }
 }
