@@ -1906,6 +1906,36 @@
     return c;
   }
 
+  /* ЛЕНТА ГЛАВНЫХ KPI ПОД ВКЛАДКАМИ (владелец 08.09: «главные KPI, которые сильно изменились,
+     в ряд: просто цифра с названием и стрелкой вверху; на стрелочку — историю»). Источник —
+     журнал (journal.json), тот же, что у стрелок на плашках: значение последней записи,
+     изменение к предыдущей. Порядок — по важности; сначала те, что изменились. */
+  var STRIP_KEYS = ['n34_weekly', 'n34_daily', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
+  var STRIP_NAME = { n34_weekly: 'Niño 3.4 weekly', n34_daily: 'Niño 3.4 daily', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
+  function buildStrip() {
+    var host = $('kstrip'); if (!host) return;
+    var items = [];
+    STRIP_KEYS.forEach(function (k) {
+      var r = jrec(k), e = r ? (r.entries || []) : []; if (!e.length) return;
+      var last = e[e.length - 1], prev = e.length > 1 ? e[e.length - 2] : null;
+      if (typeof last.v !== 'number') return;
+      var dv = prev && typeof prev.v === 'number' ? last.v - prev.v : 0;
+      items.push({ k: k, r: r, last: last, prev: prev, dv: dv });
+    });
+    var changed = items.filter(function (x) { return x.dv; }), still = items.filter(function (x) { return !x.dv; });
+    var show = changed.concat(still).slice(0, 8);
+    if (!show.length) { host.hidden = true; return; }
+    host.hidden = false;
+    host.innerHTML = '<span class="ks-h" data-src="' + esc(JSON.stringify({ name: 'Main indicators', def: 'The value of the last reading and its change against the previous one, from the panel journal; the ones that moved come first. Click any to see its history.' })) + '">KPI</span>' +
+      show.map(function (x) {
+        var dg = x.r.digits, u = x.r.unit || '', sign = x.dv > 0 && x.last.v >= 0 && dg > 0 ? '' : '';
+        var pay = { name: x.r.title, def: (x.prev ? 'Was ' + jval(x.prev.v, dg) + ' on ' + x.prev.d + ', now ' + jval(x.last.v, dg) + ' on ' + x.last.d + '.' : 'First reading we hold: ' + jval(x.last.v, dg) + ' on ' + x.last.d + '.') + ' Click for the history.', src: x.r.src, date: x.last.d };
+        return '<button type="button" class="ks" data-hist="' + esc(x.k) + '" data-src="' + esc(JSON.stringify(pay)) + '">' +
+          '<span class="ks-v">' + (x.k === 'oni' || /nino|n34|sst_world|wind|mjo/.test(x.k) && x.last.v > 0 ? '+' : '') + jval(x.last.v, dg) + (u ? '<small>' + esc(u) + '</small>' : '') + '</span>' +
+          '<span class="ks-n">' + esc(STRIP_NAME[x.k] || x.r.title) + '</span>' +
+          '<span class="ks-d ' + jsign(x.dv) + '">' + jarrow(x.dv) + (x.dv ? ' ' + (x.dv > 0 ? '+' : '') + jval(x.dv, dg) : '0') + '</span></button>';
+      }).join('');
+  }
   function railState() {
     var D = S.D, N = D.nino34, NW = D.noaa, ONI = D.oni, sm = D.summary || {}, P = S.P;
     var col = $('railL'); col.innerHTML = '';
@@ -1920,11 +1950,11 @@
     // Подпись шкалы стоит СНАРУЖИ круга: внутри она не помещалась и обрезалась
     // (владелец 03.09: «в кружок текст не поместился, вынеси его»).
     k1.innerHTML = '<div class="gauge-row"><div class="gauge' + (idx >= 70 ? ' hot' : '') + '" data-term="riskindex" style="--v:' + idx + ';--c:' + gc + '"><div class="gv">' + idx + '</div></div>' +
-      '<div class="g-side">' + '<button type="button" class="vgo" data-view="verdict">read the verdict →</button>' + '<b>' + zone('nino34') + ' ' + fnum(NW.latest.n34a, 1) + ' °C</b>' +
+      '<div class="g-side">' + '<button type="button" class="vgo" data-view="verdict">read the verdict →</button>' + '<b>' + zone('nino34') + ' ' + fnum(NW.latest.n34a, 1) + ' °C' + jchip('n34_weekly') + '</b>' +
       /* Каждое утверждение — своей строкой и без точки в конце (владелец 07.09:
          «точки после предложений на карточках убрать, просто перенос строки»). */
       '<div class="ln">rank ' + N.all_years_rank + ' of all years on the same 30 days</div>' +
-      '<div class="ln">' + ab('oni', 'ONI') + ' ' + fnum(ONI.current[ls]) + ' ' + ab('seasons', ls) + '</div>' +
+      '<div class="ln">' + ab('oni', 'ONI') + ' ' + fnum(ONI.current[ls]) + ' ' + ab('seasons', ls) + jchip('oni') + '</div>' +
       '' + kmeta('risk_index') + freshLine() +
       '<div class="cgo" data-go="now" data-gosub="analogs">see where we are \u2192</div></div></div>';
     box.appendChild(k1);
@@ -2282,9 +2312,9 @@
       return out + '<div class="jsrc"><span>' + mark(src0 || '') + (date0 ? ' · ' + dt(date0) : '') + '</span>' + dateBadge(null, src0, date0) + '</div></div>';
     }
     var e = r.entries || [], last = e[e.length - 1], prev = e[e.length - 2], dg = r.digits;
-    if (last && prev) out += '<div class="jr">' + jdelta(last.v, prev.v, dg) + ' since ' + dt(prev.d) + '</div>';
-    else out += '<div class="jr same">first reading we hold</div>';
-    if (last && r.since_event)
+    function moved(a, b) { return typeof a === 'number' && typeof b === 'number' ? a !== b : a !== b; }
+    if (last && prev && moved(last.v, prev.v)) out += '<div class="jr">' + jdelta(last.v, prev.v, dg) + ' since ' + dt(prev.d) + '</div>';
+    if (last && r.since_event && moved(last.v, r.since_event.v))
       out += '<div class="jr">' + jdelta(last.v, r.since_event.v, dg) + ' since the event began, ' + dt(r.since_event.d) + '</div>';
     /* СТРОКА ИСТОЧНИКА — ТОЖЕ ПОДСКАЗКА, И БЕЗ ОБРЫВА. Владелец 04.09: «что там за многоточия
        в тексте, немного почётче пиши». Многоточие рисовала обрезка по ширине: длинное имя
@@ -2310,7 +2340,7 @@
     if (typeof last.v !== 'number' || typeof prev.v !== 'number') return '';
     var dv = last.v - prev.v;
     if (!dv) return '';
-    return ' <span class="' + jsign(dv) + '" data-src="' + esc(JSON.stringify({ name: r.title, def: 'Was ' + prev.v + ' on ' + prev.d + ', now ' + last.v + ' on ' + last.d + '. The arrow follows changes of the data, not our refreshes.', src: r.src, date: last.d })) + '">' +
+    return ' <span class="' + jsign(dv) + ' jc" data-hist="' + esc(k) + '" data-src="' + esc(JSON.stringify({ name: r.title, def: 'Was ' + prev.v + ' on ' + prev.d + ', now ' + last.v + ' on ' + last.d + '. The arrow follows changes of the data, not our refreshes. Click for the history.', src: r.src, date: last.d })) + '">' +
       jarrow(dv) + ' ' + (dv > 0 ? '+' : '') + jval(dv, r.digits) + '</span>';
   }
 
@@ -5804,7 +5834,7 @@
         render();
       };
       readHash();
-      buildMeta(); initDock(); render();
+      buildMeta(); buildStrip(); initDock(); render();
       window.addEventListener('hashchange', function () { S._navN = (S._navN || 0) + 1; readHash(); render(); });   // адрес сменил браузер: шаг в истории уже есть
       var ro = new ResizeObserver(function () { redrawPlot(); });
       ro.observe($('stage'));
