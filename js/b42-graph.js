@@ -983,6 +983,7 @@ function draw() {
        стоят на своих местах, и картинка почти не меняется (владелец 31.08: «кажется,
        работает только на силах»). Погасив тех, у кого не осталось ни одной связи, мы
        показываем скелет кадра в любом представлении. */
+    var smallFrame = frame.mode === 'set' || frame.nodes.length <= 40;
     var linked = null;
     if (view.minW > +(el('b42g-w') || {}).min || view.minW > 2) {
         linked = {};
@@ -996,10 +997,19 @@ function draw() {
     if (view.is3d) order.sort(function (a, b) { return n[a]._depth - n[b]._depth; });
     order.forEach(function (i) {
         var p = pts[i], nd = n[i];
-        var r = Math.max(2.5, nd.size * iconScale * view.zoom *
+        /* Наименьший размер в малом кадре больше: точка в два с половиной пикселя
+           теряется даже яркой, а в наборе из семи узлов каждый важен. */
+        var r = Math.max(smallFrame ? 6 : 2.5, nd.size * iconScale * view.zoom *
                               (view.is3d ? nd._depth : 1));
         var hot = i === hoverI || i === selI;
-        var dim = focusI >= 0 && !hot && !(nbr && nbr[i]);
+        /* В МАЛОМ КАДРЕ ФОНА НЕТ. Гашение до 20 % придумано для облака в четыре с
+           половиной тысячи узлов: там сосед фокуса — единственный способ что-то
+           разглядеть. Но набор, открытый по ссылке (`?set=…`), человек выбрал сам —
+           гасить в нём непричастных значит прятать ровно то, что просили показать
+           (владелец 08.09: «бледные и почти не видны, а на мини-графе видны»).
+           Поэтому в наборе и в любом небольшом кадре фокус выделяем мягко. */
+        var dim = !smallFrame && focusI >= 0 && !hot && !(nbr && nbr[i]);
+        var soft = smallFrame && focusI >= 0 && !hot && !(nbr && nbr[i]);
         if (i === selI) {
             var ph = (now - T0) / 700;
             ctx.beginPath();
@@ -1010,7 +1020,7 @@ function draw() {
         }
         /* глубина в 3D: передние ярче и больше, задние тают */
         var dp = view.is3d ? Math.max(0, Math.min(1, (nd._depth - 0.55) * 2.2)) : 1;
-        var alpha = (dim ? 0.20 : 1) * (view.is3d ? 0.12 + dp * 0.88 : 1);
+        var alpha = (dim ? 0.20 : (soft ? 0.72 : 1)) * (view.is3d ? 0.12 + dp * 0.88 : 1);
         if (linked && !linked[i] && nd.kind !== '_group' && !hot) alpha *= 0.18;
         if (view.q && !hot && String(nd.label).toLowerCase().indexOf(view.q) < 0) alpha *= 0.13;
         drawNodeIcon(p[0], p[1], r, styleOf(nd.kind, nd), alpha, hot,
@@ -1030,11 +1040,17 @@ function draw() {
         var pri = ((hot ? 1e9 : 0) + (near ? 1e6 : 0) +
                   nd.size * (1 + (nd.ni !== undefined ? deg[nd.ni] : 10) * 0.15)) *
                   (0.15 + dp * 0.85);       // передние подписи важнее задних
-        var dim = focusI >= 0 && !hot && !near;
+        /* Тот же довод, что и у гашения узлов: в малом кадре подпись не роскошь, а
+           единственный способ понять, на что смотришь. Отсев по фокусу оставляем
+           только для большого облака (владелец 08.09). */
+        var dim = !smallFrame && focusI >= 0 && !hot && !near;
         if (dim && !hot) return;
         if (view.is3d && dp < 0.22 && !hot) return;   // дальний текст молчит
+        /* В малом кадре подписаны все: семь имён не спорят за внимание, а без имени
+           узел бесполезен — читатель пришёл смотреть именно на эти понятия. */
         labels.push({i: i, x: p[0], y: p[1] + r + 11, pri: pri, hot: hot,
-                     dp: dp, big: hot || r > 12 || frame.mode === 'overview'});
+                     dp: dp, big: hot || r > 12 || smallFrame ||
+                                  frame.mode === 'overview'});
     });
     labels.sort(function (a, b) { return b.pri - a.pri; });
     var taken = [];
