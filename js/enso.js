@@ -1635,7 +1635,7 @@
       var u = '/lang/en/archive/' + esc(l.date) + '/' + esc(l.folder) + '/index.html';
       return '<p class="wk-p"><b>' + esc(l.our_title || l.title) + '</b>' + (l.oneliner ? esc(l.oneliner) : '') +
         (l.why ? '<i>' + esc(l.why) + '</i>' : '') + (l.weak ? '<i>more distant match</i>' : '') +
-        '<a href="' + u + '"' + tgt + '>read our version ↗</a> <span class="wk-num">arXiv ' + esc(l.id) + '</span></p>';
+        '<a class="wk-read" href="' + u + '"' + tgt + '>Read the adapted article →</a> <span class="wk-num">' + esc(l.id) + '</span></p>';
     }).join('');
   }
   /* Тот же slug, что в tools/enso/links.py (_aslug): менять только вместе. */
@@ -1665,14 +1665,19 @@
   function cnUrl(id) { return '/lang/' + cnLang() + '/concepts/' + encodeURIComponent(id) + '.html'; }
   function cnGraph(ids, focus) { return '/lang/' + cnLang() + '/concepts/graph.html?set=' + ids.map(encodeURIComponent).join(',') + '&focus=' + encodeURIComponent(focus || ids[0]); }
   /* Строка чипов: до семи понятий, дальше «all N» на граф; в конце одна ссылка на граф набора. */
-  function conceptsHtml(anchors, full) {
+  function conceptsHtml(anchors, full, col) {
     var cs = conceptsFor(anchors); if (!cs.length) return '';
     var show = full ? cs : cs.slice(0, 7), ids = cs.map(function (c) { return c.id; });
+    var gbtn = '<button type="button" class="cn-mg" data-ids="' + esc(ids.join(',')) + '" data-focus="' + esc(ids[0]) + '" title="these concepts as a graph, in a window over the panel">graph</button>';
+    if (col) {
+      /* Подсказка: колонкой, имя и одна строка смысла (владелец 08.09: «в аккуратную колонку»). */
+      return '<div class="cn col"><span class="cn-h">concepts</span>' +
+        show.map(function (c) { return '<a class="cn-r" href="' + cnUrl(c.id) + '" target="_blank" rel="noopener"><b>' + esc(cnName(c)) + '</b><span>' + esc(c.line || '') + '</span></a>'; }).join('') +
+        '<div class="cn-f">' + (cs.length > show.length ? '<span class="cn-more">all ' + cs.length + ' on the graph</span>' : '') + gbtn + '</div></div>';
+    }
     return '<div class="cn"><span class="cn-h">concepts</span>' +
       show.map(function (c) { return '<a class="cn-c" href="' + cnUrl(c.id) + '" target="_blank" rel="noopener" title="' + esc(c.line || '') + '">' + esc(cnName(c)) + '</a>'; }).join('') +
-      (cs.length > show.length ? '<a class="cn-c more" href="' + cnGraph(ids) + '" target="_blank" rel="noopener">all ' + cs.length + '</a>' : '') +
-      (full ? '<button type="button" class="cn-mg" data-ids="' + esc(ids.join(',')) + '" data-focus="' + esc(ids[0]) + '" title="the same concepts as a small graph right here">graph ▾</button>' : '') +
-      '<a class="cn-g" href="' + cnGraph(ids) + '" target="_blank" rel="noopener" title="open these concepts together on the graph, new tab">graph ↗</a></div>';
+      (cs.length > show.length ? '<span class="cn-c more">all ' + cs.length + ' on the graph</span>' : '') + gbtn + '</div>';
   }
   /* МИНИ-ГРАФ В КАРТОЧКЕ (второй шаг задания, владелец 08.09: «граф должен открываться
      отдельно, в конце»). Движок общий — js/b42-graph-core.js + js/b42-mini.js, тот же, что на
@@ -1685,16 +1690,33 @@
     S._miniLoad = one('/js/b42-graph-core.js').then(function () { return one('/js/b42-mini.js'); }).catch(function (e) { S._miniLoad = null; throw e; });
     return S._miniLoad;
   }
+  /* Окно графа поверх панели (владелец 08.09: «мини-граф открывать во всплывающем окошке, не
+     отдельное окно; если захочется — там кнопка перехода»). Одно окно на страницу; закрывают
+     крестик, Esc и клик мимо. Узлы и «весь граф» открываются новой вкладкой, панель остаётся. */
+  function closeGraphModal() { var m = $('cnModal'); if (m) m.remove(); }
+  function openGraphModal(ids, focus, width) {   // width — ширина карточки, из которой открыли (владелец 08.09: «в размер карточки»)
+    closeGraphModal();
+    var tip = $('tip'); if (tip) { tip.classList.remove('on', 'pin'); S.pinned = null; }
+    var m = el('div', 'cn-modal'); m.id = 'cnModal';
+    var names = ids.map(function (id) { var c = conceptsFor(Object.keys((S.CN || {}).anchors || {})).filter(function (q) { return q.id === id; })[0]; return c ? cnName(c) : id; });
+    m.innerHTML = '<div class="cn-modal-box"><div class="cn-modal-h"><b>' + ids.length + ' concepts on the graph</b><span class="cn-modal-n">' + esc(names.slice(0, 5).join(' · ')) + (names.length > 5 ? ' · …' : '') + '</span>' +
+      '<button type="button" class="x" title="close (Esc)">×</button></div>' +
+      '<div class="b42mini" data-ids="' + esc(ids.join(',')) + '" data-focus="' + esc(focus || ids[0]) + '" data-newtab="1" data-lang="' + cnLang() + '"></div>' +
+      '<div class="cn-modal-f"><span>drag a node; hover for the meaning; click to open its page in a new tab</span>' +
+      '<a class="cn-g" href="' + cnGraph(ids, focus) + '" target="_blank" rel="noopener">open the full graph ↗</a></div></div>';
+    if (width) m.querySelector('.cn-modal-box').style.width = Math.min(window.innerWidth - 24, Math.max(360, width)) + 'px';
+    document.body.appendChild(m);
+    m.addEventListener('click', function (e) { if (e.target === m || e.target.closest('.x')) closeGraphModal(); });
+    var box = m.querySelector('.b42mini');
+    miniLib().then(function () { window.B42Mini.mount(box); }).catch(function () { box.innerHTML = '<div class="note warn">The graph engine did not load; the full graph link below still works.</div>'; });
+  }
   document.addEventListener('click', function (e) {
     var b = e.target.closest && e.target.closest('.cn-mg'); if (!b) return;
-    var cn = b.closest('.cn'), next = cn.nextElementSibling;
-    if (next && next.classList.contains('cn-mini')) { next.remove(); b.classList.remove('on'); return; }
-    var wrap = el('div', 'cn-mini');
-    var box = el('div', 'b42mini'); box.setAttribute('data-ids', b.getAttribute('data-ids')); box.setAttribute('data-focus', b.getAttribute('data-focus'));
-    box.setAttribute('data-newtab', '1'); box.setAttribute('data-lang', cnLang());
-    wrap.appendChild(box); cn.parentNode.insertBefore(wrap, cn.nextSibling); b.classList.add('on');
-    miniLib().then(function () { window.B42Mini.mount(box); }).catch(function () { wrap.innerHTML = '<div class="note warn">The graph engine did not load; the full graph is one click away.</div>'; });
-  });
+    e.preventDefault(); e.stopPropagation();
+    var host = b.closest('.tip, .card, .risk, .kpi, .ov-kpi, .info-pane, .cn-box, .cn-row, .stage-body');
+    openGraphModal(b.getAttribute('data-ids').split(',').filter(Boolean), b.getAttribute('data-focus'), host ? host.getBoundingClientRect().width : 0);
+  }, true);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeGraphModal(); });
   /* Якоря сцены для ящика source/notes и подсказок на графике: блоки утверждений links.py. */
   var SCENE_ANCHORS = { now: ['block:type', 'block:peak'], risk: ['block:type', 'block:peak'], models: ['block:models'], food: ['block:food'], radiance: ['block:radiance'],
     'trend/rain': ['block:rain'], 'trend/spectral': ['block:spectral'], regions: ['block:landbox'], gulf: ['block:landbox'], air: ['block:peak'] };
@@ -1745,7 +1767,7 @@
         (l.oneliner ? '<span class="lk-one">' + esc(l.oneliner) + '</span>' : '') +
         '<span>' + esc(l.why || '') + '</span><i>' + esc(l.kind || '') +
         (l.weak ? ' · more distant match' : '') +
-        ' · <span class="wk-num">arXiv ' + esc(l.id) + '</span></i></a>';
+        ' · <span class="wk-num">' + esc(l.id) + '</span></i><em class="wk-read">Read the adapted article →</em></a>';
     }).join('') + '<div class="lk-n">Matched by meaning across the works we parsed, then checked by the model: a link means “this is what the research says about this”, not “this is the source of that number”.</div>';
   }
 
@@ -3800,12 +3822,12 @@
         /* Номер arXiv — со своей подсказкой: он ведёт в НАШ разбор, а не в архив, и это
            должно быть видно до нажатия (владелец 06.09). Ссылка на первоисточник — там же,
            отдельной строкой. */
-        var numPay = { name: 'Our version, not arXiv',
-          html: '<p>The number identifies the paper; the link opens <b>our retelling</b> in English.</p>' + card,
-          url: 'https://arxiv.org/abs/' + String(w.id).split('v')[0], src: 'arXiv ' + w.id, date: w.date };
+        var numPay = { name: 'Our adapted article',
+          html: '<p>The number identifies the paper; the link opens <b>our adapted article</b> in English, where the original is linked.</p>' + card,
+          src: 'arXiv ' + w.id, date: w.date };
         var ourUrl = '/lang/en/archive/' + esc(w.date) + '/' + esc(w.folder) + '/index.html';
         return '<div class="ref" data-src="' + esc(JSON.stringify(pay)) + '"><div class="ref-t"><a href="' + ourUrl + '"' + tgt + '>' + esc(w.title) + '</a><span class="ref-n">' + w.uses.length + ' use' + (w.uses.length > 1 ? 's' : '') + '</span></div>' +
-          '<div class="ref-d">' + esc(w.oneliner || w.orig) + '</div><div class="ref-m"><a class="wk-num" href="' + ourUrl + '"' + tgt + ' data-src="' + esc(JSON.stringify(numPay)) + '">our version · arXiv ' + esc(w.id) + '</a> · ' + esc(w.date) + ' · ' + esc(w.uses.map(function (u) { return u.at.split(':')[0]; }).filter(function (v, i, a) { return a.indexOf(v) === i; }).join(', ')) + '</div></div>';
+          '<div class="ref-d">' + esc(w.oneliner || w.orig) + '</div><div class="ref-m"><a class="wk-num" href="' + ourUrl + '"' + tgt + ' data-src="' + esc(JSON.stringify(numPay)) + '"><span class="wk-read">Read the adapted article →</span> <span class="wk-num">' + esc(w.id) + '</span></a> · ' + esc(w.date) + ' · ' + esc(w.uses.map(function (u) { return u.at.split(':')[0]; }).filter(function (v, i, a) { return a.indexOf(v) === i; }).join(', ')) + '</div></div>';
       }).join('') || '<div class="note">No works attached yet.</div>';
       body.appendChild(list);
       body.appendChild(el('div', 'cap', 'Only the papers that a model judged to belong next to a statement of this panel; the full pool is our archive of parsed works. Point at a row for where it is used and why; the link opens our version. Register built from data/enso/links.json at ' + esc(S.L.built || '') + '.'));
@@ -5179,24 +5201,21 @@
     }
     return null;
   }
+  /* Плашки: якорь облака и ключ простого объяснения; само объяснение живёт в подсказке
+     (владелец 08.09: «вопросики не обязательно, в окошке тултипа достаточно»). */
   function kpiExplain() {
     [].slice.call(document.querySelectorAll('.stage-body .kpi, .stage-body .ov-kpi')).forEach(function (card) {
       var kn = card.querySelector('.kn'); if (!kn) return;
       var kj = card.querySelector('.jsrc[data-kpi]'), tk = kn.querySelector('[data-term]');
       if (kj && conceptsFor('kpi:' + kj.getAttribute('data-kpi')).length) card.setAttribute('data-anchor', 'kpi:' + kj.getAttribute('data-kpi'));
       else if (tk && !card.getAttribute('data-anchor')) card.setAttribute('data-anchor', 'term:' + tk.getAttribute('data-term'));
-      if (kn.querySelector('.kq')) return;
-      var key = kpiKey(kn); if (!key) return;
-      var q = el('button', 'kq', '?'); q.type = 'button'; q.title = 'what this number means';
-      q.onclick = function () {
-        var open = S.sub.kpiOpen === key ? null : key; S.sub.kpiOpen = open;
-        [].slice.call(document.querySelectorAll('.stage-body .kp')).forEach(function (x) { x.remove(); });
-        [].slice.call(document.querySelectorAll('.stage-body .kq.on')).forEach(function (x) { x.classList.remove('on'); });
-        if (open) { q.classList.add('on'); card.insertBefore(el('div', 'kp', esc(KPI_PLAIN[key])), card.querySelector('.kj') || null); }
-      };
-      kn.appendChild(q);
-      if (S.sub.kpiOpen === key) { q.classList.add('on'); card.insertBefore(el('div', 'kp', esc(KPI_PLAIN[key])), card.querySelector('.kj') || null); }
+      var key = kpiKey(kn); if (key) card.setAttribute('data-plain', key);
     });
+  }
+  function kpiPlainFor(t) {
+    var card = t && t.closest ? t.closest('[data-plain]') : null;
+    var key = card && card.getAttribute('data-plain');
+    return key && KPI_PLAIN[key] ? '<div class="kp">' + esc(KPI_PLAIN[key]) + '</div>' : '';
   }
   function sceneInfoBar() {
     var view = S.view === 'gulf' ? 'regions' : (S.view === 'risk' ? 'now' : S.view), info = SCENE_INFO[view];
@@ -5585,7 +5604,8 @@
         (p.url ? ' <a href="' + esc(p.url) + '" target="_blank" rel="noopener">source ↗</a>' : '') +
         (p.lk && linksFor(p.lk).length ? ' <button type="button" class="jh tip-lk" data-lk="' + esc(p.lk) + '">' + linksFor(p.lk).length + ' work' + (linksFor(p.lk).length > 1 ? 's' : '') + ' →</button>' : '') +
         (p.src || p.date ? '<span class="s">' + srcHtml(p.src) + (p.date ? '<div>' + esc(p.date) + '</div>' : '') + '</span>' : '') +
-        conceptsHtml(tipAnchors(p));   // облако понятий строкой под источником (08.09)
+        kpiPlainFor(S.tipAnchor) +      // плашка: объяснение простыми словами в подсказке (владелец 08.09: «в окошке тултипа достаточно»)
+        conceptsHtml(tipAnchors(p), false, true);   // понятия колонкой под источником (08.09)
     }
     function place(e) {
       var pad = 14, w = tip.offsetWidth, h = tip.offsetHeight;

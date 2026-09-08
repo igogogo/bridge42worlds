@@ -261,11 +261,26 @@
   .cn-c.more{border-style:dashed;color:var(--soft)}
   .cn-mg{margin-inline-start:auto;font-family:var(--mono);font-size:10.5px;color:var(--cyan);background:transparent;border:1px solid color-mix(in srgb, var(--cyan) 55%, transparent);border-radius:999px;padding:0 8px;cursor:pointer;white-space:nowrap}
   .cn-mg:hover,.cn-mg.on{background:var(--cyan);color:var(--surface)}
-  .cn-mg + .cn-g{margin-inline-start:0}
-  .cn-mini{margin:6px 0 2px}
-  .info-pane:has(.cn-mini){max-height:none}   /* раскрытый мини-граф не прячем за прокрутку ящика */
-  .cn-mini .b42mini{margin:0;border:1px solid var(--hair);border-radius:8px;background:var(--surface);overflow:hidden}
-  .cn-mini .b42mini-note{margin:3px 0 0;font-family:var(--mono);font-size:10.5px} .cn-mini .b42mini-note a{color:var(--cyan);text-decoration:none}
+  /* понятия колонкой в подсказке */
+  .cn.col{display:block}
+  .cn.col .cn-h{display:block;margin-bottom:3px}
+  .cn-r{display:block;padding:3px 0;border-top:1px solid var(--hair-soft, var(--hair));text-decoration:none;color:var(--text)}
+  .cn-r b{display:block;font-size:11.5px;font-weight:600;line-height:1.3;font-family:var(--font-body, inherit);padding:0;margin:0}
+  .cn-r span{display:block;font-size:10.5px;color:var(--soft);line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cn-r:hover b{color:var(--cyan)}
+  .cn-f{display:flex;align-items:center;gap:8px;margin-top:5px} .cn-f .cn-mg{margin-inline-start:auto}
+  .cn-more{font-family:var(--mono);font-size:10px;color:var(--soft)}
+  /* окно графа поверх панели */
+  .cn-modal{position:fixed;inset:0;z-index:300;background:rgba(8,10,14,.55);display:flex;align-items:center;justify-content:center;padding:16px}
+  .cn-modal-box{width:min(880px,96vw);max-height:92vh;overflow:auto;background:var(--surface);border:1px solid var(--hair);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);padding:10px 12px 8px}
+  .cn-modal-h{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;position:relative;padding-inline-end:26px}
+  .cn-modal-h b{font-family:var(--font-display);font-size:14px}
+  .cn-modal-n{font-size:11px;color:var(--soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .cn-modal-h .x{position:absolute;top:-2px;inset-inline-end:0;background:none;border:0;cursor:pointer;font-size:18px;color:var(--soft)} .cn-modal-h .x:hover{color:var(--nino)}
+  .cn-modal .b42mini{margin:0;border:1px solid var(--hair);border-radius:8px;background:var(--bg, var(--surface));overflow:hidden}
+  .cn-modal .b42mini-note{display:none}
+  .cn-modal-f{display:flex;align-items:center;gap:10px;margin-top:6px;font-family:var(--mono);font-size:10.5px;color:var(--soft)}
+  .cn-modal-f .cn-g{margin-inline-start:auto}
   .cn-g{margin-inline-start:auto;font-family:var(--mono);font-size:10.5px;color:var(--cyan);text-decoration:none;white-space:nowrap}
   .cn-g:hover{text-decoration:underline}
   .tip .cn{margin-top:6px} .tip .cn-c{font-size:10.5px;padding:0 7px}
@@ -537,7 +552,7 @@
      источника не давала себя сжать, и кнопку выдавливало за край с overflow:hidden —
      она была в разметке, но нажать её было нельзя (владелец 04.09: «кнопки history
      где-то не нажимаются, например daily OISST»). */
-  .kj .jsrc span{flex:1 1 auto;min-width:0}   /* переносится целиком, без многоточия */
+  .kj .jsrc span{flex:0 1 auto;min-width:0}   /* переносится целиком, без многоточия; не тянется на пустое место строки (владелец 08.09) */
   /* HISTORY И ЗНАЧОК ДАТЫ — ОДНОЙ ПАРОЙ В ПРАВОМ НИЖНЕМ УГЛУ КАРТОЧКИ (владелец 07.09:
      «history приклей вниз вправо, рядом со значком data date, на одной оси»). Значок даты
      и раньше был приклеен к углу абсолютно, а кнопка оставалась в потоке текста — и болталась
@@ -700,8 +715,12 @@
     background:color-mix(in srgb, var(--ochre) 9%, transparent);text-decoration:none;cursor:help}
   .lk.wk-chip:hover{border-color:var(--ochre);background:color-mix(in srgb, var(--ochre) 16%, transparent)}
   .lk-i .lk-one{color:var(--text);display:block;margin:2px 0 3px}
-  .wk-num{font-family:var(--mono);border:1px solid color-mix(in srgb, var(--ochre) 35%, var(--hair));
-    border-radius:2px 6px 2px 6px;padding:0 4px}
+  .wk-num{font-family:var(--mono);font-size:9px;color:var(--soft);border:1px solid color-mix(in srgb, var(--ochre) 30%, var(--hair));
+    border-radius:2px 6px 2px 6px;padding:0 4px;opacity:.85}   /* просто номер работы, мельче (владелец 08.09) */
+  .wk-read{font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--ochre);font-style:normal;text-decoration:none;display:inline-block;margin-top:3px}
+  .lk-i em.wk-read{display:block} .lk-i:hover .wk-read{text-decoration:underline}
+  .tip .wk-p a.wk-read{color:var(--ochre)}
+  .ref .wk-num{color:var(--soft)}
   /* Модель: прямоугольная плашка холодного цвета — форма другая, чем у зоны, и цвет несёт
      класс: справляется, отстаёт, сломана. */
   .mn{display:inline-block;font-family:var(--mono);font-size:.9em;letter-spacing:.02em;
@@ -874,7 +893,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=25285350ae"></script>
+<script src="/js/enso.js?v=5e04d3dc87"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>

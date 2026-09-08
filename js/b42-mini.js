@@ -30,9 +30,8 @@ var CORE = window.B42GraphCore;
 window.B42Mini = window.B42Mini || {};
 window.B42Mini.mount = function (box) {
     if (!box || !box.dataset.ids) return;
-    CORE.data().then(function (G) { _G = G; init(box, G); wholeLink(box); });
+    CORE.data().then(function (G) { _G = G; if (box.querySelector('canvas')) return; init(box, G); wholeLink(box); });   // обход при старте мог успеть первым
 };
-if (!boxes.length) return;
 var LANG = document.documentElement.lang || 'en';
 var LANG_PAGE = LANG;   // язык страницы; коробка может задать свой через data-lang
 /* «статей» на языке страницы. Мини-граф показывает эту подпись у каждого узла
@@ -65,7 +64,7 @@ function wholeLink(box) {
 }
 
 var _G = null;
-CORE.data().then(function (G) {
+if (boxes.length) CORE.data().then(function (G) {
     _G = G;
     boxes.forEach(function (box) { init(box, G); wholeLink(box); });
 });
