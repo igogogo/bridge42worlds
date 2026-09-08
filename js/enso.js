@@ -65,7 +65,7 @@
   var SERIES_NAME = { sst_nino34: 'Niño 3.4', sst_world: 'world ocean', t2_world: 'land+ocean' };
 
   var S = {
-    legOpen: true,          // легенда развёрнута; крестик сворачивает её на всех графиках
+    legOpen: false,         // легенда свёрнута по умолчанию везде (владелец 08.09); кнопка legend в строке заголовка
     D: null, G: {}, H: [], P: null, M: {}, L: {},
     view: 'now', sub: {}, risk: null, model: null, scenario: null, pick: null, region: null,
     // Режим сравнения: '' — показываем значения, 'update' — изменение с прошлого прогона,
@@ -437,7 +437,12 @@
          легенда, там ещё куча места»). Теперь она лежит поверх графика справа сверху, на
          своей подложке, и сворачивается крестиком. */
       var rows = items.filter(function (it) { return it && it[0]; });
-      if (!S.legOpen) return legToggle(w, top, false);
+      /* ЛЕГЕНДА — СТРОКОЙ ПОД ШАПКОЙ, НЕ ПОВЕРХ ГРАФИКА (владелец 08.09: «legend подними выше,
+         одной строкой, где полный экран и back, иначе наезжает на мини-графики»). Пункты
+         запоминаем, строку собирает syncLegendBar после отрисовки; кнопка legend встаёт в
+         строку заголовка рядом с source и notes. В SVG ничего не рисуем. */
+      S._legItems = items;
+      return '';
       var maxCh = 0;
       rows.forEach(function (it) { maxCh = Math.max(maxCh, String(it[0]).length); });
       maxCh = Math.min(maxCh, 30);
@@ -1925,7 +1930,7 @@
       items.push({ k: k, r: r, last: last, prev: prev, dv: dv });
     });
     var changed = items.filter(function (x) { return x.dv; }), still = items.filter(function (x) { return !x.dv; });
-    var show = changed.concat(still).slice(0, 8);
+    var show = changed.concat(still).slice(0, 12);
     if (!show.length) { host.hidden = true; return; }
     host.hidden = false;
     host.innerHTML = '<span class="ks-h" data-src="' + esc(JSON.stringify({ name: 'Main indicators', def: 'The value of the last reading and its change against the previous one, from the panel journal; the ones that moved come first. Click any to see its history.' })) + '">KPI</span>' +
@@ -1933,9 +1938,9 @@
         var dg = x.r.digits, u = x.r.unit || '', sign = x.dv > 0 && x.last.v >= 0 && dg > 0 ? '' : '';
         var pay = { name: x.r.title, def: (x.prev ? 'Was ' + jval(x.prev.v, dg) + ' on ' + x.prev.d + ', now ' + jval(x.last.v, dg) + ' on ' + x.last.d + '.' : 'First reading we hold: ' + jval(x.last.v, dg) + ' on ' + x.last.d + '.') + ' Click for the history.', src: x.r.src, date: x.last.d };
         return '<button type="button" class="ks" data-hist="' + esc(x.k) + '" data-src="' + esc(JSON.stringify(pay)) + '">' +
-          '<span class="ks-v">' + (x.k === 'oni' || /nino|n34|sst_world|wind|mjo/.test(x.k) && x.last.v > 0 ? '+' : '') + jval(x.last.v, dg) + (u ? '<small>' + esc(u) + '</small>' : '') + '</span>' +
-          '<span class="ks-n">' + esc(STRIP_NAME[x.k] || x.r.title) + '</span>' +
-          '<span class="ks-d ' + jsign(x.dv) + '">' + jarrow(x.dv) + (x.dv ? ' ' + (x.dv > 0 ? '+' : '') + jval(x.dv, dg) : '0') + '</span></button>';
+          '<span class="ks-row"><span class="ks-v">' + (x.k === 'oni' || /nino|n34|sst_world|wind|mjo/.test(x.k) && x.last.v > 0 ? '+' : '') + jval(x.last.v, dg) + (u ? '<small>' + esc(u) + '</small>' : '') + '</span>' +
+          (x.dv ? '<span class="ks-d ' + jsign(x.dv) + '">' + jarrow(x.dv) + (x.dv > 0 ? '+' : '') + jval(x.dv, dg) + '</span>' : '') + '</span>' +
+          '<span class="ks-n">' + esc(STRIP_NAME[x.k] || x.r.title) + '</span></button>';
       }).join('');
   }
   function railState() {
@@ -2253,9 +2258,42 @@
        четырнадцать мест сборки строк — напрашиваться на опечатку (одну уже поймали), поэтому
        чиним готовую картинку: у заголовка своя примета (class="tt" на строке y="13"), и
        только он подрезается по числу знаков, которые влезают. */
+    S._legItems = null;
     p.innerHTML = String(S.draw(w, h));
     fitSvgTitles(p);                            // заголовок меряется по-настоящему, уже в документе
     if (badge) p.appendChild(badge);           // значок даты данных переживает перерисовку
+    syncLegendBar();
+  }
+  function legSwatch(it) {
+    var col = it[1] || 'var(--soft)';
+    if (it[2] === 'dot') return '<svg viewBox="0 0 24 10" width="24" height="10" aria-hidden="true"><circle cx="12" cy="5" r="4" style="fill:' + col + '"/></svg>';
+    if (it[2] === 'box') return '<svg viewBox="0 0 24 10" width="24" height="10" aria-hidden="true"><rect x="1" y="1" width="22" height="8" rx="2" style="fill:' + col + '" opacity="' + (it[3] || 1) + '"/></svg>';
+    return '<svg viewBox="0 0 24 10" width="24" height="10" aria-hidden="true"><line x1="1" y1="5" x2="23" y2="5" style="stroke:' + col + '" stroke-width="' + (it[2] || 2) + '"' + (it[3] ? ' stroke-dasharray="' + it[3] + '"' : '') + '/></svg>';
+  }
+  function syncLegendBar() {
+    var head = document.querySelector('.stage-head'), ci = head && head.querySelector('.ctl-info');
+    var old = head && head.querySelector('.leg-bar'); if (old) old.remove();
+    var items = S._legItems || [], btn = ci && ci.querySelector('.legbtn');
+    if (!items.length || !ci) { if (btn) btn.remove(); return; }
+    if (!btn) {
+      btn = el('button', 'sq legbtn', ''); btn.type = 'button';
+      btn.onclick = function () { S.legOpen = !S.legOpen; S.pw = 0; redrawPlot(); };
+      ci.appendChild(btn);
+    }
+    btn.className = 'sq legbtn' + (S.legOpen ? ' on' : ''); btn.textContent = 'legend ' + (S.legOpen ? '▴' : '▾');
+    if (!S.legOpen) return;
+    var bar = el('div', 'leg-bar');
+    items.forEach(function (it) {
+      if (!it || !it[0]) { bar.appendChild(el('span', 'leg-sep', '')); return; }
+      var c = el('span', 'leg-c' + (it[4] ? ' pick' : '') + (it[4] && S.pick === it[4] ? ' on' : ''), legSwatch(it) + esc(String(it[0])));
+      if (it[4]) c.setAttribute('data-pick', it[4]);
+      bar.appendChild(c);
+    });
+    bar.addEventListener('click', function (e) {
+      var g = e.target.closest && e.target.closest('[data-pick]'); if (!g) return;
+      var v = g.getAttribute('data-pick'); S.pick = (S.pick === v || !v) ? null : v; render();
+    });
+    head.appendChild(bar);
   }
   /* ══ ЖУРНАЛ ЗНАЧЕНИЙ НА КИРПИЧЕ ══════════════════════════════════════════════
      Владелец 04.09: «изменение данных не равно времени обновления… на каждом кирпичике
@@ -3368,6 +3406,14 @@
   /* Тепловая карта разреза: столбцы — долготы, строки — глубины; цвет — знак и величина
      аномалии на переменных темы (не «синий-красный» из палитры Matplotlib, а наши --nino и
      --nina с прозрачностью), пустые ячейки — сеточным цветом. Линия D20 поверх, если есть. */
+  /* Цвет тепла по величине: тёплое от янтарного к густо-красному, холодное от голубого к
+     синему; чем сильнее аномалия, тем краснее (владелец 08.09: «самое горячее должно быть
+     краснее»). op — доля от максимума шкалы, 0…1. */
+  function heatColor(v, op) {
+    op = Math.max(0, Math.min(1, op));
+    return v >= 0 ? 'hsl(' + Math.round(38 - 38 * op) + ',88%,' + Math.round(62 - 26 * op) + '%)'
+                  : 'hsl(' + Math.round(196 + 16 * op) + ',72%,' + Math.round(68 - 24 * op) + '%)';
+  }
   function chartSection(cfg, W, H) {
     var cols = cfg.cols, rows = cfg.rows, get = cfg.get, nC = cols.length, nR = rows.length;
     if (!nC || !nR) return svgOpen(W, H) + '<text x="20" y="40">no section</text></svg>';
@@ -3391,7 +3437,7 @@
         var geo = 'x="' + x0.toFixed(1) + '" y="' + y0.toFixed(1) + '" width="' + (cw + .5).toFixed(1) + '" height="' + (y1 - y0 + .5).toFixed(1) + '"';
         if (!fin(v)) { s += '<rect ' + geo + ' style="fill:var(--grid)" opacity=".35"/>'; continue; }
         var op = Math.min(1, Math.abs(v) / vmax);
-        s += '<rect ' + geo + ' style="fill:' + (v >= 0 ? 'var(--nino)' : 'var(--nina)') + '" opacity="' + (0.08 + 0.92 * op).toFixed(2) + '"/>';
+        s += '<rect ' + geo + ' style="fill:' + heatColor(v, op) + '" opacity="' + (0.4 + 0.6 * op).toFixed(2) + '"/>';
         // холоднее нормы — ещё и штриховкой: знак читается без цвета
         if (v < -0.25) s += '<rect ' + geo + ' fill="url(#hneg)" opacity="' + (0.3 + 0.5 * op).toFixed(2) + '"/>';
       }
@@ -3413,7 +3459,7 @@
     }
     // легенда справа
     var lx = W - Rp + 10, ly = Tp + 4;
-    var SCALE = [[vmax, 'var(--nino)', 1], [vmax / 2, 'var(--nino)', .5], [0, 'var(--grid)', .6], [-vmax / 2, 'var(--nina)', .5], [-vmax, 'var(--nina)', 1]];
+    var SCALE = [[vmax, heatColor(vmax, 1), 1], [vmax / 2, heatColor(vmax / 2, .5), .7], [0, 'var(--grid)', .6], [-vmax / 2, heatColor(-vmax / 2, .5), .7], [-vmax, heatColor(-vmax, 1), 1]];
     if (scaleLegend(SCALE.map(function (it) { return [fnum(it[0], 1) + ' °C', it[1], 'box', it[2]]; })
         .concat(cfg.d20 ? [['20 °C now', 'var(--text)', 'line']] : [])
         .concat(cfg.d20clim ? [['20 °C normal', 'var(--text)', 'line', 1]] : []))) return s + '</svg>';
@@ -4914,10 +4960,13 @@
       row = el('div', 'seg sub');
       zk.forEach(function (z) { var b = el('button', zsel === z ? 'on' : '', z.replace(/_/g, ' ')); b.type = 'button'; b.onclick = function () { S.sub.radZone = z; render(); }; row.appendChild(b); });
       row.appendChild(el('span', 'seg-gap', ''));
-      [['chart', 'chart'], ['table', 'table']].forEach(function (o) { var b = el('button', (zmode === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.radMode = o[0]; render(); }; row.appendChild(b); });
+      [['chart', 'quakes'], ['table', 'table'], ['sun', 'sun']].forEach(function (o) { var b = el('button', (zmode === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.radMode = o[0]; render(); }; row.appendChild(b); });
       nt = '<b>Quakes.</b> Events M ≥ 4.5 by Pacific-rim zone in the same calendar window, this year against every year 2000–2025. The count does not separate aftershocks, so a swarm after one large shock (37 events in one day this year) inflates the window; catalogue magnitudes are a computed product, the raw record is the IRIS seismograms.<br><b>Sun.</b> Sunspots, F10.7 and Kp from GFZ Potsdam over the same window.<br><b>Neither is El Niño physics</b> on this panel; they are side series of the same collector.<br><b>Caveats.</b> ' + esc(radCav(cav));
       INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
-      if (zmode === 'chart') {
+      if (zmode === 'sun') {
+        var sd = SO.daily_cur || {}, byS = {}; byS[cur] = {}; for (var i2 = 0; i2 < 68; i2++) byS[cur][String(i2)] = sd[String(i2)] ? sd[String(i2)].sunspot : null;
+        plot(body, function (w, h) { return chartRadSeries({ byYear: byS, cur: cur, n: 68, dayLabel: dl, zero: true, bars: true, title: 'Sunspot number per day (SILSO via GFZ), ' + cur + ' — the sun in the same window' }, w, h); });
+      } else if (zmode === 'chart') {
         var zd = (zones[zsel] || {}).daily_cur || {}, byZ = {}; byZ[cur] = {}; for (var i = 0; i < 68; i++) byZ[cur][String(i)] = zd[String(i)] || 0;
         plot(body, function (w, h) { return chartRadSeries({ byYear: byZ, cur: cur, n: 68, dayLabel: dl, zero: true, bars: true, title: 'Quakes M ≥ 4.5 per day, ' + zsel.replace(/_/g, ' ') + ', ' + cur }, w, h); });
       } else {
@@ -5037,11 +5086,12 @@
       var kinds = { nino: ['nino'], land: ['land'], moorings: ['nino'], radiance: ['radiance'], rain: ['land'] }[mode] || ['nino'];
       var polys = (G.boxes || []).filter(function (b) { return kinds.indexOf(b.kind) >= 0; });
       function val(b) { return mode === 'rain' ? b.rain_pct : b.value; }
+      var vmaxSet = 0; polys.forEach(function (b) { var v = val(b); if (fin(v) && mode !== 'rain') vmaxSet = Math.max(vmaxSet, Math.abs(v)); });
       function colr(b) {
         var v = val(b); if (!fin(v)) return 'rgba(200,200,200,.25)';
-        if (mode === 'rain') { var d = Math.max(-1, Math.min(1, (v - 100) / 100)); return d < 0 ? 'rgba(212,115,92,' + (0.25 + 0.6 * -d).toFixed(2) + ')' : 'rgba(124,155,203,' + (0.25 + 0.6 * d).toFixed(2) + ')'; }
-        if (mode === 'radiance') return 'rgba(212,115,92,' + (0.2 + Math.min(0.75, v / 30)).toFixed(2) + ')';
-        return sstColor(v) || 'rgba(200,200,200,.25)';
+        if (mode === 'rain') { var d = Math.max(-1, Math.min(1, (v - 100) / 100)); return d < 0 ? 'rgba(212,115,92,' + (0.3 + 0.6 * -d).toFixed(2) + ')' : 'rgba(124,155,203,' + (0.3 + 0.6 * d).toFixed(2) + ')'; }
+        var op = vmaxSet ? Math.abs(v) / vmaxSet : 1;
+        return heatColor(v, op).replace('hsl(', 'hsla(').replace(')', ',' + (0.55 + 0.35 * op).toFixed(2) + ')');
       }
       var g = Globe({ animateIn: false })(box)
         .width(W).height(H).backgroundColor('rgba(0,0,0,0)')
