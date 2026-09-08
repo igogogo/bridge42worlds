@@ -13,7 +13,7 @@
                блок "ru" внутри записи анатомии.
 
 Инкрементально: сделанное не повторяется (признак — наличие ru-блока).
-Дешёвое окно DeepSeek уважается; --force-peak обходит. Смета: ~700 понятий
+Пиковый тариф DeepSeek уважается (будни 01:00–04:00 и 06:00–10:00 UTC); --force-peak обходит. Смета: ~700 понятий
 × ~600 ток + 642 анатомии × ~500 ток ≈ $1-2 в дешёвое окно.
 
     python tools/cards_translate_ru.py --concepts [--force-peak]
@@ -99,7 +99,7 @@ def ask(payload, key, max_tokens=3000):
 
 def gate(force_peak):
     if not cheap_window() and not force_peak:
-        print("ПИКОВЫЙ тариф DeepSeek — дешёвое окно 19:30–03:30 Кувейта; --force-peak обойдёт.")
+        print("ПИКОВЫЙ тариф DeepSeek — дорого только будни 01:00–04:00 и 06:00–10:00 UTC; --force-peak обойдёт.")
         return False
     return True
 

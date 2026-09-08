@@ -12,9 +12,12 @@
 ТРИ КОМАНДЫ, платное отделено и охраняется:
 
   --sample N   написать N образцов на просмотр владельцу (микро-трата, ~$0.001/шт)
-  --run        все понятия без полной карточки. ПРОВЕРЯЕТ ДЕШЁВОЕ ОКНО DeepSeek:
-               скидка 50% действует 16:30–00:30 UTC (19:30–03:30 по Кувейту).
-               Вне окна отказывается; --force-peak осознанно обходит.
+  --run        все понятия без полной карточки. ПРОВЕРЯЕТ ТАРИФ DeepSeek: дорого
+               только в будни 01:00–04:00 и 06:00–10:00 UTC (04:00–07:00 и 09:00–13:00
+               по Кувейту), остальное вдвое дешевле. В пик отказывается; --force-peak
+               осознанно обходит.
+  --revector-all  то же, но и для 527 старых понятий, чей полный текст лежит в
+               английских витринах: весь реестр встаёт на одну опору (бесплатно).
   --revector   пересчитать векторы понятий с полной карточкой (bge-m3, тот же движок)
                и обновить матрицу b42-ml/data/concept-cards.f16 (бэкап рядом).
                После него переразметка: python tools/retag_hub.py --thr 0.50 --margin 0.12
@@ -76,26 +79,45 @@ Rules:
 Output ONLY the JSON array."""
 
 
+# Пиковые часы DeepSeek — единственное место, где записан тариф. Действующее правило
+# (владелец прислал 08.09): «Peak hours are 01:00-04:00 and 06:00-10:00 UTC, Monday
+# through Friday; all other hours are off-peak», off-peak вдвое дешевле.
+PEAK_UTC = ((1, 4), (6, 10))
+
+
 def cheap_window(now=None):
-    """Дешёвое окно DeepSeek: будни 16:30-00:30 UTC и ВСЕ выходные целиком.
+    """Половинный тариф DeepSeek: всё, КРОМЕ будних 01:00-04:00 и 06:00-10:00 UTC.
 
-    С 23.08.2026 DeepSeek считает выходные (субботу и воскресенье по Пекину) дешёвыми
-    круглосуточно — владелец прислал их уведомление 07.09. До этой правки семь наших
-    инструментов отказывались работать в субботу днём, хотя платить пришлось бы по
-    скидке: окно было только «16:30-00:30 UTC».
+    Прежняя редакция описывала старый прейскурант — «дёшево 16:30-00:30 UTC и выходные».
+    Переплатой это не грозило (старое окно целиком внутри нового), но запирало работу:
+    во вторник в 13:35 UTC семь инструментов отказывались считать, хотя час половинный.
+    Теперь дорого 7 часов в будни, дёшево 133 часа в неделю из 168.
 
-    Граница выходных считается ПО ПЕКИНУ (UTC+8), а не по нашему часовому поясу:
-    суббота там начинается в пятницу 16:00 UTC и кончается в воскресенье 16:00 UTC.
+    ДЕНЬ НЕДЕЛИ БЕРЁМ ПО UTC, и двусмысленности здесь нет, хотя DeepSeek живёт по Пекину:
+    все пиковые часы раньше 16:00 UTC, а Пекин это UTC+8 — прибавка восьми часов день не
+    перекатывает, поэтому пекинский и всемирный день на этих часах совпадают. Отдельного
+    правила про выходные больше не нужно: суббота и воскресенье не будни, значит дёшевы
+    целиком — ровно то, что мы отдельно чинили 23.08.
 
-    Функция одна на все инструменты (её импортируют formula_anatomy, bc_run,
-    night_run, group_names, cards_translate_ru, unit_systems_seed): правило про деньги
-    должно жить в одном месте, иначе следующее изменение тарифа найдут не везде.
+    Функция одна на все инструменты (её импортируют formula_anatomy, bc_run, night_run,
+    group_names, cards_translate_ru, unit_systems_seed): правило про деньги должно жить
+    в одном месте, иначе следующее изменение тарифа найдут не везде.
     """
     now = now or datetime.now(timezone.utc)
-    if (now + timedelta(hours=8)).weekday() >= 5:      # суббота-воскресенье по Пекину
+    if now.weekday() >= 5:                 # суббота и воскресенье — дёшево целиком
         return True
-    m = now.hour * 60 + now.minute
-    return m >= 16 * 60 + 30 or m < 30
+    h = now.hour + now.minute / 60
+    return not any(a <= h < b for a, b in PEAK_UTC)
+
+
+def peak_hint(now=None):
+    """Строка для человека: сейчас дорого или дёшево и когда сменится."""
+    now = now or datetime.now(timezone.utc)
+    if cheap_window(now):
+        return f"{now:%H:%M} UTC — половинный тариф DeepSeek"
+    h = now.hour + now.minute / 60
+    end = next(b for a, b in PEAK_UTC if a <= h < b)
+    return f"{now:%H:%M} UTC — ПИКОВЫЙ тариф, дешевеет в {end:02d}:00 UTC"
 
 
 def targets():
@@ -213,9 +235,8 @@ def write_cards(limit=None, force_peak=False):
     except ImportError:
         pass
     if limit is None and not cheap_window() and not force_peak:
-        now = datetime.now(timezone.utc)
-        print(f"сейчас {now:%H:%M} UTC — ПИКОВЫЙ тариф DeepSeek.")
-        print("дешёвое окно: 16:30–00:30 UTC (19:30–03:30 по Кувейту).")
+        print(peak_hint() + ".")
+        print("пик: будни 01:00–04:00 и 06:00–10:00 UTC, остальное — половина цены.")
         print("владелец просил не попадать в дорогой период; --force-peak обойдёт.")
         return 1
     key = env("DEEPSEEK_API_KEY")
@@ -255,12 +276,55 @@ def write_cards(limit=None, force_peak=False):
     return 0
 
 
-def revector():
-    """Вектор — от полного текста карточки. Матрица правится на месте, бэкап рядом.
+LEGACY_CHARS = 560      # ≈ медиана полной карточки (515), с запасом на границу фразы
 
-    Пересчитываются ТОЛЬКО понятия с полной карточкой: у старых вектор остаётся
-    от однострочника — их полный текст живёт в языковых витринах и в вектор не
-    входил никогда; менять им опору сейчас значило бы сдвинуть всю разметку разом.
+
+def legacy_texts():
+    """Полный текст СТАРЫХ понятий — из английских витрин, где он и лежит.
+
+    527 понятий (accretion_disk, active_galactic_nuclei, adscft_correspondence…) пришли
+    из прежних справочников тегов и законов. Развёрнутое описание у них написано давно,
+    но живёт в lang/en/data/*.json, а не в concept-fullcards.json, — и поэтому в вектор
+    не входило никогда. Берём английские витрины, а не русские: пространство построено
+    на английском, и подмешать русский текст значило бы испортить меру сходства.
+    """
+    out = {}
+    for fname in ("tags.json", "laws.json"):
+        fp = ROOT / "lang" / "en" / "data" / fname
+        if not fp.exists():
+            continue
+        try:
+            d = json.loads(fp.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        for cid_, v in d.items():
+            if not isinstance(v, dict):
+                continue
+            body = (v.get("description_popular") or "").strip()
+            # ДЛИНУ РАВНЯЕМ НА КАРТОЧКУ. Замер 08.09: у карточек медиана 515 знаков, у
+            # витрин 790 — они писались читателю, а не индексу. Первый заход брал текст
+            # витрины целиком и даже приклеивал «как работает»: вектор старых понятий
+            # становился длиннее и «центральнее» остальных, и разметка поехала не по
+            # смыслу, а по жанру — 71% статей, с явными потерями (quantum_entanglement
+            # снимался со статьи про запутывание). Берём только начало описания, где
+            # стоит определение, и режем по границе предложения.
+            if len(body) > LEGACY_CHARS:
+                cut = body[:LEGACY_CHARS]
+                dot = max(cut.rfind(". "), cut.rfind("! "), cut.rfind("? "))
+                body = cut[:dot + 1] if dot > LEGACY_CHARS // 2 else cut
+            if body:
+                out.setdefault(cid_, body.strip())
+    return out
+
+
+def revector(everyone=False):
+    """Вектор — от полного текста. Матрица правится на месте, бэкап рядом.
+
+    По умолчанию пересчитываются понятия с полной карточкой. С everyone=True к ним
+    добавляются старые, чей текст лежит в английских витринах: тогда ВЕСЬ реестр стоит
+    на одной опоре. Раньше этого не делали намеренно — «менять им опору значило бы
+    сдвинуть всю разметку разом», — и сдвиг действительно происходит: разметка после
+    этого пересобирается заново (retag_hub.py) и её надо смотреть числами, а не на веру.
     """
     import numpy as np
     done = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
@@ -275,10 +339,18 @@ def revector():
     if not bak.exists():
         V.tofile(bak)
         print(f"бэкап матрицы: {bak.name}")
-    rows = [(i, cid) for i, cid in enumerate(cids) if cid in done]
-    print(f"пересчитываю {len(rows)} векторов от полного текста…")
-    texts = [f"{cid.replace('_', ' ')}: {done[cid]['description_popular'][:1500]}"
-             for _, cid in rows]
+    legacy = legacy_texts() if everyone else {}
+    src = {}
+    for cid in cids:
+        if cid in done:
+            src[cid] = done[cid].get("description_popular") or ""
+        elif cid in legacy:
+            src[cid] = legacy[cid]
+    rows = [(i, cid) for i, cid in enumerate(cids) if src.get(cid)]
+    n_leg = sum(1 for _, cid in rows if cid not in done)
+    print(f"пересчитываю {len(rows)} векторов от полного текста"
+          + (f" (из них {n_leg} старых — по тексту витрин)" if n_leg else "") + "…")
+    texts = [f"{cid.replace('_', ' ')}: {src[cid][:1500]}" for _, cid in rows]
     vecs = embed(texts)
     for (i, _), v in zip(rows, vecs):
         a = np.asarray(v, dtype=np.float32)
@@ -296,8 +368,13 @@ def main():
     ap.add_argument("--sample", type=int, metavar="N", help="N образцов на просмотр")
     ap.add_argument("--run", action="store_true", help="все, только в дешёвое окно")
     ap.add_argument("--force-peak", action="store_true")
+    ap.add_argument("--revector-all", action="store_true",
+                    dest="revector_all",
+                    help="вектор ВСЕХ понятий: у старых — по тексту английских витрин")
     ap.add_argument("--revector", action="store_true")
     a = ap.parse_args()
+    if a.revector_all:
+        return revector(everyone=True)
     if a.revector:
         return revector()
     if a.sample:

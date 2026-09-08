@@ -78,6 +78,26 @@ def stamp_asset():
     print(f"версия скрипта поднята: {cur.group(1) if cur else '—'} → {h} (иначе на сайте остался бы прежний код)")
 
 
+def push_index(no_index, why):
+    """Пересобрать вектор панели после выкладки. Не роняет выкладку, если не вышло.
+
+    Индекс — наша половина чат-исследования: риски, тревоги, показатели, термины, сцены,
+    вердикт, лента, регионы. Он обязан отставать от панели не больше чем на одну выкладку,
+    иначе бот отвечает по вчерашней панели и ссылается на сцены, которых уже нет.
+    """
+    if no_index:
+        print("вектор панели: пропущен по ключу --no-index")
+        return
+    print(f"\nвектор панели ({why}): пересобираю…")
+    rc = subprocess.run([sys.executable, "research_index.py", "--push"],
+                        cwd=str(HERE),
+                        env=dict(os.environ, PYTHONIOENCODING="utf-8")).returncode
+    # Мягко: сайт уже выложен, и откатывать его из-за индекса неправильно. Но молчать
+    # тоже нельзя — иначе отставание индекса заметит только читатель бота.
+    print("вектор панели:", "обновлён" if rc == 0 else f"НЕ обновлён (код {rc}) — "
+          "починить: python tools/enso/research_index.py --push")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--yes", action="store_true")
@@ -86,6 +106,8 @@ def main():
     ap.add_argument("--cached", action="store_true", help="без сети, из последних удачных копий")
     ap.add_argument("--refresh", action="store_true",
                     help="сперва обновить данные (иначе выкладывается уже посчитанное)")
+    ap.add_argument("--no-index", action="store_true",
+                    help="не пересобирать вектор панели (по умолчанию пересобирается)")
     ap.add_argument("--fresh", action="store_true",
                     help="выложить только свежий слой и журнал прогонов (после лёгкого прогона)")
     a = ap.parse_args()
@@ -98,6 +120,8 @@ def main():
         rc = subprocess.run([sys.executable, "cloudflare/deploy_r2.py", "--only", *FRESH_FILES], cwd=str(ROOT), env=env).returncode
         run.finish("ok" if rc == 0 else "failed", files=len(FRESH_FILES))
         print("выкладка свежего слоя:", "ок" if rc == 0 else f"код {rc}")
+        if rc == 0:
+            push_index(a.no_index, "лёгкая выкладка")
         return rc
 
     if a.refresh:
@@ -131,6 +155,8 @@ def main():
     run.finish("ok" if rc == 0 else "failed", stamp=cur.get("stamp"), files=len(FILES),
                reviewed=bool((s.get("review") or {}).get("stamp") == cur.get("stamp")))
     print("выкладка:", "ок" if rc == 0 else f"код {rc}")
+    if rc == 0:
+        push_index(a.no_index, "полная выкладка")
     return rc
 
 

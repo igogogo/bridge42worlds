@@ -203,6 +203,29 @@ def units():
             continue
         out.append({"id": "region:" + rid, "kind": "region", "title": r.get("name") or rid,
                     "text": txt[:900], "hash": "#regions/table", "anchor": "region:" + rid})
+    # НАШ СОБСТВЕННЫЙ СТАТИСТИЧЕСКИЙ СЛОЙ. 34 разбора рядов: тренд, смена режима, инерция,
+    # байесовский пик, скорость волны. Слой считается у нас (tools/enso/stats_layer.py),
+    # у каждого разбора есть окно, метод и число — это самое проверяемое, что есть на
+    # панели, и до 08.09 индекс его не знал вовсе.
+    for it in (load("stats.json").get("items") or []):
+        sid = it.get("id") or ""
+        if not sid:
+            continue
+        bits = [it.get("title") or ""]
+        for k in (it.get("kpis") or [])[:6]:
+            val = " ".join(str(x) for x in (k.get("name"), k.get("value"), k.get("unit")) if x)
+            bits.append(val + (". " + k["plain"] if k.get("plain") else ""))
+        if it.get("method"):
+            bits.append("Method: " + str(it["method"]))
+        if it.get("window"):
+            bits.append("Window: " + " to ".join(str(x) for x in it["window"]))
+        scene = it.get("scene") or "overview"
+        out.append({
+            "id": "stat:" + sid, "kind": "stat",
+            "title": it.get("title") or sid,
+            "text": " ".join(b for b in bits if b)[:1200],
+            "hash": "#" + scene, "anchor": "stat:" + sid,
+        })
     # Пустые и слишком короткие выбрасываем: вектор от трёх слов ищет случайное.
     return [u for u in out if len((u.get("text") or "").strip()) >= 40]
 

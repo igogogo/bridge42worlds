@@ -76,7 +76,7 @@ def run(step, cmd, timeout=28800, cwd=None):
 def wait_cheap():
     if cheap_window():
         return
-    log("ждём дешёвое окно DeepSeek (19:30 по Кувейту)…")
+    log("ждём конца пикового тарифа DeepSeek (будни 01:00–04:00 и 06:00–10:00 UTC)…")
     while not cheap_window():
         time.sleep(600)
     log("окно открылось")
