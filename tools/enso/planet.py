@@ -54,6 +54,11 @@ SOURCES = {
     "hadcrut": ("https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/analysis/diagnostics/"
                 "HadCRUT.5.0.2.0.analysis.summary_series.global.annual.csv",
                 "Met Office HadCRUT5, global annual anomaly against 1961–1990", "https://www.metoffice.gov.uk/hadobs/hadcrut5/"),
+    # суша отдельно: тот же формат файла, что у HadCRUT5 (владелец 08.09). Суточного ряда по суше
+    # у climatereanalyzer нет (проверено 08.09: land/ocean варианты t2 отдают 302), поэтому годовой.
+    "crutem": ("https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.2.0/diagnostics/"
+               "CRUTEM.5.0.2.0.summary_series.global.annual.csv",
+               "Met Office CRUTEM5, land air temperature, global annual anomaly against 1961–1990", "https://www.metoffice.gov.uk/hadobs/crutem5/"),
     "slr": ("https://www.star.nesdis.noaa.gov/socd/lsa/SeaLevelRise/slr/slr_sla_gbl_free_ref_90.csv",
             "NOAA STAR, global mean sea level from satellite altimetry",
             "https://www.star.nesdis.noaa.gov/socd/lsa/SeaLevelRise/LSA_SLR_timeseries_global.php"),
@@ -294,6 +299,11 @@ def build(verbose=True):
             doc["temperature"]["hadcrut"] = hadcrut_annual(got["hadcrut"])
     except Exception as e:                                       # noqa: BLE001
         doc["errors"].append(f"hadcrut: {str(e)[:120]}")
+    try:
+        if got.get("crutem"):
+            doc["temperature"]["crutem"] = hadcrut_annual(got["crutem"])
+    except Exception as e:                                       # noqa: BLE001
+        doc["errors"].append(f"crutem: {str(e)[:120]}")
     for key, label in (("t2_world", "Land+ocean, 2 m (ERA5)"), ("sst_world", "Ocean, 60°S–60°N (OISST)")):
         try:
             blk = our_daily(key, label)
@@ -317,8 +327,8 @@ def build(verbose=True):
             b = doc["ice"].get("north" if k == "ice_n" else "south")
             if b:
                 ys = sorted(b["years"]); rng = (ys[0], b["last"]["date"])
-        elif k == "hadcrut" and doc["temperature"].get("hadcrut"):
-            h = doc["temperature"]["hadcrut"]; rng = (str(h["years"][0]), str(h["years"][-1]))
+        elif k in ("hadcrut", "crutem") and doc["temperature"].get(k):
+            h = doc["temperature"][k]; rng = (str(h["years"][0]), str(h["years"][-1]))
         elif k == "slr" and doc["sea_level"]:
             sl = doc["sea_level"]; rng = (str(sl["years"][0]), str(sl["years"][-1]))
         s["data_from"], s["data_to"] = (rng or (None, None))

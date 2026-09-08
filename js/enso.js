@@ -4588,19 +4588,21 @@
       }
       caps.push('Sea ice extent from passive microwave satellites since October 1978 (NSIDC Sea Ice Index, version 4). Every year is a line; the current year in ochre, El Niño onset years by their dashes, the 1981–2010 median dashed grey. Click a legend entry to fade the rest. Days before 1988 were measured every other day and are filled in between.');
     } else if (k === 'temperature') {
-      var tk = pickRow([['t2_world', 'Land+ocean, daily'], ['sst_world', 'Ocean, daily'], ['hadcrut', 'Annual since 1850']], 'planetTemp', 't2_world');
-      var T2 = (PL.temperature || {})[tk];
-      if (T2 && tk !== 'hadcrut') {
+      var tk = pickRow([['t2_world', 'Land+ocean, daily'], ['sst_world', 'Ocean, daily'], ['hadcrut', 'Global, annual since 1850'], ['crutem', 'Land, annual since 1850']], 'planetTemp', 't2_world');
+      var T2 = (PL.temperature || {})[tk], annual = tk === 'hadcrut' || tk === 'crutem';
+      if (T2 && !annual) {
         var hlT = []; EY.forEach(function (y) { hlT.push(y); if (T2.years[String(y + 1)]) hlT.push(y + 1); });
         plot(body, function (w, h) { return chartYears({ title: T2.label + ': daily mean, every year since ' + Object.keys(T2.years).sort()[0] + '; dashed: ' + T2.clim_years.join('–') + ' mean', years: T2.years, clim: T2.clim, climLabel: 'mean ' + T2.clim_years.join('–'), highlight: hlT, current: T2.last.year, digits: 1, signed: false }, w, h); });
         var LT = T2.last;
         kp.innerHTML += kpi(esc(T2.label) + ' · ' + esc(LT.date), fnum(LT.value, 2, false), ' °C', (fin(LT.median_norm) ? fnum(LT.value - LT.median_norm, 2) + ' against the ' + T2.clim_years.join('–') + ' mean for the date · ' : '') + (LT.rank_high === 1 ? 'the warmest for the date in the record' : ord(LT.rank_high) + ' warmest for the date of ' + LT.of + ' years') + ' · record for the date: ' + fnum(LT.extreme.value, 2, false) + ' in ' + LT.extreme.year, tk === 'sst_world' ? 'NOAA OISST via climatereanalyzer' : 'ECMWF ERA5 via climatereanalyzer', LT.date);
         caps.push('The same daily series as on Dynamics, but every year at once, as on climatereanalyzer: absolute daily means, with the 1991–2020 mean dashed. Highlighted: the onset years of the strongest El Niños and the years after them, when the air answers the ocean.');
       } else if (T2) {
-        plot(body, function (w, h) { return chartLong([{ title: 'Global mean temperature, annual anomaly against 1961–1990 (HadCRUT5)', unit: '°C', x: T2.years, y: T2.values, bars: true, digits: 1, signed: true }], w, h); });
+        var isLand = tk === 'crutem', DS = isLand ? 'CRUTEM5' : 'HadCRUT5';
+        var TG = (PL.temperature || {}).hadcrut;   // суша отдельно, а рядом — глобальный ряд тонкой линией для масштаба
+        plot(body, function (w, h) { return chartLong([{ title: (isLand ? 'Land air temperature, annual anomaly against 1961–1990 (CRUTEM5)' : 'Global mean temperature, annual anomaly against 1961–1990 (HadCRUT5)'), unit: '°C', x: T2.years, y: T2.values, bars: true, digits: 1, signed: true }], w, h); });
         var LH = T2.last;
-        kp.innerHTML += kpi('HadCRUT5 · ' + LH.year, fnum(LH.value, 2), ' °C', (LH.rank === 1 ? 'the warmest year in the record' : ord(LH.rank) + ' warmest year of ' + LH.of) + ' · warmest: ' + LH.warmest.year + ' at ' + fnum(LH.warmest.value, 2), 'Met Office HadCRUT5', String(LH.year));
-        caps.push('Annual global mean temperature since 1850, Met Office HadCRUT5, against the 1961–1990 baseline (the usual pre-industrial reference is about 0.36 °C below it). Red bars above the baseline, blue below with hatching. The years after strong El Niños, 1998, 2016 and 2024, each set the record of their time.');
+        kp.innerHTML += kpi(DS + ' · ' + LH.year, fnum(LH.value, 2), ' °C', (LH.rank === 1 ? 'the warmest year in the record' : ord(LH.rank) + ' warmest year of ' + LH.of) + ' · warmest: ' + LH.warmest.year + ' at ' + fnum(LH.warmest.value, 2) + (isLand && TG && TG.last ? ' · global that year ' + fnum(TG.last.value, 2) : ''), 'Met Office HadCRUT5', String(LH.year));
+        caps.push(isLand ? 'Annual land air temperature since 1850, Met Office CRUTEM5, against the 1961–1990 baseline: land warms about twice as fast as the ocean, so its anomaly runs ahead of the global one. The years after strong El Niños stand out on land too.' : 'Annual global mean temperature since 1850, Met Office HadCRUT5, against the 1961–1990 baseline (the usual pre-industrial reference is about 0.36 °C below it). Red bars above the baseline, blue below with hatching. The years after strong El Niños, 1998, 2016 and 2024, each set the record of their time.');
       }
     } else {
       var SL = PL.sea_level;
@@ -5412,7 +5414,7 @@
     food: { source: 'FAO Food Price Index monthly, World Bank Pink Sheet monthly commodity prices, FAOSTAT dietary shares for the weights, our own onset dates for past events.',
       plain: 'What food prices are doing: the world index, twelve commodities by name in dollars per tonne, and how each moved after the start of past events. A rise in time with the event is not proof of cause.',
       tech: 'Paths after onset are percentages of the onset-month price; in dollars they are scaled through the onset or today’s price; weights 1–5 order the alerts; the bundle uses a log scale; series are nominal, not inflation-adjusted.' },
-    planet: { source: 'NOAA GML greenhouse gases, NSIDC sea ice index v4, Met Office HadCRUT5, NOAA STAR sea level, and our own daily series drawn year by year.',
+    planet: { source: 'NOAA GML greenhouse gases, NSIDC sea ice index v4, Met Office HadCRUT5 (global) and CRUTEM5 (land), NOAA STAR sea level, and our own daily series drawn year by year.',
       plain: 'The long record behind the event: gases in the air, ice at both poles, the planet’s temperature and sea level, decades at a glance. The El Niño years and the years after them are highlighted.',
       tech: 'Annual and daily series are shown against their own baselines as stated on each chart; CO₂ uses the trend column of the GML file; sea level has no glacial isostatic adjustment.' },
     how: { source: 'Written by hand: glossary, method notes and the release calendar of every source.',
