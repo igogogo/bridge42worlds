@@ -39,6 +39,14 @@ PROFILES = {
     "stats": {"prompt": "concept-extract-stats.txt",
               "state": "harvest-stats-state.json",
               "kinds": ("statistics",)},
+    # Океан и атмосфера: процессы, явления, обратные связи, методы и индексы,
+    # свойства среды, статистика и семейства моделей. Владелец 07.09: «в проекте
+    # Эль-Ниньо много понятий — методов, свойств атмосферы, океана, течений,
+    # парниковых и прочих эффектов; выудить сотню-полторы и обогатить реестр».
+    "climate": {"prompt": "concept-extract-climate.txt",
+                "state": "harvest-climate-state.json",
+                "kinds": ("process", "phenomenon", "effect", "method",
+                          "property", "statistics", "theory")},
 }
 HEAVY = ("gr-qc", "hep-th", "hep-ph", "quant-ph", "math-ph", "nucl-th",
          "cond-mat", "astro-ph")
@@ -58,8 +66,23 @@ def save_state(prof, asked):
         encoding="utf-8")
 
 
-def pick_articles():
-    """Полные разборы первыми, затем экспрессы тяжёлых разделов."""
+def pick_articles(ids_file=None):
+    """Полные разборы первыми, затем экспрессы тяжёлых разделов.
+
+    ids_file — список работ по одной на строку: целевой проход по теме (климат)
+    идёт не по всему архиву, а по её корпусу, иначе модель читает астрофизику
+    и честно отвечает пустотой (владелец 07.09).
+    """
+    if ids_file:
+        want = {l.strip().split("v")[0] for l in
+                Path(ids_file).read_text(encoding="utf-8").splitlines()
+                if l.strip() and not l.startswith("#")}
+        got = []
+        for p in sorted((ROOT / "lang" / "ru" / "archive").glob("*/*/data.json")):
+            aid = p.parent.name
+            if aid.split("v")[0] in want:
+                got.append(aid)
+        return got
     full, heavy = [], []
     for p in sorted((ROOT / "lang" / "ru" / "archive").glob("*/*/data.json")):
         try:
@@ -86,7 +109,7 @@ def build_prompt(aid, prof="target"):
             .replace("{text}", text))
 
 
-def run(cap, prof="target"):
+def run(cap, prof="target", ids_file=None):
     try:
         from tools.freeze import guard
         guard("целевое донасыщение (DeepSeek)")
@@ -95,7 +118,7 @@ def run(cap, prof="target"):
     key = CH.env("DEEPSEEK_API_KEY")
     kinds = PROFILES[prof]["kinds"]
     asked = state(prof)
-    todo = [a for a in pick_articles() if a not in asked][:cap]
+    todo = [a for a in pick_articles(ids_file) if a not in asked][:cap]
     print(f"целевой прогон: {len(todo)} статей (спрошено ранее {len(asked)})")
     n_c = 0
     batch = []
@@ -151,8 +174,10 @@ def main():
     ap.add_argument("--run", action="store_true")
     ap.add_argument("--cap", type=int, default=1700)
     ap.add_argument("--profile", default="target", choices=sorted(PROFILES))
+    ap.add_argument("--ids-file", dest="ids_file",
+                    help="список работ (по одной на строку) — проход только по ним")
     a = ap.parse_args()
-    arts = pick_articles()
+    arts = pick_articles(a.ids_file)
     if a.plan or not a.run:
         asked = state(a.profile)
         todo = [x for x in arts if x not in asked]
@@ -161,7 +186,7 @@ def main():
         print(f"не спрошено: {len(todo)} · в прогон пойдёт: {est}")
         print(f"смета: ~{est} × 1.4k ток ≈ ${est * 0.0006:.2f}–{est * 0.0011:.2f}")
         return 0
-    return run(a.cap, a.profile)
+    return run(a.cap, a.profile, a.ids_file)
 
 
 if __name__ == "__main__":

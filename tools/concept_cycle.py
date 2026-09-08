@@ -105,15 +105,42 @@ def hard_support():
     return _HARD
 
 
-def born_candidates(rows):
+def born_candidates(rows, corpus=None, born_min=None, names=None):
+    """Кто дорос до понятия.
+
+    corpus — множество работ темы: вес кандидата считается ВНУТРИ него, а не по
+    всему архиву. Порог в пять статей верен для корпуса в семь тысяч работ и
+    несправедлив для темы из трёхсот: термин, заметный в своей области, там
+    встречается два-три раза (владелец 07.09, климат). Остальные заслоны —
+    твёрдая опора, вектор, Semantic Scholar — не меняются.
+    """
     hard = hard_support()
+    lim = born_min or BORN_MIN
     out = []
     for r in rows.values():
         if r.get("matched") or r.get("born") or not r.get("vec"):
             continue
-        if len(r["articles"]) < BORN_MIN:
+        # Список, прошедший просмотр глазами. Нужен там, где корпус мал и порог по числу
+        # работ не отсеивает: у панели свои внутренние обозначения («риск-индекс 0-100»,
+        # «сторож перелома»), которые понятиями области не являются, а имя «rank» и вовсе
+        # притянуло карточку из алгебры (07.09).
+        if names is not None and r["name"] not in names:
+            continue
+        arts = set(r["articles"])
+        if corpus is not None:
+            arts &= corpus
+            if not arts:
+                continue
+        if len(arts) < lim:
             continue
         h = len(hard.get(r["name"]) or ())
+        if corpus is not None:
+            # Твёрдая опора тоже считается внутри темы — иначе кандидат с двумя
+            # климатическими работами прошёл бы по упоминаниям в астрофизике.
+            h = len((hard.get(r["name"]) or set()) & corpus)
+            if h >= min(2, lim):
+                out.append(r)
+            continue
         # твёрдой опоры хватает само по себе; иначе — вес поля плюс хотя бы
         # два дословных упоминания (кандидат из групп приходит без якорей,
         # ему нужна поддержка поля и подтверждение хотя бы парой статей)
@@ -164,9 +191,9 @@ def s2_alive(name):
         return True     # внешний сервис не должен уметь останавливать наш цикл
 
 
-def give_birth(rows, dry):
+def give_birth(rows, dry, corpus=None, born_min=None, names=None):
     """Кандидат становится понятием: дельта реестра + вектор в облако."""
-    ready = born_candidates(rows)
+    ready = born_candidates(rows, corpus, born_min, names)
     if not ready:
         return 0
     grown = {}
@@ -253,7 +280,23 @@ def main():
     ap = argparse.ArgumentParser(description="Цикл роста понятий — фабричный шаг")
     ap.add_argument("--budget", type=int, default=30, help="статей спросить за прогон")
     ap.add_argument("--dry", action="store_true", help="показать план, ничего не звать")
+    ap.add_argument("--corpus", help="файл состояния добычи темы: вес считать внутри её работ")
+    ap.add_argument("--min", type=int, dest="born_min",
+                    help="порог по числу работ темы (по умолчанию общий)")
+    ap.add_argument("--names-file", dest="names_file",
+                    help="рождать только эти имена (по одному на строку) — список, "
+                         "прошедший просмотр глазами")
     a = ap.parse_args()
+    corpus = None
+    if a.corpus:
+        # Состояние добычи темы: список работ, которые спрашивали её промптом.
+        corpus = set(json.loads(Path(a.corpus).read_text(encoding="utf-8"))["asked"])
+        print(f"корпус темы: {len(corpus)} работ · порог {a.born_min or BORN_MIN}")
+    names = None
+    if a.names_file:
+        names = {l.strip() for l in Path(a.names_file).read_text(encoding="utf-8").splitlines()
+                 if l.strip() and not l.startswith("#")}
+        print(f"список к рождению: {len(names)} имён")
 
     # Замок общий: цикл — прогон, платный шаг внутри.
     if not a.dry:
@@ -273,7 +316,7 @@ def main():
         print("— сухой прогон —")
         for aid in todo[:5]:
             print(f"   спросил бы: {aid}")
-        give_birth(rows, dry=True)
+        give_birth(rows, dry=True, corpus=corpus, born_min=a.born_min, names=names)
         return 0
 
     # 1. спросить — единственный платный шаг
@@ -291,7 +334,7 @@ def main():
 
     # 4. рождение
     rows = H.load_harvest()
-    born = give_birth(rows, dry=False)
+    born = give_birth(rows, dry=False, corpus=corpus, born_min=a.born_min, names=names)
     if born:
         H.save_harvest(rows)
 

@@ -1,0 +1,63 @@
+You are indexing a paper on the ocean–atmosphere system for a knowledge graph. This is a
+TARGETED pass: general concepts are already extracted; now we mine ONLY the kinds below,
+the ones a reader of an El Niño dashboard needs and our registry lacks.
+
+TARGET KINDS (extract ONLY these):
+- "process": named processes and circulations of ocean and atmosphere
+  (upwelling, ekman_transport, walker_circulation, hadley_circulation,
+  thermohaline_circulation, deep_convection, entrainment, wind_driven_mixing,
+  equatorial_wave_propagation, downwelling_kelvin_wave...).
+- "phenomenon": named phenomena and modes of variability
+  (el_nino, la_nina, madden_julian_oscillation, indian_ocean_dipole,
+  pacific_decadal_oscillation, marine_heatwave, warm_pool, cold_tongue,
+  equatorial_undercurrent, thermocline, atmospheric_river, monsoon_onset...).
+- "effect": named effects and feedbacks that change the system's behaviour
+  (bjerknes_feedback, greenhouse_effect, cloud_radiative_effect, albedo_feedback,
+  water_vapour_feedback, teleconnection, spring_predictability_barrier,
+  discharge_recharge_oscillator, coriolis_effect...).
+- "method": named methods, indices and instruments of measurement or forecasting
+  (oceanic_nino_index, relative_oni, southern_oscillation_index, reanalysis,
+  data_assimilation, ensemble_forecast, hindcast, cusum_control_chart,
+  empirical_orthogonal_function, satellite_altimetry, argo_float, tao_mooring,
+  radiosonde, spectral_analysis, bootstrap_resampling...).
+- "property": measurable properties and states of air, water and surface
+  (sea_surface_temperature, ocean_heat_content, mixed_layer_depth, salinity,
+  wind_stress, latent_heat_flux, outgoing_longwave_radiation, sea_level_anomaly,
+  specific_humidity, static_stability, geopotential_height...).
+- "statistics": named statistical notions used to judge the numbers
+  (anomaly, climatology, percentile, standard_deviation, red_noise, autocorrelation,
+  skill_score, significance_level, composite_analysis, regression_slope,
+  return_period, ensemble_spread...).
+- "theory": named theories and model families
+  (coupled_general_circulation_model, delayed_oscillator_theory, shallow_water_model,
+  statistical_dynamical_model, quasi_geostrophic_theory...).
+
+DEFINITION still applies strictly: an accepted name used by the field, definable in one
+sentence, wanted by a curious reader. NOT paper-specific constructions, NOT the name of
+one dataset version, NOT an author's private abbreviation.
+
+Rules:
+- name: short canonical English identifier, lowercase, underscores.
+- kind: exactly one of: process, phenomenon, effect, method, property, statistics, theory.
+- group: one value from GROUPS, or "other".
+- scope: "general" or "specific".
+- line: ONE dictionary-style sentence (max 25 words) defining it for the field.
+  Never define the thing through itself: "ocean heat content is the heat content of the
+  ocean" tells a reader who did not know the term nothing at all. Say what is measured,
+  where, and why it matters.
+- mentions: 1-3 EXACT substrings copied character-for-character from the paper text where
+  it surfaces (any grammatical form; 1-4 words). Empty list if used silently.
+- 0 to 12 items. Zero is a valid answer: a paper that names no process, no index, no
+  feedback returns []. Never pad with generic words like "temperature" or "model".
+
+Answer with a JSON array only, no prose:
+[{"name": "...", "kind": "...", "group": "...", "scope": "...", "line": "...",
+  "mentions": ["...", "..."]}]
+
+GROUPS:
+{groups}
+
+PAPER TITLE: {title}
+
+PAPER TEXT:
+{text}
