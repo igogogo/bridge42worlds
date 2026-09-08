@@ -17,8 +17,9 @@
 
   var T = {
     fresh: 'fresh', stale: 'stale',
-    tabs: { verdict: 'Verdict', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Where we are', ocean: 'Ocean', radiance: 'Satellite raw', models: 'Models', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long record', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
+    tabs: { brief: 'Briefing', verdict: 'Verdict', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Where we are', ocean: 'Ocean', radiance: 'Satellite raw', models: 'Models', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long record', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
     tabHelp: {
+      brief: 'The entry point: what is happening, what the data show, what to expect and when, the risks already showing, regions and food, what to watch — in plain words, with a link to every number.',
       verdict: 'What the machine makes of it today: the verdict written from the numbers on this page, the turning point, the outlook, what to watch, the caveats.',
       overview: 'One screen with everything: a strip of key indicators and a mosaic of every chart, each a door into its section.',
       news: 'What changed in the last week — values, risks, alerts, the verdict — and what is due next week.',
@@ -68,7 +69,7 @@
   var S = {
     legOpen: false,         // легенда свёрнута по умолчанию везде (владелец 08.09); кнопка legend в строке заголовка
     D: null, G: {}, H: [], P: null, M: {}, L: {},
-    view: 'now', sub: {}, risk: null, model: null, scenario: null, pick: null, region: null,
+    view: 'brief', sub: {}, risk: null, model: null, scenario: null, pick: null, region: null,
     // Режим сравнения: '' — показываем значения, 'update' — изменение с прошлого прогона,
     // 'week' — с ближайшего снимка недельной давности (владелец 03.09: «было/стало от
     // последней недели»). Кнопка в шапке перебирает три состояния.
@@ -2224,6 +2225,88 @@
     wrap.appendChild(board); wrap.appendChild(chat);
     body.appendChild(wrap);
     requestAnimationFrame(function () { log.scrollTop = log.scrollHeight; if (!rs.msgs.length) ta.focus(); });
+  }
+
+  /* ══ БРИФИНГ — ВХОД НА ПАНЕЛЬ (владелец 08.09: «резюме о том, что происходит, какие тренды,
+     простым языком со ссылками на графики; на что обратить внимание, что ждать дальше, когда
+     важные события, какие риски уже реализуются; это вход, основная точка отсчёта; текст, мини-
+     графики, мини-KPI — чётко и красиво в нашем стиле»). Текст написан рукой (Fable), числа в нём
+     подставляются из данных панели при каждой отрисовке; мини-графики — ряды рисков, плитки —
+     журнал. Модели здесь нет; каждый раздел ведёт туда, где число живёт. */
+  function briefLink(hash, text) { return '<a class="br-go" href="' + esc(hash) + '">' + esc(text) + ' →</a>'; }
+  function briefStat(id) { return (((S.ST || {}).items) || []).filter(function (it) { return it.id === id; })[0]; }
+  function briefKpi(it, name) { var k = ((it || {}).kpis || []).filter(function (q) { return q.name === name; })[0]; return k ? k : null; }
+  function briefRisk(id) { return ((S.D || {}).risks || []).filter(function (r) { return r.id === id; })[0]; }
+  function briefSpark(id, label, w) {
+    var r = briefRisk(id); if (!r || !r.metric || !(r.metric.values || []).length) return '';
+    var m = r.metric, v = m.values.filter(fin), last = v[v.length - 1];
+    return '<a class="br-sp" href="#risk/' + esc(id) + '"><span class="br-spl">' + esc(m.name || label) + '</span>' + spark(m, w || 210, 34) + '<span class="br-spv">' + fnum(last, m.unit === '°C' ? 1 : 2) + (m.unit ? ' ' + esc(m.unit) : '') + '</span></a>';
+  }
+  function briefTiles(keys) { return '<div class="br-kpis">' + keys.map(function (k) { return jrec(k) ? rsKpiTile(k) : ''; }).join('') + '</div>'; }
+  function viewBrief() {
+    var D = S.D, N = D.nino34, NW = D.noaa, ONI = D.oni, sm = D.summary || {}, ls = ONI.last_season;
+    var body = stageShell('Briefing: what is happening, what to watch, what comes next', []);
+    body.classList.add('scroll');
+    var box = el('div', 'brief');
+    var n34 = NW.latest.n34a, rank = N.all_years_rank, idx = D.risk_index, oni = ONI.current[ls];
+    var W = D.watch || {}, sw = W.sst_world || {}, streak = (sw.records || {}).streak;
+    var fuel = (D.air || {}).fuel || {}, IRI = D.iri || {}, bd = IRI.breakdown || {}, lastI = (bd.by_issue || [])[(bd.by_issue || []).length - 1] || {};
+    var brk = briefKpi(briefStat('break_sst_nino34'), 'most likely break'), shift = briefKpi(briefStat('break_sst_nino34'), 'shift of the mean');
+    var pk = briefStat('peak_bayes'), near = briefKpi(briefStat('clusters_nino34'), 'nearest years'), ext = briefKpi(briefStat('extremes_nino34'), 'return period of this height as a yearly peak');
+    var fc = (W.sst_nino34 || {}).forecast14 || {}, ar = briefKpi(briefStat('ar1_sst_nino34'), 'persistence forecast, +14 d');
+    var tele = briefKpi(briefStat('teleconnection_boxes'), 'rain links that hold');
+    var RG = D.regions && !D.regions.error ? D.regions : null, scen = S.scenario || 'strong';
+    var hot = RG ? RG.items.filter(function (x) { return x.levels[scen] >= 4; }).map(function (x) { return x.name; }) : [];
+    var shouts = (D.alerts || []).filter(function (a) { return a.level === 'SHOUT'; });
+    var s = '';
+    // ── 1. одним абзацем
+    s += '<section class="br-s br-lead"><h3>In one paragraph</h3>' +
+      '<p class="br-big">A <b>very strong El Niño</b> is under way, and it is running ahead of every event we can compare it with. The central Pacific is <b>' + fnum(n34, 1) + ' °C</b> warmer than normal — ' + (rank === 1 ? 'the warmest these calendar days have ever been' : 'rank ' + rank + ' for these calendar days') + ' — and the official index, ' + fnum(oni) + ' for ' + esc(ls) + ', already says “very strong” in the language forecasters use. Our own risk index stands at <b>' + idx + ' of 100</b>. The heat is not a spike: the water below the surface is loaded, the winds have joined in, and the storms have moved east. The event is still growing; the peak, by every past example, comes in winter.</p>' +
+      briefTiles(['n34_weekly', 'oni', 'risk_index', 'wwv_share', 'iri_share_below', 'food_index']) +
+      '<div class="br-links">' + briefLink('#now/analogs', 'this year against the strongest events') + briefLink('#verdict', 'the verdict of the day') + briefLink('#now/map', 'the map of the Pacific') + '</div></section>';
+    // ── 2. что мы видим в данных
+    s += '<section class="br-s"><h3>What the data show</h3><div class="br-two"><div>' +
+      '<p><b>The surface.</b> Niño 3.4 crossed into a new regime on <b>' + esc(brk ? brk.value : 'spring') + '</b>: our change-point test finds the level jumped ' + (shift ? esc(shift.value) + ' °C' : 'by two degrees') + ' and that the jump is not noise. Since then every week has come in warmer than the same week of 1997, 2015 and 2023. The world ocean as a whole ' + (streak ? 'has set a daily record for <b>' + streak + ' days running</b>' : 'is at record warmth') + '; land and ocean together are at their warmest for the date too.</p>' +
+      '<p><b>Below the surface.</b> The fuel gauge — warm water stored above 300 m along the equator — reads <b>' + (fuel.share_of_record != null ? fuel.share_of_record + ' % of its record' : 'at its record') + '</b>' + (fuel.discharging === false ? ' and has not started to drain' : '') + '. The buoys see a layer more than ten degrees above normal at a hundred metres off the coast of South America. What surfaces in the coming months is already in the water.</p>' +
+      '<p><b>The air and the clouds.</b> Two satellites, one NOAA and one NASA, agree that the tall storm clouds jumped east over the central Pacific this summer, to 7–9 % of the sky where the past three years had almost none, and that the east–west contrast which drives the trade winds has collapsed. The pressure seesaw, the winds and the cloud have all joined the ocean: the event is coupled.</p>' +
+      '<p><b>The models.</b> <b>' + (lastI.share != null ? lastI.share + ' %' : 'Half') + ' of the forecast models are below reality</b> — the ocean moved faster than the centres expected, and they keep revising upward issue after issue. The statistics agree with the hand-picked analogues: sorting all years since 1950 by the shape of January–August, this year lands next to <b>' + esc(near ? near.value : '1997, 2015, 2023') + '</b>.</p>' +
+      '</div><div class="br-sparks">' + briefSpark('event_strength', 'Niño 3.4, NOAA weekly') + briefSpark('fuel_charged', 'fuel: warm water volume') + briefSpark('subsurface_warm', 'warmest layer under the moorings') + briefSpark('world_ocean_record_streak', 'world ocean, daily') + briefSpark('models_below_reality', 'models below reality') + '</div></div>' +
+      '<div class="br-links">' + briefLink('#trend/sst_nino34', 'the trend and the break') + briefLink('#air', 'the fuel gauge') + briefLink('#ocean/moorings', 'the moorings') + briefLink('#radiance/cross', 'two satellites') + briefLink('#models/breakdown', 'how the models break') + '</div></section>';
+    // ── 3. чего ждать и когда
+    s += '<section class="br-s"><h3>What to expect, and when</h3>' +
+      '<p><b>The peak comes in winter.</b> Every past event of this strength peaked between mid-November and early February. It is early September, so two or three more months of growth are the normal course, not a surprise. ' +
+      (pk ? 'Scaling this summer by how past events grew, the likely winter peak is <b>around ' + esc(briefKpi(pk, 'implied winter peak').value) + ' °C</b>, with <b>' + esc(briefKpi(pk, 'chance to top 1997').value) + ' %</b> odds of beating 1997–98 and ' + esc(briefKpi(pk, 'chance to top 2015').value) + ' % of beating 2015–16; the stored fuel is not in that sum, so the odds may be conservative. ' : '') +
+      (ext && ext.value !== '·' ? 'Even the summer level alone is a once-in-' + esc(ext.value) + '-years height for a yearly peak. ' : '') + '</p>' +
+      '<p><b>The next two weeks.</b> The analogue years point to Niño 3.4 near <b>' + (fc.value != null ? fnum(fc.value) : '·') + ' °C</b> in a fortnight' + (ar ? '; pure persistence would give ' + esc(ar.value) + ' °C, which is the floor, not the forecast' : '') + '. The forecast centres expect a combined peak of <b>' + fnum((IRI.revisions || {}).combined_peak_cur != null ? IRI.revisions.combined_peak_cur : IRI.combined_peak) + ' °C</b>; their next issue is due around the 19th.</p>' +
+      '<p><b>The year after.</b> The impacts of a peak land mostly in the following year: 2027 is likely to be warmer than 2026 for the planet as a whole, because the ocean releases its heat to the air with a lag of a few months. A La Niña usually follows within a year or two — the swing back, with its own set of droughts and floods in mirror image.</p>' +
+      '<div class="br-links">' + briefLink('#now/analogs', 'where the past events went from here') + briefLink('#trend/sst_nino34', 'the 14-day view') + briefLink('#models/plume', 'the model plume') + briefLink('#risk/warmer_next_year', 'the year after the peak') + '</div></section>';
+    // ── 4. что уже реализуется
+    var live = (D.risks || []).filter(function (r) { return +r.level >= 4 && !/next_year|la_nina_after|stale|warmer_next/.test(r.id || ''); }).sort(function (a, b) { return (+b.level) - (+a.level); }).slice(0, 6);
+    s += '<section class="br-s"><h3>Risks already showing</h3><p>These are not forecasts: each one is a rule that has already fired on the data.</p><ul class="br-ul">' +
+      live.map(function (r) { return '<li><span class="rl br-l" style="background:' + lvlColor(r.level) + '">' + r.level + '</span> <b>' + esc(r.title) + '.</b> ' + esc(rsFirstSentences(r.plain || '', 2)) + ' ' + briefLink('#risk/' + r.id, 'evidence and what to watch') + '</li>'; }).join('') +
+      (shouts.length ? '<li><span class="rl br-l" style="background:var(--nino)">!</span> <b>Loud alerts today:</b> ' + shouts.map(function (a) { return esc(a.title) + (a.detail ? ' (' + esc(a.detail) + ')' : ''); }).join('; ') + '. ' + briefLink('#now/analogs', 'the alert cards') + '</li>' : '') + '</ul></section>';
+    // ── 5. регионы и еда
+    s += '<section class="br-s"><h3>Regions and food</h3>' +
+      '<p>' + (RG ? 'Under the “' + esc(scen) + '” scenario <b>' + hot.length + ' of ' + RG.items.length + ' regions</b> are at level 4–5: ' + esc(hot.join(', ')) + '. ' : '') +
+      'The usual pattern of a strong El Niño is dry in Indonesia, Australia, southern Africa and the Sahel, wet on the coast of Peru and in East Africa’s short rains, a weak monsoon in India. ' + (tele ? 'On our own measured boxes over 45 summers the same pattern shows without any literature: ' + esc(tele.plain.replace(/\.$/, '')) + '. ' : '') +
+      'Food prices react with a lag of months through rice, palm oil, sugar and fish; the index has begun to climb, and the commodities most exposed are on the Food page.</p>' +
+      briefTiles(['food_index', 'food_yoy', 'gulf_sst', 'kuwait_tmax30']) +
+      '<div class="br-links">' + briefLink('#regions', 'regions by level') + briefLink('#trend/rain', 'rain by region') + briefLink('#food', 'food prices') + briefLink('#regions/place/gulf_arabia', 'Kuwait and the Gulf') + '</div></section>';
+    // ── 6. на что смотреть
+    var watch = (sm.watch || []).slice(0, 4);
+    s += '<section class="br-s"><h3>What to watch in the coming weeks</h3><ul class="br-ul">' +
+      '<li><b>The first fall of the fuel.</b> The monthly PMEL update: the first clear drop of the warm water volume is the earliest honest sign that the peak is near.</li>' +
+      '<li><b>The 14-day change of Niño 3.4 turning negative</b>, and the end of the daily record run: the surface stops climbing before it turns.</li>' +
+      '<li><b>The next model issue around the 19th</b>: whether the centres raise the peak again or the plume starts to close.</li>' +
+      '<li><b>The satellite detectors</b>: 36 turning-point detectors on two platforms are silent now; a fired one is a two-week change worth a look.</li>' +
+      watch.map(function (w) { return '<li class="br-m">From the verdict: ' + esc(w) + '</li>'; }).join('') + '</ul>' +
+      '<div class="br-links">' + briefLink('#news', 'the calendar of releases') + briefLink('#air', 'the fuel') + briefLink('#radiance/cross', 'the detectors') + '</div></section>';
+    // ── 7. как читать
+    s += '<section class="br-s br-how"><h3>How to read this panel</h3><p>The strip under the menu holds the main indicators with their change since the last reading; click one for its history. Every scene has <b>source</b> and <b>notes</b> (in plain words or technical) and, where we computed something ourselves, <b>stats</b> with the method explained. Every number has a card with where it comes from and the concepts behind it; <b>graph</b> opens those concepts as a map. <b>Research</b> lets you ask in your own words and builds a board from the answers.</p>' +
+      '<p class="br-m">Data as of ' + esc(D.stamp || '') + (sm.confidence ? ' · confidence of the verdict: ' + esc(String(sm.confidence)) : '') + '. ' + ((sm.caveats || []).length ? 'Caveats: ' + esc(sm.caveats.slice(0, 2).join(' ')) : '') + ' Written by hand; the numbers refresh with the panel.</p></section>';
+    box.innerHTML = s;
+    body.appendChild(box);
+    box.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a.br-go, a.br-sp'); if (!a) return; e.preventDefault(); location.hash = a.getAttribute('href'); });
   }
 
   function railState() {
@@ -5538,6 +5621,9 @@
     how: { source: 'Written by hand: glossary, method notes and the release calendar of every source.',
       plain: 'The dictionary of the panel: what each term means, why it matters here, and where it comes from; plus how the whole thing is put together and when each source updates.',
       tech: 'Glossary keys match data-term attributes in the code; the calendar is the publishing cadence of each provider, not our run times.' },
+    brief: { source: 'Written by hand from the panel’s own numbers: the NOAA weekly and official indices, the value journal, the risks and alerts, the statistics layer, the model plume, the release calendar and the regional reference.',
+      plain: 'One page to start from: what is happening, in plain words, and where on the panel each number lives.',
+      tech: 'Prose is fixed text with live slots; every figure is read at render time from latest.json, journal.json and stats.json, so the page cannot drift from the data. No model is involved.' },
     research: { source: 'The statements of this panel (risks, alerts, indicators, glossary, scenes, the concept register) searched in the browser; the model contour is specified in the concept note and not yet wired.',
       plain: 'A conversation that builds a small research board: what you ask, the panel answers with its own statements, and the left side collects the numbers, concepts, scenes and papers involved.',
       tech: 'Retrieval is lexical over ~450 short units built from latest.json, journal.json, glossary.json, SCENE_INFO and concepts.json; anchors of the hits drive concepts (concepts.json) and works (links.json); saving is localStorage (b42_research).' },
@@ -6051,6 +6137,7 @@
     else if (S.view === 'food') viewFood();
     else if (S.view === 'how') viewHow();
     else if (S.view === 'research') viewResearch();
+    else if (S.view === 'brief') viewBrief();
     else viewNow();
     sceneInfoBar();                          // source / notes на каждой сцене (08.09)
     kpiExplain();                            // «?» на плашках KPI (08.09)

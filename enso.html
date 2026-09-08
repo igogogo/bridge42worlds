@@ -347,6 +347,25 @@
   .st-cav{margin:4px 0 0;padding-inline-start:16px;color:var(--muted)} .st-cav li{margin:1px 0}
   .st-w{display:block;font-family:var(--mono);font-size:9.5px;color:var(--soft);margin-top:3px}
   .seg button.sq.stats{border-color:var(--ochre);color:var(--ochre)} .seg button.sq.stats.on{background:var(--ochre);border-color:var(--ochre);color:var(--surface)}
+  /* брифинг — вход на панель (08.09) */
+  .brief{max-width:980px;margin:0 auto;padding:4px 6px 16px}
+  .br-s{padding:10px 0 12px;border-top:1px solid var(--hair-soft, var(--hair))} .br-s:first-child{border-top:0;padding-top:2px}
+  .br-s h3{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin:0 0 8px}
+  .br-s p{font-size:13.5px;line-height:1.55;margin:0 0 8px;max-width:72ch} .br-s p b{color:var(--text)}
+  .br-big{font-family:var(--font-display);font-size:16px;line-height:1.5;max-width:64ch}
+  .br-two{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(220px,.8fr);gap:14px;align-items:start}
+  .br-sparks{display:flex;flex-direction:column;gap:6px}
+  .br-sp{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:0 8px;padding:6px 8px;border:1px solid var(--hair);border-radius:9px;background:var(--surface);text-decoration:none;color:var(--text)}
+  .br-sp:hover{border-color:var(--ochre)} .br-sp svg{grid-column:1/3;width:100%;height:34px;display:block}
+  .br-spl{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)} .br-spv{font-family:var(--font-display);font-size:13px;font-weight:700;text-align:right}
+  .br-kpis{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px}
+  .br-ul{margin:0;padding-left:0;list-style:none} .br-ul li{font-size:13px;line-height:1.5;margin:0 0 7px;max-width:76ch;position:relative} .br-ul.small li{font-size:12px;margin-bottom:3px}
+  .br-l{display:inline-block;width:18px;height:18px;border-radius:5px;color:#fff;font-family:var(--mono);font-size:11px;font-weight:700;text-align:center;line-height:18px;margin-inline-end:2px;vertical-align:1px}
+  .br-links{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:4px}
+  .br-go{font-family:var(--mono);font-size:10.5px;color:var(--cyan);text-decoration:none;white-space:nowrap} .br-go:hover{text-decoration:underline}
+  .br-m{color:var(--soft);font-size:11.5px}
+  .br-how p{max-width:80ch}
+  @media (max-width:900px){ .br-two{grid-template-columns:1fr} .br-big{font-size:15px} }
   /* окно графа поверх панели */
   .cn-modal{position:fixed;inset:0;z-index:300;background:rgba(8,10,14,.55);display:flex;align-items:center;justify-content:center;padding:16px}
   .cn-modal-box{width:min(880px,96vw);max-height:92vh;overflow:auto;background:var(--surface);border:1px solid var(--hair);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);padding:10px 12px 8px}
@@ -968,7 +987,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=1351210c5e"></script>
+<script src="/js/enso.js?v=fc7f09c3df"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>
