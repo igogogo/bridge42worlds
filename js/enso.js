@@ -1481,6 +1481,7 @@
      нет сравнения с самым сильным событием, которое мы знаем, это 97-98». */
   function analogFor(m) {
     if (!m || !m.name) return null;
+    if (m.analogs && Object.keys(m.analogs).length) return null;   // ряд принёс своих аналогов (боксы OISST): чужие по имени не подмешиваем — в absolute они ложились у нуля (08.09)
     var D = S.D, out = [];
     var wk = { 'Niño 3.4, NOAA weekly': 'n34a' };
     var key = wk[m.name];
@@ -3780,9 +3781,19 @@
     return s + '</svg>';
   }
 
+  /* АНАЛОГИ В АБСОЛЮТНЫХ ГРАДУСАХ. Прошлые события в файле лежат аномалиями; в режиме
+     «absolute °C» они рисовались как есть и ложились у нуля под шкалой 0–30 (владелец 08.09:
+     «неужели аналогичные события были на 0?»). Климатология по дням берётся из самого ряда:
+     SST минус аномалия того же дня; аналог = его аномалия + климатология этого дня. */
   function boxMetric(b, absolute) {
+    var an = b.analogs || {}, out = an;
+    if (absolute && b.sst && b.anom) {
+      var clim = b.sst.map(function (v, i) { return fin(v) && fin(b.anom[i]) ? v - b.anom[i] : null; });
+      out = {};
+      Object.keys(an).forEach(function (y) { var av = an[y] || [], off = b.dates.length - av.length; out[y] = av.map(function (v, i) { var c = clim[off + i]; return fin(v) && fin(c) ? v + c : null; }); });
+    }
     return { name: b.title + (absolute ? ', daily SST' : ', daily anomaly') + ' — our box on the NOAA grid, one day behind', unit: '°C', step: 'day',
-      dates: b.dates, values: absolute ? b.sst : b.anom, analogs: absolute ? {} : (b.analogs || {}) };
+      dates: b.dates, values: absolute ? b.sst : b.anom, analogs: out };
   }
 
   function viewOcean() {
@@ -6074,8 +6085,8 @@
           if (tip.classList.contains('on')) { S.pinned = x; tip.classList.add('pin'); }
         }, 600);
       }
-      if (tip.classList.contains('on')) open();
-      else showT = setTimeout(function () { if (showX === x && x.isConnected) open(); }, 260);
+      // задержка всегда, и для смены слова при открытой карточке тоже: иначе после первой карточки следующие мигали мгновенно (владелец 08.09)
+      showT = setTimeout(function () { if (showX === x && x.isConnected) open(); }, 380);
     });
     document.addEventListener('mouseout', function (e) {
       var f = find(e);
