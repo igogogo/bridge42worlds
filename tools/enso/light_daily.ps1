@@ -1,4 +1,4 @@
-# Ежедневный лёгкий прогон панели El Niño (владелец 06.09: «раз в день запустились, проверили,
+﻿# Ежедневный лёгкий прогон панели El Niño (владелец 06.09: «раз в день запустились, проверили,
 # есть ли что новое в источниках, долили свежее, ещё не разобранное»).
 #
 # Что делает: лёгкий прогон (правила без модели → fresh.json, ops.json, runs.json), раздел
@@ -45,12 +45,14 @@ Say "=== rain (precip.py)"
 Say "=== radiance.json from the external collector"
 & $py -u radiance_take.py 2>&1 | Out-File $log -Append -Encoding utf8
 
+Say "=== globe data (globe_data.py)"
+& $py -u globe_data.py 2>&1 | Out-File $log -Append -Encoding utf8
+
 $fresh = $null
 try { $fresh = Get-Content "$root\data\enso\fresh.json" -Raw -Encoding utf8 | ConvertFrom-Json } catch { Say "fresh.json unreadable: $_" }
 if ($fresh -and $fresh.needs_assessment) {
-  Say "=== trigger crossed: full assessment (not published, needs review): $($fresh.summary)"
-  & $py -u refresh.py 2>&1 | Out-File $log -Append -Encoding utf8
-  if ($LASTEXITCODE -ne 0) { Say "full run failed, code $LASTEXITCODE" }
+  # Полный прогон с моделью — только по решению владельца в диалоге (правило 07.09): здесь лишь запись
+  Say "=== TRIGGER CROSSED, full assessment is due, decide in dialogue, not started here: $($fresh.summary)"
 }
 
 Say "=== publish the fresh layer"

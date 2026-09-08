@@ -1921,6 +1921,12 @@
     var fb = el('button', 'back-go bright', S.full ? (narrowFb ? '✕' : '✕ full screen') : '⛶'); fb.type = 'button'; fb.title = S.full ? 'back to three columns (Esc)' : 'this scene full screen';
     if (!(S._back && S.view !== 'overview') && !(S._navN > 0)) fb.style.marginLeft = 'auto';
     fb.onclick = function () { S.full = !S.full; render(); };
+    if (globeMode()) {
+      var gb = el('button', 'back-go bright' + (S.globe ? ' on' : ''), S.globe ? '🌐 flat' : '🌐 globe'); gb.type = 'button';
+      gb.title = S.globe ? 'back to the flat view' : 'the same on a globe (pilot)';
+      gb.onclick = function () { S.globe = !S.globe; render(); };
+      top.appendChild(gb);
+    }
     top.appendChild(fb);
     head.appendChild(top);
     requestAnimationFrame(fitStageTitle); setTimeout(fitStageTitle, 120);
@@ -4603,7 +4609,13 @@
   }
   function infoPane(body, items) {
     var it = items.filter(function (q) { return q.key === S.sub.info; })[0];
-    if (it) { var p = el('div', 'info-pane'); p.innerHTML = it.html; body.appendChild(p); }
+    if (!it) return;
+    var p = el('div', 'info-pane'), mode = S.sub.noteMode || 'plain';
+    if (it.plain) {
+      p.innerHTML = '<div class="seg sub" style="margin-bottom:6px">' + [['plain', 'in plain words'], ['tech', 'technical']].map(function (o) { return '<button type="button" class="sq' + (mode === o[0] ? ' on' : '') + '" data-notemode="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div>' + (mode === 'plain' ? '<div>' + esc(it.plain) + '</div>' : it.html);
+      p.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } });
+    } else p.innerHTML = it.html;
+    body.appendChild(p);
   }
   function worksFoot(body, anchor) {
     var h = linksHtml(anchor); if (!h) return;
@@ -4618,7 +4630,7 @@
       'Raw satellite view: convection over Niño 3.4 ' + (function () { var s0 = ((CR.series || {}).nino34_A || {}).conv_frac || {}; var c = s0[cur] || {}; var ks = Object.keys(c).map(Number).sort(function (a, b) { return a - b; }); var v = c[String(ks[ks.length - 1])]; return fin(v) ? fnum(v * 100, 1, false) + ' % of footprints' : ''; })() + (trig.length ? '; detectors fired: ' + trig.join(', ') : '; ' + Object.keys(dets).length + ' turning-point detectors quiet');
     var body = stageShell(head, [segBtn('radiance', 'convection', 'Convection', 'convection'), segBtn('radiance', 'walker', 'Raw Walker', 'convection'), segBtn('radiance', 'clouds', 'Cloud floors', 'convection'), segBtn('radiance', 'greenhouse', 'Window trap', 'convection'), segBtn('radiance', 'profile', 'Layers through cloud', 'convection'), segBtn('radiance', 'seismic', 'Quakes and sun', 'convection')]);
     if (!RA.updated) { body.appendChild(el('div', 'note', 'No radiance.json yet: the collector at C:\\CL\\radiance writes it; the daily wrapper copies it in.')); return; }
-    body.classList.add('scroll');
+    body.classList.add('scroll'); body.setAttribute('data-own-info', '1');
     // описание источника — по-английски, из данных, а не из русской строки файла
     var alertsEn = alerts.map(function (a) {
       var m = String(a.metric || ''), z = m.indexOf('seismic_') === 0 ? (US.zones || {})[m.slice(8)] : null;
@@ -4635,12 +4647,20 @@
       if (withNode) { row.appendChild(el('span', 'seg-gap', '')); [['A', 'day, 13:30'], ['D', 'night, 01:30']].forEach(function (o) { var b = el('button', (node === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.radNode = o[0]; render(); }; row.appendChild(b); }); }
       return row;
     }
+    var RAD_PLAIN = {
+      convection: 'Tall storm clouds have moved from the western Pacific to the middle of it, where they almost never are. The satellite counts how much of each day’s view is cold cloud tops; this year it is many times more than in the past three years.',
+      walker: 'Normally the west of the Pacific is cloudy and the east is clear, so the satellite sees the east as much warmer at the top of the atmosphere. This year that contrast has vanished: the whole circulation has shifted east, which is the signature of a strong El Niño.',
+      clouds: 'Each satellite scene is sorted by how high its clouds are, from clear sky to deep storms. Over the central Pacific there is now far more cloud and far less clear sky than before; over the west the opposite. More cloud means more sunlight reflected there.',
+      greenhouse: 'Moist air holds heat in. Even on the clearest days the air over the central Pacific now traps more of the sea’s heat than in past years, because the warm sea puts more water vapour above it; the drier west traps less.',
+      profile: 'A temperature ladder through the atmosphere, layer by layer: the microwave channels look through the clouds and show the air above the central Pacific warmer than in every recent year.',
+      seismic: 'Earthquakes and the sun are shown beside the climate rows because people ask; nothing here claims they drive El Niño. One region shows more quakes than usual this summer, mostly aftershocks of a single large one.'
+    };
     var INFO = [{ key: 'source', label: 'source', html: srcHtml }], row, nt = '';
 
     if (k === 'convection') {
       row = boxRow(true);
       nt = notes(radF(F, 'conv_frac'), 'Deep convection is where the infrared window sees cloud tops colder than 235 K; the share of such footprints per day is the cleanest count of convection the granules give.', ['conv_frac_' + boxk + '_A', 'conv_frac_' + boxk + '_D']);
-      INFO.push({ key: 'notes', label: 'notes', html: nt }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
+      INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
       var ser = ((CR.series || {})[boxk + '_' + node] || {});
       plot(body, function (w, h) { return chartRadSeries({ byYear: pct(ser.conv_frac || {}), cur: cur, n: 68, dayLabel: dl, zero: true, title: 'Deep convection: share of footprints colder than 235 K at 900 cm⁻¹, ' + boxk + ', ' + (node === 'A' ? 'day' : 'night') + ', % of footprints, ' + cur + ' against 2023–2025' }, w, h); });
       body.appendChild(kpiRow(kpiLast(ser.conv_frac || {}, 100, ' %', 'deep convection · ' + boxk + ' · ' + (node === 'A' ? 'day' : 'night'), 'share of footprints, last 14 days, against the window means of past years')));
@@ -4648,7 +4668,7 @@
       row = el('div', 'seg sub');
       [['A', 'day, 13:30'], ['D', 'night, 01:30']].forEach(function (o) { var b = el('button', (node === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.radNode = o[0]; render(); }; row.appendChild(b); });
       nt = notes(radF(F, 'walker_raw'), 'In every past year the east read 19–26 K warmer at the top of the atmosphere than the cloudy west; this year the contrast sits near zero: the convection has moved east.', ['walker_A', 'walker_D']);
-      INFO.push({ key: 'notes', label: 'notes', html: nt }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
+      INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
       var wk = (CR.series || {})['walker_' + node] || {};
       plot(body, function (w, h) { return chartRadSeries({ byYear: wk, cur: cur, n: 68, dayLabel: dl, zero: true, title: 'Raw Walker: brightness temperature at 900 cm⁻¹, Niño 3.4 minus warm pool, K, ' + (node === 'A' ? 'day' : 'night') }, w, h); });
       body.appendChild(kpiRow(kpiLast(wk, 1, ' K', 'raw Walker contrast · ' + (node === 'A' ? 'day' : 'night'), 'east minus west, last 14 days, against the window means of past years')));
@@ -4660,7 +4680,7 @@
       row.appendChild(el('span', 'seg-gap', ''));
       [['chart', 'chart'], ['table', 'table']].forEach(function (o) { var b = el('button', (mode === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.radMode = o[0]; render(); }; row.appendChild(b); });
       nt = notes(radF(F, 'clouds'), 'The day-time cloud share is the panel’s proxy for albedo: more reflecting cover over the east, less over the west; infrared does not measure albedo itself, VIIRS would.', ['highcloud_' + boxk + '_A', 'highcloud_' + boxk + '_D']);
-      INFO.push({ key: 'notes', label: 'notes', html: nt }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
+      INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
       var CLb = ((CR.clouds || {})[boxk + '_' + node]) || {};
       var FL = { clear: 'clear sky (window within 4 K of the sea)', low: 'low cloud (270–285 K)', mid: 'mid cloud (235–270 K)', deep: 'deep convection (below 235 K)' };
       function floorSeries(f) { var by = {}; Object.keys(CLb).forEach(function (y) { by[y] = {}; Object.keys(CLb[y]).forEach(function (dd) { var v = (CLb[y][dd] || {})[f]; by[y][dd] = fin(v) ? v * 100 : null; }); }); return by; }
@@ -4682,14 +4702,14 @@
       row.appendChild(el('span', 'seg-gap', ''));
       [['A', 'day, 13:30'], ['D', 'night, 01:30']].forEach(function (o) { var b = el('button', (node === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.radNode = o[0]; render(); }; row.appendChild(b); });
       nt = notes(radF(F, gk), gk === 'greenhouse_clear' ? 'On the strictest 1 % of scenes the Niño 3.4 signal halves to about +1.4 K but stays; over the warm pool truly clear scenes are 0–3 % of days, so its value is an upper bound.' : 'The full index follows cloud cover, read it beside the cloud floors; the greenhouse signal is G_clear.', [gk + '_' + boxk + '_A', gk + '_' + boxk + '_D']);
-      INFO.push({ key: 'notes', label: 'notes', html: nt }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
+      INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
       var Gb = ((CR[gk] || {})[boxk + '_' + node]) || {};
       plot(body, function (w, h) { return chartRadSeries({ byYear: Gb, cur: cur, n: 68, dayLabel: dl, zero: true, title: (gk === 'greenhouse_clear' ? 'G_clear: sea surface minus the warmest tenth of window scenes, K' : 'G: sea surface minus the mean window brightness temperature, K') + ', ' + boxk + ', ' + (node === 'A' ? 'day' : 'night') }, w, h); });
       body.appendChild(kpiRow(kpiLast(Gb, 1, ' K', (gk === 'greenhouse_clear' ? term('gclear', 'G_clear') : 'G') + ' · ' + boxk + ' · ' + (node === 'A' ? 'day' : 'night'), 'last 14 days, against the window means of past years')));
     } else if (k === 'profile') {
       row = boxRow(false);
       nt = notes(radF(F, 'profile_anom'), 'Over Niño 3.4 the infrared window and lower troposphere read 17–20 K colder because the instrument sees cloud tops, not the surface; the microwave channels see through and show the troposphere 2–3 K warmer than every analogue year.', []);
-      INFO.push({ key: 'notes', label: 'notes', html: nt }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
+      INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
       var CRL = { '662': 'CO₂ 662 cm⁻¹ · stratosphere', '690': 'CO₂ 690 · upper troposphere', '710': 'CO₂ 710 · mid troposphere', '750': 'CO₂ 750 · lower troposphere', '900': 'window 900 · surface or cloud top' };
       var ATL = { ch05: 'ch 5 · ~900 hPa', ch06: 'ch 6 · ~700 hPa', ch07: 'ch 7 · ~400 hPa', ch08: 'ch 8 · ~250 hPa', ch09: 'ch 9 · ~180 hPa', ch10: 'ch 10 · ~90 hPa', ch11: 'ch 11 · ~50 hPa', ch12: 'ch 12 · ~25 hPa', ch13: 'ch 13 · ~10 hPa', ch14: 'ch 14 · ~5 hPa', ch15: 'ch 15 · ~2 hPa' };
       function cell(v) { if (!fin(v)) return '<td class="num">·</td>'; var c = v >= 1 ? ' top' : (v <= -1 ? ' st-ok' : ''); return '<td class="num' + c + '">' + fnum(v, 1) + '</td>'; }
@@ -4705,7 +4725,7 @@
       row.appendChild(el('span', 'seg-gap', ''));
       [['chart', 'chart'], ['table', 'table']].forEach(function (o) { var b = el('button', (zmode === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.radMode = o[0]; render(); }; row.appendChild(b); });
       nt = '<b>Quakes.</b> Events M ≥ 4.5 by Pacific-rim zone in the same calendar window, this year against every year 2000–2025. The count does not separate aftershocks, so a swarm after one large shock (37 events in one day this year) inflates the window; catalogue magnitudes are a computed product, the raw record is the IRIS seismograms.<br><b>Sun.</b> Sunspots, F10.7 and Kp from GFZ Potsdam over the same window.<br><b>Neither is El Niño physics</b> on this panel; they are side series of the same collector.<br><b>Caveats.</b> ' + esc(radCav(cav));
-      INFO.push({ key: 'notes', label: 'notes', html: nt }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
+      INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
       if (zmode === 'chart') {
         var zd = (zones[zsel] || {}).daily_cur || {}, byZ = {}; byZ[cur] = {}; for (var i = 0; i < 68; i++) byZ[cur][String(i)] = zd[String(i)] || 0;
         plot(body, function (w, h) { return chartRadSeries({ byYear: byZ, cur: cur, n: 68, dayLabel: dl, zero: true, bars: true, title: 'Quakes M ≥ 4.5 per day, ' + zsel.replace(/_/g, ' ') + ', ' + cur }, w, h); });
@@ -4743,6 +4763,205 @@
         (st.diff != null ? '<div class="kpi"><div class="kn">against the mean of past years</div><div class="kv">' + fnum(st.diff, 1) + '<small>' + (st.now.slice(-2) === ' %' ? ' pt' : ' K') + '</small></div><div class="km">this year’s last 14 days minus the average of the past windows</div>' + kmeta(null, 'our own difference', String(RA.updated || '').slice(0, 10)) + '</div>' : '');
       return kp;
     }
+  }
+
+  /* ШАР (пилот, владелец 08.09: «переключатель на каждое наше представление, чтобы на шаре
+     видеть, где уместно»). Библиотека globe.gl (MIT, three.js) грузится по требованию с jsdelivr,
+     только когда человек нажал «globe»; страница без неё не тяжелеет. Данные — data/enso/globe.json
+     (globe_data.py): аномалия OISST за последний день на сетке 1°, боксы и буи из того, что уже
+     посчитано. Текстура шара рисуется на холсте из сетки, береговая линия — наш coast.json. */
+  var GLOBE_VIEWS = { now: 'nino', regions: 'land', ocean: 'moorings', radiance: 'radiance', trend: 'rain' };
+  function globeMode() {
+    var m = GLOBE_VIEWS[S.view]; if (!m) return null;
+    if (S.view === 'now' && (S.sub.now || 'analogs') !== 'map') return null;
+    if (S.view === 'ocean' && (S.sub.ocean || 'surface') !== 'moorings') return null;
+    if (S.view === 'trend' && (S.sub.trend || 'sst_nino34') !== 'rain') return null;
+    return m;
+  }
+  function globeLib() {
+    if (window.Globe) return Promise.resolve();
+    if (S._globeLoad) return S._globeLoad;
+    S._globeLoad = new Promise(function (ok, bad) {
+      var sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/globe.gl'; sc.async = true;
+      sc.onload = function () { ok(); }; sc.onerror = function () { S._globeLoad = null; bad(new Error('globe.gl did not load')); };
+      document.head.appendChild(sc);
+    });
+    return S._globeLoad;
+  }
+  function globeData() {
+    if (S.GL) return Promise.resolve(S.GL);
+    return Promise.all([get('/data/enso/globe.json'), S.COAST ? Promise.resolve(S.COAST) : get('/data/enso/coast.json').catch(function () { return null; })])
+      .then(function (r) { S.GL = r[0]; if (r[1]) S.COAST = r[1]; return S.GL; });
+  }
+  function sstColor(v) {   // расходящаяся шкала: синий холоднее, красный теплее, ±3 °C полный цвет
+    if (!fin(v)) return null;
+    var a = Math.max(-1, Math.min(1, v / 3));
+    return a >= 0 ? 'rgba(' + Math.round(180 + 60 * a) + ',' + Math.round(120 - 90 * a) + ',' + Math.round(90 - 60 * a) + ',' + (0.35 + 0.65 * Math.abs(a)).toFixed(2) + ')'
+                  : 'rgba(' + Math.round(110 + 40 * a) + ',' + Math.round(150 + 30 * a) + ',' + Math.round(210) + ',' + (0.35 + 0.65 * Math.abs(a)).toFixed(2) + ')';
+  }
+  function globeTexture(G) {
+    var W = 1440, H = 720, c = document.createElement('canvas'); c.width = W; c.height = H;
+    var x = c.getContext('2d');
+    x.fillStyle = '#1b2230'; x.fillRect(0, 0, W, H);                     // суша и полюса
+    x.fillStyle = '#2b3446'; x.fillRect(0, H * (30 / 180), W, H * (120 / 180));   // океан без данных
+    var g = G.sst; if (g && g.rows) {
+      var s = g.step || 1, px = W / 360 * s, py = H / 180 * s;
+      g.rows.forEach(function (row, i) {
+        var lat = g.lat0 + i * s;                                       // lat0 = -60 → вверх
+        row.forEach(function (v, j) {
+          var col = sstColor(v); if (!col) return;
+          var lon = g.lon0 + j * s;
+          x.fillStyle = col; x.fillRect((lon + 180) / 360 * W, (90 - lat - s) / 180 * H, px + .5, py + .5);
+        });
+      });
+    }
+    var CO = S.COAST; if (CO && CO.polys) {
+      x.strokeStyle = 'rgba(235,225,205,.55)'; x.lineWidth = 1.2;
+      CO.polys.forEach(function (poly) { x.beginPath(); poly.forEach(function (q, k) { var X = (q[0] + 180) / 360 * W, Y = (90 - q[1]) / 180 * H; if (k) x.lineTo(X, Y); else x.moveTo(X, Y); }); x.stroke(); });
+    }
+    return c.toDataURL('image/png');
+  }
+  /* Бокс через 180-й меридиан (Niño 4: 160°E → 150°W) библиотека натягивала на всю сферу —
+     крышка закрывала весь шар красным. Такие боксы режем на две половины по антимеридиану. */
+  function boxPoly(b) {
+    var lo0 = b.lon[0], lo1 = b.lon[1];
+    if (lo1 > 180) lo1 -= 360;
+    // d3-geo: кольцо по часовой стрелке = внутренность; против часовой шар красил целиком (проверено 08.09)
+    function ring(a, c) { return [[a, b.lat[0]], [a, b.lat[1]], [c, b.lat[1]], [c, b.lat[0]], [a, b.lat[0]]]; }
+    if (lo0 > lo1) return { type: 'MultiPolygon', coordinates: [[ring(lo0, 179.99)], [ring(-179.99, lo1)]] };
+    return { type: 'Polygon', coordinates: [ring(lo0, lo1)] };
+  }
+  function mountGlobe(mode) {
+    var body = document.querySelector('.stage-body'); if (!body) return;
+    var plot = body.querySelector('.plot');
+    var box = el('div', 'globe-box'); box.innerHTML = '<div class="globe-wait">loading the globe…</div>';
+    if (plot) body.replaceChild(box, plot); else body.insertBefore(box, body.firstChild.nextSibling || null);
+    S.plotEl = null; S.draw = null;
+    Promise.all([globeLib(), globeData()]).then(function (r) {
+      if (!box.isConnected) return;
+      var G = r[1], W = Math.max(300, box.clientWidth), H = Math.max(300, box.clientHeight);
+      box.innerHTML = '';
+      var kinds = { nino: ['nino'], land: ['land'], moorings: ['nino'], radiance: ['radiance'], rain: ['land'] }[mode] || ['nino'];
+      var polys = (G.boxes || []).filter(function (b) { return kinds.indexOf(b.kind) >= 0; });
+      function val(b) { return mode === 'rain' ? b.rain_pct : b.value; }
+      function colr(b) {
+        var v = val(b); if (!fin(v)) return 'rgba(200,200,200,.25)';
+        if (mode === 'rain') { var d = Math.max(-1, Math.min(1, (v - 100) / 100)); return d < 0 ? 'rgba(212,115,92,' + (0.25 + 0.6 * -d).toFixed(2) + ')' : 'rgba(124,155,203,' + (0.25 + 0.6 * d).toFixed(2) + ')'; }
+        if (mode === 'radiance') return 'rgba(212,115,92,' + (0.2 + Math.min(0.75, v / 30)).toFixed(2) + ')';
+        return sstColor(v) || 'rgba(200,200,200,.25)';
+      }
+      var g = Globe({ animateIn: false })(box)
+        .width(W).height(H).backgroundColor('rgba(0,0,0,0)')
+        .globeImageUrl(globeTexture(G)).showAtmosphere(true).atmosphereColor('#7C9BCB').atmosphereAltitude(0.12)
+        .polygonsData(polys.map(function (b) { return { geo: boxPoly(b), b: b }; }))
+        .polygonGeoJsonGeometry(function (d) { return d.geo; })
+        .polygonCapColor(function (d) { return colr(d.b); })
+        .polygonSideColor(function () { return 'rgba(0,0,0,0)'; })
+        .polygonStrokeColor(function () { return '#f2e9d8'; })
+        .polygonAltitude(0.008)
+        .polygonLabel(function (d) { return '<div style="font:12px/1.4 system-ui;padding:4px 6px;background:rgba(20,24,32,.9);color:#eee;border-radius:6px"><b>' + esc(d.b.label) + '</b><br>' + esc(d.b.text || '') + (d.b.date ? '<br><small>' + esc(d.b.date) + '</small>' : '') + '</div>'; })
+        .labelsData(polys.map(function (b) { var lc = (b.lon[0] + b.lon[1]) / 2; if (lc > 180) lc -= 360; return { lat: (b.lat[0] + b.lat[1]) / 2, lng: lc, text: b.label.replace(/^Satellite: /, '') + (fin(val(b)) ? ' ' + (mode === 'rain' ? val(b) + ' %' : fnum(val(b), 1) + (mode === 'radiance' ? ' %' : ' °C')) : '') }; }))
+        .labelSize(1.1).labelColor(function () { return '#f2e9d8'; }).labelDotRadius(0).labelAltitude(0.012);
+      if (mode === 'moorings') {
+        g.pointsData(G.moorings || []).pointLat('lat').pointLng('lon')
+          .pointAltitude(function (d) { return fin(d.value) ? 0.02 + d.value / 60 : 0.02; })
+          .pointRadius(0.6).pointColor(function (d) { return fin(d.value) ? '#D4735C' : '#888'; })
+          .pointLabel(function (d) { return '<div style="font:12px/1.4 system-ui;padding:4px 6px;background:rgba(20,24,32,.9);color:#eee;border-radius:6px"><b>' + esc(d.label) + '</b><br>' + esc(d.text) + (d.date ? '<br><small>' + esc(d.date) + '</small>' : '') + '</div>'; });
+      }
+      var focus = { nino: -140, land: 40, moorings: -150, radiance: -170, rain: 40 }[mode] || -140;
+      g.pointOfView({ lat: mode === 'land' || mode === 'rain' ? 10 : 0, lng: focus, altitude: 2.1 }, 0);
+      g.controls().autoRotate = true; g.controls().autoRotateSpeed = 0.35;
+      var leg = el('div', 'globe-legend');
+      leg.innerHTML = '<b>' + ({ rain: 'boxes: rain, % of normal over 30 days', land: 'boxes: air anomaly over 30 days, °C', radiance: 'boxes: deep convection, % of footprints', moorings: 'boxes: NOAA weekly anomaly, °C' }[mode] || 'boxes: NOAA weekly anomaly, °C') + '</b> · sea: OISST anomaly ' + esc((G.sst || {}).date || '') + ' against 1971–2000' +
+        '<span class="gl-bar"></span>−3 … +3 °C · drag to turn, wheel to zoom, point at a box' + (mode === 'moorings' ? '; pillars: warmest layer under each mooring' : '');
+      box.appendChild(leg);
+      S._globeInst = g; window.B42Globe = g;   // наружу — для отладки из консоли
+    }).catch(function (e) { box.innerHTML = '<div class="note warn">The globe did not load: ' + esc(String(e.message || e)) + '. The flat view is one click away.</div>'; });
+  }
+
+  /* SOURCE И NOTES НА КАЖДОЙ СЦЕНЕ (владелец 08.09: «source и notes везде, например #models»;
+     «простой человеческий вариант описания переключателем, техническое сохранить»). Для каждой
+     сцены здесь: source — откуда числа; plain — в чём суть, двумя-тремя фразами для обычного
+     человека; tech — техническое, к нему прибавляются подписи сцены (.cap), которые с экрана
+     убираются в этот же разбор. Стандарт сцены: сверху график, ниже плашки, слова — за кнопками. */
+  var SCENE_INFO = {
+    verdict: { source: 'The verdict is written by DeepSeek V4 Pro from the numbers on this panel and checked by Claude (Fable) against the same numbers; nothing in it is typed by hand. The numbers come from the daily and weekly rows below.',
+      plain: 'This is the machine’s summary of where the event stands today, in plain words: what is happening, whether it has turned, what to watch next and what we are not sure about. A second machine checks every number in it before it goes out.',
+      tech: 'The model receives a digest of the panel’s state (series, ranks, records, detectors, model plume) and returns verdict, turning point, outlook, watch list, confidence and caveats; a review pass compares each number with the digest and edits wording only. Corrections to earlier verdicts stay in the history.' },
+    overview: { source: 'Every tile is the same chart as on its own scene, drawn small from the same files; the strip on top repeats the headline numbers.',
+      plain: 'One screen with everything: the key numbers on top, and below them small versions of every chart. Point at a tile to read what it means, click it to open the full scene.',
+      tech: 'Tiles are rendered by the scene chart functions in a tight mode: annotations removed, axes thinned to first and last labels, viewBox cropped to the drawn content. The strip is built from latest.json, precip.json, radiance.json, spectral.json and mentions.json.' },
+    news: { source: 'Built by rules from the value journal (data/enso/journal.json): a line appears when a number, a risk level, an alert or the verdict changed in the last seven days. Release dates come from each source’s schedule.',
+      plain: 'What changed in the last week and what is due next: new records, alerts that fired, risks that moved a level, and the releases we are waiting for.',
+      tech: 'Unchanged values are skipped; absolute series carry no sign; a verdict rewritten on the same numbers is marked as reworded, not changed. Nothing here is written by a model.' },
+    mentions: { source: 'Google News RSS editions in nine languages and Bing News (headlines and publisher), Wikimedia page views of the El Niño article in nine languages, RSS of agencies and forecast centres filtered to ENSO posts.',
+      plain: 'How much the world is talking about the event and where: headlines by language, Wikipedia readers per day, and what the forecast centres publish. This is talk, not measurement.',
+      tech: 'Each edition holds only its latest hundred items, so older days are undercounted; duplicates are removed by normalised title; GDELT is optional and rate-limited; official feeds show only posts mentioning ENSO and list the silent ones.' },
+    now: { source: 'NOAA CPC weekly Niño indices (wksst9120), NOAA OISST v2.1 daily boxes read from the ERDDAP grid with our own 1991–2020 climatologies, NOAA ONI, IRI plume, Natural Earth coastline.',
+      plain: 'Where the event stands against the strongest ones on record on the same calendar days, week by week and on the map of the Pacific. A rank of 1 means warmer than any past event at this point of the year.',
+      tech: 'Analogue years are 1982, 1997, 2015 and 2023 aligned on day of year; the map colours the four Niño boxes by the weekly anomaly and shows the same week of the comparison event underneath; the play control steps the last twenty weeks.' },
+    ocean: { source: 'OISST v2.1 daily boxes (own climatology), TAO/TRITON moorings via PMEL ERDDAP (daily profiles), GODAS reanalysis via NOAA PSL OPeNDAP (monthly sections and the Hovmöller diagram).',
+      plain: 'The ocean from the surface down: daily surface temperature by box, the moorings that measure the warm water below, and the reanalysis picture of heat moving east along the equator month by month.',
+      tech: 'Mooring anomalies are against the 1991–2020 climatology of each station; the SHOUT rule for the subsurface fires only above the mooring’s own record before this event; GODAS lags about six weeks and smooths extremes; the Hovmöller rows are monthly anomalies at ~95 m or the 20 °C isotherm depth.' },
+    radiance: { source: 'NOAA-21 CrIS and ATMS granules read straight from the anonymous NOAA NODD bucket by an external collector (C:\\CL\\radiance, schema v2); USGS catalogue; GFZ solar indices.',
+      plain: 'What the satellite itself sees over the Pacific: where the tall storm clouds are, how the east-west contrast has collapsed, and how much the moist air traps heat. Measured by us from the raw data, not taken from anyone’s product.',
+      tech: 'Brightness temperatures, not air or ocean temperature; the record starts in February 2023; infrared is blind under cloud (that is the convection signal), microwave sees through; G_clear on the warmest tenth of scenes is partly residual cloud, on the strictest percent the signal halves but stays.' },
+    models: { source: 'IRI/CPC ENSO plume, monthly issues: two dozen dynamical and statistical models; our classification of each model against the observed ONI.',
+      plain: 'What the forecast centres expect and how well they have kept up: which models have fallen below reality, how each issue revised upward, and where the combined forecast now puts the peak.',
+      tech: 'A model is counted broken when its forecast for a season already observed lies below the observed ONI by the threshold; the stack shows three issues on the same calendar; the breakdown is the share of models below reality per issue; RONI removes the warm background from ONI.' },
+    air: { source: 'NOAA PSL daily and monthly indices (SOI, OLR, 850 hPa zonal wind), ERA5 wind via Open-Meteo, PMEL warm water volume and 300 m temperature, UAH satellite layers, World Bank Pink Sheet commodity prices.',
+      plain: 'The atmosphere and the fuel: whether the winds and pressure have joined the ocean, how much warm water is stored below the surface to feed the event, and how the air and food prices answer.',
+      tech: 'Coupling counts the atmospheric signs in place (SOI, OLR, westerlies); the fuel is warm water volume as a share of its record with its lead on the surface; layers are UAH lower-troposphere anomalies; commodity alerts use weights, seasonal z-scores and year-on-year percentiles.' },
+    trend: { source: 'Daily series from climatereanalyzer.org (OISST Niño 3.4 and world ocean, ERA5 2 m air), ERA5 land boxes via Open-Meteo, GPCP monthly rain, NOAA OHC, our own spectral test and risk index history.',
+      plain: 'The daily temperature rows over the last year and more, with every past year as a band behind them, records marked, a two-week outlook from similar days, plus rain by region and a watch for unusual rhythms in the data.',
+      tech: 'Records are per calendar day since the start of each series; CUSUM accumulates excess above a threshold; the 14-day forecast is the spread of what followed similar states; land boxes are 3×3 ERA5 grid means; the spectral watch tests 30-day windows for lines at 2–7 days against red noise with a multiplicity correction.' },
+    regions: { source: 'A hand-written reference by region (typical impacts by season, food exposure, sources with DOIs), the Gulf block with measured series, and for six regions the ERA5 box series and rain from the same data as on Dynamics.',
+      plain: 'What this event usually does to each region and what is measured there now: the air over the region, the rain against normal, and the typical picture by season.',
+      tech: 'Levels by scenario come from the reference tables keyed to event strength; measured blocks are shown only where a box or station exists; Gulf sea and weather series are our own OISST box and ERA5 point.' },
+    food: { source: 'FAO Food Price Index monthly, World Bank Pink Sheet monthly commodity prices, FAOSTAT dietary shares for the weights, our own onset dates for past events.',
+      plain: 'What food prices are doing: the world index, twelve commodities by name in dollars per tonne, and how each moved after the start of past events. A rise in time with the event is not proof of cause.',
+      tech: 'Paths after onset are percentages of the onset-month price; in dollars they are scaled through the onset or today’s price; weights 1–5 order the alerts; the bundle uses a log scale; series are nominal, not inflation-adjusted.' },
+    planet: { source: 'NOAA GML greenhouse gases, NSIDC sea ice index v4, Met Office HadCRUT5, NOAA STAR sea level, and our own daily series drawn year by year.',
+      plain: 'The long record behind the event: gases in the air, ice at both poles, the planet’s temperature and sea level, decades at a glance. The El Niño years and the years after them are highlighted.',
+      tech: 'Annual and daily series are shown against their own baselines as stated on each chart; CO₂ uses the trend column of the GML file; sea level has no glacial isostatic adjustment.' },
+    how: { source: 'Written by hand: glossary, method notes and the release calendar of every source.',
+      plain: 'The dictionary of the panel: what each term means, why it matters here, and where it comes from; plus how the whole thing is put together and when each source updates.',
+      tech: 'Glossary keys match data-term attributes in the code; the calendar is the publishing cadence of each provider, not our run times.' },
+    refs: { source: 'Our parsed arXiv works attached to claims by a model with a deny list, the register of data sources, quoted literature, and a hand-written list of kindred projects with licences checked at the source.',
+      plain: 'Everything we lean on: the papers we have read that support a claim, the data providers, the reports we quote, and similar projects elsewhere.',
+      tech: 'Links are proposed by a model from the pool of parsed works and filtered by links-deny.json; anchors are risks, alerts, regions, terms and hand-written claim blocks; a work standing at many anchors is flagged in the check as possibly too general.' },
+    chain: { source: 'A hand-written map of sources, collectors, computed states and outputs; dates and freshness dots come from latest.json and the value journal.',
+      plain: 'How a number travels: from the provider through our collectors and rules to the page you are reading. Click a node to see what depends on it.',
+      tech: 'Nodes carry src_keys and journal keys; the green dot means the source answered on the last run; the date is when its data last changed, not when we asked.' },
+    ops: { source: 'data/enso/ops.json and runs.json, written at the end of every run by ops.py; the fresh layer from fresh.py.',
+      plain: 'The service room: which runs happened, how long they took and whether they finished, which source is behind, and what new data has arrived that the verdict has not looked at yet.',
+      tech: 'Runs are recorded by kind with start, seconds, status and notes; sources carry date ranges read from the raw copies; the fresh layer compares light-run tails with the assessed state and lists crossed triggers.' },
+    about: { source: 'Written by hand.', plain: 'What this panel is, who writes what, and how to read it.', tech: 'The division of labour: rules compute, DeepSeek writes the verdict, Claude checks it, a person runs the updates and publishes.' }
+  };
+
+  function sceneInfoBar() {
+    var view = S.view === 'gulf' ? 'regions' : (S.view === 'risk' ? 'now' : S.view), info = SCENE_INFO[view];
+    var head = document.querySelector('.stage-head'), body = document.querySelector('.stage-body');
+    if (!info || !head || !body || body.getAttribute('data-own-info') || body.querySelector('button[data-info]')) return;
+    var seg = head.querySelector('.seg'); if (!seg) { seg = el('div', 'seg'); head.appendChild(seg); }
+    // подписи сцены уходят в технический разбор
+    var caps = [].slice.call(body.querySelectorAll('.cap')).map(function (c) { c.hidden = true; return c.innerHTML; }).filter(Boolean);
+    var open = S.sub.info, mode = S.sub.noteMode || 'plain';
+    seg.appendChild(el('span', 'seg-gap', ''));
+    [['source', 'source'], ['notes', 'notes']].forEach(function (o) {
+      var b = el('button', (open === o[0] ? 'on' : '') + ' sq', o[1] + (open === o[0] ? ' ▴' : ' ▾')); b.type = 'button'; b.setAttribute('data-info', o[0]);
+      b.onclick = function () { S.sub.info = S.sub.info === o[0] ? null : o[0]; render(); };
+      seg.appendChild(b);
+    });
+    if (!open) return;
+    var pane = el('div', 'info-pane');
+    if (open === 'source') pane.innerHTML = '<b>Source.</b> ' + esc(info.source);
+    else {
+      var sw = '<div class="seg sub" style="margin-bottom:6px">' + [['plain', 'in plain words'], ['tech', 'technical']].map(function (o) { return '<button type="button" class="sq' + (mode === o[0] ? ' on' : '') + '" data-notemode="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div>';
+      pane.innerHTML = sw + (mode === 'plain' ? '<div>' + esc(info.plain) + '</div>' : '<div>' + esc(info.tech) + '</div>' + caps.map(function (c) { return '<div class="cap" style="margin-top:6px">' + c + '</div>'; }).join(''));
+      pane.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } });
+    }
+    body.insertBefore(pane, body.firstChild);
   }
 
   /* ЛЕНТА УПОМИНАНИЙ (владелец 07.09): разговор о событии, не измерение. Данные mentions.json. */
@@ -4965,6 +5184,7 @@
      так вкладку можно послать письмом, а панель — снять снимком без кликов. Адрес
      обновляется при каждой перерисовке и никогда не перезагружает страницу. */
   function readHash() {
+    if (/[?&]globe=1(?:&|$)/.test(location.search)) S.globe = true;   // ссылка сразу на шар (пилот 08.09)
     var h = (location.hash || '').replace(/^#/, '');
     if (!h) return;
     var parts = h.split('/');
@@ -5043,11 +5263,14 @@
     else if (S.view === 'food') viewFood();
     else if (S.view === 'how') viewHow();
     else viewNow();
+    sceneInfoBar();                          // source / notes на каждой сцене (08.09)
+    if (S.globe && globeMode()) mountGlobe(globeMode());
     // Сцена собрана целиком — только теперь у рамки графика окончательная высота.
     redrawPlot();
     requestAnimationFrame(redrawPlot);
   }
   window.B42EnsoRedraw = function () { redrawPlot(); };
+  window.B42EnsoState = S;                 // наружу — только для отладки из консоли
   /* ВСЕ КАРТОЧКИ СЛЕВА ВЕДУТ НА СВОЮ СЦЕНУ. Владелец 04.09: «слева карточки state не
      переводят на наши вкладки?». Каждая карточка — утверждение, и у каждого есть место,
      где лежат его числа: состояние ведёт к рядам, тревога — к своему разделу, модели — к

@@ -303,7 +303,7 @@ def alert_id(title):
     s = title.lower()
     s = re.sub(r"niño\s*([0-9](?:[.+][0-9])?)",
                lambda m: "nino" + "".join(W.get(c, "") for c in m.group(1)), s)
-    s = re.sub(r"[-+−]?\d[\d\s.,:]*\s*(%|°c|σ|m/s|days?|mo|th)?", " ", s)
+    s = re.sub(r"[-+−]?\d[\d\s.,:]*\s*(%|°c|σ|m/s|days?\b|mo\b|th\b)?", " ", s)
     s = re.sub(r"[^a-zà-ÿа-я]+", "_", s).strip("_")
     return s[:48] or "alert"
 
