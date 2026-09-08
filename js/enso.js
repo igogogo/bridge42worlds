@@ -1295,7 +1295,7 @@
        подписи неизбежно спорят за место (владелец 06.09: «квадратики сливаются, всё
        нечитаемо»). Выбранная зона остаётся в полном цвете и с полным сравнением, соседние
        гаснут до 12% и молчат — карта читается даже на телефоне. */
-    var zone = S.sub.zone || 'all';
+    var zone = S.sub.zone || 'all', labels = '';
     boxes.forEach(function (b) {
       var x = lon(b[2]), w = lon(b[3]) - x, y = lat(b[4]), h = lat(b[5]) - y, key = b[6], v = lv[key];
       var on = zone === 'all' || zone === b[0];
@@ -1306,8 +1306,10 @@
         def: 'Now ' + fnum(v, 1) + ' °C. On the same week of ' + cmpYear + ': ' + fnum(then, 1) + ' °C; the peak of that event was ' + fnum(peak, 1) + ' °C. ' +
           (fin(then) ? (v > then ? 'This event is ' + fnum(v - then, 1) + ' °C warmer at the same point of the calendar.' : 'This event is ' + fnum(v - then, 1) + ' °C against it.') : ''),
         src: 'NOAA CPC weekly indices, wksst9120', date: NW.date };
-      s += '<g data-src="' + esc(JSON.stringify(pay)) + '" data-zone="' + b[0] + '"' + (dim ? ' opacity=".12"' : '') + '>' +
-        '<rect' + (b[0] === 'nino34' && zone === 'all' ? ' class="breathe"' : '') + ' x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + h.toFixed(1) + '" style="fill:' + col + ';stroke:' + col + '" fill-opacity="' + (zone === b[0] ? '.42' : '.3') + '" stroke-width="' + (zone === b[0] ? 2.6 : 1.8) + '" rx="3"/>';
+      var gOpen = '<g data-src="' + esc(JSON.stringify(pay)) + '" data-zone="' + b[0] + '"' + (dim ? ' opacity=".12"' : '') + '>';
+      s += gOpen +
+        '<rect' + (b[0] === 'nino34' && zone === 'all' ? ' class="breathe"' : '') + ' x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + h.toFixed(1) + '" style="fill:' + col + ';stroke:' + col + '" fill-opacity="' + (zone === b[0] ? '.42' : '.3') + '" stroke-width="' + (zone === b[0] ? 2.6 : 1.8) + '" rx="3"/></g>';
+      var L = gOpen;
       /* Боксы Niño 4, 3.4 и 3 перекрываются по долготе — подписи ярусами: 4 выше, 3.4 по
          центру, 3 ниже; у Niño 1+2 бокс узкий — подписи слева от него. */
       /* ПОДПИСЬ ЗОНЫ — ВНУТРИ ЕЁ ПРЯМОУГОЛЬНИКА, у верхнего края. Раньше плашка стояла по
@@ -1326,21 +1328,21 @@
          у выбранной зоны — за этим и сделан выбор (владелец 06.09). */
       var showName = !(pw < 420 && zone === 'all');
       if (showName) {
-        s += '<rect x="' + lx0.toFixed(1) + '" y="' + ly0.toFixed(1) + '" width="' + lw.toFixed(1) + '" height="14" rx="7" style="fill:var(--surface);stroke:' + col + '" stroke-width="1.2"/>';
-        s += '<text x="' + (lx0 + lw / 2).toFixed(1) + '" y="' + (ly0 + 10.5).toFixed(1) + '" text-anchor="middle" font-size="10" style="fill:' + col + ';font-weight:600;letter-spacing:.03em">' + b[1] + '</text>';
+        L += '<rect x="' + lx0.toFixed(1) + '" y="' + ly0.toFixed(1) + '" width="' + lw.toFixed(1) + '" height="14" rx="7" style="fill:var(--surface);stroke:' + col + '" stroke-width="1.2"/>';
+        L += '<text x="' + (lx0 + lw / 2).toFixed(1) + '" y="' + (ly0 + 10.5).toFixed(1) + '" text-anchor="middle" font-size="10" style="fill:' + col + ';font-weight:600;letter-spacing:.03em">' + b[1] + '</text>';
       }
       /* ЧИСЛА — БЕЛЫЕ ПОЛУЖИРНЫЕ С ТЁМНОЙ ОБВОДКОЙ. Владелец 06.09: «все цифры надо
          изменить на белый жирный, потому что всё сливается с фоном». Обводка (paint-order:
          stroke) держит их читаемыми и на светлой заливке зоны, и в тёмной теме, где белое
          на белом было бы не лучше. */
       var HALO = 'fill:#fff;paint-order:stroke;stroke:rgba(20,22,28,.75);stroke-width:3.4;stroke-linejoin:round;font-weight:700';
-      s += '<text x="' + tx.toFixed(1) + '" y="' + (cy + (small ? 8 : 7)).toFixed(1) + '" text-anchor="middle" style="' + HALO + '" font-size="' + big + '">' + fnum(v, 1) + '</text>';
-      // Сравнение с аналогом — только у выбранной зоны: в режиме «все» четыре таких строки
-      // и были главной кашей на карте.
-      if (fin(then) && zone === b[0]) s += '<text x="' + tx.toFixed(1) + '" y="' + (cy + (small ? 21 : 23)).toFixed(1) + '" text-anchor="middle" style="' + HALO.replace('stroke-width:3.4', 'stroke-width:3') + '" font-size="' + (small ? 10 : 12) + '">' + cmpYear + ' ' + fnum(then, 1) + ' · ' + (v >= then ? '▲' : '▼') + fnum(Math.abs(v - then), 1, false) + '</text>';
-      s += '</g>';
+      L += '<text x="' + tx.toFixed(1) + '" y="' + (cy + (small ? 8 : 7)).toFixed(1) + '" text-anchor="middle" style="' + HALO + '" font-size="' + big + '">' + fnum(v, 1) + '</text>';
+      // Сравнение с аналогом — у выбранной зоны крупнее, в режиме «все» мельче, но тоже поверх (владелец 08.09)
+      var cmpOn = fin(then) && (zone === b[0] || (zone === 'all' && !small));
+      if (cmpOn) L += '<text x="' + tx.toFixed(1) + '" y="' + (cy + (zone === b[0] ? (small ? 21 : 23) : 19)).toFixed(1) + '" text-anchor="middle" style="' + HALO.replace('stroke-width:3.4', 'stroke-width:3') + '" font-size="' + (zone === b[0] ? (small ? 10 : 12) : 9.5) + '">' + cmpYear + ' ' + fnum(then, 1) + ' · ' + (v >= then ? '▲' : '▼') + fnum(Math.abs(v - then), 1, false) + '</text>';
+      labels += L + '</g>';
     });
-    return s + '</svg>';
+    return s + labels + '</svg>';
   }
 
   /* КУДА МОГУТ УЙТИ ЦЕНЫ. Владелец 04.09: «пунктиром текущую, как если бы была корреляция
