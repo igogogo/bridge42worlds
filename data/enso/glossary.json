@@ -363,7 +363,7 @@
   },
   "radiance": {
    "name": "Raw satellite granules (NOAA-21)",
-   "def": "Level-1 radiances read straight from the NOAA-21 granules in the open NODD bucket: CrIS infrared spectra (blind under cloud, which is itself the convection signal) and ATMS microwave brightness temperatures (through cloud), two boxes, day and night, the window 1 July to 6 September of 2023–2026.",
+   "def": "Level-1 radiances read straight from the NOAA-21 granules in the open NODD bucket: CrIS infrared spectra (blind under cloud, which is itself the convection signal) and ATMS microwave brightness temperatures (through cloud), two boxes, day and night, the window 1 July to 6 September of 2023–2026. Schema v2 keeps a histogram of the window brightness temperature per day, so cloud floors, clear-sky shares and the window-trap indices G and G_clear are computed without re-reading the granules; AIRS on Aqua is being collected as a second, independent satellite.",
    "why": "The first measurement on this panel made by us from raw data rather than taken as somebody's product. Everything called temperature there is brightness temperature; the base starts in February 2023, so the sigmas are short.",
    "src": "external collector C:\\CL\\radiance (its author updates it); data/enso/radiance.json"
   },
@@ -390,6 +390,18 @@
    "def": "The Global Precipitation Climatology Project monthly product: satellites and rain gauges merged on a 2.5° grid over land and ocean since 1979, in millimetres per day.",
    "why": "The only long series that says whether the planet as a whole received more or less rain; used here for the planet and as a second source beside ERA5 for the land boxes.",
    "src": "NOAA PSL, precip.mon.mean.nc"
+  },
+  "cloudfloors": {
+   "name": "Cloud floors",
+   "def": "Each satellite scene sorted by the brightness temperature of the 11 µm window: deep convection below 235 K, mid cloud 235–270 K, low cloud 270–285 K, clear when the window reads within 4 K of the sea surface. Shares of scenes per day, from the raw CrIS granules.",
+   "why": "The day-time cloud share is the panel's proxy for albedo: more reflecting cover over the east Pacific, less over the west. Infrared does not measure albedo itself; VIIRS would.",
+   "src": "external collector C:\\CL\\radiance, schema v2; data/enso/radiance.json → clouds"
+  },
+  "gclear": {
+   "name": "G and G_clear, window trap",
+   "def": "G = sea surface temperature (OISST, K) minus the mean 11 µm brightness temperature over the box: how much the atmosphere closes the thermal window. G_clear is the same on the warmest tenth of scenes only, i.e. the least cloudy ones.",
+   "why": "The full G follows cloud, not greenhouse gases. G_clear is the proxy for the greenhouse action of water vapour; on the strictest 1 % of scenes the 2026 signal over Niño 3.4 halves to +1.4 K but stays. Over the warm pool there are almost no truly clear scenes, so its G_clear is an upper bound, not a measurement.",
+   "src": "external collector C:\\CL\\radiance, schema v2; data/enso/radiance.json → greenhouse, greenhouse_clear"
   }
  }
 }

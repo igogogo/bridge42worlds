@@ -632,13 +632,26 @@
    "id": "c_rad",
    "layer": "collect",
    "name": "C:\\CL\\radiance (external module)",
-   "sub": "orbit windows from file names, HTTP-Range reads of HDF5, box means; writes radiance.json",
+   "sub": "orbit windows from file names, HTTP-Range reads of HDF5, box histograms of the window channel; writes radiance.json (schema v2: cloud floors, G, G_clear)",
    "in": [
+    "s_airs",
     "s_n21",
     "s_usgs"
    ],
    "def": "Finds the granules crossing each box from orbit timing, reads only the long-wave band by HTTP Range, aggregates day × box × node × channel; keeps the granule ids for every row so any number can be recomputed.",
    "why": "Run and updated by its own author; the panel only copies the result file when it is complete."
+  },
+  {
+   "id": "s_airs",
+   "layer": "src",
+   "name": "AIRS on Aqua (GES DISC, Earthdata token)",
+   "sub": "second, independent satellite; granules since 2002; collection of the 2023–2026 windows under way",
+   "cadence": "daily",
+   "url": "https://disc.gsfc.nasa.gov/",
+   "src_keys": [],
+   "jkey": null,
+   "def": "Hyperspectral infrared sounder on a different platform, read through the same collector. A control day agreed with CrIS on every layer: two platforms see one picture.",
+   "why": "Independence: if two instruments on two satellites show the same convection and window trap, the signal is not an artefact of one of them. Also the way to deep analogues (2015/16 and earlier)."
   }
  ]
 }
