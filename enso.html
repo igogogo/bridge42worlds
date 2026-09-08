@@ -297,6 +297,39 @@
   .leg-c.pick{cursor:pointer} .leg-c.pick:hover{color:var(--text)}
   .leg-c.pick.on{color:var(--text);font-weight:600;background:color-mix(in srgb, var(--ochre) 16%, transparent)}
   .leg-sep{flex-basis:100%;height:0}
+  /* исследование в диалоге (прототип 08.09): доска слева, диалог справа */
+  .rs{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:12px;flex:1;min-height:0}
+  .rs-board,.rs-chat{min-height:0;overflow:auto;border:1px solid var(--hair);border-radius:10px;padding:8px 10px;background:var(--surface)}
+  .rs-chat{display:flex;flex-direction:column}
+  .rs-log{flex:1;min-height:0;overflow:auto}
+  .rs-m{margin:6px 0;padding:6px 9px;border-radius:9px;font-size:12.5px;line-height:1.45;position:relative}
+  .rs-m p{margin:0 0 4px} .rs-m ul{margin:2px 0 0;padding-left:16px} .rs-m li{margin:2px 0}
+  .rs-m.q{background:color-mix(in srgb, var(--ochre) 12%, transparent);margin-inline-start:14%}
+  .rs-m.a{background:color-mix(in srgb, var(--cyan) 8%, transparent);margin-inline-end:8%}
+  .rs-m .rs-t{position:absolute;top:4px;inset-inline-end:8px;font-family:var(--mono);font-size:9px;color:var(--soft)}
+  .rs-m .demo{font-family:var(--mono);font-size:9.5px;color:var(--soft);display:block;margin-top:4px}
+  .rs-m a{color:var(--cyan);text-decoration:none}
+  .rs-hits{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+  .rs-hit{font-size:10.5px;border:1px solid var(--hair);border-radius:999px;padding:0 7px;color:var(--muted)}
+  .rs-hit b{font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);margin-inline-end:4px}
+  .rs-in{display:flex;gap:6px;margin-top:6px;align-items:flex-end}
+  .rs-in textarea{flex:1;min-height:40px;resize:vertical;font:inherit;font-size:12.5px;padding:6px 8px;border:1px solid var(--hair);border-radius:8px;background:var(--bg, var(--surface));color:var(--text)}
+  .rs-btn{font-family:var(--mono);font-size:11px;padding:4px 11px;border-radius:999px;border:1px solid var(--hair);background:var(--surface);color:var(--text);cursor:pointer;white-space:nowrap}
+  .rs-btn:hover{border-color:var(--ochre);color:var(--ochre)} .rs-btn[disabled]{opacity:.45;cursor:default}
+  .rs-btn.main{color:var(--ochre);border-color:var(--ochre);font-weight:600}
+  .rs-h{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin:10px 0 4px} .rs-h:first-child{margin-top:0}
+  .rs-kpis{display:flex;flex-wrap:wrap;gap:6px}
+  .rs-links a{display:block;font-size:12px;text-decoration:none;color:var(--text);padding:2px 0} .rs-links a:hover{color:var(--cyan)}
+  .rs-links a b{font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);margin-inline-end:6px}
+  .rs-works .wk-p{margin:4px 0 0;font-size:12px;line-height:1.4} .rs-works .wk-p b{display:block;font-size:12px}
+  .rs-sum ol{margin:0;padding-left:18px;font-size:12px;line-height:1.45}
+  .rs-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .rs-saved .it{display:flex;gap:8px;align-items:center;font-size:12px;padding:3px 0;border-top:1px solid var(--hair-soft, var(--hair))}
+  .rs-saved .it .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .rs-saved .it .m{font-family:var(--mono);font-size:9.5px;color:var(--soft)}
+  .rs-empty{color:var(--soft);font-size:12px;line-height:1.4}
+  .rs-quota{font-family:var(--mono);font-size:10px;color:var(--soft);margin-top:4px}
+  .rs .cn{border-top:0;margin-top:0;padding-top:0}
+  @media (max-width:900px){ .rs{grid-template-columns:1fr} .rs-chat{order:-1;max-height:52vh} .rs-m.q{margin-inline-start:6%} }
   /* окно графа поверх панели */
   .cn-modal{position:fixed;inset:0;z-index:300;background:rgba(8,10,14,.55);display:flex;align-items:center;justify-content:center;padding:16px}
   .cn-modal-box{width:min(880px,96vw);max-height:92vh;overflow:auto;background:var(--surface);border:1px solid var(--hair);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);padding:10px 12px 8px}
@@ -681,7 +714,8 @@
      (pointer-events:auto при opacity:0): невидимый прямоугольник 330×320 висел там, где её
      показали в последний раз, — над кнопками подменю, — и съедал клики. Теперь спрятанная
      карточка не существует для мыши вовсе. */
-  .tip{position:fixed;z-index:200;max-width:min(330px,62vw);max-height:min(320px,44vh);overflow:auto;
+  .tip{position:fixed;z-index:400;   /* выше окна графа (300): подсказки понятий в нём прятались под ним (владелец 08.09) */
+    max-width:min(330px,62vw);max-height:min(320px,44vh);overflow:auto;
     pointer-events:none;visibility:hidden;opacity:0;
     transform:translateY(3px);transition:opacity .12s ease, transform .12s ease;
     background:var(--surface);border:1px solid var(--line, var(--hair));border-radius:11px;
@@ -917,7 +951,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=df591cce3a"></script>
+<script src="/js/enso.js?v=a73d55ee36"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>

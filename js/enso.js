@@ -17,7 +17,7 @@
 
   var T = {
     fresh: 'fresh', stale: 'stale',
-    tabs: { verdict: 'Verdict', overview: 'Overview', news: 'News', mentions: 'Mentions', now: 'Where we are', ocean: 'Ocean', radiance: 'Satellite raw', models: 'Models', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long record', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
+    tabs: { verdict: 'Verdict', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Where we are', ocean: 'Ocean', radiance: 'Satellite raw', models: 'Models', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long record', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
     tabHelp: {
       verdict: 'What the machine makes of it today: the verdict written from the numbers on this page, the turning point, the outlook, what to watch, the caveats.',
       overview: 'One screen with everything: a strip of key indicators and a mosaic of every chart, each a door into its section.',
@@ -34,6 +34,7 @@
       planet: 'The long record: greenhouse gases, sea ice, global temperature and sea level over the whole history of measurement, every year as a line. The background the event runs on, not the event.',
       how: 'Glossary, method and parameters, sources with their freshness, the release calendar, what changed.',
       chain: 'The chain of data end to end: sources, collectors, computed states, outputs — with the freshness of every piece.',
+      research: 'Ask in your own words; the board on the left fills with the indicators, concepts, panel scenes and works the conversation touches, and keeps a summary you can verify and save (prototype).',
       refs: 'One register of everything this panel rests on: the papers we parsed and attached, the data sources, the literature quoted — each with a link and where it is used.',
       about: 'What this panel is, what it does and does not claim, and how to read it.',
       ops: 'Runs and sources: every run with its start, duration and outcome; every source with its date range, last update and errors; the fresh layer and its triggers.',
@@ -1721,7 +1722,7 @@
       '<div class="b42mini" data-ids="' + esc(ids.join(',')) + '" data-focus="' + esc(focus || ids[0]) + '" data-newtab="1" data-lang="' + cnLang() + '"></div>' +
       '<div class="cn-modal-f"><span>drag a node; hover for the meaning; click to open its page in a new tab</span>' +
       '<a class="cn-g" href="' + cnGraph(ids, focus) + '" target="_blank" rel="noopener">open the full graph ↗</a></div></div>';
-    if (width) m.querySelector('.cn-modal-box').style.width = Math.min(window.innerWidth - 24, Math.max(360, width)) + 'px';
+    if (width) m.querySelector('.cn-modal-box').style.width = Math.min(window.innerWidth - 24, 760, Math.max(360, width)) + 'px';   // из полного экрана не растягивается на всю ширину (владелец 08.09)
     document.body.appendChild(m);
     m.addEventListener('click', function (e) { if (e.target === m || e.target.closest('.x')) closeGraphModal(); });
     var box = m.querySelector('.b42mini');
@@ -1943,6 +1944,186 @@
           '<span class="ks-n">' + esc(STRIP_NAME[x.k] || x.r.title) + '</span></button>';
       }).join('');
   }
+  /* ══ ИССЛЕДОВАНИЕ В ДИАЛОГЕ (прототип, владелец 08.09) ═══════════════════════════════
+     «Чат с моделью: справа диалог, слева собираются наши KPI, граф, облако понятий и резюме
+     беседы; проходить моделью несколько раз, проверять; сохранять в избранное». Записка с
+     устройством контура — ИССЛЕДОВАНИЕ-ЧАТ-КОНЦЕПТ-2026-09-08.md. Здесь живое: поиск по нашей
+     части панели (в браузере, лексический — заменяется вектором без правки вида), доска,
+     сохранение. Ответ модели идёт на window.B42_RESEARCH_API, если он задан; без него ответ
+     извлечённый, с честной пометкой «demo, без модели». */
+  var KPI_SCENE = { n34_weekly: 'now/weekly', n12_weekly: 'now/weekly', n34_daily: 'trend/sst_nino34', n34_30d: 'trend/sst_nino34', rec_sst_nino34: 'trend/sst_nino34', fc14_sst_nino34: 'trend/sst_nino34',
+    n34_box: 'ocean/surface', n12_box: 'ocean/surface', gulf_sst: 'ocean/surface', subsurface_warmest: 'ocean/moorings', d20_east: 'ocean/section',
+    oni: 'now/analogs', roni: 'now/analogs', risk_index: 'verdict', n_risks: 'now/analogs', n_alerts: 'now/analogs', scenario: 'regions',
+    sst_world: 'trend', t2_world: 'trend', rec_sst_world: 'trend', rec_t2_world: 'trend', fc14_sst_world: 'trend', fc14_t2_world: 'trend',
+    models_broke: 'models/breakdown', models_ok: 'models/breakdown', models_lag: 'models/breakdown', models_above: 'models/breakdown', models_below_n: 'models/breakdown', iri_share_below: 'models/breakdown', iri_peak: 'models/plume', live_mean: 'models/plume', n_live: 'models/plume',
+    food_index: 'food/prices', food_yoy: 'food/prices', price_palm_oil: 'food/goods', price_rice: 'food/goods', price_fishmeal: 'food/goods', price_wheat: 'food/goods',
+    wwv: 'air', wwv_share: 'air', wind_week: 'air', mjo_amp: 'air', dmi: 'air', soi: 'air', olr: 'air', u850_west: 'air', coupling_score: 'air', tlt_tropics: 'air', tls_tropics: 'air',
+    ohc_2000: 'planet', kuwait_tmax30: 'regions/place/gulf_arabia', peak_estimate: 'now/analogs' };
+  var RS_STOP = { the: 1, and: 1, for: 1, with: 1, that: 1, this: 1, what: 1, why: 1, how: 1, does: 1, are: 1, is: 1, of: 1, to: 1, in: 1, on: 1, a: 1, an: 1, it: 1, its: 1, be: 1, will: 1, was: 1, were: 1, has: 1, have: 1, from: 1, about: 1, than: 1, now: 1, our: 1, we: 1, you: 1, can: 1, not: 1, which: 1, when: 1, where: 1, there: 1, into: 1, over: 1, any: 1, all: 1 };
+  var RS_SYN = { nino: 'niño', 'el': '', nina: 'niña', temperature: 'temperature warm', warming: 'warm', rain: 'rain precipitation', rainfall: 'rain', drought: 'rain dry', prices: 'price food', food: 'food price', models: 'model forecast', forecast: 'forecast model', ocean: 'ocean sea', sea: 'sea ocean', wind: 'wind westerly', volume: 'volume fuel', fuel: 'fuel volume', peak: 'peak', strength: 'strong', strong: 'strong' };
+  function rsTokens(q) {
+    var out = [];
+    String(q || '').toLowerCase().replace(/[^a-z0-9°ñ.+\s-]/g, ' ').split(/\s+/).forEach(function (w) {
+      w = w.replace(/^[.+-]+|[.+-]+$/g, ''); if (!w || RS_STOP[w] || w.length < 3) return;
+      out.push(w); if (RS_SYN[w]) RS_SYN[w].split(' ').forEach(function (x) { if (x && x !== w && out.indexOf(x) < 0) out.push(x); });
+    });
+    return out;
+  }
+  function rsCorpus() {
+    if (S._rsCorpus) return S._rsCorpus;
+    var D = S.D || {}, items = [];
+    (D.risks || []).forEach(function (r) { items.push({ kind: 'risk', id: r.id, title: r.title, text: [r.plain, r.evidence, r.watch].filter(Boolean).join(' '), hash: '#risk/' + (r.id || ''), anchors: ['risk:' + (r.id || '')], w: 1.25 }); });
+    (D.alerts || []).forEach(function (a) { items.push({ kind: 'alert', id: a.id || aslug(a.title), title: a.title, text: a.detail || '', hash: '#now/analogs', anchors: [cnAnchor(['alert:' + (a.id || aslug(a.title)), 'alert:' + aslug(a.title)])], w: 1 }); });
+    var M = (S.J || {}).metrics || {};
+    Object.keys(M).forEach(function (k) {
+      if (k.indexOf('risk:') === 0) return;
+      var r = M[k], e = r.entries || [], last = e[e.length - 1];
+      var plainKey = Object.keys(KPI_PLAIN).filter(function (p) { return (r.title || '').toLowerCase().indexOf(p) >= 0 || (STRIP_NAME[k] || '').toLowerCase().indexOf(p) >= 0; })[0];
+      items.push({ kind: 'kpi', id: k, title: r.title || k, text: (STRIP_NAME[k] || '') + ' ' + (plainKey ? KPI_PLAIN[plainKey] : '') + ' ' + (r.src || '') + (last ? ' latest ' + jval(last.v, r.digits) + ' ' + (r.unit || '') + ' on ' + last.d : ''),
+        hash: '#' + (KPI_SCENE[k] || 'overview'), anchors: ['kpi:' + k], w: 1.1 });
+    });
+    Object.keys(S.G || {}).forEach(function (k) { var g = S.G[k]; if (!g || !g.name) return; items.push({ kind: 'term', id: k, title: g.name, text: (g.def || '') + ' ' + (g.why || ''), hash: '#how', anchors: ['term:' + k], w: 1 }); });
+    Object.keys(SCENE_INFO).forEach(function (v) { var i = SCENE_INFO[v]; items.push({ kind: 'scene', id: v, title: T.tabs[v] || v, text: (i.plain || '') + ' ' + (i.source || ''), hash: '#' + v, anchors: SCENE_ANCHORS[v] || [], w: 0.8 }); });
+    var seen = {};
+    Object.keys(((S.CN || {}).anchors || {})).forEach(function (a) { (S.CN.anchors[a] || []).forEach(function (c) { if (seen[c.id]) return; seen[c.id] = 1; items.push({ kind: 'concept', id: c.id, title: c.name_en || c.id, text: c.line || '', url: cnUrl(c.id), anchors: [], c: c, w: 0.9 }); }); });
+    var sm = D.summary || {}; if (sm.verdict) items.push({ kind: 'verdict', id: 'verdict', title: 'The verdict of the day', text: sm.verdict, hash: '#verdict', anchors: ['block:type', 'block:peak'], w: 1.1 });
+    items.forEach(function (it) { it.lt = String(it.title || '').toLowerCase(); it.lx = String(it.text || '').toLowerCase(); });
+    S._rsCorpus = items; return items;
+  }
+  function rsSearch(q, n) {
+    var toks = rsTokens(q), ql = String(q || '').toLowerCase().trim(); if (!toks.length) return [];
+    var scored = rsCorpus().map(function (it) {
+      var sc = 0;
+      toks.forEach(function (t) { if (it.lt.indexOf(t) >= 0) sc += 3; if (it.lx.indexOf(t) >= 0) sc += 1; });
+      if (ql.length > 6 && (it.lt.indexOf(ql) >= 0 || it.lx.indexOf(ql) >= 0)) sc += 4;
+      return { it: it, sc: sc * it.w };
+    }).filter(function (x) { return x.sc > 0; }).sort(function (a, b) { return b.sc - a.sc; });
+    return scored.slice(0, n || 8).map(function (x) { x.it.score = x.sc; return x.it; });
+  }
+  function rsState() {
+    if (!S.rs) S.rs = { msgs: [], kpis: [], anchors: [], concepts: {}, links: {}, works: {}, summary: [], created: new Date().toISOString().slice(0, 16).replace('T', ' ') };
+    return S.rs;
+  }
+  function rsFirstSentences(t, n) { var p = String(t || '').split(/(?<=[.!?])\s+/); return p.slice(0, n || 2).join(' '); }
+  function rsDemoAnswer(q, hits) {
+    if (!hits.length) return '<p>Nothing on the panel matches this yet. Try the words the panel uses: Niño 3.4, ONI, fuel, warm water volume, models, food prices, rain, a region.</p><span class="demo">demo · no model behind this answer; the search is lexical, over the statements of this panel</span>';
+    var s = '<p>What the panel says about this:</p><ul>' + hits.slice(0, 4).map(function (h) {
+      return '<li><b>' + esc(h.title) + '</b> — ' + esc(rsFirstSentences(h.text, 2)) + (h.hash ? ' <a href="enso.html' + esc(h.hash) + '" target="_blank" rel="noopener">open ↗</a>' : (h.url ? ' <a href="' + esc(h.url) + '" target="_blank" rel="noopener">concept ↗</a>' : '')) + '</li>';
+    }).join('') + '</ul><span class="demo">demo · no model behind this answer: extracted from the statements of this panel by a lexical search; with /api/research the same context goes to DeepSeek and comes back as prose with [id] marks</span>';
+    return s;
+  }
+  function readResearchReply(d) {
+    d = d || {};
+    return { answer: d.answer || d.text || d.reply || '', summary: d.summary_delta || d.summary || '', left: d.left != null ? d.left : (d.remaining != null ? d.remaining : null), error: d.error || null };
+  }
+  function rsMerge(rs, hits) {
+    hits.forEach(function (h) {
+      (h.anchors || []).forEach(function (a) { if (a && rs.anchors.indexOf(a) < 0) rs.anchors.push(a); });
+      if (h.kind === 'kpi' && rs.kpis.indexOf(h.id) < 0) rs.kpis.push(h.id);
+      if (h.kind === 'concept') rs.concepts[h.id] = h.c;
+      if (h.hash && h.kind !== 'kpi') rs.links[h.hash + '|' + h.kind] = { kind: h.kind, title: h.title, hash: h.hash };
+    });
+    conceptsFor(rs.anchors).forEach(function (c) { rs.concepts[c.id] = c; });
+    rs.anchors.forEach(function (a) { linksFor(a).forEach(function (l) { if (!rs.works[l.id]) rs.works[l.id] = l; }); });
+    (rs.anchors || []).forEach(function (a) { if (a.indexOf('kpi:') === 0 && rs.kpis.indexOf(a.slice(4)) < 0 && jrec(a.slice(4))) rs.kpis.push(a.slice(4)); });
+  }
+  function rsAsk(q) {
+    var rs = rsState(), hits = rsSearch(q, 8);
+    rsMerge(rs, hits);
+    var msg = { q: q, a: '', hits: hits.map(function (h) { return { kind: h.kind, title: h.title, hash: h.hash || h.url || '' }; }), demo: true, t: new Date().toISOString().slice(11, 16) };
+    rs.msgs.push(msg);
+    rs.summary.push(q + ' → ' + (hits.length ? hits.slice(0, 2).map(function (h) { return h.title; }).join('; ') : 'nothing on the panel'));
+    var API = window.B42_RESEARCH_API;
+    if (!API) { msg.a = rsDemoAnswer(q, hits); render(); return; }
+    msg.a = '<span class="demo">asking the model…</span>'; render();
+    var ctx = hits.map(function (h) { return { id: h.kind + ':' + h.id, title: h.title, text: h.text, hash: h.hash || h.url || '' }; });
+    fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question: q, lang: 'en', history: rs.msgs.slice(0, -1).map(function (m) { return { q: m.q, a: m.a.replace(/<[^>]+>/g, '').slice(0, 600) }; }), summary: rs.summary.join(' '), context: ctx }) })
+      .then(function (r) { return r.json(); }).then(function (d) {
+        var rr = readResearchReply(d);
+        msg.demo = false; msg.a = rr.error ? '<span class="demo">the model did not answer: ' + esc(rr.error) + '</span>' + rsDemoAnswer(q, hits) : mark(rr.answer);
+        if (rr.summary) rs.summary[rs.summary.length - 1] = rr.summary;
+        if (rr.left != null) rs.left = rr.left;
+        render();
+      }).catch(function () { msg.a = '<span class="demo">the model is unreachable; showing the extracted answer</span>' + rsDemoAnswer(q, hits); render(); });
+  }
+  function rsSavedList() { try { return JSON.parse(localStorage.getItem('b42_research') || '[]'); } catch (e) { return []; } }
+  function rsSave(rs) {
+    var list = rsSavedList(), id = rs.id || ('r' + Date.now().toString(36)); rs.id = id;
+    var item = { id: id, title: (rs.msgs[0] || {}).q || 'research', created: rs.created, saved: new Date().toISOString().slice(0, 16).replace('T', ' '), n: rs.msgs.length, rs: rs };
+    var i = list.findIndex(function (x) { return x.id === id; }); if (i >= 0) list[i] = item; else list.unshift(item);
+    try { localStorage.setItem('b42_research', JSON.stringify(list.slice(0, 30))); } catch (e) { }
+  }
+  function rsExportText(rs) {
+    return 'Research on the El Niño panel · ' + rs.created + '\n\n' + rs.msgs.map(function (m, i) { return (i + 1) + '. Q: ' + m.q + '\n   A: ' + m.a.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(); }).join('\n\n') +
+      '\n\nSummary:\n' + rs.summary.map(function (l, i) { return (i + 1) + '. ' + l; }).join('\n') +
+      '\n\nKPI: ' + rs.kpis.map(function (k) { var r = jrec(k), e = r ? r.entries || [] : [], last = e[e.length - 1]; return (r ? r.title : k) + (last ? ' ' + jval(last.v, r.digits) + ' ' + (r.unit || '') + ' (' + last.d + ')' : ''); }).join('; ') +
+      '\nConcepts: ' + Object.keys(rs.concepts).map(function (id) { return cnName(rs.concepts[id]); }).join(', ') +
+      '\nOn the panel: ' + Object.keys(rs.links).map(function (k) { return rs.links[k].title + ' (' + location.origin + '/enso.html' + rs.links[k].hash + ')'; }).join('; ') +
+      '\nWorks: ' + Object.keys(rs.works).map(function (id) { var l = rs.works[id]; return (l.our_title || l.title) + ' [' + l.id + ']'; }).join('; ') + '\n';
+  }
+  function rsKpiTile(k) {
+    var r = jrec(k), e = r ? (r.entries || []) : []; if (!r || !e.length) return '';
+    var last = e[e.length - 1], prev = e.length > 1 ? e[e.length - 2] : null, dg = r.digits, u = r.unit || '';
+    var dv = prev && typeof last.v === 'number' && typeof prev.v === 'number' ? last.v - prev.v : 0;
+    var pay = { name: r.title, def: (prev ? 'Was ' + jval(prev.v, dg) + ' on ' + prev.d + ', now ' + jval(last.v, dg) + ' on ' + last.d + '.' : 'First reading: ' + jval(last.v, dg) + ' on ' + last.d + '.') + ' Click for the history.', src: r.src, date: last.d };
+    return '<button type="button" class="ks" data-hist="' + esc(k) + '" data-src="' + esc(JSON.stringify(pay)) + '"><span class="ks-row"><span class="ks-v">' + jval(last.v, dg) + (u ? '<small>' + esc(u) + '</small>' : '') + '</span>' +
+      (dv ? '<span class="ks-d ' + jsign(dv) + '">' + jarrow(dv) + (dv > 0 ? '+' : '') + jval(dv, dg) + '</span>' : '') + '</span><span class="ks-n">' + esc(STRIP_NAME[k] || r.title) + '</span></button>';
+  }
+  function viewResearch() {
+    var rs = rsState();
+    var body = stageShell('Research: ask in your words; the board on the left builds itself from the panel', []);
+    body.setAttribute('data-own-info', '1');
+    var wrap = el('div', 'rs');
+    // ── доска
+    var board = el('div', 'rs-board');
+    var cids = Object.keys(rs.concepts), lks = Object.keys(rs.links), wks = Object.keys(rs.works);
+    var empty = !rs.msgs.length;
+    board.innerHTML =
+      '<div class="rs-h">KPI in this conversation</div>' + (rs.kpis.length ? '<div class="rs-kpis">' + rs.kpis.map(rsKpiTile).join('') + '</div>' : '<div class="rs-empty">' + (empty ? 'Ask about a number and it appears here with its arrow and history.' : 'No indicator matched yet.') + '</div>') +
+      '<div class="rs-h">Concepts</div>' + (cids.length ? '<div class="cn"><span class="cn-h">concepts</span>' + cids.slice(0, 24).map(function (id) { var c = rs.concepts[id]; return '<a class="cn-c" href="' + cnUrl(id) + '" target="_blank" rel="noopener" data-src="' + cnPay(c) + '">' + esc(cnName(c)) + '</a>'; }).join('') +
+        (cids.length > 24 ? '<span class="cn-c more">all ' + cids.length + ' on the graph</span>' : '') + '<button type="button" class="cn-mg" data-ids="' + esc(cids.join(',')) + '" data-focus="' + esc(cids[0]) + '">graph</button></div>' : '<div class="rs-empty">The cloud grows with every question; the graph opens on the whole set.</div>') +
+      '<div class="rs-h">On the panel</div>' + (lks.length ? '<div class="rs-links">' + lks.map(function (k) { var l = rs.links[k]; return '<a href="enso.html' + esc(l.hash) + '" target="_blank" rel="noopener"><b>' + esc(l.kind) + '</b>' + esc(l.title) + ' ↗</a>'; }).join('') + '</div>' : '<div class="rs-empty">Risks, alerts and scenes the conversation touched — where to go and look.</div>') +
+      '<div class="rs-h">Works we parsed</div>' + (wks.length ? '<div class="rs-works">' + worksHtml(wks.slice(0, 6).map(function (id) { return rs.works[id]; })) + '</div>' : '<div class="rs-empty">Parsed papers attached to the same anchors.</div>') +
+      '<div class="rs-h">Summary of the conversation</div>' + (rs.summary.length ? '<div class="rs-sum"><ol>' + rs.summary.map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('') + '</ol></div>' : '<div class="rs-empty">One line per turn; “verify” sends the lines back to the model to check them against the sources.</div>') +
+      '<div class="rs-btns"><button type="button" class="rs-btn" data-rs="verify"' + (rs.msgs.length ? '' : ' disabled') + '>verify with the model</button><button type="button" class="rs-btn main" data-rs="save"' + (rs.msgs.length ? '' : ' disabled') + '>' + (rs.id ? 'saved ✓ · save again' : 'save this research') + '</button><button type="button" class="rs-btn" data-rs="copy"' + (rs.msgs.length ? '' : ' disabled') + '>copy as text</button><button type="button" class="rs-btn" data-rs="new">new research</button></div>' +
+      '<div class="rs-h">Saved research</div><div class="rs-saved">' + (rsSavedList().length ? rsSavedList().map(function (x) { return '<div class="it"><span class="t">' + esc(x.title) + '</span><span class="m">' + esc(x.saved) + ' · ' + x.n + ' turn' + (x.n > 1 ? 's' : '') + '</span><button type="button" class="rs-btn" data-rs="open" data-id="' + esc(x.id) + '">open</button><button type="button" class="rs-btn" data-rs="del" data-id="' + esc(x.id) + '">✕</button></div>'; }).join('') : '<div class="rs-empty">Nothing saved yet. Saved research lives in this browser; a server-side copy per user is the next step.</div>') + '</div>';
+    board.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-rs]'); if (!b) return;
+      var op = b.getAttribute('data-rs');
+      if (op === 'save') { rsSave(rs); render(); }
+      else if (op === 'new') { S.rs = null; render(); }
+      else if (op === 'copy') { var txt = rsExportText(rs); (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { b.textContent = 'copied ✓'; }, function () { window.prompt('Copy the text:', txt); }); }
+      else if (op === 'open') { var it = rsSavedList().filter(function (x) { return x.id === b.getAttribute('data-id'); })[0]; if (it) { S.rs = it.rs; render(); } }
+      else if (op === 'del') { var l = rsSavedList().filter(function (x) { return x.id !== b.getAttribute('data-id'); }); try { localStorage.setItem('b42_research', JSON.stringify(l)); } catch (x) { } render(); }
+      else if (op === 'verify') {
+        if (!window.B42_RESEARCH_API) { b.textContent = 'needs /api/research (see the concept note)'; return; }
+        b.textContent = 'verifying…';
+        fetch(window.B42_RESEARCH_API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ mode: 'verify', claims: rs.summary, lang: 'en' }) })
+          .then(function (r) { return r.json(); }).then(function (d) { rs.verdicts = d.verdicts || d.claims || []; rs.summary = rs.summary.map(function (l, i) { var v = rs.verdicts[i]; return v && v.status ? l + ' [' + v.status + ']' : l; }); render(); })
+          .catch(function () { b.textContent = 'verification failed'; });
+      }
+    });
+    // ── диалог
+    var chat = el('div', 'rs-chat');
+    var log = el('div', 'rs-log');
+    log.innerHTML = (rs.msgs.length ? rs.msgs.map(function (m) {
+      return '<div class="rs-m q"><span class="rs-t">' + esc(m.t || '') + '</span>' + esc(m.q) + '</div><div class="rs-m a">' + (m.a || '') + (m.hits && m.hits.length ? '<div class="rs-hits">' + m.hits.slice(0, 5).map(function (h) { return '<span class="rs-hit"><b>' + esc(h.kind) + '</b>' + esc(h.title) + '</span>'; }).join('') + '</div>' : '') + '</div>';
+    }).join('') : '<div class="rs-m a"><p>Ask about the event in your own words. I look through the statements of this panel — risks, alerts, indicators, the glossary, the scenes and the concept register — and the board on the left fills with what the conversation touches.</p><p>Try: <i>why is the fuel at its record?</i> · <i>what do the models expect for winter?</i> · <i>what happens to food prices?</i> · <i>is the Gulf warmer than normal?</i></p>' +
+      (window.B42_RESEARCH_API ? '' : '<span class="demo">demo mode: no model behind the answers yet; the retrieval and the board are real, the model contour is specified in the concept note</span>') + '</div>');
+    var inp = el('div', 'rs-in');
+    var ta = document.createElement('textarea'); ta.placeholder = 'Ask about the event…'; ta.rows = 2;
+    var go = el('button', 'rs-btn main', 'Ask'); go.type = 'button';
+    function send() { var q = ta.value.trim(); if (q.length < 3) { ta.focus(); return; } ta.value = ''; rsAsk(q); }
+    go.onclick = send;
+    ta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } });
+    inp.appendChild(ta); inp.appendChild(go);
+    chat.appendChild(log); chat.appendChild(inp);
+    if (rs.left != null) chat.appendChild(el('div', 'rs-quota', 'questions left today: ' + rs.left));
+    wrap.appendChild(board); wrap.appendChild(chat);
+    body.appendChild(wrap);
+    requestAnimationFrame(function () { log.scrollTop = log.scrollHeight; if (!rs.msgs.length) ta.focus(); });
+  }
+
   function railState() {
     var D = S.D, N = D.nino34, NW = D.noaa, ONI = D.oni, sm = D.summary || {}, P = S.P;
     var col = $('railL'); col.innerHTML = '';
@@ -3346,7 +3527,7 @@
   function viewRisk() {
     var D = S.D, r = (D.risks || [])[S.risk];
     if (!r) { S.view = 'now'; return viewNow(); }
-    var body = stageShell(esc(r.title), [{ label: '← back', on: false, click: function () { S.risk = null; S.view = 'now'; render(); } }]);
+    var body = stageShell(esc(r.title), []);   // общая кнопка back в шапке; своя дублировала её (владелец 08.09)
     if (r.metric) plot(body, function (w, h) { return chartMetric(r.metric, w, h, r.metric.name); });
     var was = S.P && S.P.risks ? (S.P.risks[r.id] != null ? S.P.risks[r.id] : S.P.risks[r.title]) : null;
     body.appendChild(el('div', 'lead', '<b>Level ' + r.level + ' · ' + esc(r.horizon) + '.</b> ' + mark(r.plain || '') + (fin(was) && was !== r.level ? ' <i>Level was ' + was + ' at ' + esc(prevStamp()) + '.</i>' : '')));
@@ -5171,6 +5352,9 @@
     how: { source: 'Written by hand: glossary, method notes and the release calendar of every source.',
       plain: 'The dictionary of the panel: what each term means, why it matters here, and where it comes from; plus how the whole thing is put together and when each source updates.',
       tech: 'Glossary keys match data-term attributes in the code; the calendar is the publishing cadence of each provider, not our run times.' },
+    research: { source: 'The statements of this panel (risks, alerts, indicators, glossary, scenes, the concept register) searched in the browser; the model contour is specified in the concept note and not yet wired.',
+      plain: 'A conversation that builds a small research board: what you ask, the panel answers with its own statements, and the left side collects the numbers, concepts, scenes and papers involved.',
+      tech: 'Retrieval is lexical over ~450 short units built from latest.json, journal.json, glossary.json, SCENE_INFO and concepts.json; anchors of the hits drive concepts (concepts.json) and works (links.json); saving is localStorage (b42_research).' },
     refs: { source: 'Our parsed arXiv works attached to claims by a model with a deny list, the register of data sources, quoted literature, and a hand-written list of kindred projects with licences checked at the source.',
       plain: 'Everything we lean on: the papers we have read that support a claim, the data providers, the reports we quote, and similar projects elsewhere.',
       tech: 'Links are proposed by a model from the pool of parsed works and filtered by links-deny.json; anchors are risks, alerts, regions, terms and hand-written claim blocks; a work standing at many anchors is flagged in the check as possibly too general.' },
@@ -5572,6 +5756,10 @@
       if (parts[1]) S.sub.gulf = parts[1];
       return;
     }
+    if (parts[0] === 'risk' && parts[1] && S.D) {          // #risk/<id> — сцена риска по имени правила (08.09)
+      var ri = -1; (S.D.risks || []).forEach(function (r, i) { if (ri < 0 && r.id === parts[1]) ri = i; });
+      if (ri >= 0) { S.view = 'risk'; S.risk = ri; return; }
+    }
     if (T.tabs[parts[0]] || parts[0] === 'state' || parts[0] === 'risks') {
       S.view = parts[0];
       if (parts[1]) S.sub[parts[0]] = parts[1];
@@ -5641,6 +5829,7 @@
     else if (S.view === 'trend') viewTrend();
     else if (S.view === 'food') viewFood();
     else if (S.view === 'how') viewHow();
+    else if (S.view === 'research') viewResearch();
     else viewNow();
     sceneInfoBar();                          // source / notes на каждой сцене (08.09)
     kpiExplain();                            // «?» на плашках KPI (08.09)
@@ -5811,21 +6000,32 @@
        слово просто меняет содержимое карточки; приколотость означает лишь «не исчезай
        сама», а не «не слушай больше никого». Внутри самой карточки наведение игнорируем,
        иначе она перебивала бы себя, пока читаешь. */
+    var showT = null, showX = null;
     document.addEventListener('mouseover', function (e) {
       if (overTip) return;
       var x = find(e);
       if (!x || x === S.pinned) return;
-      show(x, e);
-      if (S.pinned) { S.pinned = x; return; }        // уже приколота — просто меняем содержимое
-      clearTimeout(pinT);
-      if (x.closest('#pmeta')) return;              // шапка: только пока курсор на слове, без прикалывания
-      pinT = setTimeout(function () {
-        if (tip.classList.contains('on')) { S.pinned = x; tip.classList.add('pin'); }
-      }, 600);
+      /* НЕ МГНОВЕННО. Владелец 08.09: «любое перемещение мышки, даже случайное, вызывает
+         подсказку». Ждём 260 мс на самом слове; ушёл раньше — ничего не всплывает. Если
+         карточка уже открыта, содержимое меняется сразу — так переход между словами плавный. */
+      clearTimeout(showT); showX = x;
+      var ex = { clientX: e.clientX, clientY: e.clientY };
+      function open() {
+        show(x, ex);
+        if (S.pinned) { S.pinned = x; return; }        // уже приколота — просто меняем содержимое
+        clearTimeout(pinT);
+        if (x.closest('#pmeta')) return;              // шапка: только пока курсор на слове, без прикалывания
+        pinT = setTimeout(function () {
+          if (tip.classList.contains('on')) { S.pinned = x; tip.classList.add('pin'); }
+        }, 600);
+      }
+      if (tip.classList.contains('on')) open();
+      else showT = setTimeout(function () { if (showX === x && x.isConnected) open(); }, 260);
     });
     document.addEventListener('mouseout', function (e) {
       var f = find(e);
       if (!f) return;
+      if (f === showX) { clearTimeout(showT); showX = null; }   // ушли раньше задержки — не показываем
       if (f.closest('#pmeta') && !S.pinned) { clearTimeout(hideT); hideT = setTimeout(function () { if (!overTip) hide(); }, 300); }
       else laterHide();
     });
