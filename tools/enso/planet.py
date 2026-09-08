@@ -59,6 +59,11 @@ SOURCES = {
     "crutem": ("https://www.metoffice.gov.uk/hadobs/crutem5/data/CRUTEM.5.0.2.0/diagnostics/"
                "CRUTEM.5.0.2.0.summary_series.global.annual.csv",
                "Met Office CRUTEM5, land air temperature, global annual anomaly against 1961–1990", "https://www.metoffice.gov.uk/hadobs/crutem5/"),
+    # суша по месяцам, до текущего месяца (владелец 08.09: «аналогично Ocean, daily»). Суточной суши
+    # ни у climatereanalyzer, ни у Climate Pulse нет, Berkeley Earth daily обрывается в 2022; месячный
+    # ряд NOAA NCEI — ближайшее живое: каждый год линией, как у суточных.
+    "land_m": ("https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/global/time-series/globe/land/1/0/1850-" + str(datetime.now().year) + "/data.csv",
+               "NOAA NCEI Climate at a Glance, global land monthly anomaly against 1901–2000", "https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/global/time-series"),
     "slr": ("https://www.star.nesdis.noaa.gov/socd/lsa/SeaLevelRise/slr/slr_sla_gbl_free_ref_90.csv",
             "NOAA STAR, global mean sea level from satellite altimetry",
             "https://www.star.nesdis.noaa.gov/socd/lsa/SeaLevelRise/LSA_SLR_timeseries_global.php"),
@@ -225,6 +230,37 @@ def hadcrut_annual(txt):
     return out
 
 
+def ncei_land_monthly(txt):
+    """NCEI: строки YYYYMM,anomaly → годы по 12 месяцев, норма 1991–2020 по месяцу, сводка последнего месяца."""
+    years = {}
+    for ln in txt.splitlines():
+        f = ln.split(",")
+        if len(f) < 2 or not f[0].strip().isdigit() or len(f[0].strip()) != 6:
+            continue
+        y, m = int(f[0][:4]), int(f[0][4:6])
+        try:
+            v = round(float(f[1]), 3)
+        except ValueError:
+            v = None
+        years.setdefault(str(y), [None] * 12)[m - 1] = v
+    ys = sorted(int(y) for y in years)
+    clim = []
+    for m in range(12):
+        vv = [years[str(y)][m] for y in ys if 1991 <= y <= 2020 and years[str(y)][m] is not None]
+        clim.append(round(sum(vv) / len(vv), 3) if vv else None)
+    cur = ys[-1]; arr = years[str(cur)]
+    last_i = max(i for i, v in enumerate(arr) if v is not None)
+    v = arr[last_i]
+    same = [(y, years[str(y)][last_i]) for y in ys if years[str(y)][last_i] is not None]
+    higher = sum(1 for y, x in same if x > v)
+    rec = max(same, key=lambda t: t[1])
+    last = {"year": cur, "date": f"{cur}-{last_i + 1:02d}", "value": v, "month": last_i + 1,
+            "median_norm": clim[last_i], "rank_high": higher + 1, "of": len(same),
+            "record": {"year": rec[0], "value": rec[1]}}
+    return {"label": "Land, monthly (NOAA NCEI)", "unit": "°C", "years": years, "clim": clim, "clim_years": [1991, 2020],
+            "base": "1901–2000", "monthly": True, "last": last, "last_date": last["date"]}
+
+
 def slr_series(txt):
     """NOAA STAR: строки с десятичным годом и значением (мм). Берём первую пару чисел."""
     xs, ys = [], []
@@ -304,6 +340,11 @@ def build(verbose=True):
             doc["temperature"]["crutem"] = hadcrut_annual(got["crutem"])
     except Exception as e:                                       # noqa: BLE001
         doc["errors"].append(f"crutem: {str(e)[:120]}")
+    try:
+        if got.get("land_m"):
+            doc["temperature"]["land_m"] = ncei_land_monthly(got["land_m"])
+    except Exception as e:                                       # noqa: BLE001
+        doc["errors"].append(f"land_m: {str(e)[:120]}")
     for key, label in (("t2_world", "Land+ocean, 2 m (ERA5)"), ("sst_world", "Ocean, 60°S–60°N (OISST)")):
         try:
             blk = our_daily(key, label)
@@ -329,6 +370,8 @@ def build(verbose=True):
                 ys = sorted(b["years"]); rng = (ys[0], b["last"]["date"])
         elif k in ("hadcrut", "crutem") and doc["temperature"].get(k):
             h = doc["temperature"][k]; rng = (str(h["years"][0]), str(h["years"][-1]))
+        elif k == "land_m" and doc["temperature"].get("land_m"):
+            h = doc["temperature"]["land_m"]; rng = (min(h["years"]) + "-01", h["last_date"])
         elif k == "slr" and doc["sea_level"]:
             sl = doc["sea_level"]; rng = (str(sl["years"][0]), str(sl["years"][-1]))
         s["data_from"], s["data_to"] = (rng or (None, None))

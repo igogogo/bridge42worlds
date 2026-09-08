@@ -296,7 +296,8 @@ ASCII (`gl()`). Карта Пацифики рисуется в два прох�
 Кнопки полного экрана и back у сцен свои не заводить — общие в шапке.
 Ocean · Surface: аналоги боксов лежат аномалиями; в absolute они переводятся через
 климатологию дня из самого ряда (`boxMetric`); `analogFor` не подмешивает чужие аналоги к
-рядам со своими. Long record: суша — CRUTEM5 (`planet.py`, ключ `crutem`), суточной суши нет.
+рядам со своими. Long record: суша — CRUTEM5 годовой (`crutem`) и NOAA NCEI месячный (`land_m`, `chartYears` с
+`monthly:true`); суточной суши в открытых источниках нет (проверено 08.09: CR, Climate Pulse, Berkeley).
 Подсказки всплывают с задержкой 260 мс (`showT` в `initDock`); адрес `#risk/<id>` — сцена риска.
 Вкладка Research (прототип): корпус `rsCorpus` из уже загруженных json, поиск `rsSearch`,
 доска `viewResearch`, сохранение `b42_research`; контур модели — `window.B42_RESEARCH_API`
