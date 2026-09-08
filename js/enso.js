@@ -51,7 +51,7 @@
       'air/coupling': 'The three atmospheric signs that the ocean and the air are coupled.', 'air/fuel': 'The warm water volume under the equator: the fuel gauge and its lead.', 'air/layers': 'The four satellite floors of the atmosphere and their delay.', 'air/wind': 'Daily zonal wind over the western Pacific and the westerly bursts.', 'air/mjo': 'The Madden–Julian Oscillation: phase and amplitude.', 'air/indices': 'MEI, the Indian Ocean Dipole and RONI next to our coupling score.',
       'trend/sst_nino34': 'Niño 3.4 daily: 400 days, the band of all years, the 14-day forecast, where past events went from here.', 'trend/sst_world': 'The world ocean, daily.', 'trend/t2_world': 'Land and ocean, daily.', 'trend/index': 'Our risk index by update, and the comparable core against past events.', 'trend/months': 'Thirteen months of the three series with their ranks.', 'trend/background': 'Ocean heat content and the energy imbalance: the state of the whole system.',
       'regions/table': 'Every region by season and scenario, with food vulnerability and what to do.', 'regions/place': 'One region at a time; the Gulf with its own measurements.',
-      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.', 'radiance/convection': 'Share of satellite footprints colder than 235 K: deep convection over Niño 3.4 and the warm pool, this year against 2023–2025.', 'radiance/walker': 'Brightness-temperature contrast east minus west: the Walker circulation read raw; a fall to zero means the convection moved east.', 'radiance/clouds': 'Each scene sorted by the window brightness temperature: deep, mid, low cloud and clear sky, shares per day; the day-time cloud share is the albedo proxy.', 'radiance/greenhouse': 'How much the atmosphere closes the 11 µm window: G on all scenes (follows cloud) and G_clear on the least cloudy scenes (the water-vapour greenhouse proxy), with the p90/p99 caveat.', 'radiance/profile': 'Temperature layers: infrared (blind under cloud) and microwave (through cloud), the last 14 days against each analogue year.', 'radiance/cross': 'Two independent satellites, NOAA-21 CrIS and Aqua AIRS, against each other: the 2026 shift of convection and of the atmospheric layers on both, and how closely they agree day by day.', 'radiance/seismic': 'Earthquakes by Pacific-rim zone with aftershocks separated, and solar activity, from the same collector; side series, not El Niño physics.', 'models/board': 'Every model of the plume as a card: latest forecast, class, how far below reality.', 'models/revision': 'How each centre revised its forecast issue after issue.', 'refs/works': 'Our parsed arXiv works attached to the claims of this panel, with the reason for each link.', 'refs/sources': 'Every data source with its address, cadence and last date.', 'refs/literature': 'Literature and reports quoted on the panel, not measured by us.', 'refs/concepts': 'The concept register attached to every anchor of the panel: risks, alerts, blocks, regions and glossary terms, each with its nearest concepts and a link to the graph on that set.', 'refs/neighbours': 'Kindred projects: who else shows the planet on a globe or a map, with what data and under what licence, and what we can take from each.', 'trend/rain': 'Rain by region (ERA5 box sums against the normal and against every year since 1981) and for the whole planet (GPCP monthly).', 'trend/spectral': 'A line at 2–7 days appearing in any daily series over the last 30 days: the owner’s hypothesis of a comb before a spontaneous transition, watched, not assumed.',
+      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.', 'radiance/convection': 'Share of satellite footprints colder than 235 K: deep convection over Niño 3.4 and the warm pool, this year against 2023–2025.', 'radiance/walker': 'Brightness-temperature contrast east minus west: the Walker circulation read raw; a fall to zero means the convection moved east.', 'radiance/clouds': 'Each scene sorted by the window brightness temperature: deep, mid, low cloud and clear sky, shares per day; the day-time cloud share is the albedo proxy.', 'radiance/greenhouse': 'How much the atmosphere closes the 11 µm window: G on all scenes (follows cloud) and G_clear on the least cloudy scenes (the water-vapour greenhouse proxy), with the p90/p99 caveat.', 'radiance/profile': 'Temperature layers: infrared (blind under cloud) and microwave (through cloud), the last 14 days against each analogue year.', 'radiance/epochs': 'Twenty years of the same window: every year’s deep convection over the boxes on one scale (the CrIS chain SNPP → NOAA-20 → NOAA-21, AIRS for the early years), with error bars, ranks and the ratio to 2015; play the years to watch the record build.', 'radiance/cross': 'Independent instruments against each other: the 2026 shift of convection and of the atmospheric layers on NOAA-21 CrIS, NOAA-20 CrIS and Aqua AIRS, and how closely they agree day by day.', 'radiance/seismic': 'Earthquakes by Pacific-rim zone with aftershocks separated, and solar activity, from the same collector; side series, not El Niño physics.', 'models/board': 'Every model of the plume as a card: latest forecast, class, how far below reality.', 'models/revision': 'How each centre revised its forecast issue after issue.', 'refs/works': 'Our parsed arXiv works attached to the claims of this panel, with the reason for each link.', 'refs/sources': 'Every data source with its address, cadence and last date.', 'refs/literature': 'Literature and reports quoted on the panel, not measured by us.', 'refs/concepts': 'The concept register attached to every anchor of the panel: risks, alerts, blocks, regions and glossary terms, each with its nearest concepts and a link to the graph on that set.', 'refs/neighbours': 'Kindred projects: who else shows the planet on a globe or a map, with what data and under what licence, and what we can take from each.', 'trend/rain': 'Rain by region (ERA5 box sums against the normal and against every year since 1981) and for the whole planet (GPCP monthly).', 'trend/spectral': 'A line at 2–7 days appearing in any daily series over the last 30 days: the owner’s hypothesis of a comb before a spontaneous transition, watched, not assumed.',
       'planet/gases': 'CO₂, CH₄ and N₂O since the start of measurement, with the annual growth of CO₂.', 'planet/ice': 'Arctic and Antarctic sea ice extent, every year as a line against the 1981–2010 median.', 'planet/temperature': 'Land+ocean and ocean daily temperature every year since 1940 and 1981; global annual means since 1850.', 'planet/sea': 'Global mean sea level from satellites since 1993.',
       'how/glossary': 'Every underlined term explained.', 'how/method': 'How things are computed, and which numbers are parameters.', 'how/sources': 'Every source, whether it answered, and when its data last changed.', 'how/calendar': 'When each source publishes next.', 'how/changed': 'What changed since the previous update.',
       'ops/runs': 'Every run on record: when, what kind, how long, how it ended.', 'ops/sources': 'Every source: date range held, last update, answered or stale, errors.', 'ops/fresh': 'Fresh data since the last assessment and the triggers that decide whether it deserves one.'
@@ -5167,6 +5167,37 @@
      обязательны на каждой сцене: яркостная температура, короткая база, афтершоки не отделены. */
   var RAD_YEAR_COLOR = { '2026': 'var(--text)', '2025': 'var(--a2023)', '2024': 'var(--a2015)', '2023': 'var(--a1997)' };
   function radDays(RD0) { var w = (RD0.window || {}); var m0 = parseInt((w.start || '07-01').slice(0, 2), 10), d0 = parseInt((w.start || '07-01').slice(3), 10); return function (i) { var d = new Date(Date.UTC(2026, m0 - 1, d0 + i)); return (d.getUTCMonth() + 1) + '-' + (d.getUTCDate() < 10 ? '0' : '') + d.getUTCDate(); }; }
+  /* Столбики по годам с планками ошибок; растут по кнопке play (cfg.upto). Цвет — прибор. */
+  function chartEpochs(cfg, W, H) {
+    var rows = cfg.rows, n = rows.length, upto = Math.min(n - 1, cfg.upto == null ? n - 1 : cfg.upto);
+    var Lp = 50, R = S._tight ? 8 : 60, Tp = topPad(W), B = 26, pw = W - Lp - R, ph = H - Tp - B;
+    var vals = rows.map(function (r) { return (r.v + (r.se || 0)) * cfg.mult; }).concat(rows.map(function (r) { return (r.v - (r.se || 0)) * cfg.mult; })).filter(fin);
+    if (cfg.median != null) vals.push(cfg.median * cfg.mult);
+    var vmin = Math.min.apply(null, vals), vmax = Math.max.apply(null, vals);
+    if (cfg.unit === ' %') vmin = Math.min(0, vmin);
+    var pad = (vmax - vmin) * .1; vmax += pad; vmin -= (cfg.unit === ' %' ? 0 : pad);
+    var y0 = rows[0].y, y1 = rows[n - 1].y, span = Math.max(1, y1 - y0 + 1), bw = pw / span;
+    var X = function (y) { return Lp + (y - y0) / span * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
+    var COL = { n21_cris: 'var(--ochre)', n20_cris: 'var(--lv4)', snpp_cris: 'var(--nino)', aqua_airs: 'var(--cyan)' };
+    var s = svgOpen(W, H) + hatchDefs() + '<text class="tt" x="' + Lp + '" y="13">' + fitText(esc(cfg.title), W, 12) + '</text>';
+    s += gridY(vmin, vmax, niceStep(vmax - vmin), Y, Lp, R, W, cfg.dg);
+    if (cfg.median != null) s += '<line x1="' + Lp + '" y1="' + Y(cfg.median * cfg.mult).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(cfg.median * cfg.mult).toFixed(1) + '" style="stroke:var(--soft)" stroke-dasharray="5 3" stroke-width="1.2"/>';
+    var zero = Y(Math.max(vmin, 0));
+    rows.forEach(function (r, i) {
+      if (i > upto) return;
+      var x = X(r.y) + bw * 0.15, w = Math.max(2, bw * 0.7), v = r.v * cfg.mult, yv = Y(v);
+      var top = Math.min(yv, zero), hgt = Math.max(1, Math.abs(zero - yv));
+      s += '<rect x="' + x.toFixed(1) + '" y="' + top.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + hgt.toFixed(1) + '" rx="2" style="fill:' + COL[r.inst] + '" opacity="' + (r.now ? '1' : '.75') + '"' + (r.now ? ' class="breathe"' : '') + '/>';
+      if (fin(r.se) && r.se > 0) { var ya = Y(v + r.se * cfg.mult), yb = Y(v - r.se * cfg.mult), cx = x + w / 2; s += '<line x1="' + cx.toFixed(1) + '" y1="' + ya.toFixed(1) + '" x2="' + cx.toFixed(1) + '" y2="' + yb.toFixed(1) + '" style="stroke:var(--text)" stroke-width="1" opacity=".7"/><line x1="' + (cx - 3).toFixed(1) + '" y1="' + ya.toFixed(1) + '" x2="' + (cx + 3).toFixed(1) + '" y2="' + ya.toFixed(1) + '" style="stroke:var(--text)" opacity=".7"/><line x1="' + (cx - 3).toFixed(1) + '" y1="' + yb.toFixed(1) + '" x2="' + (cx + 3).toFixed(1) + '" y2="' + yb.toFixed(1) + '" style="stroke:var(--text)" opacity=".7"/>'; }
+      if (r.now || i === upto) s += '<text x="' + (x + w / 2).toFixed(1) + '" y="' + (Math.min(yv, zero) - 6).toFixed(1) + '" text-anchor="middle" class="tt" font-size="10" style="fill:' + COL[r.inst] + '">' + fnum(v, cfg.dg, cfg.unit !== ' %') + cfg.unit + '</text>';
+    });
+    var every = W < 520 ? 4 : 2;
+    rows.forEach(function (r, i) { if (r.y % every === 0 || r.now) s += '<text x="' + (X(r.y) + bw / 2).toFixed(1) + '" y="' + (H - 9) + '" text-anchor="middle" font-size="9">' + (r.now ? r.y : String(r.y).slice(2)) + '</text>'; });
+    var leg = Object.keys(COL).filter(function (k) { return rows.some(function (r) { return r.inst === k; }); }).map(function (k) { return [cfg.names[k], COL[k], 'box', .8]; });
+    if (cfg.median != null) leg.push(['median 2003–2021', 'var(--soft)', 1.2, '5 3']);
+    s += legend(leg, W, H, R, Tp);
+    return s + '</svg>';
+  }
   function chartRadSeries(cfg, W, H) {
     var by = cfg.byYear || {}, years = Object.keys(by).sort(), cur = String(cfg.cur || '2026');
     var n = cfg.n || 68, Lp = 46, R = legendW(W), Tp = topPad(W), B = 26, pw = W - Lp - R - 8, ph = H - Tp - B;
@@ -5207,6 +5238,7 @@
     conv_frac: 'share of footprints with BT(900 cm⁻¹) below 235 K in the box per day',
     walker_raw: 'BT900(Niño 3.4) minus BT900(warm pool), K; a fall means the convection has moved east',
     detector: 'mean of the last 14 days minus the previous 14, in units of the window’s daily σ; threshold 1.5',
+    epochs: 'comparing epochs: the year’s value on the historical instrument minus that instrument’s offset against NOAA-21, measured on overlapping days; AIRS years are limited to 2021 (drift after), SNPP years to August 2023 (band failure)',
     seismic: 'event counts in the window by zone in four variants: thresholds M ≥ 4.5 and M ≥ 5.5, raw and with aftershocks separated by Gardner–Knopoff (1974) windows; an alert only on independent M ≥ 5.5 events',
     profile_anom: 'mean of the last 14 days of 2026 minus the mean of the whole window of the analogue year',
     clouds: 'floors by BT900: deep below 235 K, mid 235–270 K, low 270–285 K; clear when BT900 is within 4 K of the sea surface (2 K histogram bins plus OISST in K)',
@@ -5222,7 +5254,8 @@
     [/^G_clear на p90/, 'G_clear on the 90th percentile is partly contaminated by residual cloud: on the 99th percentile the 2026 signal over Niño 3.4 falls from +2.6…+2.8 K to +1.4 K, but does not vanish (collector check_gclear.py)'],
     [/^над тёплым бассейном/, 'over the warm pool there are almost no truly clear scenes (0–3 % of days), so its G_clear is an upper bound, not a clean measurement'],
     [/^AIRS и CrIS/, 'AIRS and CrIS agree in the shape of the curves, not in absolute values: the instruments have different spectral response functions (offsets up to 12 K at correlations above 0.9 in the upper troposphere; cross_check.py)'],
-    [/^Aqua с 2022/, 'Aqua has been drifting freely since 2022: the local time of the AIRS overpass has crept from 13:30 towards 15:00 and later, so its day and night nodes do not coincide in local time with NOAA-21'],
+    [/^Aqua с/, 'Aqua has been drifting freely since mid-2021: the AIRS overpass moved from 13:35 (stable 2003–2021) to 13:53 in 2023, 14:51 in 2025 and 15:38 in 2026; cold cloud over the tropical ocean peaks near 14:00, so the drift forges exactly the convection index — AIRS years after 2022 are NOT fit for comparing epochs'],
+    [/^для сравнения эпох/, 'for comparing epochs the CrIS chain is used (SNPP → NOAA-20 → NOAA-21): all three keep the overpass at 13:25–13:30, and the years of overlap give a direct measurement of the offset between instruments (epochs.py)'],
     [/^сырой счёт событий/, 'a raw event count misleads: about half of the catalogue are aftershocks, and one strong sequence looks like a rise in seismicity (Central America 2026: a record by the raw M ≥ 4.5 count, ordinary and below the median once aftershocks are separated)'],
     [/^порог M>=4\.5/, 'the M ≥ 4.5 threshold is unfit for comparing epochs: network sensitivity grows, and the trend in independent events reaches +10–20 % per decade even where tectonics has not changed; M ≥ 5.5 is steadier'],
     [/^связь сейсмичности/, 'no link between seismicity and El Niño is established: the USGS position is that weather and earthquakes are unrelated; the few papers concern mid-ocean ridges (the Easter microplate), not subduction zones. The block is independent monitoring']
@@ -5263,12 +5296,13 @@
   function viewRadiance() {
     var RA = S.RA || {}, k = sub('radiance', 'convection'), SRC = RA.sources || {}, CRIS = SRC.n21_cris || {}, AIRS = SRC.aqua_airs || {}, AT = SRC.n21_atms || {}, US = SRC.usgs_catalog || {}, SO = SRC.gfz_solar || {};
     /* Платформа (v3, 08.09): CrIS на NOAA-21 или AIRS на Aqua — та же схема рядов, тот же вид. */
-    var plat = S.sub.radPlat === 'airs' && AIRS.series ? 'airs' : 'cris', CR = plat === 'airs' ? AIRS : CRIS, PLAT = plat === 'airs' ? 'Aqua AIRS' : 'NOAA-21 CrIS';
+    var N20 = SRC.n20_cris || {}, SNPP = SRC.snpp_cris || {}, EP = SRC.epochs || {};
+    var plat = S.sub.radPlat === 'airs' && AIRS.series ? 'airs' : (S.sub.radPlat === 'n20' && N20.series ? 'n20' : 'cris'), CR = plat === 'airs' ? AIRS : (plat === 'n20' ? N20 : CRIS), PLAT = plat === 'airs' ? 'Aqua AIRS' : (plat === 'n20' ? 'NOAA-20 CrIS' : 'NOAA-21 CrIS');
     var alerts = RA.alerts || [], dets = CR.detectors || {}, trig = Object.keys(dets).filter(function (q) { return dets[q].triggered; });
     var W0 = RA.window || {}, cur = String(W0.current || 2026), dl = RA.updated ? radDays(RA) : null, F = (RA.meta || {}).formulas || {}, cav = (RA.meta || {}).caveats || [];
     var head = !RA.updated ? 'Satellite, raw granules: no file yet' :
       'Raw satellite view: convection over Niño 3.4 ' + (function () { var s0 = ((CR.series || {}).nino34_A || {}).conv_frac || {}; var c = s0[cur] || {}; var ks = Object.keys(c).map(Number).sort(function (a, b) { return a - b; }); var v = c[String(ks[ks.length - 1])]; return fin(v) ? fnum(v * 100, 1, false) + ' % of footprints' : ''; })() + (trig.length ? '; detectors fired: ' + trig.join(', ') : '; ' + Object.keys(dets).length + ' turning-point detectors quiet');
-    var body = stageShell(head, [segBtn('radiance', 'convection', 'Convection', 'convection'), segBtn('radiance', 'walker', 'Raw Walker', 'convection'), segBtn('radiance', 'clouds', 'Cloud floors', 'convection'), segBtn('radiance', 'greenhouse', 'Window trap', 'convection'), segBtn('radiance', 'profile', 'Layers through cloud', 'convection'), segBtn('radiance', 'cross', 'Two satellites', 'convection'), segBtn('radiance', 'seismic', 'Quakes and sun', 'convection')]);
+    var body = stageShell(head, [segBtn('radiance', 'convection', 'Convection', 'convection'), segBtn('radiance', 'walker', 'Raw Walker', 'convection'), segBtn('radiance', 'clouds', 'Cloud floors', 'convection'), segBtn('radiance', 'greenhouse', 'Window trap', 'convection'), segBtn('radiance', 'profile', 'Layers through cloud', 'convection'), segBtn('radiance', 'epochs', 'Twenty years', 'convection'), segBtn('radiance', 'cross', 'Instruments', 'convection'), segBtn('radiance', 'seismic', 'Quakes and sun', 'convection')]);
     if (!RA.updated) { body.appendChild(el('div', 'note', 'No radiance.json yet: the collector at C:\\CL\\radiance writes it; the daily wrapper copies it in.')); return; }
     body.classList.add('scroll'); body.setAttribute('data-own-info', '1');
     // описание источника — по-английски, из данных, а не из русской строки файла
@@ -5284,7 +5318,7 @@
     function platRow(row) {
       if (!AIRS.series) return row;
       row.appendChild(el('span', 'seg-gap', ''));
-      [['cris', 'NOAA-21 CrIS'], ['airs', 'Aqua AIRS']].forEach(function (o) { var b = el('button', (plat === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.title = o[0] === 'airs' ? 'independent platform; its overpass drifts towards 15:00 local' : 'NOAA-21, overpass 13:25 local'; b.onclick = function () { S.sub.radPlat = o[0]; render(); }; row.appendChild(b); });
+      [['cris', 'NOAA-21 CrIS'], ['n20', 'NOAA-20 CrIS'], ['airs', 'Aqua AIRS']].filter(function (o) { return o[0] !== 'n20' || N20.series; }).forEach(function (o) { var b = el('button', (plat === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.title = o[0] === 'airs' ? 'independent platform; its overpass has drifted to ~15:40 local' : (o[0] === 'n20' ? 'the same instrument on NOAA-20, overpass ~13:31' : 'NOAA-21, overpass 13:25 local'); b.onclick = function () { S.sub.radPlat = o[0]; render(); }; row.appendChild(b); });
       return row;
     }
     function boxRow(withNode) {
@@ -5300,7 +5334,8 @@
       greenhouse: 'Moist air holds heat in. Even on the clearest days the air over the central Pacific now traps more of the sea’s heat than in past years, because the warm sea puts more water vapour above it; the drier west traps less.',
       profile: 'A temperature ladder through the atmosphere, layer by layer: the microwave channels look through the clouds and show the air above the central Pacific warmer than in every recent year.',
       seismic: 'Earthquakes and the sun are shown beside the climate rows because people ask; nothing here claims they drive El Niño, and the USGS says weather and quakes are unrelated. Once aftershocks are separated, this summer’s counts are ordinary everywhere.',
-      cross: 'Two different satellites, one from NOAA and one from NASA, looked at the same patches of ocean. Both saw the storms jump east by the same amount. When two independent instruments agree, the finding is not an artefact of one of them.'
+      epochs: 'The same two months of every year since 2003, seen by four instruments brought to one scale: this year the central Pacific has more storm cloud than any year on record, about 1.6–1.7 times the super El Niño of 2015, while the west has the least. Press play to watch the record build year by year.',
+      cross: 'Different instruments, on NOAA-21, NOAA-20 and NASA’s Aqua, looked at the same patches of ocean. Both saw the storms jump east by the same amount. When two independent instruments agree, the finding is not an artefact of one of them.'
     };
     var INFO = [{ key: 'source', label: 'source', html: srcHtml }], row, nt = '';
 
@@ -5355,6 +5390,57 @@
       var Gb = ((CR[gk] || {})[boxk + '_' + node]) || {};
       plot(body, function (w, h) { return chartRadSeries({ byYear: Gb, cur: cur, n: 68, dayLabel: dl, zero: true, title: (gk === 'greenhouse_clear' ? 'G_clear: sea surface minus the warmest tenth of window scenes, K' : 'G: sea surface minus the mean window brightness temperature, K') + ', ' + boxk + ', ' + (node === 'A' ? 'day' : 'night') }, w, h); });
       body.appendChild(kpiRow(kpiLast(Gb, 1, ' K', (gk === 'greenhouse_clear' ? term('gclear', 'G_clear') : 'G') + ' · ' + boxk + ' · ' + (node === 'A' ? 'day' : 'night'), 'last 14 days, against the window means of past years')));
+    } else if (k === 'epochs') {
+      /* ДВАДЦАТЬ ЛЕТ (v4, 08.09; владелец: «двадцать лет отделить или синхронно; новые KPI, новые
+         визуалы, динамика — график растёт»). Блок epochs сборщика: значение каждого года у
+         исторического прибора, приведённое к шкале NOAA-21 поправкой по дням перекрытия, с SE.
+         Один столбик на год: цепочка CrIS в приоритете (SNPP до 08.2023, NOAA-20/21 с 2023), AIRS —
+         для ранних лет и только до 2021 (дальше дрейф). Медиана 2003–2021 пунктиром. Кнопка play
+         растит запись год за годом. */
+      var EM = EP.metrics || {}, em = S.sub.epMetric || 'frac_lt235', ekey = boxk + '_' + node, blk = ((EM[em] || {})[ekey]) || {};
+      var EMN = { frac_lt235: ['deep convection, share of footprints', 100, ' %', 1], bt900_mean: ['window brightness temperature, 900 cm⁻¹', 1, ' K', 1], bt690_mean: ['upper troposphere, 690 cm⁻¹', 1, ' K', 1] };
+      var mult = EMN[em][1], unitE = EMN[em][2], dgE = EMN[em][3];
+      row = el('div', 'seg sub');
+      Object.keys(EMN).filter(function (q) { return EM[q]; }).forEach(function (q) { var b = el('button', (em === q ? 'on' : '') + ' sq', EMN[q][0].split(',')[0]); b.type = 'button'; b.onclick = function () { S.sub.epMetric = q; render(); }; row.appendChild(b); });
+      row.appendChild(el('span', 'seg-gap', ''));
+      [['nino34', 'Niño 3.4 box'], ['warmpool', 'warm pool box']].forEach(function (o) { var b = el('button', boxk === o[0] ? 'on' : '', o[1]); b.type = 'button'; b.onclick = function () { S.sub.radBox = o[0]; render(); }; row.appendChild(b); });
+      row.appendChild(el('span', 'seg-gap', ''));
+      [['A', 'day, 13:30'], ['D', 'night, 01:30']].forEach(function (o) { var b = el('button', (node === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.radNode = o[0]; render(); }; row.appendChild(b); });
+      // ряд лет: лучший прибор на год
+      var PRI = ['n21_cris', 'n20_cris', 'snpp_cris', 'aqua_airs'], INAME = { n21_cris: 'NOAA-21 CrIS', n20_cris: 'NOAA-20 CrIS', snpp_cris: 'SNPP CrIS', aqua_airs: 'Aqua AIRS' };
+      var yrsE = Object.keys(blk.years || {}).map(Number).sort(function (a, b) { return a - b; }), rowsE = [];
+      yrsE.forEach(function (y) { var rec = blk.years[String(y)] || {}; for (var i = 0; i < PRI.length; i++) { var inst = PRI[i]; if (rec[inst] && !(inst === 'aqua_airs' && y > 2021)) { rowsE.push({ y: y, inst: inst, v: rec[inst].adjusted, se: rec[inst].se, n: rec[inst].n_days, raw: rec[inst].raw, off: rec[inst].offset }); break; } } });
+      if (fin(blk.current)) rowsE.push({ y: +cur, inst: 'n21_cris', v: blk.current, se: blk.current_se, n: null, now: true });
+      var base = rowsE.filter(function (r) { return r.y >= 2003 && r.y <= 2021; }).map(function (r) { return r.v; }).sort(function (a, b) { return a - b; });
+      var medE = base.length ? base[Math.floor(base.length / 2)] : null;
+      var curR = rowsE.filter(function (r) { return r.now; })[0], rankE = curR ? rowsE.filter(function (r) { return r.v > curR.v; }).length + 1 : null;
+      var r15 = (blk.years || {})['2015'] || {};
+      nt = '<b>Formula.</b> ' + esc(radF(F, 'epochs')) + ' The bar of a year is the best instrument for that year: the CrIS chain first (SNPP to August 2023, NOAA-20 and NOAA-21 from 2023), Aqua AIRS for the early years and only up to 2021; error bars are the standard error of the window mean; the dashed line is the median of 2003–2021. ' + (curR ? 'This year: ' + fnum(curR.v * mult, dgE) + unitE + ' ± ' + fnum(curR.se * mult, dgE) + ', rank ' + rankE + ' of ' + rowsE.length + '.' : '') + '<br><b>Caveats.</b> ' + esc(radCav(cav));
+      INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
+      if (!rowsE.length) { body.appendChild(el('div', 'note', 'No epoch block for this metric yet.')); }
+      else {
+        var nE = rowsE.length; if (S.sub.epI == null || S.sub.epI >= nE) S.sub.epI = nE - 1;
+        var prow = el('div', 'seg sub');
+        var bPlay = el('button', 'sq', '▶ play the years'); bPlay.type = 'button';
+        var rng = document.createElement('input'); rng.type = 'range'; rng.min = 0; rng.max = nE - 1; rng.value = S.sub.epI; rng.style.cssText = 'flex:1;min-width:120px;max-width:320px;align-self:center';
+        var lab = el('span', 'mono', 'up to ' + rowsE[S.sub.epI].y); lab.style.cssText = 'align-self:center;font-size:12px;min-width:90px';
+        function showY() { lab.textContent = 'up to ' + rowsE[S.sub.epI].y; rng.value = S.sub.epI; S.pw = 0; redrawPlot(); }
+        bPlay.onclick = function () {
+          if (S.animT) { animStop(); bPlay.textContent = '▶ play the years'; bPlay.className = 'sq'; return; }
+          if (S.sub.epI >= nE - 1) S.sub.epI = 0;
+          S.animT = setInterval(function () { if (!S.plotEl || !S.plotEl.isConnected) { animStop(); return; } S.sub.epI = Math.min(nE - 1, S.sub.epI + 1); showY(); if (S.sub.epI === nE - 1) { animStop(); bPlay.textContent = '▶ play the years'; bPlay.className = 'sq'; } }, 420);
+          bPlay.textContent = '❚❚ pause'; bPlay.className = 'sq on';
+        };
+        rng.oninput = function () { animStop(); bPlay.textContent = '▶ play the years'; bPlay.className = 'sq'; S.sub.epI = +rng.value; showY(); };
+        prow.appendChild(bPlay); prow.appendChild(rng); prow.appendChild(lab); body.appendChild(prow);
+        plot(body, function (w, h) { return chartEpochs({ rows: rowsE, upto: S.sub.epI, mult: mult, unit: unitE, dg: dgE, median: medE, title: EMN[em][0] + ', ' + boxk + ', ' + (node === 'A' ? 'day' : 'night') + ' — the same window of every year on the NOAA-21 scale', names: INAME }, w, h); });
+        var kx2 = el('div', 'kpis');
+        function ratioK(inst) { var r = r15[inst]; if (!r || !curR || !fin(r.adjusted) || r.adjusted <= 0) return ''; var z = (curR.v - r.adjusted) / Math.sqrt(curR.se * curR.se + r.se * r.se); return '<div class="kpi"><div class="kn">2026 against 2015 · ' + esc(INAME[inst]) + '</div><div class="kv">×' + fnum(curR.v / r.adjusted, 2, false) + '</div><div class="km">2015 was ' + fnum(r.adjusted * mult, dgE) + unitE + ' ± ' + fnum(r.se * mult, dgE) + ' on that instrument, brought to the NOAA-21 scale; the difference is ' + fnum(z, 1, false) + ' standard errors</div>' + kmeta(null, esc(INAME[inst]) + ', epoch block', String(RA.updated || '').slice(0, 10)) + '</div>'; }
+        kx2.innerHTML = (curR ? '<div class="kpi"><div class="kn">' + cur + ' · ' + esc(EMN[em][0].split(',')[0]) + '</div><div class="kv">' + fnum(curR.v * mult, dgE) + '<small>' + unitE + ' ± ' + fnum(curR.se * mult, dgE) + '</small></div><div class="km">rank <b>' + rankE + ' of ' + nE + '</b> years' + (medE != null ? '; ' + (medE > 0 ? '×' + fnum(curR.v / medE, 1, false) + ' the' : 'against the') + ' median of 2003–2021 (' + fnum(medE * mult, dgE) + unitE + ')' : '') + '</div>' + kmeta(null, 'NOAA-21 CrIS, window mean', String(RA.updated || '').slice(0, 10)) + '</div>' : '') +
+          ratioK('aqua_airs') + ratioK('snpp_cris') +
+          '<div class="kpi"><div class="kn">instruments in the chain</div><div class="kv">' + Object.keys(rowsE.reduce(function (o, r) { o[r.inst] = 1; return o; }, {})).length + '<small> · ' + nE + ' years</small></div><div class="km">' + esc(Object.keys(rowsE.reduce(function (o, r) { o[r.inst] = (o[r.inst] || 0) + 1; return o; }, {})).map(function (i) { return INAME[i] + ' ' + rowsE.filter(function (r) { return r.inst === i; }).length; }).join(' · ')) + '; offsets measured on overlapping days</div>' + kmeta(null, 'epochs.py of the collector', String(RA.updated || '').slice(0, 10)) + '</div>';
+        body.appendChild(kx2);
+      }
     } else if (k === 'cross') {
       /* ДВА СПУТНИКА (v3, 08.09). Сборщик пишет: перескок конвекции на восток совпал у двух приборов
          с точностью полтора процента. Таблица считается ЗДЕСЬ, из рядов файла, а не берётся из их
@@ -5379,8 +5465,11 @@
         ['Window (900), Niño 3.4', pshift(AIRS, 'nino34', '900'), pshift(CRIS, 'nino34', '900'), 1, ' K']
       ];
       var wx = el('div'); wx.style.cssText = 'flex:1;min-height:0;overflow:auto';
-      wx.innerHTML = '<table class="e"><thead><tr><th>2026 against 2023–2025</th><th class="num">Aqua AIRS</th><th class="num">NOAA-21 CrIS</th><th class="num">difference</th></tr></thead><tbody>' +
-        rowsX.map(function (r) { var a = fin(r[1]) ? r[1] * r[3] : null, c = fin(r[2]) ? r[2] * r[3] : null; var d = fin(a) && fin(c) ? a - c : null; var close = fin(d) && Math.abs(d) <= (r[4] === ' pt' ? 1 : 0.5); return '<tr><td>' + esc(r[0]) + '</td><td class="num">' + (fin(a) ? fnum(a, r[4] === ' pt' ? 1 : 2) + r[4] : '·') + '</td><td class="num">' + (fin(c) ? fnum(c, r[4] === ' pt' ? 1 : 2) + r[4] : '·') + '</td><td class="num' + (close ? ' st-ok' : '') + '">' + (fin(d) ? fnum(d, r[4] === ' pt' ? 1 : 2) + r[4] : '·') + '</td></tr>'; }).join('') + '</tbody></table>' +
+      var n20x = function (r) { return r[0].indexOf('Deep convection') === 0 ? shift(N20, r[5], 'conv_frac') : pshift(N20, r[6], r[7]); };
+      rowsX[0].push('nino34_A'); rowsX[1].push('nino34_D'); rowsX[2].push('warmpool_A'); rowsX[3].push('warmpool_D');
+      rowsX[4].push(null, 'nino34', '662'); rowsX[5].push(null, 'nino34', '690'); rowsX[6].push(null, 'warmpool', '690'); rowsX[7].push(null, 'warmpool', '900'); rowsX[8].push(null, 'nino34', '900');
+      wx.innerHTML = '<table class="e"><thead><tr><th>2026 against 2023–2025</th><th class="num">Aqua AIRS</th><th class="num">NOAA-21 CrIS</th>' + (N20.series ? '<th class="num">NOAA-20 CrIS</th>' : '') + '<th class="num">AIRS − NOAA-21</th></tr></thead><tbody>' +
+        rowsX.map(function (r) { var a = fin(r[1]) ? r[1] * r[3] : null, c = fin(r[2]) ? r[2] * r[3] : null, n2 = N20.series ? n20x(r) : null; n2 = fin(n2) ? n2 * r[3] : null; var d = fin(a) && fin(c) ? a - c : null; var close = fin(d) && Math.abs(d) <= (r[4] === ' pt' ? 1 : 0.5); return '<tr><td>' + esc(r[0]) + '</td><td class="num">' + (fin(a) ? fnum(a, r[4] === ' pt' ? 1 : 2) + r[4] : '·') + '</td><td class="num">' + (fin(c) ? fnum(c, r[4] === ' pt' ? 1 : 2) + r[4] : '·') + '</td>' + (N20.series ? '<td class="num">' + (fin(n2) ? fnum(n2, r[4] === ' pt' ? 1 : 2) + r[4] : '·') + '</td>' : '') + '<td class="num' + (close ? ' st-ok' : '') + '">' + (fin(d) ? fnum(d, r[4] === ' pt' ? 1 : 2) + r[4] : '·') + '</td></tr>'; }).join('') + '</tbody></table>' +
         '<div class="cap">Green difference: within 1 point of convection share or 0.5 K. The eastward jump of convection (+7 points over Niño 3.4, −5 to −6 over the warm pool) is the same on both instruments; the window channel differs by kelvins because the two overpasses see different cloud phases.</div>';
       body.appendChild(wx);
       var rc = corr((((AIRS.series || {}).nino34_A || {}).conv_frac || {})[cur], (((CRIS.series || {}).nino34_A || {}).conv_frac || {})[cur]);

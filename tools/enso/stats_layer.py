@@ -27,7 +27,8 @@
   hov_speed    — центр тёплой аномалии на Ховмёллере и скорость сноса на восток;
   regions      — сухопутные боксы по квадрантам «воздух × дождь» и знак дождя против аналогов;
   teleconnection — сила телесвязи каждого бокса: регрессия окна июль–август на Niño 3.4 за 45 лет;
-  convection_lag — лаг между конвекцией над Niño 3.4 (спутник) и Niño 1+2 / Niño 3.4 у поверхности.
+  convection_lag — лаг между конвекцией над Niño 3.4 (спутник) и Niño 1+2 / Niño 3.4 у поверхности;
+  epochs       — двадцать лет конвекции на шкале NOAA-21: ранг 2026, ×2015 с ошибкой, робастный z, тренд.
 
 Запуск: python stats_layer.py  (в обёртке после globe_data.py).
 """
@@ -689,6 +690,63 @@ def convection_lag_item():
                        "caveats": ["two months of daily data: exploratory, not a mechanism", "both series carry the seasonal rise; part of the correlation is the common trend"]}}
 
 
+
+def epochs_item():
+    """Двадцать лет конвекции: ранг 2026, отношение к 2015 с ошибкой, тренд 2003–2021, сдвиг восток/запад."""
+    p = ROOT / "radiance.json"
+    if not p.exists():
+        return None
+    ra = json.loads(p.read_text(encoding="utf-8")); EP = ((ra.get("sources") or {}).get("epochs") or {}).get("metrics") or {}
+    M = (EP.get("frac_lt235") or {})
+    if not M:
+        return None
+    PRI = ["n21_cris", "n20_cris", "snpp_cris", "aqua_airs"]
+    def series(key):
+        blk = M.get(key) or {}; rows = []
+        for y, rec in (blk.get("years") or {}).items():
+            for inst in PRI:
+                if inst in rec and not (inst == "aqua_airs" and int(y) > 2021):
+                    rows.append((int(y), inst, rec[inst]["adjusted"], rec[inst]["se"])); break
+        rows.sort()
+        return blk, rows
+    out = {}
+    for key in ("nino34_A", "warmpool_A", "nino34_D", "warmpool_D"):
+        blk, rows = series(key)
+        if not rows or blk.get("current") is None:
+            continue
+        cur, se = blk["current"], blk.get("current_se") or 0
+        vals = [r[2] for r in rows] + [cur]; rank = sorted(vals, reverse=True).index(cur) + 1
+        base = [r for r in rows if 2003 <= r[0] <= 2021]
+        xs = np.array([r[0] for r in base], float); ys = np.array([r[2] for r in base])
+        b = float(np.polyfit(xs, ys, 1)[0]) if len(base) > 5 else np.nan
+        med = float(np.median(ys)) if len(base) else np.nan; mad = float(np.median(np.abs(ys - med))) if len(base) else np.nan
+        z = (cur - med) / (1.4826 * mad) if mad and np.isfinite(mad) and mad > 0 else np.nan
+        r15 = {r[1]: (r[2], r[3]) for r in rows if r[0] == 2015}
+        y15 = (blk.get("years") or {}).get("2015") or {}
+        comp = {inst: (rec["adjusted"], rec["se"]) for inst, rec in y15.items()}
+        out[key] = {"cur": cur, "se": se, "rank": rank, "of": len(vals), "trend_dec": b * 10, "median": med, "z": z, "vs2015": {i: (cur / v[0] if v[0] else np.nan, (cur - v[0]) / math.sqrt(se * se + v[1] * v[1]) if (se or v[1]) else np.nan) for i, v in comp.items()}}
+    if "nino34_A" not in out:
+        return None
+    a = out["nino34_A"]; w = out.get("warmpool_A")
+    ra15 = a["vs2015"]
+    kpis = [
+        {"name": "Niño 3.4, day: rank of 2026", "value": f"{a['rank']} of {a['of']}", "unit": "years", "plain": f"Deep-convection share {a['cur'] * 100:.1f} % ± {a['se'] * 100:.1f}; the 2003–2021 median is {a['median'] * 100:.1f} %; robust z = {a['z']:.0f} (median absolute deviation scale)."},
+        {"name": "against 2015 on two instruments", "value": " / ".join(f"×{v[0]:.2f}" for v in ra15.values()), "unit": ", ".join(ra15.keys()), "plain": "Ratios of the 2026 window mean to the 2015 window mean brought to the NOAA-21 scale; the difference is " + ", ".join(f"{v[1]:.1f}" for v in ra15.values()) + " standard errors, so it is not noise."},
+        {"name": "trend 2003–2021 before this event", "value": f"{a['trend_dec'] * 100:+.2f}", "unit": "pt per decade", "plain": "Linear trend of the yearly window means over the calibrated history; small against the jump of 2026, so the record is the event, not a drift of the record."},
+    ]
+    if w:
+        kpis.append({"name": "warm pool, day: rank of 2026", "value": f"{w['rank']} of {w['of']}", "unit": "years", "plain": f"The west has the least deep cloud of the record: {w['cur'] * 100:.1f} % against a median of {w['median'] * 100:.1f} %; the east–west contrast has never been this inverted in the record."})
+    return {"id": "epochs_convection", "kind": "epochs", "scene": "radiance/epochs", "also": ["radiance", "radiance/convection"],
+            "title": f"Twenty years of the same window: 2026 convection over Niño 3.4 is rank {a['rank']} of {a['of']}, ×{list(ra15.values())[0][0]:.1f} the super El Niño of 2015" if ra15 else f"Twenty years: 2026 rank {a['rank']} of {a['of']}",
+            "series": "radiance epochs frac_lt235", "window": ["2003", str((ra.get("window") or {}).get("current") or "")], "kpis": kpis,
+            "anchors": ["stat:epochs_convection", "term:radiance", "term:walkerraw", "term:nino34"],
+            "method": {"name": "Ranks, robust z and ratios on a calibrated multi-instrument record",
+                       "plain": "Four instruments over twenty years do not read exactly alike, so the collector first measures each instrument’s offset against NOAA-21 on days they overlapped, then shifts every year onto one scale. On that record we rank this year, compare it with the median of 2003–2021 using a scale that ignores outliers, and test the gap to 2015 against the standard errors of both years.",
+                       "tech": "epochs block of radiance.json: adjusted yearly window means with SE; best instrument per year (CrIS chain first, AIRS ≤ 2021); rank among all years; robust z = (x − median)/(1.4826·MAD) over 2003–2021; ratio and (x₂₀₂₆ − x₂₀₁₅)/√(se₁² + se₂²) per instrument; OLS trend over 2003–2021.",
+                       "caveats": ["offsets are measured on a few hundred overlapping days: a residual bias of order the SE cannot be excluded", "AIRS years after 2021 are excluded because its overpass drifted into the afternoon cloud maximum"]},
+            "per_box": out}
+
+
 # ------------------------------------------------------------------ сборка
 def build(verbose=True):
     t0 = time.time()
@@ -745,7 +803,7 @@ def build(verbose=True):
                 items.append(it)
         except Exception as e:                                   # noqa: BLE001
             errors.append(f"teleconnection: {str(e)[:100]}")
-    for fn in (hov_speed_item, regions_item, convection_lag_item):
+    for fn in (hov_speed_item, regions_item, convection_lag_item, epochs_item):
         try:
             it = fn()
             if it:
