@@ -49,7 +49,7 @@
       'air/coupling': 'The three atmospheric signs that the ocean and the air are coupled.', 'air/fuel': 'The warm water volume under the equator: the fuel gauge and its lead.', 'air/layers': 'The four satellite floors of the atmosphere and their delay.', 'air/wind': 'Daily zonal wind over the western Pacific and the westerly bursts.', 'air/mjo': 'The Madden–Julian Oscillation: phase and amplitude.', 'air/indices': 'MEI, the Indian Ocean Dipole and RONI next to our coupling score.',
       'trend/sst_nino34': 'Niño 3.4 daily: 400 days, the band of all years, the 14-day forecast, where past events went from here.', 'trend/sst_world': 'The world ocean, daily.', 'trend/t2_world': 'Land and ocean, daily.', 'trend/index': 'Our risk index by update, and the comparable core against past events.', 'trend/months': 'Thirteen months of the three series with their ranks.', 'trend/background': 'Ocean heat content and the energy imbalance: the state of the whole system.',
       'regions/table': 'Every region by season and scenario, with food vulnerability and what to do.', 'regions/place': 'One region at a time; the Gulf with its own measurements.',
-      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.', 'radiance/convection': 'Share of satellite footprints colder than 235 K: deep convection over Niño 3.4 and the warm pool, this year against 2023–2025.', 'radiance/walker': 'Brightness-temperature contrast east minus west: the Walker circulation read raw; a fall to zero means the convection moved east.', 'radiance/clouds': 'Each scene sorted by the window brightness temperature: deep, mid, low cloud and clear sky, shares per day; the day-time cloud share is the albedo proxy.', 'radiance/greenhouse': 'How much the atmosphere closes the 11 µm window: G on all scenes (follows cloud) and G_clear on the least cloudy scenes (the water-vapour greenhouse proxy), with the p90/p99 caveat.', 'radiance/profile': 'Temperature layers: infrared (blind under cloud) and microwave (through cloud), the last 14 days against each analogue year.', 'radiance/seismic': 'Earthquakes by Pacific-rim zone and solar activity from the same collector; side series, not El Niño physics.', 'models/board': 'Every model of the plume as a card: latest forecast, class, how far below reality.', 'models/revision': 'How each centre revised its forecast issue after issue.', 'refs/works': 'Our parsed arXiv works attached to the claims of this panel, with the reason for each link.', 'refs/sources': 'Every data source with its address, cadence and last date.', 'refs/literature': 'Literature and reports quoted on the panel, not measured by us.', 'refs/neighbours': 'Kindred projects: who else shows the planet on a globe or a map, with what data and under what licence, and what we can take from each.', 'trend/rain': 'Rain by region (ERA5 box sums against the normal and against every year since 1981) and for the whole planet (GPCP monthly).', 'trend/spectral': 'A line at 2–7 days appearing in any daily series over the last 30 days: the owner’s hypothesis of a comb before a spontaneous transition, watched, not assumed.',
+      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.', 'radiance/convection': 'Share of satellite footprints colder than 235 K: deep convection over Niño 3.4 and the warm pool, this year against 2023–2025.', 'radiance/walker': 'Brightness-temperature contrast east minus west: the Walker circulation read raw; a fall to zero means the convection moved east.', 'radiance/clouds': 'Each scene sorted by the window brightness temperature: deep, mid, low cloud and clear sky, shares per day; the day-time cloud share is the albedo proxy.', 'radiance/greenhouse': 'How much the atmosphere closes the 11 µm window: G on all scenes (follows cloud) and G_clear on the least cloudy scenes (the water-vapour greenhouse proxy), with the p90/p99 caveat.', 'radiance/profile': 'Temperature layers: infrared (blind under cloud) and microwave (through cloud), the last 14 days against each analogue year.', 'radiance/seismic': 'Earthquakes by Pacific-rim zone and solar activity from the same collector; side series, not El Niño physics.', 'models/board': 'Every model of the plume as a card: latest forecast, class, how far below reality.', 'models/revision': 'How each centre revised its forecast issue after issue.', 'refs/works': 'Our parsed arXiv works attached to the claims of this panel, with the reason for each link.', 'refs/sources': 'Every data source with its address, cadence and last date.', 'refs/literature': 'Literature and reports quoted on the panel, not measured by us.', 'refs/concepts': 'The concept register attached to every anchor of the panel: risks, alerts, blocks, regions and glossary terms, each with its nearest concepts and a link to the graph on that set.', 'refs/neighbours': 'Kindred projects: who else shows the planet on a globe or a map, with what data and under what licence, and what we can take from each.', 'trend/rain': 'Rain by region (ERA5 box sums against the normal and against every year since 1981) and for the whole planet (GPCP monthly).', 'trend/spectral': 'A line at 2–7 days appearing in any daily series over the last 30 days: the owner’s hypothesis of a comb before a spontaneous transition, watched, not assumed.',
       'planet/gases': 'CO₂, CH₄ and N₂O since the start of measurement, with the annual growth of CO₂.', 'planet/ice': 'Arctic and Antarctic sea ice extent, every year as a line against the 1981–2010 median.', 'planet/temperature': 'Land+ocean and ocean daily temperature every year since 1940 and 1981; global annual means since 1850.', 'planet/sea': 'Global mean sea level from satellites since 1993.',
       'how/glossary': 'Every underlined term explained.', 'how/method': 'How things are computed, and which numbers are parameters.', 'how/sources': 'Every source, whether it answered, and when its data last changed.', 'how/calendar': 'When each source publishes next.', 'how/changed': 'What changed since the previous update.',
       'ops/runs': 'Every run on record: when, what kind, how long, how it ended.', 'ops/sources': 'Every source: date range held, last update, answered or stale, errors.', 'ops/fresh': 'Fresh data since the last assessment and the triggers that decide whether it deserves one.'
@@ -1639,6 +1639,63 @@
     }).join('');
   }
   /* Тот же slug, что в tools/enso/links.py (_aslug): менять только вместе. */
+  /* ОБЛАКО ПОНЯТИЙ (задание ведущей сессии 08.09, ЭЛЬНИНЬО-РАЗМЕТКА-ПОНЯТИЯМИ.md). Слой данных —
+     data/enso/concepts.json (concepts_link.py): у каждого якоря панели (риск, тревога, term:*,
+     region:*, block:*) три–семь понятий реестра. Вид: строка чипов внутри уже существующих
+     подсказок и ящиков, третьего окна нет; чип ведёт на страницу понятия на языке читателя,
+     одна ссылка в конце открывает граф сразу на наборе — новой вкладкой, с панели не уводим.
+     Понятия к сценам и карточкам руками не привязываются: только якорь → данные. */
+  var CN_LANGS = ['en', 'ru', 'ar', 'es', 'fr'];
+  function cnLang() {
+    var l = null; try { l = localStorage.getItem('b42_lang'); } catch (e) { }
+    l = String(l || window.B42_LANG || 'en').slice(0, 2);
+    return CN_LANGS.indexOf(l) >= 0 ? l : 'en';
+  }
+  function conceptsFor(anchors) {
+    var A = (S.CN || {}).anchors || {}, seen = {}, out = [];
+    (Array.isArray(anchors) ? anchors : [anchors]).forEach(function (a) {
+      (A[a] || []).forEach(function (c) { if (!seen[c.id]) { seen[c.id] = 1; out.push(c); } });
+    });
+    return out.sort(function (a, b) { return (b.score || 0) - (a.score || 0); });
+  }
+  function cnAnchor(cands) { for (var i = 0; i < cands.length; i++) if (conceptsFor(cands[i]).length) return cands[i]; return cands[0] || ''; }
+  function cnName(c) { var l = cnLang(), n = (l === 'ru' && c.name_ru) ? c.name_ru : (c.name_en || c.id); return n.charAt(0).toUpperCase() + n.slice(1); }
+  function cnUrl(id) { return '/lang/' + cnLang() + '/concepts/' + encodeURIComponent(id) + '.html'; }
+  function cnGraph(ids, focus) { return '/lang/' + cnLang() + '/concepts/graph.html?set=' + ids.map(encodeURIComponent).join(',') + '&focus=' + encodeURIComponent(focus || ids[0]); }
+  /* Строка чипов: до семи понятий, дальше «all N» на граф; в конце одна ссылка на граф набора. */
+  function conceptsHtml(anchors, full) {
+    var cs = conceptsFor(anchors); if (!cs.length) return '';
+    var show = full ? cs : cs.slice(0, 7), ids = cs.map(function (c) { return c.id; });
+    return '<div class="cn"><span class="cn-h">concepts</span>' +
+      show.map(function (c) { return '<a class="cn-c" href="' + cnUrl(c.id) + '" target="_blank" rel="noopener" title="' + esc(c.line || '') + '">' + esc(cnName(c)) + '</a>'; }).join('') +
+      (cs.length > show.length ? '<a class="cn-c more" href="' + cnGraph(ids) + '" target="_blank" rel="noopener">all ' + cs.length + '</a>' : '') +
+      '<a class="cn-g" href="' + cnGraph(ids) + '" target="_blank" rel="noopener" title="open these concepts together on the graph">graph ↗</a></div>';
+  }
+  /* Якоря сцены для ящика source/notes и подсказок на графике: блоки утверждений links.py. */
+  var SCENE_ANCHORS = { now: ['block:type', 'block:peak'], risk: ['block:type', 'block:peak'], models: ['block:models'], food: ['block:food'], radiance: ['block:radiance'],
+    'trend/rain': ['block:rain'], 'trend/spectral': ['block:spectral'], regions: ['block:landbox'], gulf: ['block:landbox'], air: ['block:peak'] };
+  function sceneAnchors() { return SCENE_ANCHORS[S.view + '/' + (S.sub[S.view] || '')] || SCENE_ANCHORS[S.view] || []; }
+  /* Подсветка в тексте: первое вхождение имени понятия словами, только в текстовых узлах,
+     не внутри ссылок и терминов. Дорога вглубь, а не раскраска. */
+  function hlConcepts(root, anchors) {
+    var cs = conceptsFor(anchors); if (!cs.length || !root) return;
+    var names = cs.map(function (c) { return (c.name_en || '').toLowerCase(); });
+    cs.slice().sort(function (a, b) { return (b.name_en || '').length - (a.name_en || '').length; }).forEach(function (c) {
+      var nm = c.name_en; if (!nm || nm.length < 4) return;
+      if (names.some(function (o) { return o !== nm.toLowerCase() && o.indexOf(nm.toLowerCase()) >= 0; })) return;
+      var re = new RegExp('(^|[^A-Za-z])(' + nm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(?![A-Za-z])', 'i');
+      var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), n;
+      while ((n = w.nextNode())) {
+        if (n.parentNode.closest('a,[data-term],.cn,button,svg')) continue;
+        var m = re.exec(n.nodeValue); if (!m) continue;
+        var at = m.index + m[1].length, a = document.createElement('a');
+        a.className = 'cn-in'; a.href = cnUrl(c.id); a.target = '_blank'; a.rel = 'noopener'; a.title = c.line || ''; a.textContent = m[2];
+        var rest = n.splitText(at); rest.nodeValue = rest.nodeValue.slice(m[2].length);
+        n.parentNode.insertBefore(a, rest);
+        return;
+      }
+    });
+  }
   function aslug(t) { return String(t == null ? '' : t).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 48); }
   function linksHtml(anchor, full) {
     var ls = linksFor(anchor);
@@ -1777,6 +1834,8 @@
        карточки открывает именно её; клик по самой карточке не трогаем, чтобы не мешать
        выделять текст. */
     var go = ALERT_GO[a.kind || 'climate'];
+    var an = cnAnchor(['alert:' + (a.id || aslug(a.title)), 'alert:' + aslug(a.title), 'alert:' + i]);
+    c.setAttribute('data-anchor', an); hlConcepts(c.querySelector('.cd'), an);
     c.querySelector('.cgo').setAttribute('data-go', go.view);
     if (go.sub) c.querySelector('.cgo').setAttribute('data-gosub', go.sub);
     return c;
@@ -1817,7 +1876,7 @@
     if (bd && (bd.by_issue || []).length) {
       var rows = bd.by_issue, first = rows[0], last = rows[rows.length - 1];
       var chronic = (bd.chronic || []).filter(function (c) { return c.of >= 3 && c.issues_low >= Math.max(3, c.of * 0.6); });
-      var c3 = el('div', 'card models-card');
+      var c3 = el('div', 'card models-card'); c3.setAttribute('data-anchor', 'block:models');
       c3.innerHTML = '<div class="ch"><b>MODELS</b><span class="kk">since ' + esc(first.issue) + '</span></div>' +
         '<div class="ct">' + last.share + ' % of models are below reality, against ' + first.share + ' % a year ago</div>' +
         '<div class="cd">Verified on ' + rows.length + ' issues: for each we take its nearest season that already has an official ONI. The average model error went ' +
@@ -1870,13 +1929,14 @@
       /* Сравнение по имени риска; по заголовку — только для снимков до 03.09, где имени нет
          (владелец 06.09: число в заголовке меняется с данными, риск не должен становиться «new»). */
       var was = P && P.risks ? (P.risks[r.id] != null ? P.risks[r.id] : P.risks[r.title]) : null;
-      var c = el('div', 'risk' + (S.risk === i ? ' on' : ''));
+      var c = el('div', 'risk' + (S.risk === i ? ' on' : '')); c.setAttribute('data-anchor', 'risk:' + (r.id || ''));
       c.innerHTML = '<div class="rl" style="background:' + lvlColor(r.level) + '">' + r.level + '</div>' +
         '<div><div class="rt">' + mark(r.title) + (was == null && P ? ' <span class="new">new</span>' : '') + '</div>' +
         '<div class="rh">' + esc(r.horizon) + (wasJ ? ' · <span class="' + jsign(r.level - wasJ.v) + '">' + jarrow(r.level - wasJ.v) + ' was ' + wasJ.v + ' on ' + esc(wasJ.d) + '</span>' : '') + (r.metric ? ' · ' + esc(r.metric.name) : '') + '</div>' +
         (r.metric ? '<div class="rs">' + spark(r.metric, 200, 24) + '</div>' : '') +
         '<div class="rf">' + (linksHtml('risk:' + (r.id || '')) || '') + (jr ? '<button type="button" class="jh" data-hist="risk:' + esc(r.id) + '">history</button>' : '') +
         dateBadge(null, (r.metric ? r.metric.name : 'this rule'), (r.metric && r.metric.dates ? String(r.metric.dates[r.metric.dates.length - 1]) : (je.length ? je[je.length - 1].d : '')), r.title) + '</div></div>';
+      hlConcepts(c.querySelector('.rt'), 'risk:' + (r.id || ''));
       c.onclick = function (e) {
         if (e.target.closest('[data-hist]')) return;      // кнопка истории живёт своей жизнью
         S.risk = (S.risk === i ? null : i); S.view = S.risk == null ? 'now' : 'risk'; render();
@@ -3159,6 +3219,9 @@
     body.appendChild(el('div', 'lead', '<b>Level ' + r.level + ' · ' + esc(r.horizon) + '.</b> ' + mark(r.plain || '') + (fin(was) && was !== r.level ? ' <i>Level was ' + was + ' at ' + esc(prevStamp()) + '.</i>' : '')));
     body.appendChild(el('div', 'note', '<strong>Evidence.</strong> ' + mark(r.evidence) + (r.metric ? '<br>' + dynWords(r.metric) : '')));
     body.appendChild(el('div', 'note warn', '<strong>Watch.</strong> ' + mark(r.watch)));
+    var cnr = conceptsHtml('risk:' + (r.id || ''), true);
+    if (cnr) body.appendChild(el('div', 'note cn-box', cnr));
+    [].slice.call(body.querySelectorAll('.lead, .note')).forEach(function (q) { hlConcepts(q, 'risk:' + (r.id || '')); });
     // по имени риска; по номеру — только пока на проде лежит старый links.json
     var lk = linksHtml('risk:' + (r.id || ''), true) || linksHtml('risk:' + S.risk, true);
     if (lk) body.appendChild(el('div', 'links-box', lk));
@@ -3651,9 +3714,35 @@
     var k = sub('refs', 'works'), D = S.D;
     var works = refsWorks(), srcs = refsSources(), lit = refsLiterature();
     var body = stageShell('References: ' + works.length + ' parsed works attached, ' + srcs.length + ' data sources, ' + lit.length + ' literature and reference items',
-      [segBtn('refs', 'works', 'Our works (' + works.length + ')', 'works'), segBtn('refs', 'sources', 'Data sources (' + srcs.length + ')', 'works'), segBtn('refs', 'literature', 'Literature (' + lit.length + ')', 'works'), segBtn('refs', 'neighbours', 'Neighbours (' + ((S.NB || {}).items || []).length + ')', 'works')]);
+      [segBtn('refs', 'works', 'Our works (' + works.length + ')', 'works'), segBtn('refs', 'sources', 'Data sources (' + srcs.length + ')', 'works'), segBtn('refs', 'literature', 'Literature (' + lit.length + ')', 'works'), segBtn('refs', 'neighbours', 'Neighbours (' + ((S.NB || {}).items || []).length + ')', 'works'), segBtn('refs', 'concepts', 'Concepts (' + ((S.CN || {}).n_anchors || 0) + ')', 'works')]);
     body.classList.add('scroll');
     var tgt = window.matchMedia('(max-width:900px)').matches ? '' : ' target="_blank" rel="noopener"';
+    if (k === 'concepts') {
+      /* Реестр понятий, привязанный к якорям панели: тот же список, что в подсказках, но целиком.
+         Группы по виду якоря; у каждой строки чипы и граф набора; наверху граф всех понятий сцены. */
+      var CNA = (S.CN || {}).anchors || {}, keys = Object.keys(CNA).sort(), GR = [['risk', 'Risks'], ['alert', 'Alerts'], ['block', 'Blocks of the panel'], ['region', 'Regions'], ['term', 'Terms of the glossary']];
+      var allIds = {}; keys.forEach(function (a) { CNA[a].forEach(function (c) { allIds[c.id] = 1; }); });
+      var nIds = Object.keys(allIds).length;
+      body.appendChild(el('div', 'note', esc((S.CN || {}).note || '') + ' Built ' + esc((S.CN || {}).built || '') + '; ' + keys.length + ' anchors, ' + ((S.CN || {}).n_links || 0) + ' links, ' + nIds + ' distinct concepts. Names open the concept page in your language; ' +
+        '<a href="' + cnGraph(Object.keys(allIds)) + '" target="_blank" rel="noopener">all ' + nIds + ' on the graph ↗</a>'));
+      function anchorLabel(a) {
+        var p = a.split(':'), id = p.slice(1).join(':');
+        if (p[0] === 'term') return (S.G[id] || {}).name || id;
+        if (p[0] === 'risk') { var rr = ((S.D || {}).risks || []).filter(function (x) { return x.id === id; })[0]; return rr ? rr.title : id; }
+        if (p[0] === 'alert') { var aa = ((S.D || {}).alerts || []).filter(function (x) { return (x.id || aslug(x.title)) === id; })[0]; return aa ? aa.title : id.replace(/_/g, ' '); }
+        if (p[0] === 'region') { var rg = (((S.D || {}).regions || {}).items || []).filter(function (x) { return x.id === id; })[0]; return rg ? rg.name : id.replace(/_/g, ' '); }
+        return id.replace(/_/g, ' ');
+      }
+      GR.forEach(function (g) {
+        var ks = keys.filter(function (a) { return a.indexOf(g[0] + ':') === 0; }); if (!ks.length) return;
+        var sec = el('div', 'cn-sec');
+        sec.innerHTML = '<div class="lk-h">' + esc(g[1]) + ' · ' + ks.length + '</div>' + ks.map(function (a) {
+          return '<div class="cn-row"><div class="cn-a">' + esc(anchorLabel(a)) + '</div>' + conceptsHtml(a, true) + '</div>';
+        }).join('');
+        body.appendChild(sec);
+      });
+      return;
+    }
     if (k === 'neighbours') {
       /* СОСЕДИ (владелец 08.09: «подборку ресурсов отдельно — сходные проекты, ссылки на соседей»).
          Ручной справочник data/enso/neighbours.json; лицензии проверены по первоисточникам. */
@@ -4623,6 +4712,7 @@
       p.innerHTML = '<div class="seg sub" style="margin-bottom:6px">' + [['plain', 'in plain words'], ['tech', 'technical']].map(function (o) { return '<button type="button" class="sq' + (mode === o[0] ? ' on' : '') + '" data-notemode="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div>' + (mode === 'plain' ? '<div>' + esc(it.plain) + '</div>' : it.html);
       p.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } });
     } else p.innerHTML = it.html;
+    p.innerHTML += conceptsHtml(sceneAnchors(), true);
     body.appendChild(p);
   }
   function worksFoot(body, anchor) {
@@ -5067,7 +5157,9 @@
   }
   function kpiExplain() {
     [].slice.call(document.querySelectorAll('.stage-body .kpi, .stage-body .ov-kpi')).forEach(function (card) {
-      var kn = card.querySelector('.kn'); if (!kn || kn.querySelector('.kq')) return;
+      var kn = card.querySelector('.kn'); if (!kn) return;
+      var tk = kn.querySelector('[data-term]'); if (tk && !card.getAttribute('data-anchor')) card.setAttribute('data-anchor', 'term:' + tk.getAttribute('data-term'));
+      if (kn.querySelector('.kq')) return;
       var key = kpiKey(kn); if (!key) return;
       var q = el('button', 'kq', '?'); q.type = 'button'; q.title = 'what this number means';
       q.onclick = function () {
@@ -5101,6 +5193,7 @@
       pane.innerHTML = sw + (mode === 'plain' ? '<div>' + esc(info.plain) + '</div>' : '<div>' + esc(info.tech) + '</div>' + caps.map(function (c) { return '<div class="cap" style="margin-top:6px">' + c + '</div>'; }).join(''));
       pane.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } });
     }
+    pane.innerHTML += conceptsHtml(sceneAnchors(), true);
     body.insertBefore(pane, body.firstChild);
   }
 
@@ -5260,6 +5353,8 @@
       (r.actions && r.actions.length ? '<div class="gl-i"><b>What to do</b><ul>' + r.actions.map(function (a) { return '<li>' + esc(a) + '</li>'; }).join('') + '</ul></div>' : '') +
       '<div class="gl-i"><b>Sources</b><div class="s">' + srcHtml((r.sources || []).join(' · ')) + (RG.as_of ? '<div>' + esc(RG.as_of) + '</div>' : '') + '</div></div>';
     body.appendChild(g);
+    var cng = conceptsHtml('region:' + r.id, true);
+    if (cng) body.appendChild(el('div', 'note cn-box', cng));
     var lk = linksHtml('region:' + r.id, true);
     if (lk) body.appendChild(el('div', 'links-box', lk));
   }
@@ -5453,11 +5548,18 @@
       if (target.getAttribute('data-src')) { try { return JSON.parse(target.getAttribute('data-src')); } catch (e) { return null; } }
       return null;
     }
+    function tipAnchors(p) {
+      if (p.lk) return [p.lk];
+      var t = S.tipAnchor, card = t && t.closest ? t.closest('[data-anchor]') : null;
+      if (card) return [card.getAttribute('data-anchor')];
+      return t && t.closest && t.closest('#stage') ? sceneAnchors() : [];
+    }
     function fill(p) {
       return '<b>' + esc(p.name || '') + '</b>' + (p.html ? p.html : esc(p.def || '')) + (p.why ? ' ' + esc(p.why) : '') +
         (p.url ? ' <a href="' + esc(p.url) + '" target="_blank" rel="noopener">source ↗</a>' : '') +
         (p.lk && linksFor(p.lk).length ? ' <button type="button" class="jh tip-lk" data-lk="' + esc(p.lk) + '">' + linksFor(p.lk).length + ' work' + (linksFor(p.lk).length > 1 ? 's' : '') + ' →</button>' : '') +
-        (p.src || p.date ? '<span class="s">' + srcHtml(p.src) + (p.date ? '<div>' + esc(p.date) + '</div>' : '') + '</span>' : '');
+        (p.src || p.date ? '<span class="s">' + srcHtml(p.src) + (p.date ? '<div>' + esc(p.date) + '</div>' : '') + '</span>' : '') +
+        conceptsHtml(tipAnchors(p));   // облако понятий строкой под источником (08.09)
     }
     function place(e) {
       var pad = 14, w = tip.offsetWidth, h = tip.offsetHeight;
@@ -5624,10 +5726,11 @@
     get('/data/enso/regions-daily.json').catch(function () { return {}; }),
     get('/data/enso/precip.json').catch(function () { return {}; }),
     get('/data/enso/radiance.json').catch(function () { return {}; }),
-    get('/data/enso/neighbours.json').catch(function () { return {}; })])
+    get('/data/enso/neighbours.json').catch(function () { return {}; }),
+    get('/data/enso/concepts.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {};
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {};
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');

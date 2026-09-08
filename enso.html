@@ -253,6 +253,20 @@
   .ctl-nav{margin-left:auto;display:flex;gap:6px;align-items:center}
   .ctl-nav .back-go.bright{margin-left:0}
   .ctl-info:empty{display:none}
+  /* облако понятий (08.09): строка чипов внутри подсказок и ящиков, третьего окна нет */
+  .cn{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:7px;padding-top:6px;border-top:1px solid var(--hair-soft, var(--hair))}
+  .cn-h{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--soft);margin-inline-end:2px}
+  .cn-c{display:inline-block;font-size:11px;line-height:1.3;padding:1px 8px;border:1px solid color-mix(in srgb, var(--cyan) 55%, transparent);border-radius:999px;color:var(--text);text-decoration:none;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cn-c:hover{background:var(--cyan);color:var(--surface);border-color:var(--cyan)}
+  .cn-c.more{border-style:dashed;color:var(--soft)}
+  .cn-g{margin-inline-start:auto;font-family:var(--mono);font-size:10.5px;color:var(--cyan);text-decoration:none;white-space:nowrap}
+  .cn-g:hover{text-decoration:underline}
+  .tip .cn{margin-top:6px} .tip .cn-c{font-size:10.5px;padding:0 7px}
+  .cn-in{color:inherit;text-decoration:underline dotted color-mix(in srgb, var(--cyan) 70%, transparent);text-underline-offset:3px}
+  .cn-in:hover{color:var(--cyan)}
+  .note.cn-box{padding-top:4px} .note.cn-box .cn{border-top:0;margin-top:0;padding-top:0}
+  .cn-sec{margin-top:10px} .cn-row{padding:6px 0;border-bottom:1px solid var(--hair-soft, var(--hair))}
+  .cn-a{font-size:12.5px;font-weight:600;margin-bottom:2px} .cn-row .cn{border-top:0;margin-top:2px;padding-top:0}
   /* «?» на плашке KPI и абзац простыми словами */
   .kpi .kn,.ov-kpi .kn{display:flex;align-items:center;gap:6px}
   .kq{margin-left:auto;width:16px;height:16px;border-radius:50%;border:1px solid var(--cyan);color:var(--cyan);background:transparent;font:600 10px/14px var(--mono);padding:0;cursor:pointer;flex-shrink:0;letter-spacing:0}
@@ -853,7 +867,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=1fdcacaf74"></script>
+<script src="/js/enso.js?v=a05f6fa958"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>
