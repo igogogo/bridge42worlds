@@ -120,7 +120,7 @@ def peak_hint(now=None):
     return f"{now:%H:%M} UTC — ПИКОВЫЙ тариф, дешевеет в {end:02d}:00 UTC"
 
 
-def targets():
+def targets(with_legacy=False):
     live = json.loads(LIVE.read_text(encoding="utf-8"))["concepts"]
     done = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
     idx = {}
@@ -159,8 +159,15 @@ def targets():
             continue
         if cid in done:
             continue
-        if cid in rich:
-            continue   # старое понятие: развёрнутый текст уже лежит в справочнике
+        if cid in rich and not with_legacy:
+            # Старое понятие: развёрнутый текст уже лежит в справочнике, и странице он
+            # и нужен — она берёт справочник первым, карточку только после него.
+            # Но ВЕКТОР от справочника считать нельзя: замер 08.09 показал, что текст
+            # витрины (писан читателю, медиана 790 знаков против 515 у карточек) сдвигает
+            # разметку у 70% статей и теряет верные привязки. Поэтому --with-legacy:
+            # написать этим понятиям карточку по общей мерке, чтобы весь реестр стоял
+            # на одной опоре. На страницы это не влияет — там справочник в приоритете.
+            continue
         titles = []
         for aid in c.get("articles", [])[:MAX_TITLES]:
             a = idx.get(aid) or idx.get(aid.split("v")[0])
@@ -228,7 +235,7 @@ def ask_batch(batch, key):
     return out
 
 
-def write_cards(limit=None, force_peak=False):
+def write_cards(limit=None, force_peak=False, with_legacy=False):
     try:
         from tools.freeze import guard
         guard("полные карточки понятий (DeepSeek)")
@@ -242,7 +249,7 @@ def write_cards(limit=None, force_peak=False):
     key = env("DEEPSEEK_API_KEY")
     if not key:
         raise SystemExit("нет DEEPSEEK_API_KEY")
-    todo, done, _ = targets()
+    todo, done, _ = targets(with_legacy)
     if limit:
         todo = todo[:limit]
     print(f"понятий без полной карточки: {len(todo)}")
@@ -368,6 +375,9 @@ def main():
     ap.add_argument("--sample", type=int, metavar="N", help="N образцов на просмотр")
     ap.add_argument("--run", action="store_true", help="все, только в дешёвое окно")
     ap.add_argument("--force-peak", action="store_true")
+    ap.add_argument("--with-legacy", action="store_true", dest="with_legacy",
+                    help="писать карточки и старым понятиям, у которых текст есть в "
+                         "справочнике: их вектор считается по однострочнику")
     ap.add_argument("--revector-all", action="store_true",
                     dest="revector_all",
                     help="вектор ВСЕХ понятий: у старых — по тексту английских витрин")
@@ -380,7 +390,7 @@ def main():
     if a.sample:
         return write_cards(limit=a.sample, force_peak=True)
     if a.run:
-        return write_cards(force_peak=a.force_peak)
+        return write_cards(force_peak=a.force_peak, with_legacy=a.with_legacy)
     todo, done, _ = targets()
     print(f"без полной карточки: {len(todo)} · готово: {len(done)}")
     return 0

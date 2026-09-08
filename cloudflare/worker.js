@@ -1843,6 +1843,9 @@ N. supported|contradicted|unknown — короткое пояснение [ис�
 supported — материалы прямо подтверждают; contradicted — прямо опровергают;
 unknown — материалов не хватает. Догадки запрещены: «похоже на правду» это unknown.
 
+ЯЗЫК ПОЯСНЕНИЯ: {lang}. Слово состояния (supported / contradicted / unknown) всегда
+по-английски — его разбирает код; пояснение после тире только на этом языке.
+
 МАТЕРИАЛЫ:
 {sources}
 
@@ -1962,6 +1965,7 @@ async function handleResearch(request, env) {
   let prompt;
   if (mode === "verify") {
     prompt = (env.RESEARCH_VERIFY_PROMPT || VERIFY_PROMPT)
+      .replace("{lang}", langName)
       .replace("{sources}", (panelText + "\n\n" + worksText).slice(0, 12000))
       .replace("{claims}", claims.map((c, i) => `${i + 1}. ${c}`).join("\n"));
   } else {
