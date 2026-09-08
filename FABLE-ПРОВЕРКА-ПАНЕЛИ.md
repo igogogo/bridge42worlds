@@ -305,7 +305,8 @@ ASCII (`gl()`). Карта Пацифики рисуется в два прох�
 plain/tech, оговорками, якорями `stat:*`); на панели `statsFor(view)` отбирает единицы сцены
 (и ряда на Dynamics/Long record), `statsHtml` рисует; новая единица — функция в `stats_layer.py`,
 возвращающая тот же словарь (v1: trend, changepoint, ar1, clusters, extremes, coherence,
-fuel_lead, spectral, peak_bayes, hov_speed, regions). Читать оговорки: это статистика на
+fuel_lead, spectral, peak_bayes, hov_speed, regions, teleconnection, convection_lag; сцены со
+своими переключателями получают кнопку stats через `infoToggles`). Читать оговорки: это статистика на
 коротких рядах; байесовский пик не видит подповерхность, скорость на Ховмёллере — снос
 бассейна, не волна.
 Ocean · Surface: аналоги боксов лежат аномалиями; в absolute они переводятся через

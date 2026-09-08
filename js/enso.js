@@ -5153,8 +5153,10 @@
   function infoToggles(row, items) {
     var ci = document.querySelector('.stage-head .ctl-info');   // с 08.09 кнопки живут в строке управления
     if (ci) row = ci; else row.appendChild(el('span', 'seg-gap', ''));
+    var st = statsFor(S.view);                                   // статистический слой и на сценах со своими кнопками
+    if (st.length && !items.some(function (i) { return i.key === 'stats'; })) items.push({ key: 'stats', label: 'stats · ' + st.length, html: statsHtml(st, S.sub.noteMode || 'plain'), stats: true });
     items.forEach(function (it) {
-      var b = el('button', (S.sub.info === it.key ? 'on' : '') + ' sq', it.label + (S.sub.info === it.key ? ' ▴' : ' ▾'));
+      var b = el('button', (S.sub.info === it.key ? 'on' : '') + ' sq' + (it.stats ? ' stats' : ''), it.label + (S.sub.info === it.key ? ' ▴' : ' ▾'));
       b.type = 'button'; b.onclick = function () { S.sub.info = S.sub.info === it.key ? null : it.key; render(); };
       row.appendChild(b);
     });
@@ -5166,8 +5168,8 @@
     if (it.plain) {
       p.innerHTML = '<div class="seg sub" style="margin-bottom:6px">' + [['plain', 'in plain words'], ['tech', 'technical']].map(function (o) { return '<button type="button" class="sq' + (mode === o[0] ? ' on' : '') + '" data-notemode="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div>' + (mode === 'plain' ? '<div>' + esc(it.plain) + '</div>' : it.html);
       p.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } });
-    } else p.innerHTML = it.html;
-    p.innerHTML += conceptsHtml(sceneAnchors(), true);
+    } else { p.innerHTML = it.html; if (it.stats) { p.classList.add('stats'); p.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } }); } }
+    if (!it.stats) p.innerHTML += conceptsHtml(sceneAnchors(), true);
     body.appendChild(p);
   }
   function worksFoot(body, anchor) {

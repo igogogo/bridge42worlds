@@ -25,7 +25,9 @@
   spectral     — сводка спектрального сторожа (линии 99 % против ожидаемых случайно);
   peak_bayes   — ансамбль подразумеваемых пиков и вероятности превысить 1997/2015/2023 (Стьюдент);
   hov_speed    — центр тёплой аномалии на Ховмёллере и скорость сноса на восток;
-  regions      — сухопутные боксы по квадрантам «воздух × дождь» и знак дождя против аналогов.
+  regions      — сухопутные боксы по квадрантам «воздух × дождь» и знак дождя против аналогов;
+  teleconnection — сила телесвязи каждого бокса: регрессия окна июль–август на Niño 3.4 за 45 лет;
+  convection_lag — лаг между конвекцией над Niño 3.4 (спутник) и Niño 1+2 / Niño 3.4 у поверхности.
 
 Запуск: python stats_layer.py  (в обёртке после globe_data.py).
 """
@@ -564,6 +566,129 @@ def regions_item():
             "rows": rows, "groups": groups}
 
 
+
+def _box_daily(path):
+    d = json.loads(Path(path).read_text(encoding="utf-8"))
+    if isinstance(d, dict) and "dates" in d:
+        return dict(zip(d["dates"], d.get("values") or d.get("mm") or []))
+    return {k: v for k, v in d.items() if isinstance(v, (int, float))} if isinstance(d, dict) else {}
+
+
+def teleconnection_item(psl):
+    """Сила телесвязи каждого сухопутного бокса: регрессия окна июль–август на Niño 3.4 за 45 лет."""
+    sp = ROOT / "spectral"
+    if not sp.exists():
+        return None
+    labels = {"gulf_north": "Kuwait and the northern Gulf", "europe_central": "Central Europe", "peru_coast": "Peru coast",
+              "java": "Java", "east_africa": "East Africa", "north_india": "Northern India"}
+    cur = max(y for y in psl if np.isfinite(psl[y][6:8]).all())
+    x_all = {y: float(np.mean(psl[y][6:8])) for y in psl if np.isfinite(psl[y][6:8]).all()}
+    rows = []
+    for key, label in labels.items():
+        try:
+            air = _box_daily(sp / f"{key}-box.json"); rain = _box_daily(sp / f"{key}-precip.json") if (sp / f"{key}-precip.json").exists() else {}
+        except Exception:                                        # noqa: BLE001
+            continue
+        def window(series, y, agg):
+            vals = [v for d, v in series.items() if d[:4] == str(y) and "07-01" <= d[5:] <= "08-31" and v is not None]
+            if len(vals) < 40:
+                return np.nan
+            return float(np.mean(vals)) if agg == "mean" else float(np.sum(vals))
+        ys = [y for y in range(1981, cur + 1) if y in x_all]
+        xa = np.array([x_all[y] for y in ys]); ta = np.array([window(air, y, "mean") for y in ys]); ra = np.array([window(rain, y, "sum") for y in ys]) if rain else None
+        def fit(y_arr):
+            m = np.isfinite(y_arr) & np.isfinite(xa)
+            m[-1] = False if ys[-1] == cur else m[-1]          # текущий год — не в подгонке, его сравниваем
+            if m.sum() < 15:
+                return None
+            X, Y = xa[m], y_arr[m]
+            b, a = np.polyfit(X, Y, 1); r = float(np.corrcoef(X, Y)[0, 1]); n = int(m.sum())
+            t = r * math.sqrt((n - 2) / max(1e-9, 1 - r * r)); pval = 2 * (1 - 0.5 * (1 + math.erf(abs(t) / math.sqrt(2))))
+            return {"slope": float(b), "intercept": float(a), "r": r, "p": pval, "n": n}
+        fa = fit(ta); fr = fit(ra) if ra is not None else None
+        cur_air = ta[-1] if ys[-1] == cur else np.nan; cur_rain = ra[-1] if (ra is not None and ys[-1] == cur) else np.nan
+        exp_air = fa["slope"] * x_all[cur] + fa["intercept"] if fa else np.nan
+        exp_rain = fr["slope"] * x_all[cur] + fr["intercept"] if fr else np.nan
+        rows.append({"key": key, "label": label, "air": fa, "rain": fr, "cur_air": cur_air, "cur_rain": cur_rain, "exp_air": exp_air, "exp_rain": exp_rain,
+                     "air_mean": float(np.nanmean(ta[:-1])) if ys[-1] == cur else float(np.nanmean(ta)), "rain_mean": float(np.nanmean(ra[:-1])) if ra is not None else np.nan})
+    rows = [r for r in rows if r["air"]]
+    if not rows:
+        return None
+    strongest = max(rows, key=lambda r: abs(r["air"]["r"]))
+    wet = [r for r in rows if r["rain"] and r["rain"]["p"] < 0.1]
+    def sgn(v):
+        return "wetter" if v > 0 else "drier"
+    kpis = [
+        {"name": "strongest air link", "value": f"r {strongest['air']['r']:+.2f}", "unit": strongest["label"], "plain": f"July–August air over {strongest['label']} moves {strongest['air']['slope']:+.2f} °C per 1 °C of Niño 3.4 (p = {strongest['air']['p']:.3f}, {strongest['air']['n']} years)."},
+        {"name": "rain links that hold", "value": f"{len(wet)} of {len([r for r in rows if r['rain']])}", "unit": "boxes", "plain": "; ".join(f"{r['label']}: {sgn(r['rain']['slope'])} with El Niño, {r['rain']['slope']:+.0f} mm per °C, r {r['rain']['r']:+.2f}" for r in wet) or "No box shows a rain link at p < 0.1 in July–August; the strong season for most of them is later in the year."},
+        {"name": "this summer against the link", "value": f"{sum(1 for r in rows if np.isfinite(r['cur_air']) and (r['cur_air'] - r['exp_air']) > 0)} of {sum(1 for r in rows if np.isfinite(r['cur_air']))}", "unit": "boxes warmer than El Niño alone predicts", "plain": "; ".join(f"{r['label']} {r['cur_air'] - r['exp_air']:+.1f} °C" for r in rows if np.isfinite(r["cur_air"]))},
+    ]
+    table = [{"box": r["label"], "air_slope": round(r["air"]["slope"], 2), "air_r": round(r["air"]["r"], 2), "air_p": round(r["air"]["p"], 3), "rain_slope": round(r["rain"]["slope"], 1) if r["rain"] else None, "rain_r": round(r["rain"]["r"], 2) if r["rain"] else None, "rain_p": round(r["rain"]["p"], 3) if r["rain"] else None,
+              "air_now_minus_expected": round(float(r["cur_air"] - r["exp_air"]), 2) if np.isfinite(r["cur_air"]) else None} for r in rows]
+    return {"id": "teleconnection_boxes", "kind": "regression", "scene": "regions", "also": ["trend/rain", "trend", "regions/place"],
+            "title": f"Teleconnection strength on our boxes, 45 summers: strongest air link {strongest['label']} (r {strongest['air']['r']:+.2f}); rain links hold in {len(wet)} boxes",
+            "series": "spectral/*-box + *-precip vs psl_nino34_monthly", "window": [f"{min(y for y in x_all if y >= 1981)}", f"{cur}"], "kpis": kpis,
+            "anchors": ["stat:teleconnection_boxes", "term:teleconnection", "term:landbox", "term:rain"],
+            "method": {"name": "Cross-year linear regression of the box on Niño 3.4",
+                       "plain": "For each of our six land boxes we take the same July–August window in every year since 1981: the mean air temperature and the rain sum. We plot them against the Niño 3.4 of that summer and fit a line. The slope is how much a degree of El Niño usually buys that region; the correlation says how reliable the link is; this year is then compared with what the line predicts from Niño 3.4 alone.",
+                       "tech": "ERA5 box means and box precipitation sums (spectral/*-box.json, *-precip.json), Jul 1–Aug 31 each year 1981–2025 (≥ 40 days), against ERSST Niño 3.4 Jul–Aug mean; OLS slope, Pearson r, two-sided p (normal approximation); the current year is held out and reported as residual from the fitted line. Rows in `table`.",
+                       "caveats": ["July–August is the wrong season for many teleconnections (India monsoon, Peru winter): a weak link here does not mean no link", "45 points, one predictor: warming trend is not removed and can masquerade as an El Niño effect in the air regressions"]},
+            "table": table}
+
+
+def convection_lag_item():
+    """Сдвиг между конвекцией над Niño 3.4 (спутник) и Niño 1+2 у берега (OISST), суточные ряды этого лета."""
+    ra = json.loads((ROOT / "radiance.json").read_text(encoding="utf-8")) if (ROOT / "radiance.json").exists() else None
+    latest = json.loads((ROOT / "latest.json").read_text(encoding="utf-8"))
+    if not ra:
+        return None
+    W0 = ra.get("window") or {}; start = W0.get("start") or "07-01"; cur = str(W0.get("current") or 2026)
+    cr = (ra.get("sources") or {}).get("n21_cris") or {}
+    conv = ((cr.get("series") or {}).get("nino34_A") or {}).get("conv_frac", {}).get(cur) or {}
+    if not conv:
+        return None
+    d0 = date(int(cur), int(start[:2]), int(start[3:5]))
+    cv = {(d0 + timedelta(days=int(k))).isoformat(): v for k, v in conv.items() if v is not None}
+    box = ((latest.get("oisst") or {}).get("boxes") or {}).get("nino12") or {}
+    n12 = {d: a for d, a in zip(box.get("dates") or [], box.get("anom") or []) if a is not None}
+    n34 = ((latest.get("oisst") or {}).get("boxes") or {}).get("nino34") or {}
+    n34 = {d: a for d, a in zip(n34.get("dates") or [], n34.get("anom") or []) if a is not None}
+    def xcorr(a, b, maxlag=20):
+        days = sorted(set(a) & set(b))
+        if len(days) < 30:
+            return None
+        xa = np.array([a[d] for d in days]); xb = np.array([b[d] for d in days]); xa -= xa.mean(); xb -= xb.mean()
+        best = (0, -2.0)
+        for L in range(-maxlag, maxlag + 1):
+            if L >= 0:
+                r = np.corrcoef(xa[:len(xa) - L] if L else xa, xb[L:])[0, 1]
+            else:
+                r = np.corrcoef(xa[-L:], xb[:len(xb) + L])[0, 1]
+            if np.isfinite(r) and r > best[1]:
+                best = (L, float(r))
+        return {"lag": best[0], "r": best[1], "n": len(days)}
+    x12 = xcorr(cv, n12); x34 = xcorr(cv, n34)
+    if not x12 and not x34:
+        return None
+    def words(x, name):
+        if not x:
+            return f"no overlap with {name}"
+        return f"{name} follows the convection by {x['lag']} days (r = {x['r']:.2f}, {x['n']} days)" if x["lag"] > 0 else (f"{name} leads the convection by {-x['lag']} days (r = {x['r']:.2f}, {x['n']} days)" if x["lag"] < 0 else f"{name} moves with the convection the same day (r = {x['r']:.2f}, {x['n']} days)")
+    kpis = []
+    if x12:
+        kpis.append({"name": "convection → Niño 1+2", "value": f"{x12['lag']:+d}", "unit": "days", "plain": words(x12, "Niño 1+2 off Peru")})
+    if x34:
+        kpis.append({"name": "convection → Niño 3.4", "value": f"{x34['lag']:+d}", "unit": "days", "plain": words(x34, "Niño 3.4 surface")})
+    return {"id": "convection_lag", "kind": "leadlag", "scene": "radiance/convection", "also": ["radiance", "ocean/surface"],
+            "title": "Storms and the sea this summer: " + (words(x12, "Niño 1+2") if x12 else words(x34, "Niño 3.4")),
+            "series": "radiance conv_frac nino34_A vs OISST boxes", "window": [min(cv), max(cv)], "kpis": kpis,
+            "anchors": ["stat:convection_lag", "term:radiance", "term:nino12", "term:coupling"],
+            "method": {"name": "Cross-correlation at daily lags",
+                       "plain": "We slide the daily share of deep storm clouds over Niño 3.4 (from the satellite) against the daily sea-surface anomalies of Niño 1+2 and Niño 3.4 and look for the shift in days where they agree best. A positive shift means the sea follows the storms; negative, the storms follow the sea.",
+                       "tech": f"Pearson r between CrIS conv_frac (day node) and OISST box anomalies over common days of the {cur} window, lags ±20 days, maximum reported; series are short (~2 months) and autocorrelated, so r is optimistic and the lag is uncertain by several days.",
+                       "caveats": ["two months of daily data: exploratory, not a mechanism", "both series carry the seasonal rise; part of the correlation is the common trend"]}}
+
+
 # ------------------------------------------------------------------ сборка
 def build(verbose=True):
     t0 = time.time()
@@ -613,7 +738,14 @@ def build(verbose=True):
                 items.append(it)
         except Exception as e:                                   # noqa: BLE001
             errors.append(f"peak_bayes: {str(e)[:100]}")
-    for fn in (hov_speed_item, regions_item):
+    if psl:
+        try:
+            it = teleconnection_item(psl)
+            if it:
+                items.append(it)
+        except Exception as e:                                   # noqa: BLE001
+            errors.append(f"teleconnection: {str(e)[:100]}")
+    for fn in (hov_speed_item, regions_item, convection_lag_item):
         try:
             it = fn()
             if it:
