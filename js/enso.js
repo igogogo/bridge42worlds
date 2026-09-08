@@ -1693,14 +1693,20 @@
   /* Окно графа поверх панели (владелец 08.09: «мини-граф открывать во всплывающем окошке, не
      отдельное окно; если захочется — там кнопка перехода»). Одно окно на страницу; закрывают
      крестик, Esc и клик мимо. Узлы и «весь граф» открываются новой вкладкой, панель остаётся. */
+  function cnBtn(anchors, label) {
+    var a = Array.isArray(anchors) ? anchors : [anchors];
+    if (!conceptsFor(a).length) return '';
+    return '<button type="button" class="cn-mg rail" data-anchors="' + esc(a.join(',')) + '" title="the concepts behind this, as a graph in a window over the panel">' + esc(label || 'graph') + '</button>';
+  }
   function closeGraphModal() { var m = $('cnModal'); if (m) m.remove(); }
-  function openGraphModal(ids, focus, width) {   // width — ширина карточки, из которой открыли (владелец 08.09: «в размер карточки»)
+  function openGraphModal(ids, focus, width, anchors) {   // width — ширина карточки, из которой открыли (владелец 08.09: «в размер карточки»); anchors — показать и облако
     closeGraphModal();
     var tip = $('tip'); if (tip) { tip.classList.remove('on', 'pin'); S.pinned = null; }
     var m = el('div', 'cn-modal'); m.id = 'cnModal';
     var names = ids.map(function (id) { var c = conceptsFor(Object.keys((S.CN || {}).anchors || {})).filter(function (q) { return q.id === id; })[0]; return c ? cnName(c) : id; });
     m.innerHTML = '<div class="cn-modal-box"><div class="cn-modal-h"><b>' + ids.length + ' concepts on the graph</b><span class="cn-modal-n">' + esc(names.slice(0, 5).join(' · ')) + (names.length > 5 ? ' · …' : '') + '</span>' +
       '<button type="button" class="x" title="close (Esc)">×</button></div>' +
+      (anchors && anchors.length ? conceptsHtml(anchors, true).replace(/<button[^>]*class="cn-mg"[\s\S]*?<\/button>/, '') : '') +
       '<div class="b42mini" data-ids="' + esc(ids.join(',')) + '" data-focus="' + esc(focus || ids[0]) + '" data-newtab="1" data-lang="' + cnLang() + '"></div>' +
       '<div class="cn-modal-f"><span>drag a node; hover for the meaning; click to open its page in a new tab</span>' +
       '<a class="cn-g" href="' + cnGraph(ids, focus) + '" target="_blank" rel="noopener">open the full graph ↗</a></div></div>';
@@ -1713,8 +1719,16 @@
   document.addEventListener('click', function (e) {
     var b = e.target.closest && e.target.closest('.cn-mg'); if (!b) return;
     e.preventDefault(); e.stopPropagation();
-    var host = b.closest('.tip, .card, .risk, .kpi, .ov-kpi, .info-pane, .cn-box, .cn-row, .stage-body');
-    openGraphModal(b.getAttribute('data-ids').split(',').filter(Boolean), b.getAttribute('data-focus'), host ? host.getBoundingClientRect().width : 0);
+    var host = b.closest('.tip, .card, .risk, .kpi, .ov-kpi, .info-pane, .cn-box, .cn-row, .stage-body, .tile');
+    var hw = host ? host.getBoundingClientRect().width : 0;
+    if (host && host.closest('#railL, #railR')) hw = Math.max(hw, 720);   // rail column is narrow; the window needs room for the graph
+    var an = b.getAttribute('data-anchors');
+    if (an) {                                    // кнопка по якорям: набор считаем здесь, в окне и облако, и граф
+      var al = an.split(',').filter(Boolean), cs = conceptsFor(al); if (!cs.length) return;
+      openGraphModal(cs.map(function (c) { return c.id; }), cs[0].id, hw, al);
+      return;
+    }
+    openGraphModal(b.getAttribute('data-ids').split(',').filter(Boolean), b.getAttribute('data-focus'), hw);
   }, true);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeGraphModal(); });
   /* Якоря сцены для ящика source/notes и подсказок на графике: блоки утверждений links.py. */
@@ -1890,7 +1904,7 @@
   function railState() {
     var D = S.D, N = D.nino34, NW = D.noaa, ONI = D.oni, sm = D.summary || {}, P = S.P;
     var col = $('railL'); col.innerHTML = '';
-    var t = tile('State', term('type', 'event type: ' + NW.type) + railFullBtn('L'), 'grow');
+    var t = tile('State', term('type', 'event type: ' + NW.type) + cnBtn(['kpi:risk_index', 'term:riskindex', 'block:type', 'term:type'], 'graph') + railFullBtn('L'), 'grow');
     var idx = D.risk_index, gc = idx >= 80 ? 'var(--lv5)' : (idx >= 60 ? 'var(--lv4)' : (idx >= 40 ? 'var(--lv3)' : 'var(--ok)'));
     var ls = ONI.last_season;
     var ri = pair(idx, P ? P.risk_index : null, 0);
@@ -1964,7 +1978,7 @@
   function railRisks() {
     var D = S.D, col = $('railR'); col.innerHTML = '';
     var risks = D.risks || [], P = S.P;
-    var t = tile('Risks', risks.length + ' · index ' + D.risk_index + (P ? ' ' + chg(D.risk_index, P.risk_index, 0) : '') + railFullBtn('R'), 'grow');
+    var t = tile('Risks', risks.length + ' · index ' + D.risk_index + (P ? ' ' + chg(D.risk_index, P.risk_index, 0) : '') + cnBtn(risks.map(function (r) { return 'risk:' + (r.id || ''); }), 'graph') + railFullBtn('R'), 'grow');
     t._b.classList.add('flush');
     var box = el('div'); box.style.padding = '0 10px 8px';
     risks.forEach(function (r, i) {
@@ -1980,7 +1994,7 @@
         '<div><div class="rt">' + mark(r.title) + (was == null && P ? ' <span class="new">new</span>' : '') + '</div>' +
         '<div class="rh">' + esc(r.horizon) + (wasJ ? ' · <span class="' + jsign(r.level - wasJ.v) + '">' + jarrow(r.level - wasJ.v) + ' was ' + wasJ.v + ' on ' + esc(wasJ.d) + '</span>' : '') + (r.metric ? ' · ' + esc(r.metric.name) : '') + '</div>' +
         (r.metric ? '<div class="rs">' + spark(r.metric, 200, 24) + '</div>' : '') +
-        '<div class="rf">' + (linksHtml('risk:' + (r.id || '')) || '') + (jr ? '<button type="button" class="jh" data-hist="risk:' + esc(r.id) + '">history</button>' : '') +
+        '<div class="rf">' + (linksHtml('risk:' + (r.id || '')) || '') + cnBtn('risk:' + (r.id || ''), 'graph') + (jr ? '<button type="button" class="jh" data-hist="risk:' + esc(r.id) + '">history</button>' : '') +
         dateBadge(null, (r.metric ? r.metric.name : 'this rule'), (r.metric && r.metric.dates ? String(r.metric.dates[r.metric.dates.length - 1]) : (je.length ? je[je.length - 1].d : '')), r.title) + '</div></div>';
       hlConcepts(c.querySelector('.rt'), 'risk:' + (r.id || ''));
       c.onclick = function (e) {
