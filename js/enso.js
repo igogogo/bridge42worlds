@@ -2090,7 +2090,7 @@
     ctl.appendChild(el('div', 'seg ctl-info'));
     [].slice.call(top.querySelectorAll('.back-go')).forEach(function (b) { nav.appendChild(b); });
     ctl.appendChild(nav);
-    head.appendChild(ctl);
+    top.appendChild(ctl);                     // в той же строке, что заголовок (владелец 08.09, вторая правка)
     requestAnimationFrame(fitStageTitle); setTimeout(fitStageTitle, 120);
     if (segs2 && segs2.length) {
       var seg = el('div', 'seg');

@@ -246,10 +246,10 @@
   .stage{display:flex;flex-direction:column;min-height:0;min-width:0}
   /* Заголовок сцены — своя строка, подменю всегда под ним: раньше подменю вставало рядом с
      коротким заголовком и прыгало вниз у длинного (владелец 07.09, Ocean). */
-  .stage-head{display:flex;flex-direction:column;align-items:stretch;gap:5px;padding:8px 12px 4px;flex-shrink:0}
-  .stage-top{display:flex;align-items:center;gap:10px}
+  .stage-head{display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:5px 12px 4px;flex-shrink:0}
+  .stage-top{display:flex;align-items:flex-start;gap:10px}
   /* строка управления (08.09): слева source/notes, справа back · globe · ⛶ */
-  .stage-ctl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .stage-ctl{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-inline-start:auto}   /* кнопки в строке заголовка, у верхнего края (08.09) */
   .ctl-nav{margin-left:auto;display:flex;gap:6px;align-items:center}
   .ctl-nav .back-go.bright{margin-left:0}
   .ctl-info:empty{display:none}
@@ -338,8 +338,8 @@
      уезжает на свою строку целиком — иначе он вставал колонкой в три-четыре этажа и съедал
      высоту графика (поймано на 1280×720). */
   /* в одну строку всегда: JS уменьшает кегль до влезания (владелец 07.09), чтобы подменю не прыгало */
-  .stage-h{font-family:var(--font-display);font-size:clamp(14px,1.7vw,18px);font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;
-    min-width:0;flex:1 1 320px}   /* без text-wrap:balance: он снова разрешал перенос и ломал строку (07.09) */
+  .stage-h{font-family:var(--font-display);font-size:clamp(12px,1.35vw,15px);font-weight:600;line-height:1.35;white-space:nowrap;overflow:hidden;
+    min-width:0;flex:1 1 200px;padding-top:2px}   /* без text-wrap:balance: он снова разрешал перенос и ломал строку (07.09) */
   .seg{display:flex;gap:3px;flex-shrink:0;flex-wrap:wrap}
   .seg.sub{padding:0 0 2px}
   /* Планшет цепочки данных и страница «About» (владелец 04.09, ночь) */
@@ -389,11 +389,6 @@
   .news{display:grid;grid-template-columns:3fr 2fr;gap:12px 24px;padding:2px 2px 10px}
   .news-col{min-width:0}
   .news-i{border:1px solid var(--line, var(--hair));border-radius:9px;padding:7px 10px;margin-bottom:8px;background:var(--surface)}
-  .news-i.k-alert{border-inline-start:3px solid var(--nino)}
-  .news-i.k-risk{border-inline-start:3px solid var(--lv4)}
-  .news-i.k-verdict{border-inline-start:3px solid var(--ochre)}
-  .news-i.k-cal{border-inline-start:3px solid var(--cyan)}
-  .news-i.k-watch{border-inline-start:3px solid var(--soft)}
   .news-i .ni-h{display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
   .news-i .ni-t{font-size:13px;color:var(--text);margin-top:2px;line-height:1.4}
   .news-i .ni-s{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.45}
@@ -797,7 +792,8 @@
     .stage-head{gap:6px}
     /* На телефоне подменю и так на своей строке, а длинный заголовок в одну строку не влезает
        ни при каком кегле — пусть переносится целиком, чем обрывается (владелец 07.09). */
-    .stage-h{font-size:15px;white-space:normal;overflow:visible}
+    .stage-h{font-size:14px;white-space:normal;overflow:visible}
+    .stage-top{flex-wrap:wrap} .stage-ctl{margin-inline-start:0;flex-wrap:wrap}
     /* Липкая подпись на телефоне закрывала низ графика: там она просто идёт следом. */
     .stage-body.scroll > .cap:last-child{position:static;border-top:0;padding-top:2px}
     /* НИЧЕГО НЕ ЕЗДИТ ВБОК. Сцена прокручивалась горизонтально (518 пикселей в 366), потому
@@ -913,7 +909,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=fb32233247"></script>
+<script src="/js/enso.js?v=47a93d34e2"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>
