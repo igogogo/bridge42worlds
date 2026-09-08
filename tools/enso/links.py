@@ -123,6 +123,24 @@ def anchors():
         out.append({"id": "term:" + k, "label": g["name"], "kind": "term",
                     "text": " ".join([g["name"], g.get("def") or "", g.get("why") or ""])})
 
+    # ЯКОРЯ ПЛАШЕК KPI. Просьба сессии панели 08.09: у плашки нет своего якоря, и облако
+    # понятий приходится брать от термина подписи — попадание случайное. Ключ журнала это
+    # и есть имя показателя (n34_daily, food_index, ohc_2000), панель уже ключует им
+    # подписи (kmeta), так что дорога та же и правок в панели не нужно.
+    try:
+        J = json.loads((DATA / "journal.json").read_text(encoding="utf-8"))
+        for k, m in (J.get("metrics") or {}).items():
+            if k.startswith("risk:"):
+                continue                                  # риск уже есть своим якорем
+            title = (m.get("title") or k).strip()
+            src = (m.get("src") or "").strip()
+            if not title:
+                continue
+            out.append({"id": "kpi:" + k, "label": title, "kind": "kpi",
+                        "text": " ".join([title, src, m.get("unit") or ""]).strip()})
+    except Exception:                                     # noqa: BLE001
+        pass
+
     # утверждения самой панели, которые просят подкрепления сильнее всего
     iri = D.get("iri") if isinstance(D.get("iri"), dict) else {}
     bd = iri.get("breakdown") or {}
