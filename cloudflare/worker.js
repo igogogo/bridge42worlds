@@ -1916,14 +1916,22 @@ async function handleResearch(request, env) {
   }
 
   // Тексты статей — те же готовые аннотации, что у /api/ask (KV, на языке читателя).
-  const workSrc = [];
+  // У СТАРЫХ РАБОТ КОНТЕКСТА В KV МОЖЕТ НЕ БЫТЬ (его кладёт context_build.py, и до
+  // архива 2017 года он не дошёл). Раньше такая работа просто исчезала: найдена
+  // вектором со сходством 0.45 — и не показана вовсе. Теперь она остаётся в ответе
+  // ссылкой (читателю есть куда пойти), но в промпт не идёт: цитировать нечего.
+  const workSrc = [], worksOut = [];
   for (const w of works) {
     const raw = await env.TOKENS.get(`ctx:${w.id}:${lang}`);
-    if (!raw) continue;
-    try {
-      const c = JSON.parse(raw);
-      workSrc.push({ ...w, title: c.title || w.title, text: c.text, url: c.url || w.url, date: c.date || w.date });
-    } catch { /* битая запись — пропускаем */ }
+    let src = null;
+    if (raw) {
+      try {
+        const c = JSON.parse(raw);
+        src = { ...w, title: c.title || w.title, text: c.text, url: c.url || w.url, date: c.date || w.date };
+      } catch { /* битая запись — работа останется без текста */ }
+    }
+    if (src) workSrc.push(src);
+    worksOut.push(src || { ...w, text: "" });
   }
 
   const panelText = panel.map((u) => `[${u.id}] ${u.title}\n${u.text}`).join("\n\n");
@@ -1979,7 +1987,7 @@ async function handleResearch(request, env) {
     return Response.json({
       answer: null, unsupported: true,
       panel: panel.map((u) => ({ id: u.id, kind: u.kind, title: u.title, hash: u.hash })),
-      works: workSrc.map(shortSource), dayLeft: spent.dayLeft,
+      works: worksOut.map(shortSource), dayLeft: spent.dayLeft,
     }, { headers: { "cache-control": "no-store" } });
   }
 
@@ -2022,7 +2030,8 @@ async function handleResearch(request, env) {
     summary_delta: summaryDelta,
     panel: panel.map((u) => ({ id: u.id, kind: u.kind, title: u.title, hash: u.hash,
                                anchor: u.anchor, score: u.score, cited: cited.has(u.id) })),
-    works: workSrc.map((s) => ({ ...shortSource(s), cited: cited.has(s.id) })),
+    works: worksOut.map((s) => ({ ...shortSource(s), cited: cited.has(s.id),
+                                  no_text: !s.text })),
     concepts: [...cKeep.values()].slice(0, 12),
     kpis: kpis.slice(0, 8),
     dayLeft: spent.dayLeft, weekLeft: spent.weekLeft,
