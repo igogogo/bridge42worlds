@@ -1886,7 +1886,8 @@
     var isNew = S.P && S.P.alerts && S.P.alerts.indexOf(a.title) < 0;
     c.innerHTML = '<div class="ch"><b>' + esc(a.level) + '</b><span class="kk">' + esc(a.kind || 'climate') + '</span>' + (isNew ? '<span class="new">new</span>' : '') + '</div>' +
       '<div class="ct">' + mark(a.title) + '</div><div class="cd">' + mark(a.detail) + '</div>' +
-      '<div class="cgo">' + esc(ALERT_GO[a.kind || 'climate'].label) + ' →</div>' + (linksHtml('alert:' + (a.id || aslug(a.title))) || linksHtml('alert:' + aslug(a.title)) || linksHtml('alert:' + i));
+      '<div class="cgo">' + esc(ALERT_GO[a.kind || 'climate'].label) + ' →</div>' + (linksHtml('alert:' + (a.id || aslug(a.title))) || linksHtml('alert:' + aslug(a.title)) || linksHtml('alert:' + i)) +
+      cnBtn(['alert:' + (a.id || aslug(a.title)), 'alert:' + aslug(a.title)], 'graph');
     /* КАРТОЧКА ТРЕВОГИ ВЕДЁТ ТУДА, ГДЕ ЕЁ ЧИСЛА. Владелец 04.09: «слева карточки, они же тоже
        могут вести на какие-то риски или наши графики навигации». Тревога — это утверждение,
        и у каждого утверждения на панели есть своя сцена: климат живёт в рядах, цены в товарах,
@@ -1944,7 +1945,7 @@
         (chronic.length ? '<div class="cd chronic">Below reality in most issues: ' + chronic.slice(0, 5).map(function (c) { return modelSpan(c.model, c.model) + ' ' + c.issues_low + '/' + c.of; }).join(', ') + '</div>' : '') +
         (rv && rv.combined_peak_prev != null ? '<div class="cd">Since the ' + esc(rv.prev_issued || '') + ' issue the combined peak went ' + fnum(rv.combined_peak_prev) + ' → ' + fnum(rv.combined_peak_cur) + ' °C; ' + rv.n_up + ' of ' + rv.n + ' models raised it. The next issue is due around the 19th.</div>' : '') +
         '<div class="spark">' + sparkBars(rows) + '</div>' +
-        '<div class="cgo" data-go="models" data-gosub="breakdown">see how they break \u2192</div>' + linksHtml('block:models');
+        '<div class="cgo" data-go="models" data-gosub="breakdown">see how they break \u2192</div>' + linksHtml('block:models') + cnBtn('block:models', 'graph');
       box.appendChild(c3);
     }
 
@@ -5224,6 +5225,8 @@
       if (kj && conceptsFor('kpi:' + kj.getAttribute('data-kpi')).length) card.setAttribute('data-anchor', 'kpi:' + kj.getAttribute('data-kpi'));
       else if (tk && !card.getAttribute('data-anchor')) card.setAttribute('data-anchor', 'term:' + tk.getAttribute('data-term'));
       var key = kpiKey(kn); if (key) card.setAttribute('data-plain', key);
+      var an = card.getAttribute('data-anchor'), js = card.querySelector('.jsrc');
+      if (an && js && !js.querySelector('.cn-mg')) js.insertAdjacentHTML('beforeend', cnBtn(an, 'graph'));
     });
   }
   function kpiPlainFor(t) {
