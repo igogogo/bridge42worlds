@@ -40,6 +40,7 @@ KIND_LABEL = {
     "regions-daily": "land regions on Dynamics (ERA5 boxes, like Niño 3.4)",
     "precip": "rain: ERA5 box sums and GPCP planet",
     "radiance": "raw satellite granules (external collector C:\\CL\\radiance), copied in",
+    "stats": "statistics layer: regression, change-points, persistence, clusters, extremes, correlations",
 }
 
 

@@ -2010,6 +2010,7 @@
     var seen = {};
     Object.keys(((S.CN || {}).anchors || {})).forEach(function (a) { (S.CN.anchors[a] || []).forEach(function (c) { if (seen[c.id]) return; seen[c.id] = 1; items.push({ kind: 'concept', id: c.id, title: c.name_en || c.id, text: c.line || '', url: cnUrl(c.id), anchors: [], c: c, w: 0.9 }); }); });
     var sm = D.summary || {}; if (sm.verdict) items.push({ kind: 'verdict', id: 'verdict', title: 'The verdict of the day', text: sm.verdict, hash: '#verdict', anchors: ['block:type', 'block:peak'], w: 1.1 });
+    ((S.ST || {}).items || []).forEach(function (it) { items.push({ kind: 'stat', id: it.id, title: it.title, text: (it.kpis || []).map(function (k) { return k.name + ' ' + k.value + ' ' + (k.unit || '') + '. ' + (k.plain || ''); }).join(' ') + ' ' + ((it.method || {}).plain || ''), hash: '#' + it.scene, anchors: it.anchors || [], w: 1.05 }); });
     items.forEach(function (it) { it.lt = String(it.title || '').toLowerCase(); it.lx = String(it.text || '').toLowerCase(); });
     S._rsCorpus = items; return items;
   }
@@ -5683,6 +5684,32 @@
     var key = card && card.getAttribute('data-plain');
     return key && KPI_PLAIN[key] ? '<div class="kp">' + esc(KPI_PLAIN[key]) + '</div>' : '';
   }
+  /* СТАТИСТИЧЕСКИЙ СЛОЙ (владелец 08.09: «статистический анализ нами, где возможно: кластеризация,
+     регрессии, Байес — с пояснением, что за метод; порождаем собственные KPI»). Данные —
+     data/enso/stats.json (tools/enso/stats_layer.py, офлайн, без модели). Единица знает свою
+     сцену; на сцене с выбором ряда (Dynamics, Long record) показываем единицы того ряда, что на
+     экране, плюс общие. Кнопка stats ▾ рядом с source и notes. */
+  var STATS_DEFAULT_SUB = { now: 'analogs', trend: 'sst_nino34', planet: 'gases', ocean: 'surface', models: 'plume', food: 'prices', radiance: 'convection', refs: 'works' };
+  function statsFor(view) {
+    var items = (S.ST || {}).items || []; if (!items.length) return [];
+    var sub = S.sub[view] || STATS_DEFAULT_SUB[view] || '', scene = view + (sub ? '/' + sub : '');
+    var out = items.filter(function (it) { return it.scene === scene || it.scene === view || (it.also || []).indexOf(scene) >= 0 || (it.also || []).indexOf(view) >= 0; });
+    if (view === 'planet') { if (sub !== 'temperature') return []; var pick = S.sub.planetTemp || 't2_world'; out = out.filter(function (it) { return !it.series || typeof it.series !== 'string' || it.series === pick || it.kind === 'coherence'; }); }
+    if (view === 'trend' && sub && sub !== 'spectral') out = out.filter(function (it) { return it.scene === scene || it.kind === 'coherence'; });
+    return out;
+  }
+  function statsHtml(items, mode) {
+    var sw = '<div class="seg sub" style="margin-bottom:6px">' + [['plain', 'in plain words'], ['tech', 'technical']].map(function (o) { return '<button type="button" class="sq' + (mode === o[0] ? ' on' : '') + '" data-notemode="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '<span class="st-note">our own statistics on this scene · ' + esc(String((S.ST || {}).built || '').slice(0, 16)) + '</span></div>';
+    return sw + items.map(function (it) {
+      var m = it.method || {};
+      return '<div class="st-item"><div class="st-t">' + esc(it.title) + '</div>' +
+        '<div class="kpis st-kpis">' + (it.kpis || []).map(function (k) { return '<div class="kpi"><div class="kn">' + esc(k.name) + '</div><div class="kv">' + esc(String(k.value)) + (k.unit ? '<small> ' + esc(k.unit) + '</small>' : '') + '</div><div class="km">' + esc(k.plain || '') + '</div></div>'; }).join('') + '</div>' +
+        '<div class="st-m"><b>' + esc(m.name || 'Method') + '.</b> ' + esc(mode === 'plain' ? (m.plain || '') : (m.tech || '')) +
+        (mode === 'tech' && (m.caveats || []).length ? '<ul class="st-cav">' + m.caveats.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ul>' : '') +
+        (it.window && it.window[0] ? '<span class="st-w">window ' + esc(it.window[0]) + (it.window[1] ? ' … ' + esc(it.window[1]) : '') + '</span>' : '') + '</div>' +
+        conceptsHtml(it.anchors || [], false) + '</div>';
+    }).join('');
+  }
   function sceneInfoBar() {
     var view = S.view === 'gulf' ? 'regions' : (S.view === 'risk' ? 'now' : S.view), info = SCENE_INFO[view];
     var head = document.querySelector('.stage-head'), body = document.querySelector('.stage-body');
@@ -5691,15 +5718,24 @@
     // подписи сцены уходят в технический разбор
     var caps = [].slice.call(body.querySelectorAll('.cap')).map(function (c) { c.hidden = true; return c.innerHTML; }).filter(Boolean);
     var open = S.sub.info, mode = S.sub.noteMode || 'plain';
-    [['source', 'source'], ['notes', 'notes']].forEach(function (o) {
-      var b = el('button', (open === o[0] ? 'on' : '') + ' sq', o[1] + (open === o[0] ? ' ▴' : ' ▾')); b.type = 'button'; b.setAttribute('data-info', o[0]);
+    var stItems = statsFor(view);
+    if (open === 'stats' && !stItems.length) open = null;
+    [['source', 'source'], ['notes', 'notes']].concat(stItems.length ? [['stats', 'stats · ' + stItems.length]] : []).forEach(function (o) {
+      var b = el('button', (open === o[0] ? 'on' : '') + ' sq' + (o[0] === 'stats' ? ' stats' : ''), o[1] + (open === o[0] ? ' ▴' : ' ▾')); b.type = 'button'; b.setAttribute('data-info', o[0]);
+      if (o[0] === 'stats') b.setAttribute('data-src', esc(JSON.stringify({ name: 'Our statistics on this scene', def: 'Regression, change-points, persistence, clusters, extremes, correlations — computed by us from the same series the chart shows, with the method explained in plain words and technically.' })));
       b.onclick = function () { S.sub.info = S.sub.info === o[0] ? null : o[0]; render(); };
       seg.appendChild(b);
     });
     if (!open) return;
     var pane = el('div', 'info-pane');
     if (open === 'source') pane.innerHTML = '<b>Source.</b> ' + esc(info.source);
-    else {
+    else if (open === 'stats') {
+      pane.classList.add('stats');
+      pane.innerHTML = statsHtml(stItems, mode);
+      pane.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } });
+      body.insertBefore(pane, body.firstChild);
+      return;
+    } else {
       var sw = '<div class="seg sub" style="margin-bottom:6px">' + [['plain', 'in plain words'], ['tech', 'technical']].map(function (o) { return '<button type="button" class="sq' + (mode === o[0] ? ' on' : '') + '" data-notemode="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div>';
       pane.innerHTML = sw + (mode === 'plain' ? '<div>' + esc(info.plain) + '</div>' : '<div>' + esc(info.tech) + '</div>' + caps.map(function (c) { return '<div class="cap" style="margin-top:6px">' + c + '</div>'; }).join(''));
       pane.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } });
@@ -6255,10 +6291,11 @@
     get('/data/enso/precip.json').catch(function () { return {}; }),
     get('/data/enso/radiance.json').catch(function () { return {}; }),
     get('/data/enso/neighbours.json').catch(function () { return {}; }),
-    get('/data/enso/concepts.json').catch(function () { return {}; })])
+    get('/data/enso/concepts.json').catch(function () { return {}; }),
+    get('/data/enso/stats.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {};
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {};
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');

@@ -48,6 +48,9 @@ Say "=== radiance.json from the external collector"
 Say "=== globe data (globe_data.py)"
 & $py -u globe_data.py 2>&1 | Out-File $log -Append -Encoding utf8
 
+Say "=== statistics layer (stats_layer.py)"
+& $py -u stats_layer.py 2>&1 | Out-File $log -Append -Encoding utf8
+
 $fresh = $null
 try { $fresh = Get-Content "$root\data\enso\fresh.json" -Raw -Encoding utf8 | ConvertFrom-Json } catch { Say "fresh.json unreadable: $_" }
 if ($fresh -and $fresh.needs_assessment) {
