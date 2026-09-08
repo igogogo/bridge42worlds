@@ -47,8 +47,8 @@ PHASES = [
      ["pages-c", "pages-f", "related", "cited", "carousel", "fx", "html", "html-force", "authors", "status"]),
     ("Облако", "D1, векторы понятий и статей, карточки статей, выкладка воркера",
      ["cloud-d1", "cloud-vec", "vec-ours", "vec-push", "cards-sync", "side-sync", "deploy"]),
-    ("Проверка", "эндпоинты, страницы, аудиты, связность ссылок",
-     ["api", "pages", "audit", "gaudit", "links", "lic-audit"]),
+    ("Проверка", "эндпоинты, страницы, аудиты, связность ссылок, сводка рассылки",
+     ["api", "pages", "audit", "gaudit", "links", "outreach", "lic-audit"]),
     # Обновление панели El Niño (tools/enso/refresh.py) — свой род прогона: шаги другие,
     # и без этой строки все семь падали в «Прочее» (06.09).
     ("Панель El Niño", "источники → ряды и риски → тревоги → вердикт модели → журнал и лента",
@@ -73,7 +73,7 @@ EXPLAIN = {
 # несколько шагов, и в ряду выходило «Формулы, Формулы», «Перегенерация,
 # Перегенерация, Перегенерация». Подробное объяснение осталось в подсказке.
 SHORT = {
-    "lic-audit": "Лицензии",
+    "lic-audit": "Лицензии", "outreach": "Сводка рассылки",
     "harvest": "Добыча понятий", "anatomy": "Анатомия формул",
     "flink": "Привязка формул", "match": "Сверка кандидатов",
     "distill": "Дистилляция", "births": "Рождение понятий",
@@ -230,6 +230,8 @@ html[dir="rtl"] .pp-step:not(:last-child)::before { right: auto; left: -7px; }
     border-bottom: 1px solid var(--hair); padding: 4px 8px 7px; }
 .pp-tbl td { padding: 6px 8px; border-bottom: 1px solid var(--hair); vertical-align: top; }
 .pp-tbl tr.done td { opacity: .45; }
+.pp-tbl tr.pp-sent td { background: color-mix(in srgb, var(--ochre) 12%, transparent); }
+.pp-out-top { margin-top: 12px; overflow-x: auto; }
 .pp-tbl .pp-mail { color: var(--muted); }
 .pp-tbl button { font: inherit; font-size: 11px; padding: 2px 8px; cursor: pointer;
     border: 1px solid var(--hair); border-radius: 4px; background: var(--bg); color: var(--fg); }
@@ -522,6 +524,19 @@ JS = """
         " устройств), страницы статей — " + seen.papers.views + " раз (" +
         seen.papers.pages + " страниц, " + seen.papers.devices + " устройств).";
     }
+    /* Топ страниц за 30 дней. Строка адресата рассылки подсвечена: это и есть ответ на
+       вопрос «зашёл ли кто-то из тех, кому мы писали» (владелец 08.09). */
+    var top = d.top || [], tb = document.getElementById("pp-out-top");
+    if (tb && top.length) {
+      tb.innerHTML = "<table class=\"pp-tbl\"><tr><th>страница</th><th>заходов</th>" +
+        "<th>устройств</th><th>последний</th></tr>" + top.map(function (r) {
+          var name = r.path.replace(/^[/]lang[/][a-z]{2}[/]/, "").replace(/[/]index[.]html$/, "");
+          return "<tr" + (r.sent ? " class=\"pp-sent\"" : "") + "><td><a href=\"" + r.path +
+            "\">" + name + "</a>" + (r.sent ? " <i class=\"pp-kind\">адресат</i>" : "") +
+            "</td><td>" + r.views + "</td><td>" + r.devices + "</td><td>" + (r.last || "") +
+            "</td></tr>";
+        }).join("") + "</table>";
+    }
   }).catch(function () {});
 
   document.getElementById("pp-out-btn").onclick = function () {
@@ -770,6 +785,7 @@ def main():
   <div class="pp-totals" id="pp-out-nums"></div>
   <button class="pp-out-btn" id="pp-out-btn" type="button">Кому отправлено &rarr;</button>
   <div class="pp-note" id="pp-out-seen"></div>
+  <div id="pp-out-top" class="pp-out-top"></div>
 </div>
 
 <div class="pp-panel" id="pp-panel" style="display:none">

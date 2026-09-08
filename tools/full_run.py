@@ -557,7 +557,7 @@ def main():
         "super", "live-2", "vecnb",
         "live-3", "gnames", "weave", "live-4", "graph", "mentions-ru", "highlight",
         "pages-c", "pages-f", "related", "cited", "carousel", "fx", "recommend",
-        "pipeline-page", "html", "lang-pages", "authors", "status", "cloud-d1", "cloud-vec", "vec-ours", "vec-push", "cards-sync", "side-sync", "deploy", "api", "pages", "audit", "gaudit", "links", "lic-audit"]
+        "pipeline-page", "html", "lang-pages", "authors", "status", "cloud-d1", "cloud-vec", "vec-ours", "vec-push", "cards-sync", "side-sync", "deploy", "api", "pages", "audit", "gaudit", "links", "outreach", "lic-audit"]
     # ПЛАН ОБЯЗАН СОВПАДАТЬ С ЦЕПОЧКОЙ. Из него убран мёртвый «uplift» (подъём «Просто»
     # до «Популярно» отменён 01.09) и добавлены два живых шага, которых в плане не было:
     # «pipeline-page» и «side-sync». Пока они расходились, счётчик «пройдено N из M» врал,
@@ -804,6 +804,9 @@ def main():
     # Лицензии — последними и НЕ мягко: работа класса «только собственный разбор» без
     # ключа в KV значит, что воркер отдаст чужие рисунки и абстракт. Это единственная
     # проверка, чей красный сигнал означает юридический риск, а не косметику.
+    # Сводка рассылки — каждым прогоном, а не руками: без этого «зашли после письма»
+    # на схеме стояло на нуле неделями (владелец 08.09).
+    run("outreach", [PY, "tools/outreach_stats.py"], timeout=600, soft=True)
     run("lic-audit", [PY, "tools/license_audit.py", "--fix"], timeout=900)
     finish()
     log("═══ ПОЛНЫЙ ПРОГОН ЗАВЕРШЁН ═══")

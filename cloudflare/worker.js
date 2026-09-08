@@ -1858,11 +1858,20 @@ async function handleResearch(request, env) {
   let body = {};
   try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
 
+  // Токен — второй пропуск рядом с капчей: его выдаёт /api/tutor/issue, у него свои
+  // лимиты в KV tok:*, и страница без Turnstile (панель, демо) ходит с ним. Проверяем
+  // ДО капчи: годный токен её заменяет, негодный отбрасывается своим кодом, а не
+  // «captcha_failed» (владелец 08.09: «заведи норму по токену»).
   const service = isService(env, request);
+  const tokenGiven = !!(request.headers.get("x-b42-token") || body.token);
+  let tk = null;
   if (!service) {
     const ipOk = await ipGuard(env, request);
     if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
-    if (!devBypass(env, request) &&
+    if (tokenGiven) {
+      tk = await checkToken(request, env, body);
+      if (!tk.ok) return Response.json({ error: tk.error, limit: tk.limit }, { status: tk.code });
+    } else if (!devBypass(env, request) &&
         !(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
       return Response.json({ error: "captcha_failed" }, { status: 403 });
     }
@@ -1875,10 +1884,18 @@ async function handleResearch(request, env) {
   if (mode === "verify" && !claims.length) return Response.json({ error: "no_claims" }, { status: 400 });
   const lang = LANGS.includes(body.lang) ? body.lang : "ru";
 
+  // Норма. Две дороги: по токену (выдаётся /api/tutor/issue, свои лимиты в KV tok:*) —
+  // для панели и демо, где читатель не входил; иначе по uid, как у /api/ask. Токен
+  // главнее: пришёл — считаем по нему и общую норму не трогаем (владелец 08.09).
   const who = await identify(request, env);
-  const spent = service
-    ? { ok: true, dayLeft: null, weekLeft: null }
-    : await quotaSpend(env, who.uid, 1, who.lim);
+  let spent;
+  if (service) {
+    spent = { ok: true, dayLeft: null, weekLeft: null };
+  } else if (tk) {
+    spent = { ok: true, dayLeft: tk.leftToday ?? null, weekLeft: tk.left ?? null };
+  } else {
+    spent = await quotaSpend(env, who.uid, 1, who.lim);
+  }
   if (!spent.ok) {
     return Response.json({ error: spent.error, dayLeft: spent.dayLeft, weekLeft: spent.weekLeft },
       { status: spent.code });
@@ -2046,6 +2063,104 @@ async function handleResearch(request, env) {
     kpis: kpis.slice(0, 8),
     dayLeft: spent.dayLeft, weekLeft: spent.weekLeft,
   }, { headers: { "cache-control": "no-store" } });
+}
+
+// ── Сохранение исследований (/api/research/save|list|delete) ──────
+// Записка панели 08.09: сначала браузер, потом D1 по uid. Хранилище то же, что у событий
+// и совета (QUEUE): одна таблица, ключ — uid (вошедший или сессия «s:…»). Своё видит
+// только владелец записи; чужой id без совпадения uid — «не найдено», а не «запрещено»,
+// чтобы номера нельзя было перебирать.
+const RESEARCH_KEEP = 50;   // исследований на читателя; старше — вытесняются
+
+async function researchTable(env) {
+  await env.QUEUE.prepare(
+    `CREATE TABLE IF NOT EXISTS research (
+       id TEXT PRIMARY KEY, uid TEXT NOT NULL, lang TEXT, title TEXT,
+       summary TEXT, turns TEXT, claims TEXT,
+       created TEXT NOT NULL, updated TEXT NOT NULL)`).run();
+  await env.QUEUE.prepare("CREATE INDEX IF NOT EXISTS rs_uid ON research(uid, updated)").run();
+}
+
+function researchId(v) {
+  return String(v || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 32);
+}
+
+async function handleResearchSave(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+  if (!env.QUEUE) return Response.json({ error: "no_db" }, { status: 503 });
+  let body = {};
+  try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
+  const ipOk = await ipGuard(env, request);
+  if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+
+  const { uid } = await identify(request, env);
+  const turns = Array.isArray(body.turns) ? body.turns.slice(-40) : [];
+  const claims = Array.isArray(body.claims) ? body.claims.slice(0, 40) : [];
+  const title = String(body.title || (turns[0] && turns[0].q) || "").slice(0, 160);
+  const summary = String(body.summary || "").slice(0, 4000);
+  const lang = LANGS.includes(body.lang) ? body.lang : "en";
+  const turnsJson = JSON.stringify(turns).slice(0, 60000);
+  const claimsJson = JSON.stringify(claims).slice(0, 8000);
+  const now = new Date().toISOString();
+
+  await researchTable(env);
+  let id = researchId(body.id);
+  if (id) {
+    const own = await env.QUEUE.prepare("SELECT id FROM research WHERE id=? AND uid=?").bind(id, uid).first();
+    if (!own) return Response.json({ error: "not_found" }, { status: 404 });
+    await env.QUEUE.prepare(
+      "UPDATE research SET title=?, summary=?, turns=?, claims=?, lang=?, updated=? WHERE id=? AND uid=?")
+      .bind(title, summary, turnsJson, claimsJson, lang, now, id, uid).run();
+  } else {
+    id = crypto.randomUUID().replace(/-/g, "").slice(0, 16);
+    await env.QUEUE.prepare(
+      "INSERT INTO research (id, uid, lang, title, summary, turns, claims, created, updated) VALUES (?,?,?,?,?,?,?,?,?)")
+      .bind(id, uid, lang, title, summary, turnsJson, claimsJson, now, now).run();
+    // вытесняем самое старое сверх нормы — читатель не должен копить без края
+    await env.QUEUE.prepare(
+      "DELETE FROM research WHERE uid=? AND id NOT IN (SELECT id FROM research WHERE uid=? ORDER BY updated DESC LIMIT ?)")
+      .bind(uid, uid, RESEARCH_KEEP).run();
+  }
+  return Response.json({ ok: true, id, updated: now }, { headers: { "cache-control": "no-store" } });
+}
+
+async function handleResearchList(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  if (!env.QUEUE) return Response.json({ error: "no_db" }, { status: 503 });
+  const { uid } = await identify(request, env);
+  await researchTable(env);
+  const url = new URL(request.url);
+  const id = researchId(url.searchParams.get("id"));
+  if (id) {
+    const row = await env.QUEUE.prepare("SELECT * FROM research WHERE id=? AND uid=?").bind(id, uid).first();
+    if (!row) return Response.json({ error: "not_found" }, { status: 404 });
+    let turns = [], claims = [];
+    try { turns = JSON.parse(row.turns || "[]"); } catch (e) { /* битая запись — пусто */ }
+    try { claims = JSON.parse(row.claims || "[]"); } catch (e) { /* то же */ }
+    return Response.json({ id: row.id, lang: row.lang, title: row.title, summary: row.summary,
+      turns, claims, created: row.created, updated: row.updated },
+      { headers: { "cache-control": "no-store" } });
+  }
+  const rows = await env.QUEUE.prepare(
+    "SELECT id, lang, title, summary, created, updated FROM research WHERE uid=? ORDER BY updated DESC LIMIT ?")
+    .bind(uid, RESEARCH_KEEP).all().then((r) => r.results || []).catch(() => []);
+  return Response.json({ items: rows }, { headers: { "cache-control": "no-store" } });
+}
+
+async function handleResearchDelete(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+  if (!env.QUEUE) return Response.json({ error: "no_db" }, { status: 503 });
+  let body = {};
+  try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
+  const { uid } = await identify(request, env);
+  const id = researchId(body.id);
+  if (!id) return Response.json({ error: "no_id" }, { status: 400 });
+  await researchTable(env);
+  const r = await env.QUEUE.prepare("DELETE FROM research WHERE id=? AND uid=?").bind(id, uid).run();
+  return Response.json({ ok: true, deleted: (r.meta && r.meta.changes) || 0 },
+    { headers: { "cache-control": "no-store" } });
 }
 
 // ── Бот-исследователь (/api/ask) ──────────────────────────────────
@@ -3791,6 +3906,9 @@ async function handleRequest(request, env, ctx) {
     if (url.pathname === "/api/side") return withCors(await feedGuard(request, env, handleArticleSide));
     if (url.pathname === "/api/ask") return withCors(await handleAsk(request, env));
     if (url.pathname === "/api/research") return withCors(await handleResearch(request, env));
+    if (url.pathname === "/api/research/save") return withCors(await handleResearchSave(request, env));
+    if (url.pathname === "/api/research/list") return withCors(await handleResearchList(request, env));
+    if (url.pathname === "/api/research/delete") return withCors(await handleResearchDelete(request, env));
     if (url.pathname === "/api/quota") return withCors(await handleQuota(request, env));
     if (url.pathname === "/api/auth/google") return handleGoogleStart(request, env);
     if (url.pathname === "/api/auth/google/callback") return handleGoogleCallback(request, env);

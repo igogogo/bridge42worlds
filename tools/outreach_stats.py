@@ -24,6 +24,7 @@
 """
 import argparse
 import json
+import re
 import sys
 from datetime import date, timedelta
 from pathlib import Path
@@ -121,6 +122,36 @@ def main():
                            "devices": int(p.get("u") or 0)},
                 "days": 30}
 
+    # ── топ страниц: кого читают на самом деле, и есть ли среди них наши адресаты.
+    # Владелец 08.09: «топ страниц посещённых и сравнение с авторами, которым мы
+    # отправили — так увидим». Адреса страниц публичны, имена сюда не пишем.
+    top = []
+    if sql:
+        month = (date.today() - timedelta(days=30)).isoformat()
+        sent_paths = set()
+        for row in rows:
+            if row.get("author"):
+                sent_paths.add(f"/lang/en/authors/{G.author_slug(row['author'])}.html")
+            if row.get("aid"):
+                sent_paths.add(row["aid"].split("v")[0])
+        try:
+            got = sql("SELECT path, COUNT(*) n, COUNT(DISTINCT uid) u, MAX(day) last "
+                      "FROM events WHERE dev=0 AND type='view' AND day>=? "
+                      "AND (path LIKE '/lang/%/authors/%' OR path LIKE '/lang/%/archive/%') "
+                      "AND path NOT LIKE '%/' "  # списки авторов/архива — не страницы людей
+                      "GROUP BY path ORDER BY n DESC LIMIT 15", [month]) or []
+        except Exception:
+            got = []
+        for r in got:
+            path = r.get("path") or ""
+            aid = ""
+            m = re.search(r"/archive/\d{4}-\d{2}-\d{2}/([^/]+)/", path)
+            if m:
+                aid = m.group(1).split("v")[0]
+            top.append({"path": path, "views": int(r.get("n") or 0),
+                        "devices": int(r.get("u") or 0), "last": r.get("last"),
+                        "sent": path in sent_paths or (bool(aid) and aid in sent_paths)})
+
     # ── сколько работ ещё ждёт разбора машиной знаний ─────────────────────────
     with_plus = without_plus = 0
     for f in (ROOT / "lang/ru/archive").glob("*/*/data.json"):
@@ -142,7 +173,7 @@ def main():
         "came": sum(1 for r in rows if r["came"]),
         "queue": len(queue),
         "plus": {"with": with_plus, "without": without_plus},
-        "seen": seen,
+        "seen": seen, "top": top,
         "detail": PRIV.name,
     }
     PUB.write_text(json.dumps(pub, ensure_ascii=False, indent=1), encoding="utf-8")
