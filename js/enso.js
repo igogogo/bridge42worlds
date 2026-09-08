@@ -2457,8 +2457,6 @@
     /* Полный экран у карты — как у обзора и цепочки данных. Владелец 06.09: «на мобильной
        тем более каша, надо предусмотреть полноэкранный режим: люди хотят увидеть на карте
        мира, где это находится». */
-    if (k === 'map') segs2.push({ label: S.full ? 'exit full screen (Esc)' : '⛶ full screen', on: !!S.full,
-                                  click: function () { S.full = !S.full; render(); } });
     var body = stageShell(above ? 'Warmer today than any of the four strongest events were at this time of year'
       : 'The event follows the strongest ones: rank ' + N.rank_same30 + ' among the analogues', segs2);
     if (k === 'map') {
@@ -4006,8 +4004,7 @@
 
   function viewOverview() {
     var D = S.D, NW = D.noaa, N = D.nino34, IRI = D.iri && !D.iri.error ? D.iri : null, A = D.air || {}, O = D.oisst || {}, SB = D.subsurface || {}, FO = D.food && !D.food.error ? D.food : null, ONI = D.oni, CORE = D.risk_core || {}, G = D.gulf || {};
-    var body = stageShell('Overview: ' + D.risk_index + ' of 100, ' + (D.risks || []).length + ' risks, ' + (D.alerts || []).length + ' alerts — every tile opens its section',
-      [{ label: S.full ? 'exit full screen (Esc)' : '⛶ full screen', on: !!S.full, click: function () { S.full = !S.full; render(); } }]);
+    var body = stageShell('Overview: ' + D.risk_index + ' of 100, ' + (D.risks || []).length + ' risks, ' + (D.alerts || []).length + ' alerts — every tile opens its section', []);
     body.classList.add('scroll');
     var strip = el('div', 'ov-strip');
     var tally = (IRI || {}).class_tally || {}, live = (IRI || {}).live || {};
@@ -4144,8 +4141,7 @@
   function viewChain() {
     var C = S.C || {}, D = S.D, nodes = C.nodes || [], layers = C.layers || [];
     var body = stageShell('The chain, end to end: ' + nodes.filter(function (n) { return n.layer === 'src'; }).length + ' sources, ' +
-      nodes.filter(function (n) { return n.layer === 'collect'; }).length + ' collectors, ' + nodes.filter(function (n) { return n.layer === 'state'; }).length + ' computed states',
-      [{ label: S.full ? 'exit full screen (Esc)' : '⛶ full screen', on: !!S.full, click: function () { S.full = !S.full; render(); } }]);
+      nodes.filter(function (n) { return n.layer === 'collect'; }).length + ' collectors, ' + nodes.filter(function (n) { return n.layer === 'state'; }).length + ' computed states', []);
     /* ПОДСВЕТКА ВСЕЙ ЦЕПОЧКИ. Владелец 05.09: «нажал на одну — остаётся она и всё, что с ней
        связано». Раньше горел только соседний слой; теперь — все предки и все потомки. */
     var byId = {}; nodes.forEach(function (n) { byId[n.id] = n; });
