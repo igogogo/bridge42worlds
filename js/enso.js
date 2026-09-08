@@ -1664,11 +1664,15 @@
   function cnName(c) { var l = cnLang(); return (l === 'ru' && c.name_ru) ? c.name_ru : (c.name_en || c.id); }
   function cnUrl(id) { return '/lang/' + cnLang() + '/concepts/' + encodeURIComponent(id) + '.html'; }
   function cnGraph(ids, focus) { return '/lang/' + cnLang() + '/concepts/graph.html?set=' + ids.map(encodeURIComponent).join(',') + '&focus=' + encodeURIComponent(focus || ids[0]); }
+  function cnPay(c) {
+    return esc(JSON.stringify({ name: cnName(c), html: '<p>' + esc(c.line || '') + '</p><a href="' + cnUrl(c.id) + '" target="_blank" rel="noopener">open the concept page ↗</a>',
+      src: 'concept' + (c.kind ? ' · ' + c.kind : '') + (fin(c.score) ? ' · closeness ' + c.score.toFixed(2) : '') }));
+  }
   /* Строка чипов: до семи понятий, дальше «all N» на граф; в конце одна ссылка на граф набора. */
   function conceptsHtml(anchors, full, col) {
     var cs = conceptsFor(anchors); if (!cs.length) return '';
     var show = full ? cs : cs.slice(0, 7), ids = cs.map(function (c) { return c.id; });
-    var gbtn = '<button type="button" class="cn-mg" data-ids="' + esc(ids.join(',')) + '" data-focus="' + esc(ids[0]) + '" title="these concepts as a graph, in a window over the panel">graph</button>';
+    var gbtn = '<button type="button" class="cn-mg" data-ids="' + esc(ids.join(',')) + '" data-focus="' + esc(ids[0]) + '">graph</button>';
     if (col) {
       /* Подсказка: колонкой, имя и одна строка смысла (владелец 08.09: «в аккуратную колонку»). */
       return '<div class="cn col"><span class="cn-h">concepts</span>' +
@@ -1676,7 +1680,7 @@
         '<div class="cn-f">' + (cs.length > show.length ? '<span class="cn-more">all ' + cs.length + ' on the graph</span>' : '') + gbtn + '</div></div>';
     }
     return '<div class="cn"><span class="cn-h">concepts</span>' +
-      show.map(function (c) { return '<a class="cn-c" href="' + cnUrl(c.id) + '" target="_blank" rel="noopener" title="' + esc(c.line || '') + '">' + esc(cnName(c)) + '</a>'; }).join('') +
+      show.map(function (c) { return '<a class="cn-c" href="' + cnUrl(c.id) + '" target="_blank" rel="noopener" data-src="' + cnPay(c) + '">' + esc(cnName(c)) + '</a>'; }).join('') +
       (cs.length > show.length ? '<span class="cn-c more">all ' + cs.length + ' on the graph</span>' : '') + gbtn + '</div>';
   }
   /* МИНИ-ГРАФ В КАРТОЧКЕ (второй шаг задания, владелец 08.09: «граф должен открываться
@@ -1696,7 +1700,7 @@
   function cnBtn(anchors, label) {
     var a = Array.isArray(anchors) ? anchors : [anchors];
     if (!conceptsFor(a).length) return '';
-    return '<button type="button" class="cn-mg rail" data-anchors="' + esc(a.join(',')) + '" title="the concepts behind this, as a graph in a window over the panel">' + esc(label || 'graph') + '</button>';
+    return '<button type="button" class="cn-mg rail" data-anchors="' + esc(a.join(',')) + '">' + esc(label || 'graph') + '</button>';
   }
   function closeGraphModal() { var m = $('cnModal'); if (m) m.remove(); }
   function openGraphModal(ids, focus, width, anchors) {   // width — ширина карточки, из которой открыли (владелец 08.09: «в размер карточки»); anchors — показать и облако
@@ -1749,7 +1753,7 @@
         if (n.parentNode.closest('a,[data-term],.cn,button,svg')) continue;
         var m = re.exec(n.nodeValue); if (!m) continue;
         var at = m.index + m[1].length, a = document.createElement('a');
-        a.className = 'cn-in'; a.href = cnUrl(c.id); a.target = '_blank'; a.rel = 'noopener'; a.title = c.line || ''; a.textContent = m[2];
+        a.className = 'cn-in'; a.href = cnUrl(c.id); a.target = '_blank'; a.rel = 'noopener'; a.setAttribute('data-src', cnPay(c)); a.textContent = m[2];
         var rest = n.splitText(at); rest.nodeValue = rest.nodeValue.slice(m[2].length);
         n.parentNode.insertBefore(a, rest);
         return;
