@@ -1646,9 +1646,11 @@
      одна ссылка в конце открывает граф сразу на наборе — новой вкладкой, с панели не уводим.
      Понятия к сценам и карточкам руками не привязываются: только якорь → данные. */
   var CN_LANGS = ['en', 'ru', 'ar', 'es', 'fr'];
+  /* Язык понятий — язык самой панели, а не сохранённый выбор сайта: панель английская, и
+     русские чипы со ссылками на русские страницы на ней смотрелись чужими (владелец 08.09).
+     Когда у панели появится свой язык (атрибут lang на <html>), понятия пойдут за ним. */
   function cnLang() {
-    var l = null; try { l = localStorage.getItem('b42_lang'); } catch (e) { }
-    l = String(l || window.B42_LANG || 'en').slice(0, 2);
+    var l = String(document.documentElement.getAttribute('lang') || 'en').slice(0, 2);
     return CN_LANGS.indexOf(l) >= 0 ? l : 'en';
   }
   function conceptsFor(anchors) {
