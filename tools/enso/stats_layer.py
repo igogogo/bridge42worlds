@@ -22,7 +22,10 @@
   coherence    — корреляции суточных аномалий поясов и океана, иерархические группы;
                  сдвиг «тропический воздух за океаном» по кросс-корреляции;
   fuel_lead    — опережение объёма тёплой воды над Niño 3.4 (кросс-корреляция по месяцам);
-  spectral     — сводка спектрального сторожа (линии 99 % против ожидаемых случайно).
+  spectral     — сводка спектрального сторожа (линии 99 % против ожидаемых случайно);
+  peak_bayes   — ансамбль подразумеваемых пиков и вероятности превысить 1997/2015/2023 (Стьюдент);
+  hov_speed    — центр тёплой аномалии на Ховмёллере и скорость сноса на восток;
+  regions      — сухопутные боксы по квадрантам «воздух × дождь» и знак дождя против аналогов.
 
 Запуск: python stats_layer.py  (в обёртке после globe_data.py).
 """
@@ -419,6 +422,148 @@ def spectral_item():
                        "caveats": ["the owner’s hypothesis (a comb before a spontaneous transition) is being watched, not assumed"]}}
 
 
+
+def peak_bayes_item(psl):
+    """Вероятность превысить пики 1997 и 2015 — по разбросу отношения «пик / июль–август» у прошлых лет."""
+    years = sorted(y for y in psl if 1950 <= y)
+    cur = max(years)
+    ja_cur = float(np.nanmean(psl[cur][6:8]))
+    if not np.isfinite(ja_cur) or ja_cur < 0.5:
+        return None
+    ratios, ys = [], []
+    for y in years:
+        if y == cur or not np.isfinite(psl[y]).all():
+            continue
+        ja = float(np.mean(psl[y][6:8]))
+        if ja >= 0.5:                                          # только годы, где к августу уже шло событие
+            pk = float(np.max(psl[y][8:] + [np.nan] * 0)) if len(psl[y]) == 12 else np.nan
+            pk = float(np.max(psl[y][8:12]))
+            ratios.append(pk / ja); ys.append(y)
+    if len(ratios) < 5:
+        return None
+    ratios = np.array(ratios)
+    implied = ja_cur * ratios                                  # ансамбль подразумеваемых пиков
+    # байесовская оценка: нормальная модель с неизвестными средним и дисперсией, плоский априор →
+    # предиктивное распределение Стьюдента; вероятности превышения рекордов
+    from scipy.stats import t as student
+    n = len(implied); m = float(implied.mean()); sd = float(implied.std(ddof=1))
+    scale = sd * math.sqrt(1 + 1 / n)
+    def p_over(x):
+        return float(1 - student.cdf((x - m) / scale, df=n - 1))
+    rec97 = float(np.max(psl[1997][8:12])) if 1997 in psl else np.nan
+    rec15 = float(np.max(psl[2015][8:12])) if 2015 in psl else np.nan
+    rec23 = float(np.max(psl[2023][8:12])) if 2023 in psl else np.nan
+    lo, hi = student.ppf([0.1, 0.9], df=n - 1, loc=m, scale=scale)
+    kpis = [
+        {"name": "implied winter peak", "value": f"{m:+.2f}", "unit": "°C", "plain": f"Scaling this year’s July–August level ({ja_cur:+.2f}) by how much past events grew from summer to their peak: median {m:+.2f} °C, 80 % band {lo:+.2f} … {hi:+.2f}, from {n} past events."},
+        {"name": "chance to top 1997", "value": f"{p_over(rec97) * 100:.0f}", "unit": "%", "plain": f"The 1997–98 peak in this index was {rec97:+.2f} °C."},
+        {"name": "chance to top 2015", "value": f"{p_over(rec15) * 100:.0f}", "unit": "%", "plain": f"The 2015–16 peak was {rec15:+.2f} °C."},
+        {"name": "chance to top 2023", "value": f"{p_over(rec23) * 100:.0f}", "unit": "%", "plain": f"The 2023–24 peak was {rec23:+.2f} °C."},
+    ]
+    return {"id": "peak_bayes", "kind": "bayes", "scene": "now/analogs", "also": ["now", "air"],
+            "title": f"Bayesian peak: median {m:+.2f} °C, {p_over(rec97) * 100:.0f} % to top 1997, {p_over(rec15) * 100:.0f} % to top 2015",
+            "series": "psl_nino34_monthly", "window": [f"{ys[0]}", f"{cur}"], "kpis": kpis,
+            "anchors": ["stat:peak_bayes", "block:peak", "term:analog", "term:nino34"],
+            "method": {"name": "Empirical-Bayes ensemble of implied peaks",
+                       "plain": "Every past event that was already under way by August grew from its summer level to its winter peak by some factor. We apply each of those factors to this summer, get a spread of possible peaks, and read off the odds of beating the famous years. The spread is treated with a Student-t predictive distribution, which is the Bayesian answer when the mean and the scatter are both unknown.",
+                       "tech": f"ERSST Niño 3.4 monthly; events = years with Jul–Aug mean ≥ 0.5 °C (n = {n}); ratio = max(Sep–Dec)/mean(Jul–Aug); implied = ratio × Jul–Aug {cur}; flat prior on (μ, σ²) → Student-t predictive with df = n−1, scale s√(1+1/n); P(peak > record) from its tail. Members: {', '.join(str(y) for y in ys)}.",
+                       "caveats": ["the peak is taken within September–December of the same year; a January peak is missed for some events", "the ensemble treats all past events as exchangeable; the subsurface charge of this year (at its record) is not used, so the odds may be conservative"]},
+            "members": ys}
+
+
+def hov_speed_item():
+    """Гребень тёплой аномалии на Ховмёллере: где он сейчас и с какой скоростью идёт на восток."""
+    p = ROOT / "hovmoller.json"
+    if not p.exists():
+        return None
+    h = json.loads(p.read_text(encoding="utf-8")); c = h.get("current") or {}
+    months, lons, A = c.get("months") or [], c.get("lons") or [], c.get("anom100")
+    if not months or not lons or not A:
+        return None
+    A = np.array(A, float)
+    if A.shape == (len(lons), len(months)):
+        A = A.T
+    if A.shape != (len(months), len(lons)):
+        return None
+    lons = np.array(lons, float)
+    crest = []
+    for i in range(len(months)):
+        row = A[i]
+        if not np.isfinite(row).any() or np.nanmax(row) < 0.5:
+            crest.append(np.nan); continue
+        # центр масс тёплой части — устойчивее, чем один максимум
+        w = np.where(np.isfinite(row) & (row > 0), row, 0.0)
+        crest.append(float((w * lons).sum() / w.sum()) if w.sum() > 0 else np.nan)
+    crest = np.array(crest)
+    k = 8
+    idx = [i for i in range(len(months) - k, len(months)) if np.isfinite(crest[i])]
+    if len(idx) < 5:
+        return None
+    x = np.array(idx, float); y = crest[idx]
+    b = float(np.polyfit(x, y, 1)[0])                          # градусов долготы в месяц
+    ms = b * 111e3 / (30.4 * 86400)                            # м/с на экваторе
+    last_c = float(crest[idx[-1]]); first_c = float(crest[idx[0]])
+    def lonname(l):
+        return f"{l:.0f}°E" if l <= 180 else f"{360 - l:.0f}°W"
+    kpis = [
+        {"name": "warm crest now", "value": lonname(last_c), "unit": "", "plain": f"Centre of the warm anomaly at 100 m along the equator in {months[idx[-1]]}; in {months[idx[0]]} it was at {lonname(first_c)}."},
+        {"name": "eastward drift", "value": f"{b:+.1f}", "unit": "° per month", "plain": f"Fitted over the last {len(idx)} months: {ms:+.2f} m/s. A free Kelvin wave crosses at 2–3 m/s; a slow drift means the warm pool is being displaced, not a single wave passing."},
+        {"name": "warm area at 100 m", "value": f"{100 * float(np.mean(A[idx[-1]] > 0.5)):.0f}", "unit": "% of the section", "plain": "Share of the equatorial section warmer than +0.5 °C at 100 m in the latest month."},
+    ]
+    return {"id": "hov_speed", "kind": "propagation", "scene": "ocean/hovmoller", "also": ["ocean"],
+            "title": f"Warm crest at 100 m: at {lonname(last_c)}, drifting {b:+.1f}° per month ({ms:+.2f} m/s)",
+            "series": "hovmoller.anom100", "window": [months[idx[0]], months[idx[-1]]], "kpis": kpis,
+            "anchors": ["stat:hov_speed", "term:hovmoller", "term:godas", "term:d20"],
+            "method": {"name": "Centre of mass of the warm anomaly and its drift by regression",
+                       "plain": "On the Hovmöller picture time runs down and longitude across. For each month we find where the warm water below the surface is centred, then fit a line through those centres over the last months: its slope is how fast the warmth is moving east, in degrees per month, converted to metres per second at the equator.",
+                       "tech": f"GODAS anomaly at 100 m along the equator, monthly; crest = anomaly-weighted mean longitude of positive anomalies (months with max ≥ 0.5 °C); OLS of crest on month index over the last {k} months; 1° ≈ 111 km. Kelvin-wave speed for reference: 2–3 m/s.",
+                       "caveats": ["monthly steps cannot resolve a single Kelvin wave (weeks); this measures the slow migration of the warm pool", "the centre of mass moves also when the west cools, not only when the east warms"]}}
+
+
+def regions_item():
+    """Сухопутные боксы: воздух и дождь за 30 дней против нормы — квадранты и сравнение с аналогами."""
+    rd = json.loads((ROOT / "regions-daily.json").read_text(encoding="utf-8")) if (ROOT / "regions-daily.json").exists() else {}
+    pr = json.loads((ROOT / "precip.json").read_text(encoding="utf-8")) if (ROOT / "precip.json").exists() else {}
+    rows = []
+    for key, w in (rd.get("series") or {}).items():
+        p = ((pr.get("regions") or {}).get(key)) or {}
+        s30 = p.get("sum30") or {}
+        air = (w.get("level30") or {}).get("anom"); z = (w.get("level30") or {}).get("z")
+        pct = s30.get("pct_of_normal"); an = s30.get("analogs") or {}
+        normal = s30.get("normal")
+        an_pct = None
+        if an and normal:
+            vals = [v / normal * 100 for v in an.values() if v is not None]
+            an_pct = float(np.mean(vals)) if vals else None
+        rows.append({"key": key, "label": (w.get("label") or key).split(",")[0], "air": air, "z": z, "rain_pct": pct, "analog_rain_pct": an_pct})
+    rows = [r for r in rows if r["air"] is not None]
+    if len(rows) < 3:
+        return None
+    def quad(r):
+        hot = r["air"] > 0.5; dry = r["rain_pct"] is not None and r["rain_pct"] < 80; wet = r["rain_pct"] is not None and r["rain_pct"] > 120
+        return ("hot" if hot else "near-normal") + ("-dry" if dry else "-wet" if wet else "")
+    groups = {}
+    for r in rows:
+        groups.setdefault(quad(r), []).append(r["label"])
+    like = [r for r in rows if r["analog_rain_pct"] is not None and r["rain_pct"] is not None and (r["rain_pct"] - 100) * (r["analog_rain_pct"] - 100) > 0]
+    unlike = [r for r in rows if r["analog_rain_pct"] is not None and r["rain_pct"] is not None and (r["rain_pct"] - 100) * (r["analog_rain_pct"] - 100) < 0]
+    zs = sorted(rows, key=lambda r: -(r["z"] or 0))
+    kpis = [
+        {"name": "regional weather groups", "value": f"{len(groups)}", "unit": "", "plain": "; ".join(k + ": " + ", ".join(v) for k, v in groups.items())},
+        {"name": "rain like the analogue years", "value": f"{len(like)} of {len(like) + len(unlike)}", "unit": "regions", "plain": ("Same sign as the mean of 1982/1997/2015/2023 in: " + ", ".join(r["label"] for r in like) + ". " if like else "") + ("Opposite: " + ", ".join(r["label"] for r in unlike) + "." if unlike else "")},
+        {"name": "most unusual air", "value": f"{zs[0]['z']:+.1f} σ", "unit": zs[0]["label"], "plain": f"30-day air anomaly {zs[0]['air']:+.1f} °C, {zs[0]['z']:+.1f} standard deviations from this window in 1981–2025."},
+    ]
+    return {"id": "regions_quadrants", "kind": "classification", "scene": "regions", "also": ["trend/rain", "trend"],
+            "title": f"Land boxes by air and rain: {len(groups)} groups; rain follows the analogue years in {len(like)} of {len(like) + len(unlike)}",
+            "series": "regions-daily + precip", "window": [rows[0].get("last_date") or "", (rd.get("built") or "")[:10]], "kpis": kpis,
+            "anchors": ["stat:regions_quadrants", "term:landbox", "term:rain", "term:teleconnection"],
+            "method": {"name": "Quadrant classification against normal and against analogue years",
+                       "plain": "Each of our six land boxes is placed by two numbers: how warm the air was over the last 30 days against normal, and how much rain fell against normal. That gives simple families (hot and dry, hot and wet…). Then we ask whether the rain sign this year matches what the same 30 days did in the four strongest past events — the teleconnection check on our own boxes.",
+                       "tech": "ERA5 box means (regions_daily.py) and box precipitation sums (precip.py): air anomaly and z-score of the last 30 days against the same window 1981–2025; rain as % of the 1991–2020 normal; thresholds hot > +0.5 °C, dry < 80 %, wet > 120 %; analogue rain = mean of the four events’ same-window sums as % of normal.",
+                       "caveats": ["six boxes are a sample, not the world; thresholds are conventions", "dry-season boxes (the Gulf in summer) have tiny normals: percentages there mean little"]},
+            "rows": rows, "groups": groups}
+
+
 # ------------------------------------------------------------------ сборка
 def build(verbose=True):
     t0 = time.time()
@@ -461,6 +606,20 @@ def build(verbose=True):
                 items.append(it)
         except Exception as e:                                   # noqa: BLE001
             errors.append(f"fuel: {str(e)[:100]}")
+    if psl:
+        try:
+            it = peak_bayes_item(psl)
+            if it:
+                items.append(it)
+        except Exception as e:                                   # noqa: BLE001
+            errors.append(f"peak_bayes: {str(e)[:100]}")
+    for fn in (hov_speed_item, regions_item):
+        try:
+            it = fn()
+            if it:
+                items.append(it)
+        except Exception as e:                                   # noqa: BLE001
+            errors.append(f"{fn.__name__}: {str(e)[:100]}")
     try:
         it = coherence_item(series)
         if it:
