@@ -1669,8 +1669,30 @@
     return '<div class="cn"><span class="cn-h">concepts</span>' +
       show.map(function (c) { return '<a class="cn-c" href="' + cnUrl(c.id) + '" target="_blank" rel="noopener" title="' + esc(c.line || '') + '">' + esc(cnName(c)) + '</a>'; }).join('') +
       (cs.length > show.length ? '<a class="cn-c more" href="' + cnGraph(ids) + '" target="_blank" rel="noopener">all ' + cs.length + '</a>' : '') +
-      '<a class="cn-g" href="' + cnGraph(ids) + '" target="_blank" rel="noopener" title="open these concepts together on the graph">graph ↗</a></div>';
+      (full ? '<button type="button" class="cn-mg" data-ids="' + esc(ids.join(',')) + '" data-focus="' + esc(ids[0]) + '" title="the same concepts as a small graph right here">graph ▾</button>' : '') +
+      '<a class="cn-g" href="' + cnGraph(ids) + '" target="_blank" rel="noopener" title="open these concepts together on the graph, new tab">graph ↗</a></div>';
   }
+  /* МИНИ-ГРАФ В КАРТОЧКЕ (второй шаг задания, владелец 08.09: «граф должен открываться
+     отдельно, в конце»). Движок общий — js/b42-graph-core.js + js/b42-mini.js, тот же, что на
+     страницах понятий и статей; грузится по первому нажатию. Кадр встаёт под облаком,
+     повторное нажатие сворачивает; узлы открывают страницы новой вкладкой. */
+  function miniLib() {
+    if (window.B42Mini && window.B42Mini.mount) return Promise.resolve();
+    if (S._miniLoad) return S._miniLoad;
+    function one(src) { return new Promise(function (ok, bad) { var sc = document.createElement('script'); sc.src = src; sc.onload = ok; sc.onerror = function () { bad(new Error(src)); }; document.head.appendChild(sc); }); }
+    S._miniLoad = one('/js/b42-graph-core.js').then(function () { return one('/js/b42-mini.js'); }).catch(function (e) { S._miniLoad = null; throw e; });
+    return S._miniLoad;
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.cn-mg'); if (!b) return;
+    var cn = b.closest('.cn'), next = cn.nextElementSibling;
+    if (next && next.classList.contains('cn-mini')) { next.remove(); b.classList.remove('on'); return; }
+    var wrap = el('div', 'cn-mini');
+    var box = el('div', 'b42mini'); box.setAttribute('data-ids', b.getAttribute('data-ids')); box.setAttribute('data-focus', b.getAttribute('data-focus'));
+    box.setAttribute('data-newtab', '1'); box.setAttribute('data-lang', cnLang());
+    wrap.appendChild(box); cn.parentNode.insertBefore(wrap, cn.nextSibling); b.classList.add('on');
+    miniLib().then(function () { window.B42Mini.mount(box); }).catch(function () { wrap.innerHTML = '<div class="note warn">The graph engine did not load; the full graph is one click away.</div>'; });
+  });
   /* Якоря сцены для ящика source/notes и подсказок на графике: блоки утверждений links.py. */
   var SCENE_ANCHORS = { now: ['block:type', 'block:peak'], risk: ['block:type', 'block:peak'], models: ['block:models'], food: ['block:food'], radiance: ['block:radiance'],
     'trend/rain': ['block:rain'], 'trend/spectral': ['block:spectral'], regions: ['block:landbox'], gulf: ['block:landbox'], air: ['block:peak'] };

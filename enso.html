@@ -259,6 +259,13 @@
   .cn-c{display:inline-block;font-size:11px;line-height:1.3;padding:1px 8px;border:1px solid color-mix(in srgb, var(--cyan) 55%, transparent);border-radius:999px;color:var(--text);text-decoration:none;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .cn-c:hover{background:var(--cyan);color:var(--surface);border-color:var(--cyan)}
   .cn-c.more{border-style:dashed;color:var(--soft)}
+  .cn-mg{margin-inline-start:auto;font-family:var(--mono);font-size:10.5px;color:var(--cyan);background:transparent;border:1px solid color-mix(in srgb, var(--cyan) 55%, transparent);border-radius:999px;padding:0 8px;cursor:pointer;white-space:nowrap}
+  .cn-mg:hover,.cn-mg.on{background:var(--cyan);color:var(--surface)}
+  .cn-mg + .cn-g{margin-inline-start:0}
+  .cn-mini{margin:6px 0 2px}
+  .info-pane:has(.cn-mini){max-height:none}   /* раскрытый мини-граф не прячем за прокрутку ящика */
+  .cn-mini .b42mini{margin:0;border:1px solid var(--hair);border-radius:8px;background:var(--surface);overflow:hidden}
+  .cn-mini .b42mini-note{margin:3px 0 0;font-family:var(--mono);font-size:10.5px} .cn-mini .b42mini-note a{color:var(--cyan);text-decoration:none}
   .cn-g{margin-inline-start:auto;font-family:var(--mono);font-size:10.5px;color:var(--cyan);text-decoration:none;white-space:nowrap}
   .cn-g:hover{text-decoration:underline}
   .tip .cn{margin-top:6px} .tip .cn-c{font-size:10.5px;padding:0 7px}
@@ -867,7 +874,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=a05f6fa958"></script>
+<script src="/js/enso.js?v=25285350ae"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>

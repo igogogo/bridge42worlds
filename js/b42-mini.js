@@ -21,9 +21,20 @@
 'use strict';
 
 var boxes = document.querySelectorAll('.b42mini[data-ids]');
-if (!boxes.length || !window.B42GraphCore) return;
+if (!window.B42GraphCore) return;
 var CORE = window.B42GraphCore;
+/* МОНТАЖ ПО ТРЕБОВАНИЮ. Панель El Niño (08.09) вставляет кадр в карточку уже после
+   загрузки страницы — по кнопке «graph ▾» в конце облака понятий; ей нужен вход, а не
+   обход разметки при старте. data-newtab="1" на коробке: клик по узлу открывает страницу
+   новой вкладкой (панель — рабочий стол, с него не уводят); data-lang — язык читателя. */
+window.B42Mini = window.B42Mini || {};
+window.B42Mini.mount = function (box) {
+    if (!box || !box.dataset.ids) return;
+    CORE.data().then(function (G) { _G = G; init(box, G); wholeLink(box); });
+};
+if (!boxes.length) return;
 var LANG = document.documentElement.lang || 'en';
+var LANG_PAGE = LANG;   // язык страницы; коробка может задать свой через data-lang
 /* «статей» на языке страницы. Мини-граф показывает эту подпись у каждого узла
    под курсором, и она была последней парой ru/en в клиенте графа. */
 var ARTS = ({ru: ' статей', es: ' artículos', ar: ' مقالة', fr: ' articles',
@@ -45,9 +56,10 @@ function wholeLink(box) {
     if (next && next.classList.contains('b42mini-note')) return;
     var d = document.createElement('div');
     d.className = 'b42mini-note';
-    var a = document.createElement('a');
-    a.href = '/lang/' + LANG + '/concepts/graph.html?set=' + encodeURIComponent(ids.join(','));
-    a.textContent = (WHOLE[LANG] || WHOLE.en) + ' →';
+    var a = document.createElement('a'), L = box.dataset.lang || LANG;
+    a.href = '/lang/' + L + '/concepts/graph.html?set=' + encodeURIComponent(ids.join(','));
+    if (box.dataset.newtab) { a.target = '_blank'; a.rel = 'noopener'; }
+    a.textContent = (WHOLE[L] || WHOLE.en) + ' →';
     d.appendChild(a);
     box.parentNode.insertBefore(d, box.nextSibling);
 }
@@ -471,6 +483,7 @@ function init(box, G) {
        Раньше адрес собирался в двух местах по-разному, и узел-учёный уводил бы
        на несуществующее понятие «s:Albert Einstein». */
     function pageOf(nd) {
+        var LANG = box.dataset.lang || LANG_PAGE;
         if (nd.kind === 'formula') return '/lang/' + LANG + '/formula/' + nd.id.slice(2) + '.html';
         if (nd.kind === 'scientist') {
             var slug = nd.id.slice(2).replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '');
@@ -530,7 +543,8 @@ function init(box, G) {
         var i = pick(e.offsetX, e.offsetY);
         if (i < 0) return;
         var nd = nodes[i];
-        location.href = pageOf(nd);
+        if (box.dataset.newtab) window.open(pageOf(nd), '_blank', 'noopener');
+        else location.href = pageOf(nd);
     });
     /* Палец: тап показывает подпись, второй тап переходит, а протяжка тянет
        узел — то же, что мышью. Слушатель НЕ passive: пока узел в руке, страницу
