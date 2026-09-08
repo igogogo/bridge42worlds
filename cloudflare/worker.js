@@ -1777,6 +1777,258 @@ function saneTitle(original, translated) {
   return !(src.length >= 24 && t.length * 3 < src.length);
 }
 
+// ── Чат-исследование (/api/research) ──────────────────────────────
+// Вопрос → английский → ОДИН вектор → ДВА поиска: наши статьи и единицы панели
+// (риски, тревоги, показатели, термины, сцены, вердикт, лента, регионы — их кладёт
+// tools/enso/research_index.py в пространство «panel»).
+//
+// Понятия и показатели в ответе НЕ придумывает модель: они выводятся из якорей
+// найденных единиц по data/enso/concepts.json. Это разница между «похоже на правду»
+// и «проверяемо»: якорь ведёт на ту же карточку панели, что видит читатель.
+const RESEARCH_TOP_WORKS = 5;
+const RESEARCH_TOP_PANEL = 8;
+
+function researchMinScore(env) {
+  const v = Number(env.RESEARCH_MIN_SCORE);
+  return Number.isFinite(v) && v > 0 ? v : 0.42;
+}
+
+// Облако понятий у якорей — читаем из R2 и держим в памяти воркера: файл небольшой,
+// меняется раз в сутки, а ходить за ним на каждый вопрос незачем.
+let _ANCH = null, _ANCH_AT = 0;
+async function anchorConcepts(env) {
+  const now = Date.now();
+  if (_ANCH && now - _ANCH_AT < 15 * 60 * 1000) return _ANCH;
+  try {
+    const obj = await env.SITE.get("data/enso/concepts.json");
+    if (obj) {
+      const j = await obj.json();
+      _ANCH = j.anchors || {};
+      _ANCH_AT = now;
+    }
+  } catch { /* нет файла — просто не будет облака, ответ от этого не рушится */ }
+  return _ANCH || {};
+}
+
+const RESEARCH_PROMPT = `Ты ведёшь исследовательский разговор о текущем событии Эль-Ниньо.
+Отвечай на {lang} языке.
+
+ПРАВИЛА, КОТОРЫЕ ВАЖНЕЕ КРАСОТЫ ОТВЕТА:
+1. Отвечай ТОЛЬКО по материалам ниже. Нет ответа в материалах — так и скажи.
+2. Каждое утверждение помечай источником в квадратных скобках: [risk:fuel_charged],
+   [kpi:n34_daily], [2608.27806]. Пометка ставится сразу после утверждения.
+3. Сначала то, что показывает панель (данные сегодня), потом то, что говорят работы.
+4. Не пересказывай материал целиком: отвечай на вопрос.
+5. Последней строкой напиши: SUMMARY: одна фраза о том, что этот ход добавил к пониманию.
+
+ПАНЕЛЬ (что измерено сейчас):
+{panel}
+
+РАБОТЫ (что об этом известно):
+{works}
+
+РАЗГОВОР ДО ЭТОГО:
+{history}
+
+ВОПРОС: {question}`;
+
+const VERIFY_PROMPT = `Проверь утверждения по материалам. Для каждого верни строку вида
+N. supported|contradicted|unknown — короткое пояснение [источник]
+
+supported — материалы прямо подтверждают; contradicted — прямо опровергают;
+unknown — материалов не хватает. Догадки запрещены: «похоже на правду» это unknown.
+
+МАТЕРИАЛЫ:
+{sources}
+
+УТВЕРЖДЕНИЯ:
+{claims}`;
+
+async function handleResearch(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+  if (!env.VECTORIZE || !env.AI) return Response.json({ error: "not_configured" }, { status: 503 });
+  if (!env.DEEPSEEK_API_KEY) return Response.json({ error: "no_key" }, { status: 503 });
+
+  let body = {};
+  try { body = await request.json(); } catch { return Response.json({ error: "bad_json" }, { status: 400 }); }
+
+  const service = isService(env, request);
+  if (!service) {
+    const ipOk = await ipGuard(env, request);
+    if (!ipOk.ok) return Response.json({ error: ipOk.error }, { status: ipOk.code });
+    if (!devBypass(env, request) &&
+        !(await turnstileOk(env, body.turnstile, request.headers.get("cf-connecting-ip")))) {
+      return Response.json({ error: "captcha_failed" }, { status: 403 });
+    }
+  }
+
+  const mode = body.mode === "verify" ? "verify" : "ask";
+  const q = String(body.question || "").trim().slice(0, 500);
+  const claims = Array.isArray(body.claims) ? body.claims.slice(0, 8).map((c) => String(c).slice(0, 300)) : [];
+  if (mode === "ask" && q.length < 3) return Response.json({ error: "question_too_short" }, { status: 400 });
+  if (mode === "verify" && !claims.length) return Response.json({ error: "no_claims" }, { status: 400 });
+  const lang = LANGS.includes(body.lang) ? body.lang : "ru";
+
+  const who = await identify(request, env);
+  const spent = service
+    ? { ok: true, dayLeft: null, weekLeft: null }
+    : await quotaSpend(env, who.uid, 1, who.lim);
+  if (!spent.ok) {
+    return Response.json({ error: spent.error, dayLeft: spent.dayLeft, weekLeft: spent.weekLeft },
+      { status: spent.code });
+  }
+
+  // Ищем по английскому: оба пространства построены на английских текстах.
+  const seed = mode === "verify" ? claims.join(" ") : q;
+  let queryEn = seed;
+  if (lang !== "en") {
+    const tr = await translateText(env, seed, "en");
+    if (tr) queryEn = tr;
+  }
+  let works = [], panel = [];
+  try {
+    const emb = await env.AI.run(SEARCH_MODEL, { text: [queryEn] });
+    const vec = emb.data[0];
+    const [fw, fp] = await Promise.all([
+      env.VECTORIZE.query(vec, { topK: RESEARCH_TOP_WORKS, returnMetadata: "all", namespace: "ours" }),
+      env.VECTORIZE.query(vec, { topK: RESEARCH_TOP_PANEL, returnMetadata: "all", namespace: "panel" })
+        .catch(() => ({ matches: [] })),
+    ]);
+    const floor = researchMinScore(env);
+    works = (fw.matches || []).filter((m) => m.score >= floor).map((m) => ({
+      id: m.id, score: Math.round(m.score * 1000) / 1000,
+      title: m.metadata?.title_en || m.metadata?.title || "",
+      url: m.metadata?.url || "", date: m.metadata?.date || "",
+    }));
+    panel = (fp.matches || []).filter((m) => m.score >= floor).map((m) => ({
+      id: String(m.id).replace(/^p:/, ""), score: Math.round(m.score * 1000) / 1000,
+      kind: m.metadata?.kind || "", title: m.metadata?.title || "",
+      hash: m.metadata?.hash || "", anchor: m.metadata?.anchor || "",
+      text: m.metadata?.text || "",
+    }));
+  } catch {
+    return Response.json({ error: "search_failed" }, { status: 502 });
+  }
+  if (!works.length && !panel.length) {
+    return Response.json({ answer: null, nothing_found: true, panel: [], works: [],
+      dayLeft: spent.dayLeft }, { headers: { "cache-control": "no-store" } });
+  }
+
+  // Тексты статей — те же готовые аннотации, что у /api/ask (KV, на языке читателя).
+  const workSrc = [];
+  for (const w of works) {
+    const raw = await env.TOKENS.get(`ctx:${w.id}:${lang}`);
+    if (!raw) continue;
+    try {
+      const c = JSON.parse(raw);
+      workSrc.push({ ...w, title: c.title || w.title, text: c.text, url: c.url || w.url, date: c.date || w.date });
+    } catch { /* битая запись — пропускаем */ }
+  }
+
+  const panelText = panel.map((u) => `[${u.id}] ${u.title}\n${u.text}`).join("\n\n");
+  const worksText = workSrc.map((s) => `[${s.id}] ${s.title}\n${s.text}`).join("\n\n");
+  const langName = askLangName(lang);
+  let prompt;
+  if (mode === "verify") {
+    prompt = (env.RESEARCH_VERIFY_PROMPT || VERIFY_PROMPT)
+      .replace("{sources}", (panelText + "\n\n" + worksText).slice(0, 12000))
+      .replace("{claims}", claims.map((c, i) => `${i + 1}. ${c}`).join("\n"));
+  } else {
+    const hist = (Array.isArray(body.history) ? body.history.slice(-4) : [])
+      .map((h) => `— ${String(h.q || "").slice(0, 200)}\n— ${String(h.a || "").slice(0, 400)}`)
+      .join("\n");
+    prompt = (env.RESEARCH_PROMPT || RESEARCH_PROMPT)
+      .replace("{lang}", langName)
+      .replace("{panel}", panelText.slice(0, 8000))
+      .replace("{works}", worksText.slice(0, 6000))
+      .replace("{history}", hist || "(разговор только начался)")
+      .replace("{question}", q);
+  }
+
+  let answer;
+  try {
+    const r = await fetch("https://api.deepseek.com/chat/completions", {
+      method: "POST",
+      headers: { "content-type": "application/json",
+                 authorization: `Bearer ${env.DEEPSEEK_API_KEY}` },
+      body: JSON.stringify({
+        model: env.RESEARCH_MODEL || env.DEEPSEEK_MODEL || "deepseek-v4-flash",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.3, max_tokens: mode === "verify" ? 600 : 900,
+        thinking: { type: "disabled" },
+      }),
+    });
+    if (!r.ok) return Response.json({ error: "upstream", status: r.status }, { status: 502 });
+    const d = await r.json();
+    answer = d?.choices?.[0]?.message?.content?.trim();
+  } catch {
+    return Response.json({ error: "model_failed" }, { status: 502 });
+  }
+  if (!answer) return Response.json({ error: "empty_answer" }, { status: 502 });
+
+  // ПРОВЕРКА ПОМЕТОК КОДОМ. Годятся только идентификаторы, которые мы действительно нашли:
+  // и статьи, и единицы панели. Без единой годной пометки ответ не отдаём — это то же
+  // правило, что у /api/ask, и оно и отличает нас от болталки.
+  const known = new Set([...workSrc.map((s) => s.id), ...panel.map((u) => u.id)]);
+  const cited = new Set();
+  for (const mm of answer.matchAll(/\[([A-Za-z0-9_.:-]{3,60})\]/g)) {
+    if (known.has(mm[1])) cited.add(mm[1]);
+  }
+  if (mode === "ask" && !cited.size) {
+    return Response.json({
+      answer: null, unsupported: true,
+      panel: panel.map((u) => ({ id: u.id, kind: u.kind, title: u.title, hash: u.hash })),
+      works: workSrc.map(shortSource), dayLeft: spent.dayLeft,
+    }, { headers: { "cache-control": "no-store" } });
+  }
+
+  // Последняя строка ответа — что ход добавил к пониманию. Забираем её отдельным полем,
+  // чтобы доска слева не разбирала текст регулярками.
+  let summaryDelta = "";
+  if (mode === "ask") {
+    const m = answer.match(/^\s*SUMMARY:\s*(.+)$/mi);
+    if (m) {
+      summaryDelta = m[1].trim();
+      answer = answer.replace(m[0], "").trim();
+    }
+  }
+
+  // Понятия и показатели — из якорей НАЙДЕННОГО, детерминированно.
+  const anch = await anchorConcepts(env);
+  const cKeep = new Map();
+  const kpis = [];
+  for (const u of panel) {
+    if (!cited.size || cited.has(u.id)) {
+      for (const c of (anch[u.anchor] || [])) {
+        if (!cKeep.has(c.id)) cKeep.set(c.id, { id: c.id, name: c.name_en, name_ru: c.name_ru, kind: c.kind });
+      }
+      if (u.kind === "kpi") kpis.push({ id: u.id, title: u.title, hash: u.hash });
+    }
+  }
+
+  const verdicts = mode === "verify"
+    ? answer.split("\n").map((ln) => {
+        const m = ln.match(/^\s*(\d+)[.)]\s*(supported|contradicted|unknown)\b[\s—:-]*(.*)$/i);
+        if (!m) return null;
+        return { n: Number(m[1]), status: m[2].toLowerCase(), why: (m[3] || "").trim() };
+      }).filter(Boolean)
+    : null;
+
+  return Response.json({
+    mode,
+    answer: mode === "verify" ? null : answer,
+    verdicts,
+    summary_delta: summaryDelta,
+    panel: panel.map((u) => ({ id: u.id, kind: u.kind, title: u.title, hash: u.hash,
+                               anchor: u.anchor, score: u.score, cited: cited.has(u.id) })),
+    works: workSrc.map((s) => ({ ...shortSource(s), cited: cited.has(s.id) })),
+    concepts: [...cKeep.values()].slice(0, 12),
+    kpis: kpis.slice(0, 8),
+    dayLeft: spent.dayLeft, weekLeft: spent.weekLeft,
+  }, { headers: { "cache-control": "no-store" } });
+}
+
 // ── Бот-исследователь (/api/ask) ──────────────────────────────────
 // Вопрос → перевод в английский → вектор → пять наших статей → ответ модели СТРОГО
 // по найденному, со ссылками. Правило проекта: ответ без ссылки на наш материал
@@ -3519,6 +3771,7 @@ async function handleRequest(request, env, ctx) {
     if (url.pathname === "/api/entity") return withCors(await feedGuard(request, env, handleEntityStats));
     if (url.pathname === "/api/side") return withCors(await feedGuard(request, env, handleArticleSide));
     if (url.pathname === "/api/ask") return withCors(await handleAsk(request, env));
+    if (url.pathname === "/api/research") return withCors(await handleResearch(request, env));
     if (url.pathname === "/api/quota") return withCors(await handleQuota(request, env));
     if (url.pathname === "/api/auth/google") return handleGoogleStart(request, env);
     if (url.pathname === "/api/auth/google/callback") return handleGoogleCallback(request, env);
