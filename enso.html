@@ -327,7 +327,14 @@
   .rs-saved .it{display:flex;gap:8px;align-items:center;font-size:12px;padding:3px 0;border-top:1px solid var(--hair-soft, var(--hair))}
   .rs-saved .it .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .rs-saved .it .m{font-family:var(--mono);font-size:9.5px;color:var(--soft)}
   .rs-empty{color:var(--soft);font-size:12px;line-height:1.4}
-  .rs-quota{font-family:var(--mono);font-size:10px;color:var(--soft);margin-top:4px}
+  .rs-quota{font-family:var(--mono);font-size:10px;color:var(--soft);margin-top:4px} .rs-quota a{color:var(--cyan);text-decoration:none}
+  .rs-cite{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--cyan);border:1px solid color-mix(in srgb, var(--cyan) 55%, transparent);border-radius:4px;padding:0 4px;margin:0 2px;text-decoration:none;vertical-align:1px}
+  .rs-cite.wk{text-transform:none;color:var(--ochre);border-color:color-mix(in srgb, var(--ochre) 55%, transparent)}
+  .rs-hit.on{border-color:var(--cyan);color:var(--text)} .rs-hit.wk.on{border-color:var(--ochre)} a.rs-hit{text-decoration:none}
+  .rs-links a.cited{color:var(--text);font-weight:600} .rs-links a i{font-style:normal;font-family:var(--mono);font-size:8.5px;color:var(--cyan);margin-inline-start:4px}
+  .rs-v{font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;border-radius:4px;padding:0 5px;margin-inline-start:6px;cursor:default}
+  .rs-v.supported{color:var(--ok);border:1px solid var(--ok)} .rs-v.contradicted{color:var(--nino);border:1px solid var(--nino)} .rs-v.unknown{color:var(--soft);border:1px solid var(--hair)}
+  .rs-note{font-family:var(--mono);font-size:10px;color:var(--soft);align-self:center}
   .rs .cn{border-top:0;margin-top:0;padding-top:0}
   @media (max-width:900px){ .rs{grid-template-columns:1fr} .rs-chat{order:-1;max-height:52vh} .rs-m.q{margin-inline-start:6%} }
   /* окно графа поверх панели */
@@ -951,7 +958,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=a73d55ee36"></script>
+<script src="/js/enso.js?v=71c533a319"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>

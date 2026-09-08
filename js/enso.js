@@ -1945,13 +1945,13 @@
           '<span class="ks-n">' + esc(STRIP_NAME[x.k] || x.r.title) + '</span></button>';
       }).join('');
   }
-  /* ══ ИССЛЕДОВАНИЕ В ДИАЛОГЕ (прототип, владелец 08.09) ═══════════════════════════════
+  /* ══ ИССЛЕДОВАНИЕ В ДИАЛОГЕ (владелец 08.09; контур ведущей сессии — ЭЛЬНИНЬО-ЧАТ-ИССЛЕДОВАНИЕ-РУЧКА.md) ══
      «Чат с моделью: справа диалог, слева собираются наши KPI, граф, облако понятий и резюме
-     беседы; проходить моделью несколько раз, проверять; сохранять в избранное». Записка с
-     устройством контура — ИССЛЕДОВАНИЕ-ЧАТ-КОНЦЕПТ-2026-09-08.md. Здесь живое: поиск по нашей
-     части панели (в браузере, лексический — заменяется вектором без правки вида), доска,
-     сохранение. Ответ модели идёт на window.B42_RESEARCH_API, если он задан; без него ответ
-     извлечённый, с честной пометкой «demo, без модели». */
+     беседы; проверять моделью; сохранять». Данные и ручка за ведущей сессией: индекс панели в
+     Vectorize (пространство panel), /api/research (ответ с пометками [risk:…] и [номер работы],
+     режим verify), /api/research/save|list|delete в D1 по uid. Здесь — вид: доска, диалог,
+     чтение ответа одной функцией. Без ручки (localhost) — извлечённый ответ с пометкой demo и
+     сохранение в браузере. */
   var KPI_SCENE = { n34_weekly: 'now/weekly', n12_weekly: 'now/weekly', n34_daily: 'trend/sst_nino34', n34_30d: 'trend/sst_nino34', rec_sst_nino34: 'trend/sst_nino34', fc14_sst_nino34: 'trend/sst_nino34',
     n34_box: 'ocean/surface', n12_box: 'ocean/surface', gulf_sst: 'ocean/surface', subsurface_warmest: 'ocean/moorings', d20_east: 'ocean/section',
     oni: 'now/analogs', roni: 'now/analogs', risk_index: 'verdict', n_risks: 'now/analogs', n_alerts: 'now/analogs', scenario: 'regions',
@@ -1962,6 +1962,28 @@
     ohc_2000: 'planet', kuwait_tmax30: 'regions/place/gulf_arabia', peak_estimate: 'now/analogs' };
   var RS_STOP = { the: 1, and: 1, for: 1, with: 1, that: 1, this: 1, what: 1, why: 1, how: 1, does: 1, are: 1, is: 1, of: 1, to: 1, in: 1, on: 1, a: 1, an: 1, it: 1, its: 1, be: 1, will: 1, was: 1, were: 1, has: 1, have: 1, from: 1, about: 1, than: 1, now: 1, our: 1, we: 1, you: 1, can: 1, not: 1, which: 1, when: 1, where: 1, there: 1, into: 1, over: 1, any: 1, all: 1 };
   var RS_SYN = { nino: 'niño', 'el': '', nina: 'niña', temperature: 'temperature warm', warming: 'warm', rain: 'rain precipitation', rainfall: 'rain', drought: 'rain dry', prices: 'price food', food: 'food price', models: 'model forecast', forecast: 'forecast model', ocean: 'ocean sea', sea: 'sea ocean', wind: 'wind westerly', volume: 'volume fuel', fuel: 'fuel volume', peak: 'peak', strength: 'strong', strong: 'strong' };
+  /* Ручка: явный адрес, иначе своя на сайте; на localhost ручки нет — демо. */
+  function rsApi() {
+    if (window.B42_RESEARCH_API !== undefined) return window.B42_RESEARCH_API || '';
+    return /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? '' : '/api/research';
+  }
+  var RS_TOKEN_KEY = 'b42_tutor_token';   // тот же токен, что у тьютора: одна норма, одна выдача
+  function rsToken() { try { return localStorage.getItem(RS_TOKEN_KEY) || ''; } catch (e) { return ''; } }
+  function rsSetToken(t) { try { t ? localStorage.setItem(RS_TOKEN_KEY, t) : localStorage.removeItem(RS_TOKEN_KEY); } catch (e) { } }
+  function rsPass() {   // пропуск: токен заменяет капчу; иначе Turnstile общим помощником
+    if (rsToken()) return Promise.resolve({ token: rsToken() });
+    return new Promise(function (ok) {
+      function go() { (window.b42TurnstilePass ? window.b42TurnstilePass() : Promise.resolve('')).then(function (t) { ok({ turnstile: t }); }, function () { ok({ turnstile: '' }); }); }
+      if (window.b42TurnstilePass) return go();
+      var s = document.createElement('script'); s.src = '/js/b42-turnstile.js'; s.onload = go; s.onerror = function () { ok({ turnstile: '' }); }; document.head.appendChild(s);
+    });
+  }
+  function rsPost(body) {
+    return rsPass().then(function (p) {
+      var h = { 'content-type': 'application/json' }; if (p.token) h['x-b42-token'] = p.token; else body.turnstile = p.turnstile || '';
+      return fetch(rsApi(), { method: 'POST', headers: h, credentials: 'same-origin', body: JSON.stringify(body) }).then(function (r) { return r.json().then(function (d) { d._status = r.status; return d; }); });
+    });
+  }
   function rsTokens(q) {
     var out = [];
     String(q || '').toLowerCase().replace(/[^a-z0-9°ñ.+\s-]/g, ' ').split(/\s+/).forEach(function (w) {
@@ -2002,65 +2024,124 @@
     return scored.slice(0, n || 8).map(function (x) { x.it.score = x.sc; return x.it; });
   }
   function rsState() {
-    if (!S.rs) S.rs = { msgs: [], kpis: [], anchors: [], concepts: {}, links: {}, works: {}, summary: [], created: new Date().toISOString().slice(0, 16).replace('T', ' ') };
+    if (!S.rs) S.rs = { msgs: [], kpis: [], anchors: [], concepts: {}, links: {}, works: {}, summary: [], verdicts: [], created: new Date().toISOString().slice(0, 16).replace('T', ' ') };
     return S.rs;
   }
   function rsFirstSentences(t, n) { var p = String(t || '').split(/(?<=[.!?])\s+/); return p.slice(0, n || 2).join(' '); }
-  function rsDemoAnswer(q, hits) {
-    if (!hits.length) return '<p>Nothing on the panel matches this yet. Try the words the panel uses: Niño 3.4, ONI, fuel, warm water volume, models, food prices, rain, a region.</p><span class="demo">demo · no model behind this answer; the search is lexical, over the statements of this panel</span>';
-    var s = '<p>What the panel says about this:</p><ul>' + hits.slice(0, 4).map(function (h) {
+  function rsDemoAnswer(q, hits, lead) {
+    if (!hits.length) return '<p>' + (lead || 'Nothing on the panel matches this yet.') + ' Try the words the panel uses: Niño 3.4, ONI, fuel, warm water volume, models, food prices, rain, a region.</p>' + (rsApi() ? '' : '<span class="demo">demo · no model behind this answer; the search is lexical, over the statements of this panel</span>');
+    var s = '<p>' + (lead || 'What the panel says about this:') + '</p><ul>' + hits.slice(0, 4).map(function (h) {
       return '<li><b>' + esc(h.title) + '</b> — ' + esc(rsFirstSentences(h.text, 2)) + (h.hash ? ' <a href="enso.html' + esc(h.hash) + '" target="_blank" rel="noopener">open ↗</a>' : (h.url ? ' <a href="' + esc(h.url) + '" target="_blank" rel="noopener">concept ↗</a>' : '')) + '</li>';
-    }).join('') + '</ul><span class="demo">demo · no model behind this answer: extracted from the statements of this panel by a lexical search; with /api/research the same context goes to DeepSeek and comes back as prose with [id] marks</span>';
+    }).join('') + '</ul>' + (rsApi() ? '' : '<span class="demo">demo · no model behind this answer: extracted from the statements of this panel by a lexical search; on the site the same question goes to /api/research</span>');
     return s;
   }
-  function readResearchReply(d) {
-    d = d || {};
-    return { answer: d.answer || d.text || d.reply || '', summary: d.summary_delta || d.summary || '', left: d.left != null ? d.left : (d.remaining != null ? d.remaining : null), error: d.error || null };
+  /* Ответ ручки — одной функцией: пометки [risk:…] ведут на панель, [номер] — на нашу статью. */
+  function rsRenderAnswer(d) {
+    var byId = {}; (d.panel || []).forEach(function (p) { byId[p.id] = p; });
+    var byW = {}; (d.works || []).forEach(function (w) { byW[String(w.id).replace(/v\d+$/, '')] = w; });
+    var t = esc(d.answer || '');
+    t = t.replace(/\[([a-z]+:[A-Za-z0-9_.\-]+)\]/g, function (m, id) { var p = byId[id]; return p ? '<a class="rs-cite" href="enso.html' + esc(p.hash || '') + '" target="_blank" rel="noopener" title="' + esc(p.title || '') + '">' + esc(p.kind || 'panel') + '</a>' : '<span class="rs-cite">' + esc(id) + '</span>'; });
+    t = t.replace(/\[(\d{4}\.\d{4,5})(?:v\d+)?\]/g, function (m, id) { var w = byW[id]; return w ? '<a class="rs-cite wk" href="' + esc(w.url || '#') + '" target="_blank" rel="noopener" title="' + esc(w.title || '') + '">' + esc(id) + '</a>' : '<span class="rs-cite wk">' + esc(id) + '</span>'; });
+    return '<p>' + t.replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
+  }
+  function rsMergeApi(rs, d) {
+    (d.kpis || []).forEach(function (k) { var key = String(k.id || '').replace(/^kpi:/, ''); if (jrec(key) && rs.kpis.indexOf(key) < 0) rs.kpis.push(key); });
+    (d.concepts || []).forEach(function (c) { rs.concepts[c.id] = { id: c.id, name_en: c.name || c.id, name_ru: c.name_ru, kind: c.kind, line: c.line || '' }; });
+    (d.panel || []).forEach(function (p) { if (!p.hash) return; var key = p.hash + '|' + p.kind; var old = rs.links[key]; rs.links[key] = { kind: p.kind, title: p.title, hash: p.hash, cited: !!(p.cited || (old && old.cited)) }; if (p.anchor && rs.anchors.indexOf(p.anchor) < 0) rs.anchors.push(p.anchor); });
+    (d.works || []).forEach(function (w) { var old = rs.works[w.id]; rs.works[w.id] = { id: w.id, title: w.title, url: w.url, date: w.date, cited: !!(w.cited || (old && old.cited)), no_text: !!w.no_text, api: true }; });
+    if (d.dayLeft != null) rs.left = { day: d.dayLeft, week: d.weekLeft };
   }
   function rsMerge(rs, hits) {
     hits.forEach(function (h) {
       (h.anchors || []).forEach(function (a) { if (a && rs.anchors.indexOf(a) < 0) rs.anchors.push(a); });
       if (h.kind === 'kpi' && rs.kpis.indexOf(h.id) < 0) rs.kpis.push(h.id);
       if (h.kind === 'concept') rs.concepts[h.id] = h.c;
-      if (h.hash && h.kind !== 'kpi') rs.links[h.hash + '|' + h.kind] = { kind: h.kind, title: h.title, hash: h.hash };
+      if (h.hash && h.kind !== 'kpi') rs.links[h.hash + '|' + h.kind] = rs.links[h.hash + '|' + h.kind] || { kind: h.kind, title: h.title, hash: h.hash, cited: false };
     });
     conceptsFor(rs.anchors).forEach(function (c) { rs.concepts[c.id] = c; });
     rs.anchors.forEach(function (a) { linksFor(a).forEach(function (l) { if (!rs.works[l.id]) rs.works[l.id] = l; }); });
     (rs.anchors || []).forEach(function (a) { if (a.indexOf('kpi:') === 0 && rs.kpis.indexOf(a.slice(4)) < 0 && jrec(a.slice(4))) rs.kpis.push(a.slice(4)); });
   }
+  var RS_ERR = { captcha_failed: 'The page could not get a “not a robot” pass. Enter an access token (button below) or reload the page.', token_required: 'An access token is needed.', token_invalid: 'The access token is not valid.', token_expired: 'The access token has expired.',
+    limit_day: 'The token’s daily allowance is used up.', limit_total: 'The token’s allowance is used up.', quota_day: 'Today’s allowance of questions is used up.', quota_week: 'This week’s allowance of questions is used up.', not_configured: 'The answer service is not configured on this server.', no_key: 'The model key is missing on the server.' };
   function rsAsk(q) {
     var rs = rsState(), hits = rsSearch(q, 8);
-    rsMerge(rs, hits);
     var msg = { q: q, a: '', hits: hits.map(function (h) { return { kind: h.kind, title: h.title, hash: h.hash || h.url || '' }; }), demo: true, t: new Date().toISOString().slice(11, 16) };
     rs.msgs.push(msg);
-    rs.summary.push(q + ' → ' + (hits.length ? hits.slice(0, 2).map(function (h) { return h.title; }).join('; ') : 'nothing on the panel'));
-    var API = window.B42_RESEARCH_API;
-    if (!API) { msg.a = rsDemoAnswer(q, hits); render(); return; }
+    if (!rsApi()) { rsMerge(rs, hits); rs.summary.push(q + ' → ' + (hits.length ? hits.slice(0, 2).map(function (h) { return h.title; }).join('; ') : 'nothing on the panel')); msg.a = rsDemoAnswer(q, hits); render(); return; }
     msg.a = '<span class="demo">asking the model…</span>'; render();
-    var ctx = hits.map(function (h) { return { id: h.kind + ':' + h.id, title: h.title, text: h.text, hash: h.hash || h.url || '' }; });
-    fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question: q, lang: 'en', history: rs.msgs.slice(0, -1).map(function (m) { return { q: m.q, a: m.a.replace(/<[^>]+>/g, '').slice(0, 600) }; }), summary: rs.summary.join(' '), context: ctx }) })
-      .then(function (r) { return r.json(); }).then(function (d) {
-        var rr = readResearchReply(d);
-        msg.demo = false; msg.a = rr.error ? '<span class="demo">the model did not answer: ' + esc(rr.error) + '</span>' + rsDemoAnswer(q, hits) : mark(rr.answer);
-        if (rr.summary) rs.summary[rs.summary.length - 1] = rr.summary;
-        if (rr.left != null) rs.left = rr.left;
-        render();
-      }).catch(function () { msg.a = '<span class="demo">the model is unreachable; showing the extracted answer</span>' + rsDemoAnswer(q, hits); render(); });
+    var history = rs.msgs.slice(0, -1).slice(-8).map(function (m) { return { q: m.q, a: String(m.a || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 600) }; });
+    rsPost({ question: q, lang: 'en', history: history }).then(function (d) {
+      msg.demo = false;
+      if (d.dayLeft != null) rs.left = { day: d.dayLeft, week: d.weekLeft };
+      if (d.error) {
+        msg.a = '<span class="demo">' + esc(RS_ERR[d.error] || ('the service answered: ' + d.error)) + (d.limit ? ' (limit ' + esc(String(d.limit)) + ')' : '') + '</span>';
+        if (/^(captcha_failed|token_)/.test(d.error)) msg.needToken = true;
+        rsMerge(rs, hits); msg.a += rsDemoAnswer(q, hits, 'Meanwhile, what the panel itself says:'); render(); return;
+      }
+      if (d.nothing_found) { msg.a = '<p><b>Nothing in our materials is close enough to this question.</b> That is an answer, not a failure: the vector search found no statement of the panel or work of ours above the threshold.</p>' + rsDemoAnswer(q, hits, 'The nearest words on the panel:'); rsMerge(rs, hits); rs.summary.push(q + ' → nothing in our materials'); render(); return; }
+      if (d.unsupported) { msg.a = '<p><b>The model answered without a single supported citation, so we do not show its text.</b> Here is what was found; judge it yourself.</p>' + rsFoundList(d); rsMergeApi(rs, d); rs.summary.push(q + ' → found, but the model’s answer was not supported'); render(); return; }
+      msg.a = rsRenderAnswer(d) + rsFoundList(d);
+      rsMergeApi(rs, d);
+      rs.summary.push(d.summary_delta ? String(d.summary_delta) : (q + ' → answered'));
+      render();
+    }).catch(function () { msg.a = '<span class="demo">the answer service is unreachable; showing the extracted answer</span>' + rsDemoAnswer(q, hits); rsMerge(rs, hits); render(); });
   }
-  function rsSavedList() { try { return JSON.parse(localStorage.getItem('b42_research') || '[]'); } catch (e) { return []; } }
-  function rsSave(rs) {
-    var list = rsSavedList(), id = rs.id || ('r' + Date.now().toString(36)); rs.id = id;
+  function rsFoundList(d) {
+    var P = (d.panel || []).slice().sort(function (a, b) { return (b.cited ? 1 : 0) - (a.cited ? 1 : 0) || (b.score || 0) - (a.score || 0); });
+    var W = (d.works || []).slice().sort(function (a, b) { return (b.cited ? 1 : 0) - (a.cited ? 1 : 0) || (b.score || 0) - (a.score || 0); });
+    if (!P.length && !W.length) return '';
+    return '<div class="rs-hits">' + P.slice(0, 6).map(function (p) { return '<a class="rs-hit' + (p.cited ? ' on' : '') + '" href="enso.html' + esc(p.hash || '') + '" target="_blank" rel="noopener"><b>' + esc(p.kind) + '</b>' + esc(p.title || p.id) + '</a>'; }).join('') +
+      W.slice(0, 4).map(function (w) { return '<a class="rs-hit wk' + (w.cited ? ' on' : '') + '" href="' + esc(w.url || '#') + '" target="_blank" rel="noopener"><b>work</b>' + esc(w.title || w.id) + (w.no_text ? ' · link only' : '') + '</a>'; }).join('') + '</div>';
+  }
+  /* Сохранение: на сайте — D1 по uid через ручку; без ручки — в браузере. Доска едет внутри
+     первого хода (ходы — любой JSON по договору), утверждения — резюме по ходам. */
+  function rsPack(rs) {
+    return { id: rs.id || undefined, lang: 'en', title: ((rs.msgs[0] || {}).q || 'research').slice(0, 160), summary: rs.summary.join('\n').slice(0, 4000),
+      turns: rs.msgs.slice(0, 40).map(function (m, i) { var t = { q: m.q, a: m.a, hits: m.hits, t: m.t, demo: !!m.demo }; if (i === 0) t.board = { kpis: rs.kpis, anchors: rs.anchors, concepts: rs.concepts, links: rs.links, works: rs.works, created: rs.created, verdicts: rs.verdicts || [] }; return t; }),
+      claims: rs.summary.slice(0, 40) };
+  }
+  function rsUnpack(rec) {
+    var turns = rec.turns || [], b = (turns[0] || {}).board || {};
+    return { id: rec.id, msgs: turns.map(function (t) { return { q: t.q, a: t.a, hits: t.hits || [], t: t.t, demo: !!t.demo }; }), kpis: b.kpis || [], anchors: b.anchors || [], concepts: b.concepts || {}, links: b.links || {}, works: b.works || {},
+      summary: rec.claims || String(rec.summary || '').split('\n').filter(Boolean), verdicts: b.verdicts || [], created: b.created || rec.created || '', saved: rec.updated || rec.created };
+  }
+  function rsLocalList() { try { return JSON.parse(localStorage.getItem('b42_research') || '[]'); } catch (e) { return []; } }
+  function rsLocalSave(rs) {
+    var list = rsLocalList(), id = rs.id || ('r' + Date.now().toString(36)); rs.id = id;
     var item = { id: id, title: (rs.msgs[0] || {}).q || 'research', created: rs.created, saved: new Date().toISOString().slice(0, 16).replace('T', ' '), n: rs.msgs.length, rs: rs };
     var i = list.findIndex(function (x) { return x.id === id; }); if (i >= 0) list[i] = item; else list.unshift(item);
     try { localStorage.setItem('b42_research', JSON.stringify(list.slice(0, 30))); } catch (e) { }
   }
+  function rsSave(rs, done) {
+    if (!rsApi()) { rsLocalSave(rs); done('saved in this browser'); return; }
+    fetch(rsApi() + '/save', { method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify(rsPack(rs)) })
+      .then(function (r) { return r.json(); }).then(function (d) { if (d && d.ok) { rs.id = d.id; rs.saved = d.updated; S._rsList = null; done('saved to your account'); } else { rsLocalSave(rs); done('server refused (' + esc(String((d || {}).error || 'error')) + '); saved in this browser'); } })
+      .catch(function () { rsLocalSave(rs); done('server unreachable; saved in this browser'); });
+  }
+  function rsList(cb) {
+    if (!rsApi()) { cb(rsLocalList().map(function (x) { return { id: x.id, title: x.title, saved: x.saved, n: x.n, local: true }; })); return; }
+    if (S._rsList) { cb(S._rsList); return; }
+    fetch(rsApi() + '/list', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (d) {
+      S._rsList = (d.items || []).map(function (x) { return { id: x.id, title: x.title, saved: x.updated || x.created, n: null }; }).concat(rsLocalList().map(function (x) { return { id: x.id, title: x.title, saved: x.saved, n: x.n, local: true }; }));
+      cb(S._rsList);
+    }).catch(function () { cb(rsLocalList().map(function (x) { return { id: x.id, title: x.title, saved: x.saved, n: x.n, local: true }; })); });
+  }
+  function rsOpen(id, local) {
+    if (local || !rsApi()) { var it = rsLocalList().filter(function (x) { return x.id === id; })[0]; if (it) { S.rs = it.rs; render(); } return; }
+    fetch(rsApi() + '/list?id=' + encodeURIComponent(id), { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (d) { var rec = d.item || d; if (rec && rec.turns) { S.rs = rsUnpack(rec); render(); } }).catch(function () { });
+  }
+  function rsDelete(id, local) {
+    if (local || !rsApi()) { var l = rsLocalList().filter(function (x) { return x.id !== id; }); try { localStorage.setItem('b42_research', JSON.stringify(l)); } catch (x) { } S._rsList = null; render(); return; }
+    fetch(rsApi() + '/delete', { method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ id: id }) }).then(function () { S._rsList = null; render(); }).catch(function () { render(); });
+  }
   function rsExportText(rs) {
-    return 'Research on the El Niño panel · ' + rs.created + '\n\n' + rs.msgs.map(function (m, i) { return (i + 1) + '. Q: ' + m.q + '\n   A: ' + m.a.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(); }).join('\n\n') +
-      '\n\nSummary:\n' + rs.summary.map(function (l, i) { return (i + 1) + '. ' + l; }).join('\n') +
+    return 'Research on the El Niño panel · ' + rs.created + '\n\n' + rs.msgs.map(function (m, i) { return (i + 1) + '. Q: ' + m.q + '\n   A: ' + String(m.a || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(); }).join('\n\n') +
+      '\n\nSummary:\n' + rs.summary.map(function (l, i) { var v = (rs.verdicts || [])[i]; return (i + 1) + '. ' + l + (v && v.status ? ' [' + v.status + ']' : ''); }).join('\n') +
       '\n\nKPI: ' + rs.kpis.map(function (k) { var r = jrec(k), e = r ? r.entries || [] : [], last = e[e.length - 1]; return (r ? r.title : k) + (last ? ' ' + jval(last.v, r.digits) + ' ' + (r.unit || '') + ' (' + last.d + ')' : ''); }).join('; ') +
       '\nConcepts: ' + Object.keys(rs.concepts).map(function (id) { return cnName(rs.concepts[id]); }).join(', ') +
       '\nOn the panel: ' + Object.keys(rs.links).map(function (k) { return rs.links[k].title + ' (' + location.origin + '/enso.html' + rs.links[k].hash + ')'; }).join('; ') +
-      '\nWorks: ' + Object.keys(rs.works).map(function (id) { var l = rs.works[id]; return (l.our_title || l.title) + ' [' + l.id + ']'; }).join('; ') + '\n';
+      '\nWorks: ' + Object.keys(rs.works).map(function (id) { var l = rs.works[id]; return (l.our_title || l.title) + ' [' + l.id + ']' + (l.url ? ' ' + l.url : ''); }).join('; ') + '\n';
   }
   function rsKpiTile(k) {
     var r = jrec(k), e = r ? (r.entries || []) : []; if (!r || !e.length) return '';
@@ -2070,47 +2151,58 @@
     return '<button type="button" class="ks" data-hist="' + esc(k) + '" data-src="' + esc(JSON.stringify(pay)) + '"><span class="ks-row"><span class="ks-v">' + jval(last.v, dg) + (u ? '<small>' + esc(u) + '</small>' : '') + '</span>' +
       (dv ? '<span class="ks-d ' + jsign(dv) + '">' + jarrow(dv) + (dv > 0 ? '+' : '') + jval(dv, dg) + '</span>' : '') + '</span><span class="ks-n">' + esc(STRIP_NAME[k] || r.title) + '</span></button>';
   }
+  function rsWorkRow(l) {
+    if (l.api) return '<p class="wk-p"><b>' + esc(l.title || l.id) + '</b>' + (l.cited ? '<i>cited by the model</i>' : '<i>found nearby</i>') + (l.url ? '<a class="wk-read" href="' + esc(l.url) + '" target="_blank" rel="noopener">Read the adapted article →</a>' : '') + ' <span class="wk-num">' + esc(l.id) + '</span></p>';
+    return worksHtml([l]);
+  }
   function viewResearch() {
-    var rs = rsState();
+    var rs = rsState(), live = !!rsApi();
     var body = stageShell('Research: ask in your words; the board on the left builds itself from the panel', []);
     body.setAttribute('data-own-info', '1');
     var wrap = el('div', 'rs');
     // ── доска
     var board = el('div', 'rs-board');
-    var cids = Object.keys(rs.concepts), lks = Object.keys(rs.links), wks = Object.keys(rs.works);
+    var cids = Object.keys(rs.concepts), lks = Object.keys(rs.links).sort(function (a, b) { return (rs.links[b].cited ? 1 : 0) - (rs.links[a].cited ? 1 : 0); }), wks = Object.keys(rs.works).sort(function (a, b) { return (rs.works[b].cited ? 1 : 0) - (rs.works[a].cited ? 1 : 0); });
     var empty = !rs.msgs.length;
     board.innerHTML =
       '<div class="rs-h">KPI in this conversation</div>' + (rs.kpis.length ? '<div class="rs-kpis">' + rs.kpis.map(rsKpiTile).join('') + '</div>' : '<div class="rs-empty">' + (empty ? 'Ask about a number and it appears here with its arrow and history.' : 'No indicator matched yet.') + '</div>') +
       '<div class="rs-h">Concepts</div>' + (cids.length ? '<div class="cn"><span class="cn-h">concepts</span>' + cids.slice(0, 24).map(function (id) { var c = rs.concepts[id]; return '<a class="cn-c" href="' + cnUrl(id) + '" target="_blank" rel="noopener" data-src="' + cnPay(c) + '">' + esc(cnName(c)) + '</a>'; }).join('') +
         (cids.length > 24 ? '<span class="cn-c more">all ' + cids.length + ' on the graph</span>' : '') + '<button type="button" class="cn-mg" data-ids="' + esc(cids.join(',')) + '" data-focus="' + esc(cids[0]) + '">graph</button></div>' : '<div class="rs-empty">The cloud grows with every question; the graph opens on the whole set.</div>') +
-      '<div class="rs-h">On the panel</div>' + (lks.length ? '<div class="rs-links">' + lks.map(function (k) { var l = rs.links[k]; return '<a href="enso.html' + esc(l.hash) + '" target="_blank" rel="noopener"><b>' + esc(l.kind) + '</b>' + esc(l.title) + ' ↗</a>'; }).join('') + '</div>' : '<div class="rs-empty">Risks, alerts and scenes the conversation touched — where to go and look.</div>') +
-      '<div class="rs-h">Works we parsed</div>' + (wks.length ? '<div class="rs-works">' + worksHtml(wks.slice(0, 6).map(function (id) { return rs.works[id]; })) + '</div>' : '<div class="rs-empty">Parsed papers attached to the same anchors.</div>') +
-      '<div class="rs-h">Summary of the conversation</div>' + (rs.summary.length ? '<div class="rs-sum"><ol>' + rs.summary.map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('') + '</ol></div>' : '<div class="rs-empty">One line per turn; “verify” sends the lines back to the model to check them against the sources.</div>') +
-      '<div class="rs-btns"><button type="button" class="rs-btn" data-rs="verify"' + (rs.msgs.length ? '' : ' disabled') + '>verify with the model</button><button type="button" class="rs-btn main" data-rs="save"' + (rs.msgs.length ? '' : ' disabled') + '>' + (rs.id ? 'saved ✓ · save again' : 'save this research') + '</button><button type="button" class="rs-btn" data-rs="copy"' + (rs.msgs.length ? '' : ' disabled') + '>copy as text</button><button type="button" class="rs-btn" data-rs="new">new research</button></div>' +
-      '<div class="rs-h">Saved research</div><div class="rs-saved">' + (rsSavedList().length ? rsSavedList().map(function (x) { return '<div class="it"><span class="t">' + esc(x.title) + '</span><span class="m">' + esc(x.saved) + ' · ' + x.n + ' turn' + (x.n > 1 ? 's' : '') + '</span><button type="button" class="rs-btn" data-rs="open" data-id="' + esc(x.id) + '">open</button><button type="button" class="rs-btn" data-rs="del" data-id="' + esc(x.id) + '">✕</button></div>'; }).join('') : '<div class="rs-empty">Nothing saved yet. Saved research lives in this browser; a server-side copy per user is the next step.</div>') + '</div>';
+      '<div class="rs-h">On the panel</div>' + (lks.length ? '<div class="rs-links">' + lks.map(function (k) { var l = rs.links[k]; return '<a href="enso.html' + esc(l.hash) + '" target="_blank" rel="noopener"' + (l.cited ? ' class="cited"' : '') + '><b>' + esc(l.kind) + '</b>' + esc(l.title) + (l.cited ? ' <i>cited</i>' : '') + ' ↗</a>'; }).join('') + '</div>' : '<div class="rs-empty">Risks, alerts and scenes the conversation touched — where to go and look.</div>') +
+      '<div class="rs-h">Works we parsed</div>' + (wks.length ? '<div class="rs-works">' + wks.slice(0, 6).map(function (id) { return rsWorkRow(rs.works[id]); }).join('') + '</div>' : '<div class="rs-empty">Parsed papers attached to the same anchors.</div>') +
+      '<div class="rs-h">Summary of the conversation</div>' + (rs.summary.length ? '<div class="rs-sum"><ol>' + rs.summary.map(function (l, i) { var v = (rs.verdicts || [])[i]; return '<li>' + esc(l) + (v && v.status ? ' <span class="rs-v ' + esc(v.status) + '" data-src="' + esc(JSON.stringify({ name: 'Checked by the model: ' + v.status, def: v.why || '' })) + '">' + esc(v.status) + '</span>' : '') + '</li>'; }).join('') + '</ol></div>' : '<div class="rs-empty">One line per turn; “verify” sends the lines back to the model to check them against the sources.</div>') +
+      '<div class="rs-btns"><button type="button" class="rs-btn" data-rs="verify"' + (rs.msgs.length && live ? '' : ' disabled') + '>verify with the model</button><button type="button" class="rs-btn main" data-rs="save"' + (rs.msgs.length ? '' : ' disabled') + '>' + (rs.id ? 'saved ✓ · save again' : 'save this research') + '</button><button type="button" class="rs-btn" data-rs="copy"' + (rs.msgs.length ? '' : ' disabled') + '>copy as text</button><button type="button" class="rs-btn" data-rs="new">new research</button><span class="rs-note"></span></div>' +
+      '<div class="rs-h">Saved research</div><div class="rs-saved"><div class="rs-empty">loading…</div></div>';
+    rsList(function (items) {
+      var host = board.querySelector('.rs-saved'); if (!host) return;
+      host.innerHTML = items.length ? items.map(function (x) { return '<div class="it"><span class="t">' + esc(x.title || 'research') + '</span><span class="m">' + esc(String(x.saved || '').slice(0, 16)) + (x.n ? ' · ' + x.n + ' turn' + (x.n > 1 ? 's' : '') : '') + (x.local ? ' · this browser' : '') + '</span><button type="button" class="rs-btn" data-rs="open" data-id="' + esc(x.id) + '"' + (x.local ? ' data-local="1"' : '') + '>open</button><button type="button" class="rs-btn" data-rs="del" data-id="' + esc(x.id) + '"' + (x.local ? ' data-local="1"' : '') + '>✕</button></div>'; }).join('')
+        : '<div class="rs-empty">' + (live ? 'Nothing saved yet. Saved research lives in your account (or this session) on the server, up to 50.' : 'Nothing saved yet. Without the server this browser keeps the copy.') + '</div>';
+    });
     board.addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('[data-rs]'); if (!b) return;
-      var op = b.getAttribute('data-rs');
-      if (op === 'save') { rsSave(rs); render(); }
+      var op = b.getAttribute('data-rs'), note = board.querySelector('.rs-note');
+      if (op === 'save') { b.textContent = 'saving…'; rsSave(rs, function (m) { if (note) note.textContent = m; render(); }); }
       else if (op === 'new') { S.rs = null; render(); }
       else if (op === 'copy') { var txt = rsExportText(rs); (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { b.textContent = 'copied ✓'; }, function () { window.prompt('Copy the text:', txt); }); }
-      else if (op === 'open') { var it = rsSavedList().filter(function (x) { return x.id === b.getAttribute('data-id'); })[0]; if (it) { S.rs = it.rs; render(); } }
-      else if (op === 'del') { var l = rsSavedList().filter(function (x) { return x.id !== b.getAttribute('data-id'); }); try { localStorage.setItem('b42_research', JSON.stringify(l)); } catch (x) { } render(); }
+      else if (op === 'open') rsOpen(b.getAttribute('data-id'), !!b.getAttribute('data-local'));
+      else if (op === 'del') rsDelete(b.getAttribute('data-id'), !!b.getAttribute('data-local'));
       else if (op === 'verify') {
-        if (!window.B42_RESEARCH_API) { b.textContent = 'needs /api/research (see the concept note)'; return; }
         b.textContent = 'verifying…';
-        fetch(window.B42_RESEARCH_API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ mode: 'verify', claims: rs.summary, lang: 'en' }) })
-          .then(function (r) { return r.json(); }).then(function (d) { rs.verdicts = d.verdicts || d.claims || []; rs.summary = rs.summary.map(function (l, i) { var v = rs.verdicts[i]; return v && v.status ? l + ' [' + v.status + ']' : l; }); render(); })
-          .catch(function () { b.textContent = 'verification failed'; });
+        rsPost({ mode: 'verify', lang: 'en', claims: rs.summary.slice(0, 40) }).then(function (d) {
+          if (d.error) { b.textContent = RS_ERR[d.error] ? 'not verified: ' + RS_ERR[d.error] : 'verification failed'; return; }
+          var V = d.verdicts || []; rs.verdicts = rs.summary.map(function (_, i) { return V.filter(function (v) { return v.n === i + 1; })[0] || V[i] || null; });
+          if (d.dayLeft != null) rs.left = { day: d.dayLeft, week: d.weekLeft };
+          render();
+        }).catch(function () { b.textContent = 'verification failed'; });
       }
     });
     // ── диалог
     var chat = el('div', 'rs-chat');
     var log = el('div', 'rs-log');
     log.innerHTML = (rs.msgs.length ? rs.msgs.map(function (m) {
-      return '<div class="rs-m q"><span class="rs-t">' + esc(m.t || '') + '</span>' + esc(m.q) + '</div><div class="rs-m a">' + (m.a || '') + (m.hits && m.hits.length ? '<div class="rs-hits">' + m.hits.slice(0, 5).map(function (h) { return '<span class="rs-hit"><b>' + esc(h.kind) + '</b>' + esc(h.title) + '</span>'; }).join('') + '</div>' : '') + '</div>';
-    }).join('') : '<div class="rs-m a"><p>Ask about the event in your own words. I look through the statements of this panel — risks, alerts, indicators, the glossary, the scenes and the concept register — and the board on the left fills with what the conversation touches.</p><p>Try: <i>why is the fuel at its record?</i> · <i>what do the models expect for winter?</i> · <i>what happens to food prices?</i> · <i>is the Gulf warmer than normal?</i></p>' +
-      (window.B42_RESEARCH_API ? '' : '<span class="demo">demo mode: no model behind the answers yet; the retrieval and the board are real, the model contour is specified in the concept note</span>') + '</div>');
+      return '<div class="rs-m q"><span class="rs-t">' + esc(m.t || '') + '</span>' + esc(m.q) + '</div><div class="rs-m a">' + (m.a || '') + (m.demo && m.hits && m.hits.length ? '<div class="rs-hits">' + m.hits.slice(0, 5).map(function (h) { return '<span class="rs-hit"><b>' + esc(h.kind) + '</b>' + esc(h.title) + '</span>'; }).join('') + '</div>' : '') + (m.needToken ? '<button type="button" class="rs-btn" data-rs-token="1">enter an access token</button>' : '') + '</div>';
+    }).join('') : '<div class="rs-m a"><p>Ask about the event in your own words. The question goes to the model with our own materials: the statements of this panel (risks, alerts, indicators, glossary, scenes, the news of the week, regions, the verdict) and the works we parsed. The answer carries marks that lead to the panel or to the work; the board on the left collects the numbers, concepts, scenes and papers involved, and keeps a summary you can verify and save.</p><p>Try: <i>is the event still growing or has it turned?</i> · <i>why is the fuel at its record?</i> · <i>what do the models expect for winter?</i> · <i>what happens to food prices?</i></p>' +
+      (live ? '' : '<span class="demo">demo mode on this server: no model behind the answers; the retrieval and the board are real, the answer service lives on the site</span>') + '</div>');
     var inp = el('div', 'rs-in');
     var ta = document.createElement('textarea'); ta.placeholder = 'Ask about the event…'; ta.rows = 2;
     var go = el('button', 'rs-btn main', 'Ask'); go.type = 'button';
@@ -2119,7 +2211,15 @@
     ta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } });
     inp.appendChild(ta); inp.appendChild(go);
     chat.appendChild(log); chat.appendChild(inp);
-    if (rs.left != null) chat.appendChild(el('div', 'rs-quota', 'questions left today: ' + rs.left));
+    var foot = el('div', 'rs-quota');
+    foot.innerHTML = (rs.left ? 'questions left: ' + esc(String(rs.left.day)) + ' today' + (rs.left.week != null ? ' · ' + esc(String(rs.left.week)) + ' this week' : '') + ' · ' : '') + (live ? (rsToken() ? 'access token in use · <a href="#" data-rs-token="1">change</a>' : 'no token: “not a robot” pass on every question · <a href="#" data-rs-token="1">enter a token</a>') : 'demo, no server');
+    chat.appendChild(foot);
+    chat.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-rs-token]'); if (!b) return;
+      e.preventDefault();
+      var t = window.prompt('Access token for the panel (issued for a period, with a daily allowance). Leave empty to remove:', rsToken() || '');
+      if (t !== null) { rsSetToken(t.trim()); render(); }
+    });
     wrap.appendChild(board); wrap.appendChild(chat);
     body.appendChild(wrap);
     requestAnimationFrame(function () { log.scrollTop = log.scrollHeight; if (!rs.msgs.length) ta.focus(); });

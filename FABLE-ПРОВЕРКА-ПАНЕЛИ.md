@@ -308,9 +308,12 @@ Ocean · Surface: аналоги боксов лежат аномалиями; �
 Пояса ERA5 (nh, sh, tropics, arctic, antarctic) — `sources.py` → `planet.py` → отдельный
 `planet-regions.json` (1,3 МБ, по требованию, `S.PLR`); новый пояс — три строки в этих трёх местах.
 Подсказки всплывают с задержкой 260 мс (`showT` в `initDock`); адрес `#risk/<id>` — сцена риска.
-Вкладка Research (прототип): корпус `rsCorpus` из уже загруженных json, поиск `rsSearch`,
-доска `viewResearch`, сохранение `b42_research`; контур модели — `window.B42_RESEARCH_API`
-(спецификация в `ИССЛЕДОВАНИЕ-ЧАТ-КОНЦЕПТ-2026-09-08.md`, раздел 3).
+Вкладка Research: на сайте живая ручка `/api/research` (`rsApi()`, на localhost — демо по
+`rsCorpus`/`rsSearch`); пропуск — токен `b42_tutor_token` или Turnstile (`rsPass`); ответ читает
+`rsRenderAnswer`/`rsMergeApi`; проверка — `mode: verify`; сохранение — D1 (`rsSave/rsList/
+rsOpen/rsDelete`, доска внутри первого хода), при отказе — браузер. Договор —
+`ЭЛЬНИНЬО-ЧАТ-ИССЛЕДОВАНИЕ-РУЧКА.md`. Проверять на проде с токеном: Turnstile в
+автоматическом браузере не проходит.
 Облако понятий: данные `data/enso/concepts.json` (ведущая сессия, `concepts_link.py --run`),
 вид — `conceptsHtml(anchors, full)` внутри подсказок (`fill`), ящика source/notes и сцен риска
 и региона; якорь карточки — атрибут `data-anchor`; якоря сцены — `SCENE_ANCHORS`. Новую карточку
