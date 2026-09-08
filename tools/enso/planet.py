@@ -34,6 +34,7 @@ sys.path.insert(0, str(HERE))
 ROOT = HERE.parents[1] / "data" / "enso"
 CACHE = ROOT / "planet"
 OUT = ROOT / "planet.json"
+OUT_R = ROOT / "planet-regions.json"   # пояса ERA5 отдельно: 1,3 МБ, панель берёт по требованию
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 ELNINO_YEARS = [1982, 1997, 2015, 2023, 2026]
 CLIM = (1981, 2010)
@@ -345,7 +346,11 @@ def build(verbose=True):
             doc["temperature"]["land_m"] = ncei_land_monthly(got["land_m"])
     except Exception as e:                                       # noqa: BLE001
         doc["errors"].append(f"land_m: {str(e)[:120]}")
-    for key, label in (("t2_world", "Land+ocean, 2 m (ERA5)"), ("sst_world", "Ocean, 60°S–60°N (OISST)")):
+    for key, label in (("t2_world", "Land+ocean, 2 m (ERA5)"), ("sst_world", "Ocean, 60°S–60°N (OISST)"),
+                       # пояса climatereanalyzer (владелец 08.09): те же суточные ряды ERA5, каждый год линией
+                       ("t2_nh", "Northern hemisphere, 2 m (ERA5)"), ("t2_sh", "Southern hemisphere, 2 m (ERA5)"),
+                       ("t2_tropics", "Tropics 23.5°S–23.5°N, 2 m (ERA5)"), ("t2_arctic", "Arctic 66.5–90°N, 2 m (ERA5)"),
+                       ("t2_antarctic", "Antarctic 90–66.5°S, 2 m (ERA5)")):
         try:
             blk = our_daily(key, label)
             if blk:
@@ -379,6 +384,11 @@ def build(verbose=True):
                    "global temperature and sea level over the whole history of measurement. Updated daily by the light "
                    "run wrapper, no model; every caption is a rule over the series itself.")
     doc["secs"] = int(time.time() - t0)
+    # пояса — в свой файл: planet.json грузится при старте панели, а пять суточных рядов с 1940
+    # года весят больше, чем всё остальное вместе
+    regions = {k: doc["temperature"].pop(k) for k in ("t2_nh", "t2_sh", "t2_tropics", "t2_arctic", "t2_antarctic") if k in doc["temperature"]}
+    OUT_R.write_text(json.dumps({"built": doc["built"], "temperature": regions, "elnino_years": ELNINO_YEARS}, ensure_ascii=False, allow_nan=False), encoding="utf-8")
+    doc["regions_file"] = "data/enso/planet-regions.json"; doc["regions_keys"] = list(regions.keys())
     OUT.write_text(json.dumps(doc, ensure_ascii=False, allow_nan=False), encoding="utf-8")
     try:
         import ops as OPSLOG

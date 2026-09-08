@@ -298,6 +298,8 @@ Ocean · Surface: аналоги боксов лежат аномалиями; �
 климатологию дня из самого ряда (`boxMetric`); `analogFor` не подмешивает чужие аналоги к
 рядам со своими. Long record: суша — CRUTEM5 годовой (`crutem`) и NOAA NCEI месячный (`land_m`, `chartYears` с
 `monthly:true`); суточной суши в открытых источниках нет (проверено 08.09: CR, Climate Pulse, Berkeley).
+Пояса ERA5 (nh, sh, tropics, arctic, antarctic) — `sources.py` → `planet.py` → отдельный
+`planet-regions.json` (1,3 МБ, по требованию, `S.PLR`); новый пояс — три строки в этих трёх местах.
 Подсказки всплывают с задержкой 260 мс (`showT` в `initDock`); адрес `#risk/<id>` — сцена риска.
 Вкладка Research (прототип): корпус `rsCorpus` из уже загруженных json, поиск `rsSearch`,
 доска `viewResearch`, сохранение `b42_research`; контур модели — `window.B42_RESEARCH_API`

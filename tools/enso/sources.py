@@ -43,6 +43,10 @@ SOURCES = {
     "t2_world":   ("https://climatereanalyzer.org/clim/t2_daily/json/era5_world_t2_day.json", "cr_json"),
     "t2_nh":      ("https://climatereanalyzer.org/clim/t2_daily/json/era5_nh_t2_day.json", "cr_json"),
     "t2_sh":      ("https://climatereanalyzer.org/clim/t2_daily/json/era5_sh_t2_day.json", "cr_json"),
+    # разбивка по поясам (владелец 08.09: «интересная разбивка, давай возьмём»): тропики и полюса
+    "t2_tropics":   ("https://climatereanalyzer.org/clim/t2_daily/json/era5_tropics_t2_day.json", "cr_json"),
+    "t2_arctic":    ("https://climatereanalyzer.org/clim/t2_daily/json/era5_arctic_t2_day.json", "cr_json"),
+    "t2_antarctic": ("https://climatereanalyzer.org/clim/t2_daily/json/era5_antarctic_t2_day.json", "cr_json"),
     "sst_world":  ("https://climatereanalyzer.org/clim/sst_daily/json_2clim/oisst2.1_world2_sst_day.json", "cr_json"),
     "sst_nino34": ("https://climatereanalyzer.org/clim/sst_daily/json_2clim/oisst2.1_nino3.4_sst_day.json", "cr_json"),
     "noaa_weekly": ("https://www.cpc.ncep.noaa.gov/data/indices/wksst9120.for", "noaa_weekly"),

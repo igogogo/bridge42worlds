@@ -4588,8 +4588,15 @@
       }
       caps.push('Sea ice extent from passive microwave satellites since October 1978 (NSIDC Sea Ice Index, version 4). Every year is a line; the current year in ochre, El Niño onset years by their dashes, the 1981–2010 median dashed grey. Click a legend entry to fade the rest. Days before 1988 were measured every other day and are filled in between.');
     } else if (k === 'temperature') {
-      var tk = pickRow([['t2_world', 'Land+ocean, daily'], ['sst_world', 'Ocean, daily'], ['land_m', 'Land, monthly'], ['hadcrut', 'Global, annual since 1850'], ['crutem', 'Land, annual since 1850']], 'planetTemp', 't2_world');
-      var T2 = (PL.temperature || {})[tk], annual = tk === 'hadcrut' || tk === 'crutem';
+      var RK = PL.regions_keys || [];
+      var tk = pickRow([['t2_world', 'Land+ocean, daily'], ['sst_world', 'Ocean, daily'], ['land_m', 'Land, monthly'], ['t2_nh', 'N. hemisphere, daily'], ['t2_sh', 'S. hemisphere, daily'], ['t2_tropics', 'Tropics, daily'], ['t2_arctic', 'Arctic, daily'], ['t2_antarctic', 'Antarctic, daily'], ['hadcrut', 'Global, annual since 1850'], ['crutem', 'Land, annual since 1850']].filter(function (o) { return (PL.temperature || {})[o[0]] || RK.indexOf(o[0]) >= 0; }), 'planetTemp', 't2_world');
+      /* Пояса лежат в своём файле (1,3 МБ) и берутся по первому запросу (владелец 08.09: «интересная разбивка, давай возьмём»). */
+      if (RK.indexOf(tk) >= 0 && !S.PLR) {
+        if (!S._plrLoad) { S._plrLoad = get('/data/enso/planet-regions.json').then(function (d) { S.PLR = d; if (S.view === 'planet') render(); }).catch(function () { S.PLR = { temperature: {} }; if (S.view === 'planet') render(); }); }
+        body.appendChild(el('div', 'note', 'Loading the regional series…'));
+        return;
+      }
+      var T2 = RK.indexOf(tk) >= 0 ? ((S.PLR || {}).temperature || {})[tk] : (PL.temperature || {})[tk], annual = tk === 'hadcrut' || tk === 'crutem';
       if (T2 && T2.monthly) {
         /* Суша по месяцам, каждый год линией — как суточные ряды, только двенадцать точек в году
            (владелец 08.09: «аналогично Ocean, daily»; суточной суши в открытых источниках нет). */
@@ -5422,7 +5429,7 @@
     food: { source: 'FAO Food Price Index monthly, World Bank Pink Sheet monthly commodity prices, FAOSTAT dietary shares for the weights, our own onset dates for past events.',
       plain: 'What food prices are doing: the world index, twelve commodities by name in dollars per tonne, and how each moved after the start of past events. A rise in time with the event is not proof of cause.',
       tech: 'Paths after onset are percentages of the onset-month price; in dollars they are scaled through the onset or today’s price; weights 1–5 order the alerts; the bundle uses a log scale; series are nominal, not inflation-adjusted.' },
-    planet: { source: 'NOAA GML greenhouse gases, NSIDC sea ice index v4, Met Office HadCRUT5 (global) and CRUTEM5 (land), NOAA NCEI land monthly, NOAA STAR sea level, and our own daily series drawn year by year.',
+    planet: { source: 'NOAA GML greenhouse gases, NSIDC sea ice index v4, Met Office HadCRUT5 (global) and CRUTEM5 (land), NOAA NCEI land monthly, NOAA STAR sea level, and the daily ERA5 and OISST series from climatereanalyzer (world, hemispheres, tropics, Arctic, Antarctic, ocean) drawn year by year.',
       plain: 'The long record behind the event: gases in the air, ice at both poles, the planet’s temperature and sea level, decades at a glance. The El Niño years and the years after them are highlighted.',
       tech: 'Annual and daily series are shown against their own baselines as stated on each chart; CO₂ uses the trend column of the GML file; sea level has no glacial isostatic adjustment.' },
     how: { source: 'Written by hand: glossary, method notes and the release calendar of every source.',
