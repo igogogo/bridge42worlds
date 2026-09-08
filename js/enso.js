@@ -1919,7 +1919,6 @@
     /* ⛶ у любой сцены, справа от back (владелец 07.09) */
     var narrowFb = window.matchMedia('(max-width:700px)').matches;
     var fb = el('button', 'back-go bright', S.full ? (narrowFb ? '✕' : '✕ full screen') : '⛶'); fb.type = 'button'; fb.title = S.full ? 'back to three columns (Esc)' : 'this scene full screen';
-    if (!(S._back && S.view !== 'overview') && !(S._navN > 0)) fb.style.marginLeft = 'auto';
     fb.onclick = function () { S.full = !S.full; render(); };
     if (globeMode()) {
       var gb = el('button', 'back-go bright' + (S.globe ? ' on' : ''), S.globe ? '🌐 flat' : '🌐 globe'); gb.type = 'button';
@@ -1929,6 +1928,14 @@
     }
     top.appendChild(fb);
     head.appendChild(top);
+    /* Владелец 08.09: «source и notes в подменю первой строкой слева, справа back, globe,
+       потом со следующей строки само подменю». Заголовок остаётся один в своей строке;
+       кнопки уходят в строку управления, source/notes в неё же вешает sceneInfoBar. */
+    var ctl = el('div', 'stage-ctl'), nav = el('div', 'ctl-nav');
+    ctl.appendChild(el('div', 'seg ctl-info'));
+    [].slice.call(top.querySelectorAll('.back-go')).forEach(function (b) { nav.appendChild(b); });
+    ctl.appendChild(nav);
+    head.appendChild(ctl);
     requestAnimationFrame(fitStageTitle); setTimeout(fitStageTitle, 120);
     if (segs2 && segs2.length) {
       var seg = el('div', 'seg');
@@ -4600,7 +4607,8 @@
      и разбор (формула, детекторы, оговорки) — за двумя переключателями в строке подменю, а
      ссылка на работы — кнопкой в правом нижнем углу, как на карточках. Механизм общий. */
   function infoToggles(row, items) {
-    row.appendChild(el('span', 'seg-gap', ''));
+    var ci = document.querySelector('.stage-head .ctl-info');   // с 08.09 кнопки живут в строке управления
+    if (ci) row = ci; else row.appendChild(el('span', 'seg-gap', ''));
     items.forEach(function (it) {
       var b = el('button', (S.sub.info === it.key ? 'on' : '') + ' sq', it.label + (S.sub.info === it.key ? ' ▴' : ' ▾'));
       b.type = 'button'; b.onclick = function () { S.sub.info = S.sub.info === it.key ? null : it.key; render(); };
@@ -4831,6 +4839,8 @@
     if (lo0 > lo1) return { type: 'MultiPolygon', coordinates: [[ring(lo0, 179.99)], [ring(-179.99, lo1)]] };
     return { type: 'Polygon', coordinates: [ring(lo0, lo1)] };
   }
+  /* Шрифт подписей на шаре знает только ASCII: «Niño» ломалось (владелец 08.09), ° тоже. */
+  function gl(t) { return String(t).replace(/ñ/g, 'n').replace(/Ñ/g, 'N').replace(/°/g, '').replace(/−/g, '-').replace(/[^\x20-\x7e]/g, ''); }
   function mountGlobe(mode) {
     var body = document.querySelector('.stage-body'); if (!body) return;
     var plot = body.querySelector('.plot');
@@ -4860,8 +4870,9 @@
         .polygonStrokeColor(function () { return '#f2e9d8'; })
         .polygonAltitude(0.008)
         .polygonLabel(function (d) { return '<div style="font:12px/1.4 system-ui;padding:4px 6px;background:rgba(20,24,32,.9);color:#eee;border-radius:6px"><b>' + esc(d.b.label) + '</b><br>' + esc(d.b.text || '') + (d.b.date ? '<br><small>' + esc(d.b.date) + '</small>' : '') + '</div>'; })
-        .labelsData(polys.map(function (b) { var lc = (b.lon[0] + b.lon[1]) / 2; if (lc > 180) lc -= 360; return { lat: (b.lat[0] + b.lat[1]) / 2, lng: lc, text: b.label.replace(/^Satellite: /, '') + (fin(val(b)) ? ' ' + (mode === 'rain' ? val(b) + ' %' : fnum(val(b), 1) + (mode === 'radiance' ? ' %' : ' °C')) : '') }; }))
-        .labelSize(1.1).labelColor(function () { return '#f2e9d8'; }).labelDotRadius(0).labelAltitude(0.012);
+        .labelsData(polys.map(function (b) { var lc = (b.lon[0] + b.lon[1]) / 2; if (lc > 180) lc -= 360; return { lat: (b.lat[0] + b.lat[1]) / 2, lng: lc, sz: 1.1, text: gl(b.label.replace(/^Satellite: /, '') + (fin(val(b)) ? '  ' + (mode === 'rain' ? val(b) + ' %' : fnum(val(b), 1) + (mode === 'radiance' ? ' %' : ' C')) : '')) }; })
+          .concat(mode === 'moorings' ? (G.moorings || []).map(function (m) { return { lat: m.lat + 1.2, lng: m.lon, sz: 0.7, text: gl((m.label || m.id || '').replace(/^TAO /, '') + (fin(m.value) ? '  ' + fnum(m.value, 1) + ' C at ' + m.depth + ' m' : '')) }; }) : []))
+        .labelSize(function (d) { return d.sz; }).labelColor(function () { return '#f2e9d8'; }).labelDotRadius(0).labelAltitude(0.012);
       if (mode === 'moorings') {
         g.pointsData(G.moorings || []).pointLat('lat').pointLng('lon')
           .pointAltitude(function (d) { return fin(d.value) ? 0.02 + d.value / 60 : 0.02; })
@@ -4939,15 +4950,144 @@
     about: { source: 'Written by hand.', plain: 'What this panel is, who writes what, and how to read it.', tech: 'The division of labour: rules compute, DeepSeek writes the verdict, Claude checks it, a person runs the updates and publishes.' }
   };
 
+  /* ПЛАШКИ KPI: ПРОСТОЕ ОБЪЯСНЕНИЕ (владелец 08.09: «простое объяснение к плашкам KPI»).
+     Ключ — подпись плашки (текст .kn до « · », без дат и чисел) или её термин; кнопка «?»
+     раскрывает абзац человеческими словами. Подписи без записи в словаре кнопки не получают. */
+  var KPI_PLAIN = {
+    'same 30 days in our years': 'The same calendar days in each of our reference events, so this year is compared like with like.',
+    'who wrote and who checked': 'Who produced the readings on this page and who checked them afterwards.',
+    'who publishes most': 'The outlet that has written most about the event in our mentions feed over the window.',
+    'where the past events went': 'What this same reading did next in the strongest past events after this point of the calendar.',
+    'warmest anomaly': 'The warmest water under the surface in this frame of the film, and how deep it sits.',
+    'verdicts stored': 'How many links between a claim on the panel and a parsed work have been judged and kept.',
+    'upper-ocean heat, 0–300 m': 'Heat stored in the top 300 m of the equatorial Pacific: the fuel an El Niño draws on.',
+    'this calendar year': 'The value accumulated since 1 January of this year.',
+    'the box': 'The rectangle of sea or land we average over; its corners are named in the source.',
+    'sun in the window': 'Solar activity over the same days, shown for completeness; it does not drive El Niño.',
+    'strongest rise, year on year': 'The food group whose price rose most against the same month a year earlier.',
+    'scenario in force': 'Which of the three scenarios (base, strong, record) the data currently support.',
+    'same window, our years': 'The same span of days in the reference years, for a like-for-like comparison.',
+    'same month in our years': 'The same month in the reference years, for a like-for-like comparison.',
+    'same window': 'The same span of days in that year.',
+    'records and cusum': 'How many days set a record for their date, and whether the running sum of surprises has crossed its alarm line.',
+    'record days': 'Days when the reading was the highest ever seen on that date.',
+    'rain, last 30 days': 'Rain that fell over the region in the last 30 days, against what is normal for these dates.',
+    'rain since': 'Rain accumulated since the start of the wet season, against normal.',
+    'planet': 'The whole-planet value for the latest month from the global dataset.',
+    'peak of the charge': 'The highest the ocean fuel reading reached while the event was charging.',
+    'moorings live': 'How many of the equatorial buoys are reporting; the silent ones are named.',
+    'lead over the surface': 'How far the water below has run ahead of the surface: a warm layer at depth reaches the surface later.',
+    'last day': 'The latest daily value we hold.',
+    'last 90 days': 'The mean of the last 90 days against the same dates in past years.',
+    'last 30 days to': 'The mean of the last 30 days, ending on the date shown.',
+    'last 30 days': 'The mean of the last 30 days against the same dates in past years.',
+    'languages': 'How many languages the mentions feed covers.',
+    'lag': 'How far the forecast trails behind what the ocean has already done.',
+    'hottest day this year': 'The hottest day of this year in the region, with its date.',
+    'heat, 0–700 m': 'Heat stored in the top 700 m of the world ocean: a slow reading that moves over years.',
+    'heat, 0–2000 m': 'Heat stored in the top 2000 m of the world ocean: the slowest and steadiest reading on the panel.',
+    'frames': 'How many monthly frames the film holds.',
+    'forecast +14 days': 'Where the reading is expected in two weeks if it keeps following its analogue years.',
+    'days above 35 °c': 'How many days this year the air over the region passed 35 °C.',
+    'bursts, 120 days': 'How many westerly wind bursts the last 120 days held; a burst pushes warm water east.',
+    'burst window': 'The span of days we scan for westerly wind bursts.',
+    'amplitude': 'How strong the MJO pulse is; below 1 it is too weak to matter.',
+    'air over the region, last day': 'The air temperature over the region on the latest day, against normal for the date.',
+    'against the mean of past years': 'This year’s value minus the average of the reference years over the same window.',
+    'wikipedia, english': 'How much attention the event gets on English Wikipedia over the window.',
+    'gpcp, last month': 'Global rain for the last complete month from the satellite-and-gauge dataset.',
+    'warm water volume': 'How much warm water sits above the 20 °C surface along the equator: the fuel gauge of an El Niño.',
+    'last week': 'Westerly wind over the last week; a strong westerly burst pushes warm water east.',
+    'noaa weekly': 'NOAA’s official weekly sea-surface anomaly for the zone.',
+    'event type': 'Whether the warmest water sits in the east (canonical) or the centre (Modoki) of the Pacific.',
+    'warmest layer': 'The warmest anomaly under the mooring and the depth it sits at.',
+    'mooring': 'One equatorial buoy: its latest reading down the water column.',
+    'upper 300 m': 'Mean temperature anomaly of the top 300 m along the equator.',
+    'roni': 'ONI with the global warming trend removed: the El Niño signal on its own.',
+    'risk index': 'Our 0–100 score of how strong and how certain the event is, built from the readings on this panel.',
+    'oni official': 'The official three-month mean of Niño 3.4: the number NOAA declares El Niño by.',
+    'daily oisst': 'The daily satellite-and-buoy sea-surface temperature for the zone.',
+    'phase today': 'Where the MJO pulse sits today on its trip around the tropics.',
+    'mei v2': 'A combined index of sea temperature, pressure, wind and cloud: El Niño read from five signs at once.',
+    'indian ocean dipole': 'The temperature difference between the west and east Indian Ocean; a positive dipole often comes with El Niño.',
+    'gulf today': 'The sea surface of the Gulf today, against normal for the date.',
+    'food-security weight': 'The weight we give the region in food-security terms.',
+    'fao food price index': 'The FAO index of world food prices, where 2014–2016 = 100.',
+    'energy imbalance': 'How much more energy the planet takes in than it sends back to space, from the literature.',
+    '20 °c isotherm': 'The depth of the 20 °C water: the boundary between the warm upper layer and the cold below.',
+    'm ≥ 4.5 in the window': 'Earthquakes of magnitude 4.5 and above in the zone over the window; shown beside the climate rows, not as a cause.',
+    'this event, today': 'Where this event stands today.',
+    'at the same date in': 'The same reading at the same date in that past event.',
+    'warmest at': 'The warmest water at that depth in this month of the film.',
+    'deepest thermocline anomaly': 'How far the warm-cold boundary has been pushed down this month.',
+    'clear sky': 'The share of satellite scenes with no cloud, last 14 days.',
+    'deep convection': 'The share of satellite scenes with very cold cloud tops: tall storm clouds.',
+    'walker': 'The contrast between the east and west of the Pacific as the satellite sees it; near zero means the storms moved east.',
+    'southern oscillation index': 'The air-pressure difference between Tahiti and Darwin; strongly negative means El Niño.',
+    'convection at the date line (olr)': 'Heat radiated to space near the date line; low values mean tall storm clouds have moved to the centre of the Pacific.',
+    'trade wind, western pacific': 'Strength of the easterly trade winds in the west; weaker or reversed trades let warm water flow east.',
+    'trade wind, central pacific': 'Strength of the easterly trade winds in the centre; weaker or reversed trades let warm water flow east.',
+    'niño 3.4 weekly': 'NOAA’s official weekly sea-surface anomaly for the central Pacific zone: the standard El Niño gauge.',
+    'niño 3.4 daily box': 'Our own daily mean of the central Pacific zone from the satellite-and-buoy dataset.',
+    'niño 3.4': 'Sea surface of the central Pacific zone: the standard El Niño gauge.',
+    'niño 3': 'Sea surface of the east-central zone, between the centre and the coast.',
+    'niño 1+2': 'Sea surface off the coast of Peru: the first zone to warm in an eastern event.',
+    'niño 4': 'Sea surface of the western zone, where the warm pool normally sits.',
+    'gulf': 'Sea surface of the Gulf against normal for the date.',
+    'the gulf': 'Sea surface of the Gulf against normal for the date.',
+    'world ocean': 'The mean sea-surface anomaly of the whole world ocean.',
+    'models': 'How many forecast models have fallen below what the ocean already did.',
+    'fuel': 'Warm water stored above the 20 °C surface along the equator: the fuel of the event.',
+    'under the surface': 'The warmest anomaly below the surface and its depth: what will surface later.',
+    'wind bursts': 'Westerly wind bursts in the last months; each pushes warm water east.',
+    'food index': 'The FAO index of world food prices, 2014–2016 = 100.',
+    'core vs 1997': 'How the central Pacific compares with the same date in the 1997–98 event.',
+    'raw walker': 'The east-west contrast the satellite sees at the top of the atmosphere; near zero means the storms moved east.',
+    'rain, planet': 'Global rain for the last complete month against normal.',
+    'driest region, 30 d': 'The region of ours with the least rain against normal over the last 30 days.',
+    'peru coast, air': 'Air temperature over the coast of Peru against normal.',
+    'spectral watch': 'Whether any daily series shows a 2–7 day rhythm over the last 30 days: watched, not assumed.',
+    'in the news': 'How much the event is written about, from our mentions feed.',
+    'co₂': 'Carbon dioxide in the air at Mauna Loa, the latest month; it does not follow El Niño week by week.',
+    'ch₄': 'Methane in the air, the latest month from the global network.',
+    'n₂o': 'Nitrous oxide in the air, the latest month from the global network.'
+  };
+  function kpiKey(kn) {
+    var t = kn.querySelector('[data-term]'), cands = [];
+    if (t) cands.push((t.textContent || '').toLowerCase().trim());
+    var txt = (kn.textContent || '').normalize('NFC').replace(/\u00a0/g, ' ').replace(/\?$/, '').toLowerCase();
+    cands.push(txt.trim()); txt.split(' · ').forEach(function (p) { cands.push(p.replace(/\b(19|20)\d\d\b/g, '').trim()); });
+    var keys = Object.keys(KPI_PLAIN).sort(function (a, b) { return b.length - a.length; });
+    for (var i = 0; i < cands.length; i++) {
+      var c = cands[i]; if (!c) continue;
+      if (KPI_PLAIN[c]) return c;
+      for (var k = 0; k < keys.length; k++) if (c.indexOf(keys[k]) === 0) return keys[k];
+    }
+    return null;
+  }
+  function kpiExplain() {
+    [].slice.call(document.querySelectorAll('.stage-body .kpi, .stage-body .ov-kpi')).forEach(function (card) {
+      var kn = card.querySelector('.kn'); if (!kn || kn.querySelector('.kq')) return;
+      var key = kpiKey(kn); if (!key) return;
+      var q = el('button', 'kq', '?'); q.type = 'button'; q.title = 'what this number means';
+      q.onclick = function () {
+        var open = S.sub.kpiOpen === key ? null : key; S.sub.kpiOpen = open;
+        [].slice.call(document.querySelectorAll('.stage-body .kp')).forEach(function (x) { x.remove(); });
+        [].slice.call(document.querySelectorAll('.stage-body .kq.on')).forEach(function (x) { x.classList.remove('on'); });
+        if (open) { q.classList.add('on'); card.insertBefore(el('div', 'kp', esc(KPI_PLAIN[key])), card.querySelector('.kj') || null); }
+      };
+      kn.appendChild(q);
+      if (S.sub.kpiOpen === key) { q.classList.add('on'); card.insertBefore(el('div', 'kp', esc(KPI_PLAIN[key])), card.querySelector('.kj') || null); }
+    });
+  }
   function sceneInfoBar() {
     var view = S.view === 'gulf' ? 'regions' : (S.view === 'risk' ? 'now' : S.view), info = SCENE_INFO[view];
     var head = document.querySelector('.stage-head'), body = document.querySelector('.stage-body');
     if (!info || !head || !body || body.getAttribute('data-own-info') || body.querySelector('button[data-info]')) return;
-    var seg = head.querySelector('.seg'); if (!seg) { seg = el('div', 'seg'); head.appendChild(seg); }
+    var seg = head.querySelector('.ctl-info'); if (!seg) { seg = el('div', 'seg ctl-info'); head.appendChild(seg); }
     // подписи сцены уходят в технический разбор
     var caps = [].slice.call(body.querySelectorAll('.cap')).map(function (c) { c.hidden = true; return c.innerHTML; }).filter(Boolean);
     var open = S.sub.info, mode = S.sub.noteMode || 'plain';
-    seg.appendChild(el('span', 'seg-gap', ''));
     [['source', 'source'], ['notes', 'notes']].forEach(function (o) {
       var b = el('button', (open === o[0] ? 'on' : '') + ' sq', o[1] + (open === o[0] ? ' ▴' : ' ▾')); b.type = 'button'; b.setAttribute('data-info', o[0]);
       b.onclick = function () { S.sub.info = S.sub.info === o[0] ? null : o[0]; render(); };
@@ -5264,6 +5404,7 @@
     else if (S.view === 'how') viewHow();
     else viewNow();
     sceneInfoBar();                          // source / notes на каждой сцене (08.09)
+    kpiExplain();                            // «?» на плашках KPI (08.09)
     if (S.globe && globeMode()) mountGlobe(globeMode());
     // Сцена собрана целиком — только теперь у рамки графика окончательная высота.
     redrawPlot();
