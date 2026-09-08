@@ -1659,7 +1659,7 @@
     return out.sort(function (a, b) { return (b.score || 0) - (a.score || 0); });
   }
   function cnAnchor(cands) { for (var i = 0; i < cands.length; i++) if (conceptsFor(cands[i]).length) return cands[i]; return cands[0] || ''; }
-  function cnName(c) { var l = cnLang(), n = (l === 'ru' && c.name_ru) ? c.name_ru : (c.name_en || c.id); return n.charAt(0).toUpperCase() + n.slice(1); }
+  function cnName(c) { var l = cnLang(); return (l === 'ru' && c.name_ru) ? c.name_ru : (c.name_en || c.id); }
   function cnUrl(id) { return '/lang/' + cnLang() + '/concepts/' + encodeURIComponent(id) + '.html'; }
   function cnGraph(ids, focus) { return '/lang/' + cnLang() + '/concepts/graph.html?set=' + ids.map(encodeURIComponent).join(',') + '&focus=' + encodeURIComponent(focus || ids[0]); }
   /* Строка чипов: до семи понятий, дальше «all N» на граф; в конце одна ссылка на граф набора. */
@@ -2230,8 +2230,8 @@
         (r.since_event ? 'Since the event began (' + r.since_event.d + '): ' + jval(r.since_event.v, dg) + '. ' : '') +
         ((r.entries || []).length > 1 ? 'We hold ' + r.entries.length + ' changes of this value.'
           : 'This is the first reading we hold.'),
-      src: r.src || '', date: last ? last.d : '' };
-    out += '<div class="jsrc"><span data-src="' + esc(JSON.stringify(srcPay)) + '">' + mark(r.src || '') +
+      src: r.src || '', date: last ? last.d : '', lk: 'kpi:' + k };   // якорь облака понятий (08.09)
+    out += '<div class="jsrc" data-kpi="' + esc(k) + '"><span data-src="' + esc(JSON.stringify(srcPay)) + '">' + mark(r.src || '') +
       (last ? ' · ' + dt(last.d) : '') + '</span>' +
       '<button type="button" class="jh" data-hist="' + esc(k) + '">history</button>' + dateBadge(k) + '</div>';
     return out + '</div>';
@@ -5158,7 +5158,9 @@
   function kpiExplain() {
     [].slice.call(document.querySelectorAll('.stage-body .kpi, .stage-body .ov-kpi')).forEach(function (card) {
       var kn = card.querySelector('.kn'); if (!kn) return;
-      var tk = kn.querySelector('[data-term]'); if (tk && !card.getAttribute('data-anchor')) card.setAttribute('data-anchor', 'term:' + tk.getAttribute('data-term'));
+      var kj = card.querySelector('.jsrc[data-kpi]'), tk = kn.querySelector('[data-term]');
+      if (kj && conceptsFor('kpi:' + kj.getAttribute('data-kpi')).length) card.setAttribute('data-anchor', 'kpi:' + kj.getAttribute('data-kpi'));
+      else if (tk && !card.getAttribute('data-anchor')) card.setAttribute('data-anchor', 'term:' + tk.getAttribute('data-term'));
       if (kn.querySelector('.kq')) return;
       var key = kpiKey(kn); if (!key) return;
       var q = el('button', 'kq', '?'); q.type = 'button'; q.title = 'what this number means';
