@@ -17,7 +17,7 @@
     'use strict';
 
     var ANSWERS_IN_MARKUP = false;         // см. комментарий выше
-    var SITE = 'https://bridge42worlds.com';
+    var SITE = 'https://bridge42worlds.academy';
 
     var ORG = {
         '@type': 'Organization',
