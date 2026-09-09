@@ -1029,14 +1029,45 @@
     POS.forEach(function (p) { [p.lo, p.hi, p.todate].forEach(function (v) { if (fin(v)) all.push(v); }); });
     if (LF) all.push(LF.value);
     var vmin = Math.min.apply(null, all) - .2, vmax = Math.max.apply(null, all) + .2;
-    var cols = W >= 980 ? 6 : (W >= 700 ? 5 : (W >= 460 ? 4 : 3)), gap = 6, top0 = 16;
-    var rows = Math.ceil(names.length / cols), cw = (W - gap * (cols - 1)) / cols, ch = (H - top0 - gap * (rows - 1)) / rows;
+    var cols = W >= 980 ? 6 : (W >= 700 ? 5 : (W >= 460 ? 4 : (W >= 380 ? 3 : 2))), gap = 6, top0 = 16;
+    var rows = Math.ceil(names.length / cols);
+    /* НА ТЕЛЕФОНЕ МОЗАИКЕ НУЖНА СВОЯ ВЫСОТА (владелец 09.09: «посмотри, как выглядит на
+       телефоне»). Поле графика ростом 220 px делило девять рядов по 17 px: имя, подписи
+       сезонов и «peak» ложились друг на друга. Квадратик не может быть ниже 76 px — если
+       поле меньше нужного, просим его подрасти, и наблюдатель размера перерисовывает нас
+       уже в полный рост. Проверка «меньше нужного» не даёт зациклиться. */
+    var need = top0 + rows * 76 + (rows - 1) * gap;
+    if (S.plotEl && H < need - 2) { S.plotEl.style.minHeight = need + 'px'; }
+    var cw = (W - gap * (cols - 1)) / cols, ch = (Math.max(H, need) - top0 - gap * (rows - 1)) / rows;
+    H = Math.max(H, need);
     var fi0 = latest.seasons.map(function (sn, i) { return sn.indexOf('OBS') < 0 && Object.keys(latest.models).some(function (nm) { return fin(latest.models[nm].values[i]); }) ? i : -1; }).filter(function (i) { return i >= 0; })[0];
     var td = fi0 != null ? seasonTodate(latest.seasons[fi0], issueYear(latest.issued)) : null, ref = td ? td.value : obs;
     var COLC = { broke: 'var(--lv5)', lag: 'var(--lv3)', ok: 'var(--nina)', none: 'var(--soft)' };
     var s2 = svgOpen(W, H) + '<text class="tt" x="0" y="11">' + fitText(esc(names.length + ' models, issues ' + issues.map(function (r) { return r.issued; }).join(' → ') + '; dashed: ' + (td ? td.season + ' lived so far ' + fnum(ref) : 'now ' + fnum(ref)) + ' °C; frame colour: broken / lagging / keeping up; hover a square for the model card'), W, 11) + '</text>';
     var livedS = POS.map(function (p) { return p.season; }).concat(LF ? [LF.season] : []);
-    var lab = cw < 260 ? seas.filter(function (sn, i) { return livedS.indexOf(sn) >= 0 || (i % 3 === 0 && livedS.indexOf(seas[i + 1]) < 0 && livedS.indexOf(seas[i - 1]) < 0); }) : seas;
+    /* ПОДПИСИ СЕЗОНОВ НЕ НАЛЕЗАЮТ ДРУГ НА ДРУГА. Считать «каждую третью» бесполезно: соседние
+       сезоны JJA-JAS-ASO все прожиты, и на узком квадратике их три подписи слипались в
+       «JJAJASASO». Теперь место меряется: сначала ставим важные (прожитые и края), потом
+       заполняем остальными, и только если между ними хватает пикселей. */
+    /* Ширина подписи меряется по правде: у нашего моноширинного знак ≈ 0,86 кегля, три знака
+       при 7,5 px это 19 px, а не 14, как считала прикидка — оттого «JJA» и «ASO» и слипались. */
+    var fsS = cw < 150 ? 7 : 7.5, labW = fsS * .86 * 3, pwL = cw - 12;
+    var xOf = function (i) { return 6 + i / Math.max(1, seas.length - 1) * pwL; };
+    // край подписи зависит от привязки: крайние жмутся к краям, остальные центрируются
+    var ancOf = function (i) { return i === 0 ? 'start' : (i === seas.length - 1 ? 'end' : 'middle'); };
+    var spanOf = function (i) { var x = xOf(i), a = ancOf(i); return a === 'start' ? [x, x + labW] : (a === 'end' ? [x - labW, x] : [x - labW / 2, x + labW / 2]); };
+    /* Очередь важности: сначала сезон, который мы живём (он и есть ответ «где мы»), потом
+       конец горизонта, потом прожитый целиком и остальные прожитые, потом край. Промежутки
+       заполняются остальными сезонами, но каждый ставится, только если не задевает соседей. */
+    var rank = function (sn) { return best && sn === best.season ? 0 : (livedS.indexOf(sn) >= 0 ? 2 : 9); };
+    var kept = [], pri = [], oth = [];
+    seas.forEach(function (sn, i) { (rank(sn) < 9 || i === 0 || i === seas.length - 1 ? pri : oth).push(i); });
+    pri.sort(function (a, b) { return (rank(seas[a]) - (a === seas.length - 1 ? .5 : 0)) - (rank(seas[b]) - (b === seas.length - 1 ? .5 : 0)); });
+    pri.concat(oth).forEach(function (i) {                    // остальные — только если реально влезают
+      var a = spanOf(i);
+      if (kept.every(function (j) { var b = spanOf(j); return a[0] > b[1] + 5 || a[1] < b[0] - 5; })) kept.push(i);
+    });
+    var lab = kept.sort(function (a, b) { return a - b; }).map(function (i) { return seas[i]; });
     names.forEach(function (nm, k) {
       var c = k % cols, rr = Math.floor(k / cols), x0 = c * (cw + gap), y0 = top0 + rr * (ch + gap);
       var cls = (CL[nm] || {}).cls || 'none', picked = pickedModel(nm, cls), dim = S.pick && !picked;
@@ -1044,12 +1075,13 @@
       var X = function (i) { return Lp + i / Math.max(1, seas.length - 1) * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
       s2 += '<g data-pick="' + esc(nm) + '" data-src="' + esc(JSON.stringify(modelPay(nm))) + '" style="cursor:pointer" opacity="' + (dim ? .42 : 1) + '">';
       s2 += '<rect x="' + x0 + '" y="' + y0 + '" width="' + cw.toFixed(1) + '" height="' + ch.toFixed(1) + '" rx="6" style="fill:var(--ink);stroke:' + COLC[cls] + '" fill-opacity="' + (picked ? '.2' : (dim ? '.02' : '.06')) + '" stroke-width="' + (picked ? 2.6 : 1.2) + '" stroke-opacity="' + (picked ? 1 : (dim ? .45 : .9)) + '"/>';
-      s2 += '<text x="' + (x0 + 6) + '" y="' + (y0 + 11) + '" font-size="' + (picked ? 10.5 : 9.5) + '" style="fill:' + COLC[cls] + ';font-weight:700" opacity="' + (picked ? 1 : (dim ? 1 : .85)) + '">' + esc(nm) + '</text>';
+      var fsN = cw < 150 ? 8 : (picked ? 10.5 : 9.5), maxCh = Math.max(6, Math.floor((cw - 46) / (fsN * .62)));
+      s2 += '<text x="' + (x0 + 6) + '" y="' + (y0 + 11) + '" font-size="' + fsN + '" style="fill:' + COLC[cls] + ';font-weight:700" opacity="' + (picked ? 1 : (dim ? 1 : .85)) + '">' + esc(nm.length > maxCh ? nm.slice(0, maxCh - 1) + '…' : nm) + '</text>';
       // подписи сезонов внизу квадратика; прожитые — цветом события
       lab.forEach(function (sn) {
-        var i = seas.indexOf(sn), xi = X(i), anc = i === 0 ? 'start' : (i === seas.length - 1 ? 'end' : 'middle');
+        var i = seas.indexOf(sn), xi = X(i), anc = ancOf(i);
         var lived = POS.some(function (p) { return p.season === sn; }) || (LF && LF.season === sn);
-        s2 += '<text x="' + xi.toFixed(1) + '" y="' + (y0 + ch - 4).toFixed(1) + '" text-anchor="' + anc + '" font-size="7.5" style="fill:' + (lived ? 'var(--nino)' : 'var(--soft)') + '">' + esc(sn) + '</text>';
+        s2 += '<text x="' + xi.toFixed(1) + '" y="' + (y0 + ch - 4).toFixed(1) + '" text-anchor="' + anc + '" font-size="' + fsS + '" style="fill:' + (lived ? 'var(--nino)' : 'var(--soft)') + '">' + esc(sn) + '</text>';
       });
       s2 += '<line x1="' + Lp + '" y1="' + Y(ref).toFixed(1) + '" x2="' + (Lp + pw).toFixed(1) + '" y2="' + Y(ref).toFixed(1) + '" style="stroke:var(--nino)" stroke-width=".9" stroke-dasharray="3 2" opacity=".75"/>';
       var lastV = null;
@@ -1071,7 +1103,7 @@
         if (best && p.season === best.season) s2 += nowDot(xp, Y(p.todate), 'var(--nino)', 3.2);
         else s2 += '<circle cx="' + xp.toFixed(1) + '" cy="' + Y(p.todate).toFixed(1) + '" r="2.8" style="fill:var(--nino)"/>';
       });
-      if (lastV != null) s2 += '<text x="' + (x0 + cw - 5).toFixed(1) + '" y="' + (y0 + 11) + '" text-anchor="end" font-size="8.5" style="fill:var(--text)" opacity=".8">peak ' + fnum(lastV, 1) + '</text>';
+      if (lastV != null) s2 += '<text x="' + (x0 + cw - 5).toFixed(1) + '" y="' + (y0 + 11) + '" text-anchor="end" font-size="' + (cw < 150 ? 7.5 : 8.5) + '" style="fill:var(--text)" opacity=".8">' + (cw < 150 ? '' : 'peak ') + fnum(lastV, 1) + '</text>';
       s2 += '</g>';
     });
     var leg = [['latest issue ' + latest.issued + ' (class colour)', 'var(--text)', 1.9, ''], ['earlier issues', 'var(--text)', 1.1, ''], [(td ? td.season + ' lived so far ' : 'now ') + fnum(ref), 'var(--nino)', .9, '3 2'],
