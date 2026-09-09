@@ -733,6 +733,90 @@ async function handleEvents(request, env) {
 }
 
 // Сводка для дашборда. Только агрегаты, никаких сырых строк наружу.
+// ── Посещения по работам (/api/visits) ────────────────────────────────
+// Владелец 09.09: «скрытая ссылка, где я по статьям вижу количество посещений на наших
+// данных». Панель /api/stats показывает двадцать самых частых ПУТЕЙ, а одна работа — это
+// пятнадцать путей (пять языков × три уровня), и в списке она рассыпана. Здесь наоборот:
+// ключ — работа, языки и уровни сложены, заголовок взят из карточек.
+//
+// Закрыто админ-ключом: это внутренние цифры, и по ним видно, что читают на самом деле.
+async function handleVisits(request, env) {
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+  const url = new URL(request.url);
+  const key = request.headers.get("x-admin-key") || url.searchParams.get("key") || "";
+  if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) {
+    return Response.json({ error: "forbidden" }, { status: 403 });
+  }
+  if (!env.QUEUE) return Response.json({ error: "db_not_configured" }, { status: 503 });
+
+  const days = Math.min(365, Math.max(1, Number(url.searchParams.get("days")) || 30));
+  const since = new Date(Date.now() - days * 864e5).toISOString().slice(0, 10);
+  const rows = await env.QUEUE.prepare(
+    `SELECT path, lang, COUNT(*) n, COUNT(DISTINCT uid) u, MAX(day) last
+       FROM events WHERE dev=0 AND type='view' AND day>=? AND path LIKE '/lang/%/archive/%'
+      GROUP BY path, lang`).bind(since).all()
+    .then((r) => r.results || []).catch(() => []);
+
+  // Путь вида /lang/ru/archive/2026-09-08/2609.90001/index.html → работа, язык, уровень.
+  // Версию из номера срезаем: 2608.21711v1 и 2608.21711 — одна работа, а в адресах
+  // встречаются обе формы.
+  const TIER = { "index.html": "popular", "simple.html": "simple", "advanced.html": "advanced" };
+  const work = new Map();
+  for (const r of rows) {
+    const m = String(r.path || "").match(/^\/lang\/([a-z]{2})\/archive\/(\d{4}-\d{2}-\d{2})\/([^/]+)\/([^/]*)$/);
+    if (!m) continue;
+    const id = m[3].split("v")[0];
+    let w = work.get(id);
+    if (!w) {
+      w = { id, date: m[2], views: 0, devices: 0, last: "", langs: {}, tiers: {}, raw: new Set() };
+      work.set(id, w);
+    }
+    // Номер в адресе идёт с версией (2607.14201v1), а в карточках хранится так же —
+    // поэтому для поиска заголовка держим ОБЕ формы: по обрезанной сводим работу
+    // воедино, по полной ищем карточку. Без этого заголовки выходили пустыми у всех.
+    w.raw.add(m[3]);
+    const n = Number(r.n) || 0;
+    w.views += n;
+    // Устройства по работе точно сложить нельзя: один человек мог открыть два уровня, и
+    // сумма его посчитает дважды. Берём максимум по путям — нижнюю честную оценку.
+    w.devices = Math.max(w.devices, Number(r.u) || 0);
+    if ((r.last || "") > w.last) w.last = r.last || "";
+    const lang = m[1];
+    w.langs[lang] = (w.langs[lang] || 0) + n;
+    const tier = TIER[m[4]] || "прочее";
+    w.tiers[tier] = (w.tiers[tier] || 0) + n;
+  }
+
+  const list = [...work.values()].sort((a, b) => b.views - a.views).slice(0, 300);
+  // Set в JSON не сериализуется — на выдачу он не идёт, только на поиск карточки.
+  // Заголовки — из карточек. Своя база (CARDS), поэтому отдельным запросом, а не JOIN:
+  // в D1 соединить две базы нельзя.
+  if (env.CARDS && list.length) {
+    // ПАЧКАМИ ПО ПЯТЬДЕСЯТ. D1 ограничивает число подставляемых значений в одном запросе;
+    // на трёх сотнях работ запрос падал целиком, а .catch() глотал ошибку — таблица
+    // выходила с заголовками «нет карточки» у всех подряд (09.09).
+    const ids = [...new Set(list.flatMap((w) => [w.id, ...w.raw]))];
+    const by = new Map();
+    for (let i = 0; i < ids.length; i += 50) {
+      const part = ids.slice(i, i + 50);
+      const marks = part.map(() => "?").join(",");
+      const got = await env.CARDS.prepare(
+        `SELECT id, title, url FROM cards WHERE lang='ru' AND version='popular' AND id IN (${marks})`)
+        .bind(...part).all().then((r) => r.results || []).catch(() => []);
+      for (const c of got) by.set(String(c.id).split("v")[0], c);
+    }
+    for (const w of list) {
+      const c = by.get(w.id);
+      if (c) { w.title = c.title || ""; w.url = c.url || ""; }
+    }
+  }
+  for (const w of list) delete w.raw;
+  const totals = list.reduce((a, w) => ({ views: a.views + w.views, works: a.works + 1 }),
+                            { views: 0, works: 0 });
+  return Response.json({ days, since, totals, works: list },
+                       { headers: { "cache-control": "no-store" } });
+}
+
 async function handleStats(request, env) {
   if (!env.QUEUE) return Response.json({ error: "db_not_configured" }, { status: 503 });
   const url = new URL(request.url);
@@ -4160,6 +4244,7 @@ async function handleRequest(request, env, ctx) {
     }
     if (url.pathname === "/api/ev") return withCors(await handleEvents(request, env));
     if (url.pathname === "/api/stats") return withCors(await handleStats(request, env));
+    if (url.pathname === "/api/visits") return withCors(await handleVisits(request, env));
     if (url.pathname === "/api/feedback") return withCors(await handleFeedback(request, env));
     if (url.pathname === "/api/react") return withCors(await handleReact(request, env));
     if (url.pathname === "/api/article-feedback") {

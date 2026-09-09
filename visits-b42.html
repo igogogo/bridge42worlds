@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- СТРАНИЦА СКРЫТАЯ. Владелец 09.09: «скрытая ссылка, где я по статьям вижу количество
+     посещений на наших данных». Три замка, и каждый нужен:
+       · имя файла не угадывается и нигде не стоит ссылкой (ни в меню, ни в карте сайта);
+       · noindex/nofollow — поисковик не возьмёт её, даже если адрес куда-то утечёт;
+       · сами цифры отдаёт /api/visits только по админ-ключу, страница без него пуста.
+     Ключ живёт в localStorage этого браузера и на сервер не уходит никуда, кроме нашего
+     же воркера в заголовке запроса. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Посещения по работам — bridge42worlds</title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans, system-ui, sans-serif); }
+  .vp { max-width: 1180px; margin: 0 auto; padding: 28px 18px 60px; }
+  .vp h1 { font-family: var(--serif, Georgia, serif); font-size: 26px; margin: 0 0 6px; }
+  .vp .sub { color: var(--muted); font-size: 14px; margin: 0 0 22px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
+  .bar input, .bar select, .bar button {
+    font: inherit; padding: 7px 11px; border: 1px solid var(--hairline, #d8d2c8);
+    border-radius: var(--radius-sm, 6px); background: var(--surface, #fff); color: var(--text); }
+  .bar button { cursor: pointer; }
+  .bar button:hover { border-color: var(--ochre, #c8842a); }
+  .bar input[type="password"] { min-width: 240px; }
+  .tot { display: flex; gap: 26px; flex-wrap: wrap; margin: 0 0 16px; }
+  .tot div { font-size: 14px; color: var(--muted); }
+  .tot b { display: block; font-size: 26px; color: var(--text); font-variant-numeric: tabular-nums; }
+  table.v { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.v th, table.v td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--hairline, #eee); vertical-align: top; }
+  table.v th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); cursor: pointer; white-space: nowrap; }
+  table.v td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  table.v tr:hover td { background: color-mix(in srgb, var(--ochre, #c8842a) 7%, transparent); }
+  .id { font-family: var(--mono, ui-monospace, monospace); font-size: 12px; color: var(--muted); }
+  .mini { font-size: 12px; color: var(--muted); }
+  .note { font-size: 13px; color: var(--muted); margin-top: 22px; line-height: 1.5; }
+  .err { color: #b3261e; font-size: 14px; margin: 12px 0; }
+  @media (max-width: 700px) { .hide-s { display: none; } .vp { padding: 18px 12px 50px; } }
+</style>
+</head>
+<body>
+<div class="vp">
+  <h1>Посещения по работам</h1>
+  <p class="sub">Наши собственные данные: каждое открытие страницы пишется в нашу базу.
+     Одна работа — это пятнадцать адресов (пять языков × три уровня), здесь они сложены.</p>
+
+  <div class="bar">
+    <input type="password" id="key" placeholder="админ-ключ" autocomplete="current-password">
+    <select id="days">
+      <option value="1">сутки</option>
+      <option value="7">неделя</option>
+      <option value="30" selected>30 дней</option>
+      <option value="90">90 дней</option>
+      <option value="365">год</option>
+    </select>
+    <button id="go">Показать</button>
+    <button id="forget" title="убрать ключ из этого браузера">Забыть ключ</button>
+  </div>
+
+  <div id="err" class="err" hidden></div>
+  <div class="tot" id="tot" hidden></div>
+  <div style="overflow-x:auto"><table class="v" id="tbl" hidden>
+    <thead><tr>
+      <th data-k="title">работа</th>
+      <th data-k="views" class="n">открытий</th>
+      <th data-k="devices" class="n">устройств</th>
+      <th data-k="last" class="hide-s">последнее</th>
+      <th class="hide-s">языки</th>
+      <th class="hide-s">уровни</th>
+    </tr></thead>
+    <tbody></tbody>
+  </table></div>
+
+  <p class="note">
+    Устройства по работе — нижняя честная оценка: один человек мог открыть и «Просто», и
+    «Подробно», и сложить их значило бы посчитать его дважды, поэтому берётся наибольшее
+    из адресов работы. Свои заходы в счёт не идут: события с признаком разработчика
+    отфильтрованы на стороне базы.
+  </p>
+</div>
+
+<script>
+(function () {
+  var K = 'b42_visits_key';
+  var keyEl = document.getElementById('key'), daysEl = document.getElementById('days');
+  var tbl = document.getElementById('tbl'), tot = document.getElementById('tot'), err = document.getElementById('err');
+  var rows = [], sortK = 'views', sortDir = -1;
+  try { keyEl.value = localStorage.getItem(K) || ''; } catch (e) {}
+
+  function fail(msg) { err.textContent = msg; err.hidden = false; tbl.hidden = true; tot.hidden = true; }
+
+  function num(n) { return (n || 0).toLocaleString('ru-RU'); }
+
+  function pairs(o) {
+    return Object.keys(o || {}).sort(function (a, b) { return o[b] - o[a]; })
+      .map(function (k) { return k + ' ' + o[k]; }).join(' · ');
+  }
+
+  function draw() {
+    var tb = tbl.querySelector('tbody');
+    tb.innerHTML = '';
+    rows.slice().sort(function (a, b) {
+      var x = a[sortK], y = b[sortK];
+      if (typeof x === 'string' || typeof y === 'string') {
+        return String(x || '').localeCompare(String(y || '')) * sortDir;
+      }
+      return ((x || 0) - (y || 0)) * sortDir;
+    }).forEach(function (w) {
+      var tr = document.createElement('tr');
+      var href = w.url || ('/lang/ru/archive/' + w.date + '/' + w.id + '/index.html');
+      tr.innerHTML =
+        '<td><a href="' + href + '" target="_blank" rel="noopener">' +
+          (w.title ? w.title.replace(/</g, '&lt;') : '(без карточки)') + '</a>' +
+          '<div class="id">' + w.id + ' · ' + (w.date || '') + '</div></td>' +
+        '<td class="n">' + num(w.views) + '</td>' +
+        '<td class="n">' + num(w.devices) + '</td>' +
+        '<td class="hide-s mini">' + (w.last || '') + '</td>' +
+        '<td class="hide-s mini">' + pairs(w.langs) + '</td>' +
+        '<td class="hide-s mini">' + pairs(w.tiers) + '</td>';
+      tb.appendChild(tr);
+    });
+    tbl.hidden = false;
+  }
+
+  function load() {
+    var key = keyEl.value.trim();
+    if (!key) return fail('Нужен админ-ключ.');
+    try { localStorage.setItem(K, key); } catch (e) {}
+    err.hidden = true;
+    fetch('/api/visits?days=' + daysEl.value, { headers: { 'x-admin-key': key } })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (res) {
+        if (!res.ok) return fail(res.j.error === 'forbidden' ? 'Ключ не подошёл.' : ('Ошибка: ' + res.j.error));
+        rows = res.j.works || [];
+        tot.innerHTML =
+          '<div>открытий<b>' + num(res.j.totals.views) + '</b></div>' +
+          '<div>работ открывали<b>' + num(res.j.totals.works) + '</b></div>' +
+          '<div>период<b>' + res.j.days + ' дн.</b></div>' +
+          '<div>с даты<b>' + res.j.since + '</b></div>';
+        tot.hidden = false;
+        draw();
+      })
+      .catch(function (e) { fail('Сеть: ' + e); });
+  }
+
+  document.getElementById('go').addEventListener('click', load);
+  daysEl.addEventListener('change', load);
+  keyEl.addEventListener('keydown', function (e) { if (e.key === 'Enter') load(); });
+  document.getElementById('forget').addEventListener('click', function () {
+    try { localStorage.removeItem(K); } catch (e) {}
+    keyEl.value = ''; tbl.hidden = true; tot.hidden = true;
+  });
+  tbl.querySelectorAll('th[data-k]').forEach(function (th) {
+    th.addEventListener('click', function () {
+      var k = th.dataset.k;
+      sortDir = (k === sortK) ? -sortDir : -1;
+      sortK = k;
+      draw();
+    });
+  });
+  if (keyEl.value) load();
+})();
+</script>
+</body>
+</html>
