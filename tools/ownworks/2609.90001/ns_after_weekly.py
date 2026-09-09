@@ -91,13 +91,20 @@ run("graph", T("tools/concepts_graph_export.py"))
 run("pages-c", T("concepts_pages.py"))
 run("related", T("tools/vector_links_local.py"))
 run("cited", T("tools/cited_ours.py"))
-run("html", T("run.py", "html"), soft=False)
-# ── облако и выкладка ──────────────────────────────────────────────────────
+# ── сначала на сайт едет сама работа: её страницы, страницы новых понятий, граф, индексы.
+# Владелец 09.09: «выложить с разметкой, не дожидаясь всех пересборок, но уже когда
+# сгенерятся понятия, их карточки и граф нарисуется». Полная пересборка архива — потом.
+run("html-only", T("run.py", "html", "--only", AID), soft=False)
+run("lic-audit", T("tools/license_audit.py", "--fix"))
+run("deploy-1", T("cloudflare/deploy_r2.py"), soft=False)
+print("\nработа на сайте:", f"https://bridge42worlds.academy/lang/ru/archive/2026-09-08/{AID}/index.html")
+# ── облако: контекст для бота, реестр понятий и векторы, карточки, обвязка ─
 run("context", T("cloudflare/context_build.py"))
-run("cloud-d1", T("cloudflare/concepts_sync.py"))
 run("cloud-vec", T("tools/concepts_to_vectorize.py", "--apply"))
 run("cards-sync", T("cloudflare/cards_sync.py", "--apply"))
 run("side", T("cloudflare/frame_sync.py", "--apply"))
-run("lic-audit", T("tools/license_audit.py", "--fix"))
-run("deploy", T("cloudflare/deploy_r2.py"), soft=False)
-print("\nготово:", f"https://bridge42worlds.academy/lang/ru/archive/2026-09-08/{AID}/index.html")
+run("cloud-d1", T("cloudflare/concepts_sync.py"))
+# ── полная пересборка архива (подпись генератора изменилась) и вторая выкладка ─
+run("html", T("run.py", "html"), soft=False)
+run("deploy-2", T("cloudflare/deploy_r2.py"), soft=False)
+print("\nготово целиком")
