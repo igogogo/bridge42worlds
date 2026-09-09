@@ -35,12 +35,21 @@
     --rail:286px; --rail2:310px; --dockh:34px;
   }
   @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){ --nino:#D4735C; --nina:#7C9BCB; --ok:#7BAA88; --band:#5c5a55;
-      --lv2:#6f6c66; --lv1:#4f4d49; --a1982:#A98BBB; --a1997:#D39BB9; --a2015:#E0A07E; --a2023:#E8B45C;
+    html:not([data-theme="light"]){ --nino:#E58973; --nina:#8FB1DE; --ok:#8FBE9B; --band:#5c5a55;
+      /* УРОВНИ РИСКА В ТЁМНОЙ ТЕМЕ. Их здесь не было: --lv3/--lv4/--lv5 оставались светлыми
+         значениями (тёмно-бордовый #7A1F1F), а ими пишется текст — цифра индекса риска,
+         имена сломанных моделей в мозаике, подписи зон на карте Тихого океана, строка
+         исчерпанного запаса. Контраст выходил 1,4:1 на тёмном фоне, то есть текст исчезал
+         ровно тогда, когда он важнее всего (владелец 09.09: «в тёмной теме текст не читаем»).
+         Здесь те же цвета, поднятые до читаемых на #1b1f27 и на карточке #2f3542.
+         --soft и --muted тоже подняты: на подложке карточек они давали 3,98 и 4,20. */
+      --lv5:#E06B6B; --lv4:#E08A5C; --lv3:#E0A860; --lv2:#8b8880; --lv1:#63615c;
+      --soft:#9AA3B4; --muted:#A2A9B8; --a1982:#A98BBB; --a1997:#D39BB9; --a2015:#E0A07E; --a2023:#E8B45C;
       --a2025:#9AA0AA; --a2024:#9AA0AA; }
   }
-  [data-theme="dark"]{ --nino:#D4735C; --nina:#7C9BCB; --ok:#7BAA88; --band:#5c5a55;
-      --lv2:#6f6c66; --lv1:#4f4d49; --a1982:#A98BBB; --a1997:#D39BB9; --a2015:#E0A07E; --a2023:#E8B45C;
+  html[data-theme="dark"]{ --nino:#E58973; --nina:#8FB1DE; --ok:#8FBE9B; --band:#5c5a55;
+      --lv5:#E06B6B; --lv4:#E08A5C; --lv3:#E0A860; --lv2:#8b8880; --lv1:#63615c;
+      --soft:#9AA3B4; --muted:#A2A9B8; --a1982:#A98BBB; --a1997:#D39BB9; --a2015:#E0A07E; --a2023:#E8B45C;
       --a2025:#9AA0AA; --a2024:#9AA0AA; }
 
   html,body{height:100%;overflow:hidden;overscroll-behavior:none}
@@ -116,6 +125,18 @@
   .tabs .trow.tog{display:flex}
   .tab.navtog{font-weight:600;letter-spacing:.02em}
   .tabs.mob.open .trow:not(.tog){padding-bottom:2px}
+  /* ЗНАЧКИ УРОВНЯ. Подложка значка — цвет уровня; в тёмной теме уровни стали светлее, и
+     белая цифра по ним даёт 2,6-3,1:1. Пишем по светлым уровням тёмными чернилами, а по
+     тёмным (в светлой теме) остаётся белый. */
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .risk .rl,
+    :root:not([data-theme="light"]) .lvl,
+    :root:not([data-theme="light"]) .cls.ok,
+    :root:not([data-theme="light"]) .cls.lag,
+    :root:not([data-theme="light"]) .br-l{color:#151a22}
+  }
+  [data-theme="dark"] .risk .rl,[data-theme="dark"] .lvl,
+  [data-theme="dark"] .cls.ok,[data-theme="dark"] .cls.lag,[data-theme="dark"] .br-l{color:#151a22}
   .tabs::-webkit-scrollbar{display:none}
   /* Чётче: цвет основного текста вместо приглушённого и чуть плотнее начертание —
      меню должно читаться с первого взгляда (владелец 04.09). */
@@ -1032,7 +1053,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=f6479b8b0a"></script>
+<script src="/js/enso.js?v=07e466eef3"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>

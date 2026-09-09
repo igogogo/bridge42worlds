@@ -433,7 +433,7 @@
   /* Верхний отступ поля графика. В тесном режиме (плитка обзора) легенды в картинке нет —
      она уехала в метку и подсказку, и держать под неё 42 пикселя незачем: именно этот
      зазор владелец 06.09 назвал «огромным между названием и графиком». */
-  function topPad(w) { return S._tight ? 16 : (legendW(w) ? 26 : 42); }
+  function topPad(w) { return S._tight ? 16 : 26; }   // строки легенды в картинке больше нет (09.09)
   /* КЛИКАБЕЛЬНАЯ ЛЕГЕНДА. Владелец 04.09: «все линии тоже нужно дать легенду по моделям,
      отдельно выделить визуально; при нажатии на элемент легенды график её высвечивать
      отдельно, остальные делать блёклыми». Пятый элемент строки — имя того, что выделяем:
@@ -489,13 +489,12 @@
       }
       return s;
     }
-    var x = 46;
-    for (i = 0; i < items.length; i++) {
-      s += '<rect x="' + x + '" y="' + (top - 14) + '" width="12" height="4" style="fill:' + items[i][1] + '"/>';
-      s += '<text x="' + (x + 16) + '" y="' + (top - 10) + '" font-size="10">' + esc(items[i][0]) + '</text>';
-      x += 22 + esc(items[i][0]).length * 5.6;
-    }
-    return s;
+    /* УЗКИЙ ЭКРАН: ЛЕГЕНДА ТОЖЕ В ПОЛОСУ. Здесь она рисовалась строкой внутри картинки от
+       x = 46 и просто уезжала за правый край: на 375 пикселях последний пункт читался как
+       «fres…» (владелец 09.09). Полоса под шапкой уже умеет её показывать и по умолчанию
+       свёрнута, значит и место под неё в картинке держать не нужно. */
+    S._legItems = items;
+    return '';
   }
 
   // ---------------------------------------------------------------- charts
@@ -630,23 +629,36 @@
     var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">Niño 3.4 daily anomaly: ' + (N.year || '') + ' against the four strongest events</text>';
     s += gridY(vmin, vmax, .5, Y, Lp, R + 8, W, 1);
     for (var m = 0; m < 12; m++) if (W > 470 || m % 2 === 0) s += '<text x="' + X((ME[m] + ME[m + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + MONTHS[m] + '</text>';
-    for (var m2 = 0; m2 < 4; m2++) if (W > 470) s += '<text x="' + X(366 + (ME[m2] + ME[m2 + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle" opacity=".55">' + MONTHS[m2] + '+1</text>';
+    for (var m2 = 0; m2 < 4; m2++) if (W > 470) s += '<text x="' + X(366 + (ME[m2] + ME[m2 + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle" opacity=".85">' + MONTHS[m2] + '+1</text>';
     s += '<line x1="' + X(366).toFixed(0) + '" y1="' + Tp + '" x2="' + X(366).toFixed(0) + '" y2="' + (H - B) + '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="3 3"/>';
     var leg = [];
     Object.keys(N.analogs).sort().forEach(function (y, yi) {
       var a = N.analogs[y], ser = a.series.concat(a.next);
       s += segs(ser.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + y + ')', 1.4, pickOp(y, .9), dashOf(yi + 1));
       // В узкой плитке легенда идёт строкой под заголовком: там помещается только год.
-      leg.push([R ? (y + '→' + (parseInt(y, 10) + 1) + ': peak ' + fnum(a.peak)) : y, 'var(--a' + y + ')', 1.6, dashOf(yi + 1), y]);
+      // пик года — число, а не украшение: он остаётся в подписи на любой ширине (09.09)
+      leg.push([y + '→' + String(parseInt(y, 10) + 1).slice(2) + ': peak ' + fnum(a.peak), 'var(--a' + y + ')', 1.6, dashOf(yi + 1), y]);
     });
     s += segs(N.current_series.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.6, pickOp('now'));
     s += nowDot(X(N.day), Y(N.current_day), 'var(--nino)', 4.5);
+    /* ЧИСЛО У МИГАЮЩЕЙ ТОЧКИ. Владелец 09.09: «на телефоне цифры не видны — на now against
+       analogs нет текущей у мигающей точки». Её и не было ни на какой ширине: точка стояла
+       молча. Ставим слева от точки, потому что вправо от неё уходит свежий хвост. */
     var ftA = freshTail('sst_nino34');
     if (ftA.length && fin(N.current_day)) {
       var tpA = [[X(N.day), Y(N.current_day)]].concat(ftA.map(function (p) { return [X(N.day + p[0]), Y(p[1])]; }));
       s += poly(tpA, 'var(--ochre)', 1.6, 1, '3 3');
       var lA = tpA[tpA.length - 1];
       s += freshDot(lA[0], lA[1], 4.5);
+    }
+    if (fin(N.current_day)) {
+      var dx = X(N.day), dy = Y(N.current_day), rightRoom = Lp + pw - dx > 54 && !ftA.length;
+      // подпись рекорда идёт по своей черте: если точка рядом с ней, число уходит ПОД точку,
+      // иначе две надписи ложатся друг на друга (найдено на телефоне сразу же)
+      var yRec = Y((N.peak_estimate || {}).hist_ceiling);
+      var below = fin((N.peak_estimate || {}).hist_ceiling) && Math.abs(dy - yRec) < 26;
+      s += '<text x="' + (rightRoom ? dx + 9 : dx - 9).toFixed(1) + '" y="' + (below ? dy + 17 : dy - 8).toFixed(1) + '" text-anchor="' + (rightRoom ? 'start' : 'end') +
+        '" font-size="12" style="fill:var(--nino);font-weight:700">' + fnum(N.current_day) + '</text>';
     }
     var pe = N.peak_estimate;
     // Черта рекорда и её подпись держатся внутри ОСНОВНОГО поля: справа теперь стоят
@@ -1238,7 +1250,7 @@
         s2 += livedMark(X(fi0), Math.max(12, pw / Math.max(5, fc.length) * .6), pRec, Y);
       }
       s2 += '<text class="tt" x="' + Lp + '" y="' + (top + 10) + '">' + esc(r.issued) + ' issue' + (ri === 0 ? ' — the newest' : '') + '</text>';
-      if (RCs && ri === 0) {
+      if (ri === 0) {
         var CLt = ((S.D.iri || {}).class_tally) || {};
         s2 += legend([['keeping up ' + (CLt.ok || 0), 'var(--nina)', 1.4, null, 'ok'],
           ['lagging ' + (CLt.lag || 0), 'var(--lv3)', 1.4, null, 'lag'],
@@ -1451,6 +1463,9 @@
          прямоугольник зоны»). Узкой Niño 1+2 плашка не по росту — ей подпись под боксом. */
       var big = small ? 14 : 18;
       var tier = { nino4: -0.32, nino34: 0, nino3: 0.32 }[b[0]] || 0;
+      // на узкой карте четыре подписи в 250 пикселях касаются друг друга — ярусы разводим шире
+      if (pw < 420 && zone === 'all') tier *= 1.9;
+      var stag = 0;
       var cy = y + h / 2 + (zone === 'all' ? tier * h : 0), tx = x + w / 2;
       var lw = Math.min(b[1].length * 7.2 + 12, w - 6), narrowBox = lw < b[1].length * 6;
       var lx0 = narrowBox ? x + w / 2 - (b[1].length * 7.2 + 12) / 2 : x + 3;
@@ -1459,6 +1474,9 @@
       /* На узком экране в режиме «все зоны» плашки имён неизбежно налезают друг на друга:
          четыре подписи на 250 пикселей ширины. Там оставляем только числа, а имя показываем
          у выбранной зоны — за этим и сделан выбор (владелец 06.09). */
+      /* Имя зоны на узком в режиме «все зоны» не помещается: четыре плашки на 250 пикселей
+         налезают друг на друга (проверено 09.09, стало хуже, чем было). Имя показываем у
+         выбранной зоны, а сравнение с аналогом — число — оставляем всегда и в краткой форме. */
       var showName = !(pw < 420 && zone === 'all');
       if (showName) {
         L += '<rect x="' + lx0.toFixed(1) + '" y="' + ly0.toFixed(1) + '" width="' + lw.toFixed(1) + '" height="14" rx="7" style="fill:var(--surface);stroke:' + col + '" stroke-width="1.2"/>';
@@ -1469,10 +1487,10 @@
          stroke) держит их читаемыми и на светлой заливке зоны, и в тёмной теме, где белое
          на белом было бы не лучше. */
       var HALO = 'fill:#fff;paint-order:stroke;stroke:rgba(20,22,28,.75);stroke-width:3.4;stroke-linejoin:round;font-weight:700';
-      L += '<text x="' + tx.toFixed(1) + '" y="' + (cy + (small ? 8 : 7)).toFixed(1) + '" text-anchor="middle" style="' + HALO + '" font-size="' + big + '">' + fnum(v, 1) + '</text>';
+      L += '<text x="' + tx.toFixed(1) + '" y="' + (cy + stag + (small ? 8 : 7)).toFixed(1) + '" text-anchor="middle" style="' + HALO + '" font-size="' + big + '">' + fnum(v, 1) + '</text>';
       // Сравнение с аналогом — у выбранной зоны крупнее, в режиме «все» мельче, но тоже поверх (владелец 08.09)
-      var cmpOn = fin(then) && (zone === b[0] || (zone === 'all' && !small));
-      if (cmpOn) L += '<text x="' + tx.toFixed(1) + '" y="' + (cy + (zone === b[0] ? (small ? 21 : 23) : 19)).toFixed(1) + '" text-anchor="middle" style="' + HALO.replace('stroke-width:3.4', 'stroke-width:3') + '" font-size="' + (zone === b[0] ? (small ? 10 : 12) : 9.5) + '">' + cmpYear + ' ' + fnum(then, 1) + ' · ' + (v >= then ? '▲' : '▼') + fnum(Math.abs(v - then), 1, false) + '</text>';
+      var cmpOn = fin(then) && (zone === b[0] || zone === 'all') && !S._tight;
+      if (cmpOn) L += '<text x="' + tx.toFixed(1) + '" y="' + (cy + stag + (zone === b[0] ? (small ? 21 : 23) : 19)).toFixed(1) + '" text-anchor="middle" style="' + HALO.replace('stroke-width:3.4', 'stroke-width:3') + '" font-size="' + (zone === b[0] ? (small ? 10 : 12) : 9.5) + '">' + (pw < 420 ? String(cmpYear).slice(2) : cmpYear) + ' ' + fnum(then, 1) + (pw < 420 ? '' : ' · ' + (v >= then ? '▲' : '▼') + fnum(Math.abs(v - then), 1, false)) + '</text>';
       labels += L + '</g>';
     });
     return s + labels + '</svg>';
@@ -1650,7 +1668,11 @@
     /* Правое поле — под подпись последнего значения. Держать его 76 пикселей в плитке
        шириной 230 значило отдать четверть картинки пустоте (владелец 06.09: «график не во
        всю ширину блока»). Узкой плитке хватает 26. */
-    var Lp = 46, R = W < 420 ? 26 : 76, Tp = topPad(W), B = 26, pw = W - Lp - R, ph = H - Tp - B;
+    /* Узкая ПЛИТКА обзора и узкий ЭКРАН — разные вещи, а проверка была одна, по ширине:
+       на телефоне главный график брал поле в 26 пикселей и подпись последнего значения
+       («+2.83 °C» это ~45 пикселей) уезжала за край (владелец 09.09: «цифры не видны»).
+       В плитке обзора её и правда незачем держать (S._tight), а на телефоне — нужно. */
+    var Lp = 46, R = S._tight ? 26 : (W < 420 ? 52 : 76), Tp = topPad(W), B = 26, pw = W - Lp - R, ph = H - Tp - B;
     var vv = vals.filter(fin);
     if (vv.length < 2) return svgOpen(W, H) + '<text x="20" y="' + (H / 2) + '">no series for this item</text></svg>';
     var ana = analogFor(m) || [];
@@ -1718,7 +1740,11 @@
     if (m.flags && m.flags.length === n) vals.forEach(function (v, i) { if (m.flags[i] && fin(v)) s += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(v).toFixed(1) + '" r="2.2" style="fill:var(--nino)"/>'; });
     var li = n - 1; while (li > 0 && !fin(vals[li])) li--;
     s += nowDot(X(li), Y(vals[li]), 'var(--nino)', 4);
-    s += '<text x="' + (X(li) + 7).toFixed(0) + '" y="' + (Y(vals[li]) + 4).toFixed(0) + '" class="tt">' + fnum(Math.abs(vals[li]) < 0.005 ? 0 : vals[li]) + (m.unit && m.unit.length <= 4 ? ' ' + esc(m.unit) : '') + '</text>';
+    /* Подпись не должна уезжать за правый край: если места справа мало, ставим её слева
+       от точки. Единицу на узком не пишем — она есть в заголовке и в карточке. */
+    var lblM = fnum(Math.abs(vals[li]) < 0.005 ? 0 : vals[li]) + (!S._tight && W >= 420 && m.unit && m.unit.length <= 4 ? ' ' + esc(m.unit) : '');
+    var roomM = W - (X(li) + 7) > lblM.length * 6.4;
+    s += '<text x="' + (roomM ? X(li) + 7 : X(li) - 7).toFixed(0) + '" y="' + (Y(vals[li]) + 4).toFixed(0) + '" class="tt"' + (roomM ? '' : ' text-anchor="end"') + '>' + lblM + '</text>';
     return s + '</svg>';
   }
 
@@ -4430,7 +4456,18 @@
   /* Круг фаз MJO: ось x = −PC2 (≈RMM1), y = PC1 (≈RMM2); след последних 30 дней, точка сегодня,
      круг единичной амплитуды. Сектора подписаны номерами фаз. */
   function chartMJO(M, W, H) {
-    var cx = Math.min(W * .34, H * .5), cy = H / 2 + 6, r = Math.min(cx - 14, H / 2 - 22);
+    /* На телефоне колесо фаз занимает всю ширину, и панель амплитуды (её число стоит в самом
+       заголовке сцены) исчезала целиком. Просим себе высоту, как мозаика моделей, и ставим
+       панель под колесом. */
+    var narrowMJO0 = W < 520;
+    if (narrowMJO0) {
+      var needM = Math.round(W * .62) + 150;
+      if (S.plotEl && H < needM - 2) S.plotEl.style.minHeight = needM + 'px';
+      H = Math.max(H, needM);
+    }
+    var cx = narrowMJO0 ? W / 2 : Math.min(W * .34, H * .5);
+    var cy = narrowMJO0 ? Math.round(W * .31) + 18 : H / 2 + 6;
+    var r = narrowMJO0 ? Math.round(W * .31) - 16 : Math.min(cx - 14, H / 2 - 22);
     var scale = r / 2.5;
     var s = svgOpen(W, H) + '<text class="tt" x="12" y="15">' + fitText('MJO phase diagram, last 30 days', W, 12) + '</text>';
     s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" style="stroke:var(--grid)"/>';
@@ -4451,12 +4488,16 @@
     s += '<text x="' + cx + '" y="' + (cy - r - 5) + '" text-anchor="middle" font-size="9">western Pacific</text>';
     s += '<text x="' + cx + '" y="' + (cy + r + 13) + '" text-anchor="middle" font-size="9">Indian Ocean</text>';
     // амплитуда по дням справа
-    var Lp = Math.round(cx + r + 72), R = 14, Tp = 30, B = 26, pw = W - Lp - R, ph2 = H - Tp - B;
-    if (pw > 120) {
+    /* На телефоне колесо фаз занимает всю ширину, и панель амплитуды (её число цитирует сам
+       заголовок сцены) исчезала целиком. Теперь на узком она встаёт ПОД колесом, а не справа. */
+    var narrowMJO = narrowMJO0;
+    var Lp = narrowMJO ? 40 : Math.round(cx + r + 72), R = 14;
+    var Tp = narrowMJO ? Math.round(cy + r + 34) : 30, B = 26, pw = W - Lp - R, ph2 = H - Tp - B;
+    if (pw > 120 && ph2 > 40) {
       var amp = M.amp, vmax = Math.max(2, Math.max.apply(null, amp.filter(fin)));
       var X = function (i) { return Lp + i / (n - 1) * pw; }, Y = function (v) { return Tp + (vmax - v) / vmax * ph2; };
       s += '<text x="' + Lp + '" y="' + (Tp - 8) + '" font-size="10" class="tt">amplitude, ' + n + ' days</text>';
-      s += '<line x1="' + Lp + '" y1="' + Y(1).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(1).toFixed(1) + '" style="stroke:var(--soft)" stroke-dasharray="3 3"/><text x="' + (Lp + 2) + '" y="' + (Y(1) - 3).toFixed(1) + '" font-size="9">1 = organised</text>';
+      s += '<line x1="' + Lp + '" y1="' + Y(1).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(1).toFixed(1) + '" style="stroke:var(--soft)" stroke-dasharray="3 3"/><text x="' + (W - R - 2) + '" y="' + (Y(1) - 3).toFixed(1) + '" text-anchor="end" font-size="9">1 = organised</text>';
       s += '<line x1="' + Lp + '" y1="' + Y(0).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(0).toFixed(1) + '" style="stroke:var(--grid)"/>';
       // фазы 6–8 — подсветка дней
       amp.forEach(function (v, i) { if (M.phase[i] >= 6 && M.phase[i] <= 8 && v >= 1) s += '<rect x="' + (X(i) - pw / n / 2).toFixed(1) + '" y="' + Tp + '" width="' + (pw / n + .5).toFixed(1) + '" height="' + ph2 + '" style="fill:var(--nino)" opacity=".12"/>'; });
@@ -5413,6 +5454,7 @@
     months.forEach(function (ym, r) {
       var y = Tp + r * rh;
       if (ym.slice(5) === '01' || ym.slice(5) === '07' || r === nR - 1) s += '<text x="' + (Lp - 6) + '" y="' + (y + rh * .5 + 3).toFixed(1) + '" text-anchor="end" font-size="9">' + esc(ym) + '</text>';
+      if (ym === lastYm) s += '<text x="' + (Lp + pw - 4).toFixed(1) + '" y="' + (y + rh * .5 + 3).toFixed(1) + '" text-anchor="end" font-size="8.5" style="fill:var(--ochre)">now</text>';
       if (ym === lastYm) s += '<rect x="' + (Lp - 2) + '" y="' + y.toFixed(1) + '" width="' + (pw + 4).toFixed(1) + '" height="' + rh.toFixed(1) + '" fill="none" style="stroke:var(--ochre)" stroke-width="1.4"/>' + '<text x="' + (Lp + pw + 4) + '" y="' + (y + rh * .5 + 3).toFixed(1) + '" font-size="9" style="fill:var(--ochre)">' + (an ? '' : 'now') + '</text>';
     });
     s += '<text x="' + (W - R) + '" y="' + (H - 4) + '" text-anchor="end" font-size="9" style="fill:var(--soft)">red warm · blue cold (hatched) · full colour at ±' + vmax + ' ' + unit + '</text>';
@@ -5475,7 +5517,10 @@
   }
 
   /* ПУЧОК (владелец 07.09): все текущие ряды приведены к месяцу начала события, без прошлых лет. */
-  var BUNDLE_COLORS = ['#8B2E2E', '#B06A8F', '#7D5B8F', '#2F6F8F', '#3E8E6E', '#C07B53', '#D08A2B', '#5A5A5A', '#A34E8C', '#4F7F3F', '#8A6A3A', '#2B7A99'];
+  /* Палитра корзины: прежняя половина была тёмной (#8B2E2E, #2F6F8F, #5A5A5A) и на тёмном
+     фоне давала 1,8-2,7:1 — подписи значений в конце линий пропадали (разбор 09.09). Тона те
+     же, поднятые до читаемых в обеих темах. */
+  var BUNDLE_COLORS = ['#D4645F', '#C77FA4', '#9E7FB4', '#4E9DC4', '#5CB294', '#D89A72', '#E0A44A', '#8E949F', '#C275AE', '#77A85F', '#B0894E', '#4E9DB8'];
   function chartBundle(items, W, H) {
     var rows = items.map(function (it, i) {
       var ser = it.series || {}, m = ser.months || [], v = ser.values || [], io = it.onset ? m.indexOf(it.onset) : -1, base = io >= 0 ? v[io] : null;

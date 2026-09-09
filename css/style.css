@@ -1500,6 +1500,14 @@ html[dir="rtl"] .feedback .fb-title-row { justify-content: flex-start; }
     padding: 1px 7px; border-radius: 3px; margin: 2px 4px 0 0; text-decoration: none;
 }
 .card-laws a:hover { background: rgba(74,106,146,0.20); color: var(--link); }
+/* ТЁМНАЯ ТЕМА: синий закона был жёстко задан светлой темой (#4a6a92) и на тёмной подложке
+   карточки давал 2,2:1 — синие ссылки в ленте не читались (владелец 09.09). Тот же тон,
+   поднятый до читаемого; фон и рамка идут за ним. */
+html[data-theme="dark"] .card-laws a { color: #8FB1DE; background: rgba(143,177,222,0.12); border-color: rgba(143,177,222,0.32); }
+html[data-theme="dark"] .card-laws a:hover { background: rgba(143,177,222,0.22); }
+html[data-theme="dark"] .author-item { color: #C4AEE0; }
+html[data-theme="dark"] .cal-off,
+html[data-theme="dark"] .alphabet-nav .alpha-empty { color: rgba(236,233,225,.34); }
 
 /* ── Text tags (highlighted) ──── */
 .text-tag { color: var(--link); cursor: pointer; text-decoration: none; border-bottom: 1px dotted var(--link); }
