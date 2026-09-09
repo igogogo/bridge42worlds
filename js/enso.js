@@ -988,6 +988,53 @@
      вопрос «видели ли они это раньше». Три выпуска в одной шкале, свежий сверху, с одной и
      той же чертой уже достигнутого уровня, отвечают: месяц назад почти весь пучок лежал
      ниже сегодняшней воды, то есть событие обгоняет прогноз, а не наоборот. */
+  /* МОЗАИКА МОДЕЛЕЙ (владелец 09.09: «month by month не сверху вниз, а квадратиками мозаикой —
+     линии сливаются в один пучок»). Квадратик на модель: до трёх выпусков линиями (старые бледнее),
+     прожитая часть первого сезона пунктиром, общая шкала, цвет рамки — класс модели. */
+  function chartMosaic(stack, obs, W, H) {
+    if (!stack || !stack.length) return svgOpen(W, H) + '<text x="20" y="' + (H / 2) + '">No stored issues.</text></svg>';
+    var issues = stack.slice(0, 3).slice().reverse();                 // старый → новый
+    var latest = issues[issues.length - 1], CL = ((S.D.iri || {}).classes) || {};
+    var names = Object.keys(latest.models).filter(function (nm) { var sec = latest.models[nm].section; return sec === 'dyn' || sec === 'stat'; });
+    var order = { broke: 0, lag: 1, ok: 2 };
+    names.sort(function (a, b) { var ca = (CL[a] || {}).cls || 'none', cb = (CL[b] || {}).cls || 'none'; return (order[ca] == null ? 3 : order[ca]) - (order[cb] == null ? 3 : order[cb]) || a.localeCompare(b); });
+    // ось сезонов: объединение прогнозных сезонов всех выпусков в хронологии
+    var seas = [];
+    issues.forEach(function (r) { r.seasons.forEach(function (sn) { if (sn.indexOf('OBS') < 0 && seas.indexOf(sn) < 0) seas.push(sn); }); });
+    var all = [obs];
+    issues.forEach(function (r) { Object.keys(r.models).forEach(function (k) { (r.models[k].values || []).forEach(function (v) { if (fin(v)) all.push(v); }); }); });
+    var vmin = Math.min.apply(null, all) - .2, vmax = Math.max.apply(null, all) + .2;
+    var cols = W >= 980 ? 6 : (W >= 700 ? 5 : (W >= 460 ? 4 : 3)), gap = 6, top0 = 16;
+    var rows = Math.ceil(names.length / cols), cw = (W - gap * (cols - 1)) / cols, ch = (H - top0 - gap * (rows - 1)) / rows;
+    var fi0 = latest.seasons.map(function (sn, i) { return sn.indexOf('OBS') < 0 && Object.keys(latest.models).some(function (nm) { return fin(latest.models[nm].values[i]); }) ? i : -1; }).filter(function (i) { return i >= 0; })[0];
+    var td = fi0 != null ? seasonTodate(latest.seasons[fi0], issueYear(latest.issued)) : null, ref = td ? td.value : obs;
+    var COLC = { broke: 'var(--lv5)', lag: 'var(--lv3)', ok: 'var(--ok)', none: 'var(--soft)' };
+    var s2 = svgOpen(W, H) + '<text class="tt" x="0" y="11">' + fitText(esc(names.length + ' models, issues ' + issues.map(function (r) { return r.issued; }).join(' → ') + '; dashed: ' + (td ? td.season + ' lived so far ' + fnum(ref) : 'now ' + fnum(ref)) + ' °C; frame colour: broken / lagging / keeping up'), W, 11) + '</text>';
+    names.forEach(function (nm, k) {
+      var c = k % cols, rr = Math.floor(k / cols), x0 = c * (cw + gap), y0 = top0 + rr * (ch + gap);
+      var cls = (CL[nm] || {}).cls || 'none', picked = S.pick && (S.pick === cls || S.pick === nm), dim = S.pick && !picked;
+      var Lp = x0 + 4, pw = cw - 8, Tp = y0 + 13, ph = ch - 22;
+      var X = function (i) { return Lp + i / Math.max(1, seas.length - 1) * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
+      s2 += '<g data-pick="' + esc(nm) + '" style="cursor:pointer" opacity="' + (dim ? .25 : 1) + '">';
+      s2 += '<rect x="' + x0 + '" y="' + y0 + '" width="' + cw.toFixed(1) + '" height="' + ch.toFixed(1) + '" rx="6" style="fill:var(--ink);stroke:' + COLC[cls] + '" fill-opacity="' + (picked ? '.09' : '.035') + '" stroke-width="' + (picked ? 2 : 1) + '" stroke-opacity=".8"/>';
+      s2 += '<text x="' + (x0 + 5) + '" y="' + (y0 + 10) + '" font-size="8.5" style="fill:' + COLC[cls] + ';font-weight:600">' + esc(nm.length > 16 ? nm.slice(0, 15) + '…' : nm) + '</text>';
+      s2 += '<line x1="' + Lp + '" y1="' + Y(ref).toFixed(1) + '" x2="' + (Lp + pw).toFixed(1) + '" y2="' + Y(ref).toFixed(1) + '" style="stroke:var(--nino)" stroke-width=".8" stroke-dasharray="3 2" opacity=".7"/>';
+      var lastV = null;
+      issues.forEach(function (r, ii) {
+        var m = r.models[nm]; if (!m) return;
+        var pts = r.seasons.map(function (sn, i) { var xi = seas.indexOf(sn); return xi < 0 || sn.indexOf('OBS') >= 0 ? null : [X(xi), fin(m.values[i]) ? Y(m.values[i]) : NaN]; }).filter(Boolean);
+        var isLast = ii === issues.length - 1;
+        s2 += segs(pts, isLast ? (picked ? 'var(--ochre)' : 'var(--text)') : 'var(--text)', isLast ? 1.6 : 1, isLast ? .95 : (.2 + .2 * ii));
+        if (isLast) { var vv = m.values.filter(fin); if (vv.length) lastV = Math.max.apply(null, vv); }
+      });
+      if (lastV != null) s2 += '<text x="' + (x0 + cw - 4).toFixed(1) + '" y="' + (y0 + 10) + '" text-anchor="end" font-size="8.5" style="fill:var(--soft)">peak ' + fnum(lastV, 1) + '</text>';
+      s2 += '</g>';
+    });
+    if (rows) { var lastRowY = top0 + (rows - 1) * (ch + gap) + ch; s2 += '<text x="0" y="' + Math.min(H - 2, lastRowY + 10).toFixed(0) + '" font-size="8" style="fill:var(--soft)">' + esc(seas[0] + ' → ' + seas[seas.length - 1] + ' left to right; y-scale ' + fnum(vmin + .2, 1) + ' … ' + fnum(vmax - .2, 1) + ' °C shared') + '</text>'; }
+    var leg = [['latest issue ' + latest.issued, 'var(--text)', 1.6, ''], ['earlier issues', 'var(--text)', 1, ''], ['lived part of the first season', 'var(--nino)', .8, '3 2'], ['', '', '', ''], ['keeping up', COLC.ok, 'box', .8, 'ok'], ['lagging', COLC.lag, 'box', .8, 'lag'], ['broken', COLC.broke, 'box', .8, 'broke']];
+    s2 += legend(leg, W, H, 12, top0);
+    return s2 + '</svg>';
+  }
   function chartStack(stack, obs, W, H) {
     if (!stack || stack.length < 2) return svgOpen(W, H) + '<text x="20" y="' + (H / 2) + '">Fewer than two stored issues.</text></svg>';
     var rows = stack.slice(0, 3);
@@ -3006,7 +3053,11 @@
         }).join('')) +
         (IRI.last_full_season ? ' The green dashed line is the last season lived in full, ' + IRI.last_full_season.season + ' ' + fnum(IRI.last_full_season.value) + ': that one is a fact, not an estimate.' : '')));
     } else if (k === 'stack') {
-      plot(body, function (w, h) { return chartStack(IRI.stack || [], NW.latest.n34a, w, h); });
+      var sm2 = S.sub.modelsStack || 'mosaic', rowS = el('div', 'seg sub');
+      [['mosaic', 'mosaic: one square per model'], ['stack', 'stacked issues']].forEach(function (o) { var b = el('button', (sm2 === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.modelsStack = o[0]; render(); }; rowS.appendChild(b); });
+      body.appendChild(rowS);
+      if (sm2 === 'mosaic') { plot(body, function (w, h) { return chartMosaic(IRI.stack || [], NW.latest.n34a, w, h); }); body.appendChild(el('div', 'cap', 'One square per model, sorted broken → lagging → keeping up: its forecast in the latest issue (thick) and in the two before (faint), all on one scale; the dashed line is the lived part of the first forecast season. Click a square to follow that model on every chart.')); }
+      else plot(body, function (w, h) { return chartStack(IRI.stack || [], NW.latest.n34a, w, h); });
       var st = IRI.stack || [];
       body.appendChild(el('div', 'cap', 'The same plume in three issues, newest on top, all on one scale. The thick ochre line is the mean over the models that KEPT UP: broken ones are left out entirely, laggards enter with a small weight. The published average of all models is the thin dashed grey line — the gap between the two is what the broken ones cost. The red mark on the first forecast season of each issue is where we stand in that season: its solid part is the share of the season already measured, the dashed part is what is left, and the pale band is where the season mean can still end up. In the June issue that mark is a full solid line — JJA is lived through; in the August one it is a third. Month by month the whole bundle climbs towards the water: the forecasts are dated by the issue, not by the data behind them.'));
     } else if (k === 'breakdown') {
