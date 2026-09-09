@@ -1961,7 +1961,7 @@ def _km_count(n, lang):
     return f"{n} {one if n == 1 else many}"
 
 
-def knowledge_advice_html(article, lang):
+def knowledge_advice_html(article, lang, version="advanced"):
     """Раздел «Взгляд машины знаний» — рекомендации АВТОРУ разобранной работы.
 
     Владелец 10 августа: «к каждой статье при полном разборе давай на основе ML
@@ -1981,6 +1981,12 @@ def knowledge_advice_html(article, lang):
     rec = rec_all.get(lang) or (rec_all.get("ru") if lang == DEFAULT_LANG else None)
     if not rec or not rec.get("directions"):
         return ""
+    # Вариант под уровень чтения (владелец 09.09: «адаптируй для простого, популярного и
+    # продвинутого результат машины знаний»). Лежит в recommend[lang]["tiers"][уровень]
+    # с теми же полями; соседи общие. Нет варианта — блок как был, только у продвинутого.
+    tier_rec = (rec.get("tiers") or {}).get(version)
+    if tier_rec:
+        rec = dict(rec, **tier_rec)
     t = _KM.get(lang, _KM["en"])
     by_id = {n["id"]: n for n in (rec.get("neighbours") or []) if n.get("id")}
 
@@ -2361,7 +2367,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
     # мелким текстом, во вторую очередь».
     if version == "advanced":
         tail_nav = ""
-        km_html = knowledge_advice_html(article, lang)
+        km_html = knowledge_advice_html(article, lang, version)
         if km_html:
             tail_nav += f'<li><a href="#km-advice">{safe(_KM.get(lang, _KM["en"])["nav"])}</a></li>'
             text_html += km_html
@@ -2377,6 +2383,13 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
             anchor = '<li class="article-nav-sep"></li>' + "".join(nav_extra_items)
             if anchor in nav_html:
                 nav_html = nav_html.replace(anchor, tail_nav + anchor, 1)
+    elif (((article.get("recommend") or {}).get(lang) or {}).get("tiers") or {}).get(version):
+        # Взгляд машины знаний на «Просто» и «Популярно» — только там, где для уровня
+        # написан свой вариант (владелец 09.09: «адаптируй для простого, популярного и
+        # продвинутого»). У остальных работ блок остаётся в хвосте продвинутой версии.
+        km_html = knowledge_advice_html(article, lang, version)
+        if km_html:
+            text_html += km_html
 
     if scipop.get("express_locked"):
         # Показываем баннер сверху текста: "показана версия X, Y пока не готова" — текст уже

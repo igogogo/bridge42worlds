@@ -17,6 +17,8 @@ HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import ns_ru, ns_en, ns_es, ns_ar, ns_fr  # noqa: E402
 from latexify import latexify_tier  # noqa: E402
+import ns_km  # noqa: E402
+import ns_km_tiers  # noqa: E402
 
 ROOT = pathlib.Path(r"C:\Users\nadez\PycharmProjects\bridge42worlds")
 AID, DATE = "2609.90001", "2026-09-08"
@@ -24,6 +26,29 @@ FOLDER = ROOT / "lang" / "ru" / "archive" / DATE / AID
 MODS = {"ru": ns_ru, "en": ns_en, "es": ns_es, "ar": ns_ar, "fr": ns_fr}
 
 TAGS = [ns_ru.MAIN_TAG] + ns_ru.EXTRA_TAGS
+
+
+def neighbours(lang):
+    """Соседи для блока машины знаний — опоры направлений, с датой и названиями по языкам
+    из индексов. Число близости не выдумываем: его считает вектор в шаге related."""
+    idx = {}
+    for lg in MODS:
+        p = ROOT / "lang" / lg / "articles-index.json"
+        try:
+            for a in json.loads(p.read_text(encoding="utf-8")):
+                idx.setdefault(a["id"].split("v")[0], {})[lg] = a
+        except Exception:
+            pass
+    out = []
+    for aid in ns_km.NEIGHBOURS:
+        rec = idx.get(aid) or {}
+        if not rec:
+            continue
+        any_ = next(iter(rec.values()))
+        out.append({"id": any_.get("id", aid), "date": any_.get("date", ""),
+                    "full": bool(any_.get("refined")),
+                    "titles": {lg: (rec.get(lg) or any_).get("title", "") for lg in MODS}})
+    return out
 
 
 def tier(name):
@@ -93,6 +118,11 @@ data = {
     "source_labels": {lang: m.DATA["source_labels"] for lang, m in MODS.items()},
     "review": {lang: m.DATA["review"] for lang, m in MODS.items()},
     # кем сделано и чем проверено — признак, который владелец назвал сразу
+    # Взгляд машины знаний: линия владельца (ОТО через аналоговую гравитацию, сингулярность
+    # как центр антиэнтропии, сверхтекучее и БЭК, резонатор) как направления развития,
+    # с опорами из нашего архива. Соседи — те же опоры с настоящими датами и названиями.
+    "recommend": {lang: dict(ns_km.KM[lang], neighbours=neighbours(lang),
+                            tiers=ns_km_tiers.TIERS[lang]) for lang in MODS},
     "made_by": "ai_agents",
     "verified_by": "lean",
     "provenance": {lang: m.DATA["provenance"] for lang, m in MODS.items()},
