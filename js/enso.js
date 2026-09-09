@@ -1957,6 +1957,9 @@
        свернулось само, потому что развёрнутое меню нужно ровно на один тап. */
     var mob = window.matchMedia('(max-width:760px)').matches;
     var HOVER = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+    /* При первом открытии меню развёрнуто (владелец 09.09): человек, пришедший на панель,
+       должен видеть, из чего она состоит. Свернётся оно само, как только он выберет раздел. */
+    if (S.navOpen == null) S.navOpen = true;
     if (window.matchMedia('(max-width:900px)').matches) list.push(['state', T.railTabs.state], ['risks', T.railTabs.risks]);
     Object.keys(T.tabs).forEach(function (k) { list.push([k, T.tabs[k]]); });
     /* ДВА РЯДА (владелец 07.09: «меню разрослось; основные вверху влево, служебные ниже вправо»). */
