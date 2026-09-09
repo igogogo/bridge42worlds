@@ -104,12 +104,65 @@ def gen_gaps(need, focus=""):
     return collected
 
 
+def gen_names(path, focus=""):
+    """Карточки для ЗАДАННЫХ имён — не «сколько-то», а ровно эти.
+
+    Понадобилось 09.09 на первой работе не из arXiv: за ней стоят Лере, Хопф, Каффарелли,
+    Фефферман, Тао и ещё десяток людей, которых ни топ-ап, ни пробел-анализ не предложат —
+    первый уводит от канона, второй смотрит на текущий корпус. Файл: имя, после «|» подсказка,
+    за что человек здесь. Имя становится id карточки как есть. Уже существующих пропускаем.
+    """
+    lines = [ln.strip() for ln in Path(path).read_text(encoding="utf-8").splitlines()
+             if ln.strip() and not ln.strip().startswith("#")]
+    collected = {}
+    if OUT_PATH.exists():
+        try:
+            for sid, s in json.loads(OUT_PATH.read_text(encoding="utf-8")).items():
+                collected[sid] = {**s, "id": sid}
+        except json.JSONDecodeError:
+            pass
+    want = [ln for ln in lines if ln.split("|")[0].strip() not in collected]
+    if not want:
+        print("все учёные из списка уже есть")
+        return collected
+    all_en = [t["en"] for t in json.loads(TAGS_PATH.read_text(encoding="utf-8"))]
+    # теги для привязки — не случайная выборка, а ближайшие к теме: ищем по словам подсказок
+    words = " ".join(want).lower()
+    near = [t for t in all_en if any(w in words for w in t.replace("_", " ").split() if len(w) > 4)]
+    tags_str = ", ".join(sorted(set(near))[:60] or random.sample(all_en, min(SAMPLE_TAGS, len(all_en))))
+    print(f"👨‍🔬 Учёные по списку: {len(want)} имён (уже есть {len(lines) - len(want)})")
+    added, ids_ok = 0, {ln.split("|")[0].strip() for ln in want}
+    for i in range(0, len(want), 4):
+        prompt = Template(load_prompt("scientist-list-names")).safe_substitute(
+            names_block="\n".join(want[i:i + 4]), tags_str=tags_str, focus=focus or "работа")
+        try:
+            r = chat("scientists", prompt)
+            new_sci = (parse_json_salvage(r.choices[0].message.content) or {}).get("scientists", [])
+        except Exception as e:
+            print(f"  ⚠️ запрос учёных: ошибка {e}")
+            continue
+        for s in new_sci:
+            sid = (s.get("id") or "").strip()
+            if sid in ids_ok and sid not in collected:
+                collected[sid] = s
+                added += 1
+            elif sid and sid not in ids_ok:
+                print(f"  · модель прислала чужое имя «{sid}» — не беру")
+    n_final = len(_save(collected))
+    print(f"✅ scientists.json: +{added} по списку (всего {n_final})")
+    return collected
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--gaps", type=int, metavar="N", help="пробел-осведомлённая догенерация +N учёных (Итерация 2), вместо слепого топ-апа до total")
     ap.add_argument("--focus", default="", help="разовый приоритет темы для --gaps (см. common.focus_line)")
     ap.add_argument("--famous", type=int, metavar="N", help="добор +N общеизвестных учёных (Эйнштейн/Ньютон и т.п.) без обычного уклона в сторону менее раскрученных")
+    ap.add_argument("--names", metavar="FILE", help="карточки ровно для имён из файла (имя | подсказка), не «сколько-то»")
     args = ap.parse_args()
+    if args.names:
+        gen_names(args.names, focus=args.focus)
+        return
     if args.famous:
         gen_famous(args.famous)
         return

@@ -637,7 +637,11 @@ def cmd_scientists(args):
         Path("lang/ru/data/scientists.json").unlink(missing_ok=True)
         print("♻️  scientists.json удалён — полная пересборка")
     focus = ["--focus", args.focus] if getattr(args, "focus", "") else []
-    if getattr(args, "famous", None):
+    if getattr(args, "names", None):
+        # Люди за конкретной работой (09.09, первая работа не из arXiv): ни топ-ап, ни
+        # пробел-анализ Лере с Фефферманом не предложат — имена задаём сами.
+        list_step = ["scientist_list.py", "--names", args.names, *focus]
+    elif getattr(args, "famous", None):
         list_step = ["scientist_list.py", "--famous", str(args.famous)]
     elif args.gaps:
         list_step = ["scientist_list.py", "--gaps", str(args.gaps), *focus]
@@ -1217,6 +1221,7 @@ def build_parser():
     s.add_argument("--gaps", type=int, metavar="N", help="пробел-осведомлённая догенерация +N учёных по реальному корпусу")
     s.add_argument("--focus", default="", help="разовый приоритет темы для --gaps")
     s.add_argument("--famous", type=int, metavar="N", help="добор +N общеизвестных учёных (Эйнштейн/Ньютон и т.п.) без уклона в сторону менее раскрученных")
+    s.add_argument("--names", metavar="FILE", help="карточки ровно для имён из файла (имя | подсказка) — люди за конкретной работой")
     s.set_defaults(func=cmd_scientists)
 
     s = sub.add_parser("evolve", help="ко-эволюция графа знаний: растит tags/laws/scientists пробел-осведомлённо до потолков (config.json → growth)")

@@ -75,6 +75,10 @@ run("cards", T("tools/concept_fullcards.py", "--run", "--force-peak"))
 run("tr-cards", T("tools/cards_translate_ru.py", "--concepts", "--force-peak"))
 run("names-ru", T("tools/concept_names_translate.py"))
 run("live-2", T("tools/wave5_apply.py", "--live-only"))
+# ── учёные за работой: карточки ровно для заданных имён, переводы, страницы, граф знаний
+# (владелец 09.09: «учёных там вытащи подробно»)
+run("scientists", T("run.py", "scientists", "--names", "data/ns-scientists.txt",
+                    "--focus", "Finite Time Blowup for Navier–Stokes (OpenAI, 2026): взрыв за конечное время с гладкой силой"))
 # ── разметка работы ────────────────────────────────────────────────────────
 run("vec-ours", T("embeddings_export.py"))
 run("vec-push", T("cloudflare/vector_build.py"))

@@ -11,7 +11,11 @@
 MAIN_TAG = "navier_stokes_equations"
 EXTRA_TAGS = ["turbulence", "vorticity", "viscosity", "reynolds_number", "singularity",
               "instability", "shear", "angular_momentum", "hydrodynamics", "fluid_flow"]
-SCIENTISTS = ["Leonhard Euler", "George Gabriel Stokes"]
+SCIENTISTS = ["Claude-Louis Navier", "George Gabriel Stokes", "Leonhard Euler", "Jean Leray",
+              "Eberhard Hopf", "Olga Ladyzhenskaya", "Luis Caffarelli", "Robert V. Kohn",
+              "Louis Nirenberg", "Vladimír Šverák", "Charles Fefferman", "Terence Tao",
+              "Tristan Buckmaster", "Vlad Vicol", "Diego Córdoba", "László Székelyhidi",
+              "Osborne Reynolds", "Lord Rayleigh"]
 LAWS = ["navier_stokes_equations", "law_of_conservation_of_angular_momentum", "newtons_second_law"]
 
 FORMULAS_ADV = [
