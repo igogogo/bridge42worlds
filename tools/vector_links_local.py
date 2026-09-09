@@ -58,12 +58,104 @@ def corpus():
     return ids, texts, meta
 
 
+def by_vector(ids, top=4, floor=0.42, dry=False):
+    """Соседи по смысловому вектору — один запрос к Vectorize на работу.
+
+    Зачем отдельный путь. Массовый прогон считает слова: это бесплатно, воспроизводимо и
+    для 94% архива работает. Но у длинных работ вес размазан, и их настоящие соседи не
+    добирают до порога: у 2609.90001 (8299 знаков против медианных 2251) лучшая близость
+    по словам 0.085 при пороге 0.10, а тот же список по вектору идёт на 0.45–0.52.
+    Обрезка текстов до общей длины не помогает — проверено, дело в мерке.
+
+    Запросов ровно столько, сколько названо работ, поэтому недельная квота сторожа
+    (ради которой массовый прогон и считается словами) здесь не тратится.
+    """
+    import os
+    import requests
+    sys.path.insert(0, str(ROOT))
+    from embeddings_build import load_env
+    envv = load_env(ROOT) or {}
+    tok = envv.get("CLOUDFLARE_API_TOKEN") or os.environ.get("CLOUDFLARE_API_TOKEN")
+    acc = envv.get("CLOUDFLARE_ACCOUNT_ID") or os.environ.get("CLOUDFLARE_ACCOUNT_ID")
+    if not (tok and acc):
+        sys.exit("нет CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID")
+    base = f"https://api.cloudflare.com/client/v4/accounts/{acc}/vectorize/v2/indexes/b42-articles"
+    H = {"Authorization": f"Bearer {tok}"}
+
+    data = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
+    try:
+        mark = json.loads((ROOT / "data" / "articles-retag-v2.json").read_text(encoding="utf-8"))["articles"]
+    except Exception:                                    # noqa: BLE001
+        mark = {}
+    titles = {}
+    try:
+        for a in json.loads((ROOT / "lang/ru/articles-index.json").read_text(encoding="utf-8")):
+            titles[a["id"]] = a.get("title", "")
+            titles.setdefault(a["id"].split("v")[0], a.get("title", ""))
+    except Exception:                                    # noqa: BLE001
+        pass
+
+    changed = 0
+    for aid in ids:
+        got = requests.post(f"{base}/get_by_ids", headers=H, json={"ids": [aid]}, timeout=60).json()
+        rows = got.get("result") or []
+        if not rows:
+            print(f"  {aid}: вектора нет в индексе — сперва embeddings_export.py + vector_build.py")
+            continue
+        q = requests.post(f"{base}/query", headers=H, timeout=60,
+                          json={"vector": rows[0]["values"], "topK": top * 3,
+                                "returnMetadata": "none", "namespace": "ours"}).json()
+        # ОБЩЕЕ ПОНЯТИЕ ОБЯЗАТЕЛЬНО. Вектор ставит рядом всё, что «про похожее вообще»:
+        # у 2609.90001 в первую четвёрку попали варп-двигатель и суперсимметрия — темы
+        # соседние по звучанию, но не по сути. У них с работой нет ни одного общего
+        # понятия, а у водопада, вязкого мёда и вихрей в жидком гелии есть. Условие
+        # дешёвое (разметка уже посчитана) и отсекает ровно этот случай.
+        mine = set(mark.get(aid) or mark.get(aid.split("v")[0]) or [])
+        near, loose = [], []
+        for m in (q.get("result") or {}).get("matches", []):
+            if m["id"] == aid or m["id"].split("v")[0] == aid.split("v")[0]:
+                continue
+            if float(m["score"]) < floor:
+                break
+            item = {"id": m["id"], "score": round(float(m["score"]), 3)}
+            his = set(mark.get(m["id"]) or mark.get(m["id"].split("v")[0]) or [])
+            (near if (mine & his) else loose).append(item)
+            if len(near) >= top:
+                break
+        # Если разметки ещё нет или общих понятий не нашлось совсем — берём по близости,
+        # иначе работа осталась бы вовсе без соседей, а это хуже неточного соседа.
+        if len(near) < 2:
+            near = (near + [x for x in loose if x not in near])[:top]
+        near = near[:top]
+        print(f"  {aid}: соседей {len(near)}")
+        for x in near:
+            print(f"      {x['score']:.3f}  {x['id']:14} {titles.get(x['id'], '')[:56]}")
+        if not dry:
+            data[aid] = near
+            changed += 1
+    if dry:
+        print("показ, файл не тронут")
+        return 0
+    OUT.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    print(f"→ {OUT.relative_to(ROOT)}: обновлено работ {changed}")
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--top", type=int, default=4)
     ap.add_argument("--min", type=float, default=0.10)
+    ap.add_argument("--vec", metavar="ID[,ID…]",
+                    help="соседей ЭТИХ работ взять смысловым вектором и влить в файл "
+                         "(для длинных работ, которым не хватает совпадения слов)")
+    ap.add_argument("--vec-min", type=float, default=0.42, dest="vec_min",
+                    help="порог близости для --vec (у вектора своя шкала, не как у слов)")
     args = ap.parse_args()
+
+    if args.vec:
+        return by_vector([x.strip() for x in args.vec.split(",") if x.strip()],
+                         top=args.top, floor=args.vec_min, dry=args.dry)
 
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.metrics.pairwise import linear_kernel
