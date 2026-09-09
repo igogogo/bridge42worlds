@@ -469,7 +469,8 @@ def build_jsonld(scipop, article, date_str, lang, canonical_url, abstract_full="
         "image": f"{SITE_URL}/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article['id']}/ai.webp",
         "author": [{"@type": "Person", "name": a} for a in article.get("authors", [])[:10]],
         "publisher": {"@type": "Organization", "name": SITE_NAME},
-        "isBasedOn": f"https://arxiv.org/abs/{article['id']}",
+        "isBasedOn": (((article.get("sources") or {}).get("live") if article.get("author_work") else None)
+                      or f"https://arxiv.org/abs/{article['id']}"),
     }
     if abstract_full:  # авторитетное саммари из оригинального абстракта — для поиска/LLM-краулеров
         data["abstract"] = abstract_full[:2000]
@@ -1164,8 +1165,7 @@ def entity_article_card(a, lang):
     return (f'<article class="article-card">'
             f'<div class="card-eyebrow">{cat_html}'
             f'<span class="card-date">{a["date"]}</span>{reading}'
-            f'<a class="card-src" href="https://arxiv.org/abs/{a["id"].split("v")[0]}" '
-            f'target="_blank" rel="noopener">arXiv:{a["id"].split("v")[0]}</a>{cites}{express}</div>'
+            f'{card_src_html(a)}{cites}{express}</div>'
             f'{thumb}'
             # card-title/card-desc, НЕ h3/oneliner: у справочников был свой крупный
             # стиль — карточка выглядела иначе, чем та же статья в ленте. Теперь
@@ -1235,6 +1235,15 @@ AW_LABELS = {
     "pdf":    {"ru": "PDF", "en": "PDF", "es": "PDF", "ar": "PDF", "fr": "PDF"},
     "zip":    {"ru": "все материалы", "en": "all materials", "es": "todos los materiales",
                "ar": "كل المواد", "fr": "tous les matériaux"},
+    # Работа, опубликованная не на arXiv у правообладателя (source_kind="external"):
+    # не «прислана нам», а взята с её страницы и разобрана. Подписи свои.
+    "ext_work": {"ru": "работа не из arXiv", "en": "not an arXiv paper",
+                 "es": "trabajo fuera de arXiv", "ar": "عمل من خارج arXiv",
+                 "fr": "travail hors arXiv"},
+    "ext_live": {"ru": "страница работы", "en": "the paper's page",
+                 "es": "página del trabajo", "ar": "صفحة العمل", "fr": "page du travail"},
+    "repo":   {"ru": "код и Lean", "en": "code and Lean", "es": "código y Lean",
+               "ar": "الكود وLean", "fr": "code et Lean"},
     "rev_h":  {"ru": "Что мы об этом думаем", "en": "What we make of it",
                "es": "Lo que pensamos", "ar": "رأينا في هذا", "fr": "Ce que nous en pensons"},
     "rev_note": {"ru": "Работа не проходила рецензирование. Это наш разбор — мнение, а не приговор.",
@@ -1262,6 +1271,66 @@ def _aw(key, lang):
 # Наш знак — мост из логотипа. Ставится у заголовка авторской работы: читатель должен
 # видеть, что источник другой, ещё до того, как дочитает строку-паспорт. Тултип говорит
 # прямо: это не препринт с arXiv (владелец 2026-08-08).
+def aw_label(article, key, lang):
+    """Подпись ссылки на источник: своя у работы (source_labels[lang]), иначе общая."""
+    own = (article.get("source_labels") or {}).get(lang) or {}
+    if own.get(key):
+        return own[key]
+    ext = article.get("source_kind") == "external"
+    if key == "live" and ext:
+        return _aw("ext_live", lang)
+    return _aw(key, lang)
+
+
+def card_src_html(a):
+    """Ссылка на первоисточник в карточке ленты.
+
+    У статьи с arXiv — arxiv.org/abs. У авторской работы адрес arXiv никогда не существовал:
+    карточка вела в 404 под подписью «arXiv:2609.90001». Ведём на страницу работы и
+    подписываем нашим кодом, как в паспорте самой статьи.
+    """
+    aid = a["id"].split("v")[0]
+    if a.get("author_work"):
+        live = (a.get("sources") or {}).get("live") or ""
+        code = a.get("code") or aid
+        if live:
+            return (f'<a class="card-src" href="{attr_safe(live)}" target="_blank" '
+                    f'rel="noopener">b42w:{safe(code)}</a>')
+        return f'<span class="card-src">b42w:{safe(code)}</span>'
+    return (f'<a class="card-src" href="https://arxiv.org/abs/{aid}" '
+            f'target="_blank" rel="noopener">arXiv:{aid}</a>')
+
+
+def own_figures_html(article, lang, date_str):
+    """Наши рисунки к работе — схемы, нарисованные нами, а не авторские.
+
+    Показываются при любой лицензии, в том числе у работ класса analysis, где мозаика из
+    PDF запрещена: правило про чужие рисунки на свои не распространяется. Файл лежит под
+    языком-источником; перевод рисунка (fig-1.<lang>.svg) берётся, если есть, иначе общий.
+    """
+    figs = article.get("own_figures") or []
+    if not figs:
+        return ""
+    base = f"/{LANG_DIR}/{DEFAULT_LANG}/archive/{date_str}/{article['id']}"
+    folder = Path(LANG_DIR) / DEFAULT_LANG / "archive" / date_str / article["id"]
+    out = []
+    for fg in figs:
+        fn = fg.get("file") or ""
+        if not fn:
+            continue
+        stem, ext = fn.rsplit(".", 1) if "." in fn else (fn, "svg")
+        loc = f"{stem}.{lang}.{ext}"
+        name = loc if (folder / loc).exists() else fn
+        if not (folder / name).exists():
+            continue
+        cap = fg.get("caption") or {}
+        cap = (cap.get(lang) or cap.get("en") or cap.get("ru") or "") if isinstance(cap, dict) else str(cap)
+        out.append(f'<figure class="own-fig"><img src="{base}/{name}" '
+                   f'alt="{attr_safe(cap[:140])}" loading="lazy">'
+                   + (f'<figcaption>{safe(cap)}</figcaption>' if cap else "") + '</figure>')
+    return "".join(out)
+
+
 AW_MARK_SVG = (
     '<svg class="aw-mark" viewBox="0 0 240 150" aria-hidden="true">'
     '<defs><linearGradient id="aw-g" x1="0" x2="1">'
@@ -1285,6 +1354,36 @@ AW_TOOLTIP = {
           "لم يخضع لمراجعة الأقران — والثقة به قرارك أنت.",
     "fr": "Travail propre de l'auteur, non un preprint arXiv : envoyé directement et examiné "
           "par nous. Il n'a pas été évalué par les pairs — à vous de juger.",
+}
+
+AW_TOOLTIP_EXT = {
+    "ru": "Работа опубликована не на arXiv, а на сайте правообладателя. Мы взяли её оттуда "
+          "и разобрали своими словами; авторский текст и рисунки не воспроизводим. "
+          "Рецензирование она не проходила — доверять ей или нет, решаете вы.",
+    "en": "Published not on arXiv but on the rights holder's site. We took it from there and "
+          "retold it in our own words; the authors' text and figures are not reproduced. "
+          "It has not been peer-reviewed — whether to trust it is up to you.",
+    "es": "Publicado no en arXiv sino en el sitio del titular de derechos. Lo tomamos de allí "
+          "y lo contamos con nuestras palabras; no reproducimos texto ni figuras del autor. "
+          "No ha sido revisado por pares; confiar en él es decisión suya.",
+    "ar": "نُشر هذا العمل لا على arXiv بل على موقع صاحب الحقوق. أخذناه من هناك وأعدنا "
+          "سرده بكلماتنا؛ لا نعيد نشر نص المؤلف ولا رسومه. لم يخضع لمراجعة الأقران — "
+          "والثقة به قرارك أنت.",
+    "fr": "Publié non sur arXiv mais sur le site du titulaire des droits. Nous l'avons pris "
+          "là et raconté avec nos mots ; le texte et les figures des auteurs ne sont pas "
+          "reproduits. Il n'a pas été évalué par les pairs — à vous de juger.",
+}
+AW_FILES_NOTE_EXT = {
+    "ru": "Работа опубликована не на arXiv. Здесь её страница, PDF и формализация: "
+          "проверить можно самим, а не только прочитать наш разбор.",
+    "en": "Not published on arXiv. Here are its page, the PDF and the formalization: you can "
+          "check it yourself, not only read our account.",
+    "es": "No publicado en arXiv. Aquí están su página, el PDF y la formalización: puede "
+          "comprobarlo usted mismo, no solo leer nuestro análisis.",
+    "ar": "لم يُنشر على arXiv. هنا صفحته وملف PDF والصياغة الشكلية: يمكنك التحقق بنفسك، "
+          "لا مجرد قراءة تحليلنا.",
+    "fr": "Non publié sur arXiv. Voici sa page, le PDF et la formalisation : vous pouvez "
+          "vérifier vous-même, pas seulement lire notre analyse.",
 }
 
 AW_FILES_H = {"ru": "Забрать работу целиком", "en": "Take the whole work",
@@ -1445,13 +1544,18 @@ def author_work_files_html(article, lang):
         return ""
     src = article.get("sources") or {}
     live, pdf = aw_localized(src, lang)
+    ext = article.get("source_kind") == "external"
+    tgt = ' target="_blank" rel="noopener"' if ext else ""
     btns = []
     if live:
-        btns.append(f'<a class="aw-file aw-file-main" href="{attr_safe(live)}">'
-                    f'{ICON_DOC}{safe(_aw("live", lang))}</a>')
+        btns.append(f'<a class="aw-file aw-file-main" href="{attr_safe(live)}"{tgt}>'
+                    f'{ICON_DOC}{safe(aw_label(article, "live", lang))}</a>')
     if pdf:
-        btns.append(f'<a class="aw-file" href="{attr_safe(pdf)}">'
-                    f'{ICON_DOC}{safe(_aw("pdf", lang))}</a>')
+        btns.append(f'<a class="aw-file" href="{attr_safe(pdf)}"{tgt}>'
+                    f'{ICON_DOC}{safe(aw_label(article, "pdf", lang))}</a>')
+    if src.get("repo"):
+        btns.append(f'<a class="aw-file" href="{attr_safe(src["repo"])}"{tgt}>'
+                    f'{ICON_BOX}{safe(aw_label(article, "repo", lang))}</a>')
     if src.get("zip"):
         mb = src.get("zip_mb")
         tail = f'<span class="aw-file-size">{mb} MB</span>' if mb else ""
@@ -1459,8 +1563,9 @@ def author_work_files_html(article, lang):
                     f'{ICON_BOX}{safe(_aw("zip", lang))}{tail}</a>')
     if not btns:
         return ""
+    note = (AW_FILES_NOTE_EXT if ext else AW_FILES_NOTE)
     return (f'<section class="aw-files"><h3>{safe(AW_FILES_H.get(lang, AW_FILES_H["en"]))}</h3>'
-            f'<p class="aw-note">{safe(AW_FILES_NOTE.get(lang, AW_FILES_NOTE["en"]))}</p>'
+            f'<p class="aw-note">{safe(note.get(lang) or AW_FILES_NOTE["en"])}</p>'
             f'<div class="aw-file-row">{"".join(btns)}</div></section>')
 
 
@@ -1507,13 +1612,20 @@ def author_work_sources(article, lang):
     # Раньше в этом месте стояло «arXiv:b42p-2026-001» — ссылка на препринт, которого на
     # arXiv нет и не будет: работа пришла к нам напрямую. Читатель, привыкший видеть здесь
     # источник, получал ложный.
-    out = [f'<span class="aw-code" title="{attr_safe(AW_TOOLTIP.get(lang, AW_TOOLTIP["en"]))}">'
+    ext = article.get("source_kind") == "external"
+    tip = (AW_TOOLTIP_EXT if ext else AW_TOOLTIP).get(lang) or AW_TOOLTIP["en"]
+    out = [f'<span class="aw-code" title="{attr_safe(tip)}">'
            f'b42w:{safe(article.get("code") or article["id"])}</span>']
     live, pdf = aw_localized(src, lang)
     if live:
-        out.append(f'<a href="{attr_safe(live)}">{safe(_aw("live", lang))}</a>')
+        out.append(f'<a href="{attr_safe(live)}" target="_blank" rel="noopener">'
+                   f'{safe(aw_label(article, "live", lang))}</a>')
     if pdf:
-        out.append(f'<a href="{attr_safe(pdf)}">{safe(_aw("pdf", lang))}</a>')
+        out.append(f'<a href="{attr_safe(pdf)}" target="_blank" rel="noopener">'
+                   f'{safe(aw_label(article, "pdf", lang))}</a>')
+    if src.get("repo"):
+        out.append(f'<a href="{attr_safe(src["repo"])}" target="_blank" rel="noopener">'
+                   f'{safe(aw_label(article, "repo", lang))}</a>')
     if src.get("zip"):
         mb = src.get("zip_mb")
         tail = f' ({mb} MB)' if mb else ""
@@ -1530,11 +1642,19 @@ def author_work_badges_html(article, lang):
     kind = (article.get("kind") or "").lower()
     kind_key = "exp" if "эксперимент" in kind or "experim" in kind else (
         "th" if "теор" in kind or "theor" in kind else "")
-    tip = attr_safe(AW_TOOLTIP.get(lang, AW_TOOLTIP["en"]))
+    ext = article.get("source_kind") == "external"
+    tip = attr_safe(((AW_TOOLTIP_EXT if ext else AW_TOOLTIP).get(lang) or AW_TOOLTIP["en"]))
     parts = [f'<span class="express-badge aw-badge" title="{tip}">'
-             f'{AW_MARK_SVG}{safe(_aw("work", lang))}</span>']
+             f'{AW_MARK_SVG}{safe(_aw("ext_work" if ext else "work", lang))}</span>']
     if kind_key:
         parts.append(f'<span class="express-badge aw-kind">{safe(_aw(kind_key, lang))}</span>')
+    # Кем сделано и чем проверено (владелец 09.09: «новый признак AI-исследования»).
+    # Строка на языке страницы из данных работы; нет — плашки нет.
+    prov = article.get("provenance") or ""
+    if isinstance(prov, dict):
+        prov = prov.get(lang) or prov.get("en") or ""
+    if prov:
+        parts.append(f'<span class="express-badge aw-kind aw-prov">{safe(prov)}</span>')
     return " ".join(parts)
 
 
@@ -2471,6 +2591,7 @@ def gen_article_html(scipop, article, date_str, images, lang, version, captions=
         canonical_url=canonical_url, page_url=page_url, hreflang_links=hreflang_links,
         tags_side_html=tags_side_html, article_graph_html=article_graph_html,
         mosaic_html=mosaic_html, ai_cover_html=ai_cover_html,
+        own_figures_html=own_figures_html(article, lang, date_str),
         abstract_html=abstract_html,
         translate_offer_html=translate_offer_html,
         feedback_html=feedback_html,
@@ -5462,6 +5583,12 @@ def regenerate_all_html(only=None, force=False):
             "sources": data.get("sources", {}),
             "review": data.get("review", {}),
             "author_comment": data.get("author_comment", ""),
+            # Внешний источник, кем сделано, свои подписи ссылок и наши рисунки — тем же
+            # путём: страница читает индекс, а не data.json.
+            "source_kind": data.get("source_kind", ""),
+            "provenance": data.get("provenance", {}),
+            "source_labels": data.get("source_labels", {}),
+            "own_figures": data.get("own_figures", []),
             # Рекомендации автору от машины знаний (tools/recommend.py). Без переноса сюда
             # раздел лежит в data.json, а на странице его нет — ровно как было с полями
             # авторской работы выше.

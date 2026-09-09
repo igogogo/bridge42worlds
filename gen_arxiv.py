@@ -323,6 +323,8 @@ def license_label(lic_url):
         return "CC0 1.0"
     if "nonexclusive-distrib" in u:
         return "arXiv non-exclusive"
+    if "openai.com" in u:
+        return "© OpenAI"
     return "license"
 
 
@@ -337,6 +339,13 @@ def license_label(lic_url):
 # авторских подписей к рисункам — уже переработка чужого текста, и её мы не делаем: у таких
 # работ рисунки из PDF не берём вовсе, обложка у статьи своя.
 ANALYSIS_ONLY = ("by-nc-nd/4.0", "by-nc-sa/4.0", "by-nc/4.0")
+
+# Правообладатели без свободной лицензии, чьи работы мы всё же разбираем — только
+# пересказом, как NC/ND. Первый случай 09.09.2026: работа OpenAI о взрыве в Навье–Стокса
+# выложена не на arXiv, лицензии на ней нет, «все права защищены». Факты и идеи не
+# охраняются, пересказ своими словами законен; авторский текст и рисунки не воспроизводим.
+# Адрес в поле license — страница условий правообладателя, чтобы читатель видел, чьё.
+RETELL_ONLY_HOSTS = ("openai.com/policies",)
 
 
 def license_class(lic_url):
@@ -353,6 +362,8 @@ def license_class(lic_url):
     # ошибкой на сайт ушли рисунки 2 137 работ (владелец 02.09: «мы берём то, что
     # открытое; то, что нет — пересказываем, но тогда без картинок»).
     if any(a in u for a in ANALYSIS_ONLY) or "nonexclusive-distrib" in u:
+        return "analysis"
+    if any(h in u for h in RETELL_ONLY_HOSTS):
         return "analysis"
     return "no"
 

@@ -2363,8 +2363,14 @@ function initAllTooltips() {
             } else if (badge) {
                 // Тексты давно переведены на шесть языков (UI_STRINGS) и до сих пор
                 // только переписывались в атрибут title — теперь показываем их сами.
-                content = '<strong>' + (el.textContent || '').trim() + '</strong> <span class="tip-desc">'
-                        + (el.classList.contains('refine-badge') ? UI.refineTip : UI.expressTip) + '</span>';
+                // Плашки авторской работы (источник, «кем сделано») носят класс экспресса
+                // ради вида, а подсказка у них своя, из title (dropNativeTips переносит её
+                // в data-tip-text); подсказка экспресса на них была бы неправдой.
+                var aw = el.classList.contains('aw-badge') || el.classList.contains('aw-kind');
+                var desc = aw ? (el.dataset.tipText || '')
+                              : (el.classList.contains('refine-badge') ? UI.refineTip : UI.expressTip);
+                content = '<strong>' + (el.textContent || '').trim() + '</strong>'
+                        + (desc ? ' <span class="tip-desc">' + desc + '</span>' : '');
             } else if (el.dataset.tag) {
                 var t = tagsLoc[el.dataset.tag];
                 content = t
@@ -2454,7 +2460,11 @@ function localizeStaticUI() {
     var superBtn = document.querySelector('.react-btn[data-react="superlike"]');
     if (superBtn) superBtn.title = UI.superlike;
 
-    var expressBadge = document.querySelector('.express-badge');
+    /* Только настоящая плашка экспресса. У авторской работы плашки источника и «кем
+       сделано» носят тот же класс ради вида, и первая из них стояла раньше экспресса:
+       querySelector брал её и переписывал в «⚡ экспресс» — работа не из arXiv
+       выходила на страницу как экспресс (09.09, первая такая работа). */
+    var expressBadge = document.querySelector('.express-badge:not(.aw-badge):not(.aw-kind)');
     if (expressBadge) {
         expressBadge.innerHTML = b42ic('bolt', 13, '⚡');
         expressBadge.appendChild(document.createTextNode(' ' + UI.express));
