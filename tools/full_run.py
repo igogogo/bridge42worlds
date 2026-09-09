@@ -456,10 +456,24 @@ def prepare_super_input():
     log(f"вход супера: {len(reg)} понятий")
 
 
+def _own_work(name):
+    """Наша собственная работа, не с arXiv: номер из зарезервированного хвоста 900xx."""
+    m = re.match(r"^\d{4}\.(\d{5})", name)
+    return bool(m) and int(m.group(1)) >= 90000
+
+
 def missing_days(limit_days=10):
-    """Дни между последним в архиве и вчерашним — то, что конвейер пропустил."""
+    """Дни между последним РАЗОБРАННЫМ в архиве и вчерашним — то, что конвейер пропустил.
+
+    Последним считается день, в котором есть хоть одна работа С arXiv. Свои работы день не
+    закрывают, и это не мелочь: 09.09 разбор работы OpenAI лёг под своим номером в папку
+    2026-09-08, конвейер увидел её последней и решил, что восьмое разобрано — а вместе с
+    ним и всё до него. Четыре дня, с 4 по 7 сентября, выпали молча, и заметили это только
+    потому, что руками сверили архив с календарём.
+    """
     arch = ROOT / "lang" / "ru" / "archive"
-    have = sorted(p.name for p in arch.iterdir() if p.is_dir())
+    have = sorted(p.name for p in arch.iterdir()
+                  if p.is_dir() and any(q.is_dir() and not _own_work(q.name) for q in p.iterdir()))
     if not have:
         return []
     last = datetime.date.fromisoformat(have[-1])
