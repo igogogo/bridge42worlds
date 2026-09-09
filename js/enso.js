@@ -2125,6 +2125,7 @@
     return '<span class="rs-day' + (d.left === 0 ? ' out' : (pc >= 80 ? ' warn' : '')) + '" data-src="' + esc(JSON.stringify(pay)) + '">' +
       '<span class="rs-daybar"><i style="width:' + pc + '%"></i></span>' + used + ' of ' + d.limit + ' today, everyone</span>';
   }
+  function rsLang(q) { return /[\u0400-\u04FF]/.test(String(q || '')) ? 'ru' : 'en'; }
   function rsPost(body) {
     return rsPass().then(function (p) {
       var h = { 'content-type': 'application/json' }; if (p.token) h['x-b42-token'] = p.token; else body.turnstile = p.turnstile || '';
@@ -2193,10 +2194,10 @@
   function rsDashFrom(d) {
     var P = (d.panel || []).slice().sort(function (a, b) { return (b.cited ? 1 : 0) - (a.cited ? 1 : 0) || (b.score || 0) - (a.score || 0); });
     var dash = { kpis: [], risks: [], stats: [], scenes: [] };
-    (d.kpis || []).forEach(function (k) { var key = String(k.id || '').replace(/^kpi:/, ''); if (jrec(key) && dash.kpis.indexOf(key) < 0) dash.kpis.push(key); });
+    (d.kpis || []).forEach(function (k) { var key = String(k.id || '').replace(/^kpi:/, ''); if (jrecHas(key) && dash.kpis.indexOf(key) < 0) dash.kpis.push(key); });
     P.forEach(function (p) {
       var id = String(p.id || ''), key = id.replace(/^[a-z]+:/, '');
-      if (p.kind === 'kpi' && jrec(key) && dash.kpis.indexOf(key) < 0) dash.kpis.push(key);
+      if (p.kind === 'kpi' && jrecHas(key) && dash.kpis.indexOf(key) < 0) dash.kpis.push(key);
       else if (p.kind === 'risk' && briefRisk(key) && dash.risks.indexOf(key) < 0) dash.risks.push(key);
       else if (p.kind === 'stat' && rsStat(key) && dash.stats.indexOf(key) < 0) dash.stats.push(key);
       else if (p.kind === 'scene' && p.hash && !dash.scenes.some(function (x) { return x.hash === p.hash; })) dash.scenes.push({ hash: p.hash, title: p.title || key });
@@ -2206,7 +2207,7 @@
   function rsDashFromHits(hits) {
     var dash = { kpis: [], risks: [], stats: [], scenes: [] };
     (hits || []).forEach(function (h) {
-      if (h.kind === 'kpi' && jrec(h.id) && dash.kpis.indexOf(h.id) < 0) dash.kpis.push(h.id);
+      if (h.kind === 'kpi' && jrecHas(h.id) && dash.kpis.indexOf(h.id) < 0) dash.kpis.push(h.id);
       else if (h.kind === 'risk' && briefRisk(h.id) && dash.risks.indexOf(h.id) < 0) dash.risks.push(h.id);
       else if (h.kind === 'stat' && rsStat(h.id) && dash.stats.indexOf(h.id) < 0) dash.stats.push(h.id);
       else if (h.kind === 'scene' && h.hash && !dash.scenes.some(function (x) { return x.hash === h.hash; })) dash.scenes.push({ hash: h.hash, title: h.title });
@@ -2218,6 +2219,10 @@
     return (d.kpis.length || d.risks.length || d.stats.length || d.scenes.length) ? d : null;
   }
   function rsStat(id) { return (((S.ST || {}).items) || []).filter(function (it) { return it.id === id; })[0] || null; }
+  /* Плитка рисуется только у показателя С ИСТОРИЕЙ: `jrec` возвращает запись журнала и без
+     единой записи, и такая плитка молча исчезала — доска обещала показатель, а в ответе не
+     было ничего (владелец 09.09: «где тут графики KPI»). */
+  function jrecHas(k) { var r = jrec(k); return !!(r && (r.entries || []).length); }
   function rsStatCard(id) {
     var it = rsStat(id); if (!it) return '';
     var m = it.method || {}, ks = (it.kpis || []).slice(0, 2);
@@ -2227,7 +2232,7 @@
   }
   function rsDashHtml(dash) {
     if (!dash) return '';
-    var kp = (dash.kpis || []).filter(function (k) { return jrec(k); }), rk = (dash.risks || []).filter(function (id) { var r = briefRisk(id); return r && r.metric && (r.metric.values || []).length; });
+    var kp = (dash.kpis || []).filter(jrecHas), rk = (dash.risks || []).filter(function (id) { var r = briefRisk(id); return r && r.metric && (r.metric.values || []).length; });
     var st = (dash.stats || []).filter(rsStat), sc = dash.scenes || [];
     if (!kp.length && !rk.length && !st.length && !sc.length) return '';
     return '<div class="rs-dash">' +
@@ -2297,7 +2302,8 @@
   var CALC_OPS = {
     trend: {
       name: 'where the series is going', need: 1,
-      words: ['trend', 'going', 'rising', 'falling', 'grow', 'growing', 'still', 'turned', 'direction', 'slowing'],
+      words: ['trend', 'going', 'rising', 'falling', 'grow', 'growing', 'still', 'turned', 'direction', 'slowing',
+              'тренд', 'раст', 'падае', 'куда', 'направлен', 'продолжа', 'развернул', 'динамик'],
       run: function (sr, p) {
         var win = Math.max(6, p.window || (sr.step === 'day' ? 90 : 12)), v = sr.values.slice(-win).filter(fin);
         var f = calcFit(v); if (!f) return null;
@@ -2315,7 +2321,8 @@
     },
     change: {
       name: 'how much it changed', need: 1,
-      words: ['change', 'changed', 'much', 'since', 'week', 'month', 'compared', 'moved', 'delta'],
+      words: ['change', 'changed', 'much', 'since', 'week', 'month', 'compared', 'moved', 'delta',
+              'измен', 'сколько', 'насколько', 'за неделю', 'за месяц', 'выросл', 'сдвин'],
       run: function (sr, p) {
         var win = p.window || (sr.step === 'day' ? 30 : 4), v = sr.values.filter(fin);
         if (v.length < win + 1) win = Math.max(2, Math.floor(v.length / 2));
@@ -2329,7 +2336,8 @@
     },
     rank: {
       name: 'where it stands in its own history', need: 1,
-      words: ['record', 'highest', 'ever', 'extreme', 'rank', 'warmest', 'strongest', 'max', 'maximum', 'unprecedented'],
+      words: ['record', 'highest', 'ever', 'extreme', 'rank', 'warmest', 'strongest', 'max', 'maximum', 'unprecedented',
+              'рекорд', 'максим', 'самый', 'впервые', 'экстрем', 'небывал'],
       run: function (sr) {
         var v = sr.values.filter(fin); if (v.length < 20) return null;
         var last = v[v.length - 1], sorted = v.slice().sort(function (a, b) { return b - a; });
@@ -2345,7 +2353,8 @@
     },
     analogs: {
       name: 'next to the years that looked like this', need: 1,
-      words: ['analog', 'analogue', '1997', '2015', '1982', '2023', 'past', 'previous', 'years', 'like', 'compare', 'history'],
+      words: ['analog', 'analogue', '1997', '2015', '1982', '2023', 'past', 'previous', 'years', 'like', 'compare', 'history',
+              'аналог', 'сравн', 'прошл', 'год', 'похож', 'истори'],
       run: function (sr) {
         var an = sr.analogs; if (!an || !Object.keys(an).length) return null;
         var v = sr.values.filter(fin), last = v[v.length - 1], rows = [];
@@ -2366,7 +2375,8 @@
     },
     lag: {
       name: 'who leads whom', need: 2,
-      words: ['lead', 'leads', 'lag', 'ahead', 'follow', 'follows', 'delay', 'before', 'after', 'drive', 'drives'],
+      words: ['lead', 'leads', 'lag', 'ahead', 'follow', 'follows', 'delay', 'before', 'after', 'drive', 'drives',
+              'опережа', 'лаг', 'задержк', 'вед[её]т', 'следом', 'раньше', 'позже'],
       run: function (sr, p, sr2) {
         if (!sr2) return null;
         var a = sr.values.filter(fin), b = sr2.values.filter(fin), n = Math.min(a.length, b.length);
@@ -2410,15 +2420,18 @@
      остальное. Если операции нужны два ряда одного шага, а пары нет (топливо месячное,
      поверхность суточная), мы не подменяем вопрос чужой парой, а честно считаем по названному
      ряду то, что можем. Настоящее опережение у нас уже посчитано единицей статистики. */
+  /* ВОПРОСЫ ПРИХОДЯТ НА ЯЗЫКЕ ЧИТАТЕЛЯ. Первый же русский вопрос владельца («сравни давление
+     циркуляции и температуру») не дал ни одной карточки: словари были только английские, ни
+     операция, ни ряд не находились. Держим оба языка в одном месте. */
   var CALC_WORDS = [
-    [/warm water volume|wwv|fuel/, 'r:fuel_charged'],
-    [/subsurface|under the|100 ?m|depth|thermocline/, 'r:subsurface_warm'],
-    [/world ocean|global ocean|ocean as a whole/, 'w:sst_world'],
-    [/land|air over|planet|global temperature|2 ?m/, 'w:t2_world'],
-    [/walker|coupling|trade wind|pressure|soi/, 'r:coupling_on'],
-    [/model|forecast|plume/, 'r:models_below_reality'],
-    [/wind burst|westerly/, 'r:wwb_recent'],
-    [/nino|niño|3\.4|event|surface|sst/, 'w:sst_nino34']
+    [/warm water volume|wwv|fuel|топлив|тёплой воды|теплой воды|объ[её]м воды/, 'r:fuel_charged'],
+    [/subsurface|under the|100 ?m|depth|thermocline|подповерх|глубин|термоклин|под водой/, 'r:subsurface_warm'],
+    [/world ocean|global ocean|ocean as a whole|мировой океан|весь океан/, 'w:sst_world'],
+    [/land|air over|planet|global temperature|2 ?m|суш|воздух|планет|глобальн/, 'w:t2_world'],
+    [/walker|coupling|trade wind|pressure|soi|уокер|давлен|циркуляц|пассат|сцепк|южн[а-я]* колебан/, 'r:coupling_on'],
+    [/model|forecast|plume|модел|прогноз|плюм/, 'r:models_below_reality'],
+    [/wind burst|westerly|ветров[а-я]* вспышк|западн[а-я]* ветр/, 'r:wwb_recent'],
+    [/nino|niño|3\.4|event|surface|sst|ниньо|событ|поверхност|температур/, 'w:sst_nino34']
   ];
   function calcPick(q, dash) {
     var ql = ' ' + String(q || '').toLowerCase() + ' ', ids = [], named = [];
@@ -2433,15 +2446,22 @@
     Object.keys(calcSeries()).forEach(add);                 // запас, если у названных не выйдет
     var op = null, sc = 0;
     Object.keys(CALC_OPS).forEach(function (k) {
-      var n = 0; CALC_OPS[k].words.forEach(function (w) { if (ql.indexOf(' ' + w) >= 0) n++; });
+      var n = 0; CALC_OPS[k].words.forEach(function (w) { if (ql.indexOf(w) >= 0) n++; });
       if (n > sc) { sc = n; op = k; }
     });
     if (!op || !ids.length) return null;
-    var m = ql.match(/(\d{1,3})\s*(day|days|week|weeks|month|months)/), win = null;
+    var m = ql.match(/(\d{1,3})\s*(days?|weeks?|months?|дн[а-я]*|день|недел[а-я]*|месяц[а-я]*)/), win = null;
     if (m) {                                                 // окно в шагах ТОГО ряда, что считаем
-      var days = +m[1] * (/^day/.test(m[2]) ? 1 : (/^week/.test(m[2]) ? 7 : 30));
+      var u = m[2], days = +m[1] * (/^(day|дн|день)/.test(u) ? 1 : (/^(week|недел)/.test(u) ? 7 : 30));
       var st = (calcSer(ids[0]) || {}).step || 'day';
       win = Math.max(3, Math.min(400, Math.round(days / (st === 'day' ? 1 : (st === 'week' ? 7 : 30)))));
+    }
+    /* «Сравни A и B» — вопрос про ДВА ряда. Если шаг один, это лаг; если шаги разные (давление
+       месячное, поверхность суточная), честнее показать тренд каждого, чем подменить вопрос. */
+    if (named.length > 1 && /compar|сравн|против|versus|\bvs\b/.test(ql)) {
+      if (calcOk('lag', calcSer(named[0]), calcSer(named[1]))) return { op: 'lag', series: named[0], series2: named[1], window: win };
+      var two = named.slice(0, 2).filter(function (k) { return calcOk('trend', calcSer(k)); });
+      if (two.length === 2) return two.map(function (k) { return { op: 'trend', series: k, window: win }; });
     }
     if (CALC_OPS[op].need === 2) {
       /* Пару берём ТОЛЬКО из рядов, названных в вопросе. Иначе выходила подмена: спросили,
@@ -2455,6 +2475,16 @@
     }
     for (var n2 = 0; n2 < ids.length; n2++) if (calcOk(op, calcSer(ids[n2]))) return { op: op, series: ids[n2], window: win };
     return null;
+  }
+  /* Если операция не узналась вовсе, но ряд в вопросе назван — считаем тренд: «что с ним
+     сейчас происходит» это ответ на почти любой вопрос о ряде, и лучше он, чем пустота. */
+  function calcPickOr(q, dash) {
+    var p = calcPick(q, dash);
+    if (p) return p;
+    var ql = ' ' + String(q || '').toLowerCase() + ' ', hit = null;
+    CALC_WORDS.forEach(function (w) { if (!hit && w[0].test(ql) && calcSer(w[1])) hit = w[1]; });
+    if (!hit && dash && (dash.risks || []).length && calcSer('r:' + dash.risks[0])) hit = 'r:' + dash.risks[0];
+    return hit && calcOk('trend', calcSer(hit)) ? { op: 'trend', series: hit, window: null } : null;
   }
   function calcRun(spec) {
     if (!spec || !CALC_OPS[spec.op]) return null;
@@ -2484,6 +2514,7 @@
     return s2 + '</svg>';
   }
   function calcHtml(spec) {
+    if (Array.isArray(spec)) return spec.map(calcHtml).join('');
     var res = calcRun(spec); if (!res) return '';
     var W = 430, H = 116;
     return '<div class="rs-calc"><div class="rs-ct">' + esc(res.title) + '</div>' +
@@ -2527,10 +2558,12 @@
     var rs = rsState(), hits = rsSearch(q, 8);
     var msg = { q: q, a: '', hits: hits.map(function (h) { return { kind: h.kind, title: h.title, hash: h.hash || h.url || '' }; }), demo: true, t: new Date().toISOString().slice(11, 16) };
     rs.msgs.push(msg);
-    if (!rsApi()) { rsMerge(rs, hits); rs.summary.push(q + ' → ' + (hits.length ? hits.slice(0, 2).map(function (h) { return h.title; }).join('; ') : 'nothing on the panel')); msg.a = rsDemoAnswer(q, hits); msg.dash = rsDashFromHits(hits); msg.calc = calcPick(q, msg.dash); render(); return; }
+    if (!rsApi()) { rsMerge(rs, hits); rs.summary.push(q + ' → ' + (hits.length ? hits.slice(0, 2).map(function (h) { return h.title; }).join('; ') : 'nothing on the panel')); msg.a = rsDemoAnswer(q, hits); msg.dash = rsDashFromHits(hits); msg.calc = calcPickOr(q, msg.dash); render(); return; }
     msg.a = '<span class="demo">asking the model…</span>'; render();
     var history = rs.msgs.slice(0, -1).slice(-8).map(function (m) { return { q: m.q, a: String(m.a || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 600) }; });
-    rsPost({ question: q, lang: 'en', history: history }).then(function (d) {
+    // ЯЗЫК ОТВЕТА — ЯЗЫК ВОПРОСА. Панель по-английски, но спрашивают на своём: русский вопрос
+    // получал английский ответ (владелец 09.09). Ручка умеет пять языков, надо только сказать.
+    rsPost({ question: q, lang: rsLang(q), history: history }).then(function (d) {
       msg.demo = false;
       if (d.panelDay) S._rsDay = d.panelDay;
       if (d.dayLeft != null) rs.left = { day: d.dayLeft, week: d.weekLeft };
@@ -2543,7 +2576,7 @@
       if (d.unsupported) { msg.a = '<p><b>The model answered without a single supported citation, so we do not show its text.</b> Here is what was found; judge it yourself.</p>' + rsFoundList(d); rsMergeApi(rs, d); rs.summary.push(q + ' → found, but the model’s answer was not supported'); render(); return; }
       msg.a = rsRenderAnswer(d) + rsFoundList(d);
       msg.dash = rsDashFrom(d);
-      msg.calc = d.calc && CALC_OPS[d.calc.op] ? d.calc : calcPick(q, msg.dash);   // модель попросит сама — возьмём её выбор
+      msg.calc = d.calc && CALC_OPS[d.calc.op] ? d.calc : calcPickOr(q, msg.dash);   // модель попросит сама — возьмём её выбор
       rsMergeApi(rs, d);
       rs.summary.push(d.summary_delta ? String(d.summary_delta) : (q + ' → answered'));
       render();
@@ -2650,7 +2683,7 @@
       else if (op === 'del') rsDelete(b.getAttribute('data-id'), !!b.getAttribute('data-local'));
       else if (op === 'verify') {
         b.textContent = 'verifying…';
-        rsPost({ mode: 'verify', lang: 'en', claims: rs.summary.slice(0, 40) }).then(function (d) {
+        rsPost({ mode: 'verify', lang: rsLang((rs.msgs[0] || {}).q || ''), claims: rs.summary.slice(0, 40) }).then(function (d) {
           if (d.error) { b.textContent = RS_ERR[d.error] ? 'not verified: ' + RS_ERR[d.error] : 'verification failed'; return; }
           var V = d.verdicts || []; rs.verdicts = rs.summary.map(function (_, i) { return V.filter(function (v) { return v.n === i + 1; })[0] || V[i] || null; });
           if (d.dayLeft != null) rs.left = { day: d.dayLeft, week: d.weekLeft };
