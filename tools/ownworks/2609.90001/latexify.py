@@ -117,7 +117,10 @@ def latexify_tier(d):
     d = dict(d)
     for k in TEXT_FIELDS:
         if k in d:
-            d[k] = latexify(d[k])
+            # Абзацы в исходниках начинаются с «**Подзаголовок.**» — привычка markdown;
+            # генератор жирного не знает и печатает звёздочки как есть (владелец 09.09).
+            # Снимаем их: ведущая фраза с точкой читается как подзаголовок и без выделения.
+            d[k] = latexify(d[k].replace("**", ""))
     if isinstance(d.get("key_numbers"), dict):
         d["key_numbers"] = {k: latexify(v) for k, v in d["key_numbers"].items()}
     return d
