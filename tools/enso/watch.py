@@ -795,7 +795,7 @@ def risks(W, N34, NW, ONI, IRI=None, AIR=None):
             metric=_m_daily(sw, "World ocean, daily anomaly"), rid="world_ocean_record_streak")
 
     # 5. скорость изменения
-    for key, name in (("sst_nino34", "Niño 3.4"), ("sst_world", "world ocean"), ("t2_world", "land+ocean")):
+    for key, name in (("sst_nino34", "Niño 3.4"), ("sst_world", "The world ocean surface"), ("t2_world", "The air over land and ocean")):
         sl = W[key]["slope14"]
         if sl["pct"] is not None and (sl["pct"] >= 90 or sl["pct"] <= 10):
             fast = sl["pct"] >= 90
@@ -809,7 +809,7 @@ def risks(W, N34, NW, ONI, IRI=None, AIR=None):
                                  W[key]["tail45"]["dates"]), rid=f"fast_{key}")
 
     # 6. CUSUM — новый уровень
-    for key, name in (("sst_nino34", "Niño 3.4"), ("sst_world", "world ocean"), ("t2_world", "land+ocean")):
+    for key, name in (("sst_nino34", "Niño 3.4"), ("sst_world", "The world ocean surface"), ("t2_world", "The air over land and ocean")):
         c = W[key]["cusum"]
         if c["alarm"]:
             add(f"{name}: not a spike but a new level", 4 if key == "sst_nino34" else 3, "already happened",
@@ -844,7 +844,7 @@ def risks(W, N34, NW, ONI, IRI=None, AIR=None):
                 "a source update", kind="data", rid=f"stale_{key}")
 
     # 9. самые тёплые 30 дней
-    for key, name in (("sst_world", "world ocean"), ("t2_world", "land+ocean")):
+    for key, name in (("sst_world", "The world ocean surface"), ("t2_world", "The air over land and ocean")):
         l = W[key]["level30"]
         if l["rank_raw"] == 1:
             add(f"{name}: the last 30 days are the warmest in the whole record", 3, "now",

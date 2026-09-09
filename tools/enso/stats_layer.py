@@ -31,7 +31,8 @@
   epochs       — двадцать лет конвекции на шкале NOAA-21: ранг 2026, ×2015 с ошибкой, робастный z, тренд;
   momentum     — импульс: доля ключевых показателей журнала, идущих в сторону усиления, биномиальный тест;
   analog_paths — пути пяти ближайших лет на 90 дней вперёд от этого дня, сдвинутые к сегодняшнему значению;
-  food_lag     — цены на еду (FAO, группы) за Niño 3.4 с лагом 0–12 месяцев, 1991–2025.
+  food_lag     — цены на еду (FAO, группы) за Niño 3.4 с лагом 0–12 месяцев, 1991–2025;
+  stability    — устойчивость системы: ранние индикаторы перехода (автокорреляция, дисперсия), связность, спектр → уровень 1–5.
 
 Запуск: python stats_layer.py  (в обёртке после globe_data.py).
 """
@@ -906,6 +907,84 @@ def food_lag_item(psl):
             "groups": out}
 
 
+
+def stability_item(series):
+    """Ранние индикаторы перехода и связность: автокорреляция и дисперсия в скользящем окне (тренд Кендалла),
+    связность восьми суточных рядов против прошлых лет, импульс, режимные сдвиги, спектр — уровень 1–5."""
+    from scipy.stats import kendalltau
+    s = series.get("sst_nino34")
+    if s is None:
+        return None
+    dates, vals = s
+    d, y = tail(dates, vals, 400)
+    n = len(y)
+    if n < 200:
+        return None
+    # детренд скользящим средним 30 дн, окно 90 дн, шаг 5
+    ker = np.ones(30) / 30
+    tr = np.convolve(y, ker, mode="same"); res = y - tr
+    wins = list(range(90, n, 5))
+    ac = []; var = []
+    for i in wins:
+        w = res[i - 90:i]
+        ac.append(float(np.corrcoef(w[:-1], w[1:])[0, 1])); var.append(float(w.var()))
+    tau_ac = kendalltau(range(len(ac)), ac).statistic; tau_var = kendalltau(range(len(var)), var).statistic
+    ac_now, ac_p50 = ac[-1], float(np.median(ac)); var_now, var_p50 = var[-1], float(np.median(var))
+    # связность: средняя |r| восьми рядов за 120 дней сейчас против тех же окон 5 прошлых лет
+    keys = [k for k in series if series[k] is not None]
+    def coh(y0, end_doy):
+        cols = {}
+        for k in keys:
+            dd, vv = series[k]
+            m = np.array([x.year == y0 and 1 <= (end_doy - x.timetuple().tm_yday) < 120 for x in dd])
+            if m.sum() < 60:
+                return None
+            cols[k] = dict(((x.timetuple().tm_yday), v) for x, v in zip(dd[m], vv[m]))
+        days = sorted(set.intersection(*[set(c.keys()) for c in cols.values()]))
+        if len(days) < 60:
+            return None
+        M = np.array([[cols[k][t] for t in days] for k in keys]); C = np.corrcoef(M)
+        iu = np.triu_indices(len(keys), 1)
+        return float(np.mean(np.abs(C[iu])))
+    end_doy = d[-1].timetuple().tm_yday; cur = d[-1].year
+    coh_now = coh(cur, end_doy)
+    coh_past = [c for c in (coh(yy, end_doy) for yy in range(cur - 5, cur)) if c is not None]
+    coh_ref = float(np.median(coh_past)) if coh_past else None
+    # прочие сторожа из уже посчитанного
+    flags = []
+    if tau_ac > 0.3:
+        flags.append("autocorrelation rising")
+    if tau_var > 0.3:
+        flags.append("variance rising")
+    if coh_now is not None and coh_ref is not None and coh_now > coh_ref * 1.25:
+        flags.append("series moving together more than usual")
+    sp = None
+    try:
+        spj = json.loads((ROOT / "spectral.json").read_text(encoding="utf-8")); sp = (spj.get("lines_99_now"), spj.get("lines_99_expected_by_chance"))
+        if sp[0] is not None and sp[1] is not None and sp[0] > 2 * max(1, sp[1]):
+            flags.append("spectral lines above chance")
+    except Exception:                                            # noqa: BLE001
+        pass
+    level = 1 + len(flags) if flags else 1
+    level = min(5, level + (1 if (tau_ac > 0.5 and tau_var > 0.5) else 0))
+    kpis = [
+        {"name": "autocorrelation trend", "value": f"{tau_ac:+.2f}", "unit": "τ", "flag": tau_ac > 0.3, "plain": f"Kendall trend of the lag-1 autocorrelation of detrended Niño 3.4 in a 90-day sliding window over the last {n} days: now {ac_now:.2f}, median {ac_p50:.2f}. Rising memory is the classic sign of a system losing its grip — or, during an event, of a system already in the new state."},
+        {"name": "variance trend", "value": f"{tau_var:+.2f}", "unit": "τ", "flag": tau_var > 0.3, "plain": f"Kendall trend of the 90-day variance of the detrended series: now {var_now:.3f}, median {var_p50:.3f} °C². Growing swings are the second classic sign."},
+        {"name": "series moving together", "value": f"{coh_now:.2f}" if coh_now is not None else "·", "unit": (f"vs {coh_ref:.2f} in past years" if coh_ref is not None else ""), "flag": bool(coh_now is not None and coh_ref is not None and coh_now > coh_ref * 1.25), "plain": f"Mean absolute correlation of the {len(keys)} daily series (ocean, world air, hemispheres, tropics, poles) over the last 120 days, against the same window of the previous five years. Higher means the whole system is being driven by one thing."},
+        {"name": "spectral lines at 99 %", "value": f"{sp[0]}" if sp and sp[0] is not None else "·", "unit": f"vs {sp[1]} by chance" if sp and sp[1] is not None else "", "flag": bool(sp and sp[0] is not None and sp[1] is not None and sp[0] > 2 * max(1, sp[1])), "plain": "Lines at 1–7 days across all daily series (Dynamics · Spectral watch): the owner’s hypothesis of a comb before a spontaneous transition."},
+        {"name": "flags raised", "value": f"{len(flags)}", "unit": "of 4", "flag": len(flags) >= 2, "plain": ", ".join(flags) if flags else "none: the indicators of a loss of stability are quiet"},
+    ]
+    return {"id": "stability", "kind": "early_warning", "scene": "now/analogs", "also": ["now", "verdict", "brief", "trend/spectral", "overview"], "level": level,
+            "title": ("System stability: " + (", ".join(flags) if flags else "no early-warning flag raised")),
+            "series": "sst_nino34 daily + all daily series + spectral", "window": [fmt_date(d[0]), fmt_date(d[-1])], "kpis": kpis,
+            "anchors": ["stat:stability", "term:spectral", "term:cusum", "term:teleconnection"],
+            "method": {"name": "Early-warning indicators of a critical transition (Scheffer), plus coherence",
+                       "plain": "Before a system tips into a new state it usually gets slower to recover and swings wider: the memory of the series (autocorrelation) and its variance both climb. We compute both in a sliding window on the daily Niño 3.4, detrended so the event’s own rise does not fake the signal, and test whether they trend up. We add whether the world’s daily series have started moving together more than they used to, and the spectral watch. Each raised flag lifts the level. This is a watch, not a verdict: during a strong event the indicators also rise simply because the state has changed.",
+                       "tech": f"Residuals of Niño 3.4 daily anomalies after a 30-day running mean; 90-day sliding windows, step 5, over {n} days; lag-1 AC and variance per window; Kendall τ against time (flag τ > 0.3; extra level if both τ > 0.5). Coherence: mean |r| of the {len(keys)} daily series over 120 days vs the median of the same window in the previous five years (flag if > 1.25×). Spectral: lines at 99 % vs expected by chance (flag if > 2×). Level = 1 + flags (+1), capped at 5.",
+                       "caveats": ["early-warning indicators are designed for a system approaching a tipping point; an El Niño already under way raises them for a different reason", "ocean currents are not in this: OSCAR and altimetry need registration (pending), so the circulation itself is watched only through the Walker contrast on the satellite"]},
+            "flags": flags}
+
+
 # ------------------------------------------------------------------ сборка
 def build(verbose=True):
     t0 = time.time()
@@ -977,6 +1056,12 @@ def build(verbose=True):
                 items.append(it)
         except Exception as e:                                   # noqa: BLE001
             errors.append(f"{fn.__name__}: {str(e)[:100]}")
+    try:
+        it = stability_item(series)
+        if it:
+            items.append(it)
+    except Exception as e:                                   # noqa: BLE001
+        errors.append(f"stability: {str(e)[:100]}")
     try:
         it = coherence_item(series)
         if it:

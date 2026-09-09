@@ -2383,6 +2383,25 @@
     return s + '</svg>';
   }
 
+  function fixRiskTitles(D) {
+    (D.risks || []).forEach(function (r) { r.title = String(r.title || '').replace(/^world ocean: /, 'The world ocean surface: ').replace(/^land\+ocean: /, 'The air over land and ocean: '); });
+  }
+  /* УСТОЙЧИВОСТЬ СИСТЕМЫ (владелец 09.09: «риск типа общей потери устойчивости, ближе к рискам
+     фазового перехода: смотреть на корреляции, появление сигналов, общие аномальные сдвиги»).
+     Карточка в колонке рисков из единицы статистики `stability`: ранние индикаторы перехода
+     (автокорреляция и дисперсия по Шефферу), связность рядов, импульс, режимные сдвиги, спектр.
+     Не правило вердикта, а сторож: уровень считается из числа тревожных индикаторов. */
+  function stabilityCard() {
+    var it = briefStat('stability'); if (!it) return null;
+    var lvl = it.level || 3, c = el('div', 'risk stab');
+    c.innerHTML = '<div class="rl" style="background:' + lvlColor(lvl) + '">' + lvl + '</div><div><div class="rt">' + esc(it.title) + '</div>' +
+      '<div class="rh">system stability watch · ' + esc((it.window || [])[1] || '') + '</div>' +
+      '<div class="stab-k">' + (it.kpis || []).slice(0, 5).map(function (k) { return '<span class="' + (k.flag ? 'on' : '') + '" data-src="' + esc(JSON.stringify({ name: k.name, def: k.plain, src: 'our statistics layer', date: (it.window || [])[1] })) + '">' + esc(k.name) + ' <b>' + esc(String(k.value)) + '</b>' + (k.unit ? ' ' + esc(k.unit) : '') + '</span>'; }).join('') + '</div>' +
+      '<div class="rf"><span class="cgo" data-go="now" data-gosub="analogs">the method and the caveats →</span>' + cnBtn(it.anchors || [], 'graph') + '</div></div>';
+    c.setAttribute('data-anchor', 'stat:stability');
+    c.querySelector('.cgo').onclick = function (e) { e.stopPropagation(); S.view = 'now'; S.sub.now = 'analogs'; S.sub.info = 'stats'; render(); };
+    return c;
+  }
   function railRisks() {
     var D = S.D, col = $('railR'); col.innerHTML = '';
     var risks = D.risks || [], P = S.P;
@@ -2411,6 +2430,7 @@
       };
       box.appendChild(c);
     });
+    var sc = stabilityCard(); if (sc) box.appendChild(sc);
     t._b.appendChild(box);
     col.appendChild(t);
   }
@@ -6484,6 +6504,7 @@
     get('/data/enso/stats.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
+      fixRiskTitles(r[0]);                    // парные риски: «world ocean:» / «land+ocean:» читались как дубли (владелец 09.09)
       S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {};
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
