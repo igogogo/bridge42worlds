@@ -16,6 +16,7 @@ import sys
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import ns_ru, ns_en, ns_es, ns_ar, ns_fr  # noqa: E402
+from latexify import latexify_tier  # noqa: E402
 
 ROOT = pathlib.Path(r"C:\Users\nadez\PycharmProjects\bridge42worlds")
 AID, DATE = "2609.90001", "2026-09-08"
@@ -28,7 +29,7 @@ TAGS = [ns_ru.MAIN_TAG] + ns_ru.EXTRA_TAGS
 def tier(name):
     out = {}
     for lang, m in MODS.items():
-        d = dict(m.DATA[name])
+        d = latexify_tier(m.DATA[name])
         d["main_tag"] = ns_ru.MAIN_TAG
         d["extra_tags"] = list(ns_ru.EXTRA_TAGS)
         d["scientists"] = list(ns_ru.SCIENTISTS)
@@ -95,7 +96,16 @@ data = {
     "made_by": "ai_agents",
     "verified_by": "lean",
     "provenance": {lang: m.DATA["provenance"] for lang, m in MODS.items()},
-    "own_figures": [{"file": "fig-1.svg",
+    # Рисунок OpenAI из анонса — первым, по прямому решению владельца 09.09 («возьми их
+    # картинку»); подпись называет источник. Наша схема — второй, она подписана по частям
+    # доказательства («схему нашу оставляй, конечно»).
+    "own_figures": [{"file": "fig-0-openai.webp",
+                     "caption": {"ru": "Иллюстрация OpenAI из анонса работы: спираль внутрь и вытягивание вдоль оси. © OpenAI",
+                                 "en": "OpenAI's illustration from the announcement: inward spiral and axial stretching. © OpenAI",
+                                 "es": "Ilustración de OpenAI del anuncio: espiral hacia dentro y estiramiento axial. © OpenAI",
+                                 "ar": "رسم OpenAI من إعلان العمل: حلزون إلى الداخل وتمدد على طول المحور. © OpenAI",
+                                 "fr": "Illustration d'OpenAI tirée de l'annonce : spirale vers l'intérieur et étirement axial. © OpenAI"}},
+                    {"file": "fig-1.svg",
                      "caption": {lang: m.DATA["figure_caption"] for lang, m in MODS.items()}}],
 }
 
