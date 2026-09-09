@@ -2166,6 +2166,59 @@
     return s;
   }
   /* Ответ ручки — одной функцией: пометки [risk:…] ведут на панель, [номер] — на нашу статью. */
+  /* МИНИ-ДАШБОРД ОТВЕТА. Владелец 09.09: «в ответе видеть наши KPI и графики, чтобы собрался
+     из наших готовых визуалов мини-дашбордик с описанием и ответом». Модель ничего не рисует:
+     из найденных единиц берутся ключи, а плитки, искры и карточки статистики — те же, что на
+     брифинге и сценах. В ход сохраняется РЕЦЕПТ (ключи), не картинка: при открытии сохранённого
+     исследования числа подставляются живые, на день просмотра. Порядок — сначала процитированные
+     моделью, потом по сходству; на ход не больше 4 плиток, 3 искр, 2 карточек статистики. */
+  function rsDashFrom(d) {
+    var P = (d.panel || []).slice().sort(function (a, b) { return (b.cited ? 1 : 0) - (a.cited ? 1 : 0) || (b.score || 0) - (a.score || 0); });
+    var dash = { kpis: [], risks: [], stats: [], scenes: [] };
+    (d.kpis || []).forEach(function (k) { var key = String(k.id || '').replace(/^kpi:/, ''); if (jrec(key) && dash.kpis.indexOf(key) < 0) dash.kpis.push(key); });
+    P.forEach(function (p) {
+      var id = String(p.id || ''), key = id.replace(/^[a-z]+:/, '');
+      if (p.kind === 'kpi' && jrec(key) && dash.kpis.indexOf(key) < 0) dash.kpis.push(key);
+      else if (p.kind === 'risk' && briefRisk(key) && dash.risks.indexOf(key) < 0) dash.risks.push(key);
+      else if (p.kind === 'stat' && rsStat(key) && dash.stats.indexOf(key) < 0) dash.stats.push(key);
+      else if (p.kind === 'scene' && p.hash && !dash.scenes.some(function (x) { return x.hash === p.hash; })) dash.scenes.push({ hash: p.hash, title: p.title || key });
+    });
+    return rsDashTrim(dash);
+  }
+  function rsDashFromHits(hits) {
+    var dash = { kpis: [], risks: [], stats: [], scenes: [] };
+    (hits || []).forEach(function (h) {
+      if (h.kind === 'kpi' && jrec(h.id) && dash.kpis.indexOf(h.id) < 0) dash.kpis.push(h.id);
+      else if (h.kind === 'risk' && briefRisk(h.id) && dash.risks.indexOf(h.id) < 0) dash.risks.push(h.id);
+      else if (h.kind === 'stat' && rsStat(h.id) && dash.stats.indexOf(h.id) < 0) dash.stats.push(h.id);
+      else if (h.kind === 'scene' && h.hash && !dash.scenes.some(function (x) { return x.hash === h.hash; })) dash.scenes.push({ hash: h.hash, title: h.title });
+    });
+    return rsDashTrim(dash);
+  }
+  function rsDashTrim(d) {
+    d.kpis = d.kpis.slice(0, 4); d.risks = d.risks.slice(0, 3); d.stats = d.stats.slice(0, 2); d.scenes = d.scenes.slice(0, 3);
+    return (d.kpis.length || d.risks.length || d.stats.length || d.scenes.length) ? d : null;
+  }
+  function rsStat(id) { return (((S.ST || {}).items) || []).filter(function (it) { return it.id === id; })[0] || null; }
+  function rsStatCard(id) {
+    var it = rsStat(id); if (!it) return '';
+    var m = it.method || {}, ks = (it.kpis || []).slice(0, 2);
+    return '<a class="rs-dst" href="#' + esc(it.scene || 'overview') + '"><span class="rs-dst-t">' + esc(it.title) + '</span>' +
+      '<span class="rs-dst-k">' + ks.map(function (k) { return '<span><b>' + esc(String(k.value)) + (k.unit ? ' ' + esc(k.unit) : '') + '</b> ' + esc(k.name) + '</span>'; }).join('') + '</span>' +
+      '<span class="rs-dst-m">' + esc(rsFirstSentences(m.plain || '', 1)) + '</span></a>';
+  }
+  function rsDashHtml(dash) {
+    if (!dash) return '';
+    var kp = (dash.kpis || []).filter(function (k) { return jrec(k); }), rk = (dash.risks || []).filter(function (id) { var r = briefRisk(id); return r && r.metric && (r.metric.values || []).length; });
+    var st = (dash.stats || []).filter(rsStat), sc = dash.scenes || [];
+    if (!kp.length && !rk.length && !st.length && !sc.length) return '';
+    return '<div class="rs-dash">' +
+      (kp.length ? '<div class="rs-dk">' + kp.map(rsKpiTile).join('') + '</div>' : '') +
+      (rk.length ? '<div class="rs-ds">' + rk.map(function (id) { return briefSpark(id, id, 170); }).join('') + '</div>' : '') +
+      (st.length ? '<div class="rs-dt">' + st.map(rsStatCard).join('') + '</div>' : '') +
+      (sc.length ? '<div class="rs-dsc">' + sc.map(function (x) { return '<a class="rs-hit" href="enso.html' + esc(x.hash) + '" target="_blank" rel="noopener"><b>scene</b>' + esc(x.title) + '</a>'; }).join('') + '</div>' : '') +
+      '<div class="rs-dcap">our panel, live numbers · click a tile for its history, a chart for the risk, a card for the scene</div></div>';
+  }
   function rsRenderAnswer(d) {
     var byId = {}; (d.panel || []).forEach(function (p) { byId[p.id] = p; });
     var byW = {}; (d.works || []).forEach(function (w) { byW[String(w.id).replace(/v\d+$/, '')] = w; });
@@ -2176,6 +2229,8 @@
   }
   function rsMergeApi(rs, d) {
     (d.kpis || []).forEach(function (k) { var key = String(k.id || '').replace(/^kpi:/, ''); if (jrec(key) && rs.kpis.indexOf(key) < 0) rs.kpis.push(key); });
+    // плитки, найденные поиском как единицы «kpi», тоже идут на доску: иначе доска говорила «No indicator matched yet», а в ответе стояли две плитки (09.09)
+    (d.panel || []).forEach(function (p) { if (p.kind !== 'kpi') return; var key = String(p.id || '').replace(/^kpi:/, ''); if (jrec(key) && rs.kpis.indexOf(key) < 0) rs.kpis.push(key); });
     (d.concepts || []).forEach(function (c) { rs.concepts[c.id] = { id: c.id, name_en: c.name || c.id, name_ru: c.name_ru, kind: c.kind, line: c.line || '' }; });
     (d.panel || []).forEach(function (p) { if (!p.hash) return; var key = p.hash + '|' + p.kind; var old = rs.links[key]; rs.links[key] = { kind: p.kind, title: p.title, hash: p.hash, cited: !!(p.cited || (old && old.cited)) }; if (p.anchor && rs.anchors.indexOf(p.anchor) < 0) rs.anchors.push(p.anchor); });
     (d.works || []).forEach(function (w) { var old = rs.works[w.id]; rs.works[w.id] = { id: w.id, title: w.title, url: w.url, date: w.date, cited: !!(w.cited || (old && old.cited)), no_text: !!w.no_text, api: true }; });
@@ -2198,7 +2253,7 @@
     var rs = rsState(), hits = rsSearch(q, 8);
     var msg = { q: q, a: '', hits: hits.map(function (h) { return { kind: h.kind, title: h.title, hash: h.hash || h.url || '' }; }), demo: true, t: new Date().toISOString().slice(11, 16) };
     rs.msgs.push(msg);
-    if (!rsApi()) { rsMerge(rs, hits); rs.summary.push(q + ' → ' + (hits.length ? hits.slice(0, 2).map(function (h) { return h.title; }).join('; ') : 'nothing on the panel')); msg.a = rsDemoAnswer(q, hits); render(); return; }
+    if (!rsApi()) { rsMerge(rs, hits); rs.summary.push(q + ' → ' + (hits.length ? hits.slice(0, 2).map(function (h) { return h.title; }).join('; ') : 'nothing on the panel')); msg.a = rsDemoAnswer(q, hits); msg.dash = rsDashFromHits(hits); render(); return; }
     msg.a = '<span class="demo">asking the model…</span>'; render();
     var history = rs.msgs.slice(0, -1).slice(-8).map(function (m) { return { q: m.q, a: String(m.a || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 600) }; });
     rsPost({ question: q, lang: 'en', history: history }).then(function (d) {
@@ -2207,11 +2262,12 @@
       if (d.error) {
         msg.a = '<span class="demo">' + esc(RS_ERR[d.error] || ('the service answered: ' + d.error)) + (d.limit ? ' (limit ' + esc(String(d.limit)) + ')' : '') + '</span>';
         if (/^(captcha_failed|token_)/.test(d.error)) msg.needToken = true;
-        rsMerge(rs, hits); msg.a += rsDemoAnswer(q, hits, 'Meanwhile, what the panel itself says:'); render(); return;
+        rsMerge(rs, hits); msg.a += rsDemoAnswer(q, hits, 'Meanwhile, what the panel itself says:'); msg.dash = rsDashFromHits(hits); render(); return;
       }
       if (d.nothing_found) { msg.a = '<p><b>Nothing in our materials is close enough to this question.</b> That is an answer, not a failure: the vector search found no statement of the panel or work of ours above the threshold.</p>' + rsDemoAnswer(q, hits, 'The nearest words on the panel:'); rsMerge(rs, hits); rs.summary.push(q + ' → nothing in our materials'); render(); return; }
       if (d.unsupported) { msg.a = '<p><b>The model answered without a single supported citation, so we do not show its text.</b> Here is what was found; judge it yourself.</p>' + rsFoundList(d); rsMergeApi(rs, d); rs.summary.push(q + ' → found, but the model’s answer was not supported'); render(); return; }
       msg.a = rsRenderAnswer(d) + rsFoundList(d);
+      msg.dash = rsDashFrom(d);
       rsMergeApi(rs, d);
       rs.summary.push(d.summary_delta ? String(d.summary_delta) : (q + ' → answered'));
       render();
@@ -2228,12 +2284,12 @@
      первого хода (ходы — любой JSON по договору), утверждения — резюме по ходам. */
   function rsPack(rs) {
     return { id: rs.id || undefined, lang: 'en', title: ((rs.msgs[0] || {}).q || 'research').slice(0, 160), summary: rs.summary.join('\n').slice(0, 4000),
-      turns: rs.msgs.slice(0, 40).map(function (m, i) { var t = { q: m.q, a: m.a, hits: m.hits, t: m.t, demo: !!m.demo }; if (i === 0) t.board = { kpis: rs.kpis, anchors: rs.anchors, concepts: rs.concepts, links: rs.links, works: rs.works, created: rs.created, verdicts: rs.verdicts || [] }; return t; }),
+      turns: rs.msgs.slice(0, 40).map(function (m, i) { var t = { q: m.q, a: m.a, hits: m.hits, t: m.t, demo: !!m.demo, dash: m.dash || null }; if (i === 0) t.board = { kpis: rs.kpis, anchors: rs.anchors, concepts: rs.concepts, links: rs.links, works: rs.works, created: rs.created, verdicts: rs.verdicts || [] }; return t; }),
       claims: rs.summary.slice(0, 40) };
   }
   function rsUnpack(rec) {
     var turns = rec.turns || [], b = (turns[0] || {}).board || {};
-    return { id: rec.id, msgs: turns.map(function (t) { return { q: t.q, a: t.a, hits: t.hits || [], t: t.t, demo: !!t.demo }; }), kpis: b.kpis || [], anchors: b.anchors || [], concepts: b.concepts || {}, links: b.links || {}, works: b.works || {},
+    return { id: rec.id, msgs: turns.map(function (t) { return { q: t.q, a: t.a, hits: t.hits || [], t: t.t, demo: !!t.demo, dash: t.dash || null }; }), kpis: b.kpis || [], anchors: b.anchors || [], concepts: b.concepts || {}, links: b.links || {}, works: b.works || {},
       summary: rec.claims || String(rec.summary || '').split('\n').filter(Boolean), verdicts: b.verdicts || [], created: b.created || rec.created || '', saved: rec.updated || rec.created };
   }
   function rsLocalList() { try { return JSON.parse(localStorage.getItem('b42_research') || '[]'); } catch (e) { return []; } }
@@ -2266,7 +2322,7 @@
     fetch(rsApi() + '/delete', { method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ id: id }) }).then(function () { S._rsList = null; render(); }).catch(function () { render(); });
   }
   function rsExportText(rs) {
-    return 'Research on the El Niño panel · ' + rs.created + '\n\n' + rs.msgs.map(function (m, i) { return (i + 1) + '. Q: ' + m.q + '\n   A: ' + String(m.a || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(); }).join('\n\n') +
+    return 'Research on the El Niño panel · ' + rs.created + '\n\n' + rs.msgs.map(function (m, i) { return (i + 1) + '. Q: ' + m.q + '\n   A: ' + String(m.a || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() + (m.dash ? '\n   Shown: ' + [].concat((m.dash.kpis || []).map(function (k) { var r = jrec(k); return r ? r.title : k; }), (m.dash.risks || []).map(function (r) { var x = briefRisk(r); return x ? x.title : r; }), (m.dash.stats || []).map(function (id) { var x = rsStat(id); return x ? x.title : id; })).join('; ') : ''); }).join('\n\n') +
       '\n\nSummary:\n' + rs.summary.map(function (l, i) { var v = (rs.verdicts || [])[i]; return (i + 1) + '. ' + l + (v && v.status ? ' [' + v.status + ']' : ''); }).join('\n') +
       '\n\nKPI: ' + rs.kpis.map(function (k) { var r = jrec(k), e = r ? r.entries || [] : [], last = e[e.length - 1]; return (r ? r.title : k) + (last ? ' ' + jval(last.v, r.digits) + ' ' + (r.unit || '') + ' (' + last.d + ')' : ''); }).join('; ') +
       '\nConcepts: ' + Object.keys(rs.concepts).map(function (id) { return cnName(rs.concepts[id]); }).join(', ') +
@@ -2330,7 +2386,7 @@
     var chat = el('div', 'rs-chat');
     var log = el('div', 'rs-log');
     log.innerHTML = (rs.msgs.length ? rs.msgs.map(function (m) {
-      return '<div class="rs-m q"><span class="rs-t">' + esc(m.t || '') + '</span>' + esc(m.q) + '</div><div class="rs-m a">' + (m.a || '') + (m.demo && m.hits && m.hits.length ? '<div class="rs-hits">' + m.hits.slice(0, 5).map(function (h) { return '<span class="rs-hit"><b>' + esc(h.kind) + '</b>' + esc(h.title) + '</span>'; }).join('') + '</div>' : '') + (m.needToken ? '<button type="button" class="rs-btn" data-rs-token="1">enter an access token</button>' : '') + '</div>';
+      return '<div class="rs-m q"><span class="rs-t">' + esc(m.t || '') + '</span>' + esc(m.q) + '</div><div class="rs-m a">' + (m.a || '') + rsDashHtml(m.dash) + (m.demo && m.hits && m.hits.length ? '<div class="rs-hits">' + m.hits.slice(0, 5).map(function (h) { return '<span class="rs-hit"><b>' + esc(h.kind) + '</b>' + esc(h.title) + '</span>'; }).join('') + '</div>' : '') + (m.needToken ? '<button type="button" class="rs-btn" data-rs-token="1">enter an access token</button>' : '') + '</div>';
     }).join('') : '<div class="rs-m a"><p>Ask about the event in your own words. The question goes to the model with our own materials: the statements of this panel (risks, alerts, indicators, glossary, scenes, the news of the week, regions, the verdict) and the works we parsed. The answer carries marks that lead to the panel or to the work; the board on the left collects the numbers, concepts, scenes and papers involved, and keeps a summary you can verify and save.</p><p>Try: <i>is the event still growing or has it turned?</i> · <i>why is the fuel at its record?</i> · <i>what do the models expect for winter?</i> · <i>what happens to food prices?</i></p>' +
       (live ? '' : '<span class="demo">demo mode on this server: no model behind the answers; the retrieval and the board are real, the answer service lives on the site</span>') + '</div>');
     var inp = el('div', 'rs-in');
