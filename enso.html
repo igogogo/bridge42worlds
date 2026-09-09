@@ -8,7 +8,7 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/css/style.css?v=60c8455717">
+<link rel="stylesheet" href="/css/style.css?v=93ed6fa4e3">
 <style>
   /* ПАНЕЛЬ, А НЕ СТРАНИЦА (владелец 03.09: «одностраничный, без прокруток, это панель, на
      ней всё должно быть динамическое»), с правками второго разбора:
@@ -937,7 +937,11 @@
     /* На телефоне подменю и так на своей строке, а длинный заголовок в одну строку не влезает
        ни при каком кегле — пусть переносится целиком, чем обрывается (владелец 07.09). */
     .stage-h{font-size:14px;white-space:normal;overflow:visible}
-    .stage-top{flex-wrap:wrap} .stage-ctl{margin-inline-start:0;flex-wrap:wrap}
+    /* Строка кнопок сцены: переносить умела только она сама, а внутри неё две группы
+       (source/notes/stats и back/globe/⛶) оставались неразрывными — вместе 419 пикселей на
+       335, и «globe» с полноэкранным уезжали за край (владелец 09.09, проверка на телефоне). */
+    .stage-top{flex-wrap:wrap} .stage-ctl{margin-inline-start:0;flex-wrap:wrap;max-width:100%}
+    .stage-ctl .seg,.stage-ctl .ctl-nav,.stage-ctl .ctl-info{flex-wrap:wrap;max-width:100%}
     /* Липкая подпись на телефоне закрывала низ графика: там она просто идёт следом. */
     .stage-body.scroll > .cap:last-child{position:static;border-top:0;padding-top:2px}
     /* НИЧЕГО НЕ ЕЗДИТ ВБОК. Сцена прокручивалась горизонтально (518 пикселей в 366), потому
@@ -1053,7 +1057,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=07e466eef3"></script>
+<script src="/js/enso.js?v=2d3ac06052"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>

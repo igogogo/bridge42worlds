@@ -560,7 +560,8 @@
     var pv = S.P && S.P.daily && S.P.daily[seriesKey(w)];
     if (fin(pv)) {
       s += '<line x1="' + Lp + '" y1="' + Y(pv).toFixed(1) + '" x2="' + (W - R - 46) + '" y2="' + Y(pv).toFixed(1) + '" style="stroke:var(--soft)" stroke-width="1" stroke-dasharray="2 4" opacity=".8"/>';
-      s += '<text x="' + (Lp + 3) + '" y="' + (Y(pv) - 3).toFixed(0) + '" style="fill:var(--soft)">was ' + fnum(pv) + ' at ' + esc(prevStamp()) + '</text>';
+      // на узком экране без времени: «was +2.65» и без того понятно, а полная строка налезала
+      s += '<text x="' + (Lp + 3) + '" y="' + (Y(pv) - 3).toFixed(0) + '" style="fill:var(--soft)">was ' + fnum(pv) + (W < 560 ? '' : ' at ' + esc(prevStamp())) + '</text>';
     }
     var x0 = X(n - 1), x1 = X(n - 1 + 14);
     if (fin(rec[n - 1])) s += nowDot(x0, Y(rec[n - 1]), 'var(--nino)', 4);
@@ -569,13 +570,22 @@
       var tp = [[x0, Y(rec[n - 1])]].concat(ft.map(function (p) { return [X(n - 1 + p[0]), Y(p[1])]; }));
       s += poly(tp, 'var(--ochre)', 1.6, 1, '3 3');
       var lastT = tp[tp.length - 1];
-      s += freshDot(lastT[0], lastT[1], 4.5) + '<text x="' + (lastT[0] + 6).toFixed(0) + '" y="' + (lastT[1] - 7).toFixed(0) + '" font-size="9" style="fill:var(--ochre)">fresh ' + fnum(ft[ft.length - 1][1]) + '</text>';
+      /* Подпись свежего хвоста стояла справа от его конца — там же, где начинаются подписи
+         вилки прогноза, и на телефоне все три числа сходились в одну строку. Уводим её ВЛЕВО
+         от точки: слева поле пустое, там ей никто не мешает (владелец 09.09). */
+      s += freshDot(lastT[0], lastT[1], 4.5) + '<text x="' + (lastT[0] - 6).toFixed(0) + '" y="' + (lastT[1] - 11).toFixed(0) + '" text-anchor="end" font-size="9" style="fill:var(--ochre)">fresh ' + fnum(ft[ft.length - 1][1]) + '</text>';
     }
     s += '<polygon points="' + x0.toFixed(1) + ',' + Y(f.from).toFixed(1) + ' ' + x1.toFixed(1) + ',' + Y(f.p90).toFixed(1) + ' ' + x1.toFixed(1) + ',' + Y(f.p10).toFixed(1) + '" style="fill:var(--nino)" opacity=".18"/>';
     s += poly([[x0, Y(f.from)], [x1, Y(f.p50)]], 'var(--nino)', 1.6, 1, '5 3');
-    s += '<text x="' + (x1 + 4).toFixed(0) + '" y="' + (Y(f.p90) + 3).toFixed(0) + '">' + fnum(f.p90) + '</text>';
-    s += '<text x="' + (x1 + 4).toFixed(0) + '" y="' + (Y(f.p50) + 3).toFixed(0) + '" class="tt">' + fnum(f.p50) + '</text>';
-    s += '<text x="' + (x1 + 4).toFixed(0) + '" y="' + (Y(f.p10) + 3).toFixed(0) + '">' + fnum(f.p10) + '</text>';
+    /* Три подписи вилки прогноза стоят одна над другой; когда вилка узкая, они сходятся в
+       одну кашу (на телефоне это видно всегда). Разводим их не меньше чем на 11 пикселей. */
+    var yFor = [Y(f.p90), Y(f.p50), Y(f.p10)];
+    if (yFor[1] - yFor[0] < 13) yFor[0] = yFor[1] - 13;
+    if (yFor[2] - yFor[1] < 13) yFor[2] = yFor[1] + 13;
+    // на узком подписываем только середину вилки: три числа в одном углу не разводятся ничем
+    if (W >= 560) s += '<text x="' + (x1 + 4).toFixed(0) + '" y="' + (yFor[0] + 3).toFixed(0) + '">' + fnum(f.p90) + '</text>';
+    s += '<text x="' + (x1 + 4).toFixed(0) + '" y="' + (yFor[1] + 3).toFixed(0) + '" class="tt">' + fnum(f.p50) + '</text>';
+    if (W >= 560) s += '<text x="' + (x1 + 4).toFixed(0) + '" y="' + (yFor[2] + 3).toFixed(0) + '">' + fnum(f.p10) + '</text>';
     var legR = [['last 30 days', 'var(--nino)', 2.6, '', 'last30'], ['400 days', 'var(--text)', 1.8, '', 'all'], ['10–90 % of all years', 'var(--band)', 6, '', 'band'], ['forecast +14 d', 'var(--nino)', 1.6, '5 3', 'fc']];
     if (ft.length) legR.push(['fresh, not yet assessed', 'var(--ochre)', 1.6, '3 3', 'fresh']);
     if (AF) Object.keys(AF).sort().forEach(function (y, k2) { legR.push([y + ' from this day on', 'var(--a' + y + ')', 1.1, dashOf(k2 + 1), y]); });
@@ -852,7 +862,10 @@
         '" y2="' + Y(v).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1.6" opacity=".8"/>';
     });
     s += nowDot(x, Y(p.todate), 'var(--nino)', 4.5);
-    s += '<text x="' + (x + cap + 4).toFixed(1) + '" y="' + (Y(p.todate) + 3.5).toFixed(1) + '" font-size="9" style="fill:var(--nino)">' +
+    /* Подписи двух прожитых сезонов стоят рядом и на телефоне налезали друг на друга: у
+       второй (меньше прожито) уводим строку ВЫШЕ точки, у первой оставляем справа. */
+    var upLab = p.months_done < 2;
+    s += '<text x="' + (upLab ? x + cap + 4 : x + cap + 4).toFixed(1) + '" y="' + (Y(p.todate) + (upLab ? -7 : 3.5)).toFixed(1) + '" font-size="9" style="fill:var(--nino)">' +
       p.months_done + '/3 lived, ' + fnum(p.todate) + '</text>';
     return s;
   }
@@ -976,7 +989,7 @@
       }
       var x = XK(k), w2 = Math.max(14, pw / Math.max(5, cols.length) * .62);
       s += livedMark(x, w2, p, Y);
-      if (best && p.season === best.season)
+      if (best && p.season === best.season && W >= 560)
         s += '<text x="' + (x + w2 / 2 + 5).toFixed(0) + '" y="' + (Y(p.hi) - 6).toFixed(0) + '" class="tt">' +
           esc(p.season) + ' ' + fnum(p.lo) + ' … ' + fnum(p.hi) + '</text>';
       // вторая строка ушла в подпись под графиком: на самом графике она налезала на счёт моделей
@@ -988,7 +1001,11 @@
       // подпись не дублируем: столбец JJA теперь на графике и подписан сам
     }
     if (best) {
-      s += '<text x="' + (W - R - 10) + '" y="' + (Tp + 12) + '" text-anchor="end" class="tt" style="fill:var(--nino)">our firmest reading: ' +
+      /* На узком экране эта строка (полсотни знаков, привязка к правому краю) уезжала за
+         левый край поля и ложилась на подписи шкалы — там она короткая (владелец 09.09). */
+      s += W < 560
+        ? '<text x="' + Lp + '" y="' + (Tp + 11) + '" class="tt" font-size="10" style="fill:var(--nino)">firmest: ' + esc(best.season) + ' ' + fnum(best.todate) + ', ' + best.months_done + '/3</text>'
+        : '<text x="' + (W - R - 10) + '" y="' + (Tp + 12) + '" text-anchor="end" class="tt" style="fill:var(--nino)">our firmest reading: ' +
         esc(best.season) + ' ' + fnum(best.todate) + ', ' + best.months_done + ' of 3 months measured</text>';
     }
     // счёт «сколько ниже прожитого» ушёл в фишки под графиком: на графике он налезал на полосу
@@ -1290,12 +1307,15 @@
       /* Подписей столько, сколько влезает: в плитке обзора «через одну» всё равно давало
          десяток слипшихся слов (владелец 06.09: «внизу сливаются даты»). */
       var every = Math.max(1, Math.ceil(n / Math.max(1, Math.floor(pw / 36))));
-      if (i % every === 0) s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 16) + '" text-anchor="middle">' + esc(r.issue.split(' ')[0]) + '</text><text x="' + X(i).toFixed(0) + '" y="' + (H - 5) + '" text-anchor="middle" opacity=".6">' + esc(r.season.split(' ')[0]) + '</text>';
+      if (i % every === 0) s += W < 560
+        ? '<text x="' + X(i).toFixed(0) + '" y="' + (H - 5) + '" text-anchor="middle">' + esc(r.issue.split(' ')[0]) + '</text>'
+        : '<text x="' + X(i).toFixed(0) + '" y="' + (H - 16) + '" text-anchor="middle">' + esc(r.issue.split(' ')[0]) + '</text><text x="' + X(i).toFixed(0) + '" y="' + (H - 5) + '" text-anchor="middle" opacity=".6">' + esc(r.season.split(' ')[0]) + '</text>';
     });
     s += poly(rows.map(function (r, i) { return [X(i), Y2(r.mean_err)]; }), 'var(--text)', 2);
     rows.forEach(function (r, i) { s += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y2(r.mean_err).toFixed(1) + '" r="2.6" style="fill:var(--text)"/>'; });
     [emin, (emin + emax) / 2, emax].forEach(function (g) { s += '<text x="' + (W - R - 38) + '" y="' + (Y2(g) + 4).toFixed(0) + '" style="fill:var(--soft)">' + fnum(g, 1) + '</text>'; });
-    if (!S._tight) s += '<text x="' + (W - R - 38) + '" y="' + (Tp - 6) + '" style="fill:var(--soft)">mean err, °C</text>';
+    // подпись правой шкалы: на узком короче и НИЖЕ заголовка, иначе они наезжают (09.09)
+    if (!S._tight && W >= 560) s += '<text x="' + (W - R - 38) + '" y="' + (Tp - 6) + '" style="fill:var(--soft)">mean err, °C</text>';
     s += legend([['share below reality', 'var(--nino)', 6], ['average model error', 'var(--text)', 2]], W, H, R, Tp);
     return s + '</svg>';
   }
@@ -3146,7 +3166,9 @@
       if (tight) { tidyTileSvg(svg, W, parseFloat(vb[3]) || 0); return; }
       var tts = [].slice.call(svg.querySelectorAll('text.tt'));
       if (!tts.length) return;
-      var hasLeg = !!svg.querySelector('[data-legtoggle]');
+      // значок легенды бывает двух видов: сворачиваемая метка и «leg-i» из legIcon —
+      // место под правый значок надо держать в обоих случаях (09.09, наезд на телефоне)
+      var hasLeg = !!svg.querySelector('[data-legtoggle], .leg-i');
       /* Сосед справа мешает только если он на ТОЙ ЖЕ строке: у разреза и недельных индексов
          подписи мини-панелей тоже помечены как заголовки, но лежат ниже (07.09). */
       var pos = tts.map(function (t) { return { t: t, x: parseFloat(t.getAttribute('x')) || 0, y: parseFloat(t.getAttribute('y')) || 0 }; });
@@ -3788,7 +3810,10 @@
       if (fin(x.series.values[li])) s += '<circle cx="' + X(li).toFixed(1) + '" cy="' + Y(x.series.values[li]).toFixed(1) + '" r="3" style="fill:' + (xi === 0 ? 'var(--nina)' : 'var(--nino)') + '"/>';
       // колонка подписей
       var lx = Lp + pw + 10, ly = Tp + 10;
-      if (S._tight) { LEGROWS.push([x.title + ': ' + fnum(x.tropics) + ' °C' + (x.lag == null ? '' : ', lags ' + x.lag + ' mo'), x.col || 'var(--text)', 'line']); return; }
+      /* Колонка подписей справа рассчитана на широкое окно: на 375 пикселях её строки
+         («after 1997: +0.84») уходили за правый край и накладывались друг на друга. На узком
+         экране, как и в плитке обзора, они уезжают в легенду под шапкой (владелец 09.09). */
+      if (S._tight || W < 560) { LEGROWS.push([x.title + ': ' + fnum(x.tropics) + ' °C' + (x.lag == null ? '' : ', lags ' + x.lag + ' mo, r ' + x.r), x.col || 'var(--text)', 'line']); return; }
       s += '<text x="' + lx + '" y="' + ly + '" class="tt" font-size="11">' + esc(x.title) + '</text>';
       s += '<text x="' + lx + '" y="' + (ly + 13) + '" font-size="10" style="fill:var(--text)">now ' + fnum(x.tropics) + ' \u00b0C</text>';
       s += '<text x="' + lx + '" y="' + (ly + 25) + '" font-size="9" style="fill:var(--soft)">' +
@@ -4492,7 +4517,7 @@
        заголовок сцены) исчезала целиком. Теперь на узком она встаёт ПОД колесом, а не справа. */
     var narrowMJO = narrowMJO0;
     var Lp = narrowMJO ? 40 : Math.round(cx + r + 72), R = 14;
-    var Tp = narrowMJO ? Math.round(cy + r + 34) : 30, B = 26, pw = W - Lp - R, ph2 = H - Tp - B;
+    var Tp = narrowMJO ? Math.round(cy + r + 46) : 30, B = 26, pw = W - Lp - R, ph2 = H - Tp - B;
     if (pw > 120 && ph2 > 40) {
       var amp = M.amp, vmax = Math.max(2, Math.max.apply(null, amp.filter(fin)));
       var X = function (i) { return Lp + i / (n - 1) * pw; }, Y = function (v) { return Tp + (vmax - v) / vmax * ph2; };
@@ -5443,7 +5468,17 @@
         if (ym.slice(5) === '01' || r === 0) s += '<line x1="' + x0 + '" y1="' + y.toFixed(1) + '" x2="' + (x0 + pw).toFixed(1) + '" y2="' + y.toFixed(1) + '" style="stroke:var(--soft)" stroke-width=".6" opacity=".7"/>';
       });
       // подписи долгот: каждые 30°
-      lons.forEach(function (L, j) { if (Math.abs(L % 30) < .6) s += '<line x1="' + (x0 + j * cw).toFixed(1) + '" y1="' + Tp + '" x2="' + (x0 + j * cw).toFixed(1) + '" y2="' + (Tp + ph).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".5"/><text x="' + (x0 + j * cw).toFixed(0) + '" y="' + (H - 20) + '" text-anchor="middle">' + esc(cur.labels[j]) + '</text>'; });
+      /* Сетка через 30° остаётся, а ПОДПИСЬ ставится только там, где до соседней хватает
+         места: на 375 пикселях «150.5°E 179.5°W 149.5°W» слипались в одну строку (09.09). */
+      var lastLx = -99;
+      lons.forEach(function (L, j) {
+        if (Math.abs(L % 30) >= .6) return;
+        var xl = x0 + j * cw;
+        s += '<line x1="' + xl.toFixed(1) + '" y1="' + Tp + '" x2="' + xl.toFixed(1) + '" y2="' + (Tp + ph).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".5"/>';
+        if (xl - lastLx < 52) return;
+        lastLx = xl;
+        s += '<text x="' + xl.toFixed(0) + '" y="' + (H - 20) + '" text-anchor="middle">' + esc(cur.labels[j]) + '</text>';
+      });
     }
     panel(Lp, cur, (metric === 'anom100' ? 'Anomaly at ' + Math.round(cur.level) + ' m' : 'Thermocline (20 °C) depth anomaly') + ', this event, ' + months[0] + ' → ' + lastYm, 0);
     if (an) {
@@ -5457,7 +5492,7 @@
       if (ym === lastYm) s += '<text x="' + (Lp + pw - 4).toFixed(1) + '" y="' + (y + rh * .5 + 3).toFixed(1) + '" text-anchor="end" font-size="8.5" style="fill:var(--ochre)">now</text>';
       if (ym === lastYm) s += '<rect x="' + (Lp - 2) + '" y="' + y.toFixed(1) + '" width="' + (pw + 4).toFixed(1) + '" height="' + rh.toFixed(1) + '" fill="none" style="stroke:var(--ochre)" stroke-width="1.4"/>' + '<text x="' + (Lp + pw + 4) + '" y="' + (y + rh * .5 + 3).toFixed(1) + '" font-size="9" style="fill:var(--ochre)">' + (an ? '' : 'now') + '</text>';
     });
-    s += '<text x="' + (W - R) + '" y="' + (H - 4) + '" text-anchor="end" font-size="9" style="fill:var(--soft)">red warm · blue cold (hatched) · full colour at ±' + vmax + ' ' + unit + '</text>';
+    s += '<text x="' + (W - R) + '" y="' + (H - 4) + '" text-anchor="end" font-size="9" style="fill:var(--soft)">' + (W < 520 ? 'red warm · blue cold · ±' + vmax + ' ' + unit : 'red warm · blue cold (hatched) · full colour at ±' + vmax + ' ' + unit) + '</text>';
     return s + '</svg>';
   }
 
@@ -5809,7 +5844,15 @@
     var step = niceStep(vmax - vmin, Math.max(3, Math.floor(ph / 26)));
     for (var g = Math.ceil(vmin / step) * step; g < vmax; g += step) s += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (W - R - 8) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width="' + (Math.abs(g) < 1e-9 ? 1.3 : .6) + '"/><text x="' + (Lp - 5) + '" y="' + (Y(g) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9">' + fnum(g, step < 1 ? 2 : (step < 10 ? 1 : 0), false) + '</text>';
     var lab = cfg.dayLabel || function (i) { return String(i); };
-    for (var i = 0; i < n; i += 10) s += '<text x="' + X(i).toFixed(1) + '" y="' + (H - 9) + '" text-anchor="middle" font-size="9">' + esc(lab(i)) + '</text>';
+    /* Через каждые десять точек подписи слипались на узком экране, а крайняя уезжала за
+       поле. Ставим по месту: не ближе 46 пикселей друг к другу и не за краем (09.09). */
+    var lastRx = -99;
+    for (var i = 0; i < n; i += 5) {
+      var xr = X(i);
+      if (xr - lastRx < 46 || xr > W - R - 14) continue;
+      lastRx = xr;
+      s += '<text x="' + xr.toFixed(1) + '" y="' + (H - 9) + '" text-anchor="middle" font-size="9">' + esc(lab(i)) + '</text>';
+    }
     var legs = [];
     years.forEach(function (y, yi) {
       var pts = [];
@@ -6541,9 +6584,21 @@
       var vmax = Math.max.apply(null, vv) * 1.1, vmin = 0;
       var X = function (i) { return Lp + (n > 1 ? i / (n - 1) : 0) * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
       s += '<rect x="' + Lp + '" y="' + Tp + '" width="' + pw.toFixed(1) + '" height="' + ph.toFixed(1) + '" rx="5" style="fill:var(--ink)" opacity=".03"/>';
-      s += '<text class="tt" x="' + Lp + '" y="' + (top + 9) + '" font-size="10">' + fitText(o.title, W - RC, 10) + '</text>';
+      // заголовок панели стоял вплотную к верхней подписи шкалы и налезал на неё на узком
+      s += '<text class="tt" x="' + Lp + '" y="' + (top + 6) + '" font-size="10">' + fitText(o.title, W - RC - Lp, 10) + '</text>';
       s += gridY(vmin, vmax, niceStep(vmax - vmin), Y, Lp, RC + 10, W, 0);
-      o.dates.forEach(function (d, i) { if (d.slice(8) === '01' || i === 0 || i === n - 1) s += '<text x="' + X(i).toFixed(0) + '" y="' + (Tp + ph + 11) + '" text-anchor="' + (i === 0 ? 'start' : (i === n - 1 ? 'end' : 'middle')) + '" font-size="9">' + esc(d.slice(5)) + '</text>'; });
+      /* Подписи дней ставились по правилу «первое число месяца плюс края», и на узком
+         экране первое число оказывалось вплотную к краевой подписи. Меряем место: подпись
+         ставится, только если до соседней хватает пикселей (владелец 09.09). */
+      var lastX = -99;
+      o.dates.forEach(function (d, i) {
+        if (!(d.slice(8) === '01' || i === 0 || i === n - 1)) return;
+        var xd = X(i);
+        if (i && i !== n - 1 && xd - lastX < 34) return;
+        if (i === n - 1 && xd - lastX < 34 && lastX > 0) return;
+        lastX = xd;
+        s += '<text x="' + xd.toFixed(0) + '" y="' + (Tp + ph + 11) + '" text-anchor="' + (i === 0 ? 'start' : (i === n - 1 ? 'end' : 'middle')) + '" font-size="9">' + esc(d.slice(5)) + '</text>';
+      });
       (o.series || []).forEach(function (q, k) {
         if (q.bars) {
           var bw = Math.max(2, pw / n - 2);

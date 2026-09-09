@@ -16,6 +16,7 @@
 import argparse
 import hashlib
 import json
+import math
 import os
 import re
 import subprocess
@@ -98,6 +99,51 @@ def push_index(no_index, why):
           "починить: python tools/enso/research_index.py --push")
 
 
+def json_guard(files):
+    """NaN и Infinity в наших файлах — это МЁРТВАЯ вкладка, а не мелочь.
+
+    Найдено 09.09: `radiance.json` пришёл от сборщика с одним-единственным `NaN`
+    (`lambda_per_day` у aqua_airs). Python такое пишет и читает молча, а браузер — нет:
+    `JSON.parse` падает на первом же `NaN`, панель ловит ошибку, кладёт пустой объект — и
+    вся вкладка Satellite говорит «файла ещё нет». Один символ в мегабайтном файле убивал
+    целый раздел, и никакой прогон этого не замечал, потому что все наши проверки читают
+    файл питоном.
+
+    Поэтому перед каждой выкладкой файлы чинятся здесь: NaN и Infinity становятся null.
+    Это наша сторона; сборщику про это сказано отдельно, но ждать его правки, оставив
+    раздел мёртвым, незачем.
+    """
+    fixed = []
+    for rel in files:
+        f = ROOT / rel
+        if f.suffix != ".json" or not f.exists():
+            continue
+        t = f.read_text(encoding="utf-8")
+        if "NaN" not in t and "Infinity" not in t:
+            continue
+        try:
+            d = json.loads(t)
+        except Exception as e:
+            print(f"⚠️ {rel}: не разобрался ({e}) — оставляю как есть")
+            continue
+
+        def clean(o):
+            if isinstance(o, dict):
+                return {k: clean(v) for k, v in o.items()}
+            if isinstance(o, list):
+                return [clean(v) for v in o]
+            if isinstance(o, float) and (math.isnan(o) or math.isinf(o)):
+                return None
+            return o
+
+        body = json.dumps(clean(d), ensure_ascii=False, separators=(",", ":"), allow_nan=False)
+        f.write_text(body, encoding="utf-8")
+        fixed.append(rel)
+    if fixed:
+        print("починено перед выкладкой (NaN/Infinity → null):", ", ".join(fixed))
+    return fixed
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--yes", action="store_true")
@@ -117,6 +163,7 @@ def main():
         # Лёгкий прогон не меняет разобранного состояния: на сайт едут только fresh/ops/runs.
         run = OPSLOG.Run("publish-fresh")
         env = dict(os.environ, B42_DEPLOY_OK="1", PYTHONIOENCODING="utf-8")
+        json_guard(FRESH_FILES)
         rc = subprocess.run([sys.executable, "cloudflare/deploy_r2.py", "--only", *FRESH_FILES], cwd=str(ROOT), env=env).returncode
         run.finish("ok" if rc == 0 else "failed", files=len(FRESH_FILES))
         print("выкладка свежего слоя:", "ок" if rc == 0 else f"код {rc}")
@@ -151,6 +198,7 @@ def main():
     stamp_asset()
     run = OPSLOG.Run("publish")
     env = dict(os.environ, B42_DEPLOY_OK="1", PYTHONIOENCODING="utf-8")
+    json_guard(FILES)
     rc = subprocess.run([sys.executable, "cloudflare/deploy_r2.py", "--only", *FILES], cwd=str(ROOT), env=env).returncode
     run.finish("ok" if rc == 0 else "failed", stamp=cur.get("stamp"), files=len(FILES),
                reviewed=bool((s.get("review") or {}).get("stamp") == cur.get("stamp")))

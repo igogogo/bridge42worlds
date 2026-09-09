@@ -105,6 +105,17 @@ try:
 except Exception as e:                                           # noqa: BLE001
     warn.append(f"G sources.py did not import: {str(e)[:80]}")
 
+# H. НИ ОДНОГО NaN В ДАННЫХ ПАНЕЛИ (09.09: один NaN в radiance.json от сборщика — и вкладка
+# Satellite мертва на проде: браузерный JSON.parse падает там, где питон читает молча).
+DATA = ROOT / "data" / "enso"
+for f in sorted(DATA.glob("*.json")):
+    try:
+        t = f.read_text(encoding="utf-8")
+    except Exception:                                            # noqa: BLE001
+        continue
+    if re.search(r'(?<![\"\w])(NaN|-?Infinity)(?![\"\w])', t):
+        bad.append(f"H {f.name}: NaN/Infinity — браузер такой JSON не разберёт (publish.py чинит, но источник надо править)")
+
 print(f"check_ui: {len(bad)} blocking, {len(warn)} warnings")
 for b in bad:
     print("  !!", b)
