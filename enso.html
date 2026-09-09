@@ -835,6 +835,8 @@
   /* Пунктирное подчёркивание — обещание подсказки; знак вопроса у курсора оставляем только
      там, где подчёркнуто. Владелец 04.09: «стрелка с вопросиком появляется везде» — это были
      плашки и строки источников, у которых своя рамка вместо подчёркивания. */
+  .tab[data-src]{text-decoration:none;cursor:pointer}   /* плашка меню с подсказкой — без пунктира */
+  .tab[data-src]:hover{color:var(--text)} .tab.on[data-src]:hover{color:var(--surface)} .tab.verdict[data-src]:hover{color:inherit}
   [data-term],[data-src]{text-decoration:underline dotted color-mix(in srgb, var(--ochre) 55%, transparent);
     text-underline-offset:3px;cursor:help}
   .zn[data-term],.mn[data-src],.kj .jsrc [data-src],.p-meta [data-src]{text-decoration:none;cursor:default}
@@ -994,7 +996,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=ce537dab58"></script>
+<script src="/js/enso.js?v=6e4c2a5f6e"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>

@@ -17,7 +17,7 @@
 
   var T = {
     fresh: 'fresh', stale: 'stale',
-    tabs: { brief: 'Briefing', verdict: 'Verdict', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Where we are', ocean: 'Ocean', radiance: 'Satellite raw', models: 'Models', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long record', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
+    tabs: { brief: 'Briefing', verdict: 'Verdict', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Now', ocean: 'Ocean', radiance: 'Satellite', models: 'Models', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long term', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
     tabHelp: {
       brief: 'The entry point: what is happening, what the data show, what to expect and when, the risks already showing, regions and food, what to watch — in plain words, with a link to every number.',
       verdict: 'What the machine makes of it today: the verdict written from the numbers on this page, the turning point, the outlook, what to watch, the caveats.',
@@ -1836,9 +1836,11 @@
       /* Подсказка к пункту меню — на значке «i» справа от текста, а не на самой кнопке
          (владелец 05.09: «для меню неудобно тултипы — пусть будет небольшая иконка i»). */
       var b = el('button', 'tab' + (v[0] === 'verdict' ? ' verdict' : '') + (svc ? ' svc' : '') + (S.view === v[0] ? ' on' : ''),
-        esc(v[1]) + (T.tabHelp[v[0]] ? '<i class="ti" data-src="' + esc(JSON.stringify({ name: v[1], def: T.tabHelp[v[0]] })) + '">i</i>' : ''));
+        esc(v[1]));
       b.type = 'button';
-      b.onclick = function (e) { if (e.target.closest && e.target.closest('.ti')) return; S.view = v[0]; S.risk = null; render(); };
+      // подсказка — на самой плашке, без значка i (владелец 09.09: меню на ноуте разрослось на три строки)
+      if (T.tabHelp[v[0]]) b.setAttribute('data-src', JSON.stringify({ name: v[1], def: T.tabHelp[v[0]] }));
+      b.onclick = function () { S.view = v[0]; S.risk = null; render(); };
       (svc ? rowSvc : rowMain).appendChild(b);
     });
     host.appendChild(rowMain); host.appendChild(rowSvc);
