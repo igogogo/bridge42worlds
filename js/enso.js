@@ -5880,11 +5880,15 @@
     var out = items.filter(function (it) { return it.scene === scene || it.scene === view || (it.also || []).indexOf(scene) >= 0 || (it.also || []).indexOf(view) >= 0; });
     if (view === 'planet') { if (sub !== 'temperature') return []; var pick = S.sub.planetTemp || 't2_world'; out = out.filter(function (it) { return !it.series || typeof it.series !== 'string' || it.series === pick || it.kind === 'coherence'; }); }
     if (view === 'trend' && sub && sub !== 'spectral') out = out.filter(function (it) { return it.scene === scene || it.kind === 'coherence'; });
+    /* Overview — сводка всей статистики: свои единицы целиком, остальные одной строкой со ссылкой на сцену (владелец 09.09: «почему там stats 1») */
+    if (view === 'overview') { var own = out.slice(); items.forEach(function (it) { if (own.indexOf(it) < 0) own.push(Object.assign({}, it, { digest: true })); }); return own; }
     return out;
   }
   function statsHtml(items, mode) {
     var sw = '<div class="seg sub" style="margin-bottom:6px">' + [['plain', 'in plain words'], ['tech', 'technical']].map(function (o) { return '<button type="button" class="sq' + (mode === o[0] ? ' on' : '') + '" data-notemode="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '<span class="st-note">our own statistics on this scene · ' + esc(String((S.ST || {}).built || '').slice(0, 16)) + '</span></div>';
-    return sw + items.map(function (it) {
+    var full = items.filter(function (it) { return !it.digest; }), dig = items.filter(function (it) { return it.digest; });
+    var digest = dig.length ? '<div class="st-item"><div class="st-t">All our statistics on the panel · ' + dig.length + ' more</div><ul class="st-dig">' + dig.map(function (it) { var k0 = (it.kpis || [])[0]; return '<li><a href="#' + esc(it.scene) + '"><b>' + esc(it.title) + '</b></a>' + (k0 ? ' <span class="st-k0">' + esc(k0.name) + ': ' + esc(String(k0.value)) + (k0.unit ? ' ' + esc(k0.unit) : '') + '</span>' : '') + ' <span class="st-sc">' + esc(it.scene) + '</span></li>'; }).join('') + '</ul></div>' : '';
+    return sw + full.map(function (it) {
       var m = it.method || {};
       return '<div class="st-item"><div class="st-t">' + esc(it.title) + '</div>' +
         '<div class="kpis st-kpis">' + (it.kpis || []).map(function (k) { return '<div class="kpi"><div class="kn">' + esc(k.name) + '</div><div class="kv">' + esc(String(k.value)) + (k.unit ? '<small> ' + esc(k.unit) + '</small>' : '') + '</div><div class="km">' + esc(k.plain || '') + '</div></div>'; }).join('') + '</div>' +
@@ -5892,7 +5896,7 @@
         (mode === 'tech' && (m.caveats || []).length ? '<ul class="st-cav">' + m.caveats.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ul>' : '') +
         (it.window && it.window[0] ? '<span class="st-w">window ' + esc(it.window[0]) + (it.window[1] ? ' … ' + esc(it.window[1]) : '') + '</span>' : '') + '</div>' +
         conceptsHtml(it.anchors || [], false) + '</div>';
-    }).join('');
+    }).join('') + digest;
   }
   function sceneInfoBar() {
     var view = S.view === 'gulf' ? 'regions' : (S.view === 'risk' ? 'now' : S.view), info = SCENE_INFO[view];
