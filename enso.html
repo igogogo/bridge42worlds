@@ -8,7 +8,7 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
-<link rel="stylesheet" href="/css/style.css?v=aac20c137c">
+<link rel="stylesheet" href="/css/style.css?v=60c8455717">
 <style>
   /* ПАНЕЛЬ, А НЕ СТРАНИЦА (владелец 03.09: «одностраничный, без прокруток, это панель, на
      ней всё должно быть динамическое»), с правками второго разбора:
@@ -111,6 +111,11 @@
   .ti:hover{opacity:1}
   .tab.on .ti,.seg button.on .ti{opacity:.85}
   @media (max-width:560px){ .tab .ti{display:none} }   /* на телефоне меню и так в пять строк */   /* отбивка от рамки сцены: меню не должно лежать на ней */
+  /* свёрнутое меню телефона: видна одна строка — где мы сейчас (владелец 09.09) */
+  .tabs.mob.closed .trow:not(.tog){display:none}
+  .tabs .trow.tog{display:flex}
+  .tab.navtog{font-weight:600;letter-spacing:.02em}
+  .tabs.mob.open .trow:not(.tog){padding-bottom:2px}
   .tabs::-webkit-scrollbar{display:none}
   /* Чётче: цвет основного текста вместо приглушённого и чуть плотнее начертание —
      меню должно читаться с первого взгляда (владелец 04.09). */
@@ -1027,7 +1032,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=3f9cd06b40"></script>
+<script src="/js/enso.js?v=f6479b8b0a"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>

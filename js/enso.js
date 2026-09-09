@@ -1950,6 +1950,13 @@
   function buildTabs() {
     var host = $('tabs'); host.innerHTML = '';
     var list = [];
+    /* МЕНЮ НА ТЕЛЕФОНЕ СВОРАЧИВАЕТСЯ. Владелец 09.09: «в мобильной версии меню занимает много
+       строк, из-за этого активная зона маленькая — сделать кнопку свернуть». Двадцать две
+       плашки на 375 пикселях это пять-шесть строк, то есть треть экрана до того, как начнётся
+       сама панель. Свёрнутое меню — одна строка: где мы сейчас и стрелка. Выбрал раздел —
+       свернулось само, потому что развёрнутое меню нужно ровно на один тап. */
+    var mob = window.matchMedia('(max-width:760px)').matches;
+    var HOVER = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
     if (window.matchMedia('(max-width:900px)').matches) list.push(['state', T.railTabs.state], ['risks', T.railTabs.risks]);
     Object.keys(T.tabs).forEach(function (k) { list.push([k, T.tabs[k]]); });
     /* ДВА РЯДА (владелец 07.09: «меню разрослось; основные вверху влево, служебные ниже вправо»). */
@@ -1964,11 +1971,24 @@
       var b = el('button', 'tab' + (v[0] === 'verdict' ? ' verdict' : '') + (svc ? ' svc' : '') + (S.view === v[0] ? ' on' : ''),
         esc(v[1]));
       b.type = 'button';
-      // подсказка — на самой плашке, без значка i (владелец 09.09: меню на ноуте разрослось на три строки)
-      if (T.tabHelp[v[0]]) b.setAttribute('data-src', JSON.stringify({ name: v[1], def: T.tabHelp[v[0]] }));
-      b.onclick = function () { S.view = v[0]; S.risk = null; render(); };
+      /* Подсказка — на самой плашке, без значка i (владелец 09.09: меню на ноуте разрослось на
+         три строки). Но только там, где есть настоящее наведение: на сенсорном экране тап
+         поднимает и подсказку, и переход, и карточка повисает над шапкой уже на новой сцене. */
+      if (T.tabHelp[v[0]] && HOVER) b.setAttribute('data-src', JSON.stringify({ name: v[1], def: T.tabHelp[v[0]] }));
+      b.onclick = function () { S.view = v[0]; S.risk = null; if (mob) S.navOpen = false; render(); };
       (svc ? rowSvc : rowMain).appendChild(b);
     });
+    if (mob) {
+      var here = (list.filter(function (v) { return v[0] === S.view; })[0] || [])[1] || T.tabs[S.view] || 'menu';
+      var tog = el('button', 'tab navtog' + (S.navOpen ? ' on' : ''),
+        (S.navOpen ? '✕ ' : '☰ ') + esc(S.navOpen ? 'close the menu' : here));
+      tog.type = 'button';
+      tog.setAttribute('aria-expanded', S.navOpen ? 'true' : 'false');
+      tog.onclick = function () { S.navOpen = !S.navOpen; buildTabs(); };
+      var rowTog = el('div', 'trow tog'); rowTog.appendChild(tog);
+      host.appendChild(rowTog);
+      host.className = 'tabs mob' + (S.navOpen ? ' open' : ' closed');
+    } else host.className = 'tabs';
     host.appendChild(rowMain); host.appendChild(rowSvc);
     var t = $('deltaBtn');
     if (t) {
