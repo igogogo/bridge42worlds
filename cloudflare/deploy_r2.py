@@ -147,6 +147,26 @@ def _internal_by_gitignore(rel):
     return spec.match_file(rel) and not allow.match_file(rel)
 
 
+# ИНДЕКСЫ СТАТЕЙ НА САЙТЕ БОЛЬШЕ НЕ НУЖНЫ, КРОМЕ ОДНОГО. Их качал браузер, пока поиск и
+# лента жили на клиенте; 01.09 всё это переехало в воркер («никаких индексов в браузере,
+# полная динамика через облако»), загрузчики убраны, а файлы продолжали уезжать: 209 МБ на
+# пять языков и три уровня чтения, которые не читает никто (владелец 09.09: «убери лишние»).
+#
+# Исключение ровно одно: lang/ru/articles-index.json читает САМ ВОРКЕР из R2 — сторож
+# публикации проверяет по нему, что выкладка жива и какая дата самая свежая, и по нему же
+# считается ежедневная сводка. Уберём его — сторож будет каждый час кричать «публикация
+# сломана». Остальным языкам и уровням в облаке делать нечего.
+#
+# Локально файлы остаются: их читает сборка (страницы тегов, законов, учёных, разделов,
+# авторов) и разметка понятиями, для которой этот список и есть корпус.
+KEEP_INDEX = "lang/ru/articles-index.json"
+
+
+def _stale_index(rel):
+    return (rel.startswith("lang/") and rel.rsplit("/", 1)[-1].startswith("articles-index")
+            and rel != KEEP_INDEX)
+
+
 def is_internal(p):
     rel = p.relative_to(ROOT).as_posix()
     if _internal_by_gitignore(rel):
@@ -154,6 +174,8 @@ def is_internal(p):
     if p.suffix.lower() in SKIP_SUFFIX and not any(x in rel for x in SKIP_SUFFIX_EXCEPT):
         return True
     if p.name in SKIP_NAMES:
+        return True
+    if _stale_index(rel):
         return True
     # jpg под lang/ пропускаем ради веса: у картинок статей есть webp-двойник. Но обложка
     # авторской работы и кадры из её media/ двойников не имеют — страница просит именно
