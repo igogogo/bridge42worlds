@@ -29,7 +29,11 @@ LOCK = ROOT / "data" / "locks" / "tree.lock"
 AID = "2609.90001"
 PY = sys.executable
 sys.stdout.reconfigure(encoding="utf-8", errors="replace", line_buffering=True)
-ENV = dict(os.environ, PYTHONIOENCODING="utf-8", B42_DEPLOY_OK="1", B42_LEAD="1")
+# SKIP_R2_BACKUP: выкладка одной работы не должна тянуть за собой резервную копию — она
+# обходит 160 тысяч переводов и держит замок дерева до часа (09.09 задержала эту статью на
+# двадцать минут). Копия делается отдельным шагом в конце, осознанно.
+ENV = dict(os.environ, PYTHONIOENCODING="utf-8", B42_DEPLOY_OK="1", B42_LEAD="1",
+           SKIP_R2_BACKUP="1")
 T = lambda *a: [PY, "-X", "utf8", *a]
 
 
@@ -106,4 +110,8 @@ if step("rest"):
     run("cloud-d1", T("cloudflare/concepts_sync.py"))
     wait_lock()
     run("html", T("run.py", "html"), soft=False)
+    # Одна копия в конце всего, а не после каждой команды: она же поставит отметку,
+    # от которой run.py считает недельный срок (владелец 09.09).
+    run("backup", T("run.py", "status"), timeout=4 * 3600,
+        env=dict(ENV, B42_BACKUP_NOW="1", SKIP_R2_BACKUP=""))
     print("\nготово целиком")

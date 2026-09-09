@@ -527,6 +527,28 @@ def _backup_to_r2():
     if (Path(__file__).resolve().parent / ".no-publish").exists():
         print(chr(10) + "⏸️  резервная копия ПРОПУЩЕНА: файл .no-publish (дев-режим)")
         return
+    # РАЗ В НЕДЕЛЮ, А НЕ КАЖДЫЙ РАЗ (владелец 09.09: «зачем нам резервные копии каждый раз
+    # делать, давай раз в неделю, каждый раз это перебор»). Копия идёт следом за ЛЮБОЙ
+    # пишущей командой, а их за день десяток; копия переводов при этом обходит 160 тысяч
+    # страниц и держит замок дерева до часа. 09.09 она задержала выкладку одной работы на
+    # двадцать минут, и это был не первый раз.
+    #
+    # Неделя — честный срок для того, что копия защищает: исходники статей и реестры лежат
+    # ещё и в git, а единственное, чего нет больше нигде, — собранные переводы и базы D1;
+    # они меняются прогонами, а прогон в неделю у нас и так один полный.
+    #
+    # Ключ B42_BACKUP_NOW=1 заставляет сделать сейчас (перед рискованной операцией).
+    stamp = Path(__file__).resolve().parent / "data" / "backup-last.json"
+    if not os.environ.get("B42_BACKUP_NOW"):
+        try:
+            was = datetime.fromisoformat(json.loads(stamp.read_text(encoding="utf-8"))["at"])
+            days = (datetime.now() - was).days
+            if days < 7:
+                print(f"\n⏭️  резервная копия пропущена: последняя {was:%d.%m %H:%M}, "
+                      f"{days} дн. назад (делаем раз в неделю; B42_BACKUP_NOW=1 — сделать сейчас)")
+                return
+        except Exception:
+            pass          # нет отметки или битая — значит копии не было, делаем
     script = Path(__file__).resolve().parent / "cloudflare" / "backup_r2.py"
     if not script.exists():
         return
@@ -555,10 +577,23 @@ def _backup_to_r2():
     # собранными страницами и больше нигде. До 2026-08-05 их единственным экземпляром был
     # бакет сайта. Дельта по md5 — если страницы не менялись, отрабатывает вхолостую.
     pages = Path(__file__).resolve().parent / "cloudflare" / "backup_pages.py"
+    ok = True
     if pages.exists():
         r3 = subprocess.run([sys.executable, str(pages)], env=child_env)
-        if r3.returncode != 0:
+        ok = r3.returncode == 0
+        if not ok:
             print(f"⚠️  копия переводов не удалась (код {r3.returncode}).")
+
+    # Отметку ставим ТОЛЬКО после удачной копии: иначе прерванная копия (её сняли, чтобы
+    # освободить замок) считалась бы сделанной и следующая ушла бы на неделю вперёд.
+    if ok:
+        try:
+            stamp.parent.mkdir(parents=True, exist_ok=True)
+            stamp.write_text(json.dumps({"at": datetime.now().isoformat(timespec="minutes"),
+                                         "после": sys.argv[1] if len(sys.argv) > 1 else "?"},
+                                        ensure_ascii=False), encoding="utf-8")
+        except OSError as e:
+            print(f"⚠️  не записал отметку о копии: {e}")
 
 
 def cmd_tags(args):
