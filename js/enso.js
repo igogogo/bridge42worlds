@@ -2107,6 +2107,24 @@
       var s = document.createElement('script'); s.src = '/js/b42-turnstile.js'; s.onload = go; s.onerror = function () { ok({ turnstile: '' }); }; document.head.appendChild(s);
     });
   }
+  /* ОБЩИЙ КРАЙ ПАНЕЛИ НА СУТКИ — ВИДИМЫЙ. Владелец 09.09: «общий лимит на запрос с плашкой,
+     сколько всего на сегодня и сколько использовано, а то залезет кто-то ботом и вынет все
+     ресурсы». Число приходит с сервера: с каждым ответом (`panelDay`) и отдельно до первого
+     вопроса — из `/api/quota`, чтобы плашка была видна сразу, а не после траты. */
+  function rsDay(cb) {
+    if (S._rsDay) { if (cb) cb(S._rsDay); return; }
+    if (!rsApi()) { if (cb) cb(null); return; }
+    fetch('/api/quota', { credentials: 'same-origin' }).then(function (r) { return r.json(); })
+      .then(function (d) { if (d && d.panelDay) { S._rsDay = d.panelDay; render(); } if (cb) cb(S._rsDay); })
+      .catch(function () { if (cb) cb(null); });
+  }
+  function rsDayHtml() {
+    var d = S._rsDay; if (!d || !d.limit) return '';
+    var used = Math.min(d.used || 0, d.limit), pc = Math.round(used / d.limit * 100);
+    var pay = { name: 'Questions for everyone today', def: 'One shared allowance for the whole panel: ' + d.limit + ' answers a day, ' + used + ' used. It counts every answer, whoever asks and with what pass, and it resets at midnight UTC. It is here so that a script cannot drain the model budget of the site in one night.', src: 'our server' };
+    return '<span class="rs-day' + (d.left === 0 ? ' out' : (pc >= 80 ? ' warn' : '')) + '" data-src="' + esc(JSON.stringify(pay)) + '">' +
+      '<span class="rs-daybar"><i style="width:' + pc + '%"></i></span>' + used + ' of ' + d.limit + ' today, everyone</span>';
+  }
   function rsPost(body) {
     return rsPass().then(function (p) {
       var h = { 'content-type': 'application/json' }; if (p.token) h['x-b42-token'] = p.token; else body.turnstile = p.turnstile || '';
@@ -2219,6 +2237,261 @@
       (sc.length ? '<div class="rs-dsc">' + sc.map(function (x) { return '<a class="rs-hit" href="enso.html' + esc(x.hash) + '" target="_blank" rel="noopener"><b>scene</b>' + esc(x.title) + '</a>'; }).join('') + '</div>' : '') +
       '<div class="rs-dcap">our panel, live numbers · click a tile for its history, a chart for the risk, a card for the scene</div></div>';
   }
+
+  /* ══ КАТАЛОГ ОПЕРАЦИЙ НАД РЯДАМИ ══════════════════════════════════════════════
+     Владелец 09.09: «давай теперь каталог операций». Уговор был такой: не гонять питон на
+     каждый вопрос (это VPS, песочница и деньги за каждый ответ), а держать конечный набор
+     операций над нашими же рядами и считать их у читателя в браузере. Модель — или, пока она
+     не просит сама, разбор вопроса — выбирает операцию и параметры; счёт идёт по тем же
+     данным, что нарисованы на панели; результат — плитки, график нашим движком и строка о
+     методе. Стоит это ноль: ни одного лишнего запроса к серверу.
+
+     Чего каталог НЕ делает: он не выдумывает данных и не строит моделей. Пять операций
+     отвечают на пять вопросов, которые читатели задают чаще всего: куда идёт ряд, насколько
+     он изменился, где он в своей истории, как он выглядит рядом с прошлыми событиями и кто
+     кого опережает. Вопрос, который сюда не ложится, честно остаётся без счёта — и попадает
+     в журнал, чтобы стать либо новой операцией, либо единицей статистики. */
+  var CALC_SERIES = null;
+  function calcSeries() {                    // реестр рядов: суточные сторожа, метрики рисков
+    if (CALC_SERIES) return CALC_SERIES;
+    var out = {}, D = S.D || {};
+    Object.keys(D.watch || {}).forEach(function (k) {
+      var w = D.watch[k], v = (w.recent || []).filter(function (x) { return x != null; });
+      if (v.length < 30) return;
+      out['w:' + k] = { id: 'w:' + k, name: w.label || k, unit: '°C', step: 'day', values: w.recent,
+        end: w.last_date, analogs: (w.tail45_analogs || null), hash: '#trend/' + k, src: 'our daily watch' };
+    });
+    (D.risks || []).forEach(function (r) {
+      var m = r.metric; if (!m || (m.values || []).length < 6) return;
+      out['r:' + r.id] = { id: 'r:' + r.id, name: m.name || r.title, unit: m.unit || '', step: m.step || 'week',
+        values: m.values, dates: m.dates || null, analogs: m.analogs || null, hash: '#risk/' + r.id, src: 'risk card' };
+    });
+    CALC_SERIES = out; return out;
+  }
+  function calcSer(id) { return calcSeries()[id] || null; }
+  function calcStepName(sr) { return sr.step === 'day' ? 'days' : (sr.step === 'week' ? 'weeks' : (sr.step === 'month' ? 'months' : (sr.step === 'year' ? 'years' : 'points'))); }
+  function calcDates(sr) {                   // даты ряда: свои или отсчитанные назад от конца
+    if (sr.dates) return sr.dates;
+    var n = sr.values.length, out = [], step = sr.step === 'week' ? 7 : 1;
+    for (var i = 0; i < n; i++) out.push(addDays(sr.end, -(n - 1 - i) * step));
+    return out;
+  }
+  function calcFit(v) {                      // МНК: наклон на шаг и остаточный разброс
+    var n = 0, sx = 0, sy = 0, sxx = 0, sxy = 0;
+    v.forEach(function (y, i) { if (!fin(y)) return; n++; sx += i; sy += y; sxx += i * i; sxy += i * y; });
+    if (n < 3) return null;
+    var b = (n * sxy - sx * sy) / (n * sxx - sx * sx), a = (sy - b * sx) / n, ss = 0;
+    v.forEach(function (y, i) { if (fin(y)) ss += Math.pow(y - (a + b * i), 2); });
+    return { a: a, b: b, sd: Math.sqrt(ss / Math.max(1, n - 2)), n: n };
+  }
+  function calcCorr(x, y) {
+    var n = 0, sx = 0, sy = 0, sxx = 0, syy = 0, sxy = 0;
+    for (var i = 0; i < Math.min(x.length, y.length); i++) {
+      if (!fin(x[i]) || !fin(y[i])) continue;
+      n++; sx += x[i]; sy += y[i]; sxx += x[i] * x[i]; syy += y[i] * y[i]; sxy += x[i] * y[i];
+    }
+    if (n < 10) return null;
+    var d = Math.sqrt((n * sxx - sx * sx) * (n * syy - sy * sy));
+    return d ? { r: (n * sxy - sx * sy) / d, n: n } : null;
+  }
+  var CALC_OPS = {
+    trend: {
+      name: 'where the series is going', need: 1,
+      words: ['trend', 'going', 'rising', 'falling', 'grow', 'growing', 'still', 'turned', 'direction', 'slowing'],
+      run: function (sr, p) {
+        var win = Math.max(6, p.window || (sr.step === 'day' ? 90 : 12)), v = sr.values.slice(-win).filter(fin);
+        var f = calcFit(v); if (!f) return null;
+        var perMonth = sr.step === 'day' ? 30 : (sr.step === 'week' ? 4 : 1);
+        var perPeriod = f.b * perMonth, unit = sr.unit || '';
+        var last = v[v.length - 1], first = v[0];
+        return { title: 'Trend of ' + sr.name + ' over the last ' + v.length + ' ' + calcStepName(sr),
+          kpis: [{ name: 'change per month', value: fnum(perPeriod, 2), unit: unit,
+                   plain: perPeriod > 0 ? 'still rising' : (perPeriod < 0 ? 'falling' : 'flat') },
+                  { name: 'over the window', value: fnum(last - first, 2), unit: unit, plain: 'from ' + fnum(first, 2) + ' to ' + fnum(last, 2) },
+                  { name: 'scatter around the line', value: fnum(f.sd, 2), unit: unit, plain: 'how far the points sit from the straight line' }],
+          series: v, fit: f,
+          plain: 'A straight line by least squares over the window, nothing more: it says which way the series leans right now, not where it will end. The scatter tells how much to trust the lean.' };
+      }
+    },
+    change: {
+      name: 'how much it changed', need: 1,
+      words: ['change', 'changed', 'much', 'since', 'week', 'month', 'compared', 'moved', 'delta'],
+      run: function (sr, p) {
+        var win = p.window || (sr.step === 'day' ? 30 : 4), v = sr.values.filter(fin);
+        if (v.length < win + 1) win = Math.max(2, Math.floor(v.length / 2));
+        var last = v[v.length - 1], was = v[v.length - 1 - win], d = last - was;
+        return { title: sr.name + ': the last ' + win + ' ' + calcStepName(sr),
+          kpis: [{ name: 'now', value: fnum(last, 2), unit: sr.unit, plain: 'the latest reading we have' },
+                 { name: 'change', value: fnum(d, 2), unit: sr.unit, plain: 'against ' + fnum(was, 2) + ' a window ago' }],
+          series: v.slice(-Math.max(win * 2, 30)),
+          plain: 'Two readings and the distance between them. No smoothing and no model: this is the plainest possible answer to “how much has it moved”.' };
+      }
+    },
+    rank: {
+      name: 'where it stands in its own history', need: 1,
+      words: ['record', 'highest', 'ever', 'extreme', 'rank', 'warmest', 'strongest', 'max', 'maximum', 'unprecedented'],
+      run: function (sr) {
+        var v = sr.values.filter(fin); if (v.length < 20) return null;
+        var last = v[v.length - 1], sorted = v.slice().sort(function (a, b) { return b - a; });
+        var rank = sorted.indexOf(last) + 1, mx = sorted[0], mn = sorted[sorted.length - 1];
+        var above = v.filter(function (x) { return x >= last; }).length;
+        return { title: sr.name + ' against its own record in this series',
+          kpis: [{ name: 'now', value: fnum(last, 2), unit: sr.unit, plain: 'the latest reading' },
+                 { name: 'rank', value: rank + ' of ' + v.length, unit: '', plain: above === 1 ? 'the highest point of the series' : above + ' points stand at or above it' },
+                 { name: 'range', value: fnum(mn, 2) + ' … ' + fnum(mx, 2), unit: sr.unit, plain: 'the whole span we hold here' }],
+          series: v, mark: last,
+          plain: 'A rank inside the stored window of this very series, not against all history: it says how unusual today is among the points on this chart.' };
+      }
+    },
+    analogs: {
+      name: 'next to the years that looked like this', need: 1,
+      words: ['analog', 'analogue', '1997', '2015', '1982', '2023', 'past', 'previous', 'years', 'like', 'compare', 'history'],
+      run: function (sr) {
+        var an = sr.analogs; if (!an || !Object.keys(an).length) return null;
+        var v = sr.values.filter(fin), last = v[v.length - 1], rows = [];
+        Object.keys(an).sort().forEach(function (y) {
+          var a = (an[y] || []).filter(fin); if (!a.length) return;
+          rows.push({ y: y, v: a[a.length - 1], vals: a });
+        });
+        if (!rows.length) return null;
+        var above = rows.filter(function (r) { return last > r.v; }).length;
+        var mean = rows.reduce(function (t, r) { return t + r.v; }, 0) / rows.length;
+        return { title: sr.name + ' today against ' + rows.length + ' analogue years at the same point',
+          kpis: [{ name: 'now', value: fnum(last, 2), unit: sr.unit, plain: 'this year' },
+                 { name: 'above', value: above + ' of ' + rows.length, unit: '', plain: 'analogue years we are already past' },
+                 { name: 'their mean', value: fnum(mean, 2), unit: sr.unit, plain: 'where those years stood on this day' }],
+          series: v, analogs: rows,
+          plain: 'The same calendar point of the years the panel keeps as analogues, put next to today. It is a comparison, not a forecast: those years went on differently for reasons of their own.' };
+      }
+    },
+    lag: {
+      name: 'who leads whom', need: 2,
+      words: ['lead', 'leads', 'lag', 'ahead', 'follow', 'follows', 'delay', 'before', 'after', 'drive', 'drives'],
+      run: function (sr, p, sr2) {
+        if (!sr2) return null;
+        var a = sr.values.filter(fin), b = sr2.values.filter(fin), n = Math.min(a.length, b.length);
+        if (n < 60) return null;
+        a = a.slice(-n); b = b.slice(-n);
+        var maxL = Math.min(Math.floor(n / 4), sr.step === 'day' ? 120 : 8), best = null;
+        for (var L = 0; L <= maxL; L++) {
+          var c = calcCorr(a.slice(0, n - L), b.slice(L));
+          if (c && (!best || Math.abs(c.r) > Math.abs(best.r))) best = { r: c.r, lag: L, n: c.n };
+        }
+        if (!best) return null;
+        var unitL = calcStepName(sr);
+        return { title: sr.name + ' against ' + sr2.name + ': the lag that fits best',
+          kpis: [{ name: 'best lag', value: best.lag + ' ' + unitL, unit: '', plain: best.lag ? sr.name + ' moves first' : 'they move together' },
+                 { name: 'correlation', value: fnum(best.r, 2), unit: '', plain: Math.abs(best.r) > .6 ? 'strong for our data' : (Math.abs(best.r) > .35 ? 'moderate' : 'weak: read it as a hint') },
+                 { name: 'points', value: String(best.n), unit: '', plain: 'pairs the count is built on' }],
+          series: a, second: b, shift: best.lag,
+          plain: 'The shift at which the two series match best. Coincidence in time is not cause: our series are short and share a season, so treat this as a hint, not a mechanism.' };
+      }
+    }
+  };
+  /* Кто считает: пока модель не просит операцию сама, её выбирает разбор вопроса — слова
+     вопроса против словаря операции, ряд берётся из того, что нашлось в ответе. */
+  /* У ОПЕРАЦИИ ЕСТЬ ТРЕБОВАНИЯ К РЯДУ, И ОНИ ПРОВЕРЯЮТСЯ ДВАЖДЫ (09.09, на разборе первых
+     пяти вопросов). Иначе получалось два вида чепухи: «сравнение с годами-аналогами» для
+     ряда, у которого аналогов нет вовсе (карточка молча не рисовалась), и лаг между суточным
+     рядом и месячным — ответ «6 дней» там просто не значил ничего. Проверка стоит и при
+     выборе, и при счёте: сохранённый рецепт тоже не должен воскресить бессмыслицу. */
+  function calcOk(op, sr, sr2) {
+    if (!op || !sr) return false;
+    var vals = (sr.values || []).filter(fin);
+    if (op === 'analogs') return !!(sr.analogs && Object.keys(sr.analogs).length);
+    if (op === 'rank') return vals.length >= 20;
+    if (op === 'lag') return !!(sr2 && sr2 !== sr && sr2.step === sr.step &&
+      vals.length >= 60 && (sr2.values || []).filter(fin).length >= 60);
+    return vals.length >= 12;
+  }
+  /* О ЧЁМ СПРОСИЛИ — ТОТ РЯД И СЧИТАЕМ. Без словаря выходило смешное: вопрос про топливо
+     считался по воздуху над сушей, потому что перебор шёл в порядке реестра. Порядок теперь
+     такой: названный ряд, потом ряды из ответа, потом Niño 3.4 как ряд события, потом всё
+     остальное. Если операции нужны два ряда одного шага, а пары нет (топливо месячное,
+     поверхность суточная), мы не подменяем вопрос чужой парой, а честно считаем по названному
+     ряду то, что можем. Настоящее опережение у нас уже посчитано единицей статистики. */
+  var CALC_WORDS = [
+    [/warm water volume|wwv|fuel/, 'r:fuel_charged'],
+    [/subsurface|under the|100 ?m|depth|thermocline/, 'r:subsurface_warm'],
+    [/world ocean|global ocean|ocean as a whole/, 'w:sst_world'],
+    [/land|air over|planet|global temperature|2 ?m/, 'w:t2_world'],
+    [/walker|coupling|trade wind|pressure|soi/, 'r:coupling_on'],
+    [/model|forecast|plume/, 'r:models_below_reality'],
+    [/wind burst|westerly/, 'r:wwb_recent'],
+    [/nino|niño|3\.4|event|surface|sst/, 'w:sst_nino34']
+  ];
+  function calcPick(q, dash) {
+    var ql = ' ' + String(q || '').toLowerCase() + ' ', ids = [], named = [];
+    var add = function (k) { if (k && calcSer(k) && ids.indexOf(k) < 0) ids.push(k); };
+    // порядок названных — по месту в вопросе: «Niño 3.4 опережает мировой океан» и обратное
+    // это разные вопросы, и первый названный должен идти первым рядом
+    CALC_WORDS.map(function (p) { var m0 = ql.match(p[0]); return m0 ? { k: p[1], at: m0.index } : null; })
+      .filter(Boolean).sort(function (a, b) { return a.at - b.at; })
+      .forEach(function (o) { add(o.k); if (calcSer(o.k) && named.indexOf(o.k) < 0) named.push(o.k); });
+    (dash && dash.risks || []).forEach(function (r) { add('r:' + r); });
+    add('w:sst_nino34');
+    Object.keys(calcSeries()).forEach(add);                 // запас, если у названных не выйдет
+    var op = null, sc = 0;
+    Object.keys(CALC_OPS).forEach(function (k) {
+      var n = 0; CALC_OPS[k].words.forEach(function (w) { if (ql.indexOf(' ' + w) >= 0) n++; });
+      if (n > sc) { sc = n; op = k; }
+    });
+    if (!op || !ids.length) return null;
+    var m = ql.match(/(\d{1,3})\s*(day|days|week|weeks|month|months)/), win = null;
+    if (m) {                                                 // окно в шагах ТОГО ряда, что считаем
+      var days = +m[1] * (/^day/.test(m[2]) ? 1 : (/^week/.test(m[2]) ? 7 : 30));
+      var st = (calcSer(ids[0]) || {}).step || 'day';
+      win = Math.max(3, Math.min(400, Math.round(days / (st === 'day' ? 1 : (st === 'week' ? 7 : 30)))));
+    }
+    if (CALC_OPS[op].need === 2) {
+      /* Пару берём ТОЛЬКО из рядов, названных в вопросе. Иначе выходила подмена: спросили,
+         опережает ли топливо поверхность, а считалось топливо против давления — оба месячные,
+         значит «подходит». Ответ на другой вопрос хуже, чем отсутствие ответа. */
+      for (var i = 0; i < named.length; i++) for (var k2 = 0; k2 < named.length; k2++) {
+        if (named[k2] !== named[i] && calcOk(op, calcSer(named[i]), calcSer(named[k2])))
+          return { op: op, series: named[i], series2: named[k2], window: win };
+      }
+      op = 'trend';                                          // пары одного шага нет — вопрос не подменяем
+    }
+    for (var n2 = 0; n2 < ids.length; n2++) if (calcOk(op, calcSer(ids[n2]))) return { op: op, series: ids[n2], window: win };
+    return null;
+  }
+  function calcRun(spec) {
+    if (!spec || !CALC_OPS[spec.op]) return null;
+    var sr = calcSer(spec.series), sr2x = spec.series2 ? calcSer(spec.series2) : null;
+    if (!calcOk(spec.op, sr, sr2x)) return null;
+    var out = null;
+    try { out = CALC_OPS[spec.op].run(sr, spec, spec.series2 ? calcSer(spec.series2) : null); } catch (e) { out = null; }
+    if (!out) return null;
+    out.op = spec.op; out.sr = sr; out.sr2 = spec.series2 ? calcSer(spec.series2) : null;
+    return out;
+  }
+  function calcChart(res, W, H) {            // рисуем нашим же движком: линия, подгонка, аналоги
+    var v = res.series || [], n = v.length;
+    if (n < 3) return svgOpen(W, H) + '</svg>';
+    var Lp = 34, Rp = 8, Tp = 14, B = 14, pw = W - Lp - Rp, ph = H - Tp - B;
+    var all = v.slice(); (res.analogs || []).forEach(function (r) { r.vals.slice(-n).forEach(function (x) { all.push(x); }); });
+    (res.second || []).forEach(function (x) { all.push(x); });
+    var lo = Math.min.apply(null, all), hi = Math.max.apply(null, all), pad = (hi - lo) * .1 + .01;
+    var X = function (i) { return Lp + i / (n - 1) * pw; }, Y = function (y) { return Tp + (hi + pad - y) / (hi - lo + 2 * pad) * ph; };
+    var s2 = svgOpen(W, H) + gridY(lo - pad, hi + pad, (hi - lo) > 4 ? 1 : .5, Y, Lp, Rp, W, 1);
+    (res.analogs || []).forEach(function (r) { var a = r.vals.slice(-n); s2 += segs(a.map(function (y, i) { return [X(i + (n - a.length)), fin(y) ? Y(y) : NaN]; }), 'var(--soft)', 1, .45); });
+    if (res.second) { var b = res.second.slice(-n); s2 += segs(b.map(function (y, i) { return [X(i), fin(y) ? Y(y) : NaN]; }), 'var(--nina)', 1.2, .8, '3 3'); }
+    s2 += segs(v.map(function (y, i) { return [X(i), fin(y) ? Y(y) : NaN]; }), 'var(--ochre)', 2, 1);
+    if (res.fit) s2 += '<line x1="' + X(0) + '" y1="' + Y(res.fit.a).toFixed(1) + '" x2="' + X(n - 1) + '" y2="' + Y(res.fit.a + res.fit.b * (n - 1)).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1.4" stroke-dasharray="4 3"/>';
+    if (res.mark != null) s2 += '<line x1="' + Lp + '" y1="' + Y(res.mark).toFixed(1) + '" x2="' + (W - Rp) + '" y2="' + Y(res.mark).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1" stroke-dasharray="3 2" opacity=".8"/>';
+    s2 += nowDot(X(n - 1), Y(v[n - 1]), 'var(--ochre)', 3.2);
+    return s2 + '</svg>';
+  }
+  function calcHtml(spec) {
+    var res = calcRun(spec); if (!res) return '';
+    var W = 430, H = 116;
+    return '<div class="rs-calc"><div class="rs-ct">' + esc(res.title) + '</div>' +
+      '<div class="rs-ck">' + res.kpis.map(function (k) { return '<span><b>' + esc(String(k.value)) + (k.unit ? ' ' + esc(k.unit) : '') + '</b> ' + esc(k.name) + '<i>' + esc(k.plain || '') + '</i></span>'; }).join('') + '</div>' +
+      '<div class="rs-cc">' + calcChart(res, W, H) + '</div>' +
+      '<div class="rs-cm"><b>How this was counted.</b> ' + esc(res.plain) + ' <a href="enso.html' + esc(res.sr.hash || '#overview') + '" target="_blank" rel="noopener">the series on the panel ↗</a></div>' +
+      '<div class="rs-dcap">counted in your browser from our own data · ' + esc(CALC_OPS[res.op].name) + '</div></div>';
+  }
   function rsRenderAnswer(d) {
     var byId = {}; (d.panel || []).forEach(function (p) { byId[p.id] = p; });
     var byW = {}; (d.works || []).forEach(function (w) { byW[String(w.id).replace(/v\d+$/, '')] = w; });
@@ -2228,6 +2501,7 @@
     return '<p>' + t.replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
   }
   function rsMergeApi(rs, d) {
+    if (d && d.panelDay) S._rsDay = d.panelDay;
     (d.kpis || []).forEach(function (k) { var key = String(k.id || '').replace(/^kpi:/, ''); if (jrec(key) && rs.kpis.indexOf(key) < 0) rs.kpis.push(key); });
     // плитки, найденные поиском как единицы «kpi», тоже идут на доску: иначе доска говорила «No indicator matched yet», а в ответе стояли две плитки (09.09)
     (d.panel || []).forEach(function (p) { if (p.kind !== 'kpi') return; var key = String(p.id || '').replace(/^kpi:/, ''); if (jrec(key) && rs.kpis.indexOf(key) < 0) rs.kpis.push(key); });
@@ -2247,17 +2521,18 @@
     rs.anchors.forEach(function (a) { linksFor(a).forEach(function (l) { if (!rs.works[l.id]) rs.works[l.id] = l; }); });
     (rs.anchors || []).forEach(function (a) { if (a.indexOf('kpi:') === 0 && rs.kpis.indexOf(a.slice(4)) < 0 && jrec(a.slice(4))) rs.kpis.push(a.slice(4)); });
   }
-  var RS_ERR = { captcha_failed: 'The page could not get a “not a robot” pass. Enter an access token (button below) or reload the page.', token_required: 'An access token is needed.', token_invalid: 'The access token is not valid.', token_expired: 'The access token has expired.',
+  var RS_ERR = { panel_day_limit: 'The panel’s shared allowance of answers for today is used up. It resets at midnight UTC; the panel itself, with all its numbers and charts, works as usual.', captcha_failed: 'The page could not get a “not a robot” pass. Enter an access token (button below) or reload the page.', token_required: 'An access token is needed.', token_invalid: 'The access token is not valid.', token_expired: 'The access token has expired.',
     limit_day: 'The token’s daily allowance is used up.', limit_total: 'The token’s allowance is used up.', quota_day: 'Today’s allowance of questions is used up.', quota_week: 'This week’s allowance of questions is used up.', not_configured: 'The answer service is not configured on this server.', no_key: 'The model key is missing on the server.' };
   function rsAsk(q) {
     var rs = rsState(), hits = rsSearch(q, 8);
     var msg = { q: q, a: '', hits: hits.map(function (h) { return { kind: h.kind, title: h.title, hash: h.hash || h.url || '' }; }), demo: true, t: new Date().toISOString().slice(11, 16) };
     rs.msgs.push(msg);
-    if (!rsApi()) { rsMerge(rs, hits); rs.summary.push(q + ' → ' + (hits.length ? hits.slice(0, 2).map(function (h) { return h.title; }).join('; ') : 'nothing on the panel')); msg.a = rsDemoAnswer(q, hits); msg.dash = rsDashFromHits(hits); render(); return; }
+    if (!rsApi()) { rsMerge(rs, hits); rs.summary.push(q + ' → ' + (hits.length ? hits.slice(0, 2).map(function (h) { return h.title; }).join('; ') : 'nothing on the panel')); msg.a = rsDemoAnswer(q, hits); msg.dash = rsDashFromHits(hits); msg.calc = calcPick(q, msg.dash); render(); return; }
     msg.a = '<span class="demo">asking the model…</span>'; render();
     var history = rs.msgs.slice(0, -1).slice(-8).map(function (m) { return { q: m.q, a: String(m.a || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 600) }; });
     rsPost({ question: q, lang: 'en', history: history }).then(function (d) {
       msg.demo = false;
+      if (d.panelDay) S._rsDay = d.panelDay;
       if (d.dayLeft != null) rs.left = { day: d.dayLeft, week: d.weekLeft };
       if (d.error) {
         msg.a = '<span class="demo">' + esc(RS_ERR[d.error] || ('the service answered: ' + d.error)) + (d.limit ? ' (limit ' + esc(String(d.limit)) + ')' : '') + '</span>';
@@ -2268,6 +2543,7 @@
       if (d.unsupported) { msg.a = '<p><b>The model answered without a single supported citation, so we do not show its text.</b> Here is what was found; judge it yourself.</p>' + rsFoundList(d); rsMergeApi(rs, d); rs.summary.push(q + ' → found, but the model’s answer was not supported'); render(); return; }
       msg.a = rsRenderAnswer(d) + rsFoundList(d);
       msg.dash = rsDashFrom(d);
+      msg.calc = d.calc && CALC_OPS[d.calc.op] ? d.calc : calcPick(q, msg.dash);   // модель попросит сама — возьмём её выбор
       rsMergeApi(rs, d);
       rs.summary.push(d.summary_delta ? String(d.summary_delta) : (q + ' → answered'));
       render();
@@ -2284,12 +2560,12 @@
      первого хода (ходы — любой JSON по договору), утверждения — резюме по ходам. */
   function rsPack(rs) {
     return { id: rs.id || undefined, lang: 'en', title: ((rs.msgs[0] || {}).q || 'research').slice(0, 160), summary: rs.summary.join('\n').slice(0, 4000),
-      turns: rs.msgs.slice(0, 40).map(function (m, i) { var t = { q: m.q, a: m.a, hits: m.hits, t: m.t, demo: !!m.demo, dash: m.dash || null }; if (i === 0) t.board = { kpis: rs.kpis, anchors: rs.anchors, concepts: rs.concepts, links: rs.links, works: rs.works, created: rs.created, verdicts: rs.verdicts || [] }; return t; }),
+      turns: rs.msgs.slice(0, 40).map(function (m, i) { var t = { q: m.q, a: m.a, hits: m.hits, t: m.t, demo: !!m.demo, dash: m.dash || null, calc: m.calc || null }; if (i === 0) t.board = { kpis: rs.kpis, anchors: rs.anchors, concepts: rs.concepts, links: rs.links, works: rs.works, created: rs.created, verdicts: rs.verdicts || [] }; return t; }),
       claims: rs.summary.slice(0, 40) };
   }
   function rsUnpack(rec) {
     var turns = rec.turns || [], b = (turns[0] || {}).board || {};
-    return { id: rec.id, msgs: turns.map(function (t) { return { q: t.q, a: t.a, hits: t.hits || [], t: t.t, demo: !!t.demo, dash: t.dash || null }; }), kpis: b.kpis || [], anchors: b.anchors || [], concepts: b.concepts || {}, links: b.links || {}, works: b.works || {},
+    return { id: rec.id, msgs: turns.map(function (t) { return { q: t.q, a: t.a, hits: t.hits || [], t: t.t, demo: !!t.demo, dash: t.dash || null, calc: t.calc || null }; }), kpis: b.kpis || [], anchors: b.anchors || [], concepts: b.concepts || {}, links: b.links || {}, works: b.works || {},
       summary: rec.claims || String(rec.summary || '').split('\n').filter(Boolean), verdicts: b.verdicts || [], created: b.created || rec.created || '', saved: rec.updated || rec.created };
   }
   function rsLocalList() { try { return JSON.parse(localStorage.getItem('b42_research') || '[]'); } catch (e) { return []; } }
@@ -2386,7 +2662,7 @@
     var chat = el('div', 'rs-chat');
     var log = el('div', 'rs-log');
     log.innerHTML = (rs.msgs.length ? rs.msgs.map(function (m) {
-      return '<div class="rs-m q"><span class="rs-t">' + esc(m.t || '') + '</span>' + esc(m.q) + '</div><div class="rs-m a">' + (m.a || '') + rsDashHtml(m.dash) + (m.demo && m.hits && m.hits.length ? '<div class="rs-hits">' + m.hits.slice(0, 5).map(function (h) { return '<span class="rs-hit"><b>' + esc(h.kind) + '</b>' + esc(h.title) + '</span>'; }).join('') + '</div>' : '') + (m.needToken ? '<button type="button" class="rs-btn" data-rs-token="1">enter an access token</button>' : '') + '</div>';
+      return '<div class="rs-m q"><span class="rs-t">' + esc(m.t || '') + '</span>' + esc(m.q) + '</div><div class="rs-m a">' + (m.a || '') + rsDashHtml(m.dash) + (m.calc ? calcHtml(m.calc) : '') + (m.demo && m.hits && m.hits.length ? '<div class="rs-hits">' + m.hits.slice(0, 5).map(function (h) { return '<span class="rs-hit"><b>' + esc(h.kind) + '</b>' + esc(h.title) + '</span>'; }).join('') + '</div>' : '') + (m.needToken ? '<button type="button" class="rs-btn" data-rs-token="1">enter an access token</button>' : '') + '</div>';
     }).join('') : '<div class="rs-m a"><p>Ask about the event in your own words. The question goes to the model with our own materials: the statements of this panel (risks, alerts, indicators, glossary, scenes, the news of the week, regions, the verdict) and the works we parsed. The answer carries marks that lead to the panel or to the work; the board on the left collects the numbers, concepts, scenes and papers involved, and keeps a summary you can verify and save.</p><p>Try: <i>is the event still growing or has it turned?</i> · <i>why is the fuel at its record?</i> · <i>what do the models expect for winter?</i> · <i>what happens to food prices?</i></p>' +
       (live ? '' : '<span class="demo">demo mode on this server: no model behind the answers; the retrieval and the board are real, the answer service lives on the site</span>') + '</div>');
     var inp = el('div', 'rs-in');
@@ -2398,8 +2674,9 @@
     inp.appendChild(ta); inp.appendChild(go);
     chat.appendChild(log); chat.appendChild(inp);
     var foot = el('div', 'rs-quota');
-    foot.innerHTML = (rs.left ? 'questions left: ' + esc(String(rs.left.day)) + ' today' + (rs.left.week != null ? ' · ' + esc(String(rs.left.week)) + ' this week' : '') + ' · ' : '') + (live ? (rsToken() ? 'access token in use · <a href="#" data-rs-token="1">change</a>' : 'no token: “not a robot” pass on every question · <a href="#" data-rs-token="1">enter a token</a>') : 'demo, no server');
+    foot.innerHTML = rsDayHtml() + (rs.left ? ' · questions left: ' + esc(String(rs.left.day)) + ' today' + (rs.left.week != null ? ' · ' + esc(String(rs.left.week)) + ' this week' : '') + ' · ' : '') + (live ? (rsToken() ? 'access token in use · <a href="#" data-rs-token="1">change</a>' : 'no token: “not a robot” pass on every question · <a href="#" data-rs-token="1">enter a token</a>') : 'demo, no server');
     chat.appendChild(foot);
+    rsDay();                                     // плашка видна ещё до первого вопроса
     chat.addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('[data-rs-token]'); if (!b) return;
       e.preventDefault();

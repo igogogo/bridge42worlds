@@ -238,6 +238,8 @@ async function handleQuota(request, env) {
     email: user ? user.email : null,
     name: user ? user.name : null,
     ...st,
+    // общий край панели на сутки — чтобы плашка была видна ещё до первого вопроса
+    panelDay: await researchDayState(env),
   });
   if (fresh) {
     // Заводим номер сессии сразу всем, ещё до входа: по нему считается норма анонимного
@@ -1792,6 +1794,30 @@ const RESEARCH_TOP_PANEL = 8;
 // статьи держатся у 0.44-0.47 — они длиннее и «размазаны» по смыслу. Порог 0.42 отсекал
 // верные работы на пограничных формулировках, поэтому 0.38; настоящее число выведет ML
 // прогоном вопросов, и менять его выкладкой кода не придётся — есть переменная.
+/* ПОТОЛОК ПАНЕЛИ НА СУТКИ — ОДИН НА ВСЕХ. Владелец 09.09: «общий лимит на запрос с плашкой,
+   сколько всего на сегодня и сколько использовано, а то залезет кто-то ботом и вынет все наши
+   ресурсы». Общий потолок проекта (`proj:`) существовал, но путь с токеном его не трогал: у
+   токена свои нормы, и на этом дорога кончалась — то есть добывший токен мог жечь модель без
+   общего края. Теперь ведро `rproj:<сутки>` считает КАЖДЫЙ ответ панели: по токену, по сессии,
+   вошедшего. Не считает только наши собственные прогоны (x-b42-service). Число — в настройках,
+   не в коде: крутить его выкладкой кода мы не будем. */
+function researchDayCap(env) {
+  const v = Number(env.RESEARCH_DAY_PROJECT);
+  return Number.isFinite(v) && v > 0 ? v : 300;
+}
+async function researchDayState(env) {
+  const limit = researchDayCap(env);
+  if (!env.TOKENS) return { used: 0, limit, left: limit };
+  const used = await readCounter(env, `rproj:${todayKey()}`);
+  return { used, limit, left: Math.max(0, limit - used) };
+}
+async function researchDaySpend(env, cost = 1) {
+  const st = await researchDayState(env);
+  if (!env.TOKENS) return { ok: true, ...st };
+  if (st.used + cost > st.limit) return { ok: false, ...st };
+  await env.TOKENS.put(`rproj:${todayKey()}`, String(st.used + cost), { expirationTtl: 172800 });
+  return { ok: true, used: st.used + cost, limit: st.limit, left: Math.max(0, st.limit - st.used - cost) };
+}
 function researchMinScore(env) {
   const v = Number(env.RESEARCH_MIN_SCORE);
   return Number.isFinite(v) && v > 0 ? v : 0.38;
@@ -1900,8 +1926,18 @@ async function handleResearch(request, env) {
     spent = await quotaSpend(env, who.uid, 1, who.lim);
   }
   if (!spent.ok) {
-    return Response.json({ error: spent.error, dayLeft: spent.dayLeft, weekLeft: spent.weekLeft },
-      { status: spent.code });
+    return Response.json({ error: spent.error, dayLeft: spent.dayLeft, weekLeft: spent.weekLeft,
+      panelDay: await researchDayState(env) }, { status: spent.code });
+  }
+  // Общий край панели: ПОСЛЕ личных норм и ДО вектора с моделью — платить за отказ незачем.
+  let panelDay = { used: 0, limit: researchDayCap(env), left: researchDayCap(env) };
+  if (!service) {
+    const pd = await researchDaySpend(env, 1);
+    panelDay = { used: pd.used, limit: pd.limit, left: pd.left };
+    if (!pd.ok) {
+      return Response.json({ error: "panel_day_limit", panelDay,
+        dayLeft: spent.dayLeft, weekLeft: spent.weekLeft }, { status: 503 });
+    }
   }
 
   // Ищем по английскому: оба пространства построены на английских текстах.
@@ -1937,7 +1973,7 @@ async function handleResearch(request, env) {
   }
   if (!works.length && !panel.length) {
     return Response.json({ answer: null, nothing_found: true, panel: [], works: [],
-      dayLeft: spent.dayLeft }, { headers: { "cache-control": "no-store" } });
+      dayLeft: spent.dayLeft, panelDay }, { headers: { "cache-control": "no-store" } });
   }
 
   // Тексты статей — те же готовые аннотации, что у /api/ask (KV, на языке читателя).
@@ -2018,7 +2054,7 @@ async function handleResearch(request, env) {
     return Response.json({
       answer: null, unsupported: true,
       panel: panel.map((u) => ({ id: u.id, kind: u.kind, title: u.title, hash: u.hash })),
-      works: worksOut.map(shortSource), dayLeft: spent.dayLeft,
+      works: worksOut.map(shortSource), dayLeft: spent.dayLeft, panelDay,
     }, { headers: { "cache-control": "no-store" } });
   }
 
@@ -2065,7 +2101,7 @@ async function handleResearch(request, env) {
                                   no_text: !s.text })),
     concepts: [...cKeep.values()].slice(0, 12),
     kpis: kpis.slice(0, 8),
-    dayLeft: spent.dayLeft, weekLeft: spent.weekLeft,
+    dayLeft: spent.dayLeft, weekLeft: spent.weekLeft, panelDay,
   }, { headers: { "cache-control": "no-store" } });
 }
 
