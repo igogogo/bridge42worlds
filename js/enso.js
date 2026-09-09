@@ -280,6 +280,20 @@
      пунктирами; легенды лучше делать нажимающимися: нажал на строчку — подсветился график».
      Пятый элемент строки — ключ ряда; клик по строке выделяет ряд, остальные бледнеют
      (обработчик один, на поле графика: plot()). Штрих в легенде тот же, что у линии. */
+  /* ВЫДЕЛЕНИЕ МОДЕЛИ ОДНИМ ПРАВИЛОМ. Ключом выделения может быть класс (ok/lag/broke),
+     имя самой модели или один из двух наборов сверки с реальностью — «ниже прожитого» и
+     «выше» (владелец 09.09: «below above первые два переключателя не работают»). Раньше
+     каждый график решал это сам и знал только класс с именем. */
+  function pickedModel(nm, cls) {
+    var v = S.pick;
+    if (!v) return false;
+    if (v === nm || v === cls) return true;
+    if (v === 'below' || v === 'above') {
+      var ao = (S.D.iri || {}).against_observed || {};
+      return (ao[v] || []).indexOf(nm) >= 0;
+    }
+    return false;
+  }
   function pickOp(key, base) {
     base = base == null ? 1 : base;
     return (!S.pick || S.pick === key) ? base : base * 0.15;
@@ -892,7 +906,7 @@
     Object.keys(models).forEach(function (name) {
       var m = models[name]; if ((m.section !== 'dyn' && m.section !== 'stat') || !m.values) return;
       var c = (cls[name] || {}).cls;
-      var hot = S.model === name, picked = S.pick && (S.pick === c || S.pick === name);
+      var hot = S.model === name, picked = pickedModel(name, c);
       var dim = (S.pick && !picked) || (S.model && !hot);
       var col = hot || picked ? 'var(--ochre)' : (c === 'broke' ? 'var(--lv5)' : (c === 'lag' ? 'var(--lv3)' : (m.section === 'dyn' ? 'var(--nina)' : 'var(--ok)')));
       var wid = hot ? 2.6 : (picked ? 1.8 : (name === strongest ? 2 : 1));
@@ -978,7 +992,7 @@
       ['published, all ' + (LVn.n_all || '—'), 'var(--soft)', 1.1, '3 3', 'pub'],
       ['previous issue' + (hist.length > 1 ? ' (' + hist[1].issued + ')' : ''), 'var(--soft)', 1.6, '5 4', 'prev'],
       [''],
-      [esc(ao.season) + ' so far ' + fnum(ref), 'var(--nino)', 1, '4 3'], ['below the lived part', 'var(--lv5)', 'dot']];
+      [esc(ao.season) + ' so far ' + fnum(ref), 'var(--nino)', 1, '4 3'], ['below the lived part ' + (ao.below || []).length, 'var(--lv5)', 'dot', null, 'below'], ['above it ' + (ao.above || []).length, 'var(--ok)', 'dot', null, 'above']];
     if (IRI.last_full_season) leg.push([esc(IRI.last_full_season.season) + ' lived in full', 'var(--ok)', 1, '2 4']);
     leg.push(['lived part of a season: dot', 'var(--nino)', 'dot']);
     leg.push(['where its mean can end: bar', 'var(--nino)', 4]);
@@ -1025,7 +1039,7 @@
     var lab = cw < 260 ? seas.filter(function (sn, i) { return livedS.indexOf(sn) >= 0 || (i % 3 === 0 && livedS.indexOf(seas[i + 1]) < 0 && livedS.indexOf(seas[i - 1]) < 0); }) : seas;
     names.forEach(function (nm, k) {
       var c = k % cols, rr = Math.floor(k / cols), x0 = c * (cw + gap), y0 = top0 + rr * (ch + gap);
-      var cls = (CL[nm] || {}).cls || 'none', picked = S.pick && (S.pick === cls || S.pick === nm), dim = S.pick && !picked;
+      var cls = (CL[nm] || {}).cls || 'none', picked = pickedModel(nm, cls), dim = S.pick && !picked;
       var Lp = x0 + 6, pw = cw - 12, Tp = y0 + 15, ph = ch - 30;
       var X = function (i) { return Lp + i / Math.max(1, seas.length - 1) * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
       s2 += '<g data-pick="' + esc(nm) + '" data-src="' + esc(JSON.stringify(modelPay(nm))) + '" style="cursor:pointer" opacity="' + (dim ? .42 : 1) + '">';
@@ -1110,7 +1124,7 @@
         var m = r.models[nm];
         if (m.section !== 'dyn' && m.section !== 'stat') return;
         var c2 = (CL[nm] || {}).cls || 'none';
-        var picked2 = S.pick && (S.pick === c2 || S.pick === nm), dim2 = S.pick && !picked2;
+        var picked2 = pickedModel(nm, c2), dim2 = S.pick && !picked2;
         var pts = fc.map(function (i) { return [X(i), fin(m.values[i]) ? Y(m.values[i]) : NaN]; });
         s2 += segs(pts, picked2 ? 'var(--ochre)' : (c2 === 'broke' ? 'var(--lv5)' : (c2 === 'lag' ? 'var(--lv3)' : 'var(--nina)')),
           picked2 ? 1.6 : 1, dim2 ? .1 : (picked2 ? .95 : .35));
@@ -3141,7 +3155,7 @@
         s += gridY(vmin, vmax, .5, Y, Lp, R, W, 1);
         rows2.forEach(function (nm, i2) {
           var c = (classes[nm] || {}).cls || 'none';
-          var picked = S.pick && (S.pick === c || S.pick === nm), dim = S.pick && !picked;
+          var picked = pickedModel(nm, c), dim = S.pick && !picked;
           var col = picked ? 'var(--ochre)' : (c === 'broke' ? 'var(--lv5)' : (c === 'lag' ? 'var(--lv3)' : 'var(--nina)'));
           var op = dim ? .15 : .95;
           var x = X(i2), pk = peaks[nm];
@@ -3194,8 +3208,8 @@
       body.appendChild(el('div', 'cap', 'Click a row to light that model in the plume. The forecast for ' + esc(ao.season) + ' is a three-month mean while reality is a weekly point, so the comparison is honest only as “the model is below a level already reached”.'));
     }
     var tl = el('div', 'tally');
-    tl.innerHTML = '<span><i style="background:var(--nino)"></i>below reality ' + ao.below.length + jchip('models_below_n') + '</span>' +
-      '<span><i style="background:var(--ok)"></i>above ' + ao.above.length + jchip('models_above') + '</span>' +
+    tl.innerHTML = '<span class="pick' + (S.pick === 'below' ? ' on' : '') + '" data-pick="below" title="highlight the models below the lived level"><i style="background:var(--nino)"></i>below reality ' + ao.below.length + jchip('models_below_n') + '</span>' +
+      '<span class="pick' + (S.pick === 'above' ? ' on' : '') + '" data-pick="above" title="highlight the models above it"><i style="background:var(--ok)"></i>above ' + ao.above.length + jchip('models_above') + '</span>' +
       /* КЛАССЫ ВНИЗУ — НАЖИМАЮТСЯ. Владелец 09.09: «вот там внизу классификация, кто сломался,
          можно при нажатии их ярче высвечивать». Те же ключи, что у легенды: клик по чипу
          выделяет весь класс на плюме, в мозаике и в столбике выпусков. */
