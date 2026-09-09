@@ -96,6 +96,15 @@ for k in tab_keys:
     if not re.search(rf"S\.view === '{k}'", JS) and k not in ("state", "risks"):
         bad.append(f"F tab without a render branch: {k}")
 
+# G. каждый источник имеет подпись (09.09: три новых ряда поясов без LABELS уронили лёгкий прогон)
+try:
+    import sources as SRC
+    for k in SRC.SOURCES:
+        if k not in SRC.LABELS:
+            bad.append(f"G source without a label in sources.LABELS: {k}")
+except Exception as e:                                           # noqa: BLE001
+    warn.append(f"G sources.py did not import: {str(e)[:80]}")
+
 print(f"check_ui: {len(bad)} blocking, {len(warn)} warnings")
 for b in bad:
     print("  !!", b)

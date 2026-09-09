@@ -28,7 +28,10 @@
   regions      — сухопутные боксы по квадрантам «воздух × дождь» и знак дождя против аналогов;
   teleconnection — сила телесвязи каждого бокса: регрессия окна июль–август на Niño 3.4 за 45 лет;
   convection_lag — лаг между конвекцией над Niño 3.4 (спутник) и Niño 1+2 / Niño 3.4 у поверхности;
-  epochs       — двадцать лет конвекции на шкале NOAA-21: ранг 2026, ×2015 с ошибкой, робастный z, тренд.
+  epochs       — двадцать лет конвекции на шкале NOAA-21: ранг 2026, ×2015 с ошибкой, робастный z, тренд;
+  momentum     — импульс: доля ключевых показателей журнала, идущих в сторону усиления, биномиальный тест;
+  analog_paths — пути пяти ближайших лет на 90 дней вперёд от этого дня, сдвинутые к сегодняшнему значению;
+  food_lag     — цены на еду (FAO, группы) за Niño 3.4 с лагом 0–12 месяцев, 1991–2025.
 
 Запуск: python stats_layer.py  (в обёртке после globe_data.py).
 """
@@ -715,6 +718,15 @@ def epochs_item():
         if not rows or blk.get("current") is None:
             continue
         cur, se = blk["current"], blk.get("current_se") or 0
+        # окно сборщика может начинаться раньше июля (09.09: 01-01); история — июль–сентябрь, значит 2026 по тем же дням
+        W0 = ra.get("window") or {}; start = W0.get("start") or "07-01"
+        if start != "07-01":
+            y0 = int(W0.get("current") or 2026)
+            jul = (date(y0, 7, 1) - date(y0, int(start[:2]), int(start[3:5]))).days
+            ser = ((((ra["sources"].get("n21_cris") or {}).get("series") or {}).get(key) or {}).get("conv_frac") or {}).get(str(y0)) or {}
+            vv = [v for k2, v in ser.items() if int(k2) >= jul and v is not None]
+            if len(vv) >= 5:
+                cur = float(np.mean(vv)); se = float(np.std(vv, ddof=1) / math.sqrt(len(vv)))
         vals = [r[2] for r in rows] + [cur]; rank = sorted(vals, reverse=True).index(cur) + 1
         base = [r for r in rows if 2003 <= r[0] <= 2021]
         xs = np.array([r[0] for r in base], float); ys = np.array([r[2] for r in base])
@@ -745,6 +757,153 @@ def epochs_item():
                        "tech": "epochs block of radiance.json: adjusted yearly window means with SE; best instrument per year (CrIS chain first, AIRS ≤ 2021); rank among all years; robust z = (x − median)/(1.4826·MAD) over 2003–2021; ratio and (x₂₀₂₆ − x₂₀₁₅)/√(se₁² + se₂²) per instrument; OLS trend over 2003–2021.",
                        "caveats": ["offsets are measured on a few hundred overlapping days: a residual bias of order the SE cannot be excluded", "AIRS years after 2021 are excluded because its overpass drifted into the afternoon cloud maximum"]},
             "per_box": out}
+
+
+
+def momentum_item():
+    """Импульс: доля ключевых показателей журнала, идущих в сторону усиления события, по последним двум записям."""
+    J = json.loads((ROOT / "journal.json").read_text(encoding="utf-8")).get("metrics") or {}
+    # ключ → знак, при котором рост значения = усиление события
+    UP = {"n34_weekly": 1, "n34_daily": 1, "n34_30d": 1, "n12_weekly": 1, "n34_box": 1, "n12_box": 1, "oni": 1, "roni": 1, "sst_world": 1, "t2_world": 1,
+          "wwv": 1, "wwv_share": 1, "subsurface_warmest": 1, "d20_east": 1, "wind_week": 1, "iri_peak": 1, "live_mean": 1, "iri_share_below": 1, "models_broke": 1,
+          "soi": -1, "olr": -1, "u850_west": 1, "coupling_score": 1, "mjo_amp": 0, "risk_index": 1, "n_alerts": 1, "food_index": 1, "food_yoy": 1, "gulf_sst": 1}
+    rows = []
+    for k, sg in UP.items():
+        r = J.get(k); e = (r or {}).get("entries") or []
+        if not r or len(e) < 2 or not isinstance(e[-1].get("v"), (int, float)) or not isinstance(e[-2].get("v"), (int, float)):
+            continue
+        dv = e[-1]["v"] - e[-2]["v"]
+        if dv == 0 or sg == 0:
+            rows.append({"k": k, "title": r.get("title"), "dv": dv, "dir": 0, "d": e[-1]["d"]}); continue
+        rows.append({"k": k, "title": r.get("title"), "dv": dv, "dir": 1 if dv * sg > 0 else -1, "d": e[-1]["d"]})
+    if len(rows) < 8:
+        return None
+    up = [r for r in rows if r["dir"] > 0]; dn = [r for r in rows if r["dir"] < 0]; flat = [r for r in rows if r["dir"] == 0]
+    share = len(up) / max(1, len(up) + len(dn))
+    # биномиальная вероятность такого перевеса при равных шансах
+    from scipy.stats import binomtest
+    n = len(up) + len(dn); pval = binomtest(len(up), n, 0.5, alternative="greater").pvalue if n else 1.0
+    kpis = [
+        {"name": "indicators moving toward a stronger event", "value": f"{len(up)} of {n}", "unit": f"({share * 100:.0f} %)", "plain": ", ".join(r["title"] for r in up[:10]) + ("…" if len(up) > 10 else "")},
+        {"name": "moving the other way", "value": f"{len(dn)}", "unit": "", "plain": ", ".join(r["title"] for r in dn) or "none"},
+        {"name": "chance of this lopsidedness by coin-flip", "value": f"{pval * 100:.1f}", "unit": "%", "plain": f"If each indicator moved up or down at random, a split of {len(up)}:{len(dn)} or more lopsided would happen {pval * 100:.1f} % of the time."},
+        {"name": "unchanged since the previous reading", "value": f"{len(flat)}", "unit": "", "plain": ", ".join(r["title"] for r in flat) or "none"},
+    ]
+    return {"id": "momentum", "kind": "composite", "scene": "overview", "also": ["verdict", "brief"],
+            "title": f"Momentum: {len(up)} of {n} key indicators moved toward a stronger event at their last change ({share * 100:.0f} %)",
+            "series": "journal.json", "window": [min(r["d"] for r in rows), max(r["d"] for r in rows)], "kpis": kpis,
+            "anchors": ["stat:momentum", "term:riskindex", "term:coupling"],
+            "method": {"name": "Sign count over the value journal with a binomial test",
+                       "plain": "Every indicator in the journal has a direction that means “the event is getting stronger” — warmer water, more fuel, weaker trades, more models below reality. We take each indicator’s last change and count how many went that way. A coin-flip test says how surprising the split is. It is a crude but honest pulse: one number for the whole board.",
+                       "tech": f"{len(rows)} journal metrics with ≥ 2 entries and a defined sign (SOI and OLR count reversed; MJO amplitude undirected); direction of the last change; one-sided binomial test of ups against 0.5. Changes are of unequal age (weekly, daily, monthly series), so this is a snapshot of the latest moves, not a rate.",
+                       "caveats": ["indicators are not independent: Niño 3.4 weekly, daily and box are the same water", "a change of one tick counts like a big one; magnitude is on the KPI strip"]},
+            "rows": rows}
+
+
+def analog_paths_item(psl):
+    """Пути ближайших лет: как шли суточные аномалии Niño 3.4 в следующие 90 дней у пяти ближайших лет."""
+    s = daily_anom("sst_nino34")
+    if s is None:
+        return None
+    dates, vals = s
+    last = dates[-1]; doy = last.timetuple().tm_yday; cur = last.year
+    # ближайшие годы — по тому же признаку, что в кластерах (январь–август ERSST)
+    years = sorted(y for y in psl if y >= 1950 and all(np.isfinite(psl[y][:8])))
+    if cur not in years:
+        return None
+    X = np.array([psl[y][:8] for y in years]); Xs = (X - X.mean(0)) / (X.std(0) + 1e-9)
+    xc = Xs[years.index(cur)]
+    near = [y for _, y in sorted(((float(np.linalg.norm(Xs[i] - xc)), y) for i, y in enumerate(years) if y != cur))[:5]]
+    by_day = {}
+    for d, v in zip(dates, vals):
+        by_day[(d.year, d.timetuple().tm_yday)] = v
+    now = float(vals[-1])
+    paths = {}
+    for y in near:
+        base = by_day.get((y, doy))
+        if base is None:
+            continue
+        pth = []
+        for h in (0, 15, 30, 45, 60, 75, 90):
+            d = date(y, 1, 1) + timedelta(days=doy - 1 + h)
+            v = by_day.get((d.year, d.timetuple().tm_yday))
+            pth.append(None if v is None else round(v - base + now, 2))     # сдвиг на разность стартов
+        paths[y] = pth
+    if len(paths) < 3:
+        return None
+    H = [0, 15, 30, 45, 60, 75, 90]
+    def stat(i):
+        vv = [paths[y][i] for y in paths if paths[y][i] is not None]
+        return (float(np.median(vv)), min(vv), max(vv), len(vv)) if vv else (None, None, None, 0)
+    s30, s60, s90 = stat(2), stat(4), stat(6)
+    kpis = [
+        {"name": "nearest years by the January–August path", "value": ", ".join(str(y) for y in paths), "unit": "", "plain": "Their daily Niño 3.4 from this calendar day on, shifted so that each starts at today’s value."},
+        {"name": "+30 days", "value": f"{s30[0]:+.2f}" if s30[0] is not None else "·", "unit": "°C", "plain": f"Median of the {s30[3]} paths; range {s30[1]:+.2f} … {s30[2]:+.2f}." if s30[0] is not None else ""},
+        {"name": "+60 days", "value": f"{s60[0]:+.2f}" if s60[0] is not None else "·", "unit": "°C", "plain": f"Median of the {s60[3]} paths; range {s60[1]:+.2f} … {s60[2]:+.2f}." if s60[0] is not None else ""},
+        {"name": "+90 days", "value": f"{s90[0]:+.2f}" if s90[0] is not None else "·", "unit": "°C", "plain": f"Median of the {s90[3]} paths; range {s90[1]:+.2f} … {s90[2]:+.2f}. Today: {now:+.2f}." if s90[0] is not None else ""},
+    ]
+    return {"id": "analog_paths", "kind": "analogs", "scene": "trend/sst_nino34", "also": ["now/analogs", "trend", "brief"],
+            "title": f"Where the nearest years went from this day: median {s90[0]:+.2f} °C in 90 days (range {s90[1]:+.2f} … {s90[2]:+.2f})" if s90[0] is not None else "Where the nearest years went from this day",
+            "series": "sst_nino34 daily + psl_nino34_monthly", "window": [fmt_date(last), fmt_date(last + timedelta(days=90))], "kpis": kpis,
+            "anchors": ["stat:analog_paths", "term:analog", "term:nino34", "block:peak"],
+            "method": {"name": "Analogue ensemble, nearest years, shifted to today",
+                       "plain": "We take the five years whose January–August looked most like this one, follow what their Niño 3.4 did over the next three months from this calendar day, and start every path from today’s value so that only the shape matters. The median is the central expectation, the range is the honest spread.",
+                       "tech": f"Nearest years by Euclidean distance in standardised ERSST Jan–Aug space (same as the clusters item); daily OISST anomalies (climatereanalyzer) from day-of-year {doy}, horizons 0–90 days in 15-day steps; each path offset by (today − that year’s value on the same day). Median and min–max across paths.",
+                       "caveats": ["five paths: the range is wide by construction and says nothing about probabilities beyond it", "shifting to today removes the level difference but keeps each year’s own weather; the record height of this year has no analogue"]},
+            "paths": paths, "horizons": H}
+
+
+def food_lag_item(psl):
+    """Цены на еду с лагом за Niño 3.4: FAO индекс и группы против ERSST, лаги 0–12 месяцев, 1990–2025."""
+    try:
+        F = S.read_fao(S.LAST / "fao_fpi.csv")
+    except Exception:                                            # noqa: BLE001
+        return None
+    months = F.get("months") or []
+    if len(months) < 120:
+        return None
+    def n34_at(ym, lag):
+        y, m = int(ym[:4]), int(ym[5:7]); t = y * 12 + (m - 1) - lag; y2, m2 = divmod(t, 12)
+        v = psl.get(y2, [np.nan] * 12)[m2] if y2 in psl else np.nan
+        return v
+    def yoy(series):
+        return [None if i < 12 or series[i] is None or series[i - 12] in (None, 0) else series[i] / series[i - 12] * 100 - 100 for i in range(len(series))]
+    out = {}
+    for name, ser in [("index", F.get("index") or [])] + list((F.get("groups") or {}).items()):
+        yy = yoy(ser); best = (0, -2.0, 0)
+        for lag in range(0, 13):
+            pairs = [(yy[i], n34_at(months[i], lag)) for i in range(len(months)) if yy[i] is not None and months[i] < "2026"]
+            pairs = [(a, b) for a, b in pairs if np.isfinite(b)]
+            if len(pairs) < 100:
+                continue
+            a = np.array([q[0] for q in pairs]); b = np.array([q[1] for q in pairs])
+            r = float(np.corrcoef(b, a)[0, 1])
+            if r > best[1]:
+                best = (lag, r, len(pairs))
+        lag, r, n = best
+        pairs = [(yy[i], n34_at(months[i], lag)) for i in range(len(months)) if yy[i] is not None and months[i] < "2026"]; pairs = [(a, b) for a, b in pairs if np.isfinite(b)]
+        a = np.array([q[0] for q in pairs]); b = np.array([q[1] for q in pairs])
+        slope = float(np.polyfit(b, a, 1)[0]) if len(pairs) > 20 else np.nan
+        out[name] = {"lag": lag, "r": r, "n": n, "slope": slope}
+    if "index" not in out:
+        return None
+    ix = out["index"]
+    groups = {k: v for k, v in out.items() if k != "index"}
+    top = sorted(groups.items(), key=lambda kv: -kv[1]["r"])
+    kpis = [
+        {"name": "food index follows Niño 3.4 by", "value": f"{ix['lag']}", "unit": "months", "plain": f"Best correlation between the year-on-year change of the FAO index and Niño 3.4 {ix['lag']} months earlier: r = {ix['r']:.2f} over {ix['n']} months since 1991; {ix['slope']:+.1f} points of yearly change per 1 °C."},
+        {"name": "most sensitive group", "value": top[0][0] if top else "·", "unit": f"r {top[0][1]['r']:.2f}, lag {top[0][1]['lag']} mo" if top else "", "plain": "; ".join(f"{k}: lag {v['lag']} mo, r {v['r']:.2f}, {v['slope']:+.1f} pt/°C" for k, v in top) if top else ""},
+        {"name": "least sensitive group", "value": top[-1][0] if top else "·", "unit": f"r {top[-1][1]['r']:.2f}" if top else "", "plain": "A weak or negative correlation means that group has followed other drivers (energy, trade, disease) more than El Niño."},
+    ]
+    return {"id": "food_lag", "kind": "leadlag", "scene": "food/prices", "also": ["food", "regions"],
+            "title": f"Food prices follow Niño 3.4 with a lag of {ix['lag']} months (r = {ix['r']:.2f}, 1991–2025); most sensitive: {top[0][0] if top else '·'}",
+            "series": "fao_fpi vs psl_nino34_monthly", "window": [months[0], months[-1]], "kpis": kpis,
+            "anchors": ["stat:food_lag", "term:fao", "term:foodweight", "term:nino34"],
+            "method": {"name": "Cross-correlation of year-on-year price change with Niño 3.4 at monthly lags, plus a linear slope",
+                       "plain": "Prices trend upward for many reasons, so we look at their yearly change instead of the level, and ask how far behind the ocean it lags: we shift Niño 3.4 back month by month and find the shift where the two lines agree best, for the whole index and for each food group. The slope says how many points of yearly change one degree of Niño 3.4 has been worth.",
+                       "tech": f"FAO Food Price Index and five groups (2014–2016 = 100), year-on-year % change, {months[0]}…2025-12 (2026 held out); ERSST Niño 3.4 monthly anomaly at lags 0–12; Pearson r at each lag, best reported; OLS slope of yoy on Niño 3.4 at the best lag. No detrending beyond the yoy transform; no control for oil, dollar or trade shocks.",
+                       "caveats": ["correlations of 0.2–0.4 over 400 months are real but small: El Niño is one driver among several", "the 2007–08 and 2022 spikes were not El Niño; they sit in the sample and dilute the link"]},
+            "groups": out}
 
 
 # ------------------------------------------------------------------ сборка
@@ -803,7 +962,15 @@ def build(verbose=True):
                 items.append(it)
         except Exception as e:                                   # noqa: BLE001
             errors.append(f"teleconnection: {str(e)[:100]}")
-    for fn in (hov_speed_item, regions_item, convection_lag_item, epochs_item):
+    if psl:
+        for fn in (analog_paths_item, food_lag_item):
+            try:
+                it = fn(psl)
+                if it:
+                    items.append(it)
+            except Exception as e:                               # noqa: BLE001
+                errors.append(f"{fn.__name__}: {str(e)[:100]}")
+    for fn in (hov_speed_item, regions_item, convection_lag_item, epochs_item, momentum_item):
         try:
             it = fn()
             if it:

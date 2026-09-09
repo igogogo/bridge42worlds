@@ -4410,8 +4410,8 @@
     /* плитки новых источников 07.09 */
     var RA1 = S.RA || {}, PR1 = S.PR || {}, RD1 = (S.RD || {}).series || {}, HV1 = S.HV || {}, MN1 = S.MN || {};
     var cr1 = ((RA1.sources || {}).n21_cris || {}).series || {}, cur1 = String((RA1.window || {}).current || 2026), dl1 = RA1.window ? radDays(RA1) : null;
-    if (cr1.walker_A) add('Raw Walker contrast', 'East minus west brightness temperature from raw granules; near zero this year.', ['radiance', 'walker'], function (w, h) { return chartRadSeries({ byYear: cr1.walker_A, cur: cur1, n: 68, dayLabel: dl1, zero: true, title: 'Raw Walker, K, day' }, w, h); });
-    if (cr1.nino34_A && cr1.nino34_A.conv_frac) add('Deep convection over Niño 3.4', 'Share of cold cloud tops, this year against 2023–2025.', ['radiance', 'convection'], function (w, h) { var by = {}; Object.keys(cr1.nino34_A.conv_frac).forEach(function (y) { by[y] = {}; Object.keys(cr1.nino34_A.conv_frac[y]).forEach(function (d) { by[y][d] = cr1.nino34_A.conv_frac[y][d] * 100; }); }); return chartRadSeries({ byYear: by, cur: cur1, n: 68, dayLabel: dl1, zero: true, title: 'Convection, % of footprints, day' }, w, h); });
+    if (cr1.walker_A) add('Raw Walker contrast', 'East minus west brightness temperature from raw granules; near zero this year.', ['radiance', 'walker'], function (w, h) { return chartRadSeries({ byYear: cr1.walker_A, cur: cur1, n: nWin, dayLabel: dl1, zero: true, title: 'Raw Walker, K, day' }, w, h); });
+    if (cr1.nino34_A && cr1.nino34_A.conv_frac) add('Deep convection over Niño 3.4', 'Share of cold cloud tops, this year against 2023–2025.', ['radiance', 'convection'], function (w, h) { var by = {}; Object.keys(cr1.nino34_A.conv_frac).forEach(function (y) { by[y] = {}; Object.keys(cr1.nino34_A.conv_frac[y]).forEach(function (d) { by[y][d] = cr1.nino34_A.conv_frac[y][d] * 100; }); }); return chartRadSeries({ byYear: by, cur: cur1, n: nWin, dayLabel: dl1, zero: true, title: 'Convection, % of footprints, day' }, w, h); });
     var gp1 = (PR1.gpcp || {}).global;
     if (gp1) add('Rain over the planet', gp1.pct_of_normal + ' % of normal in ' + gp1.last + '.', ['trend', 'rain'], function (w, h) { return chartRainBars({ ym: gp1.ym, values: gp1.values, normal: gp1.normal_series, title: 'Planet, mm per day, GPCP', unit: 'mm/day' }, w, h); });
     Object.keys(PR1.regions || {}).slice(0, 2).forEach(function (k) { var r0 = PR1.regions[k]; add('Rain, ' + (LAND_NAME[k] || k), r0.sum30.pct_of_normal + ' % of normal over 30 days.', ['trend', 'rain'], function (w, h) { return chartRainBars({ ym: r0.months.map(function (m) { return m.ym; }), values: r0.months.map(function (m) { return m.mm; }), normal: r0.months_normal, title: (LAND_NAME[k] || k) + ', mm per month', unit: 'mm', partialLast: true }, w, h); }); });
@@ -5300,6 +5300,11 @@
     var plat = S.sub.radPlat === 'airs' && AIRS.series ? 'airs' : (S.sub.radPlat === 'n20' && N20.series ? 'n20' : 'cris'), CR = plat === 'airs' ? AIRS : (plat === 'n20' ? N20 : CRIS), PLAT = plat === 'airs' ? 'Aqua AIRS' : (plat === 'n20' ? 'NOAA-20 CrIS' : 'NOAA-21 CrIS');
     var alerts = RA.alerts || [], dets = CR.detectors || {}, trig = Object.keys(dets).filter(function (q) { return dets[q].triggered; });
     var W0 = RA.window || {}, cur = String(W0.current || 2026), dl = RA.updated ? radDays(RA) : null, F = (RA.meta || {}).formulas || {}, cav = (RA.meta || {}).caveats || [];
+    /* Длина окна — из файла, не 68 (09.09: сборщик расширил окно до 01-01…09-07). Индекс 1 июля
+       нужен сравнению эпох: исторические годы считаны по июлю–сентябрю, и 2026 берём по тому же. */
+    function dayIdx(md) { var y = +cur, a = new Date(y, parseInt((W0.start || '07-01').slice(0, 2), 10) - 1, parseInt((W0.start || '07-01').slice(3), 10)), b = new Date(y, parseInt(md.slice(0, 2), 10) - 1, parseInt(md.slice(3), 10)); return Math.round((b - a) / 864e5); }
+    var nWin = dayIdx(W0.end || '09-07') + 1, julIdx = Math.max(0, dayIdx('07-01'));
+    function sameWin(o) { var v = Object.keys(o || {}).map(Number).filter(function (i) { return i >= julIdx; }).map(function (i) { return o[String(i)]; }).filter(fin); if (v.length < 5) return null; var m = v.reduce(function (a, b) { return a + b; }, 0) / v.length; var sd = Math.sqrt(v.reduce(function (a, b) { return a + (b - m) * (b - m); }, 0) / Math.max(1, v.length - 1)); return { v: m, se: sd / Math.sqrt(v.length), n: v.length }; }
     var head = !RA.updated ? 'Satellite, raw granules: no file yet' :
       'Raw satellite view: convection over Niño 3.4 ' + (function () { var s0 = ((CR.series || {}).nino34_A || {}).conv_frac || {}; var c = s0[cur] || {}; var ks = Object.keys(c).map(Number).sort(function (a, b) { return a - b; }); var v = c[String(ks[ks.length - 1])]; return fin(v) ? fnum(v * 100, 1, false) + ' % of footprints' : ''; })() + (trig.length ? '; detectors fired: ' + trig.join(', ') : '; ' + Object.keys(dets).length + ' turning-point detectors quiet');
     var body = stageShell(head, [segBtn('radiance', 'convection', 'Convection', 'convection'), segBtn('radiance', 'walker', 'Raw Walker', 'convection'), segBtn('radiance', 'clouds', 'Cloud floors', 'convection'), segBtn('radiance', 'greenhouse', 'Window trap', 'convection'), segBtn('radiance', 'profile', 'Layers through cloud', 'convection'), segBtn('radiance', 'epochs', 'Twenty years', 'convection'), segBtn('radiance', 'cross', 'Instruments', 'convection'), segBtn('radiance', 'seismic', 'Quakes and sun', 'convection')]);
@@ -5344,7 +5349,7 @@
       nt = notes(radF(F, 'conv_frac'), 'Deep convection is where the infrared window sees cloud tops colder than 235 K; the share of such footprints per day is the cleanest count of convection the granules give.', ['conv_frac_' + boxk + '_A', 'conv_frac_' + boxk + '_D']);
       INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
       var ser = ((CR.series || {})[boxk + '_' + node] || {});
-      plot(body, function (w, h) { return chartRadSeries({ byYear: pct(ser.conv_frac || {}), cur: cur, n: 68, dayLabel: dl, zero: true, title: 'Deep convection: share of footprints colder than 235 K at 900 cm⁻¹, ' + boxk + ', ' + (node === 'A' ? 'day' : 'night') + ', % of footprints, ' + cur + ' against 2023–2025' }, w, h); });
+      plot(body, function (w, h) { return chartRadSeries({ byYear: pct(ser.conv_frac || {}), cur: cur, n: nWin, dayLabel: dl, zero: true, title: 'Deep convection: share of footprints colder than 235 K at 900 cm⁻¹, ' + boxk + ', ' + (node === 'A' ? 'day' : 'night') + ', % of footprints, ' + cur + ' against 2023–2025' }, w, h); });
       body.appendChild(kpiRow(kpiLast(ser.conv_frac || {}, 100, ' %', 'deep convection · ' + boxk + ' · ' + (node === 'A' ? 'day' : 'night'), 'share of footprints, last 14 days, against the window means of past years')));
     } else if (k === 'walker') {
       row = el('div', 'seg sub');
@@ -5353,7 +5358,7 @@
       nt = notes(radF(F, 'walker_raw'), 'In every past year the east read 19–26 K warmer at the top of the atmosphere than the cloudy west; this year the contrast sits near zero: the convection has moved east.', ['walker_A', 'walker_D']);
       INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
       var wk = (CR.series || {})['walker_' + node] || {};
-      plot(body, function (w, h) { return chartRadSeries({ byYear: wk, cur: cur, n: 68, dayLabel: dl, zero: true, title: 'Raw Walker: brightness temperature at 900 cm⁻¹, Niño 3.4 minus warm pool, K, ' + (node === 'A' ? 'day' : 'night') }, w, h); });
+      plot(body, function (w, h) { return chartRadSeries({ byYear: wk, cur: cur, n: nWin, dayLabel: dl, zero: true, title: 'Raw Walker: brightness temperature at 900 cm⁻¹, Niño 3.4 minus warm pool, K, ' + (node === 'A' ? 'day' : 'night') }, w, h); });
       body.appendChild(kpiRow(kpiLast(wk, 1, ' K', 'raw Walker contrast · ' + (node === 'A' ? 'day' : 'night'), 'east minus west, last 14 days, against the window means of past years')));
     } else if (k === 'clouds') {
       var floor = S.sub.radFloor || 'clear', mode = S.sub.radMode || 'chart';
@@ -5368,7 +5373,7 @@
       var FL = { clear: 'clear sky (window within 4 K of the sea)', low: 'low cloud (270–285 K)', mid: 'mid cloud (235–270 K)', deep: 'deep convection (below 235 K)' };
       function floorSeries(f) { var by = {}; Object.keys(CLb).forEach(function (y) { by[y] = {}; Object.keys(CLb[y]).forEach(function (dd) { var v = (CLb[y][dd] || {})[f]; by[y][dd] = fin(v) ? v * 100 : null; }); }); return by; }
       if (mode === 'chart') {
-        plot(body, function (w, h) { return chartRadSeries({ byYear: floorSeries(floor), cur: cur, n: 68, dayLabel: dl, zero: true, title: 'Share of scenes: ' + FL[floor] + ', ' + boxk + ', ' + (node === 'A' ? 'day' : 'night') + ', % of footprints, ' + cur + ' against 2023–2025' }, w, h); });
+        plot(body, function (w, h) { return chartRadSeries({ byYear: floorSeries(floor), cur: cur, n: nWin, dayLabel: dl, zero: true, title: 'Share of scenes: ' + FL[floor] + ', ' + boxk + ', ' + (node === 'A' ? 'day' : 'night') + ', % of footprints, ' + cur + ' against 2023–2025' }, w, h); });
         body.appendChild(kpiRow(kpiLast(floorSeries(floor), 1, ' %', FL[floor].replace(/ \(.*$/, '') + ' · ' + boxk + ' · ' + (node === 'A' ? 'day' : 'night'), 'share of scenes, last 14 days, against the window means of past years')));
       } else {
         var yrs = Object.keys(CLb).sort(), tb = el('div'); tb.style.cssText = 'flex:1;min-height:0;overflow:auto';
@@ -5388,7 +5393,7 @@
       nt = notes(radF(F, gk), gk === 'greenhouse_clear' ? 'On the strictest 1 % of scenes the Niño 3.4 signal halves to about +1.4 K but stays; over the warm pool truly clear scenes are 0–3 % of days, so its value is an upper bound.' : 'The full index follows cloud cover, read it beside the cloud floors; the greenhouse signal is G_clear.', [gk + '_' + boxk + '_A', gk + '_' + boxk + '_D']);
       INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
       var Gb = ((CR[gk] || {})[boxk + '_' + node]) || {};
-      plot(body, function (w, h) { return chartRadSeries({ byYear: Gb, cur: cur, n: 68, dayLabel: dl, zero: true, title: (gk === 'greenhouse_clear' ? 'G_clear: sea surface minus the warmest tenth of window scenes, K' : 'G: sea surface minus the mean window brightness temperature, K') + ', ' + boxk + ', ' + (node === 'A' ? 'day' : 'night') }, w, h); });
+      plot(body, function (w, h) { return chartRadSeries({ byYear: Gb, cur: cur, n: nWin, dayLabel: dl, zero: true, title: (gk === 'greenhouse_clear' ? 'G_clear: sea surface minus the warmest tenth of window scenes, K' : 'G: sea surface minus the mean window brightness temperature, K') + ', ' + boxk + ', ' + (node === 'A' ? 'day' : 'night') }, w, h); });
       body.appendChild(kpiRow(kpiLast(Gb, 1, ' K', (gk === 'greenhouse_clear' ? term('gclear', 'G_clear') : 'G') + ' · ' + boxk + ' · ' + (node === 'A' ? 'day' : 'night'), 'last 14 days, against the window means of past years')));
     } else if (k === 'epochs') {
       /* ДВАДЦАТЬ ЛЕТ (v4, 08.09; владелец: «двадцать лет отделить или синхронно; новые KPI, новые
@@ -5410,12 +5415,14 @@
       var PRI = ['n21_cris', 'n20_cris', 'snpp_cris', 'aqua_airs'], INAME = { n21_cris: 'NOAA-21 CrIS', n20_cris: 'NOAA-20 CrIS', snpp_cris: 'SNPP CrIS', aqua_airs: 'Aqua AIRS' };
       var yrsE = Object.keys(blk.years || {}).map(Number).sort(function (a, b) { return a - b; }), rowsE = [];
       yrsE.forEach(function (y) { var rec = blk.years[String(y)] || {}; for (var i = 0; i < PRI.length; i++) { var inst = PRI[i]; if (rec[inst] && !(inst === 'aqua_airs' && y > 2021)) { rowsE.push({ y: y, inst: inst, v: rec[inst].adjusted, se: rec[inst].se, n: rec[inst].n_days, raw: rec[inst].raw, off: rec[inst].offset }); break; } } });
-      if (fin(blk.current)) rowsE.push({ y: +cur, inst: 'n21_cris', v: blk.current, se: blk.current_se, n: null, now: true });
+      var SERK = { frac_lt235: 'conv_frac', bt900_mean: 'bt900' }[em], swin = (W0.start || '07-01') !== '07-01' && SERK ? sameWin((((CRIS.series || {})[ekey] || {})[SERK] || {})[cur]) : null;
+      if (swin) rowsE.push({ y: +cur, inst: 'n21_cris', v: swin.v, se: swin.se, n: swin.n, now: true, samewin: true });
+      else if (fin(blk.current)) rowsE.push({ y: +cur, inst: 'n21_cris', v: blk.current, se: blk.current_se, n: null, now: true });
       var base = rowsE.filter(function (r) { return r.y >= 2003 && r.y <= 2021; }).map(function (r) { return r.v; }).sort(function (a, b) { return a - b; });
       var medE = base.length ? base[Math.floor(base.length / 2)] : null;
       var curR = rowsE.filter(function (r) { return r.now; })[0], rankE = curR ? rowsE.filter(function (r) { return r.v > curR.v; }).length + 1 : null;
       var r15 = (blk.years || {})['2015'] || {};
-      nt = '<b>Formula.</b> ' + esc(radF(F, 'epochs')) + ' The bar of a year is the best instrument for that year: the CrIS chain first (SNPP to August 2023, NOAA-20 and NOAA-21 from 2023), Aqua AIRS for the early years and only up to 2021; error bars are the standard error of the window mean; the dashed line is the median of 2003–2021. ' + (curR ? 'This year: ' + fnum(curR.v * mult, dgE) + unitE + ' ± ' + fnum(curR.se * mult, dgE) + ', rank ' + rankE + ' of ' + rowsE.length + '.' : '') + '<br><b>Caveats.</b> ' + esc(radCav(cav));
+      nt = '<b>Formula.</b> ' + esc(radF(F, 'epochs')) + ' The bar of a year is the best instrument for that year: the CrIS chain first (SNPP to August 2023, NOAA-20 and NOAA-21 from 2023), Aqua AIRS for the early years and only up to 2021; error bars are the standard error of the window mean; the dashed line is the median of 2003–2021. ' + (swin ? 'The collector’s window now starts on 1 January; the historical years are July–September means, so the ' + cur + ' bar is our own mean of the same July–September days (' + swin.n + ' days), not the file’s January–September value. ' : '') + (curR ? 'This year: ' + fnum(curR.v * mult, dgE) + unitE + ' ± ' + fnum(curR.se * mult, dgE) + ', rank ' + rankE + ' of ' + rowsE.length + '.' : '') + '<br><b>Caveats.</b> ' + esc(radCav(cav));
       INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
       if (!rowsE.length) { body.appendChild(el('div', 'note', 'No epoch block for this metric yet.')); }
       else {
@@ -5503,11 +5510,11 @@
       nt = '<b>Quakes, aftershocks separated.</b> Events by Pacific-rim zone in the same calendar window, this year against every year 2000–2025, in four counts: M ≥ 4.5 and M ≥ 5.5, raw and declustered by Gardner–Knopoff (1974) windows. About ' + (US.dependent_frac != null ? Math.round(US.dependent_frac * 100) + ' %' : 'half') + ' of the catalogue are dependent events, so the raw count misleads: Central America looked like a 27-year record by raw M ≥ 4.5 and is below its median once aftershocks are removed. The M ≥ 4.5 threshold is unfit across epochs (network sensitivity grows +10–20 % per decade); an alert would fire only on independent M ≥ 5.5 events. Catalogue magnitudes are a computed product; the raw record is the IRIS seismograms.<br><b>Sun.</b> Sunspots, F10.7 and Kp from GFZ Potsdam over the same window.<br><b>Neither is El Niño physics</b> on this panel: no link is claimed or established (the USGS holds weather and quakes unrelated); they are side series of the same collector.<br><b>Caveats.</b> ' + esc(radCav(cav));
       INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
       if (zmode === 'sun') {
-        var sd = SO.daily_cur || {}, byS = {}; byS[cur] = {}; for (var i2 = 0; i2 < 68; i2++) byS[cur][String(i2)] = sd[String(i2)] ? sd[String(i2)].sunspot : null;
-        plot(body, function (w, h) { return chartRadSeries({ byYear: byS, cur: cur, n: 68, dayLabel: dl, zero: true, bars: true, title: 'Sunspot number per day (SILSO via GFZ), ' + cur + ' — the sun in the same window' }, w, h); });
+        var sd = SO.daily_cur || {}, byS = {}; byS[cur] = {}; for (var i2 = 0; i2 < nWin; i2++) byS[cur][String(i2)] = sd[String(i2)] ? sd[String(i2)].sunspot : null;
+        plot(body, function (w, h) { return chartRadSeries({ byYear: byS, cur: cur, n: nWin, dayLabel: dl, zero: true, bars: true, title: 'Sunspot number per day (SILSO via GFZ), ' + cur + ' — the sun in the same window' }, w, h); });
       } else if (zmode === 'chart') {
-        var zd = (zones[zsel] || {}).daily_cur_dec || (zones[zsel] || {}).daily_cur || {}, byZ = {}; byZ[cur] = {}; for (var i = 0; i < 68; i++) byZ[cur][String(i)] = zd[String(i)] || 0;
-        plot(body, function (w, h) { return chartRadSeries({ byYear: byZ, cur: cur, n: 68, dayLabel: dl, zero: true, bars: true, title: 'Independent quakes M ≥ 4.5 per day (aftershocks removed), ' + zsel.replace(/_/g, ' ') + ', ' + cur }, w, h); });
+        var zd = (zones[zsel] || {}).daily_cur_dec || (zones[zsel] || {}).daily_cur || {}, byZ = {}; byZ[cur] = {}; for (var i = 0; i < nWin; i++) byZ[cur][String(i)] = zd[String(i)] || 0;
+        plot(body, function (w, h) { return chartRadSeries({ byYear: byZ, cur: cur, n: nWin, dayLabel: dl, zero: true, bars: true, title: 'Independent quakes M ≥ 4.5 per day (aftershocks removed), ' + zsel.replace(/_/g, ' ') + ', ' + cur }, w, h); });
       } else {
         var wz = el('div'); wz.style.cssText = 'flex:1;min-height:0;overflow:auto';
         wz.innerHTML = '<table class="e"><thead><tr><th>zone</th><th class="num">M ≥ 4.5 raw</th><th class="num">M ≥ 4.5 independent</th><th class="num">median · max</th><th class="num">rank of 27</th><th class="num">M ≥ 5.5 independent</th><th class="num">trend, % per decade</th></tr></thead><tbody>' +
@@ -5529,9 +5536,9 @@
       function m14(o) { var ks = Object.keys(o || {}).map(Number).sort(function (a, b) { return a - b; }).slice(-14); var v = ks.map(function (kk) { return o[String(kk)]; }).filter(fin); return v.length ? v.reduce(function (a, b) { return a + b; }, 0) / v.length : null; }
       function mAll(o) { var v = Object.keys(o || {}).map(function (kk) { return o[kk]; }).filter(fin); return v.length ? v.reduce(function (a, b) { return a + b; }, 0) / v.length : null; }
       var now = m14(by[cur]), out = { by: {} }, yrs = Object.keys(by).filter(function (y) { return y !== cur; }).sort(), vals = [];
-      yrs.forEach(function (y) { var v = mAll(by[y]); if (fin(v)) { vals.push(v); out.by[y] = fnum(v * (mult === 100 ? 1 : 1), mult === 100 ? 1 : 1, false) + unit; } });
-      out.now = fin(now) ? fnum(now, mult === 100 ? 1 : 1, false) + unit : '·';
-      out.name = name; out.meaning = meaning; out.diff = fin(now) && vals.length ? now - vals.reduce(function (a, b) { return a + b; }, 0) / vals.length : null;
+      yrs.forEach(function (y) { var v = mAll(by[y]); if (fin(v)) { vals.push(v); out.by[y] = fnum(v * mult, 1, false) + unit; } });   // множитель применяется (09.09: доля 0.108 показывалась как 0.1 %)
+      out.now = fin(now) ? fnum(now * mult, 1, false) + unit : '·';
+      out.name = name; out.meaning = meaning; out.diff = fin(now) && vals.length ? (now - vals.reduce(function (a, b) { return a + b; }, 0) / vals.length) * mult : null;
       out.yrs = yrs;
       return out;
     }

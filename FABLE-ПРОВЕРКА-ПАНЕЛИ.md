@@ -300,7 +300,9 @@ ASCII (`gl()`). Карта Пацифики рисуется в два прох�
 и `daily_cur_dec` (афтершоки отделены), `zq()` понимает и старую схему. Спутник v4: `CRIS`/`N20`/`SNPP`/`AIRS` с одной схемой, `plat` (`S.sub.radPlat`: cris / n20 / airs)
 переключает платформу; подраздел `cross` считает сдвиги и корреляции из рядов файла сам; подраздел
 `epochs` (`chartEpochs`, блок `sources.epochs`) — лучший прибор на год (цепочка CrIS, AIRS ≤ 2021),
-play растит запись; их таблицы не копировать, проверять по блоку (см. 9р).
+play растит запись; их таблицы не копировать, проверять по блоку (см. 9р). Окно сборщика читать из
+`window` (`nWin`), не зашивать 68; если окно начинается раньше июля, 2026 в эпохах считается по
+июльским дням из ряда (`sameWin`), чтобы сравнивать одно окно с другим.
 Кнопки полного экрана и back у сцен свои не заводить — общие в шапке.
 Briefing (`viewBrief`, вход по умолчанию): текст рукой + живые слоты; при смене фазы события
 (пик пройден, разрядка, Ла-Нинья) переписать абзацы «In one paragraph», «What to expect» и
@@ -310,7 +312,8 @@ Briefing (`viewBrief`, вход по умолчанию): текст рукой 
 plain/tech, оговорками, якорями `stat:*`); на панели `statsFor(view)` отбирает единицы сцены
 (и ряда на Dynamics/Long record), `statsHtml` рисует; новая единица — функция в `stats_layer.py`,
 возвращающая тот же словарь (v1: trend, changepoint, ar1, clusters, extremes, coherence,
-fuel_lead, spectral, peak_bayes, hov_speed, regions, teleconnection, convection_lag; сцены со
+fuel_lead, spectral, peak_bayes, hov_speed, regions, teleconnection, convection_lag, epochs,
+momentum, analog_paths, food_lag; сцены со
 своими переключателями получают кнопку stats через `infoToggles`). Читать оговорки: это статистика на
 коротких рядах; байесовский пик не видит подповерхность, скорость на Ховмёллере — снос
 бассейна, не волна.
@@ -341,7 +344,8 @@ Concepts. Граф понятий: одна кнопка `graph` у каждог
 
 ## 7а. Порядок прогонов с 07.09
 
-0. `python check_ui.py` — согласованность панели (термины, подсказки, файлы, обёртка).
+0. `python check_ui.py` — согласованность панели (термины, подсказки, файлы, обёртка, подписи
+   источников: новый ряд в `SOURCES` без строки в `LABELS` роняет `watch.run`, правило G ловит).
 1. Лёгкий прогон только по слову владельца, не чаще раза в день: `powershell -File tools\enso\light_daily.ps1`
    (внутри после сбора: planet → mentions → spectral → regions → precip → radiance_take → globe_data → stats_layer → publish --fresh).
 2. После него открыть Ops · sources и fresh layer: какие источники обновились, есть ли триггеры.
