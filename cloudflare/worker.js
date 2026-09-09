@@ -1840,6 +1840,93 @@ async function anchorConcepts(env) {
   return _ANCH || {};
 }
 
+/* КАРТА СОСТОЯНИЯ ПАНЕЛИ. Владелец 09.09: «что самое опасное в текущем состоянии — простой
+   вопрос; агент должен оркестрировать, лезть в вектор, ориентироваться в структуре». Живая
+   проверка показала, чего не хватало: вектор ищет ПО СМЫСЛУ, а «самое опасное» — вопрос
+   СТРУКТУРНЫЙ (возьми риски, отсортируй по уровню, глянь тревоги и вердикт). Сходство
+   эмбеддингов такого не делает: на этот вопрос вектор поднял работу про грозы в США, а на
+   панели в ту минуту лежали три риска пятого уровня и две громкие тревоги.
+   Файл кладёт tools/enso/agent_state.py, он маленький и меняется раз в сутки. */
+let _AST = null, _AST_AT = 0;
+async function panelState(env) {
+  const now = Date.now();
+  if (_AST && now - _AST_AT < 10 * 60 * 1000) return _AST;
+  try {
+    const obj = await env.SITE.get("data/enso/agent-state.json");
+    if (obj) { _AST = await obj.json(); _AST_AT = now; }
+  } catch { /* нет файла — работаем как раньше, на одном поиске */ }
+  return _AST || null;
+}
+// Короткая выжимка карты для промпта: то, что нужно для структурных вопросов, и ничего сверх.
+function stateDigest(st) {
+  if (!st) return "";
+  const L = [];
+  if (st.about) L.push(`ABOUT THIS SITE AND PANEL:\n${st.about}`);
+  const sc = (st.scenes || []).map((x) => `  [${x.id}] ${x.text}`).join("\n");
+  if (sc) L.push(`SCENES OF THE PANEL:\n${sc}`);
+  if (st.verdict) L.push(`VERDICT TODAY [verdict:today]: ${st.verdict}`);
+  if (st.risk_index != null) L.push(`Risk index: ${st.risk_index} of 100.`);
+  const rs = (st.risks || []).slice(0, 12)
+    .map((r) => `  level ${r.level} [${r.id}] ${r.title}. ${r.plain || ""}`).join("\n");
+  if (rs) L.push(`RISKS, highest level first (level 5 is the strongest signal we mark):\n${rs}`);
+  const al = (st.alerts || []).filter((a) => a.level === "SHOUT").slice(0, 6)
+    .map((a) => `  [${a.id}] ${a.title}. ${a.detail || ""}`).join("\n");
+  if (al) L.push(`LOUD ALERTS TODAY:\n${al}`);
+  const kp = (st.kpis || []).slice(0, 14)
+    .map((k) => `  [${k.id}] ${k.title}: ${k.value} ${k.unit || ""} on ${k.date}` +
+      (k.was != null ? ` (was ${k.was} on ${k.was_date})` : "")).join("\n");
+  if (kp) L.push(`KEY INDICATORS:\n${kp}`);
+  const sT = (st.stats || []).slice(0, 12)
+    .map((x) => `  [${x.id}] ${x.title}${x.value ? ` — ${x.name}: ${x.value}` : ""}`).join("\n");
+  if (sT) L.push(`OUR OWN STATISTICS (units computed by us):\n${sT}`);
+  return L.join("\n\n");
+}
+// Единицы карты, на которые можно ссылаться: пометка [risk:…] должна проходить проверку,
+// даже если вектор эту единицу не поднял — она взята из карты, а не выдумана.
+function stateUnits(st) {
+  if (!st) return [];
+  const out = [];
+  (st.risks || []).forEach((r) => out.push({ id: r.id, kind: "risk", title: r.title, hash: r.hash, anchor: r.id, text: r.plain || "", score: 0, from: "state" }));
+  (st.alerts || []).forEach((a) => out.push({ id: a.id, kind: "alert", title: a.title, hash: a.hash, anchor: a.id, text: a.detail || "", score: 0, from: "state" }));
+  (st.kpis || []).forEach((k) => out.push({ id: k.id, kind: "kpi", title: k.title, hash: k.hash, anchor: k.id, text: `${k.value} ${k.unit || ""} on ${k.date}`, score: 0, from: "state" }));
+  (st.stats || []).forEach((x) => out.push({ id: x.id, kind: "stat", title: x.title, hash: x.hash, anchor: x.id, text: x.value || "", score: 0, from: "state" }));
+  (st.scenes || []).forEach((x) => out.push({ id: x.id, kind: "scene", title: String(x.text || "").split(":")[0], hash: x.hash, anchor: x.id, text: x.text || "", score: 0, from: "state" }));
+  if (st.verdict) out.push({ id: "verdict:today", kind: "verdict", title: "The verdict of the day", hash: "#verdict", anchor: "verdict:today", text: st.verdict, score: 0, from: "state" });
+  return out;
+}
+
+/* ПЕРВЫЙ КРУГ — БЕЗ ПОИСКА. Владелец 09.09: «сначала давай думать, потом делать: я задал
+   вопрос, отправил его в агента вместе с полным описанием и состоянием дашборда, получил
+   результат, потом по вектору ищи». Так и устроено: на первом круге у модели есть описание
+   сайта, карта состояния и вопрос — и половина вопросов («что самое опасное», «что
+   изменилось», «на что смотреть») отвечается здесь, без вектора и без второго вызова.
+   Вектор включается вторым кругом и только если модель сама скажет, что ей нужно. */
+const RESEARCH_PROMPT1 = `Ты ведёшь исследовательский разговор о текущем событии Эль-Ниньо.
+Отвечай на {lang} языке.
+
+СНАЧАЛА ПОДУМАЙ ПО ТОМУ, ЧТО У НАС ЕСТЬ, И ТОЛЬКО ПОТОМ ПРОСИ ИСКАТЬ.
+Ниже — описание сайта и ПОЛНАЯ карта панели на сегодня: вердикт, риски с уровнями, тревоги,
+показатели с датами, наша статистика, сцены. Это не выдача поиска, а вся структура.
+
+ПРАВИЛА:
+1. Отвечай только по материалам ниже. Каждое утверждение помечай источником в квадратных
+   скобках: [risk:fuel_charged], [kpi:n34_daily], [stat:trend_sst_nino34], [alert:...].
+2. Вопросы о том, что сильнее, опаснее, свежее, выше по уровню — решаются отбором и
+   сортировкой по карте, а не поиском похожих слов. Уровень 5 сильнее уровня 4.
+3. Если для ответа нужна ПРИЧИНА, механизм, термин или сравнение с литературой — этого в
+   карте нет. Тогда ПЕРВОЙ строкой напиши до двух запросов на английском:
+   NEED: короткий запрос; ещё один запрос
+   и больше ничего не пиши. Тебе принесут найденное и спросят снова.
+4. Не проси искать то, что уже есть в карте.
+5. Последней строкой: SUMMARY: одна фраза о том, что этот ход добавил к пониманию.
+
+{state}
+
+РАЗГОВОР ДО ЭТОГО:
+{history}
+
+ВОПРОС: {question}`;
+
 const RESEARCH_PROMPT = `Ты ведёшь исследовательский разговор о текущем событии Эль-Ниньо.
 Отвечай на {lang} языке.
 
@@ -1852,7 +1939,13 @@ const RESEARCH_PROMPT = `Ты ведёшь исследовательский р
 4. Не пересказывай материал целиком: отвечай на вопрос.
 5. Последней строкой напиши: SUMMARY: одна фраза о том, что этот ход добавил к пониманию.
 
-ПАНЕЛЬ (что измерено сейчас):
+СОСТОЯНИЕ ПАНЕЛИ (карта: вердикт, риски по уровню, тревоги, показатели, наша статистика).
+Это ПОЛНАЯ структура на сегодня, а не выдача поиска: вопросы вида «что самое опасное»,
+«что изменилось», «на что смотреть» отвечаются отсюда, сортировкой и отбором, а не
+похожестью слов:
+{state}
+
+НАЙДЕНО ПОИСКОМ ПО ВОПРОСУ:
 {panel}
 
 РАБОТЫ (что об этом известно):
@@ -1861,7 +1954,11 @@ const RESEARCH_PROMPT = `Ты ведёшь исследовательский р
 РАЗГОВОР ДО ЭТОГО:
 {history}
 
-ВОПРОС: {question}`;
+ВОПРОС: {question}
+
+Если для ответа не хватает материала, ПЕРВОЙ строкой напиши до двух запросов на английском:
+NEED: короткий запрос; ещё один запрос
+Тогда тебе дадут найденное и спросят снова. Если материала хватает — сразу отвечай, без NEED.`;
 
 const VERIFY_PROMPT = `Проверь утверждения по материалам. Для каждого верни строку вида
 N. supported|contradicted|unknown — короткое пояснение [источник]
@@ -1940,16 +2037,18 @@ async function handleResearch(request, env) {
     }
   }
 
-  // Ищем по английскому: оба пространства построены на английских текстах.
+  // Оба пространства построены на английских текстах, поэтому ищем по английскому — но
+  // перевод нужен только тогда, когда поиск вообще случится (первый круг обходится без него).
   const seed = mode === "verify" ? claims.join(" ") : q;
-  let queryEn = seed;
-  if (lang !== "en") {
-    const tr = await translateText(env, seed, "en");
-    if (tr) queryEn = tr;
+  async function toEn(text) {
+    if (lang === "en") return text;
+    const tr = await translateText(env, text, "en");
+    return tr || text;
   }
   let works = [], panel = [];
-  try {
-    const emb = await env.AI.run(SEARCH_MODEL, { text: [queryEn] });
+  const pstate = await panelState(env);
+  async function searchBoth(text) {          // один вектор — два пространства, как и было
+    const emb = await env.AI.run(SEARCH_MODEL, { text: [text] });
     const vec = emb.data[0];
     const [fw, fp] = await Promise.all([
       env.VECTORIZE.query(vec, { topK: RESEARCH_TOP_WORKS, returnMetadata: "all", namespace: "ours" }),
@@ -1957,21 +2056,32 @@ async function handleResearch(request, env) {
         .catch(() => ({ matches: [] })),
     ]);
     const floor = researchMinScore(env);
-    works = (fw.matches || []).filter((m) => m.score >= floor).map((m) => ({
-      id: m.id, score: Math.round(m.score * 1000) / 1000,
-      title: m.metadata?.title_en || m.metadata?.title || "",
-      url: m.metadata?.url || "", date: m.metadata?.date || "",
-    }));
-    panel = (fp.matches || []).filter((m) => m.score >= floor).map((m) => ({
-      id: String(m.id).replace(/^p:/, ""), score: Math.round(m.score * 1000) / 1000,
-      kind: m.metadata?.kind || "", title: m.metadata?.title || "",
-      hash: m.metadata?.hash || "", anchor: m.metadata?.anchor || "",
-      text: m.metadata?.text || "",
-    }));
-  } catch {
-    return Response.json({ error: "search_failed" }, { status: 502 });
+    return {
+      works: (fw.matches || []).filter((m) => m.score >= floor).map((m) => ({
+        id: m.id, score: Math.round(m.score * 1000) / 1000,
+        title: m.metadata?.title_en || m.metadata?.title || "",
+        url: m.metadata?.url || "", date: m.metadata?.date || "",
+      })),
+      panel: (fp.matches || []).filter((m) => m.score >= floor).map((m) => ({
+        id: String(m.id).replace(/^p:/, ""), score: Math.round(m.score * 1000) / 1000,
+        kind: m.metadata?.kind || "", title: m.metadata?.title || "",
+        hash: m.metadata?.hash || "", anchor: m.metadata?.anchor || "",
+        text: m.metadata?.text || "",
+      })),
+    };
   }
-  if (!works.length && !panel.length) {
+  /* Поиск на первом круге делаем ТОЛЬКО там, где без него нельзя: проверка утверждений
+     (verify) опирается на материалы, и карты ей мало. Для вопроса поиск отложен до второго
+     круга — если модель его попросит. */
+  if (mode === "verify" || !pstate) {
+    try {
+      const r0 = await searchBoth(await toEn(seed));
+      works = r0.works; panel = r0.panel;
+    } catch {
+      return Response.json({ error: "search_failed" }, { status: 502 });
+    }
+  }
+  if (!works.length && !panel.length && !pstate) {
     return Response.json({ answer: null, nothing_found: true, panel: [], works: [],
       dayLeft: spent.dayLeft, panelDay }, { headers: { "cache-control": "no-store" } });
   }
@@ -2008,34 +2118,86 @@ async function handleResearch(request, env) {
     const hist = (Array.isArray(body.history) ? body.history.slice(-4) : [])
       .map((h) => `— ${String(h.q || "").slice(0, 200)}\n— ${String(h.a || "").slice(0, 400)}`)
       .join("\n");
-    prompt = (env.RESEARCH_PROMPT || RESEARCH_PROMPT)
-      .replace("{lang}", langName)
-      .replace("{panel}", panelText.slice(0, 8000))
-      .replace("{works}", worksText.slice(0, 6000))
-      .replace("{history}", hist || "(разговор только начался)")
-      .replace("{question}", q);
+    prompt = pstate
+      ? (env.RESEARCH_PROMPT1 || RESEARCH_PROMPT1)
+        .replace("{lang}", langName)
+        .replace("{state}", stateDigest(pstate).slice(0, 9000))
+        .replace("{history}", hist || "(разговор только начался)")
+        .replace("{question}", q)
+      : (env.RESEARCH_PROMPT || RESEARCH_PROMPT)
+        .replace("{lang}", langName)
+        .replace("{state}", "(карта состояния недоступна)")
+        .replace("{panel}", panelText.slice(0, 8000))
+        .replace("{works}", worksText.slice(0, 6000))
+        .replace("{history}", hist || "(разговор только начался)")
+        .replace("{question}", q);
   }
 
-  let answer;
-  try {
+  async function askModel(text) {
     const r = await fetch("https://api.deepseek.com/chat/completions", {
       method: "POST",
       headers: { "content-type": "application/json",
                  authorization: `Bearer ${env.DEEPSEEK_API_KEY}` },
       body: JSON.stringify({
         model: env.RESEARCH_MODEL || env.DEEPSEEK_MODEL || "deepseek-v4-flash",
-        messages: [{ role: "user", content: prompt }],
+        messages: [{ role: "user", content: text }],
         temperature: 0.3, max_tokens: mode === "verify" ? 600 : 900,
         thinking: { type: "disabled" },
       }),
     });
-    if (!r.ok) return Response.json({ error: "upstream", status: r.status }, { status: 502 });
+    if (!r.ok) return { err: "upstream", status: r.status };
     const d = await r.json();
-    answer = d?.choices?.[0]?.message?.content?.trim();
+    return { text: d?.choices?.[0]?.message?.content?.trim() || "" };
+  }
+
+  let answer, steps = 1;
+  try {
+    const a1 = await askModel(prompt);
+    if (a1.err) return Response.json({ error: a1.err, status: a1.status }, { status: 502 });
+    answer = a1.text;
+    /* ВТОРОЙ ЗАХОД, ЕСЛИ МОДЕЛЬ ПОПРОСИЛА. Это и есть оркестрация, которой не хватало
+       (владелец 09.09): первый круг даёт карту состояния и выдачу по вопросу, и если модель
+       говорит NEED: <запрос>, мы делаем ещё один поиск её словами и спрашиваем снова.
+       Кругов ровно два: без края разговор модели с собой стоит денег и времени, а два
+       закрывают тот случай, ради которого всё затевалось — «сначала пойми структуру, потом
+       добери подробность». */
+    let need = mode === "ask" && /^\s*NEED\s*:/im.test(answer)
+      ? (answer.match(/^\s*NEED\s*:(.+)$/im) || [])[1].split(";").map((x) => x.trim()).filter(Boolean).slice(0, 2)
+      : [];
+    // Модель молча ответила ни на что не сославшись — это тот же случай «не хватило»,
+    // только она об этом не сказала. Ищем по самому вопросу, чем терять ответ.
+    if (!need.length && mode === "ask" && pstate && !/\[[a-z]+:[A-Za-z0-9_.-]+\]/.test(answer)) need = [await toEn(q)];
+    if (need.length) {
+      const more = await Promise.all(need.map(async (n) => searchBoth(await toEn(n.slice(0, 120))).catch(() => null)));
+      const seenP = new Set(panel.map((u) => u.id)), seenW = new Set(works.map((x) => x.id));
+      for (const r2 of more) {
+        if (!r2) continue;
+        for (const u of r2.panel) if (!seenP.has(u.id)) { seenP.add(u.id); panel.push(u); }
+        for (const x of r2.works) if (!seenW.has(x.id)) { seenW.add(x.id); works.push(x); }
+      }
+      for (const x of works) {
+        if (workSrc.some((y) => y.id === x.id) || worksOut.some((y) => y.id === x.id)) continue;
+        const raw = await env.TOKENS.get(`ctx:${x.id}:${lang}`);
+        let src = null;
+        if (raw) { try { const c = JSON.parse(raw); src = { ...x, title: c.title || x.title, text: c.text, url: c.url || x.url, date: c.date || x.date }; } catch { /* битая запись */ } }
+        if (src) workSrc.push(src);
+        worksOut.push(src || { ...x, text: "" });
+      }
+      const prompt2 = (env.RESEARCH_PROMPT || RESEARCH_PROMPT)
+        .replace("{lang}", langName)
+        .replace("{state}", stateDigest(pstate).slice(0, 6000) || "(карта состояния недоступна)")
+        .replace("{panel}", panel.map((u) => `[${u.id}] ${u.title}\n${u.text}`).join("\n\n").slice(0, 9000))
+        .replace("{works}", workSrc.map((x) => `[${x.id}] ${x.title}\n${x.text}`).join("\n\n").slice(0, 6000))
+        .replace("{history}", "(второй заход: ниже уже добавлено то, что ты просил найти; NEED больше не пиши)")
+        .replace("{question}", q);
+      const a2 = await askModel(prompt2);
+      if (!a2.err && a2.text) { answer = a2.text; steps = 2; }
+    }
   } catch {
     return Response.json({ error: "model_failed" }, { status: 502 });
   }
   if (!answer) return Response.json({ error: "empty_answer" }, { status: 502 });
+  answer = answer.replace(/^\s*NEED\s*:.*$/gim, "").trim();   // служебная строка читателю не нужна
 
   // ПРОВЕРКА ПОМЕТОК КОДОМ. Годятся только идентификаторы, которые мы действительно нашли:
   // и статьи, и единицы панели. Без единой годной пометки ответ не отдаём — это то же
@@ -2043,12 +2205,23 @@ async function handleResearch(request, env) {
   const known = new Map();
   for (const s of workSrc) { known.set(s.id, s.id); known.set(String(s.id).replace(/v\d+$/, ""), s.id); }
   for (const u of panel) known.set(u.id, u.id);
+  // Единицы карты состояния — такие же настоящие, как выдача поиска: они не выдуманы, а взяты
+  // из файла панели. Без этого верный ответ «самое опасное — риск пятого уровня» отвергался
+  // как «без опоры» (владелец 09.09).
+  const stUnits = stateUnits(pstate);
+  for (const u of stUnits) known.set(u.id, u.id);
   const cited = new Set();
   for (const mm of answer.matchAll(/\[([A-Za-z0-9_.:-]{3,60})\]/g)) {
     // Номер работы модель пишет то с версией, то без: 2608.27806 и 2608.27806v1 — одно
     // и то же, и придираться к хвосту значило бы выбрасывать верную пометку (08.09).
     const hit = known.get(mm[1]) || known.get(mm[1].replace(/v\d+$/, ""));
     if (hit) cited.add(hit);
+  }
+  // Всё, на что модель сослалась из карты, добавляем в выдачу: панель рисует по этим ключам
+  // плитки, искры и карточки — иначе ответ ссылается на риск, которого нет в ответе сервера.
+  for (const u of stUnits) {
+    if (!cited.has(u.id) || panel.some((p) => p.id === u.id)) continue;
+    panel.push({ id: u.id, kind: u.kind, title: u.title, hash: u.hash, anchor: u.anchor, text: u.text, score: 0 });
   }
   if (mode === "ask" && !cited.size) {
     return Response.json({
@@ -2101,7 +2274,7 @@ async function handleResearch(request, env) {
                                   no_text: !s.text })),
     concepts: [...cKeep.values()].slice(0, 12),
     kpis: kpis.slice(0, 8),
-    dayLeft: spent.dayLeft, weekLeft: spent.weekLeft, panelDay,
+    dayLeft: spent.dayLeft, weekLeft: spent.weekLeft, panelDay, steps,
   }, { headers: { "cache-control": "no-store" } });
 }
 

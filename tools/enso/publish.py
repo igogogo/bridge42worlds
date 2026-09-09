@@ -50,7 +50,7 @@ FILES = ["data/enso/latest.json", "data/enso/history.json", "data/enso/glossary.
          # раздел истории измерений (planet.py): медленные ряды, обновляются ежедневной обёрткой
          "data/enso/planet.json",
          # лента упоминаний (mentions.py) и Ховмёллер (subsurface.godas), тоже из ежедневной обёртки
-         "data/enso/mentions.json", "data/enso/hovmoller.json", "data/enso/spectral.json", "data/enso/regions-daily.json", "data/enso/precip.json", "data/enso/radiance.json", "data/enso/neighbours.json", "data/enso/globe.json", "data/enso/planet-regions.json", "data/enso/stats.json",
+         "data/enso/mentions.json", "data/enso/hovmoller.json", "data/enso/spectral.json", "data/enso/regions-daily.json", "data/enso/precip.json", "data/enso/radiance.json", "data/enso/neighbours.json", "data/enso/globe.json", "data/enso/planet-regions.json", "data/enso/stats.json", "data/enso/agent-state.json",
          # кадры анимации разреза прошлых событий (subsurface.py --hov), грузятся по требованию
          "data/enso/sections-1982.json", "data/enso/sections-1997.json", "data/enso/sections-2015.json", "data/enso/sections-2023.json"]
 FRESH_FILES = ["data/enso/fresh.json", "data/enso/ops.json", "data/enso/runs.json", "data/enso/planet.json",
