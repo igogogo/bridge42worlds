@@ -578,6 +578,9 @@
   .mini svg{width:74px;height:14px;display:block}
   .tally{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
   .tally span{font-family:var(--mono);font-size:10.5px;padding:3px 8px;border-radius:999px;border:1px solid var(--line, var(--hair));color:var(--muted)}
+  .tally span.pick{cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+  .tally span.pick:hover{border-color:var(--ochre);color:var(--text)}
+  .tally span.pick.on{border-color:var(--ochre);color:var(--text);background:color-mix(in srgb, var(--ochre) 16%, transparent)}
   .tally i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-inline-end:5px;vertical-align:-1px}
 
   /* РАСКЛАДКА ЖЁСТКАЯ. Пока ширины выпрашивались у содержимого, «что делать» получала
@@ -996,7 +999,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=6b854b61dc"></script>
+<script src="/js/enso.js?v=df097d340b"></script>
 <script src="/js/sitenav.js?v=754c98dbe3"></script>
 </body>
 </html>

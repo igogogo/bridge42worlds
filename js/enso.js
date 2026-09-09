@@ -1028,9 +1028,9 @@
       var cls = (CL[nm] || {}).cls || 'none', picked = S.pick && (S.pick === cls || S.pick === nm), dim = S.pick && !picked;
       var Lp = x0 + 6, pw = cw - 12, Tp = y0 + 15, ph = ch - 30;
       var X = function (i) { return Lp + i / Math.max(1, seas.length - 1) * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
-      s2 += '<g data-pick="' + esc(nm) + '" data-src="' + esc(JSON.stringify(modelPay(nm))) + '" style="cursor:pointer" opacity="' + (dim ? .55 : 1) + '">';
-      s2 += '<rect x="' + x0 + '" y="' + y0 + '" width="' + cw.toFixed(1) + '" height="' + ch.toFixed(1) + '" rx="6" style="fill:var(--ink);stroke:' + COLC[cls] + '" fill-opacity="' + (picked ? '.12' : '.05') + '" stroke-width="' + (picked ? 2.2 : 1.2) + '" stroke-opacity=".95"/>';
-      s2 += '<text x="' + (x0 + 6) + '" y="' + (y0 + 11) + '" font-size="9.5" style="fill:' + COLC[cls] + ';font-weight:700">' + esc(nm) + '</text>';
+      s2 += '<g data-pick="' + esc(nm) + '" data-src="' + esc(JSON.stringify(modelPay(nm))) + '" style="cursor:pointer" opacity="' + (dim ? .42 : 1) + '">';
+      s2 += '<rect x="' + x0 + '" y="' + y0 + '" width="' + cw.toFixed(1) + '" height="' + ch.toFixed(1) + '" rx="6" style="fill:var(--ink);stroke:' + COLC[cls] + '" fill-opacity="' + (picked ? '.2' : (dim ? '.02' : '.06')) + '" stroke-width="' + (picked ? 2.6 : 1.2) + '" stroke-opacity="' + (picked ? 1 : (dim ? .45 : .9)) + '"/>';
+      s2 += '<text x="' + (x0 + 6) + '" y="' + (y0 + 11) + '" font-size="' + (picked ? 10.5 : 9.5) + '" style="fill:' + COLC[cls] + ';font-weight:700" opacity="' + (picked ? 1 : (dim ? 1 : .85)) + '">' + esc(nm) + '</text>';
       // подписи сезонов внизу квадратика; прожитые — цветом события
       lab.forEach(function (sn) {
         var i = seas.indexOf(sn), xi = X(i), anc = i === 0 ? 'start' : (i === seas.length - 1 ? 'end' : 'middle');
@@ -1043,7 +1043,7 @@
         var m = r.models[nm]; if (!m) return;
         var pts = r.seasons.map(function (sn, i) { var xi = seas.indexOf(sn); return xi < 0 || sn.indexOf('OBS') >= 0 ? null : [X(xi), fin(m.values[i]) ? Y(m.values[i]) : NaN]; }).filter(Boolean);
         var isLast = ii === issues.length - 1;
-        s2 += segs(pts, isLast ? (picked ? 'var(--ochre)' : COLC[cls]) : 'var(--text)', isLast ? 1.9 : 1.1, isLast ? 1 : (.3 + .2 * ii));
+        s2 += segs(pts, isLast ? (picked ? 'var(--ochre)' : COLC[cls]) : 'var(--text)', isLast ? (picked ? 2.8 : 1.9) : 1.1, isLast ? 1 : (dim ? .12 : (picked ? .5 : .3) + .2 * ii));
         if (isLast) { var vv = m.values.filter(fin); if (vv.length) lastV = Math.max.apply(null, vv); }
       });
       // наша опора: прожитые сезоны
@@ -3196,8 +3196,19 @@
     var tl = el('div', 'tally');
     tl.innerHTML = '<span><i style="background:var(--nino)"></i>below reality ' + ao.below.length + jchip('models_below_n') + '</span>' +
       '<span><i style="background:var(--ok)"></i>above ' + ao.above.length + jchip('models_above') + '</span>' +
-      (tally ? '<span><i style="background:var(--ok)"></i>' + T.okC + ' ' + tally.ok + jchip('models_ok') + '</span><span><i style="background:var(--lv3)"></i>' + T.lagC + ' ' + tally.lag + jchip('models_lag') + '</span><span><i style="background:var(--lv5)"></i>' + T.brokeC + ' ' + tally.broke + jchip('models_broke') + '</span>' : '') +
+      /* КЛАССЫ ВНИЗУ — НАЖИМАЮТСЯ. Владелец 09.09: «вот там внизу классификация, кто сломался,
+         можно при нажатии их ярче высвечивать». Те же ключи, что у легенды: клик по чипу
+         выделяет весь класс на плюме, в мозаике и в столбике выпусков. */
+      (tally ? ['ok', 'lag', 'broke'].map(function (kk) {
+        var col = { ok: 'var(--nina)', lag: 'var(--lv3)', broke: 'var(--lv5)' }[kk];
+        var nmC = { ok: T.okC, lag: T.lagC, broke: T.brokeC }[kk];
+        return '<span class="pick' + (S.pick === kk ? ' on' : '') + '" data-pick="' + kk + '" title="highlight this class on the charts"><i style="background:' + col + '"></i>' + nmC + ' ' + tally[kk] + jchip('models_' + kk) + '</span>';
+      }).join('') : '') +
       '<span>' + src({ name: 'Mean over the live models', def: 'The weighted mean over the models that kept up with reality: broken ones are out entirely, chronic laggards enter with weight 0.4, unverified ones with 0.6. The published plume average counts all ' + ((IRI.live || {}).n_all || '—') + ' equally and therefore sits lower — that is the difference between “the models say” and “the models that were right say”.', src: 'IRI plume, our verification', date: IRI.issued }, 'live RMS ' + fnum(liveNow(IRI, 'rms')) + ' \u00b7 their mean ' + fnum(liveNow(IRI)) + ' \u00b7 published ' + fnum(ao.mean)) + jchip('live_mean') + '</span>';
+    tl.addEventListener('click', function (e) {
+      var g = e.target.closest && e.target.closest('[data-pick]'); if (!g || e.target.closest('[data-hist]')) return;
+      var v = g.getAttribute('data-pick'); S.pick = S.pick === v ? null : v; render();
+    });
     body.appendChild(tl);
   }
 
