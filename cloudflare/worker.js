@@ -1665,13 +1665,24 @@ async function handleCouncilResults(request, env) {
 // экспрессе оставляет след в базе, а недельный прогон дорастит верх списка.
 const REACTION_KINDS = new Set(["like", "dislike", "superlike", "star"]);
 
+// Один повтор при срыве базы. Таблица реакций крошечная и с индексами — медленной она не
+// бывает; зато сама D1 изредка отвечает «storage operation exceeded timeout» или «currently
+// processing a long-running export», когда рядом идёт выгрузка или пик записи. 8 сентября,
+// в день всплеска после публикации ссылки, так сорвалось 49 обращений подряд. Срыв
+// мгновенный и разовый, поэтому вторая попытка почти всегда проходит.
 async function reactionCounts(env, articleId) {
-  const r = await env.QUEUE.prepare(
-    "SELECT reaction, COUNT(*) n FROM reactions WHERE article_id = ? GROUP BY reaction"
-  ).bind(articleId).all();
-  const out = {};
-  for (const row of r.results || []) out[row.reaction] = row.n;
-  return out;
+  let last;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const r = await env.QUEUE.prepare(
+        "SELECT reaction, COUNT(*) n FROM reactions WHERE article_id = ? GROUP BY reaction"
+      ).bind(articleId).all();
+      const out = {};
+      for (const row of r.results || []) out[row.reaction] = row.n;
+      return out;
+    } catch (e) { last = e; }
+  }
+  throw last;
 }
 
 async function handleReact(request, env) {
@@ -1683,8 +1694,17 @@ async function handleReact(request, env) {
   if (request.method === "GET") {
     const id = String(url.searchParams.get("id") || "").slice(0, 60);
     if (!id) return Response.json({ error: "no_id" }, { status: 400 });
-    return Response.json({ id, counts: await reactionCounts(env, id) },
-      { headers: { "cache-control": "public, max-age=60" } });
+    try {
+      return Response.json({ id, counts: await reactionCounts(env, id) },
+        { headers: { "cache-control": "public, max-age=60" } });
+    } catch (e) {
+      // Не пятисотка и не запись в журнал ошибок: если база сорвалась, клиент просто
+      // ничего не перерисовывает и на карточке остаётся прежнее число (js/likes.js
+      // выходит на пустом ответе). Пятьсот таких строк за один пик забивали журнал и
+      // прятали настоящие поломки, а читатель всё равно не видел ни одной из них.
+      return Response.json({ error: "busy" },
+        { status: 503, headers: { "cache-control": "no-store" } });
+    }
   }
   if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
 
@@ -1711,7 +1731,12 @@ async function handleReact(request, env) {
   } catch {
     return Response.json({ error: "write_failed" }, { status: 503 });
   }
-  return Response.json({ ok: true, id, counts: await reactionCounts(env, id) },
+  // Реакция уже записана. Если пересчёт сорвался, отвечаем всё равно успехом без чисел:
+  // клиент оставит свой показанный плюс (он обновляет счётчик только при наличии counts),
+  // и человек не увидит отката того, что на самом деле сохранилось.
+  let counts = null;
+  try { counts = await reactionCounts(env, id); } catch { /* числа подождут до перечтения */ }
+  return Response.json(counts ? { ok: true, id, counts } : { ok: true, id },
     { headers: { "cache-control": "no-store" } });
 }
 
