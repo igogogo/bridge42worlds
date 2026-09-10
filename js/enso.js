@@ -2174,7 +2174,7 @@
      журнал (journal.json), тот же, что у стрелок на плашках: значение последней записи,
      изменение к предыдущей. Порядок — по важности; сначала те, что изменились. */
   var STRIP_KEYS = ['n34_daily', 'n34_weekly', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
-  var STRIP_NAME = { n34_weekly: 'Niño 3.4 weekly', n34_daily: 'Niño 3.4 daily', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
+  var STRIP_NAME = { n34_weekly: 'Niño 3.4 weekly', n34_daily: 'Niño 3.4 daily', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean, anom', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
   /* РЕКОРДЫ ВПЕРЁД И РАМКОЙ. Владелец 10.09: «рекорды тоже как-то в ленте KPI отображать —
      мерцанием красной рамки или вперёд ставить». Панель уже знает про рекорды в четырёх
      местах, просто молчала об этом в полосе: ранг 1 у суточного Niño 3.4 и у поясов планеты,
@@ -3437,6 +3437,12 @@
   }
 
   /* Карточка истории: последние восемь изменений и кнопка «все» (владелец 04.09). */
+  /* Отклонение и абсолютная величина — разные числа, и подпись обязана их различать
+     (владелец 10.09: «на карточке world ocean 0,775, а на графике 21,2 — разве не одно и то
+     же?»). Оба верные: 21,2 °C это температура поверхности, 0,775 — отклонение от нормы
+     1991–2020 того же района. В журнале у отклонений теперь так и написано, а здесь строка
+     объясняет это словами. */
+  function janom(r) { return !!r && /anomal/i.test(String(r.title || '') + ' ' + String(r.src || '')); }
   function histHtml(k, all) {
     var r = jrec(k);
     if (!r) return '<b>No history</b>This number is not in the value journal yet.';
@@ -3444,6 +3450,7 @@
     var rows = all ? e : e.slice(0, 8);
     var s = '<b>' + esc(r.title || k) + '</b>' +
       'Every line is a change of the DATA, not of our refresh: the panel can update six times a day and this list stay still.' +
+      (janom(r) ? '<div class="jnote">This is an anomaly: how far the reading sits from the 1991–2020 average for the same date, not the temperature itself. The absolute value for the world ocean lives on Long term · Temperature — about 21 °C in late summer.</div>' : '') +
       /* Подписи колонок: без них столбик чисел и стрелок читался как одно месиво
          (владелец 06.09: «не понятно расположено до конца»). */
       '<table class="htab"><tr class="hh"><td>date of the data</td><td class="v">value</td>' +

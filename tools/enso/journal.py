@@ -150,17 +150,24 @@ def _peak(d):
 # Ключ здесь = ключ на кирпичике в панели (data-k). Один реестр на обе стороны: если
 # показателя нет тут, у кирпичика не будет ни стрелки, ни истории — и это видно сразу,
 # а не «почему-то не работает».
+#
+# ИМЯ ГОВОРИТ, ЧТО ЭТО ЗА ЧИСЛО. Владелец 10.09: «на карточке world ocean 0,775 °C — разве у
+# нас средняя не 21,2, та что на графике?». Оба числа верные и оба наши: 21,2 °C это
+# абсолютная температура поверхности, 0,775 °C — отклонение от нормы 1991–2020 за тот же
+# район. Путала подпись: заголовок «World ocean, 60°S–60°N» и единица «°C» ничем не
+# отличались от абсолютной величины. Теперь у всех отклонений в имени стоит «anomaly», а в
+# источнике — база сравнения.
 METRICS = {
     "n34_weekly": dict(
-        title="Niño 3.4, weekly", unit="°C", digits=2, src="NOAA CPC weekly",
+        title="Niño 3.4, weekly anomaly", unit="°C", digits=2, src="NOAA CPC weekly, anomaly against 1991–2020",
         val=lambda d: _g(d, "noaa", "latest", "n34a"), date=lambda d: _g(d, "noaa", "date"),
         at=lambda d, ym: _weekly_at(d, ym, "n34a")),
     "n12_weekly": dict(
-        title="Niño 1+2, weekly", unit="°C", digits=2, src="NOAA CPC weekly",
+        title="Niño 1+2, weekly anomaly", unit="°C", digits=2, src="NOAA CPC weekly, anomaly against 1991–2020",
         val=lambda d: _g(d, "noaa", "latest", "n12a"), date=lambda d: _g(d, "noaa", "date"),
         at=lambda d, ym: _weekly_at(d, ym, "n12a")),
     "n34_daily": dict(
-        title="Niño 3.4, daily", unit="°C", digits=2, src="OISST v2.1 daily",
+        title="Niño 3.4, daily anomaly", unit="°C", digits=2, src="OISST v2.1 daily, anomaly against 1991–2020",
         val=lambda d: _g(d, "watch", "sst_nino34", "last_value"),
         date=lambda d: _g(d, "watch", "sst_nino34", "last_date"),
         at=lambda d, ym: _month_at(d, "sst_nino34", ym)),
@@ -168,12 +175,12 @@ METRICS = {
         title="ONI, official", unit="°C", digits=2, src="NOAA CPC / ERSST v6",
         val=lambda d: _oni_last(d)[0], date=lambda d: _oni_last(d)[1]),
     "sst_world": dict(
-        title="World ocean, 60°S–60°N", unit="°C", digits=3, src="OISST v2.1 daily",
+        title="World ocean, 60°S–60°N, anomaly", unit="°C", digits=3, src="OISST v2.1 daily, anomaly against 1991–2020",
         val=lambda d: _g(d, "watch", "sst_world", "last_value"),
         date=lambda d: _g(d, "watch", "sst_world", "last_date"),
         at=lambda d, ym: _month_at(d, "sst_world", ym)),
     "t2_world": dict(
-        title="Land + ocean, 2 m", unit="°C", digits=3, src="ERA5 daily",
+        title="Land + ocean, 2 m, anomaly", unit="°C", digits=3, src="ERA5 daily, anomaly against 1991–2020",
         val=lambda d: _g(d, "watch", "t2_world", "last_value"),
         date=lambda d: _g(d, "watch", "t2_world", "last_date"),
         at=lambda d, ym: _month_at(d, "t2_world", ym)),
