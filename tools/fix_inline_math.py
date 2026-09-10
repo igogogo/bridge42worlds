@@ -38,11 +38,38 @@ FIELDS = ("text", "description", "fun_fact", "threads", "oneliner", "context",
 PROTECT = re.compile(
     r"(\[(?:tag|scientist|law):[^\]]+\]|\[/(?:tag|scientist|law)\]"
     r"|\$[^$\n]{1,200}\$"
-    r"|\\\([^)]{1,300}?\\\)"
-    r"|\\\[[^\]]{1,400}?\\\])"
+    # Внутри формулы бывают обычные скобки: C_c^\infty(\mathbb R^3\times(0,\infty)).
+    # Прежний шаблон запрещал ЛЮБУЮ закрывающую скобку внутри, поэтому такая формула не
+    # опознавалась как готовая — и обёртка ниже совала в неё доллары, ломая KaTeX
+    # (владелец 10.09 на работе OpenAI). Теперь идём до первого настоящего разделителя,
+    # что бы ни стояло внутри.
+    r"|\\\((?:(?!\\\)).){1,300}\\\)"
+    r"|\\\[(?:(?!\\\]).){1,400}\\\])"
 )
 
 ESCAPED = re.compile(r"\\([_^{}])")
+
+# ЛЕЧЕНИЕ СВОИХ ЖЕ СЛЕДОВ. До 10.09 обёртка не узнавала формулу со скобками внутри и
+# рассыпала по ней доллары: \(f\in $C_c$^\infty(\mathbb $R^3$…)\). KaTeX на таком месте
+# показывает сырой текст. Внутри \( \) и \[ \] доллар не значит ничего — просто убираем.
+INSIDE_MATH = re.compile(r"\\\((?:(?!\\\)).){1,400}\\\)|\\\[(?:(?!\\\]).){1,600}\\\]")
+
+
+def heal(s):
+    """Убирает доллары, попавшие ВНУТРЬ готовой формулы. Возвращает (текст, правок)."""
+    if not isinstance(s, str) or "$" not in s:
+        return s, 0
+    n = 0
+
+    def drop(m):
+        nonlocal n
+        body = m.group(0)
+        if "$" not in body:
+            return body
+        n += 1
+        return body.replace("$", "")
+
+    return INSIDE_MATH.sub(drop, s), n
 
 # Кусок математики без разделителей: символ (латиница/греческая) или число с индексом
 # либо степенью, возможно цепочкой. Кириллицу НЕ трогаем — это обычный текст.
@@ -60,8 +87,11 @@ def fix_text(s):
     """Возвращает (новый текст, сколько правок). Защищённые куски не трогаются."""
     if not isinstance(s, str) or not s:
         return s, 0
+    # Сначала убираем свои прошлые следы, потом уже размечаем: иначе покалеченная формула
+    # снова не опознается как готовая и получит ещё порцию долларов.
+    s, healed = heal(s)
     parts = PROTECT.split(s)
-    changed = 0
+    changed = healed
     out = []
     for i, chunk in enumerate(parts):
         # нечётные индексы — это сами защищённые совпадения
@@ -86,21 +116,23 @@ def fix_text(s):
     return "".join(out), changed
 
 
-def walk(node):
+def walk(node, only_heal=False):
     """Правит строки в полях статьи, возвращает число правок."""
     n = 0
     if isinstance(node, dict):
         for k, v in list(node.items()):
-            if isinstance(v, str) and k in FIELDS:
-                new, c = fix_text(v)
+            # Лечение идёт по ЛЮБОЙ строке: доллар внутри \( \) не значит ничего нигде,
+            # а испорченные места нашлись и в полях за пределами списка FIELDS.
+            if isinstance(v, str) and (only_heal or k in FIELDS):
+                new, c = heal(v) if only_heal else fix_text(v)
                 if c:
                     node[k] = new
                     n += c
             else:
-                n += walk(v)
+                n += walk(v, only_heal)
     elif isinstance(node, list):
         for v in node:
-            n += walk(v)
+            n += walk(v, only_heal)
     return n
 
 
@@ -108,6 +140,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--ids", nargs="*")
+    # Только убрать свои прошлые следы, ничего нового не размечать: лечение трогает
+    # два десятка статей, а полная разметка — весь архив, и это уже другой объём пересборки.
+    ap.add_argument("--heal-only", action="store_true")
     args = ap.parse_args()
 
     paths = sorted((ROOT / "lang/ru/archive").glob("*/*/data.json"))
@@ -121,8 +156,11 @@ def main():
         d = json.loads(p.read_text(encoding="utf-8"))
         before = json.dumps(d, ensure_ascii=False)
         n = 0
-        for tier in TIERS:
-            n += walk(d.get(tier, {}))
+        if args.heal_only:
+            n = walk(d, only_heal=True)
+        else:
+            for tier in TIERS:
+                n += walk(d.get(tier, {}))
         if not n:
             continue
         touched += 1
