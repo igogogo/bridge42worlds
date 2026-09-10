@@ -48,6 +48,9 @@ Say "=== radiance.json from the external collector"
 Say "=== globe data (globe_data.py)"
 & $py -u globe_data.py 2>&1 | Out-File $log -Append -Encoding utf8
 
+Say "=== city forecasts against fact (cities.py)"
+& $py -u cities.py 2>&1 | Out-File $log -Append -Encoding utf8
+
 Say "=== panel state map (agent_state.py)"
 & $py -u agent_state.py 2>&1 | Out-File $log -Append -Encoding utf8
 

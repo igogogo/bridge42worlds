@@ -47,6 +47,7 @@
       'now/analogs': 'Daily Niño 3.4 this year against the four strongest past events on the same days.', 'now/map': 'The four Niño boxes on the map, this week against the same week of a past event.',
       'now/weekly': 'The four weekly indices over the last weeks, with the same weeks of past events beside them.', 'now/weekly_a': 'One weekly index against the strongest events on the same calendar.',
       'ocean/surface': 'Daily box means from the NOAA grid, one day behind, with own climatologies.', 'ocean/hovmoller': 'How the heat moves: the subsurface anomaly along the equator month by month, this event beside a past one.', 'mentions/attention': 'How much the world talks about it: articles per day, Wikipedia views, share of world news.', 'mentions/articles': 'Latest headlines in nine languages, with the publisher.', 'mentions/official': 'What the forecast centres publish.', 'ocean/moorings': 'Temperature by depth under the equator, mooring by mooring, every day.', 'ocean/section': 'The reanalysis section along the equator, monthly.',
+      'models/cities': 'Seven-day weather forecasts for 50 cities, three models, seven parameters, against the fact when the day arrives: how far the models miss, by horizon and over time. A local watch of how stable the system is.',
       'models/plume': 'All models\' seasonal forecasts, the live-model centre, where we stand in the season.', 'models/stack': 'The last three issues, one under the other, against the same reality.', 'models/scoreboard': 'Each model against the official value it forecast.', 'models/breakdown': 'How many models fell below reality, issue by issue; the chronic ones.', 'models/revisions': 'How each model moved its peak between issues.',
       'air/coupling': 'The three atmospheric signs that the ocean and the air are coupled.', 'air/fuel': 'The warm water volume under the equator: the fuel gauge and its lead.', 'air/layers': 'The four satellite floors of the atmosphere and their delay.', 'air/wind': 'Daily zonal wind over the western Pacific and the westerly bursts.', 'air/mjo': 'The Madden–Julian Oscillation: phase and amplitude.', 'air/indices': 'MEI, the Indian Ocean Dipole and RONI next to our coupling score.',
       'trend/sst_nino34': 'Niño 3.4 daily: 400 days, the band of all years, the 14-day forecast, where past events went from here.', 'trend/sst_world': 'The world ocean, daily.', 'trend/t2_world': 'Land and ocean, daily.', 'trend/index': 'Our risk index by update, and the comparable core against past events.', 'trend/months': 'Thirteen months of the three series with their ranks.', 'trend/background': 'Ocean heat content and the energy imbalance: the state of the whole system.',
@@ -3621,6 +3622,93 @@
     body.appendChild(kp);
   }
 
+
+  /* ══ ПРОГНОЗЫ ПО 50 ГОРОДАМ ПРОТИВ ФАКТА ═══════════════════════════════════════
+     Владелец 10.09: «недельный прогноз по 50 городам, обновляем ежедневно и смотрим,
+     насколько ломаются метеорологические модели — тот же фактор, что у сезонных моделей,
+     только локальный; берём всё, что есть, и по каждому параметру смотрим устойчивость».
+     Данные кладёт tools/enso/cities.py (ежедневно) и cities_backfill.py (история с января
+     2025). Здесь три вида: ошибка по горизонту, ход ошибки по месяцам (2025 спокойный против
+     2026 событийного) и города рейтингом. Сравнивать город с собственной нормой, не между
+     собой — об этом сказано в примечании. */
+  var CT_MODEL_COL = { ecmwf_ifs025: 'var(--nina)', gfs_seamless: 'var(--ochre)', icon_seamless: 'var(--ok)' };
+  var CT_MODEL_NAME = { ecmwf_ifs025: 'ECMWF IFS', gfs_seamless: 'GFS', icon_seamless: 'ICON' };
+  function ctStat(o) { return o && fin(o.mae) ? o : null; }
+  function chartCitiesH(CT, param, W, H) {
+    var PS = (CT.param_stats || {})[param] || {}, models = CT.models || [];
+    var Lp = 46, Rr = 12, Tp = topPad(W), B = 26, pw = W - Lp - Rr, ph = H - Tp - B;
+    var all = [];
+    models.forEach(function (m) { for (var h = 1; h <= 7; h++) { var o = ctStat((PS[m] || {})[String(h)]); if (o) all.push(o.mae); } });
+    if (!all.length) return svgOpen(W, H) + '<text x="20" y="40">no forecast–fact pairs yet for this parameter</text></svg>';
+    var vmax = Math.max.apply(null, all) * 1.25, vmin = 0;
+    var X = function (h) { return Lp + (h - 1) / 6 * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
+    var s2 = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + esc((CT.labels || {})[param] || param) + ': mean absolute error by forecast horizon, ' + esc((CT.units || {})[param] || '') + ', all cities</text>';
+    s2 += gridY(vmin, vmax, niceStep(vmax, 5), Y, Lp, Rr, W, 1);
+    for (var h = 1; h <= 7; h++) s2 += '<text x="' + X(h).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + (h === 1 ? '1 day' : h + ' days') + '</text>';
+    var leg = [];
+    models.forEach(function (m) {
+      var pts = []; for (var h = 1; h <= 7; h++) { var o = ctStat((PS[m] || {})[String(h)]); pts.push([X(h), o ? Y(o.mae) : NaN]); }
+      s2 += segs(pts, CT_MODEL_COL[m] || 'var(--text)', S.pick === m ? 2.8 : 1.8, pickOp(m, 1));
+      pts.forEach(function (p, i) { if (fin(p[1])) s2 += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="2.6" style="fill:' + (CT_MODEL_COL[m] || 'var(--text)') + '" opacity="' + pickOp(m, 1) + '"/>'; });
+      var o7 = ctStat((PS[m] || {})['7']), o1 = ctStat((PS[m] || {})['1']);
+      leg.push([CT_MODEL_NAME[m] + (o1 && o7 ? ': ' + fnum(o1.mae, 2, false) + ' → ' + fnum(o7.mae, 2, false) : ''), CT_MODEL_COL[m], 1.8, '', m]);
+    });
+    s2 += legend(leg, W, H, Rr, Tp);
+    return s2 + '</svg>';
+  }
+  function chartCitiesMonths(CT, param, W, H) {
+    var M = ((CT.monthly || {})[param]) || {}, hs = ['1', '3', '5', '7'];
+    var months = []; hs.forEach(function (h) { Object.keys(M[h] || {}).forEach(function (mo) { if (months.indexOf(mo) < 0) months.push(mo); }); });
+    months.sort();
+    if (months.length < 2) return svgOpen(W, H) + '<text x="20" y="40">the month-by-month view needs at least two months of pairs (the backfill from January 2025 is running)</text></svg>';
+    var Lp = 46, Rr = 12, Tp = topPad(W), B = 26, pw = W - Lp - Rr, ph = H - Tp - B;
+    var all = []; hs.forEach(function (h) { months.forEach(function (mo) { var o = (M[h] || {})[mo]; if (o && fin(o.mae)) all.push(o.mae); }); });
+    var vmax = Math.max.apply(null, all) * 1.25, vmin = 0;
+    var X = function (i) { return Lp + i / Math.max(1, months.length - 1) * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
+    var s2 = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + esc((CT.labels || {})[param] || param) + ': error by month, ' + esc((CT.units || {})[param] || '') + ' — a quiet 2025 against the event year</text>';
+    s2 += gridY(vmin, vmax, niceStep(vmax, 5), Y, Lp, Rr, W, 1);
+    var every = months.length > 14 ? 3 : (months.length > 8 ? 2 : 1);
+    months.forEach(function (mo, i) { if (i % every === 0 || i === months.length - 1) s2 += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="' + (i === 0 ? 'start' : (i === months.length - 1 ? 'end' : 'middle')) + '">' + esc(MON3[+mo.slice(5, 7) - 1] + (mo.slice(5, 7) === '01' || i === 0 ? " '" + mo.slice(2, 4) : '')) + '</text>'; });
+    // граница года — пунктиром
+    months.forEach(function (mo, i) { if (mo.slice(5, 7) === '01' && i) s2 += '<line x1="' + X(i).toFixed(1) + '" y1="' + Tp + '" x2="' + X(i).toFixed(1) + '" y2="' + (Tp + ph) + '" style="stroke:var(--soft)" stroke-dasharray="3 3" opacity=".7"/>'; });
+    var cols = { '1': 'var(--soft)', '3': 'var(--nina)', '5': 'var(--ochre)', '7': 'var(--nino)' }, leg = [];
+    hs.forEach(function (h) {
+      var pts = months.map(function (mo, i) { var o = (M[h] || {})[mo]; return [X(i), o && fin(o.mae) ? Y(o.mae) : NaN]; });
+      s2 += segs(pts, cols[h], h === '5' ? 2.4 : 1.4, pickOp('h' + h, 1));
+      leg.push([h + (h === '1' ? ' day ahead' : ' days ahead'), cols[h], h === '5' ? 2.4 : 1.4, '', 'h' + h]);
+    });
+    s2 += legend(leg, W, H, Rr, Tp);
+    return s2 + '</svg>';
+  }
+  function viewCities(body) {
+    var CT = S.CT || {};
+    if (!CT.cities) { body.appendChild(el('div', 'note', 'No cities.json yet: tools/enso/cities.py writes it in the daily run.')); return; }
+    var params = CT.params || [], param = S.sub.ctParam || 'temperature_2m_max';
+    var rowP = el('div', 'seg sub');
+    params.forEach(function (p) { var b = el('button', (param === p ? 'on' : '') + ' sq', (CT.labels || {})[p] || p); b.type = 'button'; b.onclick = function () { S.sub.ctParam = p; render(); }; rowP.appendChild(b); });
+    body.appendChild(rowP);
+    var view = S.sub.ctView || 'horizon', rowV = el('div', 'seg sub');
+    [['horizon', 'by horizon'], ['months', 'by month'], ['cities', 'by city']].forEach(function (o) { var b = el('button', (view === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.ctView = o[0]; render(); }; rowV.appendChild(b); });
+    body.appendChild(rowV);
+    var kp = el('div', 'kpis');
+    kp.innerHTML = '<div class="kpi"><div class="kn">forecast–fact pairs</div><div class="kv">' + (CT.pairs || 0).toLocaleString('en') + '</div><div class="km">' + (CT.cities || []).length + ' cities · ' + (CT.models || []).length + ' models · ' + params.length + ' parameters · since ' + esc(CT.since || '') + '</div>' + kmeta(null, 'Open-Meteo forecasts and ERA5 archive', String(CT.built || '').slice(0, 10)) + '</div>' +
+      (function () { var PS = (CT.param_stats || {})[param] || {}, best = null; (CT.models || []).forEach(function (m) { var o = ctStat((PS[m] || {})['5']); if (o && (!best || o.mae < best.mae)) best = { m: m, mae: o.mae }; }); return best ? '<div class="kpi"><div class="kn">best at 5 days, ' + esc((CT.labels || {})[param] || param) + '</div><div class="kv">' + esc(CT_MODEL_NAME[best.m]) + '</div><div class="km">mean absolute error ' + fnum(best.mae, 2, false) + ' ' + esc((CT.units || {})[param] || '') + ' over all cities</div></div>' : '<div class="kpi"><div class="kn">first comparisons</div><div class="kv">soon</div><div class="km">the fact arrives about two days after the date; the first pairs appear three days after the start</div></div>'; })();
+    body.appendChild(kp);
+    if (view === 'horizon') plot(body, function (w, h) { return chartCitiesH(CT, param, w, h); });
+    else if (view === 'months') plot(body, function (w, h) { return chartCitiesMonths(CT, param, w, h); });
+    else {
+      var CS = CT.city_stats || {}, rows = (CT.cities || []).map(function (c) {
+        var o = ctStat((((CS[c.id] || {})[param]) || {})['5']), o1 = ctStat((((CS[c.id] || {})[param]) || {})['1']);
+        return { c: c, mae5: o ? o.mae : null, mae1: o1 ? o1.mae : null, n: o ? o.n : 0 };
+      }).sort(function (a, b) { return (b.mae5 == null ? -1 : b.mae5) - (a.mae5 == null ? -1 : a.mae5); });
+      var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
+      wrap.innerHTML = '<table class="e"><thead><tr><th>city</th><th>group</th><th class="num">1 day</th><th class="num">5 days</th><th class="num">pairs</th></tr></thead><tbody>' +
+        rows.map(function (r) { return '<tr><td>' + esc(r.c.name) + '</td><td class="src">' + esc(r.c.group) + '</td><td class="num">' + (r.mae1 != null ? fnum(r.mae1, 2, false) : '—') + '</td><td class="num' + (r.mae5 != null && rows[0].mae5 != null && r.mae5 >= rows[0].mae5 * .8 ? ' top' : '') + '">' + (r.mae5 != null ? fnum(r.mae5, 2, false) : '—') + '</td><td class="num src">' + r.n + '</td></tr>'; }).join('') + '</tbody></table>';
+      body.appendChild(wrap);
+      body.appendChild(el('div', 'cap', 'Mean absolute error of ' + ((CT.labels || {})[param] || param) + ' at 1 and 5 days ahead, all three models together, ' + esc((CT.units || {})[param] || '') + '. Compare a city with its own history, not cities with each other: a coastal city and a continental one miss by different amounts on a normal day.'));
+    }
+    body.appendChild(el('div', 'cap', esc(CT.note || '')));
+  }
   function viewModels() {
     var D = S.D, IRI = D.iri && !D.iri.error ? D.iri : null, NW = D.noaa, P = S.P;
     if (!IRI) { var b0 = stageShell('The IRI plume did not load', []); b0.appendChild(el('div', 'note warn', esc((D.iri || {}).error || ''))); return; }
@@ -3632,9 +3720,10 @@
       : (ao.below.length + ' of ' + ao.n + ' models are already below reality for ' + esc(ao.season));
     var body = stageShell(title, [segBtn('models', 'plume', 'Plume', 'plume'), segBtn('models', 'stack', 'Month by month', 'plume'),
       segBtn('models', 'board', 'Scoreboard', 'plume'), segBtn('models', 'breakdown', 'How they break', 'plume'),
-      segBtn('models', 'revision', 'Revisions', 'plume')]);
+      segBtn('models', 'revision', 'Revisions', 'plume'), segBtn('models', 'cities', 'Cities, 7 days', 'plume')]);
     var i0 = IRI.seasons.indexOf(ao.season);
 
+    if (k === 'cities') { viewCities(body); return; }
     if (k === 'plume') {
       plot(body, function (w, h) { return chartPlume(IRI, NW.latest.n34a, w, h); });
       var hist = (IRI.history || []).filter(function (h2) { return h2.combined; }).map(function (h2) { return h2.issued + ': ' + fnum(Math.max.apply(null, h2.combined.filter(fin))); });
@@ -7210,11 +7299,12 @@
     get('/data/enso/radiance.json').catch(function () { return {}; }),
     get('/data/enso/neighbours.json').catch(function () { return {}; }),
     get('/data/enso/concepts.json').catch(function () { return {}; }),
-    get('/data/enso/stats.json').catch(function () { return {}; })])
+    get('/data/enso/stats.json').catch(function () { return {}; }),
+    get('/data/enso/cities.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
       fixRiskTitles(r[0]);                    // парные риски: «world ocean:» / «land+ocean:» читались как дубли (владелец 09.09)
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {};
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {};
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');

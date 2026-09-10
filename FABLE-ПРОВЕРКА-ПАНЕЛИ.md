@@ -351,6 +351,10 @@ rsOpen/rsDelete`, доска внутри первого хода), при от�
 ответ, включая путь по токену; своё — только `x-b42-service`. Состояние в `panelDay` (в каждом
 ответе и в `/api/quota`), плашка в подвале диалога (`rsDayHtml`). Менять число — переменной в
 `wrangler.toml`, не кодом.
+Города (`#models/cities`): `cities.py` ежедневно (прогноз 3 моделей × 7 параметров × 50
+городов, факт ERA5), `cities_backfill.py` для истории с 01.2025 (previous-runs только часовые,
+429 у Open-Meteo — ждать, не долбить; запускать отдельным процессом), сводка `cities.json`,
+сырьё `data/enso/raw/cities/`. Сцена — `viewCities`, графики `chartCitiesH`/`chartCitiesMonths`.
 Облако понятий: данные `data/enso/concepts.json` (ведущая сессия, `concepts_link.py --run`),
 вид — `conceptsHtml(anchors, full)` внутри подсказок (`fill`), ящика source/notes и сцен риска
 и региона; якорь карточки — атрибут `data-anchor`; якоря сцены — `SCENE_ANCHORS`. Новую карточку
