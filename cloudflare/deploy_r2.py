@@ -20,7 +20,7 @@ data/bulk-select, папки api/, per-article data.json, arxiv-atom.xml/arxiv-o
 Нужны env: CLOUDFLARE_ACCOUNT_ID (или R2_ACCOUNT_ID), R2_BUCKET=bridge42worlds-site,
   и либо (R2_ACCESS_KEY_ID + R2_SECRET_ACCESS_KEY), либо CLOUDFLARE_API_TOKEN.
 """
-import os, sys, json, hashlib, mimetypes, time
+import os, sys, json, hashlib, mimetypes, time, fnmatch
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import requests
@@ -204,6 +204,48 @@ def iter_files():
             if p.is_file() and not is_internal(p):
                 candidates.append(p)
     return candidates
+
+
+def _in_scope(p):
+    """Едет ли файл на сайт вообще — тот же отбор, что делает полный обход:
+    лежит в папке сайта либо подходит под корневой образец."""
+    rel = p.relative_to(ROOT).as_posix()
+    if any(rel == d or rel.startswith(d + "/") for d in INCLUDE_DIRS):
+        return True
+    # INCLUDE_GLOBS собираются через ROOT.glob(), то есть только из корня.
+    return "/" not in rel and any(fnmatch.fnmatch(p.name, g) for g in INCLUDE_GLOBS)
+
+
+def files_for(only):
+    """Точечная выкладка: собрать НАЗВАННЫЕ пути, не обходя дерево целиком.
+
+    Обход шёл всегда, а `--only` отсеивал лишнее уже внутри цикла. На 263 тысячах
+    файлов это 70–120 секунд на то, чтобы отправить один маленький файл. Дороже всего
+    вышло доске конвейера: она роняет на сайт журнал прогона перед каждым шагом и после
+    него, с ограничением в 120 секунд, — и в это ограничение обход НЕ укладывался.
+    То есть каждый шаг платил четыре минуты ожидания, а доска всё равно не обновлялась
+    (владелец 10.09: «что с пересборкой» — прогон из 48 шагов терял на этом больше трёх
+    часов).
+
+    Отбор здесь тот же, что и при полном обходе: файл вне папок сайта или внутренний
+    (.jsonl, data.json, правила .gitignore) не поедет и отсюда.
+
+    Возвращает None, если хоть один путь не файл и не папка: значит это приставка
+    вроде «lang/ru/arch», и без полного обхода её не раскрыть.
+    """
+    out = []
+    for o in only:
+        p = ROOT / o
+        if p.is_file():
+            if _in_scope(p) and not is_internal(p):
+                out.append(p)
+        elif p.is_dir():
+            for q in p.rglob("*"):
+                if q.is_file() and _in_scope(q) and not is_internal(q):
+                    out.append(q)
+        else:
+            return None
+    return out
 
 
 def md5(p):
@@ -485,7 +527,10 @@ def main():
     pending = {}          # отпечатки файлов, которые ещё предстоит отправить
     rehash = "--rehash" in sys.argv
     quick = 0
-    for p in iter_files():
+    # Названные пути берём напрямую; полный обход остаётся для выкладки целиком и для
+    # случая, когда в --only передали приставку, а не готовый путь (см. files_for).
+    targeted = files_for(only) if only else None
+    for p in (iter_files() if targeted is None else targeted):
         key = p.relative_to(ROOT).as_posix()
         if only and not any(key.startswith(o) for o in only):
             continue
