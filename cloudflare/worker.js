@@ -4629,23 +4629,59 @@ const LIC_WORDS = {
   zh: { fig: "未显示插图：论文许可不允许转载。请在 arXiv 查看。", abs: "原始摘要见 arXiv", link: "在 arXiv 打开" },
 };
 
+/* Наша ли это картинка. Обложку рисуем мы сами (ai.webp и её уменьшённая t_ai.webp),
+   авторские рисунки из PDF лежат под номерами: 0.webp, 1.webp, t_2.webp. Всё, что не
+   опознано как наше, считаем авторским и прячем — ошибаться безопаснее в эту сторону. */
+function ourImage(url) {
+  return /(^|\/)(t_)?ai\.[a-z0-9]+$/i.test(String(url || "").split("?")[0]);
+}
+
 function licenceRewrite(lang, resp, cover) {
   const w = LIC_WORDS[lang] || LIC_WORDS.en;
   const esc = (t) => t.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
   let arxiv = "";
+  let hidden = 0;   // сколько АВТОРСКИХ рисунков убрали из текущей мозаики
   return new HTMLRewriter()
     // номер работы — из ссылки на источник, она есть на каждой странице
     .on('a[href^="https://arxiv.org/abs/"]', { element(e) { if (!arxiv) arxiv = e.getAttribute("href") || ""; } })
-    // Мозаика — ОБЁРТКА, галерея лежит внутри неё. Значок ставится на место всей
-    // мозаики; отдельно трогать галерею нельзя — она исчезнет вместе с обёрткой, и
-    // значок исчезнет с ней (так и вышло в первой выкладке 02.09).
+    // Мозаика — ОБЁРТКА, галерея лежит внутри неё. Отдельно трогать галерею нельзя —
+    // она исчезнет вместе с обёрткой (так и вышло в первой выкладке 02.09).
+    //
+    // Но и заменять мозаику целиком, как делали до 10.09, оказалось неверно. Замена
+    // происходит на открывающем теге, когда ещё не видно, что внутри, — и объявление
+    // «иллюстрации не показаны» вставало ВСЕГДА. А внутри почти никогда не было чужого:
+    // из 1201 просмотренной страницы у работ этого класса мозаика либо пуста (561 раз —
+    // объявляли о сокрытии пустоты), либо в ней одна наша же обложка ai.webp (26 раз —
+    // прятали собственную картинку и винили в этом чужую лицензию). Авторских рисунков
+    // у таких работ нет вовсе: лицензия отрабатывает ещё на сборке, их просто не берут.
+    //
+    // Поэтому теперь: содержимое убираем поштучно (своё оставляем), а объявление
+    // дописываем на ЗАКРЫВАЮЩЕМ теге и только если чужое действительно было.
     .on("div.mosaic", { element(e) {
-      e.replace(`<div class="mosaic lic-hidden" style="display:flex;align-items:center;gap:10px;` +
-                `padding:14px 0;color:#5A6273;font-size:13px"><span class="lic-mark" style="display:inline-flex;` +
-                `align-items:center;justify-content:center;width:34px;height:34px;border:1px solid #C77F3A;` +
-                `border-radius:50%;color:#C77F3A;cursor:help;flex:none" data-tip-text="${esc(w.fig)}" ` +
-                `aria-label="${esc(w.fig)}" title="${esc(w.fig)}">&#9635;</span><span>${esc(w.fig)}</span></div>`,
-                { html: true });
+      hidden = 0;
+      e.onEndTag((end) => {
+        if (!hidden) return;
+        // Отдельной строкой ПОСЛЕ мозаики: сама она к этому мгновению уже пуста, а пустой
+        // div ничего не занимает — ровно как на страницах, где рисунков не было никогда.
+        end.after(`<div class="lic-hidden" style="display:flex;align-items:center;gap:10px;` +
+                  `padding:14px 0;color:#5A6273;font-size:13px"><span class="lic-mark" ` +
+                  `style="display:inline-flex;align-items:center;justify-content:center;width:34px;` +
+                  `height:34px;border:1px solid #C77F3A;border-radius:50%;color:#C77F3A;cursor:help;` +
+                  `flex:none" data-tip-text="${esc(w.fig)}" aria-label="${esc(w.fig)}" ` +
+                  `title="${esc(w.fig)}">&#9635;</span><span>${esc(w.fig)}</span></div>`,
+                  { html: true });
+      });
+    } })
+    // Чужая картинка внутри мозаики — вон вместе со ссылкой-обёрткой; наша остаётся.
+    .on("div.mosaic a", { element(e) {
+      const href = e.getAttribute("href") || "";
+      if (/\.(webp|png|jpe?g|gif|svg)$/i.test(href.split("?")[0]) && !ourImage(href)) {
+        hidden++;
+        e.remove();
+      }
+    } })
+    .on("div.mosaic img", { element(e) {
+      if (!ourImage(e.getAttribute("src"))) { hidden++; e.remove(); }
     } })
     // Чужая обложка: превью для соцсетей на неё ссылаться не должно — файл всё равно 404.
     .on('meta[property="og:image"]', { element(e) { if (cover) e.remove(); } })
