@@ -138,6 +138,15 @@
   [data-theme="dark"] .risk .rl,[data-theme="dark"] .lvl,
   [data-theme="dark"] .cls.ok,[data-theme="dark"] .cls.lag,[data-theme="dark"] .br-l{color:#151a22}
   .g-side b .dsub{display:block;font-family:var(--mono);font-size:9.5px;font-weight:500;color:var(--soft);letter-spacing:.04em;margin-top:1px}
+  /* рекорд в ленте KPI: красная рамка, мягко дышит, и метка (владелец 10.09) */
+  .ks.rec{border-color:var(--lv5);position:relative;animation:b42-recpulse 2.6s ease-in-out infinite}
+  .ks.rec .ks-v{color:var(--lv5)}
+  /* метка стоит ВНУТРИ плитки: полоса прокручивается и обрезает всё, что выше её края */
+  .ks-rec{position:absolute;top:2px;inset-inline-end:5px;font-family:var(--mono);font-size:7.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--surface);background:var(--lv5);border-radius:3px;padding:0 4px;line-height:11px}
+  .ks.rec{padding-top:9px}
+  @keyframes b42-recpulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb, var(--lv5) 55%, transparent)}60%{box-shadow:0 0 0 6px transparent}}
+  @media (prefers-reduced-motion: reduce){ .ks.rec{animation:none} }
   .tabs::-webkit-scrollbar{display:none}
   /* Чётче: цвет основного текста вместо приглушённого и чуть плотнее начертание —
      меню должно читаться с первого взгляда (владелец 04.09). */
@@ -1058,7 +1067,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=b0998c5b2f"></script>
+<script src="/js/enso.js?v=d5a2d65e0c"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>

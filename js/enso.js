@@ -2171,6 +2171,36 @@
      изменение к предыдущей. Порядок — по важности; сначала те, что изменились. */
   var STRIP_KEYS = ['n34_daily', 'n34_weekly', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
   var STRIP_NAME = { n34_weekly: 'Niño 3.4 weekly', n34_daily: 'Niño 3.4 daily', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
+  /* РЕКОРДЫ ВПЕРЁД И РАМКОЙ. Владелец 10.09: «рекорды тоже как-то в ленте KPI отображать —
+     мерцанием красной рамки или вперёд ставить». Панель уже знает про рекорды в четырёх
+     местах, просто молчала об этом в полосе: ранг 1 у суточного Niño 3.4 и у поясов планеты,
+     доля 100 % у топлива, серия рекордных суток у сторожевых рядов, уровень 5 у риска
+     «подповерхностное тепло». Здесь всё это сведено к одной таблице «ключ → почему рекорд». */
+  function stripRecords() {
+    var D = S.D || {}, W = D.watch || {}, PL = (S.PL || {}).temperature || {}, out = {};
+    function put(k, why) { if (k && why && !out[k]) out[k] = why; }
+    if ((D.nino34 || {}).all_years_rank === 1) put('n34_daily', 'the warmest for these calendar days in the whole record');
+    var wS = W.sst_world || {}, wT = W.t2_world || {};
+    if (((PL.sst_world || {}).last || {}).rank_high === 1) put('sst_world', 'the warmest for the date in the record, ' + (((PL.sst_world || {}).last || {}).of || '') + ' years');
+    else if (((wS.records || {}).streak || 0) >= 7) put('sst_world', (wS.records.streak) + ' record days in a row');
+    if (((PL.t2_world || {}).last || {}).rank_high === 1) put('t2_world', 'the warmest for the date in the record');
+    var fuel = ((D.air || {}).fuel || {});
+    if (fin(fuel.share_of_record) && fuel.share_of_record >= 99.5) put('wwv_share', 'at the record of the series');
+    if (fin(fuel.rank) && fuel.rank === 1) put('wwv', 'the largest warm-water volume of the record');
+    (D.risks || []).forEach(function (r) {
+      if (+r.level < 5) return;
+      if (r.id === 'fuel_charged') { put('wwv', 'the fuel is at its record'); put('wwv_share', 'the fuel is at its record'); }
+      if (r.id === 'subsurface_warm') put('subsurface_warmest', 'the warmest layer of the record under the moorings');
+      if (r.id === 'event_strength') put('n34_weekly', 'a very strong event: rank 1 among the years we can compare');
+    });
+    (D.alerts || []).forEach(function (a) {
+      if ((a.level || '') !== 'SHOUT') return;
+      var t = (a.title || '').toLowerCase();
+      if (/1\+2|niño 3\b|nino 3\b/.test(t)) put('n34_daily', a.title);
+      if (/world ocean|ocean/.test(t)) put('sst_world', a.title);
+    });
+    return out;
+  }
   function buildStrip() {
     var host = $('kstrip'); if (!host) return;
     var items = [];
@@ -2181,15 +2211,22 @@
       var dv = prev && typeof prev.v === 'number' ? last.v - prev.v : 0;
       items.push({ k: k, r: r, last: last, prev: prev, dv: dv });
     });
-    var changed = items.filter(function (x) { return x.dv; }), still = items.filter(function (x) { return !x.dv; });
-    var show = changed.concat(still).slice(0, 12);
+    var REC = stripRecords();
+    items.forEach(function (x) { x.rec = REC[x.k] || null; });
+    /* Порядок: сперва рекорды, потом изменившиеся, потом остальные. Рекорд — это не «оно
+       поменялось», это «такого ещё не было», и в ленте он должен стоять первым. */
+    var recs = items.filter(function (x) { return x.rec; });
+    var changed = items.filter(function (x) { return !x.rec && x.dv; }), still = items.filter(function (x) { return !x.rec && !x.dv; });
+    var show = recs.concat(changed, still).slice(0, 12);
     if (!show.length) { host.hidden = true; return; }
     host.hidden = false;
     host.innerHTML = '<span class="ks-h" data-src="' + esc(JSON.stringify({ name: 'Main indicators', def: 'The value of the last reading and its change against the previous one, from the panel journal; the ones that moved come first. Click any to see its history.' })) + '">KPI</span>' +
       show.map(function (x) {
         var dg = x.r.digits, u = x.r.unit || '', sign = x.dv > 0 && x.last.v >= 0 && dg > 0 ? '' : '';
         var pay = { name: x.r.title, def: (x.prev ? 'Was ' + jval(x.prev.v, dg) + ' on ' + x.prev.d + ', now ' + jval(x.last.v, dg) + ' on ' + x.last.d + '.' : 'First reading we hold: ' + jval(x.last.v, dg) + ' on ' + x.last.d + '.') + ' Click for the history.', src: x.r.src, date: x.last.d };
-        return '<button type="button" class="ks" data-hist="' + esc(x.k) + '" data-src="' + esc(JSON.stringify(pay)) + '">' +
+        if (x.rec) pay.def = 'A record: ' + x.rec + '. ' + pay.def;
+        return '<button type="button" class="ks' + (x.rec ? ' rec' : '') + '" data-hist="' + esc(x.k) + '" data-src="' + esc(JSON.stringify(pay)) + '">' +
+          (x.rec ? '<span class="ks-rec">record</span>' : '') +
           '<span class="ks-row"><span class="ks-v">' + (x.k === 'oni' || /nino|n34|sst_world|wind|mjo/.test(x.k) && x.last.v > 0 ? '+' : '') + jval(x.last.v, dg) + (u ? '<small>' + esc(u) + '</small>' : '') + '</span>' +
           (x.dv ? '<span class="ks-d ' + jsign(x.dv) + '">' + jarrow(x.dv) + (x.dv > 0 ? '+' : '') + jval(x.dv, dg) + '</span>' : '') + '</span>' +
           '<span class="ks-n">' + esc(STRIP_NAME[x.k] || x.r.title) + '</span></button>';
