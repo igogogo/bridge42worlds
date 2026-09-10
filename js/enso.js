@@ -667,8 +667,14 @@
       // иначе две надписи ложатся друг на друга (найдено на телефоне сразу же)
       var yRec = Y((N.peak_estimate || {}).hist_ceiling);
       var below = fin((N.peak_estimate || {}).hist_ceiling) && Math.abs(dy - yRec) < 26;
-      s += '<text x="' + (rightRoom ? dx + 9 : dx - 9).toFixed(1) + '" y="' + (below ? dy + 17 : dy - 8).toFixed(1) + '" text-anchor="' + (rightRoom ? 'start' : 'end') +
-        '" font-size="12" style="fill:var(--nino);font-weight:700">' + fnum(N.current_day) + '</text>';
+      /* Главная цифра графика — белым и жирно, с тёмной обводкой, а не цветом события
+         (владелец 10.09: «число написать контрастным белым, а не блеклым»). Под ней — чем
+         измерено и за какое число: рядом на карточке стоит недельный индекс NOAA (+2.7 за
+         неделю до 2 сентября), а здесь суточный OISST, и это два разных продукта. */
+      var HALO2 = 'fill:var(--text);paint-order:stroke;stroke:var(--surface);stroke-width:3.2;stroke-linejoin:round;font-weight:700';
+      var yN = below ? dy + 17 : dy - 12, xN = rightRoom ? dx + 9 : dx - 9, ancN = rightRoom ? 'start' : 'end';
+      s += '<text x="' + xN.toFixed(1) + '" y="' + yN.toFixed(1) + '" text-anchor="' + ancN + '" font-size="13" style="' + HALO2 + '">' + fnum(N.current_day) + '</text>';
+      if (N.last_date || (S.D.watch && S.D.watch.sst_nino34)) s += '<text x="' + xN.toFixed(1) + '" y="' + (yN + 10).toFixed(1) + '" text-anchor="' + ancN + '" font-size="8" style="fill:var(--soft)">daily OISST · ' + esc(String(dt(N.last_date || S.D.watch.sst_nino34.last_date)).replace(/<[^>]+>/g, '')) + '</text>';   // dt() отдаёт HTML-плашку, в SVG нужен голый текст
     }
     var pe = N.peak_estimate;
     // Черта рекорда и её подпись держатся внутри ОСНОВНОГО поля: справа теперь стоят
@@ -1764,7 +1770,7 @@
        от точки. Единицу на узком не пишем — она есть в заголовке и в карточке. */
     var lblM = fnum(Math.abs(vals[li]) < 0.005 ? 0 : vals[li]) + (!S._tight && W >= 420 && m.unit && m.unit.length <= 4 ? ' ' + esc(m.unit) : '');
     var roomM = W - (X(li) + 7) > lblM.length * 6.4;
-    s += '<text x="' + (roomM ? X(li) + 7 : X(li) - 7).toFixed(0) + '" y="' + (Y(vals[li]) + 4).toFixed(0) + '" class="tt"' + (roomM ? '' : ' text-anchor="end"') + '>' + lblM + '</text>';
+    s += '<text x="' + (roomM ? X(li) + 7 : X(li) - 7).toFixed(0) + '" y="' + (Y(vals[li]) + 4).toFixed(0) + '" class="tt"' + (roomM ? '' : ' text-anchor="end"') + ' font-size="12" style="fill:var(--text);paint-order:stroke;stroke:var(--surface);stroke-width:3;stroke-linejoin:round;font-weight:700">' + lblM + '</text>';
     return s + '</svg>';
   }
 
