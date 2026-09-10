@@ -12,7 +12,7 @@
      же воркера в заголовке запроса. -->
 <meta name="robots" content="noindex, nofollow">
 <title>Посещения по работам — bridge42worlds</title>
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/style.css?v=93ed6fa4e3">
 <style>
   body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans, system-ui, sans-serif); }
   .vp { max-width: 1180px; margin: 0 auto; padding: 28px 18px 60px; }
@@ -37,6 +37,11 @@
   .mini { font-size: 12px; color: var(--muted); }
   .note { font-size: 13px; color: var(--muted); margin-top: 22px; line-height: 1.5; }
   .err { color: #b3261e; font-size: 14px; margin: 12px 0; }
+  /* Работа, автору которой мы писали. Видно сразу: заходы по ней — возможный ответ
+     на письмо, а не случайный трафик. */
+  .mailed { color: var(--ochre, #c8842a); white-space: nowrap; }
+  .after { font-size: 11px; margin-top: 2px; color: var(--ochre, #c8842a); }
+  .after.none { color: var(--muted); }
   @media (max-width: 700px) { .hide-s { display: none; } .vp { padding: 18px 12px 50px; } }
 </style>
 </head>
@@ -66,18 +71,34 @@
       <th data-k="title">работа</th>
       <th data-k="views" class="n">открытий</th>
       <th data-k="devices" class="n">устройств</th>
+      <th data-k="mailed" class="hide-s">письмо автору</th>
       <th data-k="last" class="hide-s">последнее</th>
       <th class="hide-s">языки</th>
       <th class="hide-s">уровни</th>
+      <th class="hide-s">чем читали</th>
+      <th class="hide-s">браузер</th>
     </tr></thead>
     <tbody></tbody>
   </table></div>
 
   <p class="note">
+    Знак ✉ в столбце «письмо автору» означает, что мы писали автору этой работы, и стоит
+    день первого письма. Строкой ниже — открытия ЭТОЙ работы, случившиеся не раньше дня
+    письма: именно они отвечают на вопрос, дошло ли письмо. Имена и адреса на сайт не уходят: в облаке лежит только номер
+    работы и дата, сам журнал рассылки остаётся на машине.
+  </p>
+  <p class="note">
     Устройства по работе — нижняя честная оценка: один человек мог открыть и «Просто», и
     «Подробно», и сложить их значило бы посчитать его дважды, поэтому берётся наибольшее
     из адресов работы. Свои заходы в счёт не идут: события с признаком разработчика
     отфильтрованы на стороне базы.
+  </p>
+  <p class="note">
+    «Чем читали» считается по ширине окна (до 768 — телефон, до 1024 — планшет, дальше
+    компьютер), поэтому видно и по всей прошлой статистике. «Браузер» начал записываться
+    10 сентября 2026: у более ранних заходов столбец пуст — не потому, что читателей не
+    было, а потому, что мы тогда не смотрели. Сохраняется только вид, вроде
+    «chrome/android»: полную строку клиента не храним, по ней человека узнают.
   </p>
 </div>
 
@@ -98,6 +119,16 @@
       .map(function (k) { return k + ' ' + o[k]; }).join(' · ');
   }
 
+  // Вид устройства считается по ширине окна, а не по названию системы: у планшета в
+  // альбомной ориентации экран настольный, и читает человек ровно как за столом.
+  // Пустые доли не печатаем — строка и так узкая.
+  function kinds(k) {
+    if (!k) return '';
+    return [['телефон', k.mob], ['планшет', k.tab], ['компьютер', k.desk]]
+      .filter(function (p) { return p[1]; })
+      .map(function (p) { return p[0] + ' ' + p[1]; }).join(' · ');
+  }
+
   function draw() {
     var tb = tbl.querySelector('tbody');
     tb.innerHTML = '';
@@ -116,9 +147,16 @@
           '<div class="id">' + w.id + ' · ' + (w.date || '') + '</div></td>' +
         '<td class="n">' + num(w.views) + '</td>' +
         '<td class="n">' + num(w.devices) + '</td>' +
+        '<td class="hide-s mini">' + (w.mailed
+            ? '<span class="mailed">✉ ' + w.mailed + '</span>' +
+              (w.afterMail ? '<div class="after">после письма: ' + w.afterMail + '</div>'
+                           : '<div class="after none">после письма: нет</div>')
+            : '') + '</td>' +
         '<td class="hide-s mini">' + (w.last || '') + '</td>' +
         '<td class="hide-s mini">' + pairs(w.langs) + '</td>' +
-        '<td class="hide-s mini">' + pairs(w.tiers) + '</td>';
+        '<td class="hide-s mini">' + pairs(w.tiers) + '</td>' +
+        '<td class="hide-s mini">' + kinds(w.kinds) + '</td>' +
+        '<td class="hide-s mini">' + pairs(w.browsers) + '</td>';
       tb.appendChild(tr);
     });
     tbl.hidden = false;
@@ -138,7 +176,9 @@
           '<div>открытий<b>' + num(res.j.totals.views) + '</b></div>' +
           '<div>работ открывали<b>' + num(res.j.totals.works) + '</b></div>' +
           '<div>период<b>' + res.j.days + ' дн.</b></div>' +
-          '<div>с даты<b>' + res.j.since + '</b></div>';
+          '<div>с даты<b>' + res.j.since + '</b></div>' +
+          '<div>чем читали<b>' + (kinds(res.j.totals) || '—') + '</b></div>' +
+          '<div>браузеры<b>' + (pairs(res.j.totals.browsers) || '—') + '</b></div>';
         tot.hidden = false;
         draw();
       })

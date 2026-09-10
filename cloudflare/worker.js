@@ -686,6 +686,35 @@ async function tg(env, text, opts) {
 // к статистике меняются («а сколько уникальных за неделю?», «куда уходили с главной?»),
 // и пересчитать по сырью можно, а достать из готовой суммы — нельзя.
 // d=1 — событие с помеченного тестового устройства: хранится, но в сводки не входит.
+
+// Схема заводится один раз на изолят, а не на каждое событие: три запроса DDL перед
+// каждой записью просмотра — это три лишних обращения к базе на каждого читателя.
+let evSchemaReady = false;
+
+// БРАУЗЕР И СИСТЕМА — КОРОТКОЙ МЕТКОЙ (владелец 10.09: «в отчёте можно устройства
+// увидеть, мобильные, и что за браузер»). Сырой заголовок клиента не храним: в нём
+// версии сборки и модель телефона, по которым человека узнают среди сотни других, а нам
+// нужен только вид. Пишем ровно «chrome/android» — этого хватает на вопрос и не хватает
+// на слежку. Порядок проверок важен: Edge и Opera представляются ещё и хромом,
+// Chrome — ещё и сафари, поэтому частное идёт раньше общего.
+function uaTag(ua) {
+  const s = String(ua || "").toLowerCase();
+  if (!s) return "";
+  const os = /android/.test(s) ? "android"
+    : /iphone|ipad|ipod/.test(s) ? "ios"
+    : /windows/.test(s) ? "windows"
+    : /mac os x|macintosh/.test(s) ? "macos"
+    : /linux|x11|cros/.test(s) ? "linux" : "прочее";
+  const br = /edg[ea]?\//.test(s) ? "edge"
+    : /opr\/|opera/.test(s) ? "opera"
+    : /samsungbrowser/.test(s) ? "samsung"
+    : /yabrowser/.test(s) ? "yandex"
+    : /firefox|fxios/.test(s) ? "firefox"
+    : /chrome|crios|chromium/.test(s) ? "chrome"
+    : /safari/.test(s) ? "safari" : "прочее";
+  return br + "/" + os;
+}
+
 async function handleEvents(request, env) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
   if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
@@ -706,28 +735,45 @@ async function handleEvents(request, env) {
     || !!(request.cf && request.cf.verifiedBotCategory)
     || !request.headers.get("accept-language");
   if (isBot) return Response.json({ ok: true, n: 0 });
-  try {
-    await env.QUEUE.prepare(
-      `CREATE TABLE IF NOT EXISTS events (
-         id INTEGER PRIMARY KEY AUTOINCREMENT,
-         ts TEXT DEFAULT CURRENT_TIMESTAMP,
-         day TEXT, type TEXT, path TEXT, lang TEXT, uid TEXT, sid TEXT,
-         first_seen TEXT, ref TEXT, dev INTEGER DEFAULT 0, w INTEGER, extra TEXT)`).run();
-    // Индексы — под те запросы, которые реально делает /api/stats
-    await env.QUEUE.prepare("CREATE INDEX IF NOT EXISTS ev_day ON events(day)").run();
-    await env.QUEUE.prepare("CREATE INDEX IF NOT EXISTS ev_uid ON events(uid)").run();
-  } catch (e) { /* таблица уже есть — идём дальше */ }
+  if (!evSchemaReady) {
+    try {
+      await env.QUEUE.prepare(
+        `CREATE TABLE IF NOT EXISTS events (
+           id INTEGER PRIMARY KEY AUTOINCREMENT,
+           ts TEXT DEFAULT CURRENT_TIMESTAMP,
+           day TEXT, type TEXT, path TEXT, lang TEXT, uid TEXT, sid TEXT,
+           first_seen TEXT, ref TEXT, dev INTEGER DEFAULT 0, w INTEGER, extra TEXT,
+           ua TEXT)`).run();
+      // Индексы — под те запросы, которые реально делает /api/stats
+      await env.QUEUE.prepare("CREATE INDEX IF NOT EXISTS ev_day ON events(day)").run();
+      await env.QUEUE.prepare("CREATE INDEX IF NOT EXISTS ev_uid ON events(uid)").run();
+      evSchemaReady = true;
+    } catch (e) { /* таблица уже есть — идём дальше */ }
+  }
   const day = new Date().toISOString().slice(0, 10);
   const s = (v, n) => String(v == null ? "" : v).slice(0, n);
+  const tag = uaTag(ua);
   const stmt = env.QUEUE.prepare(
-    `INSERT INTO events (day, type, path, lang, uid, sid, first_seen, ref, dev, w, extra)
-     VALUES (?,?,?,?,?,?,?,?,?,?,?)`);
+    `INSERT INTO events (day, type, path, lang, uid, sid, first_seen, ref, dev, w, extra, ua)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`);
+  const bind = (e, withUa) => {
+    const v = [day, s(e.t, 24), s(e.p, 300), s(e.l, 5), s(e.u, 32), s(e.s, 32),
+               s(e.f, 10), s(e.r, 80), e.d ? 1 : 0, Number(e.w) || 0, s(e.x, 60)];
+    return withUa ? [...v, tag] : v;
+  };
   try {
-    await env.QUEUE.batch(evs.map(e => stmt.bind(
-      day, s(e.t, 24), s(e.p, 300), s(e.l, 5), s(e.u, 32), s(e.s, 32),
-      s(e.f, 10), s(e.r, 80), e.d ? 1 : 0, Number(e.w) || 0, s(e.x, 60))));
+    await env.QUEUE.batch(evs.map(e => stmt.bind(...bind(e, true))));
   } catch (e) {
-    return Response.json({ error: "write_failed" }, { status: 503 });
+    // Столбца ua может ещё не быть в боевой базе: воркер выкатывается раньше, чем к ней
+    // доедет миграция. Терять из-за этого просмотры нельзя — пишем по-старому.
+    const old = env.QUEUE.prepare(
+      `INSERT INTO events (day, type, path, lang, uid, sid, first_seen, ref, dev, w, extra)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?)`);
+    try {
+      await env.QUEUE.batch(evs.map(e => old.bind(...bind(e, false))));
+    } catch (e2) {
+      return Response.json({ error: "write_failed" }, { status: 503 });
+    }
   }
   return Response.json({ ok: true, n: evs.length });
 }
@@ -751,8 +797,15 @@ async function handleVisits(request, env) {
 
   const days = Math.min(365, Math.max(1, Number(url.searchParams.get("days")) || 30));
   const since = new Date(Date.now() - days * 864e5).toISOString().slice(0, 10);
+  // ЧЕМ ЧИТАЛИ. Ширину окна счётчик пишет с самого начала, поэтому телефон/планшет/
+  // компьютер видно и задним числом, по всей уже накопленной статистике. Границы обычные:
+  // до 768 — телефон, до 1024 — планшет, дальше настольный экран. Нулевая ширина бывает
+  // у старых записей и у sendBeacon с уже закрытой вкладки — такие не относим никуда.
   const rows = await env.QUEUE.prepare(
-    `SELECT path, lang, COUNT(*) n, COUNT(DISTINCT uid) u, MAX(day) last
+    `SELECT path, lang, COUNT(*) n, COUNT(DISTINCT uid) u, MAX(day) last,
+            SUM(CASE WHEN w>0   AND w<768  THEN 1 ELSE 0 END) mob,
+            SUM(CASE WHEN w>=768 AND w<1024 THEN 1 ELSE 0 END) tab,
+            SUM(CASE WHEN w>=1024           THEN 1 ELSE 0 END) desk
        FROM events WHERE dev=0 AND type='view' AND day>=? AND path LIKE '/lang/%/archive/%'
       GROUP BY path, lang`).bind(since).all()
     .then((r) => r.results || []).catch(() => []);
@@ -768,7 +821,8 @@ async function handleVisits(request, env) {
     const id = m[3].split("v")[0];
     let w = work.get(id);
     if (!w) {
-      w = { id, date: m[2], views: 0, devices: 0, last: "", langs: {}, tiers: {}, raw: new Set() };
+      w = { id, date: m[2], views: 0, devices: 0, last: "", langs: {}, tiers: {},
+            kinds: { mob: 0, tab: 0, desk: 0 }, browsers: {}, raw: new Set() };
       work.set(id, w);
     }
     // Номер в адресе идёт с версией (2607.14201v1), а в карточках хранится так же —
@@ -785,6 +839,26 @@ async function handleVisits(request, env) {
     w.langs[lang] = (w.langs[lang] || 0) + n;
     const tier = TIER[m[4]] || "прочее";
     w.tiers[tier] = (w.tiers[tier] || 0) + n;
+    w.kinds.mob += Number(r.mob) || 0;
+    w.kinds.tab += Number(r.tab) || 0;
+    w.kinds.desk += Number(r.desk) || 0;
+  }
+
+  // БРАУЗЕРЫ — отдельным запросом: метка появилась 10.09, и у всего, что записано до неё,
+  // столбца просто нет. Поэтому и запрос отдельный, и падение его молчаливое: старая база
+  // ответит ошибкой, таблица посещений от этого не должна пропасть целиком.
+  const uaRows = await env.QUEUE.prepare(
+    `SELECT path, ua, COUNT(*) n FROM events
+      WHERE dev=0 AND type='view' AND day>=? AND path LIKE '/lang/%/archive/%'
+        AND ua IS NOT NULL AND ua<>''
+      GROUP BY path, ua`).bind(since).all()
+    .then((r) => r.results || []).catch(() => []);
+  for (const r of uaRows) {
+    const m = String(r.path || "").match(/^\/lang\/[a-z]{2}\/archive\/\d{4}-\d{2}-\d{2}\/([^/]+)\/[^/]*$/);
+    if (!m) continue;
+    const w = work.get(m[1].split("v")[0]);
+    if (!w) continue;
+    w.browsers[r.ua] = (w.browsers[r.ua] || 0) + (Number(r.n) || 0);
   }
 
   const list = [...work.values()].sort((a, b) => b.views - a.views).slice(0, 300);
@@ -810,9 +884,52 @@ async function handleVisits(request, env) {
       if (c) { w.title = c.title || ""; w.url = c.url || ""; }
     }
   }
+  // ПИСАЛИ ЛИ МЫ АВТОРУ (владелец 10.09: «помечай поле, если авторам отправлялись
+  // письма»). В облаке лежит только номер работы и день — ни имени, ни адреса: журнал
+  // рассылки остаётся на машине (tools/outreach_push.py).
+  try {
+    const mail = await env.QUEUE.prepare("SELECT id, at FROM outreach_sent").all()
+      .then((r) => r.results || []).catch(() => []);
+    const by = new Map(mail.map((m) => [String(m.id), m.at]));
+    for (const w of list) {
+      const day = by.get(w.id) || by.get(w.id.split("v")[0]);
+      if (day) w.mailed = day;
+    }
+    // ПРИШЛИ ЛИ ПОСЛЕ ПИСЬМА. Сама пометка отвечает только «мы писали», а вопрос всегда
+    // второй: открыл ли автор работу ПОСЛЕ нашего письма. Тянем открытия по дням один
+    // раз и складываем по каждой работе только те дни, что не раньше её письма.
+    const mailedWorks = list.filter((w) => w.mailed);
+    if (mailedWorks.length) {
+      const from = mailedWorks.reduce((a, w) => (w.mailed < a ? w.mailed : a), "9999");
+      const rowsDay = await env.QUEUE.prepare(
+        `SELECT path, day, COUNT(*) n FROM events
+          WHERE dev=0 AND type='view' AND day>=? AND path LIKE '/lang/%/archive/%'
+          GROUP BY path, day`).bind(from).all()
+        .then((r) => r.results || []).catch(() => []);
+      const perWork = new Map();
+      for (const r of rowsDay) {
+        const m = String(r.path || "").match(/\/archive\/\d{4}-\d{2}-\d{2}\/([^/]+)\//);
+        if (!m) continue;
+        const id = m[1].split("v")[0];
+        if (!perWork.has(id)) perWork.set(id, []);
+        perWork.get(id).push([r.day, Number(r.n) || 0]);
+      }
+      for (const w of mailedWorks) {
+        const days = perWork.get(w.id) || [];
+        w.afterMail = days.reduce((a, [d, n]) => a + (d >= w.mailed ? n : 0), 0);
+      }
+    }
+  } catch (e) { /* таблицы ещё нет — просто без пометки */ }
   for (const w of list) delete w.raw;
-  const totals = list.reduce((a, w) => ({ views: a.views + w.views, works: a.works + 1 }),
-                            { views: 0, works: 0 });
+  const totals = { views: 0, works: 0, mob: 0, tab: 0, desk: 0, browsers: {} };
+  for (const w of list) {
+    totals.views += w.views;
+    totals.works += 1;
+    totals.mob += w.kinds.mob;
+    totals.tab += w.kinds.tab;
+    totals.desk += w.kinds.desk;
+    for (const [k, n] of Object.entries(w.browsers)) totals.browsers[k] = (totals.browsers[k] || 0) + n;
+  }
   return Response.json({ days, since, totals, works: list },
                        { headers: { "cache-control": "no-store" } });
 }
