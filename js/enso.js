@@ -519,7 +519,7 @@
     var AF = w.analog_forward || null, FW = AF ? 365 : 0;
     var vals = rec.filter(fin).concat(bmax.filter(fin), bmin.filter(fin), [f.p90, f.p10]);
     if (AF) Object.keys(AF).forEach(function (y) { vals = vals.concat((AF[y] || []).filter(fin)); });
-    var vmin = Math.min.apply(null, vals) - .05, vmax = Math.max.apply(null, vals) + .25;
+    var vmin = Math.min.apply(null, vals) - .05, vmax = Math.max.apply(null, vals) + .5;   // воздух сверху под «fresh» и вилку (10.09)
     var X = function (i) { return Lp + i / (n - 1 + 14 + FW) * pw; };
     var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
     var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText(esc(w.label) +
@@ -633,7 +633,9 @@
     var all = [];
     Object.keys(N.analogs).forEach(function (y) { all = all.concat(N.analogs[y].series.filter(fin), N.analogs[y].next.filter(fin)); });
     all = all.concat(N.current_series.filter(fin));
-    var vmin = Math.min.apply(null, all) - .1, vmax = Math.max.apply(null, all) + .45;
+    // запас сверху: над чертой рекорда стоит подпись, над точкой — число; им нужно место,
+    // а не сжатие у верхней границы (владелец 10.09: «чуть опусти график и пиши прямо над ним»)
+    var vmin = Math.min.apply(null, all) - .1, vmax = Math.max.apply(null, all) + .9;
     var X = function (i) { return Lp + i / (n - 1) * pw; };
     var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
     var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">Niño 3.4 daily anomaly: ' + (N.year || '') + ' against the four strongest events</text>';
@@ -1714,7 +1716,7 @@
     Object.keys(m.levels || {}).forEach(function (y) { if (fin(m.levels[y])) vv.push(m.levels[y]); });
     var vmin = Math.min.apply(null, vv), vmax = Math.max.apply(null, vv);
     if (vmax - vmin < 1e-6) vmax = vmin + 1;
-    var pad = (vmax - vmin) * .12; vmin -= pad; vmax += pad * 2;
+    var pad = (vmax - vmin) * .12; vmin -= pad; vmax += pad * 3;   // сверху воздух под подпись (10.09)
     var X = function (i) { return Lp + i / (n - 1) * pw; };
     var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
     var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText(esc(title || m.name) +
@@ -2123,7 +2125,7 @@
      в ряд: просто цифра с названием и стрелкой вверху; на стрелочку — историю»). Источник —
      журнал (journal.json), тот же, что у стрелок на плашках: значение последней записи,
      изменение к предыдущей. Порядок — по важности; сначала те, что изменились. */
-  var STRIP_KEYS = ['n34_weekly', 'n34_daily', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
+  var STRIP_KEYS = ['n34_daily', 'n34_weekly', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
   var STRIP_NAME = { n34_weekly: 'Niño 3.4 weekly', n34_daily: 'Niño 3.4 daily', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
   function buildStrip() {
     var host = $('kstrip'); if (!host) return;
@@ -2830,8 +2832,8 @@
     var s = '';
     // ── 1. одним абзацем
     s += '<section class="br-s br-lead"><h3>In one paragraph</h3>' +
-      '<p class="br-big">A <b>very strong El Niño</b> is under way, and it is running ahead of every event we can compare it with. The central Pacific is <b>' + fnum(n34, 1) + ' °C</b> warmer than normal — ' + (rank === 1 ? 'the warmest these calendar days have ever been' : 'rank ' + rank + ' for these calendar days') + ' — and the official index, ' + fnum(oni) + ' for ' + esc(ls) + ', already says “very strong” in the language forecasters use. Our own risk index stands at <b>' + idx + ' of 100</b>. The heat is not a spike: the water below the surface is loaded, the winds have joined in, and the storms have moved east. The event is still growing; the peak, by every past example, comes in winter.</p>' +
-      briefTiles(['n34_weekly', 'oni', 'risk_index', 'wwv_share', 'iri_share_below', 'food_index']) +
+      '<p class="br-big">A <b>very strong El Niño</b> is under way, and it is running ahead of every event we can compare it with. The central Pacific is <b>' + fnum(N.current_day) + ' °C</b> warmer than normal by the daily reading (the weekly NOAA index says ' + fnum(n34, 1) + ') — ' + (rank === 1 ? 'the warmest these calendar days have ever been' : 'rank ' + rank + ' for these calendar days') + ' — and the official index, ' + fnum(oni) + ' for ' + esc(ls) + ', already says “very strong” in the language forecasters use. Our own risk index stands at <b>' + idx + ' of 100</b>. The heat is not a spike: the water below the surface is loaded, the winds have joined in, and the storms have moved east. The event is still growing; the peak, by every past example, comes in winter.</p>' +
+      briefTiles(['n34_daily', 'n34_weekly', 'oni', 'risk_index', 'wwv_share', 'iri_share_below', 'food_index']) +
       '<div class="br-links">' + briefLink('#now/analogs', 'this year against the strongest events') + briefLink('#verdict', 'the verdict of the day') + briefLink('#now/map', 'the map of the Pacific') + '</div></section>';
     // ── 2. что мы видим в данных
     s += '<section class="br-s"><h3>What the data show</h3><div class="br-two"><div>' +
@@ -2880,6 +2882,7 @@
 
   function railState() {
     var D = S.D, N = D.nino34, NW = D.noaa, ONI = D.oni, sm = D.summary || {}, P = S.P;
+    var dailyDate = N.last_date || ((D.watch || {}).sst_nino34 || {}).last_date || '';
     var col = $('railL'); col.innerHTML = '';
     var t = tile('State', term('type', 'event type: ' + NW.type) + cnBtn(['kpi:risk_index', 'term:riskindex', 'block:type', 'term:type'], 'graph') + railFullBtn('L'), 'grow');
     var idx = D.risk_index, gc = idx >= 80 ? 'var(--lv5)' : (idx >= 60 ? 'var(--lv4)' : (idx >= 40 ? 'var(--lv3)' : 'var(--ok)'));
@@ -2892,7 +2895,14 @@
     // Подпись шкалы стоит СНАРУЖИ круга: внутри она не помещалась и обрезалась
     // (владелец 03.09: «в кружок текст не поместился, вынеси его»).
     k1.innerHTML = '<div class="gauge-row"><div class="gauge' + (idx >= 70 ? ' hot' : '') + '" data-term="riskindex" style="--v:' + idx + ';--c:' + gc + '"><div class="gv">' + idx + '</div></div>' +
-      '<div class="g-side">' + '<button type="button" class="vgo" data-view="verdict">read the verdict →</button>' + '<b>' + zone('nino34') + ' ' + fnum(NW.latest.n34a, 1) + ' °C' + jchip('n34_weekly') + '</b>' +
+      /* СУТОЧНОЕ — ГЛАВНОЕ ЧИСЛО, НЕДЕЛЬНОЕ РЯДОМ. Владелец 10.09: «люди любят суточный рост,
+         я бы его выпятил с объяснением разницы; показывать и то и то, но акцент на суточный —
+         суточные мы обновляем каждый день». Раньше заголовком стоял недельный индекс NOAA
+         (+2.7 за неделю до 2 сентября), а у точки на графике — суточный OISST (+2.83 за 6
+         сентября), и два числа читались как рост, которого не было (см. 9я). */
+      '<div class="g-side">' + '<button type="button" class="vgo" data-view="verdict">read the verdict →</button>' +
+      '<b>' + zone('nino34') + ' ' + fnum(N.current_day) + ' °C' + jchip('n34_daily') + '<small class="dsub">daily · ' + esc(String(dt(dailyDate)).replace(/<[^>]+>/g, '')) + '</small></b>' +
+      '<div class="ln">' + src({ name: 'Weekly against daily', def: 'Two products of the same sea. The daily is the OISST grid over our own box, one day behind and refreshed every morning. The weekly is the official NOAA index, published on Wednesdays for the week before: it lags the daily by several days, and while the event grows it always reads lower. The verdict and the risks use both.', src: 'NOAA CPC weekly · NOAA OISST daily', date: NW.date }, 'NOAA weekly ' + fnum(NW.latest.n34a, 1) + ' to ' + esc(String(dt(NW.date)).replace(/<[^>]+>/g, ''))) + jchip('n34_weekly') + '</div>' +
       /* Каждое утверждение — своей строкой и без точки в конце (владелец 07.09:
          «точки после предложений на карточках убрать, просто перенос строки»). */
       '<div class="ln">rank ' + N.all_years_rank + ' of all years on the same 30 days</div>' +
@@ -3541,8 +3551,8 @@
     var on = pair(ONI.current[ls], P && P.oni ? P.oni[ls] : null, 2, '');
     var kp = el('div', 'kpis');
     kp.innerHTML =
-      '<div class="kpi"><div class="kn">' + term('weekly', 'NOAA weekly') + '</div><div class="kv">' + wk.big + '</div><div class="km">' + term('percentile', ord(Math.round(NW.n34_rank_pct)) + ' percentile') + ' of this season’s weeks</div><div class="kd"><span>4 w <span class="' + upDown(c4.n34a) + '">' + fnum(c4.n34a, 1) + '</span></span><span>8 w <span class="' + upDown(c8.n34a) + '">' + fnum(c8.n34a, 1) + '</span></span></div>' + kmeta('n34_weekly') + '</div>' +
       '<div class="kpi"><div class="kn">' + term('oisst', 'daily OISST') + '</div><div class="kv">' + dy.big + '</div><div class="km">30 days ' + fnum(N.current30) + ', ' + term('rank', 'rank ' + N.all_years_rank) + ' of all years</div><div class="kd"><span>slope ' + fnum(n34.slope14.now) + '</span><span>' + term('cusum', 'CUSUM') + ' ' + (n34.cusum.alarm ? 'alarm' : 'quiet') + '</span></div>' + kmeta('n34_daily') + '</div>' +
+      '<div class="kpi"><div class="kn">' + term('weekly', 'NOAA weekly') + '</div><div class="kv">' + wk.big + '</div><div class="km">' + term('percentile', ord(Math.round(NW.n34_rank_pct)) + ' percentile') + ' of this season’s weeks</div><div class="kd"><span>4 w <span class="' + upDown(c4.n34a) + '">' + fnum(c4.n34a, 1) + '</span></span><span>8 w <span class="' + upDown(c8.n34a) + '">' + fnum(c8.n34a, 1) + '</span></span></div>' + kmeta('n34_weekly') + '</div>' +
       '<div class="kpi"><div class="kn">' + term('oni', 'ONI official') + ' · ' + term('roni', 'RONI') + '</div><div class="kv">' + on.big + '<small>' + esc(ls) + '</small></div><div class="km">analogues: ' + [1982, 1997, 2015, 2023].map(function (y) { return y + ' ' + fnum((ONI.analogs[y] || {})[ls]); }).join(', ') + '</div>' +
       (ONI.roni && !ONI.roni.error && fin(ONI.roni.last) ? '<div class="chgline">' + term('roni', 'RONI') + ' ' + fnum(ONI.roni.last) + ' (' + esc(ONI.roni.last_season) + '); ONI − RONI = ' + fnum(ONI.roni.gap_last) + ' is the warm background</div>' : '') + kmeta('oni') + '</div>' +
       '<div class="kpi"><div class="kn">' + term('type', 'event type') + '</div><div class="kv" style="font-size:15px;line-height:1.25">' + esc(NW.type) + '</div><div class="km">' + zone('nino12') + ' ' + fnum(NW.latest.n12a, 1) + ' · ' + zone('nino4') + ' ' + fnum(NW.latest.n4a, 1) + ' · east−centre ' + fnum(NW.east_minus_central, 1) + '</div>' +
@@ -4454,7 +4464,7 @@
     var Lp = 46, R = 40, Tp = 26, B = 26, pw = W - Lp - R, ph = H - Tp - B;
     var vv = vals.filter(fin).concat([e.threshold || 0, -(e.threshold || 0)]);
     var vmin = Math.min.apply(null, vv), vmax = Math.max.apply(null, vv);
-    var pad = (vmax - vmin) * .12; vmin -= pad; vmax += pad * 2;
+    var pad = (vmax - vmin) * .12; vmin -= pad; vmax += pad * 3;   // сверху воздух под подпись (10.09)
     var X = function (i) { return Lp + i / (n - 1) * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
     var s = svgOpen(W, H) + hatchDefs() + '<text class="tt" x="' + Lp + '" y="15">' + fitText('Westerly wind anomaly over 130°E–180°, daily — shaded: bursts; hatched: easterly', W, 12) + '</text>';
     (e.events || []).forEach(function (ev) {
