@@ -37,9 +37,16 @@ async function loadReactions(id) {
     // три обращения к чужой базе, теперь одно к своей — и оно кэшируется на минуту.
     const d = await api(`/api/react?id=${encodeURIComponent(id)}`);
     if (!d) return;
+    applyCounts(id, d.counts);
+}
+
+// Показать присланные сервером числа. Отдельной функцией, потому что источников два:
+// чтение при открытии страницы и ОТВЕТ НА САМО НАЖАТИЕ — он приходит без кэша и уже
+// содержит новое число.
+function applyCounts(id, counts) {
     for (const type of REACTIONS) {
         document.querySelectorAll(`[data-article-id="${id}"] [data-react="${type}"] .rc`)
-            .forEach(el => el.textContent = (d.counts && d.counts[type]) || 0);
+            .forEach(el => el.textContent = (counts && counts[type]) || 0);
     }
 }
 
@@ -83,8 +90,9 @@ async function react(id, type, entityType) {
     setTimeout(() => { _lock.delete(id); }, 350);
     // фоновая запись + тихая ресинхронизация счётчиков с сервером (не блокирует UI)
     try {
+        let d = null;
         if (!wasActive) {
-            const d = await api('/api/react', {
+            d = await api('/api/react', {
                 method: 'POST',
                 body: JSON.stringify({ id, reaction: type, entityType: entityType || 'article' }),
             });
@@ -97,9 +105,18 @@ async function react(id, type, entityType) {
                 highlightReactions(id);
             }
         }
-        // После СНЯТИЯ не перечитываем: удаления на сервере нет, он вернёт прежнее число
-        // и счётчик отскочит вверх — тот самый «прыгающий счётчик».
-        if (!wasActive) loadReactions(id);
+        // ЧИСЛО БЕРЁМ ИЗ ОТВЕТА НА НАЖАТИЕ, а не перечитываем.
+        //
+        // Чтение счётчиков кэшируется на минуту (так задумано: его делает каждый читатель
+        // при открытии страницы). Перечитывание сразу после записи попадало в этот кэш и
+        // возвращало ПРЕЖНЕЕ число, затирая только что показанный плюс: читатель жал
+        // «нравится», видел +1 и тут же откат к старому (владелец 10.09 на работе OpenAI —
+        // его лайк в базу лёг, а на экране не появился). Ответ на POST приходит с
+        // no-store и уже содержит новое число, поэтому берём его.
+        //
+        // После СНЯТИЯ не трогаем вовсе: удаления на сервере нет, любое число оттуда
+        // вернёт счётчик вверх — тот самый «прыгающий счётчик».
+        if (!wasActive && d && d.counts) applyCounts(id, d.counts);
     } catch (e) { console.error('react bg:', e); }
     finally { _pending.delete(id); }
 }
