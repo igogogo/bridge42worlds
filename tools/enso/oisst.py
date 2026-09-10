@@ -52,6 +52,9 @@ BOXES = {
 }
 CLIM_YEARS = (1991, 2020)
 ANALOG_YEARS = (1982, 1997, 2015, 2023)
+# Сколько суток СЛЕДУЮЩЕГО года держим у каждого аналога. Столько же берёт watch.py для
+# Niño 3.4, и ровно на столько ось графика шире календарного года (js/enso.js: 366 + 120).
+NEXT_DAYS = 120
 TAIL_DAYS = 120
 REFETCH_DAYS = 14
 
@@ -206,6 +209,54 @@ def build_clim(box, verbose=False):
           "years": list(CLIM_YEARS), "stride": b["stride"], "smooth_days": k,
           "analogs": analogs, "built": datetime.now().strftime("%Y-%m-%d %H:%M"),
           "source": f"NOAA OISST v2.1 final ({FINAL}) via CoastWatch ERDDAP"}
+    _save(p, cl)
+    return cl
+
+
+def build_analog_next(box, verbose=False):
+    """Продолжение каждого аналога в следующий год: первые 120 суток года y+1.
+
+    Владелец 10.09: «на графике они заканчиваются январём, а почему не проследовать
+    следующий год, обычно следующий год важен, чтобы увидеть историческую динамику».
+    Он прав, и данных нам хватало: ось графика и так шире календарного года на 120
+    суток, для Niño 3.4 продолжение приходит из watch.py, а остальные зоны собирались на
+    клиенте из этого файла, где лежал ровно календарный год. Четверть картинки пустовала.
+    Для Niño 1+2 обрезанным оказывался как раз тот год, где стоит исторический максимум
+    зоны: 29 июня 1983 года.
+
+    Считается один раз, как климатология, и дописывается в тот же файл отдельным ключом:
+    ежедневный прогон от этого не тяжелеет. Год, который уже посчитан, повторно не берём —
+    прерванный сбор можно продолжить тем же вызовом.
+    """
+    p = CACHE / f"clim_{box}.json"
+    cl = _load(p, {})
+    if not cl.get("doy"):
+        return cl
+    nxt = cl.get("analogs_next") or {}
+    need = [y for y in ANALOG_YEARS if str(y) not in nxt]
+    if not need:
+        return cl
+    got = 0
+    for y in need:
+        t0 = time.time()
+        try:
+            m = box_means(FINAL, box, f"{y + 1}-01-01", f"{y + 1}-05-31")
+        except Exception as e:                                   # noqa: BLE001
+            if verbose:
+                print(f"  {box} {y + 1}: {str(e)[:100]}")
+            continue
+        arr = np.full(366, np.nan)                               # та же сетка, что у аналогов
+        for dt, v in m.items():
+            arr[grid_index(date.fromisoformat(dt))] = v
+        nxt[str(y)] = [None if not np.isfinite(v) else round(float(v), 3) for v in arr[:NEXT_DAYS]]
+        got += 1
+        if verbose:
+            print(f"  {box} {y}→{y + 1}: {len(m)} дней, {time.time() - t0:.0f} с")
+    if not got:
+        return cl
+    cl["analogs_next"] = nxt
+    cl["next_days"] = NEXT_DAYS
+    cl["built"] = datetime.now().strftime("%Y-%m-%d %H:%M")
     _save(p, cl)
     return cl
 
@@ -365,6 +416,7 @@ if __name__ == "__main__":
                 continue
             print("климатология", bx)
             build_clim(bx, verbose=True)
+            build_analog_next(bx, verbose=True)          # продолжение аналогов в следующий год
             build_last_year(bx, date.today().year - 1, verbose=True)
         print("готово")
     else:

@@ -663,13 +663,33 @@
       for (j = 0; j < out.length; j++) if (!fin(out[j])) out[j] = NaN;
       return out;
     };
+    /* ПРОДОЛЖЕНИЕ В СЛЕДУЮЩИЙ ГОД (владелец 10.09). Раньше здесь стояло next: [], и линии
+       обрывались 31 декабря, хотя ось графика шире года на 120 суток. Теперь сборщик кладёт
+       в тот же файл analogs_next — первые 120 суток года y+1 на той же сетке, — и зоны
+       кроме Niño 3.4 получают тот же горизонт, что и она.
+
+       Пик считается тем же окном, что и у Niño 3.4 в watch.py: с сентября года события по
+       февраль следующего. Иначе одна и та же подпись «peak» значила на разных зонах разное:
+       у 3.4 пик события, у остальных максимум календарного года. Планка «record of the
+       series» при этом берётся по всему нарисованному, чтобы она не оказалась ниже линии,
+       которую читатель видит на картинке. */
+    var NX = C.analogs_next || {};
     var analogs = {}, top = -99;
     Object.keys(C.analogs).forEach(function (y) {
-      var abs = fillGaps(C.analogs[y]);
-      var ser = abs.map(function (v, i) { return fin(v) && fin(C.doy[i]) ? v - C.doy[i] : NaN; });
-      var pk = Math.max.apply(null, ser.filter(fin));
-      if (pk > top) top = pk;
-      analogs[y] = { series: ser, next: [], peak: pk };
+      /* Год и продолжение склеиваем ДО заполнения дыр: иначе рвётся шов 31 декабря, а у
+         редких лет рвётся и само продолжение. 1997 год в наборе идёт через день (176 суток
+         из 366), и его 1998-й такой же: 50 значений на 120 клеток. */
+      var absAll = fillGaps(C.analogs[y].concat(NX[y] || []));
+      var serAll = absAll.map(function (v, i) {
+        var c = C.doy[i < 366 ? i : i - 366];                            // продолжение — те же дни года
+        return fin(v) && fin(c) ? v - c : NaN;
+      });
+      var ser = serAll.slice(0, 366), nx = serAll.slice(366);
+      var win = serAll.slice(244, 426).filter(fin);                      // сентябрь(y) — февраль(y+1)
+      var pk = win.length ? Math.max.apply(null, win) : Math.max.apply(null, ser.filter(fin));
+      var seen = serAll.filter(fin);
+      if (seen.length && Math.max.apply(null, seen) > top) top = Math.max.apply(null, seen);
+      analogs[y] = { series: ser, next: nx, peak: pk };
     });
     var cur = []; for (var k = 0; k < 366; k++) cur.push(NaN);
     (bx.dates || []).forEach(function (d, i) { var v = bx.anom[i]; if (fin(v)) cur[gridIndex(d)] = v; });
@@ -3681,7 +3701,8 @@
         var NZ = analogsFor(az);
         if (NZ) plot(body, function (w, h) { return chartAnalogs(NZ, w, h); });
         else plot(body, function (w, h) { return svgOpen(w, h) + '<text x="20" y="40">loading the climatology of this box…</text></svg>'; });
-        body.appendChild(el('div', 'cap', 'For this zone the analogue years are laid out from the climatology of our own box; our line starts where the daily tail of the box starts (10 May). The full-year reading is kept for Niño 3.4.'));
+        var tail0 = (((S.D.oisst || {}).boxes || {})[az] || {}).dates || [];
+        body.appendChild(el('div', 'cap', 'For this zone the analogue years are laid out from the climatology of our own box, and they run on into the following spring, as they do for Niño 3.4. “Peak” is the highest reading between September and February, the same window for every zone. Our own line starts where the daily tail of the box starts' + (tail0.length ? ' (' + String(dt(tail0[0])).replace(/<[^>]+>/g, '') + ')' : '') + '.'));
       }
     }
 
