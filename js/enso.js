@@ -695,7 +695,7 @@
     (bx.dates || []).forEach(function (d, i) { var v = bx.anom[i]; if (fin(v)) cur[gridIndex(d)] = v; });
     var last = bx.dates[bx.dates.length - 1];
     return { key: box, label: bx.title || box, year: last.slice(0, 4), analogs: analogs, current_series: cur, day: gridIndex(last), current_day: bx.last_anom,
-      peak_estimate: { hist_ceiling: top }, all_years_rank: null };
+      peak_estimate: { hist_ceiling: top, ceiling_label: 'highest of the four analogues' }, all_years_rank: null };
   }
   function chartAnalogs(N, W, H) {
     var years = Object.keys(N.analogs).sort();
@@ -756,7 +756,7 @@
     // мини-панели, и подпись налезала прямо на них (владелец 04.09).
     var xEnd = Lp + pw;
     s += '<line x1="' + Lp + '" y1="' + Y(pe.hist_ceiling).toFixed(0) + '" x2="' + xEnd.toFixed(0) + '" y2="' + Y(pe.hist_ceiling).toFixed(0) + '" style="stroke:var(--nino)" stroke-width=".9" stroke-dasharray="6 4"/>';
-    s += '<text x="' + (xEnd - 4).toFixed(0) + '" y="' + (Y(pe.hist_ceiling) - 4).toFixed(0) + '" text-anchor="end" style="fill:var(--nino)">record of the series ' + fnum(pe.hist_ceiling) + '</text>';
+    s += '<text x="' + (xEnd - 4).toFixed(0) + '" y="' + (Y(pe.hist_ceiling) - 4).toFixed(0) + '" text-anchor="end" style="fill:var(--nino)">' + esc(pe.ceiling_label || 'record of the series') + ' ' + fnum(pe.hist_ceiling) + '</text>';
     if (RC) {
       var x0 = W - RC - 12, gap = 5, hh = (ph - gap * (years.length - 1)) / years.length;
       years.forEach(function (y, yi) {
@@ -2220,11 +2220,13 @@
     (D.risks || []).forEach(function (r) {
       if (+r.level < 5) return;
       if (r.id === 'fuel_charged') { put('wwv', 'the fuel is at its record'); put('wwv_share', 'the fuel is at its record'); }
-      if (r.id === 'subsurface_warm') put('subsurface_warmest', 'the warmest layer of the record under the moorings');
+      // subsurface_warm сюда не идёт: рекорд слоя проверяется по данным ниже, а не по уровню риска
       // event_strength сюда больше не идёт: это про силу события, а не про значение ряда
     });
     /* Недельные зоны: рекорд ряда — это значение выше исторического максимума самого ряда,
        и ничто иное. Тот же тест, что у сборщика тревог в tools/enso/alerts.py. */
+    var tw = (((D.subsurface || {}).tao || {}).warmest) || {};
+    if (tw.above_record === true) put('subsurface_warmest', 'the warmest layer ever measured under these moorings' + (tw.prev_max ? ', past ' + fnum(tw.prev_max.value, 1) + ' °C of ' + esc(String(tw.prev_max.date || '').slice(0, 7)) : ''));
     var nwL = ((D.noaa || {}).latest) || {}, nwM = ((D.noaa || {}).hist_max) || {};
     if (fin(nwL.n34a) && fin(nwM.n34a) && nwL.n34a > nwM.n34a) put('n34_weekly', 'above the highest weekly value of the record, ' + fnum(nwM.n34a, 1) + ' °C');
     if (fin(nwL.n12a) && fin(nwM.n12a) && nwL.n12a > nwM.n12a) put('n12_weekly', 'above the highest weekly value of the record, ' + fnum(nwM.n12a, 1) + ' °C');
@@ -3711,7 +3713,8 @@
         var wkV = wkZ ? (NW.latest || {})[wkZ] : null;
         body.appendChild(el('div', 'cap', 'For this zone the analogue years are laid out from the climatology of our own box, and they run on into the following spring, as they do for Niño 3.4. “Peak” is the highest reading between September and February, the same window for every zone. Our own line starts where the daily tail of the box starts' + (tail0.length ? ' (' + String(dt(tail0[0])).replace(/<[^>]+>/g, '') + ')' : '') + '.' +
           /* Владелец 10.09 поймал два числа одной зоны на одном экране без объяснения. */
-          (fin(wkV) && fin(bxZ.last_anom) ? ' Two numbers of the same zone sit on this screen and they are two different products: the figure over the blinking dot is our own daily mean of the OISST grid over this box, ' + fnum(bxZ.last_anom) + ' °C on ' + String(dt(bxZ.last_date)).replace(/<[^>]+>/g, '') + '; the figure on the card below is NOAA’s official weekly index, ' + fnum(wkV, 1) + ' °C for the week to ' + String(dt(NW.date)).replace(/<[^>]+>/g, '') + '. The weekly is published on Wednesdays for the week before, so while an event is growing it always reads behind the daily.' : '')));
+          ' Every number on this chart, the peaks in the legend included, comes from our own daily mean of the OISST grid over this box against our own climatology of it. The Pacific map beside this scene reads peaks from NOAA’s weekly index instead, so the two disagree by a few tenths and sometimes on which past event was the strongest.' +
+          (fin(wkV) && fin(bxZ.last_anom) ? ' The same split explains two numbers of this zone on one screen: the figure over the blinking dot is ours, ' + fnum(bxZ.last_anom) + ' °C on ' + String(dt(bxZ.last_date)).replace(/<[^>]+>/g, '') + ', while NOAA’s official weekly index for this zone reads ' + fnum(wkV, 1) + ' °C for the week to ' + String(dt(NW.date)).replace(/<[^>]+>/g, '') + '. The weekly is published on Wednesdays for the week before, so while an event is growing it always reads behind the daily.' : '')));
       }
     }
 
@@ -3722,8 +3725,12 @@
     cap.innerHTML = k === 'map' ? 'The coastline is real (Natural Earth, public domain); the boxes are the four Niño regions. Colour is the anomaly of the week; the small number under it is the same week of the comparison event. Pick a zone above to bring it forward and see how it compares with the same week of the chosen event; point at a patch for the peak that event reached.'
       : (k === 'weekly' ? 'Over 4 weeks: Niño 3.4 ' + fnum(c4.n34a, 1) + ', Niño 1+2 ' + fnum(c4.n12a, 1) + '; over 8 weeks ' + fnum(c8.n34a, 1) + ' and ' + fnum(c8.n12a, 1) + '. Record of the weekly Niño 3.4: ' + fnum(NW.hist_max_n34.n34a, 1) + ' (' + esc(NW.hist_max_n34.date) + ').'
         : (k === 'weekly_a' ? 'The same weekly index against 1982, 1997, 2015 and 2023 on the same weeks of the year. The number in brackets is how much this event is above that one right now.'
-          : '<strong>Peak estimate.</strong> ' + esc(pe.note) + ' Typical peak window ' + esc(pe.typical_peak_window) + '.' +
-            (lf ? ' The last season lived through in full is ' + esc(lf.season) + ' at ' + fnum(lf.value) + ' °C' + (td ? '; the current ' + esc(td.season) + ' is ' + td.months_done + ' month of 3 measured, at ' + fnum(td.observed_todate) + ' °C.' : '.') : '')));
+          : (S.sub.analogZone && S.sub.analogZone !== 'nino34'
+            /* Оценка пика посчитана по Niño 3.4 и только по нему; под чужой зоной она
+               противоречила графику над собой (проверка роем 10.09). */
+            ? '<strong>Peak estimate.</strong> The peak estimate and the seasons below are computed for Niño 3.4 only, so they are not shown while another zone is selected. Switch the zone back to Niño 3.4 to read them.'
+            : '<strong>Peak estimate.</strong> ' + esc(pe.note) + ' Typical peak window ' + esc(pe.typical_peak_window) + '.' +
+              (lf ? ' The last season lived through in full is ' + esc(lf.season) + ' at ' + fnum(lf.value) + ' °C' + (td ? '; the current ' + esc(td.season) + ' is ' + td.months_done + ' month of 3 measured, at ' + fnum(td.observed_todate) + ' °C.' : '.') : ''))));
     body.appendChild(cap);
 
     var wk = pair(NW.latest.n34a, P && P.noaa ? P.noaa.n34a : null, 1, '°C');
@@ -6427,10 +6434,21 @@
     [/^для сравнения эпох/, 'for comparing epochs the CrIS chain is used (SNPP → NOAA-20 → NOAA-21): all three keep the overpass at 13:25–13:30, and the years of overlap give a direct measurement of the offset between instruments (epochs.py)'],
     [/^сырой счёт событий/, 'a raw event count misleads: about half of the catalogue are aftershocks, and one strong sequence looks like a rise in seismicity (Central America 2026: a record by the raw M ≥ 4.5 count, ordinary and below the median once aftershocks are separated)'],
     [/^порог M>=4\.5/, 'the M ≥ 4.5 threshold is unfit for comparing epochs: network sensitivity grows, and the trend in independent events reaches +10–20 % per decade even where tectonics has not changed; M ≥ 5.5 is steadier'],
+    [/^ТЕКУЩИЙ ГОД ВНЕ ДИАПАЗОНА/i, 'this year is outside the range the sea-temperature-to-convection link was fitted on, so the year’s residual from that link is an extrapolation, not a measurement: a bend in the curve too small to see statistically would flip its sign. The residual must not be shown as a reading'],
     [/^связь сейсмичности/, 'no link between seismicity and El Niño is established: the USGS position is that weather and earthquakes are unrelated; the few papers concern mid-ocean ridges (the Easter microplate), not subduction zones. The block is independent monitoring']
   ];
   function radF(F, key) { return RAD_EN[key] || F[key] || ''; }
-  function radCav(cav) { return (cav || []).map(function (c) { for (var i = 0; i < RAD_CAV_EN.length; i++) if (RAD_CAV_EN[i][0].test(c)) return RAD_CAV_EN[i][1]; return c; }).join('. ') + (cav && cav.length ? '.' : ''); }
+  /* Панель английская, файл сборщика русский. Непереведённую оговорку раньше печатали как
+     есть, и после v7 на экран вышел русский абзац. Теперь непереведённое с кириллицей
+     выбрасывается: пропустить оговорку не хорошо, но показать её читателю на чужом языке
+     хуже, а список переводов рядом и пополняется одной строкой. */
+  function radCav(cav) {
+    var out = (cav || []).map(function (c) {
+      for (var i = 0; i < RAD_CAV_EN.length; i++) if (RAD_CAV_EN[i][0].test(c)) return RAD_CAV_EN[i][1];
+      return /[\u0400-\u04FF]/.test(String(c)) ? '' : c;
+    }).filter(Boolean);
+    return out.join('. ') + (out.length ? '.' : '');
+  }
 
   /* СТАНДАРТ СЦЕНЫ (владелец 08.09): сверху график, ниже плашки с метриками; описание источника
      и разбор (формула, детекторы, оговорки) — за двумя переключателями в строке подменю, а
@@ -6573,7 +6591,7 @@
       profile: 'A temperature ladder through the atmosphere, layer by layer: the microwave channels look through the clouds and show the air above the central Pacific warmer than in every recent year.',
       seismic: 'Earthquakes and the sun are shown beside the climate rows because people ask; nothing here claims they drive El Niño, and the USGS says weather and quakes are unrelated. Once aftershocks are separated, this summer’s counts are ordinary everywhere.',
       epochs: 'The same two months of every year since 2003, seen by four instruments brought to one scale: this year the central Pacific has more storm cloud than any year on record, about 1.6–1.7 times the super El Niño of 2015, while the west has the least. Press play to watch the record build year by year.',
-      regime: 'A record is a point on a curve; a change of regime is the curve itself bending. So this view does not ask how warm it is, it asks whether the old rule still works: warmer sea, more storm cloud. The slope of that rule, refitted on a moving window of years, has held steady, which means the rule has not broken. What is new is that this year’s sea is warmer than any year the rule was fitted on, so where the rule puts this year is an extrapolation, not a measurement, and the panel does not print it as one.',
+      regime: 'A record is a point on a curve; a change of regime is the curve itself bending. So this view does not ask how warm it is, it asks whether the old rule still works: warmer sea, more storm cloud. The chart is the steepness of that rule, refitted on a moving window of years — flat means the rule is the same rule, a climb or a fall means it is changing. The tile beside it says whether the movement is bigger than the error of measuring it, and different instruments and seasons can answer differently. What is true for all of them is that this year’s sea is warmer than any year the rule was fitted on, so where the rule puts this year is an extrapolation, not a measurement, and the panel does not print it as one.',
       cross: 'Different instruments, on NOAA-21, NOAA-20 and NASA’s Aqua, looked at the same patches of ocean. Both saw the storms jump east by the same amount. When two independent instruments agree, the finding is not an artefact of one of them.'
     };
     var INFO = [{ key: 'source', label: 'source', html: srcHtml }], row, nt = '';
@@ -6666,9 +6684,9 @@
       });
       var rel = V.relation || {}, curV = V.current || {}, ex = V.extrapolation || {}, agr = (RG.agreement || {})[rwin] || {};
       var drift = ((RG.drift_check || {}).variants || {})[vkey] || {};
-      nt = '<b>What is measured.</b> One point per year: the mean sea-surface temperature of the Niño 3.4 box against the share of satellite footprints colder than 235 K, both over the same window of the calendar. A straight line is fitted through the years, and the question is whether the line itself moves. ' +
+      nt = '<b>What is measured.</b> One point per year: the mean sea-surface temperature of the Niño 3.4 box against the share of satellite footprints colder than 235 K, both over the same window of the calendar. The line is fitted through the LOGARITHM of that share, so its slope is per degree Celsius and is read by multiplying, not by adding; the question is whether the line itself moves. ' +
         'The rolling slope is that same line refitted on a moving window of twelve years, with its standard error; the dashed line is the fit over all years at once. ' +
-        '<br><b>Two limits the collector states, and what the panel does about them.</b> First, this year’s sea is ' + fnum(ex.beyond_range_c, 2, false) + ' °C above the warmest year the line was fitted on (' + fnum(ex.sst_train_max, 2, false) + ' °C), so the position of ' + cur + ' against the line is an extrapolation, not a measurement; we do not print it as a reading. Second, the collector reports that the residuals in this release are too large in magnitude by a factor of 1.3 to 1.8, from a defect in the sign of the prediction error that its author is fixing; so the residual history by year and the σ figures are held back until that is corrected. What is shown here does not depend on either: the slope, its drift, and the ratio of observed to predicted convection. ' +
+        '<br><b>Two limits the collector states, and what the panel does about them.</b> First, this year’s sea is ' + fnum(ex.beyond_range_c, 2, false) + ' °C above the warmest year the line was fitted on (' + fnum(ex.sst_train_max, 2, false) + ' °C), so the position of ' + cur + ' against the line is an extrapolation, not a measurement; we do not print it as a reading. Second, the collector reports that the residuals in this release are too large in magnitude by a factor of 1.3 to 1.8, from a defect in the sign of the prediction error that its author is fixing; so the residual history by year and the σ figures are held back until that is corrected. The slope and its drift do not depend on either. The ratio of observed to predicted convection is the same comparison the residual makes, written without the division by the prediction error that is being corrected, so its size stands even if the σ scale moves; read it, and the agreement of the variants, as direction and rough size rather than as exact figures. ' +
         '<br><b>Scope.</b> Two equatorial boxes, about 0.4 % of the surface of the planet. Nothing in the climate system would show here first; this is a watch on the tropical Pacific, not on the planet. ' +
         '<br><b>Caveats.</b> ' + esc(radCav(cav));
       INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
@@ -6677,21 +6695,21 @@
       }
       var rollAll = V.rolling_slope || [];
       plot(body, function (w, h) {
-        return chartRegimeSlope({ rows: rollAll, full: rel.slope, title: 'Slope of “warmer sea → more deep convection”, refitted on a moving window of years · ' + pairName(rpair) + ' · ' + (WNAME[rwin] || rwin) }, w, h);
+        return chartRegimeSlope({ rows: rollAll, full: rel.slope, title: 'Slope of “warmer sea → more deep convection”, per °C on the log of the share, refitted on a moving window of years · ' + pairName(rpair) + ' · ' + (WNAME[rwin] || rwin) }, w, h);
       });
       var roll0 = rollAll[0] || {}, rollN = rollAll[rollAll.length - 1] || {};
       var moved = fin(roll0.slope) && fin(rollN.slope) ? (rollN.slope - roll0.slope) : null;
       var seBoth = Math.sqrt((roll0.se || 0) * (roll0.se || 0) + (rollN.se || 0) * (rollN.se || 0));
       var kp2 = el('div', 'kpis');
       kp2.innerHTML =
-        '<div class="kpi"><div class="kn">the link, all years</div><div class="kv">' + fnum(rel.slope, 2, false) + '<small> ± ' + fnum(rel.slope_se, 2, false) + '</small></div><div class="km">fitted on ' + (rel.n_years_fitted || '·') + ' years of ' + (V.n_years || '·') + '; r² ' + fnum(rel.r2, 2, false) + '. Steeper means the air answers a warm sea with more storm cloud</div>' + kmeta(null, pairName(rpair) + ', raw granules', String(RA.updated || '').slice(0, 10)) + '</div>' +
+        '<div class="kpi"><div class="kn">the link, all years</div><div class="kv">' + fnum(rel.slope, 2, false) + '<small> ± ' + fnum(rel.slope_se, 2, false) + ' per °C</small></div><div class="km">fitted on ' + (rel.n_years_fitted || '·') + ' years of ' + (V.n_years || '·') + '; r² ' + fnum(rel.r2, 2, false) + '. The line runs through the logarithm of the share, so read it by multiplying: one degree of sea temperature more' + (fin(rel.slope) ? ' multiplies deep convection by about ' + fnum(Math.exp(rel.slope), 1, false) : ' multiplies deep convection') + '</div>' + kmeta(null, pairName(rpair) + ', raw granules', String(RA.updated || '').slice(0, 10)) + '</div>' +
         '<div class="kpi"><div class="kn">has the link moved</div><div class="kv">' + (moved == null ? '·' : (moved > 0 ? '+' : '') + fnum(moved, 2, false)) + '</div><div class="km">' + (moved == null ? 'not enough windows' : 'first rolling window ' + fnum(roll0.slope, 2, false) + ' to the last ' + fnum(rollN.slope, 2, false) + ', against a combined error of ' + fnum(seBoth, 2, false) + (Math.abs(moved) < seBoth ? '; smaller than the error, so the link is holding' : '; larger than the error, worth watching')) + '</div>' + kmeta(null, 'our own difference of the collector’s rolling fits', String(RA.updated || '').slice(0, 10)) + '</div>' +
         '<div class="kpi"><div class="kn">convection against the link</div><div class="kv">' + (fin(curV.ratio_obs_pred) ? fnum(curV.ratio_obs_pred * 100, 0, false) + '<small> % of predicted</small>' : '·') + '</div><div class="km">' + cur + ' saw ' + (fin(curV.conv) ? fnum(curV.conv * 100, 1, false) + ' % of footprints' : '·') + ' where the line puts ' + (fin(curV.conv_predicted) ? fnum(curV.conv_predicted * 100, 1, false) + ' %' : '·') + ' — but that prediction is an extrapolation, see above</div>' + kmeta(null, pairName(rpair) + ', raw granules', String(RA.updated || '').slice(0, 10)) + '</div>' +
         '<div class="kpi"><div class="kn">do the variants agree</div><div class="kv">' + (agr.all_same_sign ? 'yes' : 'no') + '</div><div class="km">' + (agr.n_variants || '·') + ' variants of ' + (WNAME[rwin] || rwin) + ' (two instruments × day and night)' + (agr.all_same_sign ? ' put this year on the same side of the line' : ' disagree on which side of the line this year falls, so no direction is claimed') + '. Their sizes are not compared here while the residual scale is being fixed</div>' + kmeta(null, 'collector, agreement block', String(RA.updated || '').slice(0, 10)) + '</div>';
       body.appendChild(kp2);
       if (drift.band && drift.band.length) {
         var kb = drift.band;
-        body.appendChild(el('div', 'cap', 'Drift check. Aqua’s overpass has walked to a later hour, and cold cloud over the tropical ocean peaks in the early afternoon, so part of any change could be the clock rather than the sky. The collector refits the link with four strengths of clock correction: the slope moves from ' + fnum(kb[0].slope, 2, false) + ' to ' + fnum(kb[kb.length - 1].slope, 2, false) + ' across the whole band, and the sign of this year’s position ' + (drift.sign_stable ? 'does not change' : 'changes') + ' anywhere in it.'));
+        body.appendChild(el('div', 'cap', 'Drift check. Aqua’s overpass has walked to a later hour, and cold cloud over the tropical ocean peaks in the early afternoon, so part of any change could be the clock rather than the sky. The collector refits the link with four strengths of clock correction: the slope moves from ' + fnum(kb[0].slope, 2, false) + ' to ' + fnum(kb[kb.length - 1].slope, 2, false) + ' across the whole band, and ' + (drift.sign_stable ? 'this year stays on the same side of the line everywhere in it' : 'this year changes side within it, so which way the year sits is not settled') + '.'));
       }
       body.appendChild(el('div', 'cap', 'A record is a position on a curve. A change of regime is the curve bending. This view watches the curve.'));
     } else if (k === 'epochs') {
