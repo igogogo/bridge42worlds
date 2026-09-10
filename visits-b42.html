@@ -80,6 +80,7 @@
       <th class="hide-s">уровни</th>
       <th class="hide-s">чем читали</th>
       <th class="hide-s">браузер</th>
+      <th class="hide-s">по ссылке</th>
     </tr></thead>
     <tbody></tbody>
   </table></div>
@@ -93,6 +94,8 @@
       <th class="hide-s">последнее</th>
       <th class="hide-s">чем читали</th>
       <th class="hide-s">браузер</th>
+      <th class="hide-s">по ссылке</th>
+      <th class="hide-s">разделы</th>
     </tr></thead>
     <tbody></tbody>
   </table></div>
@@ -121,6 +124,14 @@
     главные страницы языков. Счётчик на такие страницы поставлен 10 сентября 2026 (раньше
     он грузился только вместе с поиском, которого на них нет), поэтому их числа считаются
     с этого дня, а не за весь выбранный период.
+  </p>
+  <p class="note">
+    «По ссылке» — метка из адреса, по которому пришли: <code>?src=iri</code>,
+    <code>?from=letter</code>, <code>utm_source</code>. Её ставим мы сами в тех ссылках,
+    которые раздаём, поэтому видно, какая из них сработала — даже когда реферера нет вовсе
+    (письмо, мессенджер, PDF). «Разделы» — вкладки внутри страницы: панель El Niño не
+    перезагружается при переходе, и без её собственного сообщения час хождения по разделам
+    виден как один просмотр.
   </p>
 </div>
 
@@ -198,7 +209,9 @@
         '<td class="n">' + num(p.devices) + '</td>' +
         '<td class="hide-s mini">' + (p.last || '') + '</td>' +
         '<td class="hide-s mini">' + kinds(p.kinds) + '</td>' +
-        '<td class="hide-s mini">' + pairs(p.browsers) + '</td>';
+        '<td class="hide-s mini">' + pairs(p.browsers) + '</td>' +
+        '<td class="hide-s mini">' + pairs(p.sources) + '</td>' +
+        '<td class="hide-s mini">' + pairs(p.screens) + '</td>';
       tb.appendChild(tr);
     });
     ph.hidden = false;
@@ -232,7 +245,8 @@
         '<td class="hide-s mini">' + pairs(w.langs) + '</td>' +
         '<td class="hide-s mini">' + pairs(w.tiers) + '</td>' +
         '<td class="hide-s mini">' + kinds(w.kinds) + '</td>' +
-        '<td class="hide-s mini">' + pairs(w.browsers) + '</td>';
+        '<td class="hide-s mini">' + pairs(w.browsers) + '</td>' +
+        '<td class="hide-s mini">' + pairs(w.sources) + '</td>';
       tb.appendChild(tr);
     });
     tbl.hidden = false;

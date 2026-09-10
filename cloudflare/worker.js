@@ -822,7 +822,7 @@ async function handleVisits(request, env) {
     let w = work.get(id);
     if (!w) {
       w = { id, date: m[2], views: 0, devices: 0, last: "", langs: {}, tiers: {},
-            kinds: { mob: 0, tab: 0, desk: 0 }, browsers: {}, raw: new Set() };
+            kinds: { mob: 0, tab: 0, desk: 0 }, browsers: {}, sources: {}, raw: new Set() };
       work.set(id, w);
     }
     // Номер в адресе идёт с версией (2607.14201v1), а в карточках хранится так же —
@@ -859,6 +859,21 @@ async function handleVisits(request, env) {
     const w = work.get(m[1].split("v")[0]);
     if (!w) continue;
     w.browsers[r.ua] = (w.browsers[r.ua] || 0) + (Number(r.n) || 0);
+  }
+
+  // Метка розданной ссылки (?src=…) — и у работ тоже: письмо автору, пост, рассылка.
+  const srcRows = await env.QUEUE.prepare(
+    `SELECT path, extra, COUNT(*) n FROM events
+      WHERE dev=0 AND type='view' AND day>=? AND path LIKE '/lang/%/archive/%'
+        AND extra IS NOT NULL AND extra<>''
+      GROUP BY path, extra`).bind(since).all()
+    .then((r) => r.results || []).catch(() => []);
+  for (const r of srcRows) {
+    const m = String(r.path || "").match(/^\/lang\/[a-z]{2}\/archive\/\d{4}-\d{2}-\d{2}\/([^/]+)\/[^/]*$/);
+    if (!m) continue;
+    const w = work.get(m[1].split("v")[0]);
+    if (!w) continue;
+    w.sources[r.extra] = (w.sources[r.extra] || 0) + (Number(r.n) || 0);
   }
 
   const list = [...work.values()].sort((a, b) => b.views - a.views).slice(0, 300);
@@ -939,7 +954,7 @@ async function handleVisits(request, env) {
     devices: Number(r.u) || 0,
     last: r.last || "",
     kinds: { mob: Number(r.mob) || 0, tab: Number(r.tab) || 0, desk: Number(r.desk) || 0 },
-    browsers: {},
+    browsers: {}, sources: {}, screens: {},
   }));
   if (pages.length) {
     const byPath = new Map(pages.map((p) => [p.path, p]));
@@ -952,6 +967,22 @@ async function handleVisits(request, env) {
     for (const r of uaPages) {
       const p = byPath.get(r.path || "");
       if (p) p.browsers[r.ua] = (p.browsers[r.ua] || 0) + (Number(r.n) || 0);
+    }
+    // ПО КАКОЙ ССЫЛКЕ ПРИШЛИ и КАКОЙ РАЗДЕЛ ОТКРЫЛИ. Первое — метка из адреса (?src=iri),
+    // её кладёт счётчик в поле extra события view. Второе — событие 'screen', которое
+    // страница шлёт сама: панель El Niño не перезагружается при переходе по вкладкам, и
+    // без такого сообщения час хождения по разделам виден как один просмотр.
+    const marks = await env.QUEUE.prepare(
+      `SELECT path, type, extra, COUNT(*) n FROM events
+        WHERE dev=0 AND day>=? AND path NOT LIKE '/lang/%/archive/%'
+          AND extra IS NOT NULL AND extra<>'' AND type IN ('view','screen')
+        GROUP BY path, type, extra`).bind(since).all()
+      .then((r) => r.results || []).catch(() => []);
+    for (const r of marks) {
+      const p = byPath.get(r.path || "");
+      if (!p) continue;
+      const box = r.type === "screen" ? p.screens : p.sources;
+      box[r.extra] = (box[r.extra] || 0) + (Number(r.n) || 0);
     }
   }
 
