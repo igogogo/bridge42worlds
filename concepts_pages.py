@@ -981,7 +981,12 @@ def concept_page(cid, c, lang, live, by_id, rich=None, page_langs=None):
                     f'font-size:11px;color:var(--muted)">{_lbl}:</b> {chips}</div>')
     if c["scientists"]:
         chips = "".join(
-            f'<a href="/lang/{lang}/scientists/{H.escape(s["name"].replace(" ", "_"))}.html">'
+            # Имя файла страницы учёного строит ОДНА функция на весь проект (author_slug):
+            # она убирает не только пробелы, но и точки, слэши и запрещённые в именах
+            # файлов знаки. Здесь стояла своя замена пробелов — и «Albert A. Michelson»
+            # получал ссылку с точкой, а страница лежит без неё. Одна битая ссылка на
+            # 42 821 проверенных, но сторож ссылок из-за неё краснел весь прогон (10.09).
+            f'<a href="/lang/{lang}/scientists/{H.escape(G.author_slug(s["name"]))}.html">'
             f'{H.escape(s["name"])} <em style="opacity:.6">{s["n"]}</em></a>'
             for s in c["scientists"])
         body.append(f'<div class="related-tags related-scientists"><b style="font-family:'
