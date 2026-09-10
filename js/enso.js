@@ -645,7 +645,12 @@
       return null;
     }
     if (C.error || !C.doy || !C.analogs) return null;
-    var doyOf = function (iso) { var d = new Date(iso + 'T00:00:00Z'); return Math.round((d - Date.UTC(d.getUTCFullYear(), 0, 1)) / 864e5); };
+    var gridIndex = function (iso) {                 // та же сетка, что у tools/enso/oisst.py:60
+      var y = +iso.slice(0, 4), d = new Date(iso + 'T00:00:00Z');
+      var doy = Math.round((d - Date.UTC(y, 0, 1)) / 864e5);
+      var leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+      return (leap || doy < 59) ? doy : doy + 1;
+    };
     var fillGaps = function (arr) {   // шаг 4 дня → линейно между опорами
       var out = arr.slice(), i, j;
       for (i = 0; i < out.length; i++) {
@@ -667,9 +672,9 @@
       analogs[y] = { series: ser, next: [], peak: pk };
     });
     var cur = []; for (var k = 0; k < 366; k++) cur.push(NaN);
-    (bx.dates || []).forEach(function (d, i) { var v = bx.anom[i]; if (fin(v)) cur[doyOf(d)] = v; });
+    (bx.dates || []).forEach(function (d, i) { var v = bx.anom[i]; if (fin(v)) cur[gridIndex(d)] = v; });
     var last = bx.dates[bx.dates.length - 1];
-    return { key: box, label: bx.title || box, year: last.slice(0, 4), analogs: analogs, current_series: cur, day: doyOf(last), current_day: bx.last_anom,
+    return { key: box, label: bx.title || box, year: last.slice(0, 4), analogs: analogs, current_series: cur, day: gridIndex(last), current_day: bx.last_anom,
       peak_estimate: { hist_ceiling: top }, all_years_rank: null };
   }
   function chartAnalogs(N, W, H) {
@@ -2174,8 +2179,8 @@
      в ряд: просто цифра с названием и стрелкой вверху; на стрелочку — историю»). Источник —
      журнал (journal.json), тот же, что у стрелок на плашках: значение последней записи,
      изменение к предыдущей. Порядок — по важности; сначала те, что изменились. */
-  var STRIP_KEYS = ['n34_daily', 'n34_weekly', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
-  var STRIP_NAME = { n34_weekly: 'Niño 3.4 weekly', n34_daily: 'Niño 3.4 daily', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean, anom', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
+  var STRIP_KEYS = ['n34_daily', 'n34_weekly', 'n12_weekly', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
+  var STRIP_NAME = { n34_weekly: 'Niño 3.4 weekly', n34_daily: 'Niño 3.4 daily', n12_weekly: 'Niño 1+2 weekly', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean, anom', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
   /* РЕКОРДЫ ВПЕРЁД И РАМКОЙ. Владелец 10.09: «рекорды тоже как-то в ленте KPI отображать —
      мерцанием красной рамки или вперёд ставить». Панель уже знает про рекорды в четырёх
      местах, просто молчала об этом в полосе: ранг 1 у суточного Niño 3.4 и у поясов планеты,
@@ -2201,7 +2206,7 @@
     (D.alerts || []).forEach(function (a) {
       if ((a.level || '') !== 'SHOUT') return;
       var t = (a.title || '').toLowerCase();
-      if (/1\+2|niño 3\b|nino 3\b/.test(t)) put('n34_daily', a.title);
+      if (/1\+2/.test(t)) put('n12_weekly', a.title);
       if (/world ocean|ocean/.test(t)) put('sst_world', a.title);
     });
     return out;
@@ -2232,7 +2237,7 @@
         if (x.rec) pay.def = 'A record: ' + x.rec + '. ' + pay.def;
         return '<button type="button" class="ks' + (x.rec ? ' rec' : '') + '" data-hist="' + esc(x.k) + '" data-src="' + esc(JSON.stringify(pay)) + '">' +
           (x.rec ? '<span class="ks-rec">record</span>' : '') +
-          '<span class="ks-row"><span class="ks-v">' + (x.k === 'oni' || /nino|n34|sst_world|wind|mjo/.test(x.k) && x.last.v > 0 ? '+' : '') + jval(x.last.v, dg) + (u ? '<small>' + esc(u) + '</small>' : '') + '</span>' +
+          '<span class="ks-row"><span class="ks-v">' + (x.k === 'oni' || /nino|n34|n12|sst_world|wind|mjo/.test(x.k) && x.last.v > 0 ? '+' : '') + jval(x.last.v, dg) + (u ? '<small>' + esc(u) + '</small>' : '') + '</span>' +
           (x.dv ? '<span class="ks-d ' + jsign(x.dv) + '">' + jarrow(x.dv) + (x.dv > 0 ? '+' : '') + jval(x.dv, dg) + '</span>' : '') + '</span>' +
           '<span class="ks-n">' + esc(STRIP_NAME[x.k] || x.r.title) + '</span></button>';
       }).join('');
