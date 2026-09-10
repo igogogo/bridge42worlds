@@ -53,6 +53,10 @@
       'trend/sst_nino34': 'Niño 3.4 daily: 400 days, the band of all years, the 14-day forecast, where past events went from here.', 'trend/sst_world': 'The world ocean, daily.', 'trend/t2_world': 'Land and ocean, daily.', 'trend/index': 'Our risk index by update, and the comparable core against past events.', 'trend/months': 'Thirteen months of the three series with their ranks.', 'trend/background': 'Ocean heat content and the energy imbalance: the state of the whole system.',
       'regions/table': 'Every region by season and scenario, with food vulnerability and what to do.', 'regions/place': 'One region at a time; the Gulf with its own measurements.',
       'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.', 'radiance/convection': 'Share of satellite footprints colder than 235 K: deep convection over Niño 3.4 and the warm pool, this year against 2023–2025.', 'radiance/walker': 'Brightness-temperature contrast east minus west: the Walker circulation read raw; a fall to zero means the convection moved east.', 'radiance/clouds': 'Each scene sorted by the window brightness temperature: deep, mid, low cloud and clear sky, shares per day; the day-time cloud share is the albedo proxy.', 'radiance/greenhouse': 'How much the atmosphere closes the 11 µm window: G on all scenes (follows cloud) and G_clear on the least cloudy scenes (the water-vapour greenhouse proxy), with the p90/p99 caveat.', 'radiance/profile': 'Temperature layers: infrared (blind under cloud) and microwave (through cloud), the last 14 days against each analogue year.', 'radiance/epochs': 'Twenty years of the same window: every year’s deep convection over the boxes on one scale (the CrIS chain SNPP → NOAA-20 → NOAA-21, AIRS for the early years), with error bars, ranks and the ratio to 2015; play the years to watch the record build.', 'radiance/cross': 'Independent instruments against each other: the 2026 shift of convection and of the atmospheric layers on NOAA-21 CrIS, NOAA-20 CrIS and Aqua AIRS, and how closely they agree day by day.', 'radiance/seismic': 'Earthquakes by Pacific-rim zone with aftershocks separated, and solar activity, from the same collector; side series, not El Niño physics.', 'models/board': 'Every model of the plume as a card: latest forecast, class, how far below reality.', 'models/revision': 'How each centre revised its forecast issue after issue.', 'refs/works': 'Our parsed arXiv works attached to the claims of this panel, with the reason for each link.', 'refs/sources': 'Every data source with its address, cadence and last date.', 'refs/literature': 'Literature and reports quoted on the panel, not measured by us.', 'refs/concepts': 'The concept register attached to every anchor of the panel: risks, alerts, blocks, regions and glossary terms, each with its nearest concepts and a link to the graph on that set.', 'refs/neighbours': 'Kindred projects: who else shows the planet on a globe or a map, with what data and under what licence, and what we can take from each.', 'trend/rain': 'Rain by region (ERA5 box sums against the normal and against every year since 1981) and for the whole planet (GPCP monthly).', 'trend/spectral': 'A line at 2–7 days appearing in any daily series over the last 30 days: the owner’s hypothesis of a comb before a spontaneous transition, watched, not assumed.',
+      'planet/snow': 'Snow cover of the northern hemisphere since 1966: the seasonal switch of how much sunlight the land throws back. The closest open stand-in for albedo.',
+      'planet/glaciers': 'Annual mass balance of the measured glaciers since 1885, and the running total: how much water the ice gives up year after year.',
+      'regions/fires': 'Active fire detections from three satellites, by region and day: where it burns now and how that compares with the days before.',
+      'regions/water': 'What the reservoirs hold: stored energy in Brazil and storage in California, day by day.',
       'planet/gases': 'CO₂, CH₄ and N₂O since the start of measurement, with the annual growth of CO₂.', 'planet/ice': 'Arctic and Antarctic sea ice extent, every year as a line against the 1981–2010 median.', 'planet/temperature': 'Land+ocean and ocean daily temperature every year since 1940 and 1981; global annual means since 1850.', 'planet/sea': 'Global mean sea level from satellites since 1993.',
       'how/glossary': 'Every underlined term explained.', 'how/method': 'How things are computed, and which numbers are parameters.', 'how/sources': 'Every source, whether it answered, and when its data last changed.', 'how/calendar': 'When each source publishes next.', 'how/changed': 'What changed since the previous update.',
       'ops/runs': 'Every run on record: when, what kind, how long, how it ended.', 'ops/sources': 'Every source: date range held, last update, answered or stale, errors.', 'ops/fresh': 'Fresh data since the last assessment and the triggers that decide whether it deserves one.'
@@ -5554,10 +5558,195 @@
     return s + '</svg>';
   }
 
+
+  /* ══ СНЕГ И ЛЕДНИКИ ════════════════════════════════════════════════════════════
+     Владелец 10.09 спрашивал про альбедо: открытого ряда «альбедо планеты» нет (CERES только
+     по учётной записи NASA), и ближайшее, что лежит одним файлом с 1966 года, — площадь
+     снежного покрова: снег и есть сезонный переключатель отражательной способности суши.
+     Рядом ледники WGMS с 1885-го: годовой баланс массы и накопленная потеря. Кладёт
+     tools/enso/ice_snow.py. */
+  function planetSnowIce(body, k, kp, kpi) {
+    var IS = S.IS || {};
+    if (!IS.built) { body.appendChild(el('div', 'note', 'No ice-snow.json yet: run python tools/enso/ice_snow.py.')); return; }
+    if (k === 'snow') {
+      var which = S.sub.snowKey || 'nh_month', SN = (IS.snow || {})[which];
+      var rowS = el('div', 'seg sub');
+      [['nh_month', 'Northern Hemisphere'], ['eurasia_month', 'Eurasia'], ['namerica_month', 'North America'], ['nh_week', 'weekly, hemisphere']].forEach(function (o) {
+        var b = el('button', (which === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.snowKey = o[0]; render(); }; rowS.appendChild(b);
+      });
+      body.appendChild(rowS);
+      if (!SN) { body.appendChild(el('div', 'note', 'This series is not in the file.')); return; }
+      var L = SN.last || {}, ann = SN.annual || {}, yrs = Object.keys(ann).sort();
+      kp.innerHTML = kpi(esc(SN.label || 'Snow cover'), fnum(L.value, 2, false), ' млн км²',
+        (fin(L.anom) ? (L.anom >= 0 ? '+' : '') + fnum(L.anom, 2) + ' against the ' + (SN.base || []).join('–') + ' mean for the same period · ' : '') +
+        (L.rank_high === 1 ? 'the largest for this period in the record' : ord(L.rank_high) + ' largest of ' + L.of + ' years'),
+        'Rutgers Global Snow Lab', String(L.year || '') + (which === 'nh_week' ? ', week ' : ', month ') + String(L.period || ''));
+      body.appendChild(kp);
+      plot(body, function (w, h) {
+        return chartSeriesSimple({ title: (SN.label || 'Snow cover') + ': yearly mean, million km², since ' + (yrs[0] || ''),
+          x: yrs.map(Number), y: yrs.map(function (y) { return ann[y]; }), digits: 2, unit: ' млн км²' }, w, h);
+      });
+      body.appendChild(el('div', 'cap', 'Snow area, not snow depth: a warm winter with the same coverage holds less water. The yearly mean smooths the season; the indicator above is the latest ' + (which === 'nh_week' ? 'week' : 'month') + ' against its own normal.'));
+      return;
+    }
+    var G = IS.glaciers || {}, gy = G.years || {}, keys = Object.keys(gy).sort();
+    if (!keys.length) { body.appendChild(el('div', 'note', 'The glacier archive is not parsed yet.')); return; }
+    var solid = keys.filter(function (y) { return !gy[y].prelim; });
+    var lastY = solid[solid.length - 1], lastV = gy[lastY];
+    kp.innerHTML = kpi('Glacier mass balance, ' + esc(lastY), fnum(lastV.median, 0), ' mm w.e.',
+      'median over ' + lastV.n + ' measured glaciers · a negative value means the ice gave up water',
+      'WGMS Fluctuations of Glaciers', lastY) +
+      kpi('Cumulative since ' + esc(keys[0]), fnum(lastV.cum / 1000, 1), ' m w.e.',
+        'the yearly medians added up: the thickness of water the average measured glacier has lost',
+        'WGMS Fluctuations of Glaciers', lastY);
+    body.appendChild(kp);
+    var view = S.sub.glacierView || 'cum', rowG = el('div', 'seg sub');
+    [['cum', 'cumulative loss'], ['annual', 'year by year']].forEach(function (o) {
+      var b = el('button', (view === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.glacierView = o[0]; render(); }; rowG.appendChild(b);
+    });
+    body.appendChild(rowG);
+    var xs = solid.map(Number);
+    plot(body, function (w, h) {
+      return view === 'cum'
+        ? chartSeriesSimple({ title: 'Cumulative mass balance of the measured glaciers, metres of water equivalent', x: xs, y: solid.map(function (y) { return gy[y].cum / 1000; }), digits: 1, unit: ' m w.e.', zero: true }, w, h)
+        : chartSeriesSimple({ title: 'Annual mass balance, median over the glaciers measured that year, mm water equivalent', x: xs, y: solid.map(function (y) { return gy[y].median; }), digits: 0, unit: ' mm w.e.', bars: true, zero: true }, w, h);
+    });
+    body.appendChild(el('div', 'cap', 'Years with fewer than ' + (G.min_glaciers || 30) + ' measured glaciers are left out as preliminary; the last full year here is ' + esc(lastY) + '. The median is used instead of the mean because a few glaciers report roughly.'));
+  }
+  /* Простой линейный/столбчатый график по x/y — для рядов, у которых нет своей сцены. */
+  function chartSeriesSimple(o, W, H) {
+    var xs = o.x || [], ys = o.y || [];
+    var pts = xs.map(function (x, i) { return [x, ys[i]]; }).filter(function (p) { return fin(p[1]); });
+    if (pts.length < 2) return svgOpen(W, H) + '<text x="20" y="40">not enough points</text></svg>';
+    var Lp = 52, Rp = 12, Tp = topPad(W), B = 26, pw = W - Lp - Rp, ph = H - Tp - B;
+    var vv = pts.map(function (p) { return p[1]; });
+    var vmin = Math.min.apply(null, vv), vmax = Math.max.apply(null, vv);
+    if (o.zero) { vmin = Math.min(vmin, 0); vmax = Math.max(vmax, 0); }
+    var pad = (vmax - vmin) * .12 || 1; vmin -= pad; vmax += pad * 1.6;
+    var x0 = pts[0][0], x1 = pts[pts.length - 1][0];
+    var X = function (x) { return Lp + (x - x0) / Math.max(1, x1 - x0) * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
+    var s2 = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText(esc(o.title || ''), W - Lp - Rp, 11) + '</text>';
+    s2 += gridY(vmin, vmax, niceStep(vmax - vmin, 5), Y, Lp, Rp, W, o.digits == null ? 1 : o.digits);
+    var step = Math.max(1, Math.round((x1 - x0) / (W < 520 ? 5 : 9)));
+    for (var x = Math.ceil(x0 / step) * step; x <= x1; x += step) s2 += '<text x="' + X(x).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + x + '</text>';
+    if (vmin < 0 && vmax > 0) s2 += '<line x1="' + Lp + '" y1="' + Y(0).toFixed(1) + '" x2="' + (W - Rp) + '" y2="' + Y(0).toFixed(1) + '" style="stroke:var(--soft)" stroke-width=".8"/>';
+    if (o.bars) {
+      var bw = Math.max(1.2, pw / pts.length * .7);
+      pts.forEach(function (p) {
+        var y = Y(p[1]), y0 = Y(0);
+        s2 += '<rect x="' + (X(p[0]) - bw / 2).toFixed(1) + '" y="' + Math.min(y, y0).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + Math.abs(y0 - y).toFixed(1) + '" style="fill:' + (p[1] < 0 ? 'var(--nino)' : 'var(--nina)') + '" opacity=".85"/>';
+      });
+    } else {
+      s2 += segs(pts.map(function (p) { return [X(p[0]), Y(p[1])]; }), 'var(--ochre)', 2, 1);
+      var last = pts[pts.length - 1];
+      s2 += nowDot(X(last[0]), Y(last[1]), 'var(--ochre)', 3.4);
+      s2 += '<text x="' + (X(last[0]) - 7).toFixed(1) + '" y="' + (Y(last[1]) - 10).toFixed(1) + '" text-anchor="end" font-size="12" style="fill:var(--text);paint-order:stroke;stroke:var(--surface);stroke-width:3;stroke-linejoin:round;font-weight:700">' + fnum(last[1], o.digits == null ? 1 : o.digits, false) + '</text>';
+    }
+    return s2 + '</svg>';
+  }
+
+  /* ══ ПОЖАРЫ ════════════════════════════════════════════════════════════════════
+     Активные очаги NASA FIRMS: три прибора, суточные глобальные файлы. Очаг это не площадь,
+     а обнаружение; мощность в мегаваттах. Регион сравниваем с его собственным ходом. */
+  function viewFires(body) {
+    var FR = S.FR || {};
+    if (!FR.built) { body.appendChild(el('div', 'note', 'No fires.json yet: run python tools/enso/fires.py.')); return; }
+    var inst = S.sub.fireInst || 'viirs_snpp', rowI = el('div', 'seg sub');
+    [['viirs_snpp', 'VIIRS · Suomi NPP'], ['viirs_n20', 'VIIRS · NOAA-20'], ['modis', 'MODIS · Aqua+Terra']].forEach(function (o) {
+      var b = el('button', (inst === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.fireInst = o[0]; render(); }; rowI.appendChild(b);
+    });
+    body.appendChild(rowI);
+    var ser = (FR.series || {})[inst] || {}, days = Object.keys(ser).sort();
+    if (!days.length) { body.appendChild(el('div', 'note', 'This instrument has no days in the file yet.')); return; }
+    var last = ser[days[days.length - 1]], regs = FR.regions || [];
+    var kp = el('div', 'kpis');
+    var top = regs.map(function (r) { return { r: r, n: (last.regions || {})[r.id] || 0, frp: (last.frp || {})[r.id] || 0 }; }).sort(function (a, b) { return b.n - a.n; });
+    kp.innerHTML = '<div class="kpi"><div class="kn">hotspots in the last 24 hours</div><div class="kv">' + (last.total.n || 0).toLocaleString('en') + '</div><div class="km">' + (last.total.strong || 0) + ' of them stronger than 100 MW · ' + Math.round(last.total.frp).toLocaleString('en') + ' MW of radiative power in all</div>' + kmeta(null, 'NASA FIRMS, ' + esc(inst.replace('_', ' ')), days[days.length - 1]) + '</div>' +
+      top.slice(0, 3).map(function (t) { return '<div class="kpi"><div class="kn">' + esc(t.r.name) + '</div><div class="kv">' + t.n.toLocaleString('en') + '</div><div class="km">' + Math.round(t.frp).toLocaleString('en') + ' MW · ' + (days.length > 1 ? 'yesterday ' + (((ser[days[days.length - 2]] || {}).regions || {})[t.r.id] || 0).toLocaleString('en') : 'the first day of our record') + '</div></div>'; }).join('');
+    body.appendChild(kp);
+    var view = S.sub.fireView || 'regions', rowV = el('div', 'seg sub');
+    [['regions', 'regions today'], ['series', 'day by day']].forEach(function (o) {
+      var b = el('button', (view === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.fireView = o[0]; render(); }; rowV.appendChild(b);
+    });
+    body.appendChild(rowV);
+    if (view === 'regions') {
+      var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
+      wrap.innerHTML = '<table class="e"><thead><tr><th>region</th><th class="num">hotspots</th><th class="num">strong</th><th class="num">power, MW</th><th class="num">yesterday</th></tr></thead><tbody>' +
+        top.map(function (t) {
+          var y = days.length > 1 ? (((ser[days[days.length - 2]] || {}).regions || {})[t.r.id] || 0) : null;
+          return '<tr><td>' + esc(t.r.name) + '</td><td class="num' + (t.n === top[0].n ? ' top' : '') + '">' + t.n.toLocaleString('en') + '</td><td class="num src">' + '' + '</td><td class="num">' + Math.round(t.frp).toLocaleString('en') + '</td><td class="num src">' + (y == null ? '—' : y.toLocaleString('en')) + '</td></tr>';
+        }).join('') + '</tbody></table>';
+      body.appendChild(wrap);
+    } else {
+      var pick = S.sub.fireRegion || (top[0] && top[0].r.id) || 'amazon';
+      var rowR = el('div', 'seg sub');
+      regs.forEach(function (r) { var b = el('button', (pick === r.id ? 'on' : '') + ' sq', r.name.split(' (')[0]); b.type = 'button'; b.onclick = function () { S.sub.fireRegion = r.id; render(); }; rowR.appendChild(b); });
+      body.appendChild(rowR);
+      plot(body, function (w, h) {
+        return chartSeriesSimple({ title: (regs.filter(function (r) { return r.id === pick; })[0] || {}).name + ': hotspots a day, ' + esc(inst.replace('_', ' ')),
+          x: days.map(function (d, i) { return i; }), y: days.map(function (d) { return (ser[d].regions || {})[pick] || 0; }), digits: 0 }, w, h);
+      });
+      body.appendChild(el('div', 'cap', 'One point per day since we started keeping this record (' + days[0] + '). The open FIRMS channel holds only the last day, so the series grows from the day we began.'));
+    }
+    body.appendChild(el('div', 'cap', esc(FR.note || '')));
+  }
+
+  /* ══ ЗАПАС ВОДЫ ═══════════════════════════════════════════════════════════════
+     Бразилия (ONS, запасённая энергия) и Калифорния (CDEC, объём). Оба берега Тихого
+     океана: юг Бразилии при событии заливает, Калифорния мокнет зимой. */
+  function viewWater(body) {
+    var WA = S.WA || {};
+    if (!WA.built) { body.appendChild(el('div', 'note', 'No water.json yet: run python tools/enso/water.py.')); return; }
+    var side = S.sub.waterSide || 'brazil', rowS = el('div', 'seg sub');
+    [['brazil', 'Brazil, stored energy'], ['california', 'California, storage']].forEach(function (o) {
+      var b = el('button', (side === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.waterSide = o[0]; render(); }; rowS.appendChild(b);
+    });
+    body.appendChild(rowS);
+    var kp = el('div', 'kpis');
+    if (side === 'brazil') {
+      var BR = WA.brazil || {}, subs = Object.keys(BR);
+      kp.innerHTML = subs.map(function (k2) {
+        var b = BR[k2], L = b.last || {};
+        return '<div class="kpi"><div class="kn">' + esc(b.name) + '</div><div class="kv">' + fnum(L.pct, 1, false) + '<small> % of max</small></div><div class="km">' + Math.round(L.mwmonth || 0).toLocaleString('en') + ' MW-months stored' + (L.rank_high ? ' · ' + ord(L.rank_high) + ' highest of ' + L.of + ' years for the date' : '') + '</div>' + kmeta(null, 'ONS Brazil', L.date) + '</div>';
+      }).join('');
+      body.appendChild(kp);
+      var pickB = S.sub.waterSub || subs[0], rowB = el('div', 'seg sub');
+      subs.forEach(function (k2) { var b = el('button', (pickB === k2 ? 'on' : '') + ' sq', BR[k2].name); b.type = 'button'; b.onclick = function () { S.sub.waterSub = k2; render(); }; rowB.appendChild(b); });
+      body.appendChild(rowB);
+      var B2 = BR[pickB] || {};
+      plot(body, function (w, h) {
+        return chartSeriesSimple({ title: B2.name + ': stored energy, % of the subsystem maximum', x: (B2.dates || []).map(function (d, i) { return i; }), y: B2.pct || [], digits: 1, unit: ' %' }, w, h);
+      });
+      var res = WA.brazil_reservoirs || {}, items = (res.items || []).slice(0, 10);
+      if (items.length) {
+        var wrap = el('div'); wrap.style.cssText = 'max-height:150px;overflow:auto';
+        wrap.innerHTML = '<table class="e"><thead><tr><th>the ten lowest reservoirs on ' + esc(res.date || '') + '</th><th>basin</th><th>subsystem</th><th class="num">% of max</th></tr></thead><tbody>' +
+          items.map(function (x) { return '<tr><td>' + esc(x.name) + '</td><td class="src">' + esc(x.basin) + '</td><td class="src">' + esc(x.subsystem) + '</td><td class="num' + (x.pct < 30 ? ' top' : '') + '">' + fnum(x.pct, 1, false) + '</td></tr>'; }).join('') + '</tbody></table>';
+        body.appendChild(wrap);
+      }
+    } else {
+      var CAt = WA.california_total || {}, CAr = WA.california || {}, ids = Object.keys(CAr);
+      var L2 = CAt.last || {};
+      kp.innerHTML = '<div class="kpi"><div class="kn">ten largest reservoirs together</div><div class="kv">' + fnum(L2.pct, 1, false) + '<small> % of capacity</small></div><div class="km">' + Math.round((L2.af || 0) / 1000).toLocaleString('en') + ' thousand acre-feet of ' + Math.round((CAt.capacity_af || 0) / 1000).toLocaleString('en') + '</div>' + kmeta(null, 'California CDEC', L2.date) + '</div>' +
+        ids.slice(0, 3).map(function (id) { var b = CAr[id], L3 = b.last || {}; return '<div class="kpi"><div class="kn">' + esc(b.name) + '</div><div class="kv">' + fnum(L3.pct, 1, false) + '<small> %</small></div><div class="km">' + Math.round((L3.af || 0) / 1000).toLocaleString('en') + ' of ' + Math.round(b.capacity_af / 1000).toLocaleString('en') + ' thousand acre-feet</div></div>'; }).join('');
+      body.appendChild(kp);
+      var pickC = S.sub.waterRes || 'total', rowC = el('div', 'seg sub');
+      [['total', 'all ten']].concat(ids.map(function (id) { return [id, CAr[id].name]; })).forEach(function (o) {
+        var b = el('button', (pickC === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.waterRes = o[0]; render(); }; rowC.appendChild(b);
+      });
+      body.appendChild(rowC);
+      var C2 = pickC === 'total' ? CAt : (CAr[pickC] || {});
+      plot(body, function (w, h) {
+        return chartSeriesSimple({ title: C2.name + ': storage, % of capacity', x: (C2.dates || []).map(function (d, i) { return i; }), y: C2.pct || [], digits: 1, unit: ' %' }, w, h);
+      });
+    }
+    body.appendChild(el('div', 'cap', esc(WA.note || '')));
+  }
   function viewPlanet() {
     var PL = S.PL || {}, k = sub('planet', 'gases');
     var body = stageShell('The long record: the background the event runs on',
-      [segBtn('planet', 'gases', 'Greenhouse gases', 'gases'), segBtn('planet', 'ice', 'Sea ice', 'gases'), segBtn('planet', 'temperature', 'Temperature', 'gases'), segBtn('planet', 'sea', 'Sea level', 'gases')]);
+      [segBtn('planet', 'gases', 'Greenhouse gases', 'gases'), segBtn('planet', 'ice', 'Sea ice', 'gases'), segBtn('planet', 'temperature', 'Temperature', 'gases'), segBtn('planet', 'sea', 'Sea level', 'gases'),
+       segBtn('planet', 'snow', 'Snow cover', 'gases'), segBtn('planet', 'glaciers', 'Glaciers', 'gases')]);
     if (!PL.built) { body.appendChild(el('div', 'note', 'No long-record data yet: run python tools/enso/planet.py.')); return; }
     var kp = el('div', 'kpis'), caps = [], EY = PL.elnino_years || [];
     function kpi(name, val, small, sub2, src, dt) { return '<div class="kpi"><div class="kn">' + name + '</div><div class="kv">' + val + '<small>' + esc(small || '') + '</small></div><div class="km">' + sub2 + '</div>' + kmeta(null, src, dt) + '</div>'; }
@@ -5567,6 +5756,7 @@
       body.appendChild(row);
       return cur;
     }
+    if (k === 'snow' || k === 'glaciers') { planetSnowIce(body, k, kp, kpi); return; }
     if (k === 'gases') {
       var G = PL.gases || {}, items = [];
       if (G.co2) items.push({ title: 'CO₂ at Mauna Loa, monthly mean; dashed: seasonally adjusted', unit: 'ppm', x: G.co2.months.map(ym2x), y: G.co2.values, y2: G.co2.trend, digits: 0 });
@@ -6959,7 +7149,10 @@
     var high = RG ? RG.items.filter(function (x) { return x.levels[scen] >= 4; }).length : 0;
     var head = k === 'table' ? (RG ? high + ' of ' + RG.items.length + ' regions at level 4–5 under the “' + scen + '” scenario' : 'Regions')
       : (measured && gk !== 'ref' ? gulfHead(G, gk) : (r ? r.name + ': level ' + r.levels[scen] + ' of 5 under the “' + scen + '” scenario' : 'By region'));
-    var body = stageShell(head, [segBtn('regions', 'table', 'Overview', 'table'), segBtn('regions', 'place', 'By region', 'table')]);
+    var body = stageShell(head, [segBtn('regions', 'table', 'Overview', 'table'), segBtn('regions', 'place', 'By region', 'table'),
+      segBtn('regions', 'fires', 'Fires', 'table'), segBtn('regions', 'water', 'Water held', 'table')]);
+    if (S.sub.regions === 'fires') { viewFires(body); return; }
+    if (S.sub.regions === 'water') { viewWater(body); return; }
     if (k === 'table') {
       if (!RG) { body.appendChild(el('div', 'note warn', 'The regions block did not load.')); return; }
       regionsTable(body, RG, scen, P);
@@ -7337,11 +7530,14 @@
     get('/data/enso/neighbours.json').catch(function () { return {}; }),
     get('/data/enso/concepts.json').catch(function () { return {}; }),
     get('/data/enso/stats.json').catch(function () { return {}; }),
-    get('/data/enso/cities.json').catch(function () { return {}; })])
+    get('/data/enso/cities.json').catch(function () { return {}; }),
+    get('/data/enso/fires.json').catch(function () { return {}; }),
+    get('/data/enso/water.json').catch(function () { return {}; }),
+    get('/data/enso/ice-snow.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
       fixRiskTitles(r[0]);                    // парные риски: «world ocean:» / «land+ocean:» читались как дубли (владелец 09.09)
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {};
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {};
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');

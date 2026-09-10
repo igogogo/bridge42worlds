@@ -54,6 +54,11 @@ Say "=== city forecasts against fact (cities.py)"
 # докачка истории по городам идёт порциями: суточный лимит Open-Meteo не пускает всё сразу
 & $py -u cities_backfill.py --from 2025-01-01 --max-jobs 220 --pause 2 2>&1 | Out-File $log -Append -Encoding utf8
 
+Say "=== fires, reservoirs, snow and glaciers"
+& $py -u fires.py 2>&1 | Out-File $log -Append -Encoding utf8
+& $py -u water.py 2>&1 | Out-File $log -Append -Encoding utf8
+& $py -u ice_snow.py 2>&1 | Out-File $log -Append -Encoding utf8
+
 Say "=== panel state map (agent_state.py)"
 & $py -u agent_state.py 2>&1 | Out-File $log -Append -Encoding utf8
 

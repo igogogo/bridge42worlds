@@ -327,7 +327,14 @@
   .ks-d.up{color:var(--nino)} .ks-d.dn{color:var(--cyan)} .ks-d.same{color:var(--soft)}
   .jc{cursor:pointer} .jc:hover{text-decoration:underline}
   /* легенда строкой под шапкой сцены (08.09) */
-  .leg-bar{display:flex;flex-wrap:wrap;align-items:center;gap:2px 12px;padding:1px 0 0;font-family:var(--mono);font-size:10.5px;color:var(--muted);line-height:1.5}
+  /* ЛЕГЕНДА РАЗВОРАЧИВАЕТСЯ СТОЛБИКОМ. Владелец 10.09: «было удобнее, когда легенда
+     разворачивалась в столбик, а не в строку — в строке она теряется». Столбик читается
+     сверху вниз, каждая строка на своём месте; на широком экране колонок несколько, чтобы
+     длинный список не гнал сцену вниз. */
+  .leg-bar{display:block;columns:2 220px;column-gap:22px;padding:2px 0 1px;font-family:var(--mono);font-size:10.5px;
+    color:var(--muted);line-height:1.65;max-height:132px;overflow:auto}
+  .leg-bar .leg-c{display:flex;break-inside:avoid;width:100%}
+  @media (max-width:760px){ .leg-bar{columns:1;max-height:150px} }
   .leg-c{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;border-radius:4px;padding:0 3px}
   .leg-c svg{flex:none}
   .leg-c.pick{cursor:pointer} .leg-c.pick:hover{color:var(--text)}
@@ -1067,7 +1074,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=d5a2d65e0c"></script>
+<script src="/js/enso.js?v=f3f2288916"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>
