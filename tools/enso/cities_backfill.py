@@ -37,7 +37,14 @@ from cities import CITIES, MODELS, RAW, get  # noqa: E402
 ARCHIVE = RAW / "forecasts-archive.jsonl"
 STATE = RAW / "backfill-state.json"
 HOURLY = ["temperature_2m", "precipitation", "wind_speed_10m", "relative_humidity_2m", "cloud_cover", "pressure_msl"]
-LEADS = range(1, 8)
+# ЦЕНА ЗАПРОСА И СУТОЧНЫЙ ЛИМИТ. Первый заход лёг на 429 через 239 заданий из 3150: у
+# Open-Meteo бесплатный доступ считает не запросы, а переменные × часы, и месяц по 42 часовым
+# рядам стоит десятков «вызовов». Поэтому: горизонты 1/3/5/7 вместо 1…7 (именно их рисует
+# сцена) и первые 15 суток месяца вместо всех — цена падает примерно в 4,5 раза, а месячная
+# ошибка всё равно считается по тысячам пар. Плюс `--max-jobs`: докачка идёт порциями,
+# по одной в сутки, и доезжает сама (10.09).
+LEADS = (1, 3, 5, 7)      # см. ниже: цена запроса считается по переменным × часам
+DAYS_PER_MONTH = 15       # первые 15 суток месяца
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -82,6 +89,7 @@ def daily_from_hourly(times, cols):
 
 
 def fetch_city_month(city, model, d0, d1):
+    d1 = min(d1, d0 + timedelta(days=DAYS_PER_MONTH - 1))        # берём начало месяца, см. выше
     hv = ",".join(f"{v}_previous_day{L}" for L in LEADS for v in HOURLY)
     url = (f"https://previous-runs-api.open-meteo.com/v1/forecast?latitude={city[2]}&longitude={city[3]}"
            f"&start_date={d0.isoformat()}&end_date={d1.isoformat()}&hourly={hv}&models={model}&timezone=UTC")
@@ -108,6 +116,7 @@ def main():
     ap.add_argument("--to", dest="end", default=(date.today() - timedelta(days=1)).isoformat())
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--pause", type=float, default=2.0, help="секунд между запросами")
+    ap.add_argument("--max-jobs", type=int, default=0, help="сколько заданий за один запуск (0 — все)")
     a = ap.parse_args()
     start, end = date.fromisoformat(a.start), date.fromisoformat(a.end)
     RAW.mkdir(parents=True, exist_ok=True)
@@ -116,6 +125,9 @@ def main():
     jobs = [(c, m, d0, d1) for d0, d1 in month_spans(start, end) for c in CITIES for m in MODELS]
     todo = [j for j in jobs if f"{j[0][0]}|{j[1]}|{j[2].isoformat()}" not in done]
     print(f"jobs {len(jobs)}, done {len(jobs) - len(todo)}, to do {len(todo)}")
+    if a.max_jobs:
+        todo = todo[:a.max_jobs]
+        print(f"this run: {len(todo)} jobs")
     if a.dry:
         return
     t0 = time.time()

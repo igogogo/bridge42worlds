@@ -51,6 +51,9 @@ Say "=== globe data (globe_data.py)"
 Say "=== city forecasts against fact (cities.py)"
 & $py -u cities.py 2>&1 | Out-File $log -Append -Encoding utf8
 
+# докачка истории по городам идёт порциями: суточный лимит Open-Meteo не пускает всё сразу
+& $py -u cities_backfill.py --from 2025-01-01 --max-jobs 220 --pause 2 2>&1 | Out-File $log -Append -Encoding utf8
+
 Say "=== panel state map (agent_state.py)"
 & $py -u agent_state.py 2>&1 | Out-File $log -Append -Encoding utf8
 
