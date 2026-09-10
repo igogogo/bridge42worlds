@@ -625,6 +625,48 @@
      пучке четыре события накладываются друг на друга и различаются только цветом; в столбце
      справа у каждого своя панель, но шкала температур ОДНА на всех и та же, что у большого
      графика, — поэтому сравнивать можно глазом, а подписи месяцев внизу общие. */
+  /* «Против аналогов» для любой зоны: аналоги — из climatology-файла бокса (абсолютная SST по
+     дню года, шаг 4 дня, между — пусто), в аномалию через ту же климатологию; наша линия —
+     из суточного хвоста бокса. Файл подтягивается лениво один раз. */
+  S.CLM = S.CLM || {};
+  function analogsFor(box) {
+    var bx = ((S.D.oisst || {}).boxes || {})[box]; if (!bx) return null;
+    var C = S.CLM[box];
+    if (!C) {
+      if (S.CLM[box + ':busy']) return null;
+      S.CLM[box + ':busy'] = true;
+      fetch('/data/enso/oisst/clim_' + box + '.json').then(function (r) { return r.json(); })
+        .then(function (c) { S.CLM[box] = c; render(); }).catch(function () { S.CLM[box] = { error: true }; render(); });
+      return null;
+    }
+    if (C.error || !C.doy || !C.analogs) return null;
+    var doyOf = function (iso) { var d = new Date(iso + 'T00:00:00Z'); return Math.round((d - Date.UTC(d.getUTCFullYear(), 0, 1)) / 864e5); };
+    var fillGaps = function (arr) {   // шаг 4 дня → линейно между опорами
+      var out = arr.slice(), i, j;
+      for (i = 0; i < out.length; i++) {
+        if (fin(out[i])) continue;
+        var a = i - 1; while (a >= 0 && !fin(out[a])) a--;
+        var b = i + 1; while (b < out.length && !fin(out[b])) b++;
+        if (a >= 0 && b < out.length) out[i] = out[a] + (out[b] - out[a]) * (i - a) / (b - a);
+        else out[i] = NaN;
+      }
+      for (j = 0; j < out.length; j++) if (!fin(out[j])) out[j] = NaN;
+      return out;
+    };
+    var analogs = {}, top = -99;
+    Object.keys(C.analogs).forEach(function (y) {
+      var abs = fillGaps(C.analogs[y]);
+      var ser = abs.map(function (v, i) { return fin(v) && fin(C.doy[i]) ? v - C.doy[i] : NaN; });
+      var pk = Math.max.apply(null, ser.filter(fin));
+      if (pk > top) top = pk;
+      analogs[y] = { series: ser, next: [], peak: pk };
+    });
+    var cur = []; for (var k = 0; k < 366; k++) cur.push(NaN);
+    (bx.dates || []).forEach(function (d, i) { var v = bx.anom[i]; if (fin(v)) cur[doyOf(d)] = v; });
+    var last = bx.dates[bx.dates.length - 1];
+    return { key: box, label: bx.title || box, year: last.slice(0, 4), analogs: analogs, current_series: cur, day: doyOf(last), current_day: bx.last_anom,
+      peak_estimate: { hist_ceiling: top }, all_years_rank: null };
+  }
   function chartAnalogs(N, W, H) {
     var years = Object.keys(N.analogs).sort();
     var RC = (W >= 640 && years.length) ? Math.max(110, Math.min(190, Math.round(W * .24))) : 0;
@@ -638,14 +680,14 @@
     var vmin = Math.min.apply(null, all) - .1, vmax = Math.max.apply(null, all) + .9;
     var X = function (i) { return Lp + i / (n - 1) * pw; };
     var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
-    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">Niño 3.4 daily anomaly: ' + (N.year || '') + ' against the four strongest events</text>';
+    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + esc(N.label || 'Niño 3.4') + ' daily anomaly: ' + (N.year || '') + ' against the four strongest events</text>';
     s += gridY(vmin, vmax, .5, Y, Lp, R + 8, W, 1);
     for (var m = 0; m < 12; m++) if (W > 470 || m % 2 === 0) s += '<text x="' + X((ME[m] + ME[m + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + MONTHS[m] + '</text>';
     for (var m2 = 0; m2 < 4; m2++) if (W > 470) s += '<text x="' + X(366 + (ME[m2] + ME[m2 + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle" opacity=".85">' + MONTHS[m2] + '+1</text>';
     s += '<line x1="' + X(366).toFixed(0) + '" y1="' + Tp + '" x2="' + X(366).toFixed(0) + '" y2="' + (H - B) + '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="3 3"/>';
     var leg = [];
     Object.keys(N.analogs).sort().forEach(function (y, yi) {
-      var a = N.analogs[y], ser = a.series.concat(a.next);
+      var a = N.analogs[y], ser = a.series.concat(a.next || []);
       s += segs(ser.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + y + ')', 1.4, pickOp(y, .9), dashOf(yi + 1));
       // В узкой плитке легенда идёт строкой под заголовком: там помещается только год.
       // пик года — число, а не украшение: он остаётся в подписи на любой ширине (09.09)
@@ -656,7 +698,7 @@
     /* ЧИСЛО У МИГАЮЩЕЙ ТОЧКИ. Владелец 09.09: «на телефоне цифры не видны — на now against
        analogs нет текущей у мигающей точки». Её и не было ни на какой ширине: точка стояла
        молча. Ставим слева от точки, потому что вправо от неё уходит свежий хвост. */
-    var ftA = freshTail('sst_nino34');
+    var ftA = N.key && N.key !== 'nino34' ? [] : freshTail('sst_nino34');
     if (ftA.length && fin(N.current_day)) {
       var tpA = [[X(N.day), Y(N.current_day)]].concat(ftA.map(function (p) { return [X(N.day + p[0]), Y(p[1])]; }));
       s += poly(tpA, 'var(--ochre)', 1.6, 1, '3 3');
@@ -673,10 +715,11 @@
          (владелец 10.09: «число написать контрастным белым, а не блеклым»). Под ней — чем
          измерено и за какое число: рядом на карточке стоит недельный индекс NOAA (+2.7 за
          неделю до 2 сентября), а здесь суточный OISST, и это два разных продукта. */
+      /* Число стоит НАД точкой (владелец 10.09), а если над ней проходит черта рекорда —
+         под точкой. Подписи продукта здесь больше нет: чем измерено, говорит выбор зоны
+         и примечание к сцене. */
       var HALO2 = 'fill:var(--text);paint-order:stroke;stroke:var(--surface);stroke-width:3.2;stroke-linejoin:round;font-weight:700';
-      var yN = below ? dy + 17 : dy - 12, xN = rightRoom ? dx + 9 : dx - 9, ancN = rightRoom ? 'start' : 'end';
-      s += '<text x="' + xN.toFixed(1) + '" y="' + yN.toFixed(1) + '" text-anchor="' + ancN + '" font-size="13" style="' + HALO2 + '">' + fnum(N.current_day) + '</text>';
-      if (N.last_date || (S.D.watch && S.D.watch.sst_nino34)) s += '<text x="' + xN.toFixed(1) + '" y="' + (yN + 10).toFixed(1) + '" text-anchor="' + ancN + '" font-size="8" style="fill:var(--soft)">daily OISST · ' + esc(String(dt(N.last_date || S.D.watch.sst_nino34.last_date)).replace(/<[^>]+>/g, '')) + '</text>';   // dt() отдаёт HTML-плашку, в SVG нужен голый текст
+      s += '<text x="' + dx.toFixed(1) + '" y="' + (below ? dy + 19 : dy - 11).toFixed(1) + '" text-anchor="middle" font-size="13" style="' + HALO2 + '">' + fnum(N.current_day) + '</text>';   // dt() отдаёт HTML-плашку, в SVG нужен голый текст
     }
     var pe = N.peak_estimate;
     // Черта рекорда и её подпись держатся внутри ОСНОВНОГО поля: справа теперь стоят
@@ -3533,7 +3576,25 @@
       });
       body.appendChild(row2);
       plot(body, function (w, h) { return chartNoaa(NW, w, h, 'analog'); });
-    } else plot(body, function (w, h) { return chartAnalogs(N, w, h); });
+    } else {
+      /* ВЫБОР ЗОНЫ (владелец 10.09: «на эту же вкладку добавить переключалку зон»). Niño 3.4
+         считает разбор целиком (полный год и продолжение аналогов); остальные зоны собираются
+         на клиенте из суточного бокса и климатологии того же бокса: аналоги — за весь год,
+         наша линия — с начала хвоста бокса (10 мая). Честнее, чем ничего, и видно сразу. */
+      var az = S.sub.analogZone || 'nino34', rowZ = el('div', 'seg sub');
+      [['nino34', 'Niño 3.4'], ['nino3', 'Niño 3'], ['nino12', 'Niño 1+2'], ['nino4', 'Niño 4'], ['gulf', 'Gulf']].forEach(function (o) {
+        var b = el('button', (az === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button';
+        b.onclick = function () { S.sub.analogZone = o[0]; render(); }; rowZ.appendChild(b);
+      });
+      body.appendChild(rowZ);
+      if (az === 'nino34') plot(body, function (w, h) { return chartAnalogs(N, w, h); });
+      else {
+        var NZ = analogsFor(az);
+        if (NZ) plot(body, function (w, h) { return chartAnalogs(NZ, w, h); });
+        else plot(body, function (w, h) { return svgOpen(w, h) + '<text x="20" y="40">loading the climatology of this box…</text></svg>'; });
+        body.appendChild(el('div', 'cap', 'For this zone the analogue years are laid out from the climatology of our own box; our line starts where the daily tail of the box starts (10 May). The full-year reading is kept for Niño 3.4.'));
+      }
+    }
 
     var pe = N.peak_estimate, ls = ONI.last_season, c4 = NW.chg4w || {}, c8 = NW.chg8w || {};
     var cap = el('div', 'cap');
