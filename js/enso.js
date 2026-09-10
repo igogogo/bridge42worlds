@@ -3180,7 +3180,7 @@
     // Клик по элементу легенды выделяет линию (или целый класс), повторный — снимает.
     p.addEventListener('click', function (e) {
       var lt = e.target.closest && e.target.closest('[data-legtoggle]');
-      if (lt) { S.legOpen = !S.legOpen; S.pw = 0; redrawPlot(); return; }   // размер не менялся — сбрасываем кэш размера
+      if (lt) { S.legOpen = !S.legOpen; syncLegendBar(); return; }   // окошко ничего не двигает — перерисовывать график незачем
       var g = e.target.closest && e.target.closest('[data-pick]');
       if (!g) return;
       var v = g.getAttribute('data-pick');
@@ -3329,12 +3329,16 @@
     if (!items.length || !ci) { if (btn) btn.remove(); return; }
     if (!btn) {
       btn = el('button', 'sq legbtn', ''); btn.type = 'button';
-      btn.onclick = function () { S.legOpen = !S.legOpen; S.pw = 0; redrawPlot(); };
+      btn.onclick = function () { S.legOpen = !S.legOpen; syncLegendBar(); };
       ci.appendChild(btn);
     }
     btn.className = 'sq legbtn' + (S.legOpen ? ' on' : ''); btn.textContent = 'legend ' + (S.legOpen ? '▴' : '▾');
     if (!S.legOpen) return;
-    var bar = el('div', 'leg-bar');
+    /* ЛЕГЕНДА — ОТДЕЛЬНЫМ ОКОШКОМ, А НЕ ВНУТРИ ШАПКИ. Владелец 10.09: «легенду открывать
+       отдельным выпадающим окном, а не встраивать в текущее». Встроенная полоса сдвигала
+       сцену вниз и меняла размер графика при каждом открытии; окошко висит под кнопкой,
+       ничего не двигает, закрывается кнопкой, Esc и щелчком мимо. */
+    var bar = el('div', 'leg-bar leg-pop');
     items.forEach(function (it) {
       if (!it || !it[0]) { bar.appendChild(el('span', 'leg-sep', '')); return; }
       var c = el('span', 'leg-c' + (it[4] ? ' pick' : '') + (it[4] && S.pick === it[4] ? ' on' : ''), legSwatch(it) + esc(String(it[0])));
@@ -3346,6 +3350,18 @@
       var v = g.getAttribute('data-pick'); S.pick = (S.pick === v || !v) ? null : v; render();
     });
     head.appendChild(bar);
+    var r = btn.getBoundingClientRect(), hr = head.getBoundingClientRect();
+    bar.style.top = (r.bottom - hr.top + 4) + 'px';
+    bar.style.insetInlineEnd = Math.max(4, hr.right - r.right) + 'px';
+    if (!S._legAway) {
+      S._legAway = true;
+      document.addEventListener('click', function (e) {
+        if (!S.legOpen) return;
+        if (e.target.closest && (e.target.closest('.leg-pop') || e.target.closest('.legbtn'))) return;
+        S.legOpen = false; syncLegendBar();
+      });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && S.legOpen) { S.legOpen = false; syncLegendBar(); } });
+    }
   }
   /* ══ ЖУРНАЛ ЗНАЧЕНИЙ НА КИРПИЧЕ ══════════════════════════════════════════════
      Владелец 04.09: «изменение данных не равно времени обновления… на каждом кирпичике

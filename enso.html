@@ -335,6 +335,12 @@
      длинный список не гнал сцену вниз. */
   .leg-bar{display:block;columns:2 220px;column-gap:22px;padding:2px 0 1px;font-family:var(--mono);font-size:10.5px;
     color:var(--muted);line-height:1.65;max-height:132px;overflow:auto}
+  /* легенда отдельным окошком под кнопкой: сцена не прыгает, график не пересчитывается */
+  .leg-pop{position:absolute;z-index:60;min-width:210px;max-width:min(560px,86vw);max-height:min(320px,52vh);
+    columns:1;padding:7px 10px;border:1px solid var(--hair);border-radius:10px;background:var(--surface);
+    box-shadow:0 10px 26px rgba(0,0,0,.28)}
+  @media (min-width:900px){ .leg-pop{columns:2 200px} }
+  .stage-head{position:relative}
   .leg-bar .leg-c{display:flex;break-inside:avoid;width:100%}
   @media (max-width:760px){ .leg-bar{columns:1;max-height:150px} }
   .leg-c{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;border-radius:4px;padding:0 3px}
@@ -1076,7 +1082,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=d3fa72d813"></script>
+<script src="/js/enso.js?v=e8bf35f9a2"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>

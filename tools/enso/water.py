@@ -35,6 +35,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "data" / "enso" / "water.json"
+CACHE = ROOT / "data" / "enso" / "raw" / "water"
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -50,6 +51,23 @@ CA = [("SHA", "Shasta", 4552000), ("ORO", "Oroville", 3537577), ("CLE", "Trinity
       ("BER", "Berryessa", 1602000), ("BUL", "New Bullards Bar", 966103), ("FOL", "Folsom", 977000),
       ("PNF", "Pine Flat", 1000000)]
 SUBS = {"N": "North", "NE": "Northeast", "S": "South", "SE": "Southeast and Centre-West"}
+
+
+def get_cached(url, name, timeout=240, max_age_h=20):
+    """Тяжёлые годовые файлы качаем не чаще раза в сутки.
+
+    Список водохранилищ Бразилии за год — 4,3 МБ, и он обновляется раз в сутки одной строкой
+    на объект. Качать его при каждом запуске значит возить мегабайты ради нескольких новых
+    строк (владелец 10.09: «там большой объём скачивается?»). Держим копию в raw/water и
+    берём заново, только если она старше max_age_h часов.
+    """
+    CACHE.mkdir(parents=True, exist_ok=True)
+    f = CACHE / name
+    if f.exists() and (time.time() - f.stat().st_mtime) < max_age_h * 3600:
+        return f.read_bytes()
+    body = get(url, timeout=timeout)
+    f.write_bytes(body)
+    return body
 
 
 def get(url, timeout=180, tries=3):
@@ -70,7 +88,9 @@ def brazil(years):
     rows = []
     for y in years:
         try:
-            body = get(ONS_SUB.format(y=y), timeout=120).decode("utf-8", "replace")
+            # прошлые годы не меняются — их держим месяц, текущий обновляем раз в сутки
+            body = get_cached(ONS_SUB.format(y=y), f"ear_subsistema_{y}.csv", timeout=120,
+                              max_age_h=20 if y >= date.today().year else 24 * 30).decode("utf-8", "replace")
         except Exception as e:                                   # noqa: BLE001
             print(f"  brazil {y}: ERR {str(e)[:70]}")
             continue
@@ -102,7 +122,7 @@ def brazil(years):
 def brazil_reservoirs(year):
     """Последний доступный день по каждому водохранилищу: процент, бассейн, подсистема."""
     try:
-        body = get(ONS_RES.format(y=year), timeout=240).decode("utf-8", "replace")
+        body = get_cached(ONS_RES.format(y=year), f"ear_reservatorios_{year}.csv").decode("utf-8", "replace")
     except Exception as e:                                       # noqa: BLE001
         print(f"  brazil reservoirs {year}: ERR {str(e)[:70]}")
         return []
@@ -136,10 +156,17 @@ def california(a, b):
     cap = {x[0]: x[2] for x in CA}
     names = {x[0]: x[1] for x in CA}
     out = {k: {"name": names[k], "capacity_af": cap[k], "dates": [], "af": [], "pct": []} for k in cap}
+    seen_rows = set()
     for r in csv.DictReader(io.StringIO(body)):
         sid = (r.get("STATION_ID") or "").strip()
         if sid not in out:
             continue
+        # CDEC отдаёт по створу иногда две строки за сутки (пересчёт): вторую отбрасываем,
+        # иначе сумма по десяти водохранилищам подскакивает — 85 % вместо 56 % (10.09)
+        key = (sid, (r.get("OBS DATE") or r.get("DATE TIME") or "")[:8])
+        if key in seen_rows:
+            continue
+        seen_rows.add(key)
         v = (r.get("VALUE") or "").strip()
         if not v or v.startswith("-"):
             continue
@@ -153,15 +180,20 @@ def california(a, b):
         iso = f"{d[:4]}-{d[4:6]}-{d[6:]}"
         b2 = out[sid]
         b2["dates"].append(iso); b2["af"].append(round(af)); b2["pct"].append(round(100 * af / cap[sid], 1))
-    total = {}
+    total, seen = {}, {}
     for sid, b2 in out.items():
         if b2["dates"]:
             b2["last"] = {"date": b2["dates"][-1], "af": b2["af"][-1], "pct": b2["pct"][-1]}
         for d, af in zip(b2["dates"], b2["af"]):
             total[d] = total.get(d, 0) + af
+            seen[d] = seen.get(d, 0) + 1
+    # ИТОГ СЧИТАЕМ ТОЛЬКО ЗА ПОЛНЫЕ ДНИ. За сегодняшнее число отчитываются не все створы, и
+    # за сегодняшнее число отчитываются не все створы, и сумма по двум из десяти дала
+    # «0,7 % ёмкости» — падение, которого не было (10.09).
+    full = [d for d in sorted(total) if seen[d] >= len(cap) - 1]
     cap_all = sum(cap.values())
     tot = {"name": "Ten largest reservoirs together", "capacity_af": cap_all,
-           "dates": sorted(total), "af": [total[d] for d in sorted(total)]}
+           "dates": full, "af": [total[d] for d in full], "partial_days": len(total) - len(full)}
     tot["pct"] = [round(100 * v / cap_all, 1) for v in tot["af"]]
     if tot["dates"]:
         tot["last"] = {"date": tot["dates"][-1], "af": tot["af"][-1], "pct": tot["pct"][-1]}
