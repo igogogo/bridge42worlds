@@ -1942,6 +1942,7 @@
   }
   function closeGraphModal() { var m = $('cnModal'); if (m) m.remove(); }
   function openGraphModal(ids, focus, width, anchors) {   // width — ширина карточки, из которой открыли (владелец 08.09: «в размер карточки»); anchors — показать и облако
+    mAction('concept-graph');
     closeGraphModal();
     var tip = $('tip'); if (tip) { tip.classList.remove('on', 'pin'); S.pinned = null; }
     var m = el('div', 'cn-modal'); m.id = 'cnModal';
@@ -2080,7 +2081,7 @@
          три строки). Но только там, где есть настоящее наведение: на сенсорном экране тап
          поднимает и подсказку, и переход, и карточка повисает над шапкой уже на новой сцене. */
       if (T.tabHelp[v[0]] && HOVER) b.setAttribute('data-src', JSON.stringify({ name: v[1], def: T.tabHelp[v[0]] }));
-      b.onclick = function () { S.view = v[0]; S.risk = null; if (mob) S.navOpen = false; render(); };
+      b.onclick = function () { S.view = v[0]; S.risk = null; if (mob) S.navOpen = false; mScreen(v[0]); render(); };
       (svc ? rowSvc : rowMain).appendChild(b);
     });
     if (mob) {
@@ -2717,6 +2718,7 @@
   var RS_ERR = { panel_day_limit: 'The panel’s shared allowance of answers for today is used up. It resets at midnight UTC; the panel itself, with all its numbers and charts, works as usual.', captcha_failed: 'The page could not get a “not a robot” pass. Enter an access token (button below) or reload the page.', token_required: 'An access token is needed.', token_invalid: 'The access token is not valid.', token_expired: 'The access token has expired.',
     limit_day: 'The token’s daily allowance is used up.', limit_total: 'The token’s allowance is used up.', quota_day: 'Today’s allowance of questions is used up.', quota_week: 'This week’s allowance of questions is used up.', not_configured: 'The answer service is not configured on this server.', no_key: 'The model key is missing on the server.' };
   function rsAsk(q) {
+    mAction('research-ask');
     var rs = rsState(), hits = rsSearch(q, 8);
     var msg = { q: q, a: '', hits: hits.map(function (h) { return { kind: h.kind, title: h.title, hash: h.hash || h.url || '' }; }), demo: true, t: new Date().toISOString().slice(11, 16) };
     rs.msgs.push(msg);
@@ -2771,6 +2773,7 @@
     try { localStorage.setItem('b42_research', JSON.stringify(list.slice(0, 30))); } catch (e) { }
   }
   function rsSave(rs, done) {
+    mAction('research-save');
     if (!rsApi()) { rsLocalSave(rs); done('saved in this browser'); return; }
     fetch(rsApi() + '/save', { method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify(rsPack(rs)) })
       .then(function (r) { return r.json(); }).then(function (d) { if (d && d.ok) { rs.id = d.id; rs.saved = d.updated; S._rsList = null; done('saved to your account'); } else { rsLocalSave(rs); done('server refused (' + esc(String((d || {}).error || 'error')) + '); saved in this browser'); } })
@@ -2992,6 +2995,7 @@
          «точки после предложений на карточках убрать, просто перенос строки»). */
       '<div class="ln">rank ' + N.all_years_rank + ' of all years on the same 30 days</div>' +
       '<div class="ln">' + ab('oni', 'ONI') + ' ' + fnum(ONI.current[ls]) + ' ' + ab('seasons', ls) + jchip('oni') + '</div>' +
+      '<div class="ln rscale">' + esc(riskScaleLine(D)) + '</div>' +
       '' + kmeta('risk_index') + freshLine() +
       '<div class="cgo" data-go="now" data-gosub="analogs">see where we are \u2192</div></div></div>';
     box.appendChild(k1);
@@ -3350,9 +3354,12 @@
       var v = g.getAttribute('data-pick'); S.pick = (S.pick === v || !v) ? null : v; render();
     });
     head.appendChild(bar);
-    var r = btn.getBoundingClientRect(), hr = head.getBoundingClientRect();
-    bar.style.top = (r.bottom - hr.top + 4) + 'px';
-    bar.style.insetInlineEnd = Math.max(4, hr.right - r.right) + 'px';
+    var place = function () {
+      var r = btn.getBoundingClientRect(), hr = head.getBoundingClientRect();
+      bar.style.top = (Math.max(r.bottom - hr.top, head.clientHeight - 2) + 4) + 'px';   // ниже последнего ряда меню, чтобы не закрыть его
+      bar.style.insetInlineEnd = Math.max(4, hr.right - r.right) + 'px';
+    };
+    place(); requestAnimationFrame(function () { if (bar.isConnected) place(); });
     if (!S._legAway) {
       S._legAway = true;
       document.addEventListener('click', function (e) {
@@ -3481,8 +3488,20 @@
     return s;
   }
 
+  /* СЧЁТЧИК РАЗДЕЛОВ (записка команды сайта, ENSO-МОНИТОРИНГ-2026-09-10.md). Панель не
+     перезагружается при переходе между разделами, поэтому час чтения записывался одним
+     просмотром. Сообщаем о переключении сами — и только об ОСОЗНАННОМ: восстановление
+     состояния при загрузке, возврат на раздел по умолчанию и перерисовки счётчику не
+     показываем. Проверка window.b42Metrics обязательна: файл грузится отдельно и
+     асинхронно, а панель важнее статистики. */
+  function mScreen(name) {
+    try { if (window.b42Metrics && name) window.b42Metrics.screen(String(name).slice(0, 40)); } catch (e) { }
+  }
+  function mAction(name) {
+    try { if (window.b42Metrics && name) window.b42Metrics.action(String(name).slice(0, 40)); } catch (e) { }
+  }
   function segBtn(view, key, label, defKey) {
-    return { help: T.subHelp[view + '/' + key] || '', label: label, on: sub(view, defKey) === key, click: function () { S.sub[view] = key; render(); } };
+    return { help: T.subHelp[view + '/' + key] || '', label: label, on: sub(view, defKey) === key, click: function () { S.sub[view] = key; mScreen(view + '/' + key); render(); } };
   }
 
   /* ══ ВЕРДИКТ ОТДЕЛЬНОЙ СЦЕНОЙ ═══════════════════════════════════════════════════
@@ -3550,7 +3569,7 @@
     body.appendChild(dl);
 
     var kp = el('div', 'kpis');
-    kp.innerHTML = '<div class="kpi"><div class="kn">' + term('riskindex', 'risk index') + '</div><div class="kv">' + D.risk_index + '<small>of 100</small></div><div class="km">' + (D.risks || []).length + ' risks on the board, ' + (D.alerts || []).length + ' alerts</div>' + kmeta('risk_index') + '</div>' +
+    kp.innerHTML = '<div class="kpi"><div class="kn">' + term('riskindex', 'risk index') + '</div><div class="kv">' + D.risk_index + '<small>of 100</small></div><div class="km">' + (D.risks || []).length + ' risks on the board, ' + (D.alerts || []).length + ' alerts<br>' + esc(riskScaleLine(D)) + '</div>' + kmeta('risk_index') + '</div>' +
       '<div class="kpi"><div class="kn">verdicts stored</div><div class="kv" style="font-size:17px">' + ((J.verdicts || []).length) + '</div><div class="km">only the ones that actually changed</div>' + kmeta(null, 'our own record', (J.built || '').slice(0, 10)) + '</div>' +
       '<div class="kpi"><div class="kn">who wrote and who checked</div>' +
       '<div class="kv crew"><span class="cr-r">writes</span> ' + esc(sm.model || 'rules') + '<br>' +
@@ -4534,7 +4553,7 @@
       body.appendChild(m3);
     } else {
       var m = el('div', 'note');
-      m.innerHTML = '<strong>Method.</strong> Everything is computed on ' + term('anomaly', 'anomalies to 1991–2020') + ' taken from the source files themselves. “Rank” is the position of the same 30 calendar days among all years. “Above trend” is after subtracting the linear warming. Slope and noise are compared with the same windows of the same season, so a percentile means “unusual for this time of year”. The 14-day forecast is ' + term('analog', 'analogue-based') + '. ' + term('cusum', 'CUSUM') + ' accumulates the deviation from the level at the start of the window; threshold 5. The ' + term('riskindex', 'risk index') + ' is a saturating sum of levels: 100·(1 − exp(−Σ level^1.5/25)). Model classes come from the forecasts of stored IRI issues against the official ONI of the exact season each issue was forecasting.';
+      m.innerHTML = '<strong>Method.</strong> Everything is computed on ' + term('anomaly', 'anomalies to 1991–2020') + ' taken from the source files themselves. “Rank” is the position of the same 30 calendar days among all years. “Above trend” is after subtracting the linear warming. Slope and noise are compared with the same windows of the same season, so a percentile means “unusual for this time of year”. The 14-day forecast is ' + term('analog', 'analogue-based') + '. ' + term('cusum', 'CUSUM') + ' accumulates the deviation from the level at the start of the window; threshold 5. The ' + term('riskindex', 'risk index') + ' is two scales in one: 0 to 90 is a saturating sum of risk levels, 90·(1 − exp(−Σ level^1.5/25)), so a full house of level-5 risks reaches 90 and never more — 90 reads as “stronger than anything on record”, not “the end”. The last ten points are held in reserve for readings that go past the record itself: they open only when a series is above its own historical maximum for that calendar day, is moving fast against its own history of 14-day slopes, and does both on several systems at once. Model classes come from the forecasts of stored IRI issues against the official ONI of the exact season each issue was forecasting.';
       body.appendChild(m);
       var c = el('div', 'note warn');
       c.innerHTML = '<strong>Caveats.</strong> The climatereanalyzer series are global means; the focus of the event is visible only through the NOAA Niño regions. Daily OISST lags. The ' + term('plume', 'IRI plume') + ' is extracted from a figure: a change of layout would break the parser, which must then fail loudly. The ' + term('summary', 'model summary') + ' is an interpretation, not a source. ' + term('teleconnection', 'Teleconnections') + ' are typical, not guaranteed, and for Europe and Russia they are weak enough that we say so on the row itself.';
@@ -5185,10 +5204,36 @@
     d.addEventListener('click', function (ev) { if (ev.target.closest('.dcal')) return; S._back = 'overview'; S.full = false; S.view = go[0]; if (go[1]) S.sub[go[0]] = go[1]; S.risk = null; render(); });
     return d;
   }
-  function arcGauge(v, max, color) {
+  function arcGauge(v, max, color, markAt) {
     var r = 17, c = 2 * Math.PI * r, f = Math.max(0, Math.min(1, v / max));
+    var tick = '';
+    if (markAt != null) {                    // засечка «потолок известного» на 90 (владелец 10.09)
+      var a = (-90 + 360 * markAt / max) * Math.PI / 180, co = Math.cos(a), si = Math.sin(a);
+      tick = '<line x1="' + (22 + 14.2 * co).toFixed(1) + '" y1="' + (22 + 14.2 * si).toFixed(1) +
+        '" x2="' + (22 + 19.8 * co).toFixed(1) + '" y2="' + (22 + 19.8 * si).toFixed(1) +
+        '" style="stroke:var(--text)" stroke-width="1.4"/>';
+    }
     return '<svg viewBox="0 0 44 44" width="44" height="44"><circle cx="22" cy="22" r="' + r + '" fill="none" style="stroke:var(--grid)" stroke-width="5"/>' +
-      '<circle cx="22" cy="22" r="' + r + '" fill="none" style="stroke:' + color + '" stroke-width="5" stroke-dasharray="' + (c * f).toFixed(1) + ' ' + c.toFixed(1) + '" transform="rotate(-90 22 22)" stroke-linecap="round"/></svg>';
+      '<circle cx="22" cy="22" r="' + r + '" fill="none" style="stroke:' + color + '" stroke-width="5" stroke-dasharray="' + (c * f).toFixed(1) + ' ' + c.toFixed(1) + '" transform="rotate(-90 22 22)" stroke-linecap="round"/>' + tick + '</svg>';
+  }
+  /* ДЕВЯНОСТО — ПОТОЛОК ИЗВЕСТНОГО, ПОСЛЕДНИЕ ДЕСЯТЬ — ЗАПАС. Владелец 10.09: «то, что
+     событие очень сильное, — да, но это не 100 риска, это 90; а 100 — это когда началось
+     что-то, что даже в голове не укладывается, и причём быстро». Считает это watch.py:
+     первые девяносто набираются силой и числом рисков и упираются в 90 навсегда, последние
+     десять открываются, только если показания ушли ЗА исторический максимум этого дня,
+     ушли быстро и сразу в нескольких системах. Строка говорит, из чего собрано число,
+     чтобы 93 не читалось как «до конца света семь пунктов». */
+  function riskScaleLine(D) {
+    var rd = (D || {}).risk_index_detail, F = S.F || {}, pre = '';
+    if (!rd && F.risk_index_detail && F.risk_index != null) {
+      rd = F.risk_index_detail;                     // разбор из слоя свежего — со своим числом
+      pre = 'on the fresh data, index ' + F.risk_index + ': ';
+    }
+    if (!rd) return '0 to 90 is everything we can measure against the record; the last ten open only past it';
+    var res = Math.round((rd.points || 0) * 10) / 10, base = Math.round(rd.base || 0);
+    return pre + 'known scale ' + base + ' of 90 \u00b7 ' + (res > 0
+      ? 'past the record ' + res + ' of 10, on ' + (rd.breadth || 0) + ' systems at once'
+      : 'nothing past the record yet');
   }
   function donut(parts) {
     var tot = 0; parts.forEach(function (x) { tot += x[0]; });
@@ -5283,7 +5328,7 @@
     var c4 = (NW.chg4w || {}).n34a, b34 = (O.boxes || {}).nino34 || {}, TAO = SB.tao || {}, WD = (D.wind || {}).era5 || {};
     var sh = (D.alerts || []).filter(function (a) { return a.level === 'SHOUT'; }).length, wt = (D.alerts || []).length - sh;
     var core = (CORE.items || []), coreNow = core.filter(function (x) { return x.year === 'now'; })[0], core97 = core.filter(function (x) { return x.year === '1997'; })[0];
-    strip.appendChild(ovKpi(term('riskindex', 'risk index'), D.risk_index + '<small>of 100</small>', (D.risks || []).length + ' risks, ' + sh + ' shout · ' + wt + ' watch', arcGauge(D.risk_index, 100, 'var(--nino)'), ['trend', 'index'], null, 'risk_index'));
+    strip.appendChild(ovKpi(term('riskindex', 'risk index'), D.risk_index + '<small>of 100</small>', (D.risks || []).length + ' risks, ' + sh + ' shout · ' + wt + ' watch — ' + esc(riskScaleLine(D)), arcGauge(D.risk_index, 100, 'var(--nino)', 90), ['trend', 'index'], null, 'risk_index'));
     strip.appendChild(ovKpi(zone('nino34') + ' weekly', fnum(NW.latest.n34a, 1) + '<small>°C</small>', '4 weeks ' + arrow(c4, 1) + ' · ' + esc(NW.date), spark({ values: NW.series.slice(-26).map(function (r) { return r.n34a; }) }, 60, 26), ['now', 'weekly'], null, 'n34_weekly'));
     if (fin(b34.last_anom)) strip.appendChild(ovKpi(zone('nino34') + ' daily box', fnum(b34.last_anom) + '<small>°C</small>', '30 days ' + arrow(b34.chg30, 2) + ' · ' + esc(b34.last_date), spark({ values: b34.anom }, 60, 26), ['ocean', 'surface'], null, 'n34_box'));
     strip.appendChild(ovKpi(term('oni', 'ONI') + ' · ' + term('roni', 'RONI'), fnum(ONI.current[ONI.last_season]) + '<small>' + esc(ONI.last_season) + '</small>', 'RONI ' + fnum((ONI.roni || {}).last) + ' — the gap is the warm background', twoBars(ONI.current[ONI.last_season] || 0, (ONI.roni || {}).last || 0, 'ONI', 'RONI', 'var(--nino)'), ['now', 'analogs'], null, 'oni'));
@@ -5317,7 +5362,7 @@
          становится безымянным элементом, который не умеет ужиматься, и на телефоне длинное
          название выталкивало метку «legend» за край плитки (проверка 06.09, 375 px). */
       d.innerHTML = '<div class="ov-t"><span class="ov-tt">' + esc(t.title) + '</span></div><div class="ov-p"></div>';
-      d.addEventListener('click', function (e) { if (e.target.closest('[data-pick]')) return; S._back = 'overview'; S.full = false; S.pick = null; if (t.go[0] === 'risk') { S.risk = t.go[1]; S.view = 'risk'; } else { S.view = t.go[0]; if (t.go[1] != null) S.sub[t.go[0]] = t.go[1]; S.risk = null; } render(); });
+      d.addEventListener('click', function (e) { if (e.target.closest('[data-pick]')) return; S._back = 'overview'; S.full = false; S.pick = null; if (t.go[0] === 'risk') { S.risk = t.go[1]; S.view = 'risk'; } else { S.view = t.go[0]; if (t.go[1] != null) S.sub[t.go[0]] = t.go[1]; S.risk = null; } mScreen(t.go[0] + (t.go[1] != null && t.go[0] !== 'risk' ? '/' + t.go[1] : '')); render(); });
       grid.appendChild(d);
       t._el = d;
     });
@@ -6322,6 +6367,50 @@
   /* СТАНДАРТ СЦЕНЫ (владелец 08.09): сверху график, ниже плашки с метриками; описание источника
      и разбор (формула, детекторы, оговорки) — за двумя переключателями в строке подменю, а
      ссылка на работы — кнопкой в правом нижнем углу, как на карточках. Механизм общий. */
+  /* ОКОШКО, А НЕ ВСТАВКА. Владелец 10.09: «лучше не открывать встроенные окна, а также,
+     как для легенды, всплывающее окошко». Встроенная панель source/notes/stats вставала
+     первой строкой сцены: график съезжал вниз, пересчитывал себя под новую высоту и после
+     закрытия возвращался обратно — сцена дёргалась на каждое нажатие. Окно висит под своей
+     кнопкой, ничего не двигает и закрывается кнопкой, щелчком мимо и клавишей Esc.
+     Закрытие щелчком мимо снимает окно прямо в разметке, без общей перерисовки: иначе один
+     щелчок по кнопке другой сцены собирал сцену дважды. */
+  function posPop(head, pane, btn) {
+    var hw = head.clientWidth, w = Math.min(680, Math.max(240, hw - 8));
+    pane.style.maxWidth = w + 'px';
+    var hr = head.getBoundingClientRect();
+    if (!btn) { pane.style.top = (head.clientHeight + 2) + 'px'; pane.style.left = '4px'; return; }
+    var r = btn.getBoundingClientRect();
+    // верх — нижний край всей шапки: иначе окно ложится на ряды подменю и закрывает их
+    pane.style.top = (Math.max(r.bottom - hr.top, head.clientHeight - 2) + 4) + 'px';
+    pane.style.left = Math.max(4, Math.min(r.left - hr.left, hw - w - 4)) + 'px';
+  }
+  function infoPopup(pane, key) {
+    var head = document.querySelector('.stage-head');
+    if (!head) return false;
+    var old = head.querySelector('.info-pop'); if (old) old.remove();
+    pane.classList.add('info-pop');
+    head.appendChild(pane);
+    var btn = head.querySelector('[data-info="' + key + '"]') || head.querySelector('.ctl-info button.on') || head.querySelector('.ctl-info button');
+    posPop(head, pane, btn);
+    requestAnimationFrame(function () { if (pane.isConnected) posPop(head, pane, btn); });
+    if (!S._infoAway) {
+      S._infoAway = true;
+      var shut = function () {
+        S.sub.info = null;
+        var p = document.querySelector('.info-pop'); if (p) p.remove();
+        [].forEach.call(document.querySelectorAll('.ctl-info button.on, .stage-body button[data-info].on'), function (b) {
+          b.classList.remove('on'); b.textContent = b.textContent.replace(' \u25b4', ' \u25be');
+        });
+      };
+      document.addEventListener('click', function (e) {
+        if (!S.sub.info || !e.target.closest) return;
+        if (e.target.closest('.info-pop') || e.target.closest('[data-info]') || e.target.closest('.tip')) return;
+        shut();
+      });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && S.sub.info) shut(); });
+    }
+    return true;
+  }
   function infoToggles(row, items) {
     var ci = document.querySelector('.stage-head .ctl-info');   // с 08.09 кнопки живут в строке управления
     if (ci) row = ci; else row.appendChild(el('span', 'seg-gap', ''));
@@ -6329,7 +6418,8 @@
     if (st.length && !items.some(function (i) { return i.key === 'stats'; })) items.push({ key: 'stats', label: 'stats · ' + st.length, html: statsHtml(st, S.sub.noteMode || 'plain'), stats: true });
     items.forEach(function (it) {
       var b = el('button', (S.sub.info === it.key ? 'on' : '') + ' sq' + (it.stats ? ' stats' : ''), it.label + (S.sub.info === it.key ? ' ▴' : ' ▾'));
-      b.type = 'button'; b.onclick = function () { S.sub.info = S.sub.info === it.key ? null : it.key; render(); };
+      b.type = 'button'; b.setAttribute('data-info', it.key);
+      b.onclick = function () { S.sub.info = S.sub.info === it.key ? null : it.key; render(); };
       row.appendChild(b);
     });
   }
@@ -6342,7 +6432,7 @@
       p.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } });
     } else { p.innerHTML = it.html; if (it.stats) { p.classList.add('stats'); p.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } }); } }
     if (!it.stats) p.innerHTML += conceptsHtml(sceneAnchors(), true);
-    body.appendChild(p);
+    if (!infoPopup(p, it.key)) body.appendChild(p);
   }
   function worksFoot(body, anchor) {
     var h = linksHtml(anchor); if (!h) return;
@@ -6977,7 +7067,7 @@
       pane.classList.add('stats');
       pane.innerHTML = statsHtml(stItems, mode);
       pane.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } });
-      body.insertBefore(pane, body.firstChild);
+      if (!infoPopup(pane, 'stats')) body.insertBefore(pane, body.firstChild);
       return;
     } else {
       var sw = '<div class="seg sub" style="margin-bottom:6px">' + [['plain', 'in plain words'], ['tech', 'technical']].map(function (o) { return '<button type="button" class="sq' + (mode === o[0] ? ' on' : '') + '" data-notemode="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div>';
@@ -6985,7 +7075,7 @@
       pane.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } });
     }
     pane.innerHTML += conceptsHtml(sceneAnchors(), true);
-    body.insertBefore(pane, body.firstChild);
+    if (!infoPopup(pane, open)) body.insertBefore(pane, body.firstChild);
   }
 
   /* ЛЕНТА УПОМИНАНИЙ (владелец 07.09): разговор о событии, не измерение. Данные mentions.json. */
@@ -7258,6 +7348,24 @@
       else { history.replaceState(null, '', h); S._hashInit = 1; }
     } catch (e) { /* file: без истории */ }
   }
+  /* ФОРМА РАМКИ ГОВОРИТ ОБ УРОВНЕ. Владелец 10.09: «для основного меню всё остаётся, для
+     элементов подменю рамка чуть более квадратная, для под-подменю ещё более квадратная и
+     двойная, для прочих переключателей ещё квадратнее и двойная или тройная; source, notes,
+     legend оставляем как есть». Раньше все ярусы выглядели одинаковыми пилюлями, и с
+     первого взгляда нельзя было понять, что ты сейчас переключаешь — раздел, подраздел или
+     частность внутри сцены. Разметку не трогаем: ярус определяется положением ряда в сцене
+     — первый ряд под графиком это подменю подменю, все следующие ряды это уже частности.
+     Ряды легенды и ряды внутри окошка source/notes из счёта выпадают: их вид владелец
+     просил оставить как есть. */
+  function markMenuLevels() {
+    var body = document.querySelector('.stage-body'); if (!body) return;
+    var n = 0;
+    [].forEach.call(body.querySelectorAll('.seg.sub'), function (row) {
+      if (row.closest('.info-pane') || row.closest('.leg-pop') || row.querySelector('button.leg')) return;
+      row.classList.add(n === 0 ? 'mlv3' : 'mlv4');
+      n++;
+    });
+  }
   function render() {
     animStop();
     writeHash();
@@ -7312,6 +7420,7 @@
     else viewNow();
     sceneInfoBar();                          // source / notes на каждой сцене (08.09)
     kpiExplain();                            // «?» на плашках KPI (08.09)
+    markMenuLevels();                        // ярус подменю виден по рамке (10.09)
     if (S.globe && globeMode()) mountGlobe(globeMode());
     // Сцена собрана целиком — только теперь у рамки графика окончательная высота.
     redrawPlot();
@@ -7342,7 +7451,7 @@
     var rid = b.getAttribute('data-risk');
     if (rid) {
       var idx = (S.D.risks || []).map(function (r) { return r.id; }).indexOf(rid);
-      if (idx >= 0) { S.risk = idx; S.view = 'risk'; render(); return; }
+      if (idx >= 0) { S.risk = idx; S.view = 'risk'; mScreen('risk'); render(); return; }
     }
     S.view = b.getAttribute('data-view') || 'now';
     var sb = b.getAttribute('data-sub');

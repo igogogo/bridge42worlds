@@ -913,14 +913,91 @@ def risks(W, N34, NW, ONI, IRI=None, AIR=None):
                 "The air block did not produce its risks; the numbers themselves are on the panel.",
                 "the next update", kind="data", rid="air_rules_failed")
 
-    return _finish(R)
+    return _finish(R)[:2]
 
 
-def _finish(R):
+# ── ИНДЕКС РИСКА: 0–90 ЗА ИЗВЕСТНОЕ, 90–100 ЗА НЕВИДАННОЕ ─────────────────────
+# Владелец 10.09: «то, что событие очень сильное, — да, но это не 100 риска, это 90; а 100 —
+# это когда началось что-то, что даже в голове не укладывается, и причём быстро».
+# Он прав, и прежняя формула этого не умела: сумма уровней насыщалась экспонентой, полный
+# набор рисков пятого уровня давал ровно 100, и запаса не оставалось.
+#
+# Теперь шкала разделена и каждая часть отвечает на свой вопрос.
+#   0–90  — НАСКОЛЬКО СИЛЬНО ТО, ЧТО МЫ УМЕЕМ СРАВНИВАТЬ. Та же нагрузка по рискам, но
+#           сжатая так, что полный дом «пятёрок» упирается в 90 и выше не идёт никогда.
+#           Девяносто — это «сильнее всего, что мы видели», а не «конец света».
+#   90–100 — ЗАПАС ЗА ПРЕДЕЛОМ ЗАПИСИ. Он открывается только тогда, когда показания
+#           ВЫШЕ прежнего рекорда для этого дня (а не просто первое место), и при этом
+#           система движется быстро, и не в одном месте, а сразу в нескольких.
+#
+# Три слагаемых запаса, каждое считается по нашим же рядам:
+#   · beyond — насколько текущее значение превысило исторический максимум для этого дня
+#     (band_max). Мерить это суточным шумом нельзя: у сглаженного ряда шум мал, и любое
+#     превышение даёт «двадцать сигм» — проверено, запас заполнялся мгновенно. Единица
+#     измерения здесь — расстояние от девяностой процентили до рекорда (band_max − band_p90):
+#     столько ряд проходит от «редко» до «никогда». Один такой шаг ВЫШЕ рекорда — это уже
+#     небывалое, три — предел шкалы;
+#   · speed  — скорость за 14 суток против исторического разброса скоростей (slope14 /
+#     hist_sd). Единица означает «так быстро бывало», двойка — «так быстро не бывало»;
+#   · breadth — на скольких независимых системах это происходит одновременно
+#     (поверхность события, мировой океан, воздух планеты, подповерхностное тепло).
+# Скорость входит МНОЖИТЕЛЕМ, а не слагаемым: владелец сказал «и причём быстро». Небывалое,
+# но неподвижное состояние запас почти не открывает; открывает только небывалое и растущее.
+# Запас = 10 × min(1, (0,6·beyond + 0,4·breadth) × (0,35 + 0,65·speed)), слагаемые уезжают
+# в файл, чтобы панель показывала, ИЗ ЧЕГО он набран, а не только цифру.
+BEYOND_KEYS = ("sst_nino34", "sst_world", "t2_world")
+
+
+def _reserve(W, extras=None):
+    """Запас 90–100: превышение рекорда × скорость × охват. Возвращает (0…10, разбор)."""
+    beyond, speed, wide = [], [], 0
+    detail = []
+    for k in BEYOND_KEYS:
+        w = (W or {}).get(k) or {}
+        try:
+            i = int(w.get("last_idx"))
+            v = float(w.get("last_value"))
+            mx = float((w.get("band_max") or [])[i])
+            p90 = float((w.get("band_p90") or [])[i])
+            unit = mx - p90                                        # от «редко» до «никогда»
+            if not (unit > 1e-6):
+                unit = float(((w.get("noise30") or {}).get("now")) or 0.05) * 4
+            over = (v - mx) / unit
+        except (TypeError, ValueError, IndexError, KeyError):
+            continue
+        sl = ((w.get("slope14") or {}).get("now"))
+        hsd = ((w.get("slope14") or {}).get("hist_sd")) or 0
+        fast = abs(float(sl)) / float(hsd) if sl is not None and hsd else 0.0
+        beyond.append(max(0.0, over))
+        speed.append(max(0.0, fast))
+        if over > 0:
+            wide += 1
+        detail.append({"series": k, "over_record_sd": round(over, 2), "speed_sd": round(fast, 2)})
+    for name, val in (extras or {}).items():                      # подповерхность и топливо: 1, если за рекордом
+        if val:
+            wide += 1
+            detail.append({"series": name, "over_record_sd": None, "speed_sd": None, "at_record": True})
+    if not beyond:
+        return 0.0, {"points": 0.0, "beyond": 0.0, "speed": 0.0, "breadth": 0, "items": detail}
+    b = min(1.0, max(beyond) / 3.0)                               # три шага над рекордом — предел
+    sp = min(1.0, max(speed) / 2.0)                               # вдвое быстрее исторического разброса
+    br = min(1.0, wide / 4.0)                                     # четыре системы разом
+    pts = 10.0 * min(1.0, (0.6 * b + 0.4 * br) * (0.35 + 0.65 * sp))
+    return pts, {"points": round(pts, 1), "beyond": round(b, 2), "speed": round(sp, 2),
+                 "breadth": wide, "items": detail,
+                 "means": ("The last ten points are kept for a state we have never measured: readings above the "
+                           "record for the date, moving fast, on several systems at once. Ninety is the strongest "
+                           "event we can compare with, not the end of the scale of what can happen.")}
+
+
+def _finish(R, W=None, extras=None):
     R.sort(key=lambda r: -r["level"])
     load = sum(r["level"] ** 1.5 for r in R if r["kind"] == "climate")
-    idx = int(round(100 * (1 - np.exp(-load / 25.0))))
-    return R, idx
+    base = 90.0 * (1 - np.exp(-load / 25.0))                      # известное упирается в 90
+    res, rd = _reserve(W, extras)
+    idx = int(round(min(100.0, base + res)))
+    rd["base"] = round(base, 1)
+    return R, idx, rd
 
 
 # ------------------------------------------------------------------ MJO
@@ -1214,7 +1291,17 @@ def run(fetch=True):
     for r in extra:
         RR.append({"id": r[8] if len(r) > 8 else _slug(r[0]), "title": r[0], "level": r[1], "horizon": r[2],
                    "evidence": r[3], "plain": r[4], "watch": r[5], "metric": r[6], "kind": r[7]})
-    RR, ridx = _finish(RR)
+    # запас 90–100 считается по сторожевым рядам и по двум блокам, где рекорд виден прямо
+    _extra_rec = {}
+    try:
+        _extra_rec["fuel"] = bool(((AIRB or {}).get("fuel") or {}).get("share_of_record", 0) >= 99.5)
+    except Exception:                                            # noqa: BLE001
+        pass
+    try:
+        _extra_rec["subsurface"] = bool(((SUB or {}).get("record")))
+    except Exception:                                            # noqa: BLE001
+        pass
+    RR, ridx, _rdet = _finish(RR, W, _extra_rec)
     # Сопоставимое ядро индекса — сегодня и у прошлых событий на тот же день года
     # (владелец 04.09: «риск-индекс посчитать для других событий, по годам хотя бы основных»).
     try:
@@ -1225,6 +1312,7 @@ def run(fetch=True):
     out = {"generated": date.today().isoformat(), "stamp": stamp,
            "sources": {k: {"fresh": v[1], "error": v[2], "label": S.LABELS[k]} for k, v in status.items()},
            "watch": W, "nino34": N34, "noaa": NW, "oni": ONI, "iri": IRI, "risks": RR, "risk_index": ridx,
+           "risk_index_detail": _rdet,
            "food": FOOD, "regions": REG, "air": AIRB, "risk_core": CORE,
            "oisst": OIS, "subsurface": SUB, "wind": WIND, "gulf": GULF, "background": BACK, "mjo": OMI}
     ONI.pop("psl_raw", None)          # служебный длинный ряд наружу не отдаём

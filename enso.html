@@ -261,8 +261,16 @@
      не читалась вовсе — её убрали. */
   .gauge-row{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
   .gauge-row .g-side{width:100%}
+  /* ПОСЛЕДНЯЯ ДЕСЯТАЯ ШКАЛЫ — ЗАПАС ЗА ПРЕДЕЛОМ ЗАПИСИ (владелец 10.09). Слоями снизу вверх:
+     серый круг, слабая заливка сектора 90–100, само значение, чёрная засечка на 90. Девяносто
+     процентов круга это 324°, потому засечка и стоит там. Отдельным элементом её не рисуем:
+     на .gauge.hot уже висит ::after с пульсацией. */
   .gauge{--v:0;--c:var(--ok);width:74px;height:74px;border-radius:50%;position:relative;flex-shrink:0;
-    background:conic-gradient(var(--c) calc(var(--v)*1%), color-mix(in srgb, var(--ink) 9%, transparent) 0);
+    background:
+      conic-gradient(from 324deg, color-mix(in srgb, var(--text) 60%, transparent) 0 1.4deg, transparent 1.4deg),
+      conic-gradient(var(--c) calc(var(--v)*1%), transparent 0),
+      conic-gradient(transparent 0 90%, color-mix(in srgb, var(--lv5) 20%, transparent) 90% 100%),
+      conic-gradient(color-mix(in srgb, var(--ink) 9%, transparent) 0 100%);
     display:grid;place-items:center;cursor:help}
   .gauge::before{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--surface)}
   .gauge .gv{position:relative;font-family:var(--font-display);font-size:26px;font-weight:600;color:var(--c);line-height:1}
@@ -271,6 +279,7 @@
     text-transform:uppercase;color:var(--soft);margin-bottom:3px}
   .g-side{font-size:12px;line-height:1.45;color:var(--muted);min-width:0}
   .g-side b{display:block;font-family:var(--font-display);font-size:14px;color:var(--text);line-height:1.25;margin-bottom:2px}
+  .g-side .rscale{font-family:var(--mono);font-size:10px;letter-spacing:.03em;color:var(--soft);line-height:1.4}
 
   .verdict .vv{font-family:var(--font-display);font-size:13.5px;line-height:1.4;margin:0 0 6px}
   .verdict .vv.on{color:var(--lv5)}
@@ -486,6 +495,10 @@
   /* сетка цен 4×3 без прокрутки (владелец 07.09): ячейки делят высоту сцены, график рисуется по их размеру */
   /* стандарт сцены (владелец 08.09): описание источника и разбор — за переключателями, работы — кнопкой справа внизу */
   .info-pane{font-size:11.5px;line-height:1.45;border:1px solid var(--hair);border-radius:8px;padding:8px 10px;color:var(--text);opacity:.92;max-height:38vh;overflow:auto;flex-shrink:0}
+  /* окошко под своей кнопкой: сцена не съезжает, график не пересчитывается (владелец 10.09) */
+  .info-pane.info-pop{position:absolute;z-index:60;min-width:240px;max-height:min(430px,58vh);
+    background:var(--surface);opacity:1;box-shadow:0 12px 30px rgba(0,0,0,.28)}
+  .info-pane.info-pop.stats{max-height:min(430px,58vh)}
   .works-foot{display:flex;justify-content:flex-end;gap:6px;flex-shrink:0;margin-top:2px}
   /* шар (пилот 08.09): контейнер вместо графика, подпись поверх */
   .globe-box{flex:1 1 60%;min-height:340px;position:relative;overflow:hidden;border-radius:10px;background:radial-gradient(circle at 50% 50%, #151a24 0, #0f1219 70%)}
@@ -505,6 +518,23 @@
     min-width:0;flex:1 1 200px;padding-top:2px}   /* без text-wrap:balance: он снова разрешал перенос и ломал строку (07.09) */
   .seg{display:flex;gap:3px;flex-shrink:0;flex-wrap:wrap}
   .seg.sub{padding:0 0 2px}
+  /* ЯРУС МЕНЮ ВИДЕН ПО ФОРМЕ РАМКИ (владелец 10.09). Верхнее меню — круглая пилюля, как
+     было. Подменю сцены — скруглённый прямоугольник. Подменю подменю — почти квадрат в
+     двойной рамке. Прочие переключатели сцены — квадрат в тройной. Вторая и третья линии
+     нарисованы тенью, а не border: рамка меняла бы размер кнопки и ломала раскладку ряда;
+     ряды с кольцами получают чуть больший зазор, иначе кольца соседей сливаются.
+     source, notes, stats и legend своей формы не меняют — владелец просил оставить как есть. */
+  .stage-head > .seg > button{border-radius:7px}
+  .stage-body .seg.sub.mlv3{gap:5px;row-gap:5px}
+  .stage-body .seg.sub.mlv4{gap:7px;row-gap:7px}
+  .stage-body .seg.sub.mlv3 button,.stage-body .seg.sub.mlv4 button{--ring:color-mix(in srgb, var(--hair) 90%, transparent)}
+  .stage-body .seg.sub.mlv3 button.sq,.stage-body .seg.sub.mlv4 button.sq{--ring:color-mix(in srgb, var(--cyan) 42%, transparent)}
+  .stage-body .seg.sub.mlv3 button.on,.stage-body .seg.sub.mlv4 button.on{--ring:color-mix(in srgb, var(--ochre) 45%, transparent)}
+  .stage-body .seg.sub.mlv3 button.sq.on,.stage-body .seg.sub.mlv4 button.sq.on{--ring:color-mix(in srgb, var(--cyan) 50%, transparent)}
+  .stage-body .seg.sub.mlv3 button{border-radius:4px;box-shadow:0 0 0 1px var(--surface),0 0 0 2px var(--ring)}
+  .stage-body .seg.sub.mlv4 button{border-radius:2px;
+    box-shadow:0 0 0 1px var(--surface),0 0 0 2px var(--ring),0 0 0 3px var(--surface),0 0 0 4px var(--ring)}
+  .stage-body .seg.sub.mlv3 button.leg,.stage-body .seg.sub.mlv4 button.leg{border-radius:5px;box-shadow:none}
   /* Планшет цепочки данных и страница «About» (владелец 04.09, ночь) */
   .chain{position:relative;flex:1;min-height:0;overflow:auto}
   .chain-edges{position:absolute;left:0;top:0;pointer-events:none;z-index:0}
@@ -1082,7 +1112,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=e8bf35f9a2"></script>
+<script src="/js/enso.js?v=3ee413c866"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>

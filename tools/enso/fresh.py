@@ -117,6 +117,10 @@ def build(cur, assessed):
     ri, ari = cur.get("risk_index"), A.get("risk_index")
     out["risk_index"] = ri
     out["assessed_risk_index"] = ari
+    # разбор шкалы 0–90 / 90–100 (10.09): в latest.json он появляется только после полного
+    # прогона, а панели он нужен сразу — она берёт его отсюда, пока там пусто
+    if cur.get("risk_index_detail"):
+        out["risk_index_detail"] = cur["risk_index_detail"]
     if ri is not None and ari is not None and abs(ri - ari) >= IDX_STEP:
         trig.append({"kind": "index", "severity": "mid", "text": f"Risk index {ari} → {ri}"})
 

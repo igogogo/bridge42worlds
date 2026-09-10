@@ -141,8 +141,8 @@
   },
   "riskindex": {
    "name": "Risk index 0–100",
-   "def": "A saturating sum of risk levels 1 to 5: 100·(1 − exp(−Σ level^1.5 / 25)).",
-   "why": "It grows with the number and strength of risks and cannot exceed 100. This is our scale, not an official one.",
+   "def": "Two scales in one. 0 to 90 is a saturating sum of risk levels 1 to 5: 90·(1 − exp(−Σ level^1.5 / 25)), so a full board of level-5 risks reaches 90 and never more. The last ten points are a reserve for readings that go past the record itself: they open only when a series is above its own historical maximum for that calendar day, is moving fast against its own history of 14-day slopes, and does both on several systems at once.",
+   "why": "90 means \u201cstronger than anything we have on record\u201d, not \u201cthe end\u201d; 100 is kept for something unprecedented arriving fast. This is our scale, not an official one.",
    "src": "computed in tools/enso/watch.py"
   },
   "oisst": {
