@@ -35,6 +35,9 @@
   table.v tr:hover td { background: color-mix(in srgb, var(--ochre, #c8842a) 7%, transparent); }
   .id { font-family: var(--mono, ui-monospace, monospace); font-size: 12px; color: var(--muted); }
   .mini { font-size: 12px; color: var(--muted); }
+  .vp h2.sec { font-family: var(--serif, Georgia, serif); font-size: 19px; margin: 34px 0 10px; }
+  /* Вторая таблица не сортируется — рука над её шапкой не должна обещать нажатие. */
+  table.v.nosort th { cursor: default; }
   .note { font-size: 13px; color: var(--muted); margin-top: 22px; line-height: 1.5; }
   .err { color: #b3261e; font-size: 14px; margin: 12px 0; }
   /* Работа, автору которой мы писали. Видно сразу: заходы по ней — возможный ответ
@@ -81,6 +84,19 @@
     <tbody></tbody>
   </table></div>
 
+  <h2 class="sec" id="ph" hidden>Страницы, кроме статей</h2>
+  <div style="overflow-x:auto"><table class="v nosort" id="ptbl" hidden>
+    <thead><tr>
+      <th>страница</th>
+      <th class="n">открытий</th>
+      <th class="n">устройств</th>
+      <th class="hide-s">последнее</th>
+      <th class="hide-s">чем читали</th>
+      <th class="hide-s">браузер</th>
+    </tr></thead>
+    <tbody></tbody>
+  </table></div>
+
   <p class="note">
     Знак ✉ в столбце «письмо автору» означает, что мы писали автору этой работы, и стоит
     день первого письма. Строкой ниже — открытия ЭТОЙ работы, случившиеся не раньше дня
@@ -100,6 +116,12 @@
     было, а потому, что мы тогда не смотрели. Сохраняется только вид, вроде
     «chrome/android»: полную строку клиента не храним, по ней человека узнают.
   </p>
+  <p class="note">
+    Вторая таблица — всё, что не лежит в архиве: панель El Niño, «Учиться», справочник,
+    главные страницы языков. Счётчик на такие страницы поставлен 10 сентября 2026 (раньше
+    он грузился только вместе с поиском, которого на них нет), поэтому их числа считаются
+    с этого дня, а не за весь выбранный период.
+  </p>
 </div>
 
 <script>
@@ -110,7 +132,12 @@
   var rows = [], sortK = 'views', sortDir = -1;
   try { keyEl.value = localStorage.getItem(K) || ''; } catch (e) {}
 
-  function fail(msg) { err.textContent = msg; err.hidden = false; tbl.hidden = true; tot.hidden = true; }
+  function hideAll() {
+    tbl.hidden = true; tot.hidden = true;
+    document.getElementById('ph').hidden = true;
+    document.getElementById('ptbl').hidden = true;
+  }
+  function fail(msg) { err.textContent = msg; err.hidden = false; hideAll(); }
 
   function num(n) { return (n || 0).toLocaleString('ru-RU'); }
 
@@ -127,6 +154,55 @@
     return [['телефон', k.mob], ['планшет', k.tab], ['компьютер', k.desk]]
       .filter(function (p) { return p[1]; })
       .map(function (p) { return p[0] + ' ' + p[1]; }).join(' · ');
+  }
+
+  // Человеческое имя страницы. Адрес в таблице тоже остаётся — по нему открывать, — но
+  // «/enso.html» ничего не говорит, а «Панель El Niño» говорит сразу.
+  var NAMES = {
+    '/enso.html': 'Панель El Niño',
+    '/research.html': 'Research',
+    '/learn.html': 'Учиться',
+    '/reference.html': 'Справочник',
+    '/ask.html': 'Спросить',
+    '/discoveries.html': 'Открытия',
+    '/frontier.html': 'Передний край',
+    '/hypotheses.html': 'Гипотезы',
+    '/lecture.html': 'Лекция',
+    '/mathkit.html': 'Матнабор',
+    '/memo.html': 'Записка',
+    '/pipeline.html': 'Конвейер',
+    '/course.html': 'Курс',
+    '/course-thermodynamics.html': 'Курс: термодинамика',
+    '/status.html': 'Состояние',
+    '/404.html': 'Страница 404'
+  };
+  function pageName(p) {
+    if (NAMES[p]) return NAMES[p];
+    var m = String(p || '').match(/^\/lang\/([a-z]{2})\/(.*)$/);
+    if (!m) return p;
+    var rest = m[2].replace(/index\.html$/, '').replace(/\/$/, '');
+    return (rest ? rest : 'главная') + ' · ' + m[1];
+  }
+
+  function drawPages(pages) {
+    var ph = document.getElementById('ph'), pt = document.getElementById('ptbl');
+    if (!pages || !pages.length) { ph.hidden = true; pt.hidden = true; return; }
+    var tb = pt.querySelector('tbody');
+    tb.innerHTML = '';
+    pages.forEach(function (p) {
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><a href="' + p.path + '" target="_blank" rel="noopener">' + pageName(p.path) + '</a>' +
+          '<div class="id">' + p.path + '</div></td>' +
+        '<td class="n">' + num(p.views) + '</td>' +
+        '<td class="n">' + num(p.devices) + '</td>' +
+        '<td class="hide-s mini">' + (p.last || '') + '</td>' +
+        '<td class="hide-s mini">' + kinds(p.kinds) + '</td>' +
+        '<td class="hide-s mini">' + pairs(p.browsers) + '</td>';
+      tb.appendChild(tr);
+    });
+    ph.hidden = false;
+    pt.hidden = false;
   }
 
   function draw() {
@@ -181,6 +257,7 @@
           '<div>браузеры<b>' + (pairs(res.j.totals.browsers) || '—') + '</b></div>';
         tot.hidden = false;
         draw();
+        drawPages(res.j.pages);
       })
       .catch(function (e) { fail('Сеть: ' + e); });
   }
@@ -190,7 +267,7 @@
   keyEl.addEventListener('keydown', function (e) { if (e.key === 'Enter') load(); });
   document.getElementById('forget').addEventListener('click', function () {
     try { localStorage.removeItem(K); } catch (e) {}
-    keyEl.value = ''; tbl.hidden = true; tot.hidden = true;
+    keyEl.value = ''; hideAll();
   });
   tbl.querySelectorAll('th[data-k]').forEach(function (th) {
     th.addEventListener('click', function () {

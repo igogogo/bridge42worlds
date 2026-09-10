@@ -376,3 +376,23 @@
         t = setTimeout(alignToContent, 120);
     });
 })();
+
+/* Счётчик посещений (js/metrics.js) — и для страниц БЕЗ поиска.
+   Раньше он грузился только из js/search.js, а тот подключён на собранных страницах
+   архива. Отдельно стоящие страницы с нашей шапкой — панель El Niño, «Учиться»,
+   справочник, «Спросить» — не считались вовсе: владелец 10.09 попросил статистику по
+   панели, а её в базе не было ни одной строки. Меню есть у всех таких страниц, поэтому
+   грузим отсюда.
+   Двойной загрузки не боимся: metrics.js первым делом проверяет window.b42Metrics и
+   на второй копии выходит, а скрипты выполняются по очереди — первая успевает
+   доработать до конца прежде, чем начнётся вторая. */
+(function () {
+    if (window.b42Metrics) return;
+    var s = document.createElement('script');
+    s.src = '/js/metrics.js';
+    s.async = true;
+    s.onerror = function () {};
+    var go = function () { document.head.appendChild(s); };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go);
+    else go();
+})();

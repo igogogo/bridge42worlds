@@ -920,6 +920,41 @@ async function handleVisits(request, env) {
       }
     }
   } catch (e) { /* таблицы ещё нет — просто без пометки */ }
+  // СТРАНИЦЫ, КРОМЕ СТАТЕЙ (владелец 10.09: «в странице посещений по статьям можно
+  // добавить статистику по дашборду El Niño»). Панель, «Учиться», справочник, главные
+  // страницы языков — всё, что не лежит в архиве. Отдельным списком, а не вперемешку с
+  // работами: у работы пятнадцать адресов и заголовок из карточки, у страницы — один
+  // адрес и ничего больше, складывать их в одну таблицу значило бы врать в обе стороны.
+  const pageRows = await env.QUEUE.prepare(
+    `SELECT path, COUNT(*) n, COUNT(DISTINCT uid) u, MAX(day) last,
+            SUM(CASE WHEN w>0   AND w<768  THEN 1 ELSE 0 END) mob,
+            SUM(CASE WHEN w>=768 AND w<1024 THEN 1 ELSE 0 END) tab,
+            SUM(CASE WHEN w>=1024           THEN 1 ELSE 0 END) desk
+       FROM events WHERE dev=0 AND type='view' AND day>=? AND path NOT LIKE '/lang/%/archive/%'
+      GROUP BY path ORDER BY n DESC LIMIT 60`).bind(since).all()
+    .then((r) => r.results || []).catch(() => []);
+  const pages = pageRows.map((r) => ({
+    path: r.path || "",
+    views: Number(r.n) || 0,
+    devices: Number(r.u) || 0,
+    last: r.last || "",
+    kinds: { mob: Number(r.mob) || 0, tab: Number(r.tab) || 0, desk: Number(r.desk) || 0 },
+    browsers: {},
+  }));
+  if (pages.length) {
+    const byPath = new Map(pages.map((p) => [p.path, p]));
+    const uaPages = await env.QUEUE.prepare(
+      `SELECT path, ua, COUNT(*) n FROM events
+        WHERE dev=0 AND type='view' AND day>=? AND path NOT LIKE '/lang/%/archive/%'
+          AND ua IS NOT NULL AND ua<>''
+        GROUP BY path, ua`).bind(since).all()
+      .then((r) => r.results || []).catch(() => []);
+    for (const r of uaPages) {
+      const p = byPath.get(r.path || "");
+      if (p) p.browsers[r.ua] = (p.browsers[r.ua] || 0) + (Number(r.n) || 0);
+    }
+  }
+
   for (const w of list) delete w.raw;
   const totals = { views: 0, works: 0, mob: 0, tab: 0, desk: 0, browsers: {} };
   for (const w of list) {
@@ -930,7 +965,7 @@ async function handleVisits(request, env) {
     totals.desk += w.kinds.desk;
     for (const [k, n] of Object.entries(w.browsers)) totals.browsers[k] = (totals.browsers[k] || 0) + n;
   }
-  return Response.json({ days, since, totals, works: list },
+  return Response.json({ days, since, totals, works: list, pages },
                        { headers: { "cache-control": "no-store" } });
 }
 
