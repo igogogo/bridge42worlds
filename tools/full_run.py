@@ -571,7 +571,7 @@ def main():
         "f-support", "twins", "consts", "units-fix", "live-1", "cards", "tr-cards",
         "tr-formulas", "names-ru", "field", "retag-day", "retag", "apply", "hl-day",
         "super", "live-2", "vecnb",
-        "live-3", "gnames", "weave", "live-4", "graph", "mentions-ru", "highlight",
+        "live-3", "gnames", "weave", "live-4", "graph", "enso-links", "mentions-ru", "highlight",
         "pages-c", "pages-f", "related", "cited", "carousel", "fx", "recommend",
         "pipeline-page", "html", "lang-pages", "authors", "status", "cloud-d1", "cloud-vec", "vec-ours", "vec-push", "cards-sync", "side-sync", "deploy", "api", "pages", "audit", "gaudit", "links", "outreach", "lic-audit"]
     # ПЛАН ОБЯЗАН СОВПАДАТЬ С ЦЕПОЧКОЙ. Из него убран мёртвый «uplift» (подъём «Просто»
@@ -706,6 +706,13 @@ def main():
         timeout=4 * 3600, soft=True)
     run("live-4", [PY, "tools/wave5_apply.py", "--live-only"], timeout=1800, soft=True)
     run("graph", [PY, "tools/concepts_graph_export.py"], timeout=1800)
+    # ОБЛАКА ПОНЯТИЙ ДЛЯ ПАНЕЛИ. Слой связывает якоря панели Эль-Ниньо с нашим реестром
+    # понятий, то есть зависит от ОБЕИХ сторон. Со стороны панели его пересобирает их
+    # выкладка, а со стороны реестра не пересобирал никто: на 10.09 файл был от 08.09,
+    # хотя реестр за эти дни менялся дважды (владелец: «делаем сами вектор, включи
+    # везде, чтобы не терялось»). Место здесь — сразу за графом, когда реестр уже
+    # окончателен. Считает по готовой матрице карточек, модель не зовёт.
+    run("enso-links", [PY, "tools/enso/concepts_link.py", "--run"], timeout=1800, soft=True)
     run("mentions-ru", [PY, "tools/mentions_ru.py"], timeout=4 * 3600, soft=True)
     run("highlight", [PY, "tools/highlight_concepts.py",
                       "--tiers", "simple,popular,advanced"], timeout=6 * 3600, soft=True)
