@@ -7603,6 +7603,15 @@
      — первый ряд под графиком это подменю подменю, все следующие ряды это уже частности.
      Ряды легенды и ряды внутри окошка source/notes из счёта выпадают: их вид владелец
      просил оставить как есть. */
+  /* Тень на правом краю ленты карточек ставится по факту: если всё поместилось, гасить край
+     нельзя — читатель решит, что там что-то спрятано. Мерим после сборки сцены и на изменение
+     размера окна. */
+  function markScrollStrips() {
+    [].forEach.call(document.querySelectorAll('.stage-body .kpis'), function (k) {
+      k.classList.toggle('scrolls', k.scrollWidth > k.clientWidth + 2);
+    });
+  }
+  window.addEventListener('resize', function () { markScrollStrips(); });
   function markMenuLevels() {
     var body = document.querySelector('.stage-body'); if (!body) return;
     var n = 0;
@@ -7667,6 +7676,7 @@
     sceneInfoBar();                          // source / notes на каждой сцене (08.09)
     kpiExplain();                            // «?» на плашках KPI (08.09)
     markMenuLevels();                        // ярус подменю виден по рамке (10.09)
+    markScrollStrips();                      // край ленты карточек гаснет, только если есть куда ехать
     if (S.globe && globeMode()) mountGlobe(globeMode());
     // Сцена собрана целиком — только теперь у рамки графика окончательная высота.
     redrawPlot();

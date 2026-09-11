@@ -660,7 +660,21 @@
   .stage-body.scroll > .cap:last-child{position:sticky;bottom:-8px;background:var(--surface);padding:5px 0 8px;border-top:1px solid var(--hair);opacity:.92;z-index:2}
   .tbl-inline{max-height:38%;overflow:auto;flex-shrink:0;border-top:1px solid var(--line, var(--hair));padding-top:4px}
 
-  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:7px;flex-shrink:0}
+  /* ЛЕНТА КАРТОЧЕК НЕ ПЕРЕНОСИТСЯ НА ВТОРОЙ РЯД (владелец 11.09: «на #ocean внизу получилось
+     два ряда карточек, а это уже влияет на график, он по высоте уменьшается; надо сделать
+     горизонтальную ленту карточек, если не поместились, но не второй ряд»). Сетка auto-fit
+     переносила шестую карточку вниз, и второй ряд отнимал у графика около 145 пикселей —
+     график платил за карточку, которую никто не просил показать целиком. Теперь это одна
+     строка: карточки не сжимаются уже собственной ширины и при нехватке места уезжают
+     вбок. Прокрутка идёт пальцем и колесом, край подсвечен тенью, чтобы было видно, что
+     лента продолжается. */
+  .kpis{display:flex;gap:7px;flex-shrink:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;
+    scroll-snap-type:x proximity;padding-bottom:2px;
+    -webkit-mask:linear-gradient(90deg,#000 calc(100% - 26px),transparent);mask:linear-gradient(90deg,#000 calc(100% - 26px),transparent)}
+  .kpis:not(.scrolls){-webkit-mask:none;mask:none}      /* маска только когда лента реально длиннее поля */
+  .kpis > *{flex:1 0 150px;min-width:150px;scroll-snap-align:start}
+  .kpis::-webkit-scrollbar{height:6px}
+  .kpis::-webkit-scrollbar-thumb{background:color-mix(in srgb, var(--hair) 80%, transparent);border-radius:3px}
   .kpi{border:1px solid var(--line, var(--hair));border-radius:10px;padding:7px 10px;background:var(--tag-bg, transparent)}
   .kpi .kn{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--soft)}
   .kpi .kv{font-family:var(--font-display);font-size:22px;line-height:1.05;margin:2px 0;font-variant-numeric:tabular-nums}
@@ -1033,7 +1047,7 @@
     .stage-body{overflow-y:auto;overflow-x:hidden}
     .stage-body > *{max-width:100%;min-width:0}
     .plot{min-height:220px}
-    .kpis{grid-template-columns:1fr}
+    .kpis{display:flex}      /* на телефоне та же лента: вторым рядом сцена только растёт */
     .kpi{min-width:0}
     table.regions{table-layout:auto}
     table.regions th.act,table.regions td.act{width:auto;max-width:none}
@@ -1140,7 +1154,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=a3d30b3958"></script>
+<script src="/js/enso.js?v=55c71575fd"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>
