@@ -5368,9 +5368,13 @@
     var strip = el('div', 'ov-strip');
     var tally = (IRI || {}).class_tally || {}, live = (IRI || {}).live || {};
     var c4 = (NW.chg4w || {}).n34a, b34 = (O.boxes || {}).nino34 || {}, TAO = SB.tao || {}, WD = (D.wind || {}).era5 || {};
-    var sh = (D.alerts || []).filter(function (a) { return a.level === 'SHOUT'; }).length, wt = (D.alerts || []).length - sh;
     var core = (CORE.items || []), coreNow = core.filter(function (x) { return x.year === 'now'; })[0], core97 = core.filter(function (x) { return x.year === '1997'; })[0];
-    strip.appendChild(ovKpi(term('riskindex', 'risk index'), D.risk_index + '<small>of 100</small>', (D.risks || []).length + ' risks, ' + sh + ' shout · ' + wt + ' watch — ' + esc(riskScaleLine(D)), arcGauge(D.risk_index, 100, 'var(--nino)', 90), ['trend', 'index'], null, 'risk_index'));
+    /* ИНДЕКС РИСКА В ОБЗОРЕ НЕ ПОВТОРЯЕМ. Владелец 11.09: «карточка с рисками высокая, она и
+       так у нас есть на основной, убери её оттуда». Он прав дважды. Во-первых, тот же индекс
+       с той же шкалой стоит большим кругом на карточке State слева, и обзор его дублировал.
+       Во-вторых, разбор шкалы 0–90/90–100, добавленный 10.09, — это три строки текста, и в
+       сетке одинаковых плиток он тянул вверх ВЕСЬ ряд: соседи стояли полупустые под свой
+       же рост. Число индекса и так в заголовке сцены, а разбор живёт там, где ему место. */
     strip.appendChild(ovKpi(zone('nino34') + ' weekly', fnum(NW.latest.n34a, 1) + '<small>°C</small>', '4 weeks ' + arrow(c4, 1) + ' · ' + esc(NW.date), spark({ values: NW.series.slice(-26).map(function (r) { return r.n34a; }) }, 60, 26), ['now', 'weekly'], null, 'n34_weekly'));
     if (fin(b34.last_anom)) strip.appendChild(ovKpi(zone('nino34') + ' daily box', fnum(b34.last_anom) + '<small>°C</small>', '30 days ' + arrow(b34.chg30, 2) + ' · ' + esc(b34.last_date), spark({ values: b34.anom }, 60, 26), ['ocean', 'surface'], null, 'n34_box'));
     strip.appendChild(ovKpi(term('oni', 'ONI') + ' · ' + term('roni', 'RONI'), fnum(ONI.current[ONI.last_season]) + '<small>' + esc(ONI.last_season) + '</small>', 'RONI ' + fnum((ONI.roni || {}).last) + ' — the gap is the warm background', twoBars(ONI.current[ONI.last_season] || 0, (ONI.roni || {}).last || 0, 'ONI', 'RONI', 'var(--nino)'), ['now', 'analogs'], null, 'oni'));
