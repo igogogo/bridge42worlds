@@ -640,12 +640,20 @@
   .risk .rf{padding-inline-end:0}
   .ov-kpi .km{padding-inline-end:16px}
   .plot svg{display:block;width:100%;height:100%}
+  /* ЦВЕТ ТЕКСТА ГРАФИКОВ — НА ВСЮ СЦЕНУ, А НЕ НА ОДНУ ОБЁРТКУ. Владелец 11.09: «цвет шрифта
+     осей на тёмной теме совсем чёрный, не видно». Правило висело только на .plot, а графики
+     живут и в других местах: ячейки сетки цен (.pgrid .pcell) и новые два поля карточки
+     риска (.rgrid .pcell). У SVG заливка по умолчанию чёрная, поэтому подписи осей и
+     заголовок там были чёрным по тёмному — то есть невидимыми. Базовое правило теперь стоит
+     на всей сцене, и следующий график, где бы его ни повесили, получит цвет сам. */
+  .stage-body svg text{font-family:var(--mono);font-size:11px;fill:var(--soft)}
+  .stage-body svg text.tt{font-size:12px;font-weight:600;fill:var(--text)}
   .plot svg text{font-family:var(--mono);font-size:11px;fill:var(--soft)}
   .plot svg text.tt{font-size:12px;font-weight:600;fill:var(--text)}
   /* Выбранный элемент легенды: подчёркнут и ярче — видно, что именно высвечено. */
   .plot svg g.pick text{cursor:pointer}
-  .plot svg g.pick:hover text{fill:var(--ochre)}
-  .plot svg g.pick.on text{fill:var(--ochre);font-weight:600}
+  .plot svg g.pick:hover text,.stage-body svg g.pick:hover text{fill:var(--ochre)}
+  .plot svg g.pick.on text,.stage-body svg g.pick.on text{fill:var(--ochre);font-weight:600}
   /* Подпись под графиком чуть ярче (владелец 07.09: «в подвале существенная информация») и в
      прокручиваемых сценах прилипает к низу, чтобы не теряться под длинным списком. */
   .cap{font-size:11.5px;color:var(--text);opacity:.8;line-height:1.5;flex-shrink:0}
