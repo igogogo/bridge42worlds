@@ -4603,21 +4603,92 @@
     }
   }
 
+  /* ВТОРОЙ ГРАФИК НА КАРТОЧКЕ РИСКА: ГДЕ ОН СРЕДИ ОСТАЛЬНЫХ. Владелец 11.09: «на риск идёт
+     карточка, и график на ней получается узким и широким, потому что там довольно много
+     текста; может, имеет смысл сделать несколько графиков в ряд, или текст внизу в две
+     колонки; и да, пару графиков лучше». Один график во всю ширину сцены получался лентой
+     830 на 235, а ниже шла стена текста.
+     Второй график выбран так, чтобы он был у КАЖДОГО риска и говорил новое. Уровень этого
+     риска по обновлениям не годится: в истории 47 снимков за пять дней, и из 68 рисков
+     уровень менялся ровно у одного — линия была бы плоской у всех. Доска же отвечает на
+     вопрос, который карточка раньше не отвечала вовсе: этот риск один из трёх пятого уровня
+     или последний в очереди, и кто стоит рядом. По столбику можно перейти на его риск —
+     до сих пор с карточки риска можно было уйти только назад. */
+  function chartRiskBoard(risks, cur, W, H) {
+    if (!risks.length) return svgOpen(W, H) + '<text x="20" y="40">no risks on the board</text></svg>';
+    var Lp = 30, Rp = 10, Tp = topPad(W), B = 30, pw = W - Lp - Rp, ph = H - Tp - B;
+    var n = risks.length, gap = Math.min(4, pw / n * .25), bw = Math.max(3, pw / n - gap);
+    var maxL = 5;
+    var Y = function (v) { return Tp + (maxL - v) / maxL * ph; };
+    var s2 = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText('The whole board by level: this risk against the other ' + (n - 1), W - Lp - Rp, 11) + '</text>';
+    for (var g = 1; g <= maxL; g++) {
+      s2 += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (W - Rp) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".7"/>';
+      s2 += '<text x="' + (Lp - 6) + '" y="' + (Y(g) + 3).toFixed(1) + '" text-anchor="end">' + g + '</text>';
+    }
+    risks.forEach(function (r, i) {
+      var x = Lp + i * (bw + gap), lv = Math.max(1, Math.min(maxL, +r.level || 1)), on = i === cur;
+      var pay = { name: r.title, def: 'Level ' + r.level + ' · ' + esc(r.horizon || '') + (on ? '. This is the risk open now.' : '. Click the bar to open it.') };
+      s2 += '<rect data-risk="' + i + '" data-src="' + esc(JSON.stringify(pay)) + '" x="' + x.toFixed(1) + '" y="' + Y(lv).toFixed(1) + '" width="' + bw.toFixed(1) +
+        '" height="' + (Y(0) - Y(lv)).toFixed(1) + '" rx="1.5" style="fill:var(--lv' + lv + ');cursor:pointer"' + (on ? '' : ' opacity=".55"') + '/>';
+      if (on) s2 += '<rect x="' + (x - 1.5).toFixed(1) + '" y="' + (Y(lv) - 1.5).toFixed(1) + '" width="' + (bw + 3).toFixed(1) +
+        '" height="' + (Y(0) - Y(lv) + 3).toFixed(1) + '" rx="2.5" fill="none" style="stroke:var(--text)" stroke-width="1.6"/>';
+    });
+    var me = risks[cur] || {}, same = risks.filter(function (q) { return +q.level === +me.level; }).length;
+    s2 += '<text x="' + Lp + '" y="' + (H - 9) + '">level ' + me.level + ' \u00b7 ' + same + ' risk' + (same > 1 ? 's' : '') + ' at this level \u00b7 ' + esc(me.horizon || '') + '</text>';
+    return s2 + '</svg>';
+  }
   function viewRisk() {
     var D = S.D, r = (D.risks || [])[S.risk];
     if (!r) { S.view = 'now'; return viewNow(); }
     var body = stageShell(esc(r.title), []);   // общая кнопка back в шапке; своя дублировала её (владелец 08.09)
-    if (r.metric) plot(body, function (w, h) { return chartMetric(r.metric, w, h, r.metric.name); });
+    /* Два поля в ряд вместо одной широкой ленты: ряд риска слева, доска справа. Механизм тот
+       же, что у сетки цен, — своя ячейка на график и общий пересчёт по наблюдателю размера;
+       общий plot() держит ровно один график на сцену и для двух не годится. */
+    S.plotEl = null; S.draw = null;
+    var grid = el('div', 'rgrid'), c1 = el('div', 'pcell'), c2 = el('div', 'pcell');
+    if (r.metric) grid.appendChild(c1);
+    grid.appendChild(c2);
+    body.appendChild(grid);
+    var drawR = function () {
+      if (!grid.isConnected) return;
+      // сбой одного поля не должен оставлять оба пустыми и молчать об этом
+      if (r.metric) {
+        var w1 = Math.max(200, c1.clientWidth), h1 = Math.max(150, c1.clientHeight);
+        try { c1.innerHTML = chartMetric(r.metric, w1, h1, r.metric.name); fitSvgTitles(c1); }
+        catch (e1) { c1.innerHTML = '<div class="note warn">' + esc(String(e1 && e1.message || e1)) + '</div>'; }
+      }
+      var w2 = Math.max(200, c2.clientWidth), h2 = Math.max(150, c2.clientHeight);
+      try { c2.innerHTML = chartRiskBoard(D.risks || [], S.risk, w2, h2); fitSvgTitles(c2); }
+      catch (e2) { c2.innerHTML = '<div class="note warn">' + esc(String(e2 && e2.message || e2)) + '</div>'; }
+    };
+    /* Рисуем СРАЗУ, а не только следующим кадром. Сцену успевает пересобрать поздний render
+       (ленивое облако понятий, строка source), и кадровый обработчик приходил к уже
+       отцепленной сетке: оба поля оставались пустыми и молчали. Немедленный вызов берёт
+       размер, какой есть, а наблюдатель размера дорисует по настоящему. */
+    drawR();
+    requestAnimationFrame(drawR);
+    setTimeout(drawR, 120);
+    if (window.ResizeObserver) { var roR = new ResizeObserver(function () { drawR(); }); roR.observe(grid); }
+    grid.addEventListener('click', function (e) {
+      var t = e.target.closest && e.target.closest('[data-risk]'); if (!t) return;
+      var i = +t.getAttribute('data-risk'); if (i === S.risk) return;
+      S.risk = i; mScreen('risk'); render();
+    });
     var was = S.P && S.P.risks ? (S.P.risks[r.id] != null ? S.P.risks[r.id] : S.P.risks[r.title]) : null;
-    body.appendChild(el('div', 'lead', '<b>Level ' + r.level + ' · ' + esc(r.horizon) + '.</b> ' + mark(r.plain || '') + (fin(was) && was !== r.level ? ' <i>Level was ' + was + ' at ' + esc(prevStamp()) + '.</i>' : '')));
-    body.appendChild(el('div', 'note', '<strong>Evidence.</strong> ' + mark(r.evidence) + (r.metric ? '<br>' + dynWords(r.metric) : '')));
-    body.appendChild(el('div', 'note warn', '<strong>Watch.</strong> ' + mark(r.watch)));
+    /* Текст под графиками — в две колонки на широком экране (владелец 11.09). Он занимал всю
+       высоту под лентой и не давал графику вырасти; в двух колонках он вдвое ниже, и эта
+       высота достаётся графикам. На узком экране колонка одна, как была. */
+    var txt = el('div', 'risk-text');
+    txt.appendChild(el('div', 'lead', '<b>Level ' + r.level + ' · ' + esc(r.horizon) + '.</b> ' + mark(r.plain || '') + (fin(was) && was !== r.level ? ' <i>Level was ' + was + ' at ' + esc(prevStamp()) + '.</i>' : '')));
+    txt.appendChild(el('div', 'note', '<strong>Evidence.</strong> ' + mark(r.evidence) + (r.metric ? '<br>' + dynWords(r.metric) : '')));
+    txt.appendChild(el('div', 'note warn', '<strong>Watch.</strong> ' + mark(r.watch)));
     var cnr = conceptsHtml('risk:' + (r.id || ''), true);
-    if (cnr) body.appendChild(el('div', 'note cn-box', cnr));
-    [].slice.call(body.querySelectorAll('.lead, .note')).forEach(function (q) { hlConcepts(q, 'risk:' + (r.id || '')); });
+    if (cnr) txt.appendChild(el('div', 'note cn-box', cnr));
+    [].slice.call(txt.querySelectorAll('.lead, .note')).forEach(function (q) { hlConcepts(q, 'risk:' + (r.id || '')); });
     // по имени риска; по номеру — только пока на проде лежит старый links.json
     var lk = linksHtml('risk:' + (r.id || ''), true) || linksHtml('risk:' + S.risk, true);
-    if (lk) body.appendChild(el('div', 'links-box', lk));
+    if (lk) txt.appendChild(el('div', 'links-box', lk));
+    body.appendChild(txt);
   }
 
 

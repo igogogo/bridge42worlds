@@ -508,6 +508,26 @@
   .back-go.bright.on{background:var(--ochre);color:var(--surface)}
   .pgrid.fit{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);gap:6px;flex:1;min-height:0}
   .pcell{min-width:0;min-height:0;overflow:hidden}
+  /* КАРТОЧКА РИСКА: ДВА ПОЛЯ В РЯД И ТЕКСТ В ДВЕ КОЛОНКИ (владелец 11.09). Один график во всю
+     ширину сцены выходил лентой 830 на 235: текст под ним занимал всю высоту и графику её не
+     оставлял. Теперь ряд риска и доска рисков делят ширину, а текст на широком экране идёт в
+     две колонки и вдвое ниже — освободившаяся высота достаётся графикам. На телефоне всё
+     возвращается в одну колонку. */
+  .rgrid{display:grid;grid-template-columns:1fr;gap:8px;flex:1 1 auto;min-height:240px}
+  @media (min-width:900px){ .rgrid{grid-template-columns:1.35fr 1fr} }
+  .rgrid .pcell svg{width:100%;height:100%;display:block}
+  /* На телефоне поля встают друг под друга, и делить одну высоту на двоих нельзя: каждое
+     выходило 336 на 125 — та же лента, только вдвое. Тело сцены на узком экране и так
+     прокручивается, поэтому даём каждому полю свою высоту. */
+  /* flex:0 0 auto обязателен: с flex:1 сетка считала себе высоту ряда, ячейки со своим
+     min-height из неё вылезали, и текст ниже ложился поверх графика (поймано на 375 px). */
+  @media (max-width:899px){ .rgrid{flex:0 0 auto;min-height:0} .rgrid .pcell{min-height:210px} }
+  .risk-text{flex-shrink:0}
+  @media (min-width:1000px){
+    .risk-text{columns:2 330px;column-gap:20px}
+    .risk-text > *{break-inside:avoid;-webkit-column-break-inside:avoid}
+    .risk-text > .lead{margin-top:0}
+  }
   .pcell svg{width:100%;height:100%;display:block}
   @media (max-width:900px){.pgrid.fit{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(6,1fr)}}
   /* Заголовок сцены и переключатели: если заголовку остаётся меньше 320 пикселей, он
@@ -1112,7 +1132,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=625d077fd0"></script>
+<script src="/js/enso.js?v=a3d30b3958"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>
