@@ -1093,16 +1093,39 @@ def mini_ids_scientist(name, cap=12):
     return ",".join(ids) if len(ids) >= 3 else ""
 
 
-def mini_ids_articles(aids, lang=None, cap=12):
-    """Понятия набора статей (автор, раздел): самые частые по разметке v2."""
+_VER_TAIL = re.compile(r"v\d+$")
+
+
+def bare_id(aid):
+    """Номер работы без версии: 2609.10511v1 → 2609.10511.
+
+    Реестр понятий хранит номера БЕЗ версии, а индекс и папки архива — С ней у каждой
+    пятой работы. Пока сравнивали как есть, эти работы просто не находились: понятия у
+    статьи проставлены, а страница автора показывает пустой ряд и пустой мини-граф
+    (владелец 11.09 на M. S. Aksenov). Замер: по полному номеру понятия находились у 5755
+    работ, по срезанному — у 7121. Полторы тысячи работ теряли разметку на одном суффиксе.
+    """
+    return _VER_TAIL.sub("", str(aid or ""))
+
+
+def concepts_of_articles(aids, cap=12):
+    """Понятия набора статей (автор, раздел), самые частые сверху.
+
+    Номера сводим к виду без версии с обеих сторон — см. bare_id().
+    """
     live = _live_mini()
+    want = {bare_id(a) for a in aids}
     cnt = {}
     for cid, v in live.items():
         for a in v.get("articles") or []:
-            if a in aids:
+            if bare_id(a) in want:
                 cnt[cid] = cnt.get(cid, 0) + 1
-    top = sorted(cnt.items(), key=lambda kv: -kv[1])[:cap]
-    ids = [c for c, _ in top]
+    return [c for c, _ in sorted(cnt.items(), key=lambda kv: (-kv[1], kv[0]))[:cap]]
+
+
+def mini_ids_articles(aids, lang=None, cap=12):
+    """Понятия набора статей (автор, раздел): самые частые по разметке v2."""
+    ids = concepts_of_articles(aids, cap)
     return ",".join(ids) if len(ids) >= 3 else ""
 
 
@@ -4574,10 +4597,35 @@ def update_all_authors(only=None):
             # Только теги, у которых есть своя страница: в разметке статей встречаются
             # имена вне реестра (plasma_physics, quantum_computing — 28.08), и ссылка
             # на такое имя ведёт в 404 прямо со страницы человека.
-            author_tags_html = " · ".join(
-                f'<a href="/{lbase}/tags/{attr_safe(t)}.html" data-tag="{attr_safe(t)}">{safe(tags_loc.get(t, {}).get("name", t))}</a>'
-                for t in author_tags[:20] if t in valid_tag_ids()
-            )
+            #
+            # ПОНЯТИЯ ИДУТ ПЕРВЫМИ, теги остаются для старых работ. Ряд подписан «Понятия»,
+            # а строился только из старого реестра тегов — в нём 365 имён против 3749
+            # страниц понятий. Пока архив был размечен тегами, это сходилось; работы
+            # последних недель размечаются понятиями, и у них верхнеуровневое поле tags
+            # пустое, а в индекс падает непроверенный main_tag без своей страницы. Итог:
+            # у 124 сентябрьских работ из 179 ряд выходил пустым (владелец 11.09 на
+            # M. S. Aksenov: «понятий я у него не вижу»). Берём то, чем работа размечена
+            # на самом деле, а теги досыпаем следом — они верны для старой части архива.
+            author_concepts = concepts_of_articles(data.get("articles", []), cap=20)
+            _cnames = chip_dicts(lang)[0]
+            _seen_ent = set()
+            _chips = []
+            for cid in author_concepts:
+                _seen_ent.add(cid)
+                _label = (_cnames.get(cid) or {}).get("name") or cid.replace("_", " ")
+                _chips.append(
+                    f'<a href="/{lbase}/concepts/{attr_safe(cid)}.html" data-tag="{attr_safe(cid)}">'
+                    f'{safe(_label)}</a>')
+            for t in author_tags:
+                if len(_chips) >= 20:
+                    break
+                if t in _seen_ent or t not in valid_tag_ids():
+                    continue
+                _seen_ent.add(t)
+                _chips.append(
+                    f'<a href="/{lbase}/tags/{attr_safe(t)}.html" data-tag="{attr_safe(t)}">'
+                    f'{safe(tags_loc.get(t, {}).get("name", t))}</a>')
+            author_tags_html = " · ".join(_chips)
             author_law_ids = [lid for lid, L in laws_loc.items() if set(L.get("tags", [])) & author_tags_set]
             author_laws_html = " · ".join(
                 f'<a href={entity_href(lid, lang)} class="law-chip" data-law="{attr_safe(lid)}">{safe(laws_loc[lid].get("name", lid))}</a>'
