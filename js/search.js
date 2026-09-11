@@ -1404,6 +1404,81 @@ function cardHTML(item) {
     '</article>';
 }
 
+/* ФОРМУЛЫ В КАРТОЧКЕ ЛЕНТЫ.
+ *
+ * Владелец 11.09 увидел на карточке сырое «for every \(\nu\gt 0\) there exist a force
+ * \(f\in C_c^\infty(...)\)» вместо формул. Причина простая: KaTeX подключён в шаблонах
+ * статьи, закона и тега, а на странице ленты его нет вовсе — рисовать там математику
+ * было нечем.
+ *
+ * Ставить его на главную всем и всегда неправильно: это триста килобайт ради нескольких
+ * карточек в архиве из семи тысяч. Поэтому грузим ПО НУЖДЕ — если в показанных карточках
+ * нет разделителей формул, не грузится ничего. Разделители те же четыре, что в статье:
+ * разойдутся — одна и та же строка будет выглядеть на карточке и на странице по-разному.
+ */
+var _kxState = 0;          // 0 — не трогали, 1 — грузится, 2 — готов
+var _kxWaiting = [];
+
+function katexReady(cb) {
+    if (_kxState === 2) { cb(); return; }
+    _kxWaiting.push(cb);
+    if (_kxState) return;
+    _kxState = 1;
+    var base = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/';
+    var css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = base + 'katex.min.css';
+    document.head.appendChild(css);
+    // Падение загрузки не должно оставить очередь висеть навсегда: сбрасываем состояние,
+    // и следующая лента попробует снова. Сырой текст лучше пустой карточки.
+    function fail() { _kxState = 0; _kxWaiting = []; }
+    var core = document.createElement('script');
+    core.src = base + 'katex.min.js';
+    core.onerror = fail;
+    core.onload = function () {
+        var auto = document.createElement('script');
+        auto.src = base + 'contrib/auto-render.min.js';
+        auto.onerror = fail;
+        auto.onload = function () {
+            _kxState = 2;
+            var queue = _kxWaiting;
+            _kxWaiting = [];
+            queue.forEach(function (f) { try { f(); } catch (e) {} });
+        };
+        document.head.appendChild(auto);
+    };
+    document.head.appendChild(core);
+}
+
+var MATH_MARK = /\\\(|\\\[|\$[^$\n]{1,120}\$/;
+
+function mathInCards(root) {
+    if (!root || !root.querySelectorAll) return;
+    var els = root.querySelectorAll('.card-title, .card-desc');
+    var need = [];
+    for (var i = 0; i < els.length; i++) {
+        if (MATH_MARK.test(els[i].textContent || '')) need.push(els[i]);
+    }
+    if (!need.length) return;
+    var S = '$';
+    katexReady(function () {
+        if (!window.renderMathInElement) return;
+        need.forEach(function (el) {
+            try {
+                renderMathInElement(el, {
+                    delimiters: [
+                        { left: S + S, right: S + S, display: true },
+                        { left: '\\[', right: '\\]', display: true },
+                        { left: '\\(', right: '\\)', display: false },
+                        { left: S, right: S, display: false }
+                    ],
+                    throwOnError: false
+                });
+            } catch (e) {}
+        });
+    });
+}
+
 function renderResults(items) {
     feed.active = false;
     var container = document.getElementById('search-results');
@@ -1415,6 +1490,7 @@ function renderResults(items) {
     container.innerHTML = items.map(cardHTML).join('');
     initAllTooltips();
     initReveal();
+    mathInCards(container);
 }
 
 // Лента: сортировка по дате (новые сверху), группировка по дням, подгрузка на скролле.
@@ -2044,6 +2120,7 @@ function renderMoreFeed() {
         feed.shown += slice.length;
         initAllTooltips();
         initReveal();
+        mathInCards(c);
         return;
     }
     // Кончилось — просим следующую страницу у облака. feed.q пуст на ленте по индексу
