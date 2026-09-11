@@ -2730,6 +2730,14 @@ def save_data_json(versions_ru, article, date_str, folder, translations=None, ca
         "express": article.get("express", False),
         "express_tiers": article.get("express_tiers", []),
     }
+    # РАБОТА НЕ ИЗ arXiv. Признак и адреса источника приходят из папки приёма
+    # (tools/outside/), проносятся через article и должны лечь в data.json: страница и
+    # карточка читают их оттуда. Без переноса работа собралась бы неотличимо от arXiv-статьи,
+    # со ссылкой «arXiv:2609.90002» на несуществующий препринт — ту же яму закапывали руками
+    # на первой такой работе. Поля необязательные: у обычной статьи их просто нет.
+    for _k in ("author_work", "kind", "code", "sources", "source_kind", "source_org"):
+        if article.get(_k):
+            payload[_k] = article[_k]
     # Поле пишет covers_full.py задним числом; при пересоздании статьи build_article проносит его
     # через article — иначе regen молча терял и поле, и с ним защиту FLUX-обложки от затирания.
     if article.get("image_model"):
@@ -5763,7 +5771,14 @@ def load_generation_inputs():
     # Базовые id (без суффикса версии vN) уже обработанных статей — arXiv регулярно выпускает
     # v2/v3 той же работы; без этого набора такая новая версия считалась бы совсем другой
     # статьёй (папка с другим именем) и качалась/генерилась заново как дубль по сути.
-    existing_base_ids = ({ARXIV_BASE_ID_RE.sub("", p.name) for p in archive.glob("*/*") if p.is_dir()}
+    # ПАПКА БЕЗ data.json — НЕ РАЗОБРАННАЯ СТАТЬЯ. Считали по наличию каталога, а каталог
+    # появляется раньше разбора: его заводит и сорвавшаяся генерация, и приём работы не из
+    # arXiv (tools/outside кладёт туда fulltext.txt ДО разбора). В обоих случаях работа
+    # потом молча пропускалась с «новая версия уже обработанной» и не собиралась никогда —
+    # поймано 11.09 на первой внешней работе. Источник правды у статьи один и тот же везде:
+    # data.json.
+    existing_base_ids = ({ARXIV_BASE_ID_RE.sub("", p.name) for p in archive.glob("*/*")
+                          if p.is_dir() and (p / "data.json").exists()}
                          if archive.exists() else set())
     express_tags_path = Path(CONFIG.get("express", {}).get("tags_file", "lang/ru/data/tags-list-express.json"))
     express_tags_input = (json.loads(express_tags_path.read_text(encoding="utf-8"))
@@ -5850,6 +5865,12 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
         # (bio/med-прогон так и фильтрует локально). no_fetch — express-режим без обращения к arXiv
         # вообще: не тянем atom и PDF (текст берём из авторской аннотации a["summary"], обложка —
         # заглушка-мультиязычная карточка). Оба флага дефолт-выключены → обычный путь без изменений.
+        # РАБОТА НЕ ИЗ arXiv: лицензию знает наша запись приёма (tools/outside/works/<id>.json),
+        # и спрашивать о ней arXiv бессмысленно — такого препринта там нет, ответ всегда пустой,
+        # а пустая лицензия по правилам значит «не берём». Первая внешняя работа так и
+        # отскочила с «license: none» (11.09), хотя у неё честная CC BY 4.0 на bioRxiv.
+        if known_license is None and a.get("license_url"):
+            known_license = a["license_url"]
         if known_license is not None:
             oai_xml, lic_url = "", known_license
         else:
@@ -5868,7 +5889,12 @@ def _build_article(a, date_str, inputs, force=False, express=False, known_licens
         # используются, на странице признак «собственный разбор» с пояснением легальности
         # и кнопка снятия для автора; no — не берём. allow_restricted оставлен как
         # явный флаг run.py ids, но с расширением забора класс analysis проходит и без него.
-        cls = license_class(lic_url)
+        # Класс из записи приёма сильнее вычисленного по адресу: у работ не из arXiv
+        # лицензия бывает несвободной или отсутствует вовсе, а по адресу это неотличимо
+        # от «не берём». Порог ставит приёмник (tools/outside/intake.py) — там же записано
+        # основание: охраняется выражение, а не факты, поэтому собственный разбор законен,
+        # а класс analysis гарантирует, что чужие рисунки и аннотация на страницу не уйдут.
+        cls = a.get("license_class") or license_class(lic_url)
         if cls == "no":
             print(f"  ⏭️ {a['id']} — license: {lic_url or 'none'}")
             # Журнал отказов. До 2026-08-18 отказ жил только в консоли, и вопрос владельца

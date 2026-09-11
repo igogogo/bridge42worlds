@@ -1,0 +1,55 @@
+{
+  "_": "Акцент канала работ не из arXiv. Владелец 11.09.2026: «особенно уделяй внимание работам о продолжении жизни, омоложении, квантовые компьютеры, нейросети, что то важное из физики, всё что на слуху или интересно». Список читает поиск (tools/outside/sweep.md) — он же задаёт углы веера.",
+  "updated": "2026-09-11",
+  "areas": [
+    {
+      "key": "longevity",
+      "ru": "продление жизни, омоложение, старение",
+      "en": "longevity, rejuvenation, ageing",
+      "hint": "partial reprogramming, senolytics, epigenetic clocks, healthspan, geroscience, Yamanaka factors, plasma dilution, autophagy, mitochondrial decline"
+    },
+    {
+      "key": "quantum",
+      "ru": "квантовые компьютеры",
+      "en": "quantum computing",
+      "hint": "error correction, logical qubits, magic state distillation, quantum advantage, neutral atoms, trapped ions, superconducting qubits, topological qubits"
+    },
+    {
+      "key": "neural",
+      "ru": "нейросети и искусственный интеллект",
+      "en": "neural networks and AI",
+      "hint": "reasoning, mechanistic interpretability, scaling, agents, world models, new architectures, AI for science",
+      "note": "До 11.09.2026 у ежедневного отбора с arXiv на эту область стоял жёсткий фильтр («всё остальное про сам ИИ — не берём»). Владелец 11.09: «убери про ИИ, всё что важное берём» — фильтр снят, акцент стоит в обоих каналах (data/prompts/article-select.txt)."
+    },
+    {
+      "key": "physics",
+      "ru": "громкая физика",
+      "en": "notable physics",
+      "hint": "gravitational waves, JWST cosmology, muon g-2, neutrinos, superconductivity, fusion, dark matter, metrology records, tests of quantum gravity"
+    }
+  ],
+  "families": [
+    {
+      "key": "preprint",
+      "ru": "препринт-серверы кроме arXiv",
+      "where": "bioRxiv, medRxiv, chemRxiv, Research Square, SSRN, OSF Preprints, HAL, Zenodo, TechRxiv"
+    },
+    {
+      "key": "journal",
+      "ru": "сайты журналов",
+      "where": "Nature и семейство, Science, Cell, eLife, PNAS, PRX, PRL, Nature Physics, Nature Aging, Nature Biotechnology"
+    },
+    {
+      "key": "lab",
+      "ru": "исследовательские блоги лабораторий и компаний",
+      "where": "Google DeepMind, Google Research, OpenAI, Anthropic, Microsoft Research, IBM Quantum, Quantinuum, QuEra, PsiQuantum, Meta AI, Altos Labs, Calico, NVIDIA Research"
+    }
+  ],
+  "rules": [
+    "Только ПЕРВОИСТОЧНИК: страница самой работы. Не новость о ней, не обзор, не чужой пересказ.",
+    "Не с arXiv: arXiv забирает ежедневный конвейер, дублировать незачем.",
+    "Свежесть: примерно последние 90 дней.",
+    "Аннотацию берём ДОСЛОВНО со страницы источника, не пересказываем на этапе приёма.",
+    "Лицензию проверяем на самой странице; класс считает gen_arxiv.license_class()."
+  ]
+}

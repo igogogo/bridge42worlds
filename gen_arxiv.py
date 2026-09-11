@@ -151,6 +151,63 @@ def _bulk_month(aid):
 _BULK_CACHE = {}
 
 
+OUTSIDE_DIR = Path(__file__).resolve().parent / "tools" / "outside" / "works"
+
+
+def outside_meta(aid):
+    """Метаданные работы НЕ ИЗ arXiv — из нашей папки приёма. None, если её там нет.
+
+    Владелец 11.09.2026: «источники разные, они могут быть не PDF; дальше идёт обычным
+    прогоном». Обычным прогоном оно и идёт: конвейер спрашивает метаданные одной функцией,
+    и работа, положенная в tools/outside/works/, для него неотличима от arXiv-работы.
+    Менять генератор не понадобилось — хватило этой двери.
+
+    Папка лежит в tools/, а не в data/: data/ публикуется целиком, и рабочим файлам там
+    не место (см. предупреждение в deploy_r2.py).
+
+    Форму отдаём ту же, что и дамп: id, title, summary, authors, published, categories.
+    """
+    base = re.sub(r"v\d+$", "", (aid or "").strip())
+    p = OUTSIDE_DIR / f"{base}.json"
+    if not p.exists():
+        return None
+    try:
+        d = json.loads(p.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    cats = d.get("categories") or []
+    return {
+        "id": aid,
+        "title": " ".join((d.get("title") or "").split()),
+        "summary": " ".join((d.get("abstract") or "").split()),
+        "authors": list(d.get("authors") or []),
+        # Дата у нас день, а конвейер ждёт метку времени как у arXiv.
+        "published": (d.get("date") or "") + "T00:00:00Z",
+        "categories": cats,
+        "primary_category": cats[0] if cats else "",
+        # ── ЧТО ОТЛИЧАЕТ РАБОТУ НЕ ИЗ arXiv ──────────────────────────────
+        # Признак author_work уже понимают и карточка, и страница: по нему ссылка ведёт
+        # на страницу источника и подписывается нашим кодом, а не «arXiv:2609.90002» —
+        # такого препринта не существует, и без признака ссылка вела бы в 404 (ровно эту
+        # яму руками закапывали на первой работе, 2609.90001).
+        "license_url": d.get("licence_url") or "",
+        # Подпись — КОРОТКАЯ. В заготовке поле licence хранит дословную фразу со страницы
+        # источника (она нужна для сверки: «made available under a CC-BY 4.0 International
+        # license…»), но на странице статьи ей не место — там нужна этикетка в два слова.
+        # Считаем её по адресу тем же кодом, что и для arXiv, а длинную фразу оставляем
+        # в записи приёма.
+        "license_name": license_label(d.get("licence_url") or "") or (d.get("org") or ""),
+        "license_class": d.get("licence_class") or license_class(d.get("licence_url") or ""),
+        "author_work": True,
+        "kind": d.get("kind") or "",
+        "code": aid,
+        "source_kind": "external",
+        "source_org": d.get("org") or "",
+        "sources": {k: v for k, v in (("live", d.get("url")), ("pdf", d.get("pdf")),
+                                      ("doi", d.get("doi"))) if v},
+    }
+
+
 def local_meta(aid):
     """Метаданные одной работы из нашего дампа. None — если её там нет.
 
@@ -163,6 +220,11 @@ def local_meta(aid):
     Чанк месяца читается один раз за процесс и держится словарём: файл на 4–8 тысяч работ,
     это доли секунды и десятки мегабайт, а работы одного прогона обычно из соседних месяцев.
     """
+    # Свои работы (900xx) — сперва: по номеру они попадают в чанк своего месяца, но
+    # в дампе arXiv их нет и быть не может.
+    own = outside_meta(aid)
+    if own:
+        return own
     mon = _bulk_month(aid)
     if not mon:
         return None
