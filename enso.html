@@ -646,6 +646,20 @@
      риска (.rgrid .pcell). У SVG заливка по умолчанию чёрная, поэтому подписи осей и
      заголовок там были чёрным по тёмному — то есть невидимыми. Базовое правило теперь стоит
      на всей сцене, и следующий график, где бы его ни повесили, получит цвет сам. */
+  /* БАЗОВЫЙ ВИД ССЫЛКИ НА СЦЕНЕ. Владелец 11.09, и это уже не первый раз: «опять синие
+     ссылки на mentions headlines». Причина всегда одна и та же — своего правила для ссылки
+     на панели не было вовсе, только частные (.gl-i a, .ref .ref-t a, .rs-m a, .cn-m a), и
+     любая новая <a> без класса получала браузерную синеву с подчёркиванием: rgb(0,0,238) на
+     тёмном фоне. Базовое правило ставим на сцену и на колонки, как сделали для подписей
+     графиков: следующая ссылка, где бы её ни написали, получит наш вид сама. Частные
+     правила специфичнее и продолжают выигрывать там, где вид особый. */
+  .stage-body a,#railL a,#railR a{color:var(--text);text-decoration:none;
+    border-bottom:1px solid color-mix(in srgb, var(--cyan) 45%, transparent)}
+  .stage-body a:hover,#railL a:hover,#railR a:hover{color:var(--cyan);border-bottom-color:var(--cyan)}
+  /* заголовок новости — это текст, который ведёт наружу, а не ссылка среди текста:
+     подчёркивание появляется только под курсором, чтобы таблица читалась как таблица */
+  .stage-body td.act a{border-bottom-color:transparent}
+  .stage-body td.act a:hover{border-bottom-color:var(--cyan)}
   .stage-body svg text{font-family:var(--mono);font-size:11px;fill:var(--soft)}
   .stage-body svg text.tt{font-size:12px;font-weight:600;fill:var(--text)}
   .plot svg text{font-family:var(--mono);font-size:11px;fill:var(--soft)}
