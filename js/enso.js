@@ -7463,13 +7463,30 @@
         (nextUp ? '<div class="kpi"><div class="kn">next release due</div><div class="kv">' + (nextUp.in_days <= 0 ? 'today' : nextUp.in_days + '<small>days</small>') + '</div><div class="km">' + esc(nextUp.name) + ' · ' + esc(nextUp.rule || '') + '</div>' + kmeta(null, esc(nextUp.src || ''), nextUp.next) + '</div>' : '');
       body.appendChild(kp);
 
+      /* ОДНО ЗА РАЗ, А НЕ ПРОКРУТКА В ПРОКРУТКЕ. Владелец 11.09: «табличка это источник для
+         самих карточек, давай его переключателем показывать, а то он сам с прокруткой и всё
+         там с прокруткой». Таблица календаря и карточки центров говорят об одном и том же,
+         и стояли друг под другом: у таблицы своя полоса прокрутки внутри прокручиваемой
+         сцены. Теперь их разводит переключатель, и на экране всегда ровно одна прокрутка. */
+      var ov = S.sub.offView || 'centres';
       if (cal.length) {
-        var wrapC = el('div'); wrapC.style.cssText = 'flex:0 0 auto;max-height:38vh;overflow:auto';
+        var rowO = el('div', 'seg sub');
+        [['centres', 'centres, ' + keys.length], ['calendar', 'release calendar, ' + cal.length]].forEach(function (o) {
+          var b = el('button', (ov === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button';
+          b.onclick = function () { S.sub.offView = o[0]; render(); }; rowO.appendChild(b);
+        });
+        body.appendChild(rowO);
+      } else { ov = 'centres'; }
+
+      if (ov === 'calendar') {
+        var wrapC = el('div'); wrapC.style.cssText = 'flex:1 1 auto;min-height:0;overflow:auto';
         wrapC.innerHTML = '<table class="e"><thead><tr><th>due</th><th class="num">in days</th><th>what</th><th>who</th><th>rule</th></tr></thead><tbody>' +
           cal.slice().sort(function (a, b) { return (a.in_days == null ? 1e9 : a.in_days) - (b.in_days == null ? 1e9 : b.in_days); }).map(function (c) {
             return '<tr><td style="white-space:nowrap">' + dt(c.next || '') + '</td><td class="num">' + (c.in_days == null ? '—' : (c.in_days <= 0 ? 'today' : c.in_days)) + '</td><td>' + esc(c.name || '') + '</td><td>' + esc(c.src || '') + '</td><td class="s">' + esc(c.rule || '') + '</td></tr>';
           }).join('') + '</tbody></table>';
         body.appendChild(wrapC);
+        body.appendChild(el('div', 'cap', 'Every source this panel waits on, soonest first. Two of the centres that matter most publish on a schedule but have no feed we can read: NOAA CPC its ENSO discussion on the second Thursday of the month, BoM its wrap-up fortnightly. They live in this table and not in the list of centres.'));
+        return;
       }
 
       var g = el('div', 'gloss');
@@ -7485,7 +7502,7 @@
         return '<div class="gl-i"><b><a href="' + esc(o.url || '#') + '" target="_blank" rel="noopener">' + esc(o.label) + '</a></b> ' + state + list + '</div>';
       }).join('') : '<div class="note">No official feed answered.</div>';
       body.appendChild(g);
-      body.appendChild(el('div', 'cap', 'Our own measurements are one half of this panel; what the forecast centres say is the other. Here is when the next official word is due, and how long each centre has been quiet on the subject. Only posts that mention El Niño or ENSO are kept; the feeds hold ten posts each, so a post falls out of the window within hours and we remember the hit rather than the window. NOAA CPC publishes its ENSO discussion on the second Thursday of the month and BoM its wrap-up fortnightly; neither has a feed we can read, so they appear in the calendar above and not in the list below.'));
+      body.appendChild(el('div', 'cap', 'Our own measurements are one half of this panel; what the forecast centres say is the other. Only posts that mention El Niño or ENSO are kept. The feeds hold ten posts each, so a post falls out of the window within hours: we remember the hit rather than the window, which is why a centre can be quiet here and still have a date. Switch to the release calendar above for when the next official word is due.'));
     }
   }
 
