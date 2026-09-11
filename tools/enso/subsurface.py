@@ -627,7 +627,14 @@ def risks(SUB):
              "dates": next((s["d20_series"]["dates"] for s in t.get("stations", []) if s.get("label") == w["station"]), None),
              "values": next((s["d20_series"]["values"] for s in t.get("stations", []) if s.get("label") == w["station"]), None),
              "analogs": next((s["d20_series"].get("analogs") or {} for s in t.get("stations", []) if s.get("label") == w["station"]), {})},
-            "climate", "subsurface_warm"))
+            "climate", "subsurface_warm",
+            # лестница правила: 3→5→8 °C, а у верхней ступени верх — собственный прежний
+            # максимум этой станции (prev_max), он же тот порог, по которому сборщик тревог
+            # отличает SHOUT от WATCH. Когда рекорд перекрыт, доля упирается в единицу — это
+            # честно: выше собственного рекорда мерить уже нечем.
+            ((w["value"] - 8) / max(0.1, (w["prev_max"]["value"] - 8))
+             if w["value"] >= 8 and (w.get("prev_max") or {}).get("value") else
+             (w["value"] - 5) / 3.0 if w["value"] >= 5 else (w["value"] - 3.0) / 2.0)))
     g = (SUB or {}).get("godas") or {}
     hc = (g.get("heat_content") or {}).get("values") or []
     if hc and hc[-1] >= 1.0:

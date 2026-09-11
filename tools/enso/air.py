@@ -433,7 +433,10 @@ def risks(A, n34_now=None):
                 _metric((next((p for p in C["parts"] if p["key"] == "soi"), {}) or {}).get("series"),
                         "Southern Oscillation Index, monthly",
                         extra={"levels": (A or {}).get("_soi_levels") or {}}),
-                "climate", "coupling_on"))
+                "climate", "coupling_on",
+                # сколько признаков ядра включено: низ — порог правила 2, верх — полный счёт
+                # C["of"], который и означает «все признаки на месте»
+                (C["score"] - 2) / float(C["of"] - 2) if C["of"] > 2 else None))
         else:
             out.append((
                 "The ocean is warming, the air is not answering", 3, "now",
@@ -464,7 +467,10 @@ def risks(A, n34_now=None):
                                     for v in ((F.get("series") or {}).get("values") or [])]},
                         "Warm water volume, monthly", unit="·10¹⁴ m³",
                         extra={"levels": (F.get("levels") or {})}),
-                "climate", "fuel_charged"))
+                "climate", "fuel_charged",
+                # доля от собственного исторического максимума ряда: низ — порог правила 90 %,
+                # верх — естественные 100 %, то есть «равно максимуму ряда с 1980 года»
+                (share - 90) / 10.0))
         elif F.get("discharging"):
             out.append((
                 "The fuel is discharging: the peak is close", 4, f"{lead or 6} months",

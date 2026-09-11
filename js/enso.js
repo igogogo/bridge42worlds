@@ -4618,23 +4618,44 @@
     if (!risks.length) return svgOpen(W, H) + '<text x="20" y="40">no risks on the board</text></svg>';
     var Lp = 30, Rp = 10, Tp = topPad(W), B = 30, pw = W - Lp - Rp, ph = H - Tp - B;
     var n = risks.length, gap = Math.min(4, pw / n * .25), bw = Math.max(3, pw / n - gap);
-    var maxL = 5;
+    /* ДРОБНЫЙ УРОВЕНЬ (владелец 11.09: «внутри 5 допустим там рост, а то они одного уровня в
+       пределах уровня»). Целая часть — уровень правила, дробная — доля пути от порога,
+       который этот уровень дал, до следующего порога; её считает сам сборщик и кладёт полем
+       strength. Где честного потолка нет, поля нет, и такой столбик стоит РОВНО на линии
+       уровня с пунктирной крышкой: видно, что он не градуирован, и его не путаешь с тем,
+       кто честно стоит на своей отметке. Шкала поэтому до шести: пятёрка, прошедшая свою
+       ступень целиком, упирается в потолок поля. */
+    var maxL = 6;
     var Y = function (v) { return Tp + (maxL - v) / maxL * ph; };
-    var s2 = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText('The whole board by level: this risk against the other ' + (n - 1), W - Lp - Rp, 11) + '</text>';
-    for (var g = 1; g <= maxL; g++) {
+    var nGraded = risks.filter(function (q) { return fin(q.strength); }).length;
+    var s2 = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText('The whole board: level, and how far past its own threshold each risk sits', W - Lp - Rp, 11) + '</text>';
+    for (var g = 1; g <= 5; g++) {
       s2 += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (W - Rp) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".7"/>';
       s2 += '<text x="' + (Lp - 6) + '" y="' + (Y(g) + 3).toFixed(1) + '" text-anchor="end">' + g + '</text>';
     }
     risks.forEach(function (r, i) {
-      var x = Lp + i * (bw + gap), lv = Math.max(1, Math.min(maxL, +r.level || 1)), on = i === cur;
-      var pay = { name: r.title, def: 'Level ' + r.level + ' · ' + esc(r.horizon || '') + (on ? '. This is the risk open now.' : '. Click the bar to open it.') };
-      s2 += '<rect data-risk="' + i + '" data-src="' + esc(JSON.stringify(pay)) + '" x="' + x.toFixed(1) + '" y="' + Y(lv).toFixed(1) + '" width="' + bw.toFixed(1) +
-        '" height="' + (Y(0) - Y(lv)).toFixed(1) + '" rx="1.5" style="fill:var(--lv' + lv + ');cursor:pointer"' + (on ? '' : ' opacity=".55"') + '/>';
-      if (on) s2 += '<rect x="' + (x - 1.5).toFixed(1) + '" y="' + (Y(lv) - 1.5).toFixed(1) + '" width="' + (bw + 3).toFixed(1) +
-        '" height="' + (Y(0) - Y(lv) + 3).toFixed(1) + '" rx="2.5" fill="none" style="stroke:var(--text)" stroke-width="1.6"/>';
+      var x = Lp + i * (bw + gap), lv = Math.max(1, Math.min(5, +r.level || 1)), on = i === cur;
+      var st = fin(r.strength) ? Math.max(0, Math.min(1, r.strength)) : null;
+      var top = lv + (st == null ? 0 : st);
+      var pay = {
+        name: r.title,
+        def: 'Level ' + r.level + ' \u00b7 ' + esc(r.horizon || '') + '. ' +
+          (st == null
+            ? 'This rule is on or off: it has no measured distance past its own threshold, so the bar stands exactly on the line and its top is dashed.'
+            : 'It sits ' + Math.round(st * 100) + ' % of the way from the threshold that granted this level to the next one.') +
+          (on ? ' This is the risk open now.' : ' Click the bar to open it.')
+      };
+      s2 += '<rect data-risk="' + i + '" data-src="' + esc(JSON.stringify(pay)) + '" x="' + x.toFixed(1) + '" y="' + Y(top).toFixed(1) + '" width="' + bw.toFixed(1) +
+        '" height="' + (Y(0) - Y(top)).toFixed(1) + '" rx="1.5" style="fill:var(--lv' + lv + ');cursor:pointer"' + (on ? '' : ' opacity=".55"') + '/>';
+      // крышка: сплошная у градуированного, пунктирная у того, кто стоит на линии по правилу
+      if (st == null) s2 += '<line x1="' + x.toFixed(1) + '" y1="' + Y(lv).toFixed(1) + '" x2="' + (x + bw).toFixed(1) + '" y2="' + Y(lv).toFixed(1) +
+        '" style="stroke:var(--surface)" stroke-width="1.6" stroke-dasharray="2 2"/>';
+      if (on) s2 += '<rect x="' + (x - 1.5).toFixed(1) + '" y="' + (Y(top) - 1.5).toFixed(1) + '" width="' + (bw + 3).toFixed(1) +
+        '" height="' + (Y(0) - Y(top) + 3).toFixed(1) + '" rx="2.5" fill="none" style="stroke:var(--text)" stroke-width="1.6"/>';
     });
     var me = risks[cur] || {}, same = risks.filter(function (q) { return +q.level === +me.level; }).length;
-    s2 += '<text x="' + Lp + '" y="' + (H - 9) + '">level ' + me.level + ' \u00b7 ' + same + ' risk' + (same > 1 ? 's' : '') + ' at this level \u00b7 ' + esc(me.horizon || '') + '</text>';
+    var mySt = fin(me.strength) ? Math.round(Math.max(0, Math.min(1, me.strength)) * 100) + ' % past its threshold' : 'on or off, not graded';
+    s2 += '<text x="' + Lp + '" y="' + (H - 9) + '">' + fitText('level ' + me.level + ' \u00b7 ' + same + ' at this level \u00b7 ' + mySt + ' \u00b7 ' + nGraded + ' of ' + n + ' rules measure the distance', W - Lp - Rp, 11) + '</text>';
     return s2 + '</svg>';
   }
   function viewRisk() {

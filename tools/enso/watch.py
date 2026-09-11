@@ -725,16 +725,32 @@ def risks(W, N34, NW, ONI, IRI=None, AIR=None):
     Тексты по-английски: дашборд на сайте английский (владелец 03.09)."""
     R = []
 
-    def add(title, level, horizon, evidence, plain, watch, metric=None, kind="climate", rid=None):
+    def add(title, level, horizon, evidence, plain, watch, metric=None, kind="climate", rid=None, strength=None):
         # У РИСКА ЕСТЬ ИМЯ, НЕ ЗАВИСЯЩЕЕ ОТ ЗАГОЛОВКА. Журнал значений (tools/enso/journal.py)
         # ведёт историю уровня по каждому риску, а заголовок — это текст: его переписывают, а
         # 3 сентября его ещё и перевели с русского на английский — и вся история риска
         # обрывается на ровном месте. `rid` задаётся правилом и живёт, пока живёт правило.
         # Где правило одно, а состояния разные («очень сильное» / «развивается»), rid общий:
         # это один и тот же риск в двух состояниях, и уровень между ними должен идти подряд.
+        # НАСКОЛЬКО ДАЛЕКО ЗА СВОЙ ПОРОГ УШЁЛ МИР. Владелец 11.09: «риски лучше сделать
+        # экспоненциальные, то есть внутри 5 допустим там рост, а то они одного уровня в
+        # пределах уровня». Он прав в диагнозе, но лечить надо здесь, а не в графике: почти
+        # все правила подставляют уровню константу, и любая функция от целого уровня даёт те
+        # же пять полок. `strength` — доля пути от порога, который дал этот уровень, до
+        # следующего порога, 0…1. Это НЕ мера опасности и не измерение: это положение внутри
+        # своей же ступени.
+        #
+        # Заполняется ТОЛЬКО там, где ОБА конца отрезка уже существуют как настоящие
+        # величины: нижний — порог самого правила, верхний — порог следующей ступени,
+        # естественные 100 %, полный счёт или собственный исторический максимум ряда.
+        # Где верхнего конца нет, стоит None, и доска рисует риск ровно на линии уровня с
+        # открытым верхом. Выдуманный потолок (вдвое от порога, круглое число) запрещён:
+        # на картинке выдуманное число неотличимо от измеренного. Разбор по каждому правилу
+        # — в ЭЛЬНИНЬО-ПРОВЕРКА-2026-09-06.md, раздел про градуировку рисков.
+        st = None if strength is None else round(max(0.0, min(1.0, float(strength))), 3)
         R.append({"id": rid or _slug(title),
                   "title": title, "level": level, "horizon": horizon, "evidence": evidence,
-                  "plain": plain, "watch": watch, "metric": metric, "kind": kind})
+                  "plain": plain, "watch": watch, "metric": metric, "kind": kind, "strength": st})
 
     n34 = W["sst_nino34"]; sw = W["sst_world"]; tw = W["t2_world"]
     lat = NW["latest"]
@@ -753,7 +769,9 @@ def risks(W, N34, NW, ONI, IRI=None, AIR=None):
     elif lat["n34a"] >= 1.0:
         add("El Niño is developing", 3, "now", f"Niño 3.4 {lat['n34a']:+.1f} °C",
             "The warm phase is here, but it has not reached “very strong” yet.", "the NOAA weekly index",
-            metric=_m_weekly(NW, "n34a", "Niño 3.4, NOAA weekly"), rid="event_strength")
+            metric=_m_weekly(NW, "n34a", "Niño 3.4, NOAA weekly"), rid="event_strength",
+            # от порога «Эль-Ниньо» до порога «очень сильное» — оба литерала в этом же правиле
+            strength=(lat["n34a"] - 1.0) / (2.0 - 1.0))
 
     # 2. пик впереди
     pe = N34["peak_estimate"]
@@ -792,13 +810,19 @@ def risks(W, N34, NW, ONI, IRI=None, AIR=None):
             f"On each of the last {sw['records']['streak']} days the ocean, averaged over the planet, was warmer than on "
             "the same day of any year since 1982. Not one hot day, but an unbroken stretch.",
             "the first day below the record without a change of season is the first sign of a turn",
-            metric=_m_daily(sw, "World ocean, daily anomaly"), rid="world_ocean_record_streak")
+            metric=_m_daily(sw, "World ocean, daily anomaly"), rid="world_ocean_record_streak",
+            # оба счётчика считаются по окну в 30 суток и больше 30 быть не могут: 30 из 30 —
+            # это и есть естественные сто процентов этого правила, а не выдуманный потолок
+            strength=max((sw["records"]["streak"] - 14) / (30.0 - 14.0),
+                         (sw["records"]["last30"] - 20) / (30.0 - 20.0)))
 
     # 5. скорость изменения
     for key, name in (("sst_nino34", "Niño 3.4"), ("sst_world", "The world ocean surface"), ("t2_world", "The air over land and ocean")):
         sl = W[key]["slope14"]
         if sl["pct"] is not None and (sl["pct"] >= 90 or sl["pct"] <= 10):
             fast = sl["pct"] >= 90
+            # процентиль скорости уже безразмерен: у роста верх 100, у падения 0
+            st_fast = ((sl["pct"] - 90) / 10.0) if fast else ((10 - sl["pct"]) / 10.0)
             add(f"{name}: unusually {'fast rise' if fast else 'fast fall'}", 3, "2 weeks",
                 f"14-day slope {sl['now']:+.2f} °C, the {sl['pct']:.0f}th percentile for this time of year"
                 + (f"; acceleration {sl['accel']:+.2f}" if sl["accel"] is not None else ""),
@@ -877,7 +901,11 @@ def risks(W, N34, NW, ONI, IRI=None, AIR=None):
                 f"Of {ao['n']} models, {len(ao['below'])} have already fallen behind what the ocean showed this week. "
                 "They are not “wrong about the future”; they are not keeping up with the present. Their winter "
                 "forecasts are most likely too low.",
-                "the next IRI issue: how many models catch up", metric=metric, rid="models_below_reality")
+                "the next IRI issue: how many models catch up", metric=metric, rid="models_below_reality",
+                # доля моделей: у четвёртой ступени верх — естественные 100 %, у третьей —
+                # порог самой четвёртой ступени; оба литерала стоят строкой выше
+                strength=((ao["share_below"] - 50) / 50.0 if ao["share_below"] >= 50
+                          else (ao["share_below"] - 35) / (50.0 - 35.0)))
         if rv and rv.get("combined_peak_prev") is not None and rv["combined_peak_cur"] - rv["combined_peak_prev"] >= 0.2:
             # СКОЛЬКО ВЫПУСКОВ ПОДРЯД сводный пик растёт — по истории, а не «второй месяц»
             # из заголовка: к 06.09 рост шёл двенадцатый выпуск подряд (проверка Fable).
@@ -907,7 +935,7 @@ def risks(W, N34, NW, ONI, IRI=None, AIR=None):
         try:
             import air as AR
             for r in AR.risks(AIR, lat["n34a"]):
-                add(*r[:6], metric=r[6], kind=r[7], rid=r[8])
+                add(*r[:6], metric=r[6], kind=r[7], rid=r[8], strength=(r[9] if len(r) > 9 else None))
         except Exception as e:                                   # noqa: BLE001
             add("Atmospheric rules failed", 2, "now", str(e)[:160],
                 "The air block did not produce its risks; the numbers themselves are on the panel.",
@@ -1289,8 +1317,11 @@ def run(fetch=True):
     if OMI and not OMI.get("error"):
         extra += mjo_risks(OMI, WIND)
     for r in extra:
+        # десятое поле — доля продвижения внутри уровня, если правило умеет её считать
+        _st = r[9] if len(r) > 9 else None
+        _st = None if _st is None else round(max(0.0, min(1.0, float(_st))), 3)
         RR.append({"id": r[8] if len(r) > 8 else _slug(r[0]), "title": r[0], "level": r[1], "horizon": r[2],
-                   "evidence": r[3], "plain": r[4], "watch": r[5], "metric": r[6], "kind": r[7]})
+                   "evidence": r[3], "plain": r[4], "watch": r[5], "metric": r[6], "kind": r[7], "strength": _st})
     # запас 90–100 считается по сторожевым рядам и по двум блокам, где рекорд виден прямо
     _extra_rec = {}
     try:
