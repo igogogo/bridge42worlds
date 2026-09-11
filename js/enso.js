@@ -4700,7 +4700,8 @@
        высоту под лентой и не давал графику вырасти; в двух колонках он вдвое ниже, и эта
        высота достаётся графикам. На узком экране колонка одна, как была. */
     var txt = el('div', 'risk-text');
-    txt.appendChild(el('div', 'lead', '<b>Level ' + r.level + ' · ' + esc(r.horizon) + '.</b> ' + mark(r.plain || '') + (fin(was) && was !== r.level ? ' <i>Level was ' + was + ' at ' + esc(prevStamp()) + '.</i>' : '')));
+    txt.appendChild(el('div', 'lead', '<b>Level ' + r.level + ' · ' + esc(r.horizon) + '.</b> ' +
+      (fin(r.strength) ? '<i>' + term('riskstrength', Math.round(r.strength * 100) + ' % past its own threshold') + '.</i> ' : '') + mark(r.plain || '') + (fin(was) && was !== r.level ? ' <i>Level was ' + was + ' at ' + esc(prevStamp()) + '.</i>' : '')));
     txt.appendChild(el('div', 'note', '<strong>Evidence.</strong> ' + mark(r.evidence) + (r.metric ? '<br>' + dynWords(r.metric) : '')));
     txt.appendChild(el('div', 'note warn', '<strong>Watch.</strong> ' + mark(r.watch)));
     var cnr = conceptsHtml('risk:' + (r.id || ''), true);
@@ -6789,14 +6790,14 @@
       });
       var rel = V.relation || {}, curV = V.current || {}, ex = V.extrapolation || {}, agr = (RG.agreement || {})[rwin] || {};
       var drift = ((RG.drift_check || {}).variants || {})[vkey] || {};
-      nt = '<b>What is measured.</b> One point per year: the mean sea-surface temperature of the Niño 3.4 box against the share of satellite footprints colder than 235 K, both over the same window of the calendar. The line is fitted through the LOGARITHM of that share, so its slope is per degree Celsius and is read by multiplying, not by adding; the question is whether the line itself moves. ' +
+      nt = '<b>What is measured.</b> ' + term('regimewatch', 'A regime watch') + ': one point per year, the mean sea-surface temperature of the Niño 3.4 box against the share of satellite footprints colder than 235 K, both over the same window of the calendar. The line is fitted through the LOGARITHM of that share, so its slope is per degree Celsius and is read by multiplying, not by adding; the question is whether the line itself moves. ' +
         'The rolling slope is that same line refitted on a moving window of twelve years, with its standard error; the dashed line is the fit over all years at once. ' +
         '<br><b>Two limits the collector states, and what the panel does about them.</b> First, this year’s sea is ' + fnum(ex.beyond_range_c, 2, false) + ' °C above the warmest year the line was fitted on (' + fnum(ex.sst_train_max, 2, false) + ' °C), so the position of ' + cur + ' against the line is an extrapolation, not a measurement; we do not print it as a reading. Second, the collector reports that the residuals in this release are too large in magnitude by a factor of 1.3 to 1.8, from a defect in the sign of the prediction error that its author is fixing; so the residual history by year and the σ figures are held back until that is corrected. The slope and its drift do not depend on either. The ratio of observed to predicted convection is the same comparison the residual makes, written without the division by the prediction error that is being corrected, so its size stands even if the σ scale moves; read it, and the agreement of the variants, as direction and rough size rather than as exact figures. ' +
         '<br><b>Scope.</b> Two equatorial boxes, about 0.4 % of the surface of the planet. Nothing in the climate system would show here first; this is a watch on the tropical Pacific, not on the planet. ' +
         '<br><b>Caveats.</b> ' + esc(radCav(cav));
       INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
       if (ex.is_extrapolation) {
-        body.appendChild(el('div', 'kp', 'This year sits outside the range the link was fitted on: ' + fnum(ex.sst_current, 2, false) + ' °C against a training range that ends at ' + fnum(ex.sst_train_max, 2, false) + ' °C. Where the link puts ' + cur + ' is therefore a statement about the shape of the curve beyond the data, and the data cannot settle that shape. Read the slope below, not the position of this year.'));
+        body.appendChild(el('div', 'kp', 'This year sits outside the range the link was fitted on (' + term('extrapolation', 'an extrapolation') + '): ' + fnum(ex.sst_current, 2, false) + ' °C against a training range that ends at ' + fnum(ex.sst_train_max, 2, false) + ' °C. Where the link puts ' + cur + ' is therefore a statement about the shape of the curve beyond the data, and the data cannot settle that shape. Read the slope below, not the position of this year.'));
       }
       var rollAll = V.rolling_slope || [];
       plot(body, function (w, h) {

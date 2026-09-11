@@ -142,7 +142,7 @@
   "riskindex": {
    "name": "Risk index 0–100",
    "def": "Two scales in one. 0 to 90 is a saturating sum of risk levels 1 to 5: 90·(1 − exp(−Σ level^1.5 / 25)), so a full board of level-5 risks reaches 90 and never more. The last ten points are a reserve for readings that go past the record itself: they open only when a series is above its own historical maximum for that calendar day, is moving fast against its own history of 14-day slopes, and does both on several systems at once.",
-   "why": "90 means \u201cstronger than anything we have on record\u201d, not \u201cthe end\u201d; 100 is kept for something unprecedented arriving fast. This is our scale, not an official one.",
+   "why": "90 means “stronger than anything we have on record”, not “the end”; 100 is kept for something unprecedented arriving fast. This is our scale, not an official one.",
    "src": "computed in tools/enso/watch.py"
   },
   "oisst": {
@@ -402,6 +402,30 @@
    "def": "G = sea surface temperature (OISST, K) minus the mean 11 µm brightness temperature over the box: how much the atmosphere closes the thermal window. G_clear is the same on the warmest tenth of scenes only, i.e. the least cloudy ones.",
    "why": "The full G follows cloud, not greenhouse gases. G_clear is the proxy for the greenhouse action of water vapour; on the strictest 1 % of scenes the 2026 signal over Niño 3.4 halves to +1.4 K but stays. Over the warm pool there are almost no truly clear scenes, so its G_clear is an upper bound, not a measurement.",
    "src": "external collector C:\\CL\\radiance, schema v2; data/enso/radiance.json → greenhouse, greenhouse_clear"
+  },
+  "regimewatch": {
+   "name": "Regime watch",
+   "def": "Watching the link between sea temperature and the response of the air, instead of watching the readings themselves. One point per year, a line fitted through the logarithm of the share of deep convection, and the question is whether the line itself moves.",
+   "why": "A record is a position on a curve; a change of regime is the curve bending. This is the only block on the panel that watches the curve.",
+   "src": "computed by the radiance collector, block regime"
+  },
+  "extrapolation": {
+   "name": "Extrapolation",
+   "def": "Reading a fitted relation outside the range of values it was fitted on. The line still draws, but the data can no longer say what shape it has out there, and a bend too small to see statistically can flip the answer.",
+   "why": "This year's sea is warmer than any year the convection link was fitted on, so where the link puts this year is a statement about the shape of the curve, not a measurement. The panel says so rather than printing the number as a reading.",
+   "src": "stated by the radiance collector in its own caveats"
+  },
+  "riskstrength": {
+   "name": "How far past its own threshold",
+   "def": "For a risk that has a numeric rule, the share of the way from the threshold that granted its level to the next threshold, 0 to 1. Written only when both ends already exist as real quantities: the next level's threshold, a natural hundred per cent, a full count, or the series' own historical maximum.",
+   "why": "Levels are coarse: most rules set a constant, so risks inside one level looked identical. This says which of them is only just over the line and which has run far past it. It is not a measure of danger, and where no honest ceiling exists it is left empty rather than invented.",
+   "src": "computed in tools/enso/watch.py, air.py, subsurface.py"
+  },
+  "forecasterror": {
+   "name": "Forecast against fact",
+   "def": "The average size of the miss between a weather forecast issued N days earlier and what the reanalysis later recorded, per city, per parameter, per lead time. Bias is the same miss with its sign kept, so a steady over- or under-forecast shows up as a number rather than cancelling out.",
+   "why": "A local, faster version of the same question the model plume asks about the ocean: how well is the system being predicted right now. When the misses grow together across cities, the atmosphere is doing something the models were not built on.",
+   "src": "Open-Meteo forecasts against ERA5, computed by us in tools/enso/cities.py"
   }
  }
 }
