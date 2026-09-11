@@ -342,9 +342,13 @@ body.graph-fs-open { overflow: hidden; }
 .graph-fs-collapse-btn:hover { border-color: var(--link); color: var(--link); }
 .graph-fs-collapse { display: none; }
 .graph-fs-collapse.open { display: block; margin-top: 2px; }
+/* Иконка и подпись стоят ВМЕСТЕ. Было space-between — а внутри подписи всего две вещи,
+   значок и текст, и они разъезжались по краям шестисот пикселей: значок у левого поля,
+   «Links in the knowledge graph» у правого, будто это две разные надписи (владелец 11.09
+   на странице автора). Промежуток задаём явно, чтобы текст не липнул к значку. */
 .mini-graph-label {
     max-width: 620px; margin: 14px 0 2px; font-size: 13px; color: var(--soft);
-    display: flex; align-items: center; justify-content: space-between;
+    display: flex; align-items: center; gap: 7px;
 }
 /* Иконка «граф знаний» — глиф из 3 узлов+рёбер (currentColor, работает в любой теме) вместо
    эмодзи-паутины 🕸, которая читалась как web/сеть, а не как граф (юзер-фидбек 2026-07-19). */
