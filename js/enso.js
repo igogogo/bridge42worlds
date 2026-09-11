@@ -52,7 +52,7 @@
       'air/coupling': 'The three atmospheric signs that the ocean and the air are coupled.', 'air/fuel': 'The warm water volume under the equator: the fuel gauge and its lead.', 'air/layers': 'The four satellite floors of the atmosphere and their delay.', 'air/wind': 'Daily zonal wind over the western Pacific and the westerly bursts.', 'air/mjo': 'The Madden–Julian Oscillation: phase and amplitude.', 'air/indices': 'MEI, the Indian Ocean Dipole and RONI next to our coupling score.',
       'trend/sst_nino34': 'Niño 3.4 daily: 400 days, the band of all years, the 14-day forecast, where past events went from here.', 'trend/sst_world': 'The world ocean, daily.', 'trend/t2_world': 'Land and ocean, daily.', 'trend/index': 'Our risk index by update, and the comparable core against past events.', 'trend/months': 'Thirteen months of the three series with their ranks.', 'trend/background': 'Ocean heat content and the energy imbalance: the state of the whole system.',
       'regions/table': 'Every region by season and scenario, with food vulnerability and what to do.', 'regions/place': 'One region at a time; the Gulf with its own measurements.',
-      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.', 'radiance/convection': 'Share of satellite footprints colder than 235 K: deep convection over Niño 3.4 and the warm pool, this year against 2023–2025.', 'radiance/walker': 'Brightness-temperature contrast east minus west: the Walker circulation read raw; a fall to zero means the convection moved east.', 'radiance/clouds': 'Each scene sorted by the window brightness temperature: deep, mid, low cloud and clear sky, shares per day; the day-time cloud share is the albedo proxy.', 'radiance/greenhouse': 'How much the atmosphere closes the 11 µm window: G on all scenes (follows cloud) and G_clear on the least cloudy scenes (the water-vapour greenhouse proxy), with the p90/p99 caveat.', 'radiance/profile': 'Temperature layers: infrared (blind under cloud) and microwave (through cloud), the last 14 days against each analogue year.', 'radiance/epochs': 'Twenty years of the same window: every year’s deep convection over the boxes on one scale (the CrIS chain SNPP → NOAA-20 → NOAA-21, AIRS for the early years), with error bars, ranks and the ratio to 2015; play the years to watch the record build.', 'radiance/regime': 'Not how high the reading is, but whether the link between sea temperature and the response of the air still holds: the slope of that link on a rolling window of years, and where this year sits against the range the link was fitted on.', 'radiance/cross': 'Independent instruments against each other: the 2026 shift of convection and of the atmospheric layers on NOAA-21 CrIS, NOAA-20 CrIS and Aqua AIRS, and how closely they agree day by day.', 'radiance/seismic': 'Earthquakes by Pacific-rim zone with aftershocks separated, and solar activity, from the same collector; side series, not El Niño physics.', 'models/board': 'Every model of the plume as a card: latest forecast, class, how far below reality.', 'models/revision': 'How each centre revised its forecast issue after issue.', 'refs/works': 'Our parsed arXiv works attached to the claims of this panel, with the reason for each link.', 'refs/sources': 'Every data source with its address, cadence and last date.', 'refs/literature': 'Literature and reports quoted on the panel, not measured by us.', 'refs/concepts': 'The concept register attached to every anchor of the panel: risks, alerts, blocks, regions and glossary terms, each with its nearest concepts and a link to the graph on that set.', 'refs/neighbours': 'Kindred projects: who else shows the planet on a globe or a map, with what data and under what licence, and what we can take from each.', 'trend/rain': 'Rain by region (ERA5 box sums against the normal and against every year since 1981) and for the whole planet (GPCP monthly).', 'trend/spectral': 'A line at 2–7 days appearing in any daily series over the last 30 days: the owner’s hypothesis of a comb before a spontaneous transition, watched, not assumed.',
+      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.', 'radiance/convection': 'Share of satellite footprints colder than 235 K: deep convection over Niño 3.4 and the warm pool, this year against 2023–2025.', 'radiance/walker': 'Brightness-temperature contrast east minus west: the Walker circulation read raw; a fall to zero means the convection moved east.', 'radiance/clouds': 'Each scene sorted by the window brightness temperature: deep, mid, low cloud and clear sky, shares per day; the day-time cloud share is the albedo proxy.', 'radiance/greenhouse': 'How much the atmosphere closes the 11 µm window: G on all scenes (follows cloud) and G_clear on the least cloudy scenes (the water-vapour greenhouse proxy), with the p90/p99 caveat.', 'radiance/profile': 'Temperature layers: infrared (blind under cloud) and microwave (through cloud), the last 14 days against each analogue year.', 'radiance/epochs': 'Twenty years of the same window: every year’s deep convection over the boxes on one scale (the CrIS chain SNPP → NOAA-20 → NOAA-21, AIRS for the early years), with error bars, ranks and the ratio to 2015; play the years to watch the record build.', 'radiance/regime': 'Not how high the reading is, but whether the link between sea temperature and the response of the air still holds: the slope of that link on a rolling window of years, and where this year sits against the range the link was fitted on.', 'radiance/cross': 'Independent instruments against each other: the 2026 shift of convection and of the atmospheric layers on NOAA-21 CrIS, NOAA-20 CrIS and Aqua AIRS, and how closely they agree day by day.', 'radiance/seismic': 'Earthquakes by Pacific-rim zone with aftershocks separated, and solar activity, from the same collector; side series, not El Niño physics.', 'models/board': 'Every model of the plume as a card: latest forecast, class, how far below reality.', 'models/revision': 'How each centre revised its forecast issue after issue.', 'refs/works': 'Our parsed arXiv works attached to the claims of this panel, with the reason for each link.', 'refs/sources': 'Every data source with its address, cadence and last date.', 'refs/literature': 'Literature and reports quoted on the panel, not measured by us.', 'refs/concepts': 'The concept register attached to every anchor of the panel: risks, alerts, blocks, regions and glossary terms, each with its nearest concepts and a link to the graph on that set.', 'refs/neighbours': 'Kindred projects: who else shows the planet on a globe or a map, with what data and under what licence, and what we can take from each.', 'trend/land_peru_coast': 'Air over the coast of Peru: the daily ERA5 box against its own all-years band, with the 14-day forecast and where past events went from this same day.', 'trend/land_gulf_north': 'Air over the north of the Persian Gulf: the same daily ERA5 box reading as the other land series.', 'trend/land_europe_central': 'Air over central Europe: the same daily ERA5 box reading.', 'trend/land_java': 'Air over Java: the same daily ERA5 box reading.', 'trend/land_east_africa': 'Air over east Africa: the same daily ERA5 box reading.', 'trend/land_north_india': 'Air over north India: the same daily ERA5 box reading.', 'trend/rain': 'Rain by region (ERA5 box sums against the normal and against every year since 1981) and for the whole planet (GPCP monthly).', 'trend/spectral': 'A line at 2–7 days appearing in any daily series over the last 30 days: the owner’s hypothesis of a comb before a spontaneous transition, watched, not assumed.',
       'planet/snow': 'Snow cover of the northern hemisphere since 1966: the seasonal switch of how much sunlight the land throws back. The closest open stand-in for albedo.',
       'planet/glaciers': 'Annual mass balance of the measured glaciers since 1885, and the running total: how much water the ice gives up year after year.',
       'regions/fires': 'Active fire detections from three satellites, by region and day: where it burns now and how that compares with the days before.',
@@ -3211,7 +3211,7 @@
      вставляем пустой, а рисуем в конце render(), когда сцена собрана и высота у рамки
      окончательная. Наблюдатель остаётся вторым рубежом для настоящих браузеров. */
   var plotRO = window.ResizeObserver ? new ResizeObserver(function () { redrawPlot(); }) : null;
-  function plot(body, draw) {
+  function plot(body, draw, jk) {
     var p = el('div', 'plot');
     // Клик по элементу легенды выделяет линию (или целый класс), повторный — снимает.
     p.addEventListener('click', function (e) {
@@ -3226,7 +3226,7 @@
     body.appendChild(p);
     S.plotEl = p; S.draw = draw; S.pw = 0; S.ph = 0;
     // дата данных — значок в правом нижнем углу поля графика
-    var wrapB = el('span', 'dcal-wrap', dateBadge(plotKey(draw)));
+    var wrapB = el('span', 'dcal-wrap', dateBadge(jk || plotKey(draw)));
     p.appendChild(wrapB);
     if (plotRO) { plotRO.disconnect(); plotRO.observe(p); }
   }
@@ -4294,7 +4294,7 @@
       var isLand = !W[k];
       // ряд сцены → показатель журнала: один и тот же кирпич обслуживает три ряда
       var JK = { sst_nino34: 'n34_daily', sst_world: 'sst_world', t2_world: 't2_world' };
-      plot(body, function (w, h) { return chartRecent(w0, w, h); });
+      plot(body, function (w, h) { return chartRecent(w0, w, h); }, JK[k] || null);
       var lv = pair(w0.last_value, P && P.daily ? P.daily[k] : null, 2, '°C');
       var p50 = pair(w0.forecast14.p50, P && P.p50 ? P.p50[k] : null, 2, '°C');
       var kp = el('div', 'kpis');
@@ -5391,6 +5391,7 @@
   function arrow(v, d) { return fin(v) ? '<span class="' + upDown(v) + '">' + (v > 0 ? '▲' : (v < 0 ? '▼' : '=')) + ' ' + fnum(Math.abs(v), d == null ? 1 : d, false) + '</span>' : ''; }
 
   function ovTiles() {
+    S._ovCut = 0;
     var D = S.D, NW = D.noaa, N = D.nino34, IRI = D.iri && !D.iri.error ? D.iri : null, A = D.air || {}, O = D.oisst || {}, SB = D.subsurface || {}, BG = D.background || {}, FO = D.food && !D.food.error ? D.food : null, G = D.gulf || {};
     var T2 = [];
     function add(title, meaning, go, draw) { if (draw) T2.push({ title: title, meaning: meaning, go: go, draw: draw }); }
@@ -5446,10 +5447,13 @@
     if (HV1.current && HV1.current.months) add('Heat on the move (Hovmöller)', 'Subsurface anomaly along the equator, month by month.', ['ocean', 'hovmoller'], function (w, h) { return chartHovmoller(HV1, w, h, { metric: 'anom100', analog: null }); });
     if ((MN1.per_day || {}).dates) add('In the news', (MN1.articles || []).length + ' headlines in nine languages.', ['mentions', 'attention'], function (w, h) { return chartDaysPanels([{ title: 'Articles per day', dates: MN1.per_day.dates, series: [{ name: 'articles', values: MN1.per_day.counts, bars: true, color: 'var(--ochre)' }] }], w, h); });
     (D.risks || []).forEach(function (r, i) {
-      if (!r.metric || !r.metric.values || T2.length >= 48) return;
+      // усечение больше не молчаливое: считаем, сколько плиток не влезло, и говорим вслух
+      if (!r.metric || !r.metric.values) return;
+      if (T2.length >= 48) { S._ovCut = (S._ovCut || 0) + 1; return; }
       if (T2.some(function (t) { return t.title === r.title; })) return;
       add(r.title, 'Level ' + r.level + ' · ' + r.horizon + '. ' + (r.plain || '').slice(0, 160), ['risk', i], function (w, h) { return chartMetric(r.metric, w, h, r.metric.name); });
     });
+    if (T2.length > 48) S._ovCut = (S._ovCut || 0) + (T2.length - 48);
     return T2.slice(0, 48);
   }
 
@@ -5471,12 +5475,15 @@
     if (fin(b34.last_anom)) strip.appendChild(ovKpi(zone('nino34') + ' daily box', fnum(b34.last_anom) + '<small>°C</small>', '30 days ' + arrow(b34.chg30, 2) + ' · ' + esc(b34.last_date), spark({ values: b34.anom }, 60, 26), ['ocean', 'surface'], null, 'n34_box'));
     strip.appendChild(ovKpi(term('oni', 'ONI') + ' · ' + term('roni', 'RONI'), fnum(ONI.current[ONI.last_season]) + '<small>' + esc(ONI.last_season) + '</small>', 'RONI ' + fnum((ONI.roni || {}).last) + ' — the gap is the warm background', twoBars(ONI.current[ONI.last_season] || 0, (ONI.roni || {}).last || 0, 'ONI', 'RONI', 'var(--nino)'), ['now', 'analogs'], null, 'oni'));
     if (IRI) strip.appendChild(ovKpi('models', (tally.broke || 0) + '<small>broken of ' + ((tally.ok || 0) + (tally.lag || 0) + (tally.broke || 0)) + '</small>', 'live RMS ' + fnum(liveNow(IRI, 'rms')) + ' · published ' + fnum((IRI.against_observed || {}).mean), donut([[tally.ok || 0, 'var(--nina)'], [tally.lag || 0, 'var(--lv3)'], [tally.broke || 0, 'var(--lv5)']]), ['models', 'plume'], null, 'models_broke'));
-    if (A.fuel) strip.appendChild(ovKpi(term('wwv', 'fuel'), A.fuel.share_of_record + '<small>% of record</small>', (A.fuel.discharging ? 'being spent' : 'not spent yet') + ' · leads by ' + (A.fuel.lead || {}).lag + ' mo', barFill(A.fuel.share_of_record, 'var(--ochre)'), ['air', 'fuel'], null, 'wwv'));
-    if (TAO.warmest) strip.appendChild(ovKpi(term('tao', 'under the surface'), fnum(TAO.warmest.value, 1) + '<small>°C at ' + TAO.warmest.depth + ' m</small>', esc(TAO.warmest.station) + ' · D20 east ' + TAO.d20_east + ' m', barFill(Math.min(100, TAO.warmest.value * 8), 'var(--nino)'), ['ocean', 'moorings'], null, 'subsurface_warmest'));
+    if (A.fuel) strip.appendChild(ovKpi(term('wwv', 'fuel'), A.fuel.share_of_record + '<small>% of record</small>', (A.fuel.discharging ? 'being spent' : 'not spent yet') + ' · leads by ' + (A.fuel.lead || {}).lag + ' mo', barFill(A.fuel.share_of_record, 'var(--ochre)'), ['air', 'fuel'],
+      { name: 'The fuel gauge', def: 'Warm water stored above 300 m along the equator, as a share of the highest value this series has reached since 1980. The bar is full at that record, so 100 % means “equal to the most there has ever been”, not “physically full”.', why: 'Click to open the fuel.' }, 'wwv'));
+    if (TAO.warmest) strip.appendChild(ovKpi(term('tao', 'under the surface'), fnum(TAO.warmest.value, 1) + '<small>°C at ' + TAO.warmest.depth + ' m</small>', esc(TAO.warmest.station) + ' · D20 east ' + TAO.d20_east + ' m', barFill(Math.min(100, TAO.warmest.value * 8), 'var(--nino)'), ['ocean', 'moorings'],
+      { name: 'The warmest layer under the moorings', def: 'How far above its own 1991–2020 normal the warmest water under the buoy line is, and at what depth. The bar is full at 12.5 °C above normal; that ceiling is ours, chosen to hold the record of these moorings with room to spare.', why: 'Click to open the moorings.' }, 'subsurface_warmest'));
     if (WD.dates) strip.appendChild(ovKpi(term('wwb', 'wind bursts'), (WD.events || []).length + '<small>in 120 d</small>', (WD.active ? 'one under way' : 'last ' + WD.days_since_last + ' d ago') + ' · week ' + fnum(WD.mean7, 1) + ' m/s', spark({ values: WD.anom.slice(-60) }, 60, 26), ['air', 'wind'], null, 'wind_week'));
     if (FO) strip.appendChild(ovKpi(term('fao', 'food index'), fnum(FO.index, 1, false) + '<small>' + esc(FO.last_month) + '</small>', 'year ' + arrow(FO.yoy_pct, 1) + ' % · month ' + arrow(FO.mom, 1), spark({ values: FO.series.index.slice(-24) }, 60, 26), ['food', 'prices'], null, 'food_index'));
     if (coreNow && core97) strip.appendChild(ovKpi('core vs 1997', coreNow.core + '<small>vs ' + core97.core + '</small>', 'comparable rules only; by RONI 1997 is still ahead', twoBars(coreNow.core, core97.core, 'now', '1997', 'var(--nino)'), ['trend', 'index'], null, ['our core index', coreNow.date || '']));
-    if (G.sea && fin(G.sea.last_sst)) strip.appendChild(ovKpi(term('gulfbox', 'the Gulf'), fnum(G.sea.last_sst, 1, false) + '<small>°C</small>', 'anomaly ' + fnum(Math.abs(G.sea.last_anom) < .005 ? 0 : G.sea.last_anom) + ' · ' + (G.sea.days_over_35 || 0) + ' d above 35', barFill((G.sea.last_sst - 20) * 100 / 16, 'var(--ochre)'), ['regions', 'place'], null, 'gulf_sst'));
+    if (G.sea && fin(G.sea.last_sst)) strip.appendChild(ovKpi(term('gulfbox', 'the Gulf'), fnum(G.sea.last_sst, 1, false) + '<small>°C</small>', 'anomaly ' + fnum(Math.abs(G.sea.last_anom) < .005 ? 0 : G.sea.last_anom) + ' · ' + (G.sea.days_over_35 || 0) + ' d above 35', barFill((G.sea.last_sst - 20) * 100 / 16, 'var(--ochre)'), ['regions', 'place'],
+      { name: 'Sea surface of the Persian Gulf', def: 'The absolute temperature of the water, not an anomaly. The bar runs from 20 °C to 36 °C, a span of ours chosen to hold the Gulf’s whole year; 35 °C is the line above which desalination and fisheries start to suffer.', why: 'Click to open the region.' }, 'gulf_sst'));
     /* НОВЫЕ ПОКАЗАТЕЛИ 07.09 (владелец: «пройдись по overview, наверняка появились новые KPI»). */
     var RA0 = S.RA || {}, PR0 = S.PR || {}, SP0 = S.SP || {}, MN0 = S.MN || {}, RD0 = (S.RD || {}).series || {};
     var wkA = (((RA0.sources || {}).n21_cris || {}).series || {}).walker_A || {}, wkCur = wkA[String((RA0.window || {}).current || 2026)] || {};
@@ -5505,7 +5512,9 @@
       t._el = d;
     });
     body.appendChild(grid);
-    body.appendChild(el('div', 'cap', tiles.length + ' tiles: the same charts as on their scenes, drawn small. Point at a tile for its meaning; click to open. ' + esc((D.stamp || '').slice(0, 16)) + '.'));
+    var cut = (S._ovCut || 0);
+    body.appendChild(el('div', 'cap', tiles.length + ' tiles: the same charts as on their scenes, drawn small. Point at a tile for its meaning; click to open.' +
+      (cut ? ' ' + cut + ' more would not fit and are not drawn here; every one of them is on its own scene.' : '') + ' ' + esc((D.stamp || '').slice(0, 16)) + '.'));
     // рисуем после раскладки: у окон должны быть настоящие размеры
     function drawAll() {
       tiles.forEach(function (t) {
@@ -7312,7 +7321,12 @@
     }).join('') + digest;
   }
   function sceneInfoBar() {
-    var view = S.view === 'gulf' ? 'regions' : (S.view === 'risk' ? 'now' : S.view), info = SCENE_INFO[view];
+    /* У карточки риска нет своей записи в SCENE_INFO, и раньше ей подставляли запись сцены
+       «now»: под кнопкой source стоял источник Niño 3.4, какой бы ряд ни лежал на графике.
+       Свой источник у риска уже есть — он в ряду риска, — поэтому общую строку сцены здесь
+       не показываем вовсе, чтобы не приписывать риску чужие данные. */
+    if (S.view === 'risk') return;
+    var view = S.view === 'gulf' ? 'regions' : S.view, info = SCENE_INFO[view];
     var head = document.querySelector('.stage-head'), body = document.querySelector('.stage-body');
     if (!info || !head || !body || body.getAttribute('data-own-info') || body.querySelector('button[data-info]')) return;
     var seg = head.querySelector('.ctl-info'); if (!seg) { seg = el('div', 'seg ctl-info'); head.appendChild(seg); }
