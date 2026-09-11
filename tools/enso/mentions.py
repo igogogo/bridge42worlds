@@ -147,7 +147,11 @@ def gdelt_volume():
 
 
 def official(url):
-    items = _rss(_get(url, tries=1))
+    # Одна попытка — мало: ReliefWeb 11.09 отдал ноль на первом же обращении, хотя лента
+    # живая и держит двадцать записей. Пустая лента на панели выглядит как «центр молчит»,
+    # а это была наша неудачная попытка, и разница между этими двумя вещами и есть смысл
+    # всей вкладки.
+    items = _rss(_get(url, tries=2))
     enso = [x for x in items if re.search(r"ni[nñ]o|enso|la ni[nñ]a", x["title"] + " " + str(x.get("summary") or ""), re.I)]
     if "search=el+nino" in url:                                  # лента уже отфильтрована поиском
         enso = items
@@ -228,6 +232,24 @@ def build(verbose=True):
         r = src(f"rss_{key}", label, url, _cached(f"rss_{key}", lambda url=url: official(url)))
         if r is not None:
             doc["official"][key] = {"label": label, "items": r.get("items") or [], "n_all": r.get("n_all", 0), "url": url}
+
+    # ПАМЯТЬ О ПОСЛЕДНЕМ СЛОВЕ ЦЕНТРА. Открытые ленты держат десять последних записей, и
+    # запись про Эль-Ниньо вылетает из окна за часы. Без памяти вкладка умела сказать только
+    # «в последних десяти ничего», то есть показывала пустоту там, где есть измеримая вещь:
+    # СКОЛЬКО ЦЕНТР МОЛЧИТ. Переносим последнее попадание из прошлого файла, пока не придёт
+    # новое; дата у него своя, чужой не подменяется.
+    try:
+        prev = json.loads((ROOT / "mentions.json").read_text(encoding="utf-8"))
+    except Exception:                                            # noqa: BLE001
+        prev = {}
+    for key, blk in doc["official"].items():
+        hit = (blk.get("items") or [])
+        old = ((prev.get("official") or {}).get(key) or {}).get("last_seen")
+        if hit:
+            top = hit[0]
+            blk["last_seen"] = {"title": top.get("title"), "url": top.get("url"), "date": top.get("date")}
+        elif old:
+            blk["last_seen"] = old
     # сводка правилами
     parts = []
     if uniq:

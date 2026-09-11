@@ -46,7 +46,7 @@
       'verdict/now': 'Today\'s verdict.', 'verdict/history': 'Every verdict that actually changed, in order.',
       'now/analogs': 'Daily Niño 3.4 this year against the four strongest past events on the same days.', 'now/map': 'The four Niño boxes on the map, this week against the same week of a past event.',
       'now/weekly': 'The four weekly indices over the last weeks, with the same weeks of past events beside them.', 'now/weekly_a': 'One weekly index against the strongest events on the same calendar.',
-      'ocean/surface': 'Daily box means from the NOAA grid, one day behind, with own climatologies.', 'ocean/hovmoller': 'How the heat moves: the subsurface anomaly along the equator month by month, this event beside a past one.', 'mentions/attention': 'How much the world talks about it: articles per day, Wikipedia views, share of world news.', 'mentions/articles': 'Latest headlines in nine languages, with the publisher.', 'mentions/official': 'What the forecast centres publish.', 'ocean/moorings': 'Temperature by depth under the equator, mooring by mooring, every day.', 'ocean/section': 'The reanalysis section along the equator, monthly.',
+      'ocean/surface': 'Daily box means from the NOAA grid, one day behind, with own climatologies.', 'ocean/hovmoller': 'How the heat moves: the subsurface anomaly along the equator month by month, this event beside a past one.', 'mentions/attention': 'How much the world talks about it: articles per day, Wikipedia views, share of world news.', 'mentions/articles': 'Latest headlines in nine languages, with the publisher.', 'mentions/official': 'The official word: when the next release from each centre is due, how long each has been quiet on El Niño, and what they last said.', 'ocean/moorings': 'Temperature by depth under the equator, mooring by mooring, every day.', 'ocean/section': 'The reanalysis section along the equator, monthly.',
       'models/cities': 'Seven-day weather forecasts for 50 cities, three models, seven parameters, against the fact when the day arrives: how far the models miss, by horizon and over time. A local watch of how stable the system is.',
       'models/plume': 'All models\' seasonal forecasts, the live-model centre, where we stand in the season.', 'models/stack': 'The last three issues, one under the other, against the same reality.', 'models/scoreboard': 'Each model against the official value it forecast.', 'models/breakdown': 'How many models fell below reality, issue by issue; the chronic ones.', 'models/revisions': 'How each model moved its peak between issues.',
       'air/coupling': 'The three atmospheric signs that the ocean and the air are coupled.', 'air/fuel': 'The warm water volume under the equator: the fuel gauge and its lead.', 'air/layers': 'The four satellite floors of the atmosphere and their delay.', 'air/wind': 'Daily zonal wind over the western Pacific and the westerly bursts.', 'air/mjo': 'The Madden–Julian Oscillation: phase and amplitude.', 'air/indices': 'MEI, the Indian Ocean Dipole and RONI next to our coupling score.',
@@ -7437,12 +7437,55 @@
       body.appendChild(wrap);
       body.appendChild(el('div', 'cap', 'Headlines as written by the publishers, newest first, duplicates removed; a link goes to the publisher through Google News or Bing News. Not our words and not a source of numbers.'));
     } else {
-      var g = el('div', 'gloss'), off = M.official || {};
-      var withE = Object.keys(off).filter(function (key) { return (off[key].items || []).length; }), without = Object.keys(off).filter(function (key) { return !(off[key].items || []).length; });
-      g.innerHTML = withE.map(function (key) { var o = off[key]; return '<div class="gl-i"><b>' + esc(o.label) + '</b> <span class="s">' + o.items.length + ' of the latest ' + (o.n_all || o.items.length) + ' posts mention El Niño</span><ul>' + o.items.map(function (x) { return '<li><a href="' + esc(x.url) + '" target="_blank" rel="noopener">' + esc(x.title) + '</a> <span class="s">' + esc(x.date || '') + '</span></li>'; }).join('') + '</ul></div>'; }).join('') +
-        (without.length ? '<div class="gl-i"><b>Nothing about El Niño in the latest posts</b><ul>' + without.map(function (key) { var o = off[key]; return '<li><a href="' + esc(o.url || '#') + '" target="_blank" rel="noopener">' + esc(o.label) + '</a> <span class="s">' + (o.n_all || 0) + ' posts checked</span></li>'; }).join('') + '</ul></div>' : '') || '<div class="note">No official feed answered.</div>';
+      /* ЧТО СКАЗАНО И КОГДА СКАЖУТ ДАЛЬШЕ (владелец 11.09: «вкладка непонятная, то есть
+         что-то там есть, но ничего нет; выглядит запущенной; какая цель вкладки»).
+         Цель у неё есть, и она стоит отдельной вкладки: наши измерения это одна половина,
+         вторая — что об этом говорят официальные центры прогноза. Но показана она была
+         худшей стороной: открытые ленты держат десять последних записей, запись про
+         Эль-Ниньо вылетает из окна за часы, и вкладка умела сказать только «в последних
+         десяти ничего» — пустая страница на весь экран.
+         Теперь здесь три вещи, и ни одна не пустует. Календарь: когда официальное слово
+         придёт в следующий раз и через сколько дней (он и так лежит в данных, но на этой
+         вкладке его не было). Молчание числом: сколько дней прошло с последней записи про
+         Эль-Ниньо у каждого центра — это измерение, а не пустота. И сами записи, когда они
+         есть. */
+      var off = M.official || {}, keys = Object.keys(off);
+      var cal = ((S.D.background || {}).calendar || {}).items || [];
+      function daysTo(iso) { var d = new Date(iso + 'T00:00:00Z'); return Math.round((d - Date.now()) / 864e5); }
+      function daysSince(iso) { if (!iso) return null; var d = new Date(String(iso).slice(0, 10) + 'T00:00:00Z'); var n = Math.round((Date.now() - d) / 864e5); return fin(n) ? n : null; }
+      var lastDays = keys.map(function (k2) { return daysSince(((off[k2].last_seen) || {}).date); }).filter(function (v) { return v != null; });
+      var quietest = lastDays.length ? Math.min.apply(null, lastDays) : null;
+      var nextUp = cal.filter(function (c) { return c.in_days != null; }).sort(function (a, b) { return a.in_days - b.in_days; })[0];
+      var kp = el('div', 'kpis');
+      kp.innerHTML =
+        '<div class="kpi"><div class="kn">centres watched</div><div class="kv">' + keys.length + '</div><div class="km">agencies and forecast centres with a feed we can read, checked on every run</div>' + kmeta(null, 'open RSS feeds', (M.built || '').slice(0, 10)) + '</div>' +
+        '<div class="kpi"><div class="kn">since the last word</div><div class="kv">' + (quietest == null ? '·' : quietest + '<small>days</small>') + '</div><div class="km">' + (quietest == null ? 'no post about El Niño on record in any feed we read yet' : 'since any of these centres last published on El Niño; the feeds hold ten posts each, so we remember the hit rather than the window') + '</div>' + kmeta(null, 'our own count', (M.built || '').slice(0, 10)) + '</div>' +
+        (nextUp ? '<div class="kpi"><div class="kn">next release due</div><div class="kv">' + (nextUp.in_days <= 0 ? 'today' : nextUp.in_days + '<small>days</small>') + '</div><div class="km">' + esc(nextUp.name) + ' · ' + esc(nextUp.rule || '') + '</div>' + kmeta(null, esc(nextUp.src || ''), nextUp.next) + '</div>' : '');
+      body.appendChild(kp);
+
+      if (cal.length) {
+        var wrapC = el('div'); wrapC.style.cssText = 'flex:0 0 auto;max-height:38vh;overflow:auto';
+        wrapC.innerHTML = '<table class="e"><thead><tr><th>due</th><th class="num">in days</th><th>what</th><th>who</th><th>rule</th></tr></thead><tbody>' +
+          cal.slice().sort(function (a, b) { return (a.in_days == null ? 1e9 : a.in_days) - (b.in_days == null ? 1e9 : b.in_days); }).map(function (c) {
+            return '<tr><td style="white-space:nowrap">' + dt(c.next || '') + '</td><td class="num">' + (c.in_days == null ? '—' : (c.in_days <= 0 ? 'today' : c.in_days)) + '</td><td>' + esc(c.name || '') + '</td><td>' + esc(c.src || '') + '</td><td class="s">' + esc(c.rule || '') + '</td></tr>';
+          }).join('') + '</tbody></table>';
+        body.appendChild(wrapC);
+      }
+
+      var g = el('div', 'gloss');
+      g.innerHTML = keys.length ? keys.map(function (key) {
+        var o = off[key], hit = o.items || [], ls = o.last_seen || null, ago = daysSince(ls && ls.date);
+        var state = hit.length
+          ? '<span class="s">' + hit.length + ' of the latest ' + (o.n_all || hit.length) + ' posts are about El Niño</span>'
+          : (ls ? '<span class="s">quiet here now; last wrote about it ' + (ago == null ? 'earlier' : ago + ' days ago') + '</span>'
+                : '<span class="s">' + (o.n_all || 0) + ' posts checked, none about El Niño, and none on record yet</span>');
+        var list = hit.length
+          ? '<ul>' + hit.map(function (x) { return '<li><a href="' + esc(x.url) + '" target="_blank" rel="noopener">' + esc(x.title) + '</a> <span class="s">' + esc(x.date || '') + '</span></li>'; }).join('') + '</ul>'
+          : (ls && ls.url ? '<ul><li><a href="' + esc(ls.url) + '" target="_blank" rel="noopener">' + esc(ls.title || 'the last post on the subject') + '</a> <span class="s">' + esc(ls.date || '') + '</span></li></ul>' : '');
+        return '<div class="gl-i"><b><a href="' + esc(o.url || '#') + '" target="_blank" rel="noopener">' + esc(o.label) + '</a></b> ' + state + list + '</div>';
+      }).join('') : '<div class="note">No official feed answered.</div>';
       body.appendChild(g);
-      body.appendChild(el('div', 'cap', 'Agencies and forecast centres with an open feed, only the posts that mention El Niño or ENSO; feeds with nothing on the subject are listed at the end so the silence is visible too. NOAA CPC publishes its ENSO discussion on the second Thursday of the month and BoM its wrap-up fortnightly; neither has a feed we can read, see ' + vLink('the release calendar', 'how', 'calendar') + '.'));
+      body.appendChild(el('div', 'cap', 'Our own measurements are one half of this panel; what the forecast centres say is the other. Here is when the next official word is due, and how long each centre has been quiet on the subject. Only posts that mention El Niño or ENSO are kept; the feeds hold ten posts each, so a post falls out of the window within hours and we remember the hit rather than the window. NOAA CPC publishes its ENSO discussion on the second Thursday of the month and BoM its wrap-up fortnightly; neither has a feed we can read, so they appear in the calendar above and not in the list below.'));
     }
   }
 
