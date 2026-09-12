@@ -4370,6 +4370,36 @@ def update_all_sections(lang):
     print(f"  🗂️ Sections updated for {lang} ({len(cats)} pages)")
 
 
+def authors_of_items(items):
+    """Имена авторов названных работ — чтобы переписывать ИХ страницы, а не все сорок шесть тысяч.
+
+    Владелец 12.09.2026: «авторов не надо гонять всех везде, всё должно быть локально».
+    Он прав, и точечный путь у update_all_authors() был с самого начала — просто пути
+    генерации звали её без списка, и одна статья тянула сорокаминутную пересборку всех.
+    Здесь достаём авторов из уже собранных в памяти работ: ходить за ними на диск незачем.
+    """
+    out = set()
+    for it in items or []:
+        a = (it or {}).get("article") or {}
+        out |= {x for x in (a.get("authors") or []) if isinstance(x, str) and x.strip()}
+    return sorted(out)
+
+
+def authors_of_ids(aids):
+    """То же, но по номерам работ: читаем авторов из data.json. Нужно там, где работы
+    уже записаны (или вот-вот будут удалены) и в памяти их нет."""
+    out = set()
+    base = Path(LANG_DIR) / DEFAULT_LANG / "archive"
+    for aid in aids or []:
+        for p in base.glob(f"*/{aid}/data.json"):
+            try:
+                d = json.loads(p.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            out |= {x for x in (d.get("authors") or []) if isinstance(x, str) and x.strip()}
+    return sorted(out)
+
+
 def update_all_authors(only=None):
     """only — имена авторов, чьи страницы нужно переписать. Без него пишутся все.
 
@@ -6575,7 +6605,9 @@ def process_day(date_str, force=False, refresh_aggregates=True, express=False, l
             generate_archive_page(lang)
             generate_analytics_page(lang)
         generate_analytics_page(lang)
-        update_all_authors()
+        # Только авторы написанных сегодня работ: от дня меняются сотни имён, остальные
+        # сорок шесть тысяч переписывались бы тем же содержимым.
+        update_all_authors(only=authors_of_items(prepared))
         generate_sitemaps()
         generate_llms_txt()
         generate_feeds()
@@ -6772,6 +6804,9 @@ def find_article_dates(aid):
 def delete_article(aid, rebuild=True):
     """Удаляет статью (папки во всех языках: контент, картинки, PDF) и чистит индексы/графы."""
     import shutil
+    # Авторов снимаем ДО удаления: после него читать их будет неоткуда, а их страницы
+    # обязаны перестать показывать снятую работу.
+    gone_authors = authors_of_ids([aid])
     removed = 0
     for lang in LANGUAGES:
         for folder in (Path(LANG_DIR) / lang / "archive").glob(f"*/{aid}"):
@@ -6786,7 +6821,7 @@ def delete_article(aid, rebuild=True):
             update_all_tags(lang)
             update_all_scientists(lang)
             update_all_sections(lang)
-        update_all_authors()
+        update_all_authors(only=gone_authors)
     if not removed:
         print(f"  ⚠️ статья {aid} не найдена")
     return removed
@@ -6865,7 +6900,8 @@ def regenerate_article(aid, force=True, only_langs=None):
         update_all_tags(lang)
         update_all_scientists(lang)
         update_all_sections(lang)
-    update_all_authors()
+    # Пересоздали ОДНУ работу — и переписываем страницы её авторов, а не всех.
+    update_all_authors(only=authors_of_items([item]))
     print(f"  ✅ {aid} пересоздана ({date_str})")
     return True
 
@@ -6889,12 +6925,15 @@ def iso_day(v):
     return ""
 
 
-def _refresh_all_aggregates():
+def _refresh_all_aggregates(authors=None):
+    """authors — имена, чьи страницы переписать. None означает «все», и это дорого:
+    сорок шесть тысяч страниц на каждом языке. Вызывающий почти всегда знает, кого
+    именно он тронул, — пусть и скажет."""
     for lang in LANGUAGES:
         update_all_tags(lang)
         update_all_scientists(lang)
         update_all_sections(lang)
-    update_all_authors()
+    update_all_authors(only=authors)
 
 
 def generate_ids(id_list, force=False, express=False, allow_restricted=False, only_langs=None):
@@ -6939,7 +6978,7 @@ def generate_ids(id_list, force=False, express=False, allow_restricted=False, on
             print(f"  ❌ {item['article']['id']}: запись страниц упала ({e}) — пропускаю, остальные статьи не теряем")
             traceback.print_exc()
     if prepared:
-        _refresh_all_aggregates()
+        _refresh_all_aggregates(authors_of_items(prepared))
     print(f"\n✅ Сгенерировано по id: {len(prepared)} из {len(id_list)}")
     return len(prepared)
 
@@ -6959,6 +6998,9 @@ def bulk_generate(selection_path, batch_size=100, express=True, force=False, ski
     inputs = load_generation_inputs()
     total_batches = max(1, (len(ready) - 1) // batch_size + 1)
     total_generated = 0
+    # Авторы КОПЯТСЯ по всем батчам: prepared живёт внутри цикла, и к финальному
+    # пересчёту в нём остался бы только последний батч.
+    touched_authors = set()
 
     for bi in range(0, len(ready), batch_size):
         batch = ready[bi:bi + batch_size]
@@ -6993,6 +7035,7 @@ def bulk_generate(selection_path, batch_size=100, express=True, force=False, ski
                 print(f"  ❌ {item['article']['id']}: запись страниц упала ({e}) — пропускаю, остальные статьи не теряем")
                 traceback.print_exc()
         total_generated += written
+        touched_authors |= set(authors_of_items(prepared))
         print(f"  ✅ Батч {batch_num}: {written}/{len(batch)} сгенерировано (остальные — уже есть/лицензия/ошибка)")
 
     if total_generated:
@@ -7004,7 +7047,9 @@ def bulk_generate(selection_path, batch_size=100, express=True, force=False, ski
             generate_archive_page(lang)
             generate_analytics_page(lang)
         generate_analytics_page(lang)
-        update_all_authors()
+        # Только авторы написанных работ. Указатели по буквам и облако авторов пишутся
+        # внутри в любом случае — новый автор в них появится.
+        update_all_authors(only=sorted(touched_authors))
         generate_sitemaps()
         generate_llms_txt()
         generate_feeds()
