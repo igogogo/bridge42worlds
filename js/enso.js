@@ -434,7 +434,13 @@
     return sr.tail.map(function (p) { return [Math.round((Date.parse(p[0] + 'T00:00:00Z') - t0) / 86400000), p[1]]; }).filter(function (p) { return p[0] > 0 && fin(p[1]); });
   }
   function freshDot(x, y, r) { return '<circle class="fresh-dot" cx="' + (+x).toFixed(1) + '" cy="' + (+y).toFixed(1) + '" r="' + (r || 4.5) + '" style="stroke:var(--ochre)"/>'; }
-  function legendW(w) { return w < 560 ? 0 : 54; }
+  /* МЕСТА ПОД ЛЕГЕНДУ В КАРТИНКЕ БОЛЬШЕ НЕ ДЕРЖИМ. Владелец 11.09: «на dynamics на графиках
+     есть справа место, надо растянуть до конца». Пятьдесят четыре пикселя резервировались с
+     тех пор, когда легенда была колонкой внутри SVG. С 09.09 она уехала в окошко под кнопкой
+     и при R>0 функция legend() возвращает пустую строку — то есть поле держалось под то,
+     чего там нет, на каждом графике панели. Ноль. Собственные отступы под концевую подпись
+     у графиков свои и остаются. */
+  function legendW(w) { return 0; }
   /* Верхний отступ поля графика. В тесном режиме (плитка обзора) легенды в картинке нет —
      она уехала в метку и подсказку, и держать под неё 42 пикселя незачем: именно этот
      зазор владелец 06.09 назвал «огромным между названием и графиком». */
@@ -555,9 +561,22 @@
         s += '<line x1="' + X(i2).toFixed(0) + '" y1="' + Tp + '" x2="' + X(i2).toFixed(0) + '" y2="' + (H - B) + '" style="stroke:var(--grid)" stroke-width=".5"/>';
         // подписи месяцев — через один на среднем поле и через два в плитке обзора,
         // иначе они стоят вплотную и читаются как одно слово (владелец 06.09)
-        var mEvery = W > 620 ? 1 : (W > 400 ? 2 : 3);
+        // на двухлетнем поле каждый месяц не помещается: 25 подписей на 700 пикселей
+        var mEvery = FW ? (W > 900 ? 2 : 3) : (W > 620 ? 1 : (W > 400 ? 2 : 3));
         if (mo % mEvery === 0 || mEvery === 1) s += '<text x="' + (X(i2) + 2).toFixed(0) + '" y="' + (H - 10) + '">' + MONTHS[mo - 1] + (mo === 1 && !S._tight ? " '" + d.slice(2, 4) : '') + '</text>';
       }
+    }
+    /* ПОД ПРОДОЛЖЕНИЕМ ТОЖЕ ЕСТЬ МЕСЯЦЫ. Владелец 11.09: «у тех, что протянули на следующий
+       год, внизу по оси нет подписей месяцев». Цикл выше шёл только по нашим суткам, а год
+       вперёд рисовался без единой засечки: читатель видел линии прошлых событий и не мог
+       сказать, где там ноябрь. Даты берём тем же счётом от последнего дня ряда. */
+    for (var i3 = 1; i3 <= FW + 14; i3++) {
+      var df = addDays(w.last_date, i3);
+      if (df.slice(8) !== '01') continue;
+      var mof = parseInt(df.slice(5, 7), 10), xf = X(n - 1 + i3);
+      var mEveryF = FW ? (W > 900 ? 2 : 3) : (W > 620 ? 1 : (W > 400 ? 2 : 3));
+      s += '<line x1="' + xf.toFixed(0) + '" y1="' + Tp + '" x2="' + xf.toFixed(0) + '" y2="' + (H - B) + '" style="stroke:var(--grid)" stroke-width=".5" opacity=".6"/>';
+      if (mof % mEveryF === 0 || mEveryF === 1) s += '<text x="' + (xf + 2).toFixed(0) + '" y="' + (H - 10) + '" opacity=".85">' + MONTHS[mof - 1] + (mof === 1 && !S._tight ? " '" + df.slice(2, 4) : '') + '</text>';
     }
     s += segs(rec.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 1.8, pickOp('all'));
     s += segs(rec.slice(-30).map(function (v, i) { return [X(n - 30 + i), fin(v) ? Y(v) : NaN]; }), 'var(--nino)', 2.6, pickOp('last30'));
@@ -987,7 +1006,7 @@
        месяцев. Именно про него владелец сказал «на JAS мы сейчас в большей степени». */
     var best = (IRI.position || []).filter(function (p) { return !p.complete; })
       .sort(function (a, b) { return b.months_done - a.months_done; })[0] || null;
-    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">IRI model plume, ' + esc(IRI.issued) + ' issue: Niño 3.4 by season, °C</text>';
+    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText('IRI model plume, ' + esc(IRI.issued) + ' issue: Niño 3.4 by season — the dot is a three-month mean, not today', W - Lp - 10, 12) + '</text>';
     s += gridY(vmin, vmax, .5, Y, Lp, R + 8, W, 1);
     cols.forEach(function (c, k) {
       if (W <= 470 && k % 2 !== 0) return;
