@@ -393,9 +393,31 @@ def fuel_item(latest, psl):
     A = np.vstack([a, np.ones_like(a)]).T
     coef, *_ = np.linalg.lstsq(A, b, rcond=None)
     last_v = x[-1][2]; proj = coef[0] * last_v + coef[1]
+    # РАЗБРОС ВОКРУГ ПРЯМОЙ И КРАЙ ДИАПАЗОНА. Владелец 11.09 заметил странное число: «what
+    # the fuel implies +1.09 °C» стояло рядом с сегодняшними +2,87, и читалось как обещание
+    # обвала. Две причины, и обе надо назвать вслух, а не прятать в слово «rough».
+    #   · Связь слабая: r = 0,49, то есть прямая объясняет около четверти разброса. Одна
+    #     цифра без разброса выдаёт за оценку то, что оценкой не является.
+    #   · Топливо СЕЙЧАС стоит на самом верху окна, по которому подогнана прямая, а окно —
+    #     всего пять лет, из них три холодные. Подгонка на холодных годах, приложенная к
+    #     рекордному топливу, и даёт заниженный уровень.
+    # Поэтому наверх выносим разброс, а не одну цифру, и говорим, где стоит текущее значение.
+    resid = b - (coef[0] * a + coef[1])
+    sd = float(np.std(resid, ddof=2)) if len(resid) > 2 else float("nan")
+    r2 = r * r
+    at_top = last_v >= float(np.max(a))
+    lo, hi = proj - sd, proj + sd
     kpis = [
-        {"name": "best lead of the fuel", "value": f"{lead}", "unit": "months", "plain": f"The warm-water volume correlates most with Niño 3.4 {lead} months later (r = {r:.2f}, {npairs} months)."},
-        {"name": "what the fuel implies", "value": f"{proj:+.2f}", "unit": f"°C in {lead} mo", "plain": f"A straight-line fit of Niño 3.4 on the fuel {lead} months earlier, applied to the latest fuel value {last_v:.2f}: {proj:+.2f} °C. A rough scale, not a forecast."},
+        {"name": "best lead of the fuel", "value": f"{lead}", "unit": "months",
+         "plain": f"The warm-water volume lines up best with Niño 3.4 {lead} months later: r = {r:.2f} over {npairs} months, so the line accounts for about {r2 * 100:.0f} % of the variation and the rest is other things."},
+        {"name": "what the fuel implies", "value": f"{lo:+.1f}…{hi:+.1f}", "unit": f"°C in {lead} mo",
+         "plain": (f"A straight line fitted from Niño 3.4 on the fuel {lead} months earlier, then read at the latest fuel value, "
+                   f"{last_v / 1e14:.2f}·10¹⁴ m³: the middle of the fit is {proj:+.2f} °C and one standard error of the fit is "
+                   f"±{sd:.2f}, hence {lo:+.1f} to {hi:+.1f}. "
+                   + ("The fuel is now at the very top of the window the line was fitted on (2021 onward, three of those years cold), "
+                      "so this is the edge of what the line has ever seen and the middle of it reads low against what the surface "
+                      "already shows. Read the width, not the centre. " if at_top else "")
+                   + "This is a scale of how much the stored heat matters, not a forecast of the level.")},
     ]
     return {"id": "fuel_lead", "kind": "leadlag", "scene": "air", "also": ["now"],
             "title": f"The fuel leads the surface by {lead} months (r = {r:.2f}) in our own record",

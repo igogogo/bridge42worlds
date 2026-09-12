@@ -28,6 +28,17 @@ def _series(cur, key):
     return w, list(zip(t.get("dates") or [], t.get("anom") or t.get("values") or []))   # значения лежат под «anom»
 
 
+# Какие риски держатся на каком источнике: если пришла дыра (риск вида data про молчание),
+# зависимые от неё риски считаются приостановленными, а не снятыми.
+SUSPENDS = {
+    "tao_silent": ("subsurface_warm",),
+}
+# то же для тревог: ключ — id тревоги, которую держит этот источник
+SUSPENDS_AL = {
+    "tao_silent": ("water_above_normal_at_m_depth_w",),
+}
+
+
 def build(cur, assessed):
     """cur — результат правил на свежих данных (как latest.json до саммари); assessed — latest.json."""
     A = assessed or {}
@@ -99,9 +110,15 @@ def build(cur, assessed):
         elif was_al[k].get("level") != a.get("level"):
             trig.append({"kind": "alert", "severity": "high" if a.get("level") == "SHOUT" else "mid",
                          "text": f"Alert level {was_al[k].get('level')} → {a.get('level')}: {a.get('title')}"})
+    # то же правило для тревог: молчащий источник приостанавливает, а не снимает
+    now_r_ids = {r.get("id") for r in cur.get("risks") or []}
     for k, a in was_al.items():
-        if k not in now_al:
-            trig.append({"kind": "alert", "severity": "mid", "text": f"Alert cleared: {a.get('title')}"})
+        if k in now_al:
+            continue
+        held = any(k in deps and g in now_r_ids for g, deps in SUSPENDS_AL.items())
+        trig.append({"kind": "alert", "severity": "mid",
+                     "text": (f"Alert suspended, its source is silent: {a.get('title')}" if held
+                              else f"Alert cleared: {a.get('title')}")})
     now_r = {r.get("id"): r for r in cur.get("risks") or [] if r.get("id")}
     was_r = {r.get("id"): r for r in A.get("risks") or [] if r.get("id")}
     out["risks"] = {k: r.get("level") for k, r in now_r.items()}
@@ -111,8 +128,19 @@ def build(cur, assessed):
         elif was_r[k].get("level") != r.get("level"):
             trig.append({"kind": "risk", "severity": "mid",
                          "text": f"Risk level {was_r[k].get('level')} → {r.get('level')}: {r.get('title')}"})
+    # ПРИОСТАНОВЛЕН — НЕ СНЯТ. Поймано 12.09: буи не ответили, правило по ним не сработало, и
+    # лента объявила «Risk cleared: Water +11.3 °C above normal is sitting at 100 m under
+    # 125°W». Вода никуда не делась, мы просто не дозвонились до причала. Пока на доске стоит
+    # риск вида data про молчание источника, риски, которые на этом источнике держатся, не
+    # объявляются снятыми: они помечаются приостановленными, и это честное слово.
     for k, r in was_r.items():
-        if k not in now_r:
+        if k in now_r:
+            continue
+        gap = next((g for g, deps in SUSPENDS.items() if k in deps and g in now_r), None)
+        if gap:
+            trig.append({"kind": "risk", "severity": "mid",
+                         "text": f"Risk suspended, its source is silent: {r.get('title')}"})
+        else:
             trig.append({"kind": "risk", "severity": "mid", "text": f"Risk cleared: {r.get('title')}"})
     ri, ari = cur.get("risk_index"), A.get("risk_index")
     out["risk_index"] = ri

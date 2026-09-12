@@ -607,6 +607,21 @@ def risks(SUB):
     out = []
     t = (SUB or {}).get("tao") or {}
     w = t.get("warmest") or {}
+    # МОЛЧАНИЕ ИСТОЧНИКА — НЕ ОТМЕНА ОПАСНОСТИ. Поймано 12.09: буи не ответили на лёгком
+    # прогоне, warmest пришёл пустым, правило ниже просто не сработало — и слой свежего
+    # объявил «Risk cleared: Water +11.3 °C above normal is sitting at 100 m under 125°W».
+    # Вода никуда не делась: в разобранном состоянии те же 11,27 °C на 100 м за 1 сентября.
+    # Риск пятого уровня исчез с доски потому, что мы не дозвонились до причала.
+    # Теперь на месте пропавшего ряда встаёт риск ВИДА data: доска показывает дыру, а не
+    # отсутствие опасности, и «cleared» в ленте больше не врёт.
+    if not w.get("value"):
+        out.append((
+            "The moorings did not answer, so the heat under the equator is unmeasured today", 2, "now",
+            "The TAO/TRITON array returned no five-day mean on this run" + (f"; the last reading we hold is from {t.get('last_date')}" if t.get("last_date") else "") + ".",
+            "This is a gap in our reading, not a change in the ocean. The warm layer does not disappear because a buoy "
+            "stopped reporting, and any risk that rests on these moorings is suspended rather than lifted while this lasts.",
+            "the next run: the array usually returns within a day",
+            None, "data", "tao_silent"))
     if w.get("value") is not None and w["value"] >= 3.0:
         lvl = 5 if w["value"] >= 8 else (4 if w["value"] >= 5 else 3)
         de, dw = t.get("d20_east"), t.get("d20_west")
