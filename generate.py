@@ -4613,6 +4613,7 @@ def update_all_authors(only=None):
         # перерисует в языке страницы по data-context-author), чипы соавторов/тегов/законов локализованы.
         by_id = articles_by_lang.get(lang, {})
         _pick = set(only or ())
+        _done = 0
         for author_name, data in graph.items():
             if _pick and author_name not in _pick:
                 continue
@@ -4735,7 +4736,12 @@ def update_all_authors(only=None):
                 articles_list_html=articles_html or f'<p>{safe(loc["no_articles"])}</p>',
                 footer_text=safe(loc["footer"])
             ), encoding="utf-8")
-        print(f"  👥 Authors updated for {lang} ({len(graph)} authors)")
+            _done += 1
+        # Считаем СОБРАННЫЕ страницы, а не размер реестра: при точечной пересборке
+        # (only=…) старая подпись говорила «49590 авторов» на двух тронутых и
+        # заставляла думать, что гоняем всех.
+        print(f"  👥 Authors updated for {lang} "
+              + (f"({_done} of {len(graph)})" if _pick else f"({_done} authors)"))
 
 
 # ── Main ──
