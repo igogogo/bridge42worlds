@@ -14,6 +14,9 @@ import requests
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from pypdf import PdfReader
+# Чистка одиноких суррогатов — общая, из common: два экземпляра одной функции
+# разъедутся ровно тогда, когда это будет дороже всего.
+from common import _no_surrogates
 
 # cp1252-консоль Windows роняет печать ✅/❌ при ручном запуске
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
@@ -639,7 +642,12 @@ def parse_pdf(path):
                     imgs.append(img.data)
             except Exception:
                 pass
-        return t, imgs
+        # Чужой PDF изредка отдаёт обломок пары UTF-16 — половину символа вроде 𝐴.
+        # Такую строку нельзя ни отправить модели, ни записать в файл без потерь, а
+        # всплывает это далеко от места рождения: 12.09 статья 2609.11792v1 погибла на
+        # отправке запроса, «surrogates not allowed». Чистим там, где чужой текст входит
+        # в систему, — дальше по трубе он уже наш.
+        return _no_surrogates(t), imgs
     except Exception:
         return "", []
 

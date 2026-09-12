@@ -396,6 +396,25 @@ def job(**tags):
     return _Job()
 
 
+def _no_surrogates(s):
+    """Убрать одинокие суррогаты: строка с ними не кодируется в utf-8 вообще.
+
+    Откуда берутся. Пара UTF-16 (\\ud835 + \\udc34) кодирует символ вне базовой плоскости —
+    математическую букву вроде 𝐴. Если разбор PDF отдал только первую половину пары,
+    получается символ, которого в Юникоде нет: ни отправить, ни записать.
+
+    Заменяем на пробел, а не выбрасываем: позиция в тексте сохраняется, и соседние слова
+    не слипаются.
+    """
+    if not isinstance(s, str) or s.isascii():
+        return s
+    try:
+        s.encode("utf-8")
+        return s
+    except UnicodeEncodeError:
+        return "".join(" " if "\ud800" <= ch <= "\udfff" else ch for ch in s)
+
+
 def chat(agent, user_prompt, retries=3, system=None, **overrides):
     """Вызов LLM по ИМЕНИ АГЕНТА (модель/температура/max_tokens из config.agents).
     overrides позволяет точечно переопределить (напр. max_tokens) в конкретном вызове.
@@ -407,6 +426,15 @@ def chat(agent, user_prompt, retries=3, system=None, **overrides):
     обязана жить в системной роли (тот же урок, что с суб-агентами)."""
     if client is None:
         raise RuntimeError("DEEPSEEK_API_KEY не задан — операция с API невозможна")
+    # ОДИНОКИЕ СУРРОГАТЫ УБИВАЮТ ЗАПРОС ДО ОТПРАВКИ. Разбор PDF изредка отдаёт обломок
+    # пары UTF-16 — например \ud835 от математических букв (𝐴, 𝑥). Такую строку нельзя
+    # закодировать в utf-8 вовсе, и клиент падает ещё до сети: три ретрая подряд с тем же
+    # текстом, потом статья теряется целиком (12.09, 2609.11792v1 — «surrogates not
+    # allowed»). Чистим в единой воронке всех вызовов: сколько бы источников текста ни
+    # было, наружу уходит кодируемая строка.
+    user_prompt = _no_surrogates(user_prompt)
+    if system:
+        system = _no_surrogates(system)
     guard_peak(f"агент {agent}")  # стоп в пиковые часы, если не ALLOW_PEAK=1 (защита от переплаты ×2)
     p = agent_cfg(agent)
     p.update({k: v for k, v in overrides.items() if v is not None})
