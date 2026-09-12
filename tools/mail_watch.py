@@ -5,7 +5,7 @@
 прошло незамеченным».
 
     python tools/mail_watch.py            один проход: что нового — в канал
-    python tools/mail_watch.py --loop     крутиться (по умолчанию раз в 120 с)
+    python tools/mail_watch.py --loop     крутиться (по умолчанию раз в сутки)
     python tools/mail_watch.py --list     показать последние письма, ничего не слать
 
 Доступы — из .env (MAIL_HOST/MAIL_USER/MAIL_PASS, IMAP 993 SSL). Файл вне git.
@@ -166,13 +166,40 @@ def boxes():
 
 
 def check(list_only=False, quiet=False):
-    total = 0
+    """Обойти все ящики. Возвращает 0; кидает наверх только безнадёжное.
+
+    ЗДЕСЬ И БЫЛА ГЛАВНАЯ БЕДА. Ошибка ловилась по каждому ящику и гасилась печатью, а
+    наружу всегда уходил успех — то есть цикл считал, что опрос удался, и спал свои две
+    минуты. Отступ при неудачах, написанный в цикле, не включался НИКОГДА: ему нечего
+    было ловить. Так 12.09 набралось 2354 отвергнутых входа подряд, и хостинг закрыл
+    почту домена — вместе с чтением ответов авторов.
+    Один упавший ящик по-прежнему не повод останавливаться: у него может быть свой сбой.
+    А вот когда ВСЕ ящики отвергают доступы — это не сбой, это ответ, и его надо отдать
+    наверх, чтобы сторож встал, а не долбился.
+    """
+    errs = []
+    ok = 0
     for box in boxes():
         try:
-            total += check_box(box, list_only=list_only, quiet=quiet)
+            check_box(box, list_only=list_only, quiet=quiet)
+            ok += 1
         except Exception as ex:
+            errs.append(ex)
             print(f"⚠️ {box}: {type(ex).__name__} {ex}")
+    if not ok and errs and all(_is_auth_error(e) for e in errs):
+        raise errs[0]
     return 0
+
+
+def _is_auth_error(ex):
+    """Сервер отверг доступы — в отличие от «сети нет».
+
+    Различать обязательно: сетевой сбой лечится ожиданием, отвергнутый пароль — нет.
+    Формулировку каждый сервер даёт свою, поэтому смотрим на текст, а не на тип.
+    """
+    s = f"{type(ex).__name__} {ex}".lower()
+    return any(k in s for k in ("invalid login", "authenticationfailed", "authentication failed",
+                                "invalid credentials", "login failed", "auth"))
 
 
 def check_box(user, list_only=False, quiet=False):
@@ -248,7 +275,8 @@ def main():
         pass
     ap = argparse.ArgumentParser()
     ap.add_argument("--loop", action="store_true", help="крутиться постоянно")
-    ap.add_argument("--every", type=int, default=120, help="период опроса в секундах")
+    ap.add_argument("--every", type=int, default=86400,
+                    help="период опроса в секундах (по умолчанию сутки)")
     ap.add_argument("--list", action="store_true", help="показать последние письма и выйти")
     args = ap.parse_args()
     if not args.loop:
@@ -276,15 +304,38 @@ def main():
     # стареет — Worker через час говорит в канал. Сигнал стал означать то, что от него
     # ждут: не «я запущен», а «я делаю дело».
     fails = 0
+    auth_fails = 0
     while True:
         try:
             check(quiet=True)
             if fails:
                 print(f"✅ связь восстановилась после {fails} неудачных попыток")
-            fails = 0
+            fails = auth_fails = 0
             beat("mail")
             delay = args.every
         except Exception as ex:
+            # ОТВЕРГНУТЫЙ ПАРОЛЬ — НЕ СЕТЕВОЙ СБОЙ, И ПОВТОРЯТЬ ЕГО НЕЛЬЗЯ.
+            #
+            # Сеть, которой нет, вернётся сама, и ждать её повторами правильно. Пароль,
+            # который сервер отверг, от повторов не починится никогда — а выглядит это
+            # ровно как подбор. 12.09 сторож так и сделал: пять ящиков раз в две минуты,
+            # 2354 неудачных входа подряд, и хостинг закрыл почту домена целиком —
+            # вместе с чтением ответов авторов. Мы сами себя и заблокировали.
+            #
+            # Поэтому: три попытки и стоп. Молча продолжать хуже, чем встать: встали —
+            # видно в журнале и по остановившемуся сигналу, долбимся — не видно никому,
+            # пока не отключат.
+            if _is_auth_error(ex):
+                auth_fails += 1
+                print(f"⛔ почта не пускает ({auth_fails}/3): {type(ex).__name__} {ex}")
+                if auth_fails >= 3:
+                    print("⛔ СТОРОЖ ОСТАНОВЛЕН: пароль отвергнут трижды подряд.")
+                    print("   Повторять нельзя — это выглядит подбором, и хостинг закроет")
+                    print("   почту домена. Проверь доступы в панели и запусти сторожа заново.")
+                    return 1
+                delay = 60
+                time.sleep(delay)
+                continue
             fails += 1
             print(f"⚠️ опрос не удался ({fails}): {type(ex).__name__} {ex}")
             # Отступ при повторных неудачах: сеть, которой нет, не станет доступнее
