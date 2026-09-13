@@ -46,6 +46,7 @@ intake.py, и она остаётся единственной: сюда не п
 import argparse
 import json
 import re
+import subprocess
 import sys
 import time
 import urllib.error
@@ -306,6 +307,18 @@ def draft(a):
 
 # ── состояние ────────────────────────────────────────────────────────────────
 
+def _id_for(doi):
+    """Номер, который intake присвоил работе с этим DOI. None — если записи нет."""
+    for p in (HERE / "works").glob("*.json"):
+        try:
+            rec = json.loads(p.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if rec.get("doi") and rec["doi"] == doi:
+            return rec.get("id") or p.stem
+    return None
+
+
 def load_seen():
     try:
         return json.loads(SEEN.read_text(encoding="utf-8"))
@@ -327,6 +340,8 @@ def main():
     ap.add_argument("--limit", type=int, default=8, help="сколько взять (владелец: 8 в сутки)")
     ap.add_argument("--server", default="biorxiv", choices=("biorxiv", "medrxiv", "both"))
     ap.add_argument("--apply", action="store_true", help="завести работы; без ключа — показ")
+    ap.add_argument("--generate", action="store_true",
+                    help="после приёма сразу разобрать (для шага в дневном прогоне)")
     a = ap.parse_args()
 
     to = a.to or (date.today() - timedelta(days=1)).isoformat()
@@ -370,7 +385,6 @@ def main():
         return 0
 
     DRAFTS.mkdir(parents=True, exist_ok=True)
-    import subprocess
     done, failed = [], []
     for sc, r in take:
         d = draft(r)
@@ -404,18 +418,22 @@ def main():
     save_seen(seen)
 
     log(f"\n✅ заведено {len(done)}, пропущено {len(failed)}")
-    if done:
-        ids = []
-        for d in done:
-            hit = sorted((HERE / "works").glob("*.json"),
-                         key=lambda p: p.stat().st_mtime, reverse=True)
-            for p in hit[:len(done) + 2]:
-                rec = json.loads(p.read_text(encoding="utf-8"))
-                if rec.get("doi") == d["doi"]:
-                    ids.append(rec["id"])
-                    break
+    ids = [i for i in (_id_for(d["doi"]) for d in done) if i]
+    if not ids:
+        return 0
+    if not a.generate:
         log(f"дальше: python run.py ids {' '.join(ids)}")
-    return 0
+        return 0
+
+    # Разбор — тем же конвейером, что и arXiv. Замок дерева здесь НЕ берём: в дневном
+    # прогоне он уже взят full_run и передан нам через окружение, а руками сборщик
+    # зовут при свободном дереве. Постинга нет никогда: наружу работы уходят общим
+    # шагом в конце цепочки, и решать это за владельца сборщику не положено.
+    log(f"\n▶ разбор: {' '.join(ids)}")
+    rc = subprocess.run([sys.executable, "-X", "utf8", "-u", "run.py", "ids"] + ids
+                        + ["--no-post"], cwd=str(ROOT)).returncode
+    log(f"разбор закончился, код {rc}")
+    return rc
 
 
 if __name__ == "__main__":
