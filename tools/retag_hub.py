@@ -81,6 +81,128 @@ LIVE_MIN = 3            # у новой статьи меньше трёх св�
 STOP_W = {"of", "the", "and", "in", "a", "for", "with", "based", "using"}
 
 
+# ── ДОМЕННЫЙ СТОРОЖ ──────────────────────────────────────────────────────────
+# Найдено 13.09.2026 на первых восьми работах с bioRxiv: у статьи про Т-клетки при
+# старении стояло stellar_age, stellar_population и asteroseismology, у статьи про
+# «часы старения» — atomic_clock, quantum_clock и solar_flare_prediction. Из 41
+# назначенной связи 16 пришли из чужих областей.
+#
+# Причина не в порогах. Вектор ищет ближайшее из ТОГО, ЧТО ЕСТЬ, а в реестре 3510
+# понятий физических против 117 биологических и НИ ОДНОГО про старение. Для работы
+# про возраст клеток ближайшим честно оказывается «возраст звезды»: слова те же,
+# предмет другой. Поднимать порог бессмысленно — станет пусто вместо неверного, а
+# неверное вернётся, как только слово совпадёт сильнее.
+#
+# Поэтому сторож смотрит не на близость, а на ПРЕДМЕТ. У каждого понятия есть дом —
+# область, где живёт большинство его статей. Понятие из чужого дома к статье не
+# цепляется. Два исключения, и оба нужны:
+#   · методы ходят везде — машинное обучение и статистика одинаково уместны у
+#     астрофизика и у биолога, и запрещать их значило бы обеднить разметку;
+#   · кочующее понятие (живёт сразу в нескольких областях, нигде не большинство) —
+#     это и есть общее знание, ради связей ради которого граф и строится.
+# Понятие без статей пропускаем: оно новое, дома у него ещё нет.
+# СЕМЬИ, А НЕ РАЗДЕЛЫ. Первый замер сторожа по разделам снимал 6,3% разметки всего
+# архива — и снимал не там: больше всего в hep-ph, gr-qc, cond-mat, а в примерах стояло
+# «у статьи math-ph снять el_nino_southern_oscillation». Но math-ph это та же физика, и
+# понятия между физическими разделами ходят законно: разделение на astro-ph и hep-th
+# существует для рубрикации, а не для смысла. Различие, которое нам действительно нужно,
+# ровно одно — физика против биологии. Поэтому сравниваем СЕМЬИ.
+FAMILY = {
+    "astro-ph": "phys", "gr-qc": "phys", "hep-ph": "phys", "hep-th": "phys",
+    "hep-ex": "phys", "hep-lat": "phys", "nucl-th": "phys", "nucl-ex": "phys",
+    "quant-ph": "phys", "cond-mat": "phys", "physics": "phys", "math-ph": "phys",
+    "nlin": "phys", "chao-dyn": "phys", "q-bio": "bio", "q-fin": "econ",
+    "econ": "econ", "cs": "method", "math": "method", "stat": "method",
+    # eess — обработка сигналов, изображения, системы: такая же прикладная
+    # методология, и предмет у неё чужой по определению.
+    "eess": "method",
+}
+
+
+def family(area):
+    """Семья раздела. Незнакомый раздел считаем своей отдельной семьёй, а не чужой."""
+    return FAMILY.get(area or "", area or "")
+
+
+METHOD_AREAS = {"method"}
+# Сколько статей понятия должно лежать в области статьи, чтобы понятие считалось здесь
+# своим. Двух хватает: одна бывает случайной, две — уже привычка.
+AT_HOME_MIN = 2
+AT_HOME_SHARE = 0.15
+
+
+def _areas_of_articles():
+    """Область каждой статьи архива по её первому разделу. {номер без версии: 'q-bio'}."""
+    import json as _j
+    out = {}
+    try:
+        for a in _j.loads((ROOT / "lang" / "ru" / "articles-index.json")
+                          .read_text(encoding="utf-8")):
+            cat = (a.get("categories") or [""])[0]
+            out[re.sub(r"v\d+$", "", a["id"])] = cat.split(".")[0]
+    except (OSError, ValueError, KeyError):
+        pass
+    return out
+
+
+def concept_homes(exclude=()):
+    """Где живёт каждое понятие. {cid: (главная область, {область: сколько статей})}.
+
+    exclude — номера (без версии), которые в подсчёт не идут. Это не мелочь, а условие
+    правильности. Сторож спрашивает у понятия, живёт ли оно в области статьи, и ответ
+    берёт из реестра — куда уже записана разметка ЭТОЙ ЖЕ статьи. Получалась петля:
+    stellar_age ошибочно приписали двум био-работам, после чего он стал «своим» в
+    биологии и продолжал к ним цепляться, подтверждая себя на каждом круге. Перемаркой
+    это не лечится — круг сходится на неверном ответе (проверено 13.09: два прохода дали
+    одно и то же). Статья не может выдавать понятию прописку сама себе.
+    """
+    import json as _j
+    from collections import Counter
+    art_area = _areas_of_articles()
+    skip = {re.sub(r"v\d+$", "", x) for x in exclude}
+    try:
+        reg = _j.loads((ROOT / "data" / "concepts-live.json")
+                       .read_text(encoding="utf-8"))["concepts"]
+    except (OSError, ValueError, KeyError):
+        return {}
+    homes = {}
+    for cid, v in reg.items():
+        arts = [re.sub(r"v\d+$", "", x) for x in (v.get("articles") or [])]
+        areas = Counter(family(a) for a in (art_area.get(x) for x in arts if x not in skip) if a)
+        homes[cid] = (areas.most_common(1)[0][0] if areas else None, areas)
+    return homes
+
+
+def fits_domain(cid, art_area, homes):
+    """Уместно ли понятие у статьи из этой области.
+
+    ПЕРВАЯ ПОПЫТКА БЫЛА НЕВЕРНОЙ, и ошибка поучительная. Сторож спрашивал «кочует ли
+    понятие» — то есть расползлись ли его статьи по областям без явного большинства. В
+    нашем корпусе это пропускает почти всё: астрофизика занимает 27%, физика 17%, и у
+    любого сколько-нибудь общего понятия главная область не дотягивает до порога. Так
+    atomic_clock и solar_flare_prediction прошли к статье про часы старения как
+    «кочующие».
+    Правильный вопрос другой: живёт ли понятие В ЭТОЙ области. Он прямой, не зависит от
+    перекоса корпуса и не требует подбирать порог «размазанности».
+    """
+    art_area = family(art_area)
+    if not art_area:
+        return True
+    # Статья-метод принимает понятия любой семьи. Метод на то и метод, что прикладывается
+    # к чужому предмету: работа по машинному обучению про климат законно несёт понятия
+    # океана, а по статистике про геном — понятия биологии. Запрет здесь снимал бы ровно
+    # те связи, ради которых междисциплинарную работу и интересно читать.
+    if art_area in METHOD_AREAS:
+        return True
+    home, areas = homes.get(cid, (None, None))
+    if home is None or not areas:
+        return True                       # новое понятие, дома ещё нет
+    if home == art_area or home in METHOD_AREAS:
+        return True
+    n = areas.get(art_area, 0)
+    return n >= AT_HOME_MIN or n / sum(areas.values()) >= AT_HOME_SHARE
+
+
 def load_all():
     """Векторы статей и карточек — из дерева ML, где волна их посчитала."""
     sys.path.insert(0, str(ML))
@@ -100,7 +222,7 @@ def load_all():
     # вектор с радостью назначит статье запись-указатель — ту самую, от которой
     # слияние и уводило. Проверять надо здесь, а не после: переразметка идёт по
     # всему архиву, и вычищать её потом дороже, чем не пустить сюда.
-    live_p = Path(__file__).resolve().parent.parent / "data" / "concepts-live.json"
+    live_p = ROOT / "data" / "concepts-live.json"
     try:
         import json as _json
         reg = _json.loads(live_p.read_text(encoding="utf-8"))["concepts"]
@@ -154,10 +276,22 @@ def build(args):
           f"90-й процентиль {float(np.percentile(hub, 90)):.3f} · "
           f"max {float(hub.max()):.3f} ({cids[int(hub.argmax())]})")
 
+    # Сторож нужен и здесь: дневной путь снимает чужие понятия у статей дня, а полная
+    # переразметка с --add-only прошлась бы следом и вернула их обратно. Замер 13.09 по
+    # всему архиву: снимается 451 связь из 106 615 (0,42%), пустых статей становится на
+    # одну больше. У физики убирает две связи, у биологии 391 — индексы Эль-Ниньо,
+    # теорию квантового измерения, правило Борна. Ровно то, ради чего он и ставился.
+    homes = {} if args.no_guard else concept_homes()
+    art_area = _areas_of_articles()
+
     def run(thr, margin):
         got = {}
         for i, a in enumerate(have):
-            got[a] = rank_article(np, S[i], hub, CC, WORDS, thr, margin)
+            picked = rank_article(np, S[i], hub, CC, WORDS, thr, margin)
+            if homes:
+                ar = art_area.get(re.sub(r"v\d+$", "", a), "")
+                picked = [x for x in picked if fits_domain(cids[x], ar, homes)]
+            got[a] = picked
         support = collections.Counter(x for v in got.values() for x in v)
         # опора: меньше MIN_SUPPORT — кандидат, из разметки убираем
         weak = {x for x, n in support.items() if n < MIN_SUPPORT}
@@ -268,6 +402,11 @@ def live(args):
     hub = S.mean(axis=0)
     CC = CV @ CV.T
     words = word_sets(cids)
+    # Дома понятий и области статей считаем ОДИН раз: реестр на 47 МБ, а день приносит
+    # два десятка статей — платить за разбор дважды незачем.
+    _live_ids = [a.strip() for a in args.live.split(",") if a.strip()]
+    homes = {} if args.no_guard else concept_homes(exclude=_live_ids)
+    art_area = _areas_of_articles()
     out = {}
     # Список через запятую: день приносит два десятка статей сразу, а поле и
     # матрица сходства грузятся секунды — незачем платить за них двадцать раз.
@@ -284,6 +423,15 @@ def live(args):
             print(f"статьи {aid} нет в корпусе"); continue
         i = have.index(aid)
         picked = rank_article(np, S[i], hub, CC, words, args.thr, args.margin)
+        if not args.no_guard:
+            area = art_area.get(aid.split("v")[0], "")
+            keep, dropped = [], []
+            for x in picked:
+                (keep if fits_domain(cids[x], area, homes) else dropped).append(x)
+            if dropped:
+                print(f"{aid}: сторож снял {len(dropped)} из чужих областей — "
+                      + ", ".join(cids[x] for x in dropped[:6]))
+            picked = keep
         print(f"{aid}: связей {len(picked)}")
         for x in picked:
             print(f"   {S[i][x]:.3f}  сверх фона {S[i][x]-hub[x]:+.3f}  {cids[x]}")
@@ -291,8 +439,11 @@ def live(args):
             print(f"связей меньше {LIVE_MIN} — статья говорит о том, чего в реестре нет.")
             print("живой механизм: взять missing_tags этой статьи из data/gap-suggestions.jsonl")
             print("и дописать в data/concept-candidates.jsonl; кандидат с 5+ статьями дорос.")
-        if picked:
-            out[aid] = [cids[x] for x in picked]
+        # Пишем результат ВСЕГДА, в том числе пустой. Раньше пустое считалось «нечего
+        # сохранять» — но при --live статью назвали поимённо, и пустой список это
+        # полноценный ответ: старая разметка у неё неверна и должна уйти. Иначе снятое
+        # сторожем осталось бы лежать в справочнике разметки навсегда.
+        out[aid] = [cids[x] for x in picked]
 
     if getattr(args, "apply", False) and out:
         try:
@@ -317,6 +468,8 @@ def main():
     ap.add_argument("--add-only", action="store_true",
                     help="ДОразметка: прежние привязки сохранить, дописать только "
                          "новые (недельный прогон)")
+    ap.add_argument("--no-guard", action="store_true",
+                    help="выключить доменный сторож (для сверки: что он снимает)")
     args = ap.parse_args()
     return live(args) if args.live else build(args)
 
