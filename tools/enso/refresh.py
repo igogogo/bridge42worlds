@@ -200,7 +200,17 @@ def main(fetch=True, llm=True, light=False):
     for a in cur["alerts"]:
         a.setdefault("id", alert_id(a.get("title") or ""))
     cur["shout"] = any(a["level"] == "SHOUT" for a in cur["alerts"])
+    # СЧЁТ МОЛЧАЩИХ — ПО ВСЕЙ КАРТИНЕ, А НЕ ПО ЧАСТИ. Поймано 13.09: NOAA лёг целиком, и строка
+    # итога сказала «не ответили 8» — это только квартальные файлы NCEI. На вкладке Ops в тот
+    # же момент стояло 16: туда попадают ещё шесть суточных боксов OISST и восемь буёв, а они
+    # приходят своими сборщиками и в cur["sources"] не лежат. Считаем тем же кирпичом, что
+    # рисует Ops, иначе итог прогона преуменьшает обвал источников ровно вдвое.
     stale = [k for k, v in cur["sources"].items() if not v["fresh"]]
+    try:
+        import ops as _OPS
+        stale = sorted({s["key"] for s in _OPS.sources_status(cur) if s.get("fresh") is False})
+    except Exception:                                            # noqa: BLE001
+        pass
     if light:
         import fresh as FR
         assessed = json.loads((ROOT / "latest.json").read_text(encoding="utf-8")) if (ROOT / "latest.json").exists() else {}
