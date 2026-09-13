@@ -390,6 +390,13 @@ def license_label(lic_url):
         return "arXiv non-exclusive"
     if "openai.com" in u:
         return "© OpenAI"
+    # bioRxiv/medRxiv при отсутствии лицензии (их код cc_no) ведут на эту страницу,
+    # где прямо сказано: все права у авторов, повторное использование запрещено.
+    # Состояние прав тут известно точно, и назвать его честнее, чем отдать общее
+    # «license»: на производной работе читатель должен видеть, почему у неё только
+    # наш пересказ.
+    if "biorxiv.org" in u or "medrxiv.org" in u:
+        return "All rights reserved"
     return "license"
 
 
