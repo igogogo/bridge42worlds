@@ -281,6 +281,9 @@ def main():
     ap.add_argument("--budget", type=int, default=30, help="статей спросить за прогон")
     ap.add_argument("--dry", action="store_true", help="показать план, ничего не звать")
     ap.add_argument("--corpus", help="файл состояния добычи темы: вес считать внутри её работ")
+    ap.add_argument("--only", metavar="ID|ФАЙЛ",
+                    help="спросить ИМЕННО эти работы (список через запятую или файл со "
+                         "списком), а не первые из общей очереди")
     ap.add_argument("--min", type=int, dest="born_min",
                     help="порог по числу работ темы (по умолчанию общий)")
     ap.add_argument("--names-file", dest="names_file",
@@ -307,7 +310,20 @@ def main():
             pass
 
     st = state()
-    todo = fresh_articles(st["asked"], a.budget)
+    # ОЧЕРЕДЬ ПО СПИСКУ, А НЕ ПО ПОРЯДКУ. Общая очередь смешанная: прогон 14.09 с бюджетом
+    # шестьдесят спросил 23 наших био-работы и 37 обычных с arXiv. Когда насыщаем ОДНУ
+    # тему, это значит платить за чужое и недобрать своё — а увеличивать бюджет ради
+    # нужных работ вдвое дороже, чем назвать их поимённо.
+    if a.only:
+        src = Path(a.only)
+        raw = src.read_text(encoding="utf-8") if src.exists() else a.only
+        want = [x.strip() for x in raw.replace(",", "\n").splitlines() if x.strip()]
+        asked = set(st["asked"])
+        todo = [x for x in want if x not in asked][:a.budget]
+        print(f"по списку: названо {len(want)}, уже спрошено {len(want) - len(todo)}, "
+              f"спрошу {len(todo)}")
+    else:
+        todo = fresh_articles(st["asked"], a.budget)
     rows = H.load_harvest()
     print(f"цикл: не спрошено статей в очереди {len(todo)} (бюджет {a.budget}) · "
           f"в копилке {len(rows)} кандидатов")
