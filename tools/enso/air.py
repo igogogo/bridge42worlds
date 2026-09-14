@@ -545,7 +545,11 @@ def alerts(A):
             continue
         kind, title, detail = sig
         extra = []
-        if kind != "yoy" and yoy is not None and abs(yoy) >= 30:
+        # Проверка 14.09: у рыбной муки «+43 % against a year ago» стояло дважды, потому что
+        # месячная тревога уже несёт годовое изменение в основном тексте. Не повторять.
+        if kind == "yoy" or (kind == "month" and yoy is not None):
+            pass
+        elif yoy is not None and abs(yoy) >= 30:
             extra.append(f"{yoy:+.0f} % against a year ago")
         if kind != "month" and z is not None and abs(z) >= 2 and mom is not None:
             extra.append(f"{mom:+.0f} % in a month, unusual for the season")

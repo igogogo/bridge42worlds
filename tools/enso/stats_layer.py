@@ -409,7 +409,7 @@ def fuel_item(latest, psl):
     lo, hi = proj - sd, proj + sd
     kpis = [
         {"name": "best lead of the fuel", "value": f"{lead}", "unit": "months",
-         "plain": f"The warm-water volume lines up best with Niño 3.4 {lead} months later: r = {r:.2f} over {npairs} months, so the line accounts for about {r2 * 100:.0f} % of the variation and the rest is other things."},
+         "plain": f"The warm-water volume lines up best with Niño 3.4 {lead} months later: r = {r:.2f} over {npairs} months, so the line accounts for about {r2 * 100:.0f} % of the variation and the rest is other things. This is the five-year window kept in the panel file ({months[0]} to {months[-1]}); the fuel card above uses the whole record since 1980 and finds a different lead, which is what a short window with one long cold stretch does."},
         {"name": "what the fuel implies", "value": f"{lo:+.1f}…{hi:+.1f}", "unit": f"°C in {lead} mo",
          "plain": (f"A straight line fitted from Niño 3.4 on the fuel {lead} months earlier, then read at the latest fuel value, "
                    f"{last_v / 1e14:.2f}·10¹⁴ m³: the middle of the fit is {proj:+.2f} °C and one standard error of the fit is "
@@ -420,7 +420,10 @@ def fuel_item(latest, psl):
                    + "This is a scale of how much the stored heat matters, not a forecast of the level.")},
     ]
     return {"id": "fuel_lead", "kind": "leadlag", "scene": "air", "also": ["now"],
-            "title": f"The fuel leads the surface by {lead} months (r = {r:.2f}) in our own record",
+            # Проверка 14.09: на той же сцене карточка топлива (air.py, весь ряд с 1980) даёт
+            # 6 месяцев, а эта — 10 по окну в пять лет. Оба числа честные, но без подписи окна
+            # читатель видит два «наших» лида на одном экране. Окно называем в заголовке.
+            "title": f"The fuel leads the surface by {lead} months (r = {r:.2f}) over the last five years",
             "series": "wwv vs psl_nino34_monthly", "window": [months[0], months[-1]], "kpis": kpis,
             "anchors": ["stat:fuel_lead", "term:wwv", "term:nino34", "block:peak"],
             "method": {"name": "Cross-correlation at monthly leads and a linear map",

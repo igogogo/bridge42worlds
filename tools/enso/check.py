@@ -235,6 +235,9 @@ def check_links(D, show):
     valid |= {"region:" + (r.get("id") or "") for r in ((D.get("regions") or {}).get("items") or [])}
     valid |= {"term:" + k for k in G}
     valid |= {"block:models", "block:peak", "block:food", "block:type", "block:radiance", "block:spectral", "block:rain", "block:landbox"}
+    # Плитки KPI (08.09) — тоже якоря ссылок: ряды журнала. Без этой строки проверка 14.09
+    # объявляла шестнадцать живых якорей пропавшими.
+    valid |= {"kpi:" + k for k in ((load("journal.json", {}) or {}).get("metrics") or {}) if not k.startswith("risk:")}
     per_work = {}
     n = 0
     for a, ls in anchors.items():

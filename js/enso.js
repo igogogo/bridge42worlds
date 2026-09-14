@@ -1773,8 +1773,14 @@
      оси, надо изменить формат, достаточно трёхбуквенных месяцев, как у других». Ряд знает
      свой шаг: день → «3 Sep», месяц → «Sep 2026», всё остальное (сезоны, кварталы) уже
      приходит готовой подписью. */
+  /* Квартальные ряды (OHC NCEI) приходят десятичным годом: 2026.125 это первый квартал.
+     На оси и в значке даты такое число читается как опечатка (проверка 14.09). */
+  function qdate(d) {
+    var q = /^(\d{4})\.(125|375|625|875)$/.exec(String(d == null ? '' : d));
+    return q ? q[1] + ' Q' + ({ '125': 1, '375': 2, '625': 3, '875': 4 })[q[2]] : String(d == null ? '' : d);
+  }
   function axisDate(d, step, withYear) {
-    var t = String(d == null ? '' : d);
+    var t = qdate(d);
     var m = /^(\d{4})-(\d{2})(?:-(\d{2}))?$/.exec(t);
     if (!m) return t;
     var mon = MONTHS[parseInt(m[2], 10) - 1] || m[2];
@@ -3141,7 +3147,7 @@
         '<div class="rh">' + esc(r.horizon) + (wasJ ? ' · <span class="' + jsign(r.level - wasJ.v) + '">' + jarrow(r.level - wasJ.v) + ' was ' + wasJ.v + ' on ' + esc(wasJ.d) + '</span>' : '') + (r.metric ? ' · ' + esc(r.metric.name) : '') + '</div>' +
         (r.metric ? '<div class="rs">' + spark(r.metric, 200, 24) + '</div>' : '') +
         '<div class="rf">' + (linksHtml('risk:' + (r.id || '')) || '') + cnBtn('risk:' + (r.id || ''), 'graph') + (jr ? '<button type="button" class="jh" data-hist="risk:' + esc(r.id) + '">history</button>' : '') +
-        dateBadge(null, (r.metric ? r.metric.name : 'this rule'), (r.metric && r.metric.dates ? String(r.metric.dates[r.metric.dates.length - 1]) : (je.length ? je[je.length - 1].d : '')), r.title) + '</div></div>';
+        dateBadge(null, (r.metric ? r.metric.name : 'this rule'), (r.metric && r.metric.dates ? qdate(r.metric.dates[r.metric.dates.length - 1]) : (je.length ? je[je.length - 1].d : '')), r.title) + '</div></div>';
       hlConcepts(c.querySelector('.rt'), 'risk:' + (r.id || ''));
       c.onclick = function (e) {
         if (e.target.closest('[data-hist]')) return;      // кнопка истории живёт своей жизнью
@@ -4221,7 +4227,7 @@
       var kp = el('div', 'kpis');
       kp.innerHTML = '<div class="kpi"><div class="kn">' + term('wwv', 'warm water volume') + '</div><div class="kv">' + fnum(F.value / 1e14) + '<small>·10¹⁴ m³</small></div><div class="km">' + F.share_of_record + ' % of the highest value since 1980</div>' + kmeta('wwv') + '</div>' +
         '<div class="kpi"><div class="kn">peak of the charge</div><div class="kv" style="font-size:17px">' + esc(F.peak_date) + '</div><div class="km">' + (F.months_since_peak ? F.months_since_peak + ' months ago; ' : 'this month; ') + (F.discharging ? 'the fuel is being spent' : 'not spent yet') + '</div>' + kmeta('wwv_share') + '</div>' +
-        '<div class="kpi"><div class="kn">lead over the surface</div><div class="kv" style="font-size:17px">' + ((F.lead || {}).lag) + '<small>months</small></div><div class="km">correlation ' + ((F.lead || {}).r) + ', measured on our data</div>' + kmeta(null, 'NOAA PMEL / TAO', F.date) + '</div>' +
+        '<div class="kpi"><div class="kn">lead over the surface</div><div class="kv" style="font-size:17px">' + ((F.lead || {}).lag) + '<small>months</small></div><div class="km">correlation ' + ((F.lead || {}).r) + ', on the whole record since 1980</div>' + kmeta(null, 'NOAA PMEL / TAO', F.date) + '</div>' +
         (F.t300 ? '<div class="kpi"><div class="kn">' + term('t300', 'upper 300 m') + '</div><div class="kv">' + fnum(F.t300.value) + '<small>°C</small></div><div class="km">the same heat as a temperature, not a volume</div>' + kmeta(null, 'NOAA PMEL / TAO', F.t300.date) + '</div>' : '');
       body.appendChild(kp);
     } else if (k === 'layers' && L) {

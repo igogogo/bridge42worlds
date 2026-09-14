@@ -38,6 +38,13 @@ NINO_PEAK_YEARS = {1958, 1966, 1973, 1983, 1988, 1992, 1998, 2016, 2024}
 NINA_YEARS = {1974, 1976, 1989, 1999, 2000, 2008, 2011, 2021, 2022}
 
 
+
+def _ordinal(n):
+    """93 → 93rd, 11 → 11th. Проверка 14.09 поймала «93th percentile» в риске о быстром росте."""
+    n = int(round(float(n)))
+    suf = "th" if 10 <= n % 100 <= 20 else {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suf}"
+
 def _finite_years(years, min_days=360, exclude=()):
     return [y for y in sorted(years)
             if y not in exclude and np.isfinite(years[y]).sum() >= min_days]
@@ -824,7 +831,7 @@ def risks(W, N34, NW, ONI, IRI=None, AIR=None):
             # процентиль скорости уже безразмерен: у роста верх 100, у падения 0
             st_fast = ((sl["pct"] - 90) / 10.0) if fast else ((10 - sl["pct"]) / 10.0)
             add(f"{name}: unusually {'fast rise' if fast else 'fast fall'}", 3, "2 weeks",
-                f"14-day slope {sl['now']:+.2f} °C, the {sl['pct']:.0f}th percentile for this time of year"
+                f"14-day slope {sl['now']:+.2f} °C, the {_ordinal(sl['pct'])} percentile for this time of year"
                 + (f"; acceleration {sl['accel']:+.2f}" if sl["accel"] is not None else ""),
                 f"In two weeks the series moved by {sl['now']:+.2f} degrees. For this time of year that happens in only "
                 f"{100 - sl['pct'] if fast else sl['pct']:.0f} % of years.",
