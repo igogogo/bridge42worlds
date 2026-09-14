@@ -4418,7 +4418,7 @@
             '<td class="num src">' + ((r.level30 || {}).rank_raw || '·') + '/' + ((r.level30 || {}).of || '·') + '</td>' +
             '<td class="num' + hot + '">' + fnum(pd.to_date, 0, false) + '</td>' +
             '<td class="num src">' + fnum(pd.clim_to_date, 0, false) + '</td>' +
-            '<td class="num' + hot + '">' + (pd.rank || '·') + '/' + (pd.of || '·') + '</td>' +
+            '<td class="num' + hot + '">' + (pd.rank ? pd.rank + '/' + (pd.of || '·') : '<span class="src" title="the daily mean never rises above freezing at this height: melt here is daytime only, see the days column">no melt at the mean</span>') + '</td>' +
             '<td class="num">' + (pd.trend_per_decade != null ? fnum(pd.trend_per_decade, 0) : '·') + '</td>' +
             '<td class="num">' + (m.to_date != null ? m.to_date + ' <span class="src">of ' + fnum(m.clim_to_date, 0, false) + '</span>' : '·') + '</td></tr>';
         }).join('') + '</tbody></table>';
@@ -4435,7 +4435,7 @@
     var kp = el('div', 'kpis');
     kp.innerHTML = '<div class="kpi"><div class="kn">melt energy this year</div><div class="kv">' + fnum(pd.to_date, 0, false) +
         '<small>°C·day</small></div><div class="km">against ' + fnum(pd.clim_to_date, 0, false) + ' normal to this day; ' +
-        term('rank', 'rank ' + (pd.rank || '·') + ' of ' + (pd.of || '·')) +
+        (pd.rank ? term('rank', 'rank ' + pd.rank + ' of ' + (pd.of || '·')) : 'the daily mean never rises above freezing at this height; melt here is daytime only, read the days card') +
         (pd.trend_per_decade != null ? '; ' + fnum(pd.trend_per_decade, 0) + ' per decade' : '') + '</div>' +
         kmeta(null, r0.source, r0.last_date) + '</div>' +
       '<div class="kpi"><div class="kn">air over the ice, 30 days</div><div class="kv">' + fnum((r0.level30 || {}).anom) +

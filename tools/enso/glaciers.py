@@ -271,6 +271,11 @@ def melt_days(rows):
     pdd_clim_full = float(np.mean([pdd_year[y] for y in cl_years])) if cl_years else float("nan")
     p_same = sorted(((upto_pdd(y), y) for y in pdd_year), reverse=True)
     pdd_rank = [y for _, y in p_same].index(y_last) + 1
+    # РАНГ СРЕДИ НУЛЕЙ — НЕ РАНГ. На 6458 м (Кордильера-Бланка) суточная средняя не бывает выше
+    # нуля ни в одном году: сумма 0 против нормы 0 давала «1-е место из 46» (проверка Fable
+    # 14.09). Там таяние идёт только днём, и его меряет счёт дней по максимуму, не эта сумма.
+    if pdd_now <= 0 and pdd_clim_full < 1:
+        pdd_rank = None
     pys = np.array(list(pdd_full), dtype=float)
     pds = np.array([pdd_full[y] for y in pdd_full], dtype=float)
     pdd_trend = float(np.polyfit(pys, pds, 1)[0] * 10) if len(pys) > 10 else None

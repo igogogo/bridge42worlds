@@ -332,6 +332,11 @@ def tao(today=None, verbose=False):
         out["d20_east"] = round(float(np.mean([s["d20"] for s in east])), 1) if east else None
         out["d20_west"] = round(float(np.mean([s["d20"] for s in west])), 1) if west else None
         out["last_date"] = max(s["last_date"] for s in good)
+        # ВОЗРАСТ ПОКАЗАНИЯ — ОТДЕЛЬНЫМ ЧИСЛОМ. Проверка Fable 14.09: разбор 14.09 нёс пятидневку
+        # «к 2026-09-01», то есть тринадцатидневной давности, а текст риска говорил «измеряется
+        # напрямую, каждый день». Источник ответил (ops: 0 молчащих), но данные в нём старые —
+        # это другая беда, и её надо называть числом.
+        out["days_stale"] = (today - date.fromisoformat(out["last_date"])).days
     return out
 
 
@@ -614,10 +619,14 @@ def risks(SUB):
     # Риск пятого уровня исчез с доски потому, что мы не дозвонились до причала.
     # Теперь на месте пропавшего ряда встаёт риск ВИДА data: доска показывает дыру, а не
     # отсутствие опасности, и «cleared» в ленте больше не врёт.
-    if not w.get("value"):
+    # Старше трёх недель — то же молчание, только тихое: массив отвечает, но новых пятидневок
+    # не даёт. Правило ниже ставит риск вида data, зависимые риски приостанавливаются.
+    if not w.get("value") or (t.get("days_stale") or 0) > 21:
         out.append((
             "The moorings did not answer, so the heat under the equator is unmeasured today", 2, "now",
-            "The TAO/TRITON array returned no five-day mean on this run" + (f"; the last reading we hold is from {t.get('last_date')}" if t.get("last_date") else "") + ".",
+            ("The TAO/TRITON array returned no five-day mean on this run" if not w.get("value") else
+             f"The TAO/TRITON array answers, but its latest five-day mean is {t.get('days_stale')} days old")
+            + (f"; the last reading we hold is from {t.get('last_date')}" if t.get("last_date") else "") + ".",
             "This is a gap in our reading, not a change in the ocean. The warm layer does not disappear because a buoy "
             "stopped reporting, and any risk that rests on these moorings is suspended rather than lifted while this lasts.",
             "the next run: the array usually returns within a day",
@@ -627,7 +636,9 @@ def risks(SUB):
         de, dw = t.get("d20_east"), t.get("d20_west")
         out.append((
             f"Water {w['value']:+.1f} °C above normal is sitting at {w['depth']} m under {w['station']}", lvl, "1–3 months",
-            f"TAO mooring {w['station']}, five-day mean to {w.get('date')}, against the mooring's own 1991–2020 norm. "
+            f"TAO mooring {w['station']}, five-day mean to {w.get('date')}"
+            + (f" ({t.get('days_stale')} days old on this run)" if (t.get("days_stale") or 0) > 7 else "")
+            + ", against the mooring's own 1991–2020 norm. "
             + ((f"Above anything this mooring measured before this event: its previous maximum was "
                 f"{w['prev_max']['value']:+.1f} °C at {w['prev_max']['depth']} m on {w['prev_max']['date']}. ")
                if w.get("above_record") else
@@ -635,7 +646,7 @@ def risks(SUB):
                 f"{w['prev_max']['depth']} m on {w['prev_max']['date']}. " if w.get("prev_max") else ""))
             + f"The 20 °C isotherm is at {dw} m in the west and {de} m in the east"
             + (" — deeper in the east than in the west, the reversed slope of a mature event." if de and dw and de > dw else "."),
-            "This is the heat that has not surfaced yet. It is measured directly, every day, and it is what makes "
+            "This is the heat that has not surfaced yet. It is measured directly by the moorings, and it is what makes "
             "'the event has room to grow' a statement about the present rather than about the past events.",
             "the warm anomaly moving east along the moorings and rising toward the surface; the east D20 shallowing again would mean the wave has passed",
             {"name": f"20 °C isotherm depth, {w['station']}", "unit": "m", "step": "day",
