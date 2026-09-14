@@ -122,17 +122,60 @@ CAT_MAP = {
     "bioengineering": "q-bio.OT",
     "pharmacology and toxicology": "q-bio.OT",
     "scientific communication and education": "q-bio.OT",
-    # medRxiv
+    # medRxiv — все 48 рубрик, снятые с живого месяца (01–13.09.2026, 839 работ).
+    # Список неполным быть не должен: незнакомая рубрика уходит в «прочее», и работа
+    # оказывается в разделе, где её никто не найдёт. На первом же прогоне так осело три
+    # штуки — спортивная медицина, лучевая диагностика и медицина боли.
+    # Клиническая медицина почти вся ложится в q-bio.TO (ткани и органы): это про орган и
+    # его работу. Что про население — в PE, что про мозг и поведение — в NC, что про
+    # метод и данные — в QM, а организационное и этическое — в OT.
     "geriatric medicine": "q-bio.TO",
     "neurology": "q-bio.NC",
     "psychiatry and clinical psychology": "q-bio.NC",
+    "pain medicine": "q-bio.NC",
+    "addiction medicine": "q-bio.NC",
+    "anesthesia": "q-bio.NC",
     "epidemiology": "q-bio.PE",
+    "public and global health": "q-bio.PE",
+    "infectious diseases": "q-bio.PE",
+    "hiv aids": "q-bio.PE",
+    "occupational and environmental health": "q-bio.PE",
     "genetic and genomic medicine": "q-bio.GN",
+    "health informatics": "q-bio.QM",
+    "radiology and imaging": "q-bio.QM",
+    "allergy and immunology": "q-bio.CB",
     "oncology": "q-bio.TO",
     "cardiovascular medicine": "q-bio.TO",
     "endocrinology": "q-bio.TO",
-    "public and global health": "q-bio.PE",
-    "health informatics": "q-bio.QM",
+    "pediatrics": "q-bio.TO",
+    "rehabilitation medicine and physical therapy": "q-bio.TO",
+    "ophthalmology": "q-bio.TO",
+    "intensive care and critical care medicine": "q-bio.TO",
+    "obstetrics and gynecology": "q-bio.TO",
+    "surgery": "q-bio.TO",
+    "nutrition": "q-bio.TO",
+    "dermatology": "q-bio.TO",
+    "respiratory medicine": "q-bio.TO",
+    "gastroenterology": "q-bio.TO",
+    "otolaryngology": "q-bio.TO",
+    "rheumatology": "q-bio.TO",
+    "sexual and reproductive health": "q-bio.TO",
+    "emergency medicine": "q-bio.TO",
+    "urology": "q-bio.TO",
+    "hematology": "q-bio.TO",
+    "dentistry and oral medicine": "q-bio.TO",
+    "orthopedics": "q-bio.TO",
+    "transplantation": "q-bio.TO",
+    "sports medicine": "q-bio.TO",
+    "nephrology": "q-bio.TO",
+    "pharmacology and therapeutics": "q-bio.OT",
+    "health systems and quality improvement": "q-bio.OT",
+    "primary care research": "q-bio.OT",
+    "health policy": "q-bio.OT",
+    "health economics": "q-bio.OT",
+    "medical education": "q-bio.OT",
+    "nursing": "q-bio.OT",
+    "medical ethics": "q-bio.OT",
 }
 FALLBACK_CAT = "q-bio.OT"
 
