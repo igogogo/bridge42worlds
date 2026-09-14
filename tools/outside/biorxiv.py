@@ -153,9 +153,20 @@ LICENCE_URL = {
     # отваливались бы каждый день. Ставим реальную страницу условий: на ней сервер
     # и пишет «все права защищены, повторное использование без разрешения запрещено».
     # license_class() читает её как «no», intake опускает на пол «только пересказ» —
-    # ровно то поведение, ради которого пол и заводили.
-    "cc_no": "https://www.biorxiv.org/about/FAQ#license",
+    # ровно то поведение, ради которого пол и заводили. Подставляется по серверу:
+    # у медархива своя такая страница, и врать про чужую нельзя.
+    "cc_no": "https://www.{host}/about/FAQ#license",
 }
+
+# Работы двух серверов лежат на РАЗНЫХ доменах, а машинный вход у них общий и отвечает
+# одинаково. Адрес работы собирается из DOI, и захардкоженный biorxiv.org увёл бы каждую
+# медицинскую работу на чужой сайт — ссылка «первоисточник» вела бы в никуда. Поле server
+# в записи и говорит, чей это препринт.
+HOST = {"biorxiv": "biorxiv.org", "medrxiv": "medrxiv.org"}
+
+
+def host_of(server):
+    return HOST.get((server or "").strip().lower(), "biorxiv.org")
 
 
 def log(m):
@@ -283,13 +294,14 @@ def draft(a):
     cat = (a.get("category") or "").strip().lower()
     code = CAT_MAP.get(cat, FALLBACK_CAT)
     server = a.get("server") or "bioRxiv"
+    host = host_of(server)
     return {
         "title": " ".join((a.get("title") or "").split()),
         "date": a.get("date") or "",
         "abstract": " ".join((a.get("abstract") or "").split()),
-        "url": f"https://www.biorxiv.org/content/{doi}v{ver}",
+        "url": f"https://www.{host}/content/{doi}v{ver}",
         "doi": doi,
-        "licence_url": LICENCE_URL.get(a.get("license") or "", ""),
+        "licence_url": LICENCE_URL.get(a.get("license") or "", "").format(host=host),
         "licence": a.get("license") or "",
         # Код q-bio первым — по нему конвейер узнаёт область (см. ловушку 1 в шапке).
         # Рубрику сервера храним рядом, словами: она понадобится, когда будем смотреть,
