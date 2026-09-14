@@ -426,6 +426,12 @@
    "def": "The average size of the miss between a weather forecast issued N days earlier and what the reanalysis later recorded, per city, per parameter, per lead time. Bias is the same miss with its sign kept, so a steady over- or under-forecast shows up as a number rather than cancelling out.",
    "why": "A local, faster version of the same question the model plume asks about the ocean: how well is the system being predicted right now. When the misses grow together across cities, the atmosphere is doing something the models were not built on.",
    "src": "Open-Meteo forecasts against ERA5, computed by us in tools/enso/cities.py"
+  },
+  "pdd": {
+   "name": "melt energy (positive degree-days)",
+   "def": "The sum of daily mean temperatures above freezing over a year, in °C·day. A day at +5 °C adds five, a day at −3 adds nothing.",
+   "why": "Ice does not care how warm the warmest day was; it cares how much heat crossed it in total. This sum is the standard melt index of glaciology and feeds the degree-day models used to turn weather into meltwater. We use it instead of counting days above zero because that count saturates: high in the Alps every summer day is already above freezing, so a record-hot year looks ordinary by day count and shows up plainly here.",
+   "src": "our own calculation from ERA5-Land daily means"
   }
  }
 }
