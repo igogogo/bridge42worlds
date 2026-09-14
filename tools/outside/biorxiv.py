@@ -40,6 +40,7 @@ intake.py, и она остаётся единственной: сюда не п
 веса при сортировке. На замере это ровно то, что отсекало ботанику и микроскопию.
 
     python tools/outside/biorxiv.py --days 7              показать, что нашлось
+    python tools/outside/biorxiv.py --pool tools/outside/pools/ФАЙЛ.json --min-age 5         --limit 20 --apply --generate                    кусок из готового пула
     python tools/outside/biorxiv.py --days 1 --apply      завести дневную порцию
     python tools/outside/biorxiv.py --days 7 --limit 8 --apply
 """
