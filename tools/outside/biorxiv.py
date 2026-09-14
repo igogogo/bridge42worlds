@@ -398,49 +398,82 @@ def main():
     ap.add_argument("--apply", action="store_true", help="завести работы; без ключа — показ")
     ap.add_argument("--generate", action="store_true",
                     help="после приёма сразу разобрать (для шага в дневном прогоне)")
+    ap.add_argument("--dump", metavar="ФАЙЛ",
+                    help="выгрузить ВСЕХ кандидатов в JSON и выйти (отбор идёт отдельно)")
+    ap.add_argument("--pool", metavar="ФАЙЛ",
+                    help="брать кандидатов из выгруженного пула, а не из сети")
     a = ap.parse_args()
 
-    to = a.to or (date.today() - timedelta(days=1)).isoformat()
-    frm = a.frm or (date.fromisoformat(to) - timedelta(days=a.days - 1)).isoformat()
-    servers = ("biorxiv", "medrxiv") if a.server == "both" else (a.server,)
-
-    log(f"ОКНО {frm}…{to}, серверы: {', '.join(servers)}")
-    rows = []
-    for s in servers:
-        rows += fetch_range(s, frm, to)
-    log(f"  всего записей: {len(rows)}")
-
     seen = load_seen()
-    cand = []
-    for r in rows:
-        sc = score(r)
-        if not sc:
-            continue
-        # ВИДЕЛИ — НЕ ЗНАЧИТ ВЗЯЛИ. Полный текст у свежего препринта появляется не сразу:
-        # обе работы от 13.09 на прогоне 14.09 пришли с пустым XML. Записывать такую в
-        # «обработано» нельзя — причина временная, а исключение вышло бы вечным, и работа
-        # не вернулась бы никогда. Пропускаем только взятые и те, что не дались много раз
-        # подряд: иначе битая работа каждый день тянула бы на себя лишний запрос.
-        was = seen.get(r.get("doi"))
-        if was and (was.get("taken") or int(was.get("tries") or 0) >= RETRY_MAX):
-            continue
-        cand.append((sc, r))
+
+    def fresh(doi):
+        """ВИДЕЛИ — НЕ ЗНАЧИТ ВЗЯЛИ. Полный текст у свежего препринта появляется не сразу:
+        обе работы от 13.09 на прогоне 14.09 пришли с пустым XML. Записывать такую в
+        «обработано» нельзя — причина временная, а исключение вышло бы вечным, и работа не
+        вернулась бы никогда. Пропускаем только взятые и тех, кто не дался много раз
+        подряд: иначе битая работа каждый день тянула бы на себя лишний запрос."""
+        was = seen.get(doi)
+        return not (was and (was.get("taken") or int(was.get("tries") or 0) >= RETRY_MAX))
+
+    # ИСТОЧНИК КАНДИДАТОВ: ПУЛ ИЛИ СЕТЬ. Три месяца с двух серверов — это 18 тысяч записей
+    # и больше часа опроса: машинный вход отдаёт по 30 штук за раз. Платить этот час каждый
+    # раз, когда берём очередной кусок, незачем — собрали однажды в файл, дальше читаем
+    # оттуда мгновенно. Владелец 14.09: «у нас будет целый пул, будем частями обрабатывать».
+    #
+    # Дальше обе дороги одинаковы: кандидат — это пара (вес, заготовка). Заготовку из сети
+    # собирает draft(), а в пуле она уже лежит готовой.
+    if a.pool:
+        pool = json.loads(Path(a.pool).read_text(encoding="utf-8"))
+        cand = [(float(d.get("score") or 0), d) for d in pool if fresh(d.get("doi"))]
+        log(f"ПУЛ {a.pool}: кандидатов {len(pool)}, "
+            f"не тронутых {len(cand)}")
+    else:
+        to = a.to or (date.today() - timedelta(days=1)).isoformat()
+        frm = a.frm or (date.fromisoformat(to) - timedelta(days=a.days - 1)).isoformat()
+        servers = ("biorxiv", "medrxiv") if a.server == "both" else (a.server,)
+        log(f"ОКНО {frm}…{to}, серверы: {', '.join(servers)}")
+        rows = []
+        for srv in servers:
+            rows += fetch_range(srv, frm, to)
+        log(f"  всего записей: {len(rows)}")
+        cand = [(sc, draft(r)) for r in rows
+                for sc in (score(r),) if sc and fresh(r.get("doi"))]
+        log(f"  в теме старения: {len(cand)} (после вычета уже виденных)")
     cand.sort(key=lambda x: -x[0])
-    log(f"  в теме старения: {len(cand)} (после вычета уже виденных)")
 
     from gen_arxiv import license_class
+
+    # ВЫГРУЗКА ВСЕХ КАНДИДАТОВ. Порог по словам отвечает на вопрос «про старение ли это»,
+    # но не на вопрос «стоит ли это читать». Когда из трёх месяцев набирается полтысячи
+    # работ, а взять нужно полсотни, выбирать должен тот, кто видит все заголовки и
+    # аннотации сразу. Печать в консоль для этого не годится — нужен файл.
+    if a.dump:
+        rows = []
+        for sc, d in cand:
+            d = dict(d)
+            d["score"] = round(sc, 2)
+            d["licence_class"] = license_class(d["licence_url"]) or "no"
+            if d["licence_class"] == "no":
+                d["licence_class"] = "analysis"
+            d.pop("fulltext", None)
+            rows.append(d)
+        Path(a.dump).write_text(json.dumps(rows, ensure_ascii=False, indent=1),
+                                encoding="utf-8")
+        log(f"\nвыгружено кандидатов: {len(rows)} → {a.dump}")
+        return 0
+
     take = cand[:a.limit]
     log(f"\nБЕРЁМ {len(take)} из {len(cand)}:\n")
-    for i, (sc, r) in enumerate(take, 1):
-        d = draft(r)
+    for i, (sc, d) in enumerate(take, 1):
         cls = license_class(d["licence_url"]) or "no"
         cls = "analysis" if cls == "no" else cls
         log(f"{i:2}. [{sc:4.1f}] {d['categories'][0]:9} {cls:8} {d['title'][:88]}")
-        log(f"      {d['org']} · {r.get('category')} · {d['date']} · авторов {len(d['authors'])}")
+        log(f"      {d['org']} · {d.get('source_category')} · {d['date']} · "
+            f"авторов {len(d['authors'])}")
     if len(cand) > len(take):
-        log(f"\nне взято в этот раз: {len(cand) - len(take)} (останутся в очереди на завтра)")
-        for sc, r in cand[len(take):len(take) + 5]:
-            log(f"      [{sc:4.1f}] {(r.get('title') or '')[:86]}")
+        log(f"\nне взято в этот раз: {len(cand) - len(take)} (остаются в очереди)")
+        for sc, d in cand[len(take):len(take) + 5]:
+            log(f"      [{sc:4.1f}] {(d.get('title') or '')[:86]}")
 
     if not a.apply:
         log("\nэто показ. Завести: добавь --apply")
@@ -448,8 +481,8 @@ def main():
 
     DRAFTS.mkdir(parents=True, exist_ok=True)
     done, failed = [], []
-    for sc, r in take:
-        d = draft(r)
+    for sc, d in take:
+        d = dict(d)
         log(f"\n▶ {d['title'][:80]}")
         try:
             txt = jats_text(d["jatsxml"]) if d["jatsxml"] else ""
