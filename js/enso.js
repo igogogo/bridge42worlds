@@ -2923,7 +2923,17 @@
     var inp = el('div', 'rs-in');
     var ta = document.createElement('textarea'); ta.placeholder = 'Ask about the event…'; ta.rows = 2;
     var go = el('button', 'rs-btn main', 'Ask'); go.type = 'button';
-    function send() { var q = ta.value.trim(); if (q.length < 3) { ta.focus(); return; } ta.value = ''; rsAsk(q); }
+    /* КЛАВИАТУРА ЗАКРЫВАЕТСЯ ПОСЛЕ ВОПРОСА. Владелец 14.09: на телефоне она оставалась
+       открытой и закрывала ответ. Две причины: send() не снимал фокус с поля, и render()
+       ставил фокус обратно на каждой перерисовке. На узком экране фокус не возвращаем. */
+    var narrowRs = window.matchMedia('(max-width:760px)').matches;
+    function send() {
+      var q = ta.value.trim();
+      if (q.length < 3) { if (!narrowRs) ta.focus(); return; }
+      ta.value = '';
+      if (narrowRs) ta.blur();
+      rsAsk(q);
+    }
     go.onclick = send;
     ta.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } });
     inp.appendChild(ta); inp.appendChild(go);
@@ -2940,7 +2950,7 @@
     });
     wrap.appendChild(board); wrap.appendChild(chat);
     body.appendChild(wrap);
-    requestAnimationFrame(function () { log.scrollTop = log.scrollHeight; if (!rs.msgs.length) ta.focus(); });
+    requestAnimationFrame(function () { log.scrollTop = log.scrollHeight; if (!rs.msgs.length && !narrowRs) ta.focus(); });
   }
 
   /* ══ БРИФИНГ — ВХОД НА ПАНЕЛЬ (владелец 08.09: «резюме о том, что происходит, какие тренды,
