@@ -3569,9 +3569,13 @@
      каждое утверждение с кнопкой перехода на ту сцену, где это число живёт, и с историей
      прошлых вердиктов — а она показывает не то, как мы обновлялись, а то, как менялась
      сама оценка. */
-  function vLink(label, view, sub2) {
+  function vLink(label, view, sub2, deepKey, deepVal) {
+    /* deepKey/deepVal — второй ярус: мало попасть на Long term · Temperature, надо ещё выбрать
+       там нужный ряд (S.sub.planetTemp). Без этого переход приводил на чужую линию. */
     return '<button type="button" class="vgo" data-view="' + esc(view) + '"' +
-      (sub2 ? ' data-sub="' + esc(sub2) + '"' : '') + '>' + esc(label) + ' \u2192</button>';
+      (sub2 ? ' data-sub="' + esc(sub2) + '"' : '') +
+      (deepKey ? ' data-subkey="' + esc(deepKey) + '" data-subval="' + esc(deepVal) + '"' : '') +
+      '>' + esc(label) + ' \u2192</button>';
   }
 
   function viewVerdict() {
@@ -4329,6 +4333,15 @@
         '<div class="kpi"><div class="kn">records and CUSUM</div><div class="kv" style="font-size:17px">' + w0.records.streak + '<small>days in a row</small></div><div class="km">' + w0.records.last30 + ' record days of 30; ' + term('cusum', 'CUSUM') + ' ' + (w0.cusum.alarm ? 'alarm' : 'quiet') + ', ' + term('trend', 'above trend') + ' ' + fnum(w0.level30.det) + '</div>' +
         kmeta('rec_' + k) + '</div>';
       body.appendChild(kp);
+      /* ТОТ ЖЕ РЯД, ТОЛЬКО ВСЕМИ ГОДАМИ СРАЗУ. Здесь полоса p10–p90: она отвечает на вопрос
+         «что обычно». Пучок линий отвечает на другой — «как далеко этот год ушёл от всех
+         остальных», и читатель задаёт его первым (владелец 14.09 искал пучок именно тут). */
+      var SPAG = { sst_world: 'sst_world', t2_world: 't2_world' };
+      if (SPAG[k]) {
+        body.appendChild(el('div', 'cap', 'This chart shows the band of all years since 1981: the middle of the record and its edges. ' +
+          'The same series with <b>every year drawn as its own line</b>, the way climatereanalyzer shows it, is on the Long term tab. ' +
+          vLink('every year as a line', 'planet', 'temperature', 'planetTemp', SPAG[k])));
+      }
       if (isLand) { body.appendChild(el('div', 'cap', esc((S.RD || {}).note || '') + ' Box ' + esc(boxLabel(w0.box)) + '; ' + esc(w0.source) + '; built ' + esc((S.RD || {}).built || '') + '. ' + (w0.region ? vLink('this region on the Regions tab', 'regions', 'place') : ''))); worksFoot(body, 'block:landbox'); }
     }
   }
@@ -5142,6 +5155,11 @@
       if (bx && bx.dates && (absolute ? bx.sst : bx.anom)) plot(body, function (w, h) { return chartMetric(boxMetric(bx, absolute), w, h); });
       else body.appendChild(el('div', 'note warn', 'No climatology yet for this box: the anomaly appears once the thirty-year build finishes.'));
       var ck = (O.check || {}).nino34;
+      if (pick === 'world') {
+        body.appendChild(el('div', 'cap', 'This is our own count on the NOAA grid: the world ocean 60°S–60°N, absolute °C or anomaly, with five past events beside it. ' +
+          'For the same ocean with <b>every year since 1981 as its own line</b> — the climatereanalyzer view — go to the Long term tab. ' +
+          vLink('every year as a line', 'planet', 'temperature', 'planetTemp', 'sst_world')));
+      }
       body.appendChild(el('div', 'cap', esc(O.note || '') + ' ' + esc(O.clim || '') + '. Dashes: the same days of 1982, 1997, 2015, 2023 and last year on the same box.' +
         (ck ? ' Check against climatereanalyzer on ' + ck.n_days + ' overlapping days: mean offset ' + fnum(ck.offset, 3) + ' °C (sd ' + ck.sd + '); the spliced tail carries this offset.' : '')));
       var kp = el('div', 'kpis');
@@ -7956,6 +7974,8 @@
     S.view = b.getAttribute('data-view') || 'now';
     var sb = b.getAttribute('data-sub');
     if (sb) S.sub[S.view] = sb;
+    var dk = b.getAttribute('data-subkey');
+    if (dk) S.sub[dk] = b.getAttribute('data-subval');
     S.risk = null;
     render();
   });

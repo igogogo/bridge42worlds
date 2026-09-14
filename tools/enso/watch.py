@@ -359,7 +359,7 @@ def nino34_analogs(ds):
     return out
 
 
-def noaa_weekly_watch(rows):
+def noaa_weekly_watch(rows, onset=None):
     last = rows[-1]
     out = {"date": last["date"].isoformat(), "latest": {k: last[k] for k in ("n12a", "n3a", "n34a", "n4a")}}
     # изменение за 4 и 8 недель
@@ -420,11 +420,31 @@ def noaa_weekly_watch(rows):
             out["analog_series"][y] = [{"date": r["date"].isoformat(),
                                         **{k: r[k] for k in keys4}} for r in same[-20:]]
 
-    # исторические максимумы по каждому региону, без текущей недели — потолки для детектора
-    out["hist_max_n34"] = max(rows[:-1], key=lambda r: r["n34a"])
+    # ПОТОЛОК СЧИТАЕТСЯ ДО СОБЫТИЯ, А НЕ ДО ПРОШЛОЙ НЕДЕЛИ. Поймано 14.09: максимум брался по
+    # rows[:-1], то есть включал недели ЭТОГО события, и рекорд, поставленный две недели назад,
+    # становился «тем, что измерено раньше». Niño 3 объявлялся «выше всего измеренного, +3.7
+    # против прежнего максимума +3.5» — а эти +3.5 стояли 2026-09-02, поставленные им же. Хуже
+    # обратный случай: Niño 1+2 опустился с +4.6 до +4.5, и лента сказала «Alert cleared: Niño
+    # 1+2 is above anything measured», хотя +4.5 — это ровно всё, что зона показывала за сорок
+    # пять лет до события (29 июня 1983). Тревога снялась о собственной прошлой неделе.
+    # То же решение, что владелец принял 06.09 по буям: потолок — рекорд ДО события.
+    cut = None
+    if onset:
+        y, m = int(str(onset)[:4]), int(str(onset)[5:7])
+        cut = date(y, m, 1)
+    pre = [r for r in rows if cut is None or r["date"] < cut] or rows[:-1]
+    keys4 = ("n12a", "n3a", "n34a", "n4a")
+    out["hist_max_n34"] = max(pre, key=lambda r: r["n34a"])
     out["hist_max_n34"] = {"date": out["hist_max_n34"]["date"].isoformat(), "n34a": out["hist_max_n34"]["n34a"]}
-    out["hist_max"] = {k: max(r[k] for r in rows[:-1]) for k in ("n12a", "n3a", "n34a", "n4a")}
-    out["hist_max_date"] = {k: max(rows[:-1], key=lambda r: r[k])["date"].isoformat() for k in ("n12a", "n3a", "n34a", "n4a")}
+    out["hist_max"] = {k: max(r[k] for r in pre) for k in keys4}
+    out["hist_max_date"] = {k: max(pre, key=lambda r: r[k])["date"].isoformat() for k in keys4}
+    out["hist_max_scope"] = ("before this event began, " + str(onset)) if cut else "the whole record except the latest week"
+    # пик САМОГО события — отдельным числом, чтобы «выше собственного максимума» можно было
+    # сказать там, где это уместно, не подменяя им исторический потолок
+    ev = [r for r in rows if cut is not None and r["date"] >= cut]
+    if ev:
+        out["event_max"] = {k: max(r[k] for r in ev) for k in keys4}
+        out["event_max_date"] = {k: max(ev, key=lambda r: r[k])["date"].isoformat() for k in keys4}
     return out
 
 
@@ -1118,7 +1138,15 @@ def run(fetch=True):
             W["sst_nino34"]["analog_forward"] = fwd
     except Exception:                                            # noqa: BLE001
         pass
-    NW = noaa_weekly_watch(S.read_noaa_weekly(status["noaa_weekly"][0]))
+    # Начало события берём из журнала: он его и ведёт (onset = месяц, с которого считается
+    # это событие). Если журнала ещё нет, потолок остаётся прежним, и поле hist_max_scope
+    # честно говорит, по чему он посчитан.
+    _onset = None
+    try:
+        _onset = json.loads((S.ROOT / "journal.json").read_text(encoding="utf-8")).get("onset")
+    except Exception:                                            # noqa: BLE001
+        pass
+    NW = noaa_weekly_watch(S.read_noaa_weekly(status["noaa_weekly"][0]), onset=_onset)
     ONI = oni_watch(S.read_oni(status["oni"][0]), S.read_psl_monthly(status["psl_nino34_monthly"][0]))
     # RONI РЯДОМ С ONI (экспертиза 04.09, п. 3.5): с февраля 2026 NOAA классифицирует события по
     # относительному индексу; на тёплом фоне он ниже ONI на десятые. Считаем то же, что для ONI:

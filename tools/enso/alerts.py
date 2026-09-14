@@ -21,15 +21,24 @@ def detect(cur, prev=None):
     W = cur["watch"]; N = cur["nino34"]; NW = cur["noaa"]
     n34, sw, tw = W["sst_nino34"], W["sst_world"], W["t2_world"]
     lat = NW["latest"]; hm = NW.get("hist_max", {})
+    hmd = NW.get("hist_max_date", {})
 
     # ---- 1. выше всего измеренного
+    # ПОТОЛОК — ДО СОБЫТИЯ (watch.noaa_weekly_watch, 14.09). Пока он считался «по всему ряду,
+    # кроме последней недели», рекорд этого же события двухнедельной давности выдавался за то,
+    # «что измерено раньше», и фраза «выше всего измеренного» означала «выше прошлой недели».
+    # Дату потолка называем вслух: читатель должен видеть, с чем именно сравнивают.
+    def _vs(k):
+        d = hmd.get(k)
+        return f"{hm[k]:+.1f} °C" + (f", the highest before this event began ({d})" if d else "")
+
     if hm.get("n34a") is not None and lat["n34a"] > hm["n34a"]:
         _lvl(A, SHOUT, "Niño 3.4 is above anything measured since 1981",
-             f"weekly index {lat['n34a']:+.1f} °C against the previous maximum {hm['n34a']:+.1f} °C")
+             f"weekly index {lat['n34a']:+.1f} °C against {_vs('n34a')}")
     for k, name in (("n12a", "Niño 1+2"), ("n3a", "Niño 3"), ("n4a", "Niño 4")):
         if hm.get(k) is not None and lat[k] > hm[k]:
             _lvl(A, SHOUT, f"{name} is above anything measured",
-                 f"{lat[k]:+.1f} °C against the previous maximum {hm[k]:+.1f} °C")
+                 f"{lat[k]:+.1f} °C against {_vs(k)}")
     pe = N["peak_estimate"]
     if N["current_day"] > pe["hist_ceiling"]:
         _lvl(A, SHOUT, "Daily Niño 3.4 broke the record of the series",

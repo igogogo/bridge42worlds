@@ -1,49 +1,5 @@
 [
  {
-  "kind": "planet",
-  "label": "long record (gases, ice, temperature, sea level)",
-  "started": "2026-09-09 18:01:55",
-  "finished": "2026-09-09 18:02:12",
-  "secs": 17,
-  "status": "ok",
-  "note": "",
-  "errors": [],
-  "stale": []
- },
- {
-  "kind": "mentions",
-  "label": "mentions feed (GDELT, Wikipedia, official feeds)",
-  "started": "2026-09-09 18:02:12",
-  "finished": "2026-09-09 18:03:17",
-  "secs": 65,
-  "status": "ok",
-  "note": "778 articles in the last days across 8 languages; most from Vietnam.vn, 新浪财经, Infobae, BBC. The English Wikipedia article gets 559 views a day this week against",
-  "errors": [],
-  "stale": [
-   "gdelt_volume"
-  ]
- },
- {
-  "kind": "spectral",
-  "label": "spectral watch: a line at 2–7 days in the daily series",
-  "started": "2026-09-09 18:03:17",
-  "finished": "2026-09-09 18:03:45",
-  "secs": 28,
-  "status": "ok",
-  "note": "24 daily series scanned for a line at 2–7 days over the last 30 days: no signal; 2 line(s) at 99 % against 1.8 expected by chance, candidates: sst_nino34, t2_wo",
-  "errors": []
- },
- {
-  "kind": "regions-daily",
-  "label": "land regions on Dynamics (ERA5 boxes, like Niño 3.4)",
-  "started": "2026-09-09 18:03:46",
-  "finished": "2026-09-09 18:03:47",
-  "secs": 1,
-  "status": "ok",
-  "note": "6 land points",
-  "errors": []
- },
- {
   "kind": "precip",
   "label": "rain: ERA5 box sums and GPCP planet",
   "started": "2026-09-09 18:03:47",
@@ -1319,5 +1275,68 @@
   ],
   "triggers": 8,
   "needs_assessment": true
+ },
+ {
+  "kind": "full",
+  "label": "full update: rules, model verdict, snapshot",
+  "started": "2026-09-14 17:46:28",
+  "finished": "2026-09-14 17:50:54",
+  "secs": 266,
+  "status": "ok",
+  "note": "",
+  "errors": [],
+  "stamp": "2026-09-14 17:49",
+  "risk_index": 95,
+  "n_risks": 22,
+  "n_alerts": 14,
+  "shout": true,
+  "stale": [],
+  "model": "deepseek-v4-pro",
+  "errors_list": []
+ },
+ {
+  "kind": "full",
+  "label": "full update: rules, model verdict, snapshot",
+  "started": "2026-09-14 17:52:43",
+  "finished": "2026-09-14 17:56:38",
+  "secs": 235,
+  "status": "ok",
+  "note": "",
+  "errors": [],
+  "stamp": "2026-09-14 17:55",
+  "risk_index": 95,
+  "n_risks": 22,
+  "n_alerts": 14,
+  "shout": true,
+  "stale": [],
+  "model": "deepseek-v4-pro",
+  "errors_list": []
+ },
+ {
+  "kind": "review",
+  "label": "review mark (Fable)",
+  "started": "2026-09-14 17:57:03",
+  "finished": "2026-09-14 17:57:03",
+  "secs": 0,
+  "status": "ok",
+  "note": "ceiling for 'above anything measured' now excludes the current event (Nino 3 vs 1997-11-12, not vs its own week); intern",
+  "errors": [],
+  "stamp": "2026-09-14 17:55",
+  "findings": 2,
+  "edits": 2,
+  "model": "claude-opus-5"
+ },
+ {
+  "kind": "publish",
+  "label": "publish to the site",
+  "started": "2026-09-14 17:57:03",
+  "finished": "2026-09-14 17:57:16",
+  "secs": 12,
+  "status": "ok",
+  "note": "",
+  "errors": [],
+  "stamp": "2026-09-14 17:55",
+  "files": 43,
+  "reviewed": true
  }
 ]
