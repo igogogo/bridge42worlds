@@ -66,6 +66,7 @@ DRAFTS = HERE / "drafts"
 # запросу — разные ворота). Представляемся честно и с обратным адресом.
 UA = {"User-Agent": "bridge42worlds/1.0 (+https://bridge42worlds.com; bridge42worlds@gmail.com)"}
 THIN_TEXT = 2000          # столько же, сколько сторожит intake.py
+RETRY_MAX = 5             # столько раз ждём неготовый полный текст, потом сдаёмся
 
 # ── тема ─────────────────────────────────────────────────────────────────────
 # СИЛЬНЫЕ: вне геронтологии почти не встречаются. Хотя бы одно обязано быть.
@@ -415,7 +416,13 @@ def main():
         sc = score(r)
         if not sc:
             continue
-        if r.get("doi") in seen:
+        # ВИДЕЛИ — НЕ ЗНАЧИТ ВЗЯЛИ. Полный текст у свежего препринта появляется не сразу:
+        # обе работы от 13.09 на прогоне 14.09 пришли с пустым XML. Записывать такую в
+        # «обработано» нельзя — причина временная, а исключение вышло бы вечным, и работа
+        # не вернулась бы никогда. Пропускаем только взятые и те, что не дались много раз
+        # подряд: иначе битая работа каждый день тянула бы на себя лишний запрос.
+        was = seen.get(r.get("doi"))
+        if was and (was.get("taken") or int(was.get("tries") or 0) >= RETRY_MAX):
             continue
         cand.append((sc, r))
     cand.sort(key=lambda x: -x[0])
@@ -468,8 +475,10 @@ def main():
         done.append(d)
 
     for d, why in failed:
+        was = seen.get(d["doi"]) or {}
         seen[d["doi"]] = {"date": d["date"], "title": d["title"][:120],
-                          "taken": False, "why": why}
+                          "taken": False, "why": why,
+                          "tries": int(was.get("tries") or 0) + 1}
     save_seen(seen)
 
     log(f"\n✅ заведено {len(done)}, пропущено {len(failed)}")
