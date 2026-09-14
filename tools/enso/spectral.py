@@ -114,7 +114,15 @@ def _om_box(box, d0, d1):
     lons = [lo0 + (lo1 - lo0) * (j + .5) / GRID for j in range(GRID)]
     pts = [(la, lo) for la in lats for lo in lons]
     u = ("https://archive-api.open-meteo.com/v1/archive?latitude=" + ",".join(f"{p[0]:.3f}" for p in pts) +
-         "&longitude=" + ",".join(f"{p[1]:.3f}" for p in pts) + f"&start_date={d0}&end_date={d1}&daily=temperature_2m_mean&timezone=UTC")
+         "&longitude=" + ",".join(f"{p[1]:.3f}" for p in pts) +
+         # НАБОР ДАННЫХ ПРИБИТ ГВОЗДЁМ (14.09). Без ключа `models` Open-Meteo сам выбирает
+         # источник и на свежих годах выбирает ДРУГОЙ. Поймано на ледниках: та же точка, 15 июля,
+         # 1995 умолчание 9,4 и era5_land 9,4, а 2025 умолчание 5,8 против era5_land 12,7 — семь
+         # градусов, как если бы точка уехала на километр вверх. Ряд, склеенный из двух наборов,
+         # даёт ложное похолодание последних лет ровно там, где мы ищем потепление.
+         # Берём era5, а не era5_land: боксы захватывают море (побережье Перу целиком), а
+         # era5_land над водой отдаёт пустоту.
+         f"&start_date={d0}&end_date={d1}&models=era5&daily=temperature_2m_mean&timezone=UTC")
     with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "bridge42worlds enso"}), timeout=180) as r:
         res = json.loads(r.read().decode("utf-8"))
     if isinstance(res, dict):
@@ -129,6 +137,24 @@ def _om_box(box, d0, d1):
     return {t: round(acc[t] / wsum[t], 3) for t in acc}
 
 
+PINNED = RCACHE / "_pinned.json"
+
+
+def _mark_pinned(key):
+    """Какие боксы уже перекачаны прибитым набором.
+
+    Пока склад собран из двух наборов (см. комментарий в _om_box), его числа смещены, и панель
+    обязана это говорить. Перекачка идёт по одному боксу и растягивается на сутки из-за дневной
+    квоты Open-Meteo, так что состояние «часть перекачана» нормальное — но не молчаливое."""
+    try:
+        PINNED.parent.mkdir(parents=True, exist_ok=True)
+        d = json.loads(PINNED.read_text(encoding="utf-8")) if PINNED.exists() else {}
+        d[key] = {"models": "era5", "at": datetime.now().strftime("%Y-%m-%d %H:%M")}
+        PINNED.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
+    except Exception:                                            # noqa: BLE001
+        pass
+
+
 def _region(key, box):
     RCACHE.mkdir(parents=True, exist_ok=True)
     p = RCACHE / f"{key}-box.json"
@@ -140,6 +166,7 @@ def _region(key, box):
             d0 = "1981-01-01" if not m else (today - timedelta(days=90)).isoformat()
             m.update(_om_box(box, d0, today.isoformat()))
             p.write_text(json.dumps(m), encoding="utf-8")
+            _mark_pinned(key)
             err = None
             break
         except Exception as e:                                   # noqa: BLE001

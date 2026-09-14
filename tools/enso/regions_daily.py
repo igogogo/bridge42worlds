@@ -59,6 +59,14 @@ def dataset(store):
 def build(verbose=True):
     t0 = time.time()
     out = {}
+    # Какие боксы уже собраны прибитым набором (era5), а какие ещё несут склейку двух наборов.
+    # Смешанный ряд занижает или завышает свежие годы против климатологии; на Заливе перекачка
+    # сняла 0,45 °C с тридцатидневной аномалии и два «рекордных» дня из семи. Пока перекачаны
+    # не все, панель называет это вслух.
+    try:
+        PIN = json.loads((SPX.RCACHE / "_pinned.json").read_text(encoding="utf-8"))
+    except Exception:                                            # noqa: BLE001
+        PIN = {}
     for key, label, box, rid in SPX.REGIONS:
         p = SPX.RCACHE / f"{key}-box.json"
         if not p.exists():
@@ -68,6 +76,7 @@ def build(verbose=True):
             w = WT.series_watch(ds, label + ", daily", analog_years=WT.ANALOGS)
             w["source"] = f"ERA5 via Open-Meteo archive, mean of a {SPX.GRID}×{SPX.GRID} grid inside the box, cos-latitude weights"
             w["box"] = list(box); w["region"] = rid
+            w["pinned"] = key in PIN
             out["land_" + key] = w
             if verbose:
                 print(f"  {key:<8} to {w['last_date']}: last {w['last_value']:+.2f}, 30 d {w['level30']['anom']:+.2f} °C rank {w['level30']['rank_raw']}/{w['level30']['of']}, streak {w['records']['streak']}")
@@ -75,7 +84,12 @@ def build(verbose=True):
             if verbose:
                 print(f"  {key}: {str(e)[:120]}")
     doc = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "series": out,
-           "note": ("Six land regions from ERA5 (box means of a 3×3 grid, via Open-Meteo), treated exactly like the "
+           "pinned": sorted(PIN), "n_pinned": len(PIN),
+           "note": ((("Datasets: " + str(len(PIN)) + " of 6 boxes have been refetched from one pinned ERA5 dataset; "
+                      "the rest still carry a series stitched from two datasets, because the archive silently changes "
+                      "which one it serves for recent years, and that biases the recent years against the 1991–2020 "
+                      "normal. On the one box already converted the 30-day anomaly fell by 0.45 °C. ") if len(PIN) < 6 else "")
+                    + "Six land regions from ERA5 (box means of a 3×3 grid, via Open-Meteo), treated exactly like the "
                     "global series: anomaly against the 1991–2020 mean of the same calendar day, the band of all years "
                     "since 1981, records, CUSUM and a 14-day analogue forecast. Air over land swings more day to day "
                     "than the ocean boxes; the band is wider for that reason, not because the data are worse."),
