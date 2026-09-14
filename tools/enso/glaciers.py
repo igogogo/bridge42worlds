@@ -312,7 +312,7 @@ def snow_share(rows):
 
 
 
-def build(full=False, verbose=True, pause=3.0, offline=False):
+def build(full=False, verbose=True, pause=3.0, offline=False, only=None):
     t0 = time.time()
     series, meta, errs = {}, {}, []
     for i, (key, name, lat, lon, rid, what, enso) in enumerate(POINTS):
@@ -322,17 +322,20 @@ def build(full=False, verbose=True, pause=3.0, offline=False):
             # вместе с сорока пятью годами, которые уже лежали на диске. Считаем по тому, что
             # есть, и честно пишем, на какой день оно кончается.
             try:
-                if offline:
+                # --only ограничивает СКАЧИВАНИЕ, а не файл. Поймано 14.09: шесть прогонов с
+                # --only по неотвечающим точкам переписали glaciers.json одной строкой каждый
+                # и обнулили семь уже посчитанных. Остальные точки считаются по складу.
+                if offline or (only and key != only):
                     raise RuntimeError("offline")
                 st, _n = top_up(key, lat, lon, full=full, verbose=verbose)
             except Exception as e:                               # noqa: BLE001
                 st = load_store(key)
                 if not (st.get("rows") or {}):
                     raise
-                if not offline:
+                if not offline and not (only and key != only):
                     errs.append(f"{key}: не дотянулся ({str(e)[:60]}), считаю по складу")
-                if verbose:
-                    print(f"  {key:<18} источник молчит, беру склад: {len(st['rows'])} дней")
+                    if verbose:
+                        print(f"  {key:<18} источник молчит, беру склад: {len(st['rows'])} дней")
             rows = st["rows"]
             label = f"{name}, 2 m air at {int(st.get('elevation') or 0)} m (ERA5 point)"
             w = WT.series_watch(dataset(rows, 0), label + ", daily", analog_years=WT.ANALOGS)
@@ -356,7 +359,7 @@ def build(full=False, verbose=True, pause=3.0, offline=False):
             errs.append(f"{key}: {str(e)[:140]}")
             if verbose:
                 print(f"  {key}: {str(e)[:140]}")
-        if pause and not offline and i < len(POINTS) - 1:
+        if pause and not offline and not only and i < len(POINTS) - 1:
             time.sleep(pause)
     doc = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "series": series, "errors": errs,
            "points": [{"key": "ice_" + p[0], "name": p[1], "lat": p[2], "lon": p[3], "region": p[4]} for p in POINTS],
@@ -398,11 +401,9 @@ def main():
             have = len(json.loads(p.read_text(encoding="utf-8")).get("rows") or {}) if p.exists() else 0
             print(f"  {key:<18} {name:<32} {lat:>7.2f} {lon:>8.2f}  {rid:<14} дней в складе {have}")
         return
-    if a.only:
-        globals()["POINTS"] = [p for p in POINTS if p[0] == a.only]
-        if not POINTS:
-            sys.exit("нет такой точки")
-    build(full=a.full, pause=a.pause, offline=a.offline)
+    if a.only and a.only not in [p[0] for p in POINTS]:
+        sys.exit("нет такой точки")
+    build(full=a.full, pause=a.pause, offline=a.offline, only=a.only)
 
 
 if __name__ == "__main__":
