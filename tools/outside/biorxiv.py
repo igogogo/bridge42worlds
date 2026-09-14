@@ -62,6 +62,8 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 
 SEEN = HERE / "biorxiv-seen.json"
 DRAFTS = HERE / "drafts"
+# Кэш скачанных недель. В data/ ему не место: data/ публикуется целиком.
+CACHE = HERE / "cache"
 # Без своего User-Agent сервер отдаёт 403 на полный текст (API при этом отвечает и голому
 # запросу — разные ворота). Представляемся честно и с обратным адресом.
 UA = {"User-Agent": "bridge42worlds/1.0 (+https://bridge42worlds.com; bridge42worlds@gmail.com)"}
@@ -219,8 +221,14 @@ def log(m):
 
 # ── сеть ─────────────────────────────────────────────────────────────────────
 
-def _get(url, tries=3, timeout=90):
-    """Ответ сервера байтами. Сеть у препринт-серверов капризная — отступаем и повторяем."""
+def _get(url, tries=6, timeout=120):
+    """Ответ сервера байтами. Сеть у препринт-серверов капризная — отступаем и повторяем.
+
+    Шесть попыток, а не три, и отступ растёт: на длинном сборе (три месяца — это около
+    шестисот запросов) сервер один раз обязательно ответит 504. Три попытки по три
+    секунды такую заминку не пересиживают, и полтора часа работы уходят в никуда —
+    ровно это и случилось 14.09.
+    """
     last = None
     for i in range(tries):
         try:
@@ -230,19 +238,18 @@ def _get(url, tries=3, timeout=90):
         except (urllib.error.URLError, TimeoutError, OSError) as e:
             last = e
             if i < tries - 1:
-                time.sleep(3 * (i + 1))
+                time.sleep(min(60, 5 * 2 ** i))
     raise last
 
 
-def fetch_range(server, frm, to):
-    """Все записи сервера за промежуток дат. Страница — 30 записей, курсор по смещению."""
+def _fetch_window(server, frm, to):
+    """Записи сервера за один промежуток. Страница — 30 записей, курсор по смещению."""
     out, seen, cur, total = [], set(), 0, None
     while True:
         url = f"https://api.biorxiv.org/details/{server}/{frm}/{to}/{cur}"
         d = json.loads(_get(url).decode("utf-8", "replace"))
         if total is None:
             total = int((d.get("messages") or [{}])[0].get("total", 0))
-            log(f"  {server}: записей за {frm}…{to} — {total}")
         rows = d.get("collection") or []
         if not rows:
             break
@@ -253,6 +260,47 @@ def fetch_range(server, frm, to):
         cur += 30
         if cur >= total:
             break
+    return out
+
+
+def fetch_range(server, frm, to, step_days=7):
+    """Все записи сервера за промежуток. Окно режется на недели, каждая ложится в кэш.
+
+    ЗАЧЕМ КУСКАМИ И С КЭШЕМ. Три месяца с двух серверов — это восемнадцать тысяч записей и
+    около шестисот запросов подряд. 14.09 такой сбор шёл полтора часа и умер на 504:
+    сервер икнул, попытки кончились, и всё скачанное пропало, потому что держалось в
+    памяти. Теперь неделя — единица работы: скачали, положили на диск, пошли дальше.
+    Повторный запуск читает готовые недели с диска и продолжает с первой недостающей,
+    так что обрыв стоит одну неделю, а не весь сбор.
+    """
+    CACHE.mkdir(parents=True, exist_ok=True)
+    out, seen = [], set()
+    a, b = date.fromisoformat(frm), date.fromisoformat(to)
+    weeks, cur = [], a
+    while cur <= b:
+        end = min(cur + timedelta(days=step_days - 1), b)
+        weeks.append((cur.isoformat(), end.isoformat()))
+        cur = end + timedelta(days=1)
+    log(f"  {server}: {frm}…{to} — {len(weeks)} кусков по {step_days} дн.")
+    for i, (f1, f2) in enumerate(weeks, 1):
+        cf = CACHE / f"{server}-{f1}-{f2}.json"
+        if cf.exists():
+            try:
+                rows = json.loads(cf.read_text(encoding="utf-8"))
+                log(f"    [{i}/{len(weeks)}] {f1}…{f2}: {len(rows)} из кэша")
+            except (OSError, json.JSONDecodeError):
+                rows = None
+        else:
+            rows = None
+        if rows is None:
+            rows = _fetch_window(server, f1, f2)
+            cf.write_text(json.dumps(rows, ensure_ascii=False), encoding="utf-8")
+            log(f"    [{i}/{len(weeks)}] {f1}…{f2}: {len(rows)} скачано")
+        for r in rows:
+            if r.get("doi") not in seen:
+                seen.add(r.get("doi"))
+                out.append(r)
+    log(f"  {server}: уникальных работ {len(out)}")
     return out
 
 
