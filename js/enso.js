@@ -330,8 +330,18 @@
 
   /* Шкала цвета у разрезов и подписи слоёв — та же легенда, только рисуется прямо в поле
      графика. В плитке её нет места: отдаём тем же путём, что и обычную легенду. */
-  function scaleLegend(rows) {
-    if (!S._tight) return false;
+  function scaleLegend(rows, force) {
+    /* Если легенду просит сама сцена (две половины разреза), она уходит в ТУ ЖЕ полосу под
+       шапкой, что у обычных графиков (S._legItems → кнопка «legend» рядом с source и notes).
+       Через S._legend её забирает только мозаика обзора, и на большой сцене легенда исчезла бы
+       совсем — поймано сразу после правки 14.09. */
+    if (force && !S._tight) { S._legItems = rows; return true; }
+    /* force — просьба самой сцены. До 14.09 легенда уходила в окно только в узкой плитке
+       (S._tight), и на сцене «месяц за месяцем» два разреза рядом рисовали КАЖДЫЙ свою копию
+       одной и той же шкалы: 108 пикселей справа у каждого, то есть пятая часть картинки под
+       то, что и так одинаково (владелец 14.09: «две легенды убрать в легенды, и всё встанет
+       даже в мобильном»). */
+    if (!S._tight && !force) return false;
     S._legend = { name: 'What the colours are', html: '<span class="leg-list">' + rows.map(function (r) {
       return '<span class="leg-row"><svg viewBox="0 0 22 14" width="22" height="14" aria-hidden="true">' +
         (r[2] === 'line' ? '<line x1="1" y1="7" x2="21" y2="7" style="stroke:' + r[1] + '" stroke-width="2"' + (r[3] ? ' stroke-dasharray="5 3"' : '') + '/>'
@@ -4913,7 +4923,8 @@
     /* Колонка легенды справа нужна только на большом графике: в плитке легенда уехала в
        метку, и держать под неё 108 пикселей — значит показывать разрез в половину ширины
        (владелец 06.09: «график остался не на всю ширину, ты убрал легенду, но не расширил»). */
-    var Lp = S._tight ? 40 : 44, Rp = S._tight ? 10 : 108, Tp = S._tight ? 16 : 26, B = 26;
+    var legOut = S._tight || cfg.legendOut;            // легенда ушла в окно — поле справа не нужно
+    var Lp = S._tight ? 40 : 44, Rp = legOut ? 10 : 108, Tp = S._tight ? 16 : 26, B = 26;
     var pw = W - Lp - Rp, ph = H - Tp - B;
     var vmax = 0, i, j, v;
     for (i = 0; i < nC; i++) for (j = 0; j < nR; j++) { v = get(i, j); if (fin(v)) vmax = Math.max(vmax, Math.abs(v)); }
@@ -4942,12 +4953,16 @@
     (S._tight ? [0, 150, 300] : [0, 50, 100, 150, 200, 250, 300]).forEach(function (d) { if (d <= depthMax) s += '<text x="' + (Lp - 5) + '" y="' + (Y(d) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9">' + d + (S._tight ? '' : ' m') + '</text>'; });
     /* В плитке обзора долготы стояли вплотную и сливались: там оставляем только края —
        первую и последнюю (владелец 06.09). Глубины слева тоже прореживаем. */
-    if (S._tight) {
+    /* ПОДПИСИ ПО ШИРИНЕ КАРТИНКИ, А НЕ ПО ПРИЗНАКУ ПЛИТКИ. Признак S._tight ставит только
+       мозаика обзора; на главной сцене он всегда ложь, и два разреза рядом по 150 пикселей
+       получали по четыре подписи долготы, которые слипались в «130.5°E179.5°W129.5°W91.5°»
+       (поймано на телефоне 14.09). Меряем реальное поле: узкому хватает краёв. */
+    if (S._tight || pw < 210) {
       [0, nC - 1].forEach(function (i2) {
         s += '<text x="' + (Lp + (i2 + .5) * cw).toFixed(1) + '" y="' + (H - 9) + '" text-anchor="' + (i2 ? 'end' : 'start') + '" font-size="9">' + esc(cols[i2]) + '</text>';
       });
     } else {
-      var every = Math.max(1, Math.round(nC / Math.max(3, Math.floor(pw / 58))));
+      var every = Math.max(1, Math.round(nC / Math.max(2, Math.floor(pw / 62))));
       for (i = 0; i < nC; i++) if (i % every === 0 || i === nC - 1) s += '<text x="' + (Lp + (i + .5) * cw).toFixed(1) + '" y="' + (H - 9) + '" text-anchor="middle" font-size="9">' + esc(cols[i]) + '</text>';
     }
     // легенда справа
@@ -4955,7 +4970,8 @@
     var SCALE = [[vmax, heatColor(vmax, 1), 1], [vmax / 2, heatColor(vmax / 2, .5), .7], [0, 'var(--grid)', .6], [-vmax / 2, heatColor(-vmax / 2, .5), .7], [-vmax, heatColor(-vmax, 1), 1]];
     if (scaleLegend(SCALE.map(function (it) { return [fnum(it[0], 1) + ' °C', it[1], 'box', it[2]]; })
         .concat(cfg.d20 ? [['20 °C now', 'var(--text)', 'line']] : [])
-        .concat(cfg.d20clim ? [['20 °C normal', 'var(--text)', 'line', 1]] : []))) return s + '</svg>';
+        .concat(cfg.d20clim ? [['20 °C normal', 'var(--text)', 'line', 1]] : [])
+        .concat(cfg.legendNote ? [[cfg.legendNote, 'transparent', 'box', 0]] : []), cfg.legendOut)) return s + '</svg>';
     SCALE.forEach(function (it, k) {
       s += '<rect x="' + lx + '" y="' + (ly + k * 15) + '" width="14" height="11" style="fill:' + it[1] + '" opacity="' + it[2] + '"/>' +
         (it[0] < 0 ? '<rect x="' + lx + '" y="' + (ly + k * 15) + '" width="14" height="11" fill="url(#hneg)" opacity=".7"/>' : '') +
@@ -6380,9 +6396,12 @@
       var A2 = ha ? (S.SEC || {})[ha] : null;
       if (!A2) return chartSection(cur, w, h);
       var ay = parseInt(ha, 10), cy = parseInt(SC.months[n - 1].slice(0, 4), 10), key = (parseInt(ym.slice(0, 4), 10) + (ay - cy)) + ym.slice(4), j = A2.months.indexOf(key);
+      /* Две половины — одна легенда на двоих, в окне. Иначе каждая держала свои 108 пикселей
+         справа, и на телефоне от разреза оставалась треть ширины. */
+      cur.legendOut = true;
       var half = (w - 10) / 2, left = chartSection(cur, half, h), right;
       if (j < 0) right = svgOpen(half, h) + '<text x="20" y="40" font-size="11">' + esc(ha) + ': no frame for ' + esc(key) + '</text></svg>';
-      else right = chartSection({ title: ha + ' event · ' + key, cols: A2.labels, rows: A2.levels, get: function (a, b) { return A2.anom[j][b][a]; }, d20: A2.d20[j], d20clim: A2.d20_clim[j], legendNote: 'same month', vmax: 10 }, half, h);
+      else right = chartSection({ legendOut: true, title: ha + ' event · ' + key, cols: A2.labels, rows: A2.levels, get: function (a, b) { return A2.anom[j][b][a]; }, d20: A2.d20[j], d20clim: A2.d20_clim[j], legendNote: 'same month', vmax: 10 }, half, h);
       // два SVG в одной картинке: вкладываем как <svg x=…>
       return svgOpen(w, h) + left.replace(/^<svg /, '<svg x="0" width="' + half + '" height="' + h + '" ') + right.replace(/^<svg /, '<svg x="' + (half + 10) + '" width="' + half + '" height="' + h + '" ') + '</svg>';
     });
