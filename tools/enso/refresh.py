@@ -323,6 +323,8 @@ def new_block_alerts(cur):
     Залив выше порога стресса; хвост NRT разошёлся с climatereanalyzer сильнее 0.1."""
     A = []
     e = ((cur.get("wind") or {}).get("era5") or {})
+    # Та же оговорка, что в wind.risks: `active` считается по складу и верен, даже когда сбор
+    # этого прогона не удался. Молчание источника отдельно помечает правило wind_silent.
     if e.get("active"):
         ev = e["events"][-1]
         A.append({"level": "WATCH", "kind": "climate", "title": "A westerly wind burst is under way over the western Pacific",

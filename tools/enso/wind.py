@@ -315,11 +315,32 @@ def build(today=None, verbose=False):
             "note": "ERA5 is the field, the moorings are the check: two independent measures of the same wind."}
 
 
+STALE_DAYS = 5             # сколько суток молчания ещё терпимо для суждения о прорыве
+
+
 def risks(WIND):
     """Правила по ветру — в формате air.risks."""
     out = []
     e = (WIND or {}).get("era5") or {}
-    if e.get("error") or not e.get("dates"):
+    # СУДИМ ПО ДАННЫМ, А НЕ ПО ФЛАГУ ОШИБКИ. Поймано 14.09: у era5() поле error ставится, если
+    # хоть одна из шести точек не ответила, — даже когда склад цел и правило считается правильно.
+    # В этот день Open-Meteo вернул отказ по квоте, склад остался с данными до 12.09, прорыв шёл
+    # восьмые сутки (аномалии 5.88 и 5.64 при пороге 4.11) — а лента объявила «Risk cleared:
+    # A westerly wind burst is under way». Ветер никуда не делся, мы просто не дозвонились.
+    # Правило пустого ряда не выдумывает, но и не молчит из-за чужого пятисотого.
+    if not e.get("dates") or not (e.get("events") is not None):
+        return out
+    stale = e.get("days_stale")
+    if stale is not None and stale > STALE_DAYS:
+        out.append((
+            "The wind field did not answer, so the westerly bursts are unwatched today", 2, "now",
+            f"The ERA5 10 m wind over 130°E–180° has not updated for {stale} days"
+            + (f"; the last day we hold is {e.get('last_date')}" if e.get("last_date") else "") + ".",
+            "This is a gap in our reading, not calm air. A burst that was under way does not end because the "
+            "archive stopped answering, and any risk that rests on this field is suspended rather than lifted "
+            "while this lasts.",
+            "the next run: the archive usually returns within a day",
+            None, "data", "wind_silent"))
         return out
     ev = e.get("events") or []
     if e.get("active"):

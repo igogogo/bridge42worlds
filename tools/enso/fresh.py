@@ -32,10 +32,12 @@ def _series(cur, key):
 # зависимые от неё риски считаются приостановленными, а не снятыми.
 SUSPENDS = {
     "tao_silent": ("subsurface_warm",),
+    "wind_silent": ("wwb_active", "wwb_recent"),
 }
 # то же для тревог: ключ — id тревоги, которую держит этот источник
 SUSPENDS_AL = {
     "tao_silent": ("water_above_normal_at_m_depth_w",),
+    "wind_silent": ("a_westerly_wind_burst_is_under_way_over_the_west",),
 }
 
 
