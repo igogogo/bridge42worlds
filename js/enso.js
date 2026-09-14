@@ -6556,6 +6556,37 @@
     s += legend(leg, W, H, R, Tp);
     return s + '</svg>';
   }
+  /* ОДИН ВАРИАНТ ИЗ ЧЕТЫРЁХ ДЕЛАЕТ ВСЁ РАСХОЖДЕНИЕ. v8 (14.09): у NOAA-20 дневной узел даёт
+     наклон +0,92, тогда как у AIRS день +1,34, AIRS ночь +1,35 и у самого NOAA-20 ночь +1,23.
+     У AIRS узлы сходятся до второго знака, у NOAA-20 расходятся на четверть. Пологий наклон
+     занижает предсказание — отсюда и «вдвое больше предсказанного», и весь видимый разлад
+     приборов. Автор сборщика назвал это открытым вопросом; значит и мы не выдаём разлад за
+     физику, а показываем, какой именно вариант выпадает. Считаем по данным: наклон, который
+     дальше всех от медианы остальных. */
+  function oddVariant(RG, win) {
+    var V = RG.variants || {}, rows = [];
+    Object.keys(V).forEach(function (k) {
+      var p = k.split('|');
+      if (p[2] !== win) return;
+      var sl = ((V[k].relation) || {}).slope;
+      if (fin(sl)) rows.push({ key: k, src: p[0], node: p[1], slope: sl });
+    });
+    if (rows.length < 3) return '';
+    var odd = null, best = -1;
+    rows.forEach(function (r) {
+      var rest = rows.filter(function (q) { return q.key !== r.key; }).map(function (q) { return q.slope; }).sort(function (a, b) { return a - b; });
+      var med = rest[Math.floor(rest.length / 2)];
+      var gap = Math.abs(r.slope - med);
+      if (gap > best) { best = gap; odd = { r: r, med: med, gap: gap }; }
+    });
+    var rest2 = rows.filter(function (q) { return q.key !== odd.r.key; });
+    if (odd.gap < 0.15) return 'The four slopes agree to within ' + fnum(odd.gap, 2, false) + ' per °C, so no single variant drives the answer.';
+    return 'One variant carries the disagreement: ' + esc(({ n21_cris: 'NOAA-21 CrIS', n20_cris: 'NOAA-20 CrIS', snpp_cris: 'SNPP CrIS', aqua_airs: 'Aqua AIRS' })[odd.r.src] || odd.r.src) + ' ' + (odd.r.node === 'A' ? 'by day' : 'by night') +
+      ' has a slope of ' + fnum(odd.r.slope, 2, false) + ' per °C against ' +
+      rest2.map(function (q) { return fnum(q.slope, 2, false); }).join(', ') +
+      ' for the others. A flatter line predicts less convection, which is what makes that variant read high. The collector\u2019s author lists this as unexplained, so the disagreement between instruments is shown, not claimed as physics';
+  }
+
   /* ДЕРЖИТСЯ ЛИ СВЯЗЬ. Сборщик радианса v7 (10.09) добавил блок regime: он не спрашивает
      «высоко ли значение», он спрашивает, не разладилась ли сама связь «температура → отклик
      атмосферы». Наклон, посчитанный на скользящем окне лет, и есть ответ: пока полоса
@@ -6909,7 +6940,7 @@
       var drift = ((RG.drift_check || {}).variants || {})[vkey] || {};
       nt = '<b>What is measured.</b> ' + term('regimewatch', 'A regime watch') + ': one point per year, the mean sea-surface temperature of the Niño 3.4 box against the share of satellite footprints colder than 235 K, both over the same window of the calendar. The line is fitted through the LOGARITHM of that share, so its slope is per degree Celsius and is read by multiplying, not by adding; the question is whether the line itself moves. ' +
         'The rolling slope is that same line refitted on a moving window of twelve years, with its standard error; the dashed line is the fit over all years at once. ' +
-        '<br><b>Two limits the collector states, and what the panel does about them.</b> First, this year’s sea is ' + fnum(ex.beyond_range_c, 2, false) + ' °C above the warmest year the line was fitted on (' + fnum(ex.sst_train_max, 2, false) + ' °C), so the position of ' + cur + ' against the line is an extrapolation, not a measurement; we do not print it as a reading. Second, the collector reports that the residuals in this release are too large in magnitude by a factor of 1.3 to 1.8, from a defect in the sign of the prediction error that its author is fixing; so the residual history by year and the σ figures are held back until that is corrected. The slope and its drift do not depend on either. The ratio of observed to predicted convection is the same comparison the residual makes, written without the division by the prediction error that is being corrected, so its size stands even if the σ scale moves; read it, and the agreement of the variants, as direction and rough size rather than as exact figures. ' +
+        '<br><b>Two limits the collector states, and what the panel does about them.</b> First, this year’s sea is ' + fnum(ex.beyond_range_c, 2, false) + ' °C above the warmest year the line was fitted on (' + fnum(ex.sst_train_max, 2, false) + ' °C), so the position of ' + cur + ' against the line is an extrapolation, not a measurement; we do not print it as a reading. Second, the scale the residual is measured in is now settled: v8 divides it by the error of predicting a NEW point, which is ' + (fin(curV.pred_se_inflation) ? fnum(curV.pred_se_inflation, 2, false) : '·') + ' times the scatter of the fit itself on this variant, so a residual of one means one prediction error, not one fit scatter, and the σ figures are no longer held back. What has not changed is the first limit above: this year still sits outside the training range, so the residual remains a statement about the shape of the curve rather than a reading. ' +
         '<br><b>Scope.</b> Two equatorial boxes, about 0.4 % of the surface of the planet. Nothing in the climate system would show here first; this is a watch on the tropical Pacific, not on the planet. ' +
         '<br><b>Caveats.</b> ' + esc(radCav(cav));
       INFO.push({ key: 'notes', label: 'notes', html: nt, plain: RAD_PLAIN[k] || '' }); infoToggles(row, INFO); body.appendChild(row); infoPane(body, INFO);
@@ -6928,7 +6959,7 @@
         '<div class="kpi"><div class="kn">the link, all years</div><div class="kv">' + fnum(rel.slope, 2, false) + '<small> ± ' + fnum(rel.slope_se, 2, false) + ' per °C</small></div><div class="km">fitted on ' + (rel.n_years_fitted || '·') + ' years of ' + (V.n_years || '·') + '; r² ' + fnum(rel.r2, 2, false) + '. The line runs through the logarithm of the share, so read it by multiplying: one degree of sea temperature more' + (fin(rel.slope) ? ' multiplies deep convection by about ' + fnum(Math.exp(rel.slope), 1, false) : ' multiplies deep convection') + '</div>' + kmeta(null, pairName(rpair) + ', raw granules', String(RA.updated || '').slice(0, 10)) + '</div>' +
         '<div class="kpi"><div class="kn">has the link moved</div><div class="kv">' + (moved == null ? '·' : (moved > 0 ? '+' : '') + fnum(moved, 2, false)) + '</div><div class="km">' + (moved == null ? 'not enough windows' : 'first rolling window ' + fnum(roll0.slope, 2, false) + ' to the last ' + fnum(rollN.slope, 2, false) + ', against a combined error of ' + fnum(seBoth, 2, false) + (Math.abs(moved) < seBoth ? '; smaller than the error, so the link is holding' : '; larger than the error, worth watching')) + '</div>' + kmeta(null, 'our own difference of the collector’s rolling fits', String(RA.updated || '').slice(0, 10)) + '</div>' +
         '<div class="kpi"><div class="kn">convection against the link</div><div class="kv">' + (fin(curV.ratio_obs_pred) ? fnum(curV.ratio_obs_pred * 100, 0, false) + '<small> % of predicted</small>' : '·') + '</div><div class="km">' + cur + ' saw ' + (fin(curV.conv) ? fnum(curV.conv * 100, 1, false) + ' % of footprints' : '·') + ' where the line puts ' + (fin(curV.conv_predicted) ? fnum(curV.conv_predicted * 100, 1, false) + ' %' : '·') + ' — but that prediction is an extrapolation, see above</div>' + kmeta(null, pairName(rpair) + ', raw granules', String(RA.updated || '').slice(0, 10)) + '</div>' +
-        '<div class="kpi"><div class="kn">do the variants agree</div><div class="kv">' + (agr.all_same_sign ? 'yes' : 'no') + '</div><div class="km">' + (agr.n_variants || '·') + ' variants of ' + (WNAME[rwin] || rwin) + ' (two instruments × day and night)' + (agr.all_same_sign ? ' put this year on the same side of the line' : ' disagree on which side of the line this year falls, so no direction is claimed') + '. Their sizes are not compared here while the residual scale is being fixed</div>' + kmeta(null, 'collector, agreement block', String(RA.updated || '').slice(0, 10)) + '</div>';
+        '<div class="kpi"><div class="kn">do the variants agree</div><div class="kv">' + (agr.all_same_sign ? 'yes' : 'no') + '</div><div class="km">' + (agr.n_variants || '·') + ' variants of ' + (WNAME[rwin] || rwin) + ' (two instruments × day and night)' + (agr.all_same_sign ? ' put this year on the same side of the line' : ' disagree on which side of the line this year falls, so no direction is claimed') + '. ' + oddVariant(RG, rwin) + '</div>' + kmeta(null, 'collector, agreement block', String(RA.updated || '').slice(0, 10)) + '</div>';
       body.appendChild(kp2);
       if (drift.band && drift.band.length) {
         var kb = drift.band;
