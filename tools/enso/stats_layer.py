@@ -359,10 +359,22 @@ def coherence_item(series):
 
 
 def fuel_item(latest, psl):
-    fuel = ((latest.get("air") or {}).get("fuel") or {}).get("series") or {}
-    months, vals = fuel.get("months") or [], fuel.get("values") or []
+    # ОДНО ОКНО НА ДВОИХ. Решение владельца 14.09: лид топлива считается по полному ряду PMEL
+    # с 1980, как в карточке топлива (air.py::best_lead), а не по пятилетнему хвосту в панельном
+    # файле — иначе на одной сцене стояли 6 и 10 месяцев. Хвост из latest.json остаётся запасным
+    # путём, если копии last_good нет.
+    months, vals = [], []
+    try:
+        full = S.read_pmel(S.LAST / "wwv.txt")
+        months = sorted(full); vals = [full[m] for m in months]
+    except Exception:                                            # noqa: BLE001
+        pass
+    if len(months) < 24:
+        fuel = ((latest.get("air") or {}).get("fuel") or {}).get("series") or {}
+        months, vals = fuel.get("months") or [], fuel.get("values") or []
     if len(months) < 24:
         return None
+    long_record = len(months) >= 240
     x = []; y = []
     for m, v in zip(months, vals):
         yy, mm = int(m[:4]), int(m[5:7])
@@ -409,27 +421,27 @@ def fuel_item(latest, psl):
     lo, hi = proj - sd, proj + sd
     kpis = [
         {"name": "best lead of the fuel", "value": f"{lead}", "unit": "months",
-         "plain": f"The warm-water volume lines up best with Niño 3.4 {lead} months later: r = {r:.2f} over {npairs} months, so the line accounts for about {r2 * 100:.0f} % of the variation and the rest is other things. This is the five-year window kept in the panel file ({months[0]} to {months[-1]}); the fuel card above uses the whole record since 1980 and finds a different lead, which is what a short window with one long cold stretch does."},
+         "plain": f"The warm-water volume lines up best with Niño 3.4 {lead} months later: r = {r:.2f} over {npairs} months, so the line accounts for about {r2 * 100:.0f} % of the variation and the rest is other things. Same window as the fuel card: the whole PMEL record, {months[0]} to {months[-1]}."},
         {"name": "what the fuel implies", "value": f"{lo:+.1f}…{hi:+.1f}", "unit": f"°C in {lead} mo",
          "plain": (f"A straight line fitted from Niño 3.4 on the fuel {lead} months earlier, then read at the latest fuel value, "
                    f"{last_v / 1e14:.2f}·10¹⁴ m³: the middle of the fit is {proj:+.2f} °C and one standard error of the fit is "
                    f"±{sd:.2f}, hence {lo:+.1f} to {hi:+.1f}. "
-                   + ("The fuel is now at the very top of the window the line was fitted on (2021 onward, three of those years cold), "
-                      "so this is the edge of what the line has ever seen and the middle of it reads low against what the surface "
-                      "already shows. Read the width, not the centre. " if at_top else "")
+                   + ((f"The fuel is now at the very top of the window the line was fitted on ({months[0][:4]} onward), "
+                       "so this is the edge of what the line has ever seen and the middle of it reads low against what the surface "
+                       "already shows. Read the width, not the centre. ") if at_top else "")
                    + "This is a scale of how much the stored heat matters, not a forecast of the level.")},
     ]
     return {"id": "fuel_lead", "kind": "leadlag", "scene": "air", "also": ["now"],
             # Проверка 14.09: на той же сцене карточка топлива (air.py, весь ряд с 1980) даёт
             # 6 месяцев, а эта — 10 по окну в пять лет. Оба числа честные, но без подписи окна
             # читатель видит два «наших» лида на одном экране. Окно называем в заголовке.
-            "title": f"The fuel leads the surface by {lead} months (r = {r:.2f}) over the last five years",
+            "title": f"The fuel leads the surface by {lead} months (r = {r:.2f}) on the whole record since {months[0][:4]}",
             "series": "wwv vs psl_nino34_monthly", "window": [months[0], months[-1]], "kpis": kpis,
             "anchors": ["stat:fuel_lead", "term:wwv", "term:nino34", "block:peak"],
             "method": {"name": "Cross-correlation at monthly leads and a linear map",
                        "plain": "The recharge–discharge idea says the warm water stored below the equator feeds the surface months later. We check it on our own numbers: shift the fuel series forward month by month and see where it lines up best with Niño 3.4, then use that alignment as a crude ruler.",
-                       "tech": f"Pearson r between PMEL warm water volume (monthly, {months[0]}…{months[-1]}) and ERSST Niño 3.4 at leads 0–12 months; best lead {lead}, r = {r:.2f}, n = {npairs}. Linear regression of Niño 3.4(t+{lead}) on WWV(t): slope {coef[0]:.2f} °C per unit, intercept {coef[1]:+.2f}.",
-                       "caveats": ["the record here is short (a few years): the lead is indicative, the literature puts it at 6–9 months over decades", "the fit mixes the charge and discharge phases; during an event the relation flattens"]}}
+                       "tech": f"Pearson r between PMEL warm water volume (monthly, {months[0]}…{months[-1]}) and ERSST Niño 3.4 at leads 0–12 months; best lead {lead}, r = {r:.2f}, n = {npairs}. Linear regression of Niño 3.4(t+{lead}) on WWV(t): slope {coef[0] * 1e14:.2f} °C per 10¹⁴ m³, intercept {coef[1]:+.2f}.",
+                       "caveats": [("the lead is measured on four decades of monthly data, the same ruler as the fuel card; the literature puts it at 6–9 months" if long_record else "the record here is short (a few years): the lead is indicative, the literature puts it at 6–9 months over decades"), "the fit mixes the charge and discharge phases; during an event the relation flattens"]}}
 
 
 def spectral_item():
