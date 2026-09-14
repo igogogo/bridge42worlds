@@ -1667,8 +1667,17 @@ def author_work_badges_html(article, lang):
         "th" if "теор" in kind or "theor" in kind else "")
     ext = article.get("source_kind") == "external"
     tip = attr_safe(((AW_TOOLTIP_EXT if ext else AW_TOOLTIP).get(lang) or AW_TOOLTIP["en"]))
+    # ИМЯ АРХИВА, А НЕ ОТРИЦАНИЕ. Плашка говорила «работа не из arXiv» — то есть
+    # определяла работу через то, чем она НЕ является. Читателю это не даёт ничего и
+    # звучит как оговорка, будто с работой что-то не так. В данных лежит имя источника
+    # (bioRxiv, medRxiv, OpenAI), и оно понятнее: сразу видно, откуда работа и что это
+    # такой же архив препринтов, просто другой. Владелец 14.09: «это другой архив, ничего
+    # страшного, надо просто плашку, что это мед или био архив».
+    # Подпись-отрицание остаётся запасной: источник в записи может и не стоять.
+    org = (article.get("source_org") or "").strip() if ext else ""
+    label = org or _aw("ext_work" if ext else "work", lang)
     parts = [f'<span class="express-badge aw-badge" title="{tip}">'
-             f'{AW_MARK_SVG}{safe(_aw("ext_work" if ext else "work", lang))}</span>']
+             f'{AW_MARK_SVG}{safe(label)}</span>']
     if kind_key:
         parts.append(f'<span class="express-badge aw-kind">{safe(_aw(kind_key, lang))}</span>')
     # Кем сделано и чем проверено (владелец 09.09: «новый признак AI-исследования»).
@@ -5691,6 +5700,10 @@ def regenerate_all_html(only=None, force=False):
             # Внешний источник, кем сделано, свои подписи ссылок и наши рисунки — тем же
             # путём: страница читает индекс, а не data.json.
             "source_kind": data.get("source_kind", ""),
+            # Имя архива для плашки (bioRxiv, medRxiv, OpenAI). Забыть его здесь — та же
+            # яма, о которой предупреждают два комментария выше: data.json источник знает,
+            # а страница нет, и плашка молча откатывается на «работа не из arXiv».
+            "source_org": data.get("source_org", ""),
             "provenance": data.get("provenance", {}),
             "source_labels": data.get("source_labels", {}),
             "own_figures": data.get("own_figures", []),
