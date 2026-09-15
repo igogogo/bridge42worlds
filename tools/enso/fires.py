@@ -43,9 +43,15 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 
 UA = {"User-Agent": "bridge42worlds-panel/1.0 (research; bridge42worlds@gmail.com)"}
 SATS = {
-    "viirs_snpp": "https://firms.modaps.eosdis.nasa.gov/data/active_fire/suomi-npp-viirs-c2/csv/SUOMI_VIIRS_C2_Global_24h.csv",
-    "viirs_n20": "https://firms.modaps.eosdis.nasa.gov/data/active_fire/noaa-20-viirs-c2/csv/J1_VIIRS_C2_Global_24h.csv",
-    "modis": "https://firms.modaps.eosdis.nasa.gov/data/active_fire/modis-c6.1/csv/MODIS_C6_1_Global_24h.csv",
+    # НЕДЕЛЬНЫЙ ФАЙЛ, А НЕ СУТОЧНЫЙ. FIRMS отдаёт скользящее окно: суточный файл держит только
+    # последние 24 часа, и день, в который сбор не отработал, пропадал навсегда — в ряду на
+    # 15.09 стояло двое суток вместо сотен. Недельный файл того же формата лечит пропуск сам,
+    # пока он не старше семи дней; склад ключуется датой, поэтому повторная закачка тех же
+    # суток ничего не портит. За семь дней назад у FIRMS есть архивный запрос по ключу — если
+    # понадобится, заведём отдельно.
+    "viirs_snpp": "https://firms.modaps.eosdis.nasa.gov/data/active_fire/suomi-npp-viirs-c2/csv/SUOMI_VIIRS_C2_Global_7d.csv",
+    "viirs_n20": "https://firms.modaps.eosdis.nasa.gov/data/active_fire/noaa-20-viirs-c2/csv/J1_VIIRS_C2_Global_7d.csv",
+    "modis": "https://firms.modaps.eosdis.nasa.gov/data/active_fire/modis-c6.1/csv/MODIS_C6_1_Global_7d.csv",
 }
 # Регионы, у которых пожарный сезон завязан на Эль-Ниньо, плюс крупные для фона.
 # (юг, север, запад, восток) в градусах; долгота −180…180.
@@ -151,15 +157,45 @@ def main():
         try:
             body = get(url)
             rows = parse(body)
-            reg, total = aggregate(rows)
-            got[sat] = {"regions": reg, "total": total, "n_rows": len(rows)}
+            # КАЖДЫЕ СУТКИ — СВОИМИ. В файле теперь неделя, и класть её одним днём значило бы
+            # умножить суточный счёт всемеро. Раскладываем по собственной дате снимка, а день
+            # съёмки у FIRMS и есть acq_date. Последний день файла обычно неполон (сутки ещё
+            # идут), поэтому он помечается и на графике его видно как есть, а не как провал.
+            by_day = {}
+            for r in rows:
+                d = (r[3] or "")[:10]
+                if len(d) == 10:
+                    by_day.setdefault(d, []).append(r)
+            if not by_day:
+                by_day = {today: rows}
+            last_day = max(by_day)
+            first_day = min(by_day)
+            store = doc.setdefault("series", {}).setdefault(sat, {})
+            for d, rr in sorted(by_day.items()):
+                reg_d, tot_d = aggregate(rr)
+                # НЕПОЛНЫ ОБА КРАЯ ОКНА: последний день ещё идёт, а первый обрезан началом окна.
+                # Поэтому день переписывается только если очагов стало БОЛЬШЕ: иначе завтрашний
+                # обрезанный край затёр бы уже собранный полный день и оставил в ряду провал.
+                part = bool(d == last_day or d == first_day)
+                prev = store.get(d) or {}
+                prev_n = ((prev.get("total") or {}).get("n")) or 0
+                if prev and prev_n >= tot_d["n"] and not prev.get("partial", True):
+                    continue
+                if prev and prev_n > tot_d["n"]:
+                    continue
+                store[d] = {
+                    "total": tot_d, "regions": {k: v["n"] for k, v in reg_d.items()},
+                    "frp": {k: v["frp"] for k, v in reg_d.items()},
+                    "partial": part,
+                }
+            reg, total = aggregate(by_day[last_day])
+            got[sat] = {"regions": reg, "total": total, "n_rows": len(by_day[last_day]),
+                        "day": last_day, "days_in_file": len(by_day)}
             if sat == "viirs_snpp":
-                doc["points"] = {"date": today, "instrument": sat, "items": thin_points(rows)}
-            doc.setdefault("series", {}).setdefault(sat, {})[today] = {
-                "total": total, "regions": {k: v["n"] for k, v in reg.items()},
-                "frp": {k: v["frp"] for k, v in reg.items()},
-            }
-            print(f"  {sat:11s} {len(rows):>7} hotspots · strongest region "
+                # на карте — только последние сутки: неделя точек сливается в сплошное пятно
+                doc["points"] = {"date": last_day, "instrument": sat, "items": thin_points(by_day[last_day])}
+            print(f"  {sat:11s} {len(rows):>7} hotspots over {len(by_day)} day(s); "
+                  f"last day {last_day}: {len(by_day[last_day])} · strongest region "
                   f"{max(reg.items(), key=lambda kv: kv[1]['n'])[0]}")
         except Exception as e:                                   # noqa: BLE001
             errs.append(f"{sat}: {str(e)[:90]}")
