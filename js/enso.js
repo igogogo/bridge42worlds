@@ -6801,7 +6801,9 @@
      Закрытие щелчком мимо снимает окно прямо в разметке, без общей перерисовки: иначе один
      щелчок по кнопке другой сцены собирал сцену дважды. */
   function posPop(head, pane, btn) {
-    var hw = head.clientWidth, w = Math.min(680, Math.max(240, hw - 8));
+    /* Вдвое уже прежних 680 (владелец 15.09: «окошки всё ещё широкие»); CSS-предел здесь не
+       работал, потому что ширину ставила эта строка встроенным стилем. */
+    var hw = head.clientWidth, w = Math.min(340, Math.max(220, hw - 8));
     pane.style.maxWidth = w + 'px';
     var hr = head.getBoundingClientRect();
     if (!btn) { pane.style.top = (head.clientHeight + 2) + 'px'; pane.style.left = '4px'; return; }
@@ -6858,12 +6860,6 @@
     });
   }
   function infoPane(body, items) {
-    var stI = items.filter(function (q) { return q.stats; })[0];
-    if (stI && S.sub.statsOn) {
-      var sp = el('div', 'info-pane stats inline'); sp.innerHTML = stI.html;
-      sp.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } });
-      body.appendChild(sp);
-    }
     var it = items.filter(function (q) { return q.key === S.sub.info && !q.stats; })[0];
     if (!it) return;
     var p = el('div', 'info-pane'), mode = S.sub.noteMode || 'plain';
@@ -7569,6 +7565,19 @@
         conceptsHtml(it.anchors || [], false) + '</div>';
     }).join('') + digest;
   }
+  /* ПЕРЕКЛЮЧАТЕЛЬ STATS ПОДМЕНЯЕТ ЭКРАН СЦЕНЫ ЦЕЛИКОМ (владелец 15.09: «а не всплывание, иначе
+     получается прокрутка»). Шапка, подменю и сам переключатель остаются, тело сцены — только слой
+     статистики, во всю высоту, с прокруткой внутри. Выключил — сцена возвращается. */
+  function statsScreen() {
+    if (!S.sub.statsOn || S.view === 'risk') return;
+    var view = S.view === 'gulf' ? 'regions' : S.view, st = statsFor(view);
+    var body = document.querySelector('.stage-body');
+    if (!st.length || !body) return;
+    var pane = el('div', 'info-pane stats full'); pane.innerHTML = statsHtml(st, S.sub.noteMode || 'plain');
+    pane.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } });
+    body.innerHTML = ''; body.classList.add('scroll'); body.appendChild(pane);
+    S.plotEl = null; S.draw = null;                                // графика на экране нет — ни кадру, ни наблюдателю рисовать нечего
+  }
   function sceneInfoBar() {
     /* У карточки риска нет своей записи в SCENE_INFO, и раньше ей подставляли запись сцены
        «now»: под кнопкой source стоял источник Niño 3.4, какой бы ряд ни лежал на графике.
@@ -7590,11 +7599,6 @@
         swb.title = 'statistics layer: on / off';
         swb.onclick = function () { S.sub.statsOn = !S.sub.statsOn; render(); };
         seg.appendChild(swb);
-        if (S.sub.statsOn) {
-          var spI = el('div', 'info-pane stats inline'); spI.innerHTML = statsHtml(stItems, mode);
-          spI.addEventListener('click', function (e) { var b2 = e.target.closest('[data-notemode]'); if (b2) { S.sub.noteMode = b2.getAttribute('data-notemode'); render(); } });
-          body.insertBefore(spI, body.firstChild);
-        }
         return;
       }
       var b = el('button', (open === o[0] ? 'on' : '') + ' sq', o[1] + (open === o[0] ? ' ▴' : ' ▾')); b.type = 'button'; b.setAttribute('data-info', o[0]);
@@ -8030,6 +8034,7 @@
     else if (S.view === 'brief') viewBrief();
     else viewNow();
     sceneInfoBar();                          // source / notes на каждой сцене (08.09)
+    statsScreen();                           // stats — подмена экрана, не вставка (15.09)
     kpiExplain();                            // «?» на плашках KPI (08.09)
     markMenuLevels();                        // ярус подменю виден по рамке (10.09)
     markScrollStrips();                      // край ленты карточек гаснет, только если есть куда ехать
