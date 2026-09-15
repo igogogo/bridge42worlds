@@ -4857,7 +4857,7 @@
     var RNAME = LAND_NAME;
     /* Боксы суши, дожди и горный лёд переехали на Weather (владелец 15.09): здесь остаются
        ряды самого события и наши сторожа. Ссылка на новое место стоит подписью под графиком. */
-    var opts = [['sst_nino34', 'Niño 3.4'], ['sst_world', 'Ocean'], ['t2_world', 'Land+ocean']].concat([['index', 'Our index'], ['months', '13 months'], ['rain'], ['mountains', 'Mountain ice'], ['background', 'Background'], ['spectral', 'Spectral watch']]);
+    var opts = [['sst_nino34', 'Niño 3.4'], ['sst_world', 'Ocean'], ['t2_world', 'Land+ocean']].concat([['index', 'Our index'], ['months', '13 months'], ['background', 'Background'], ['spectral', 'Spectral watch']]);
     var body = stageShell(k === 'spectral' ? spectralHead() : k === 'rain' ? rainHead() : 'The world ocean has broken daily records for ' + W.sst_world.records.streak + ' days running, land+ocean for ' + W.t2_world.records.streak,
       opts.map(function (o) { return segBtn('trend', o[0], o[1], 'sst_nino34'); }));
     if (k === 'spectral') { viewSpectral(body); return; }
@@ -8117,12 +8117,17 @@
      только когда человек нажал «globe»; страница без неё не тяжелеет. Данные — data/enso/globe.json
      (globe_data.py): аномалия OISST за последний день на сетке 1°, боксы и буи из того, что уже
      посчитано. Текстура шара рисуется на холсте из сетки, береговая линия — наш coast.json. */
-  var GLOBE_VIEWS = { now: 'nino', regions: 'land', ocean: 'moorings', radiance: 'radiance', trend: 'rain' };
+  /* Где у сцены есть тот же вид на шаре. Дожди и боксы суши переехали на Weather (15.09), и
+     привязка к «trend/rain» осиротела: кнопка 🌐 у них пропала совсем. */
+  var GLOBE_VIEWS = { now: 'nino', regions: 'land', ocean: 'moorings', radiance: 'radiance', weather: 'rain' };
   function globeMode() {
     var m = GLOBE_VIEWS[S.view]; if (!m) return null;
     if (S.view === 'now' && (S.sub.now || 'analogs') !== 'map') return null;
     if (S.view === 'ocean' && (S.sub.ocean || 'surface') !== 'moorings') return null;
-    if (S.view === 'trend' && (S.sub.trend || 'sst_nino34') !== 'rain') return null;
+    if (S.view === 'weather') {
+      var wk = S.sub.weather || 'cities';
+      return wk === 'rain' ? 'rain' : (wk === 'land' ? 'land' : null);
+    }
     return m;
   }
   function globeLib() {
@@ -8234,13 +8239,17 @@
     });
     return true;
   }
-  function globeTextureLayered(G) {
+  /* `only` — явный список слоёв. Без него полотно слушает выключатели вкладки Globe; со
+     списком его просит сцена, которой нужен свой набор (владелец 15.09: «кнопка globe везде
+     показывает одну и ту же картинку»). Так и было: на сценах рисовался один океан. */
+  function globeTextureLayered(G, only, alphas) {
     var W = 2048, H = 1024, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
     var x = cv.getContext('2d');
     x.fillStyle = '#141a24'; x.fillRect(0, 0, W, H);
     LAYERS.forEach(function (L) {
-      if (L.kind !== 'paint' || !glOn(L.id)) return;
-      var a = glAlpha(L.id);
+      if (L.kind !== 'paint') return;
+      if (only ? only.indexOf(L.id) < 0 : !glOn(L.id)) return;
+      var a = only ? ((alphas && alphas[L.id] != null) ? alphas[L.id] : L.alpha) : glAlpha(L.id);
       if (L.id === 'sst') {
         var g = G.sst;
         if (g && g.rows) {
@@ -8329,6 +8338,14 @@
       if (!box.isConnected) return;
       var G = r[1], W = Math.max(300, box.clientWidth), H = Math.max(300, box.clientHeight);
       box.innerHTML = '';
+      /* ЧТО ИМЕННО ПОКАЗЫВАЕТ ШАР НА ЭТОЙ СЦЕНЕ. Прежде на всех сценах красился один и тот же
+         океан, и шар выглядел одинаково всюду, чем бы сцена ни занималась. Теперь у спутников
+         под боксами лежит измеренное поле облака, у дождей — оно же, а у океанских сцен море. */
+      var TEX = { nino: ['sst', 'coast'], land: ['sst', 'coast'], moorings: ['sst', 'coast'],
+                  radiance: ['sst', 'clouds', 'coast'], rain: ['sst', 'clouds', 'coast'] };
+      /* На спутниковой сцене облако и есть предмет разговора: оно ярче, а море под ним приглушено
+         до подложки. Одно облако без моря читалось серым комом (проверено на экране). */
+      var TEXA = { radiance: { clouds: 0.85, sst: 0.5 }, rain: { clouds: 0.45 } };
       var kinds = { nino: ['nino'], land: ['land'], moorings: ['nino'], radiance: ['radiance'], rain: ['land'],
                     scene: (glOn('boxes') ? ['nino', 'land', 'radiance'] : []) }[mode] || ['nino'];
       var polys = (G.boxes || []).filter(function (b) { return kinds.indexOf(b.kind) >= 0; });
@@ -8342,7 +8359,7 @@
       }
       var g = Globe({ animateIn: false })(box)
         .width(W).height(H).backgroundColor('rgba(0,0,0,0)')
-        .globeImageUrl(mode === 'scene' ? globeTextureLayered(G) : globeTexture(G)).showAtmosphere(true).atmosphereColor('#7C9BCB').atmosphereAltitude(0.12)
+        .globeImageUrl(mode === 'scene' ? globeTextureLayered(G) : globeTextureLayered(G, TEX[mode] || ['sst', 'coast'], TEXA[mode])).showAtmosphere(true).atmosphereColor('#7C9BCB').atmosphereAltitude(0.12)
         .polygonsData(polys.map(function (b) { return { geo: boxPoly(b), b: b }; }))
         .polygonGeoJsonGeometry(function (d) { return d.geo; })
         .polygonCapColor(function (d) { return colr(d.b); })
@@ -8363,7 +8380,13 @@
       g.pointOfView({ lat: mode === 'land' || mode === 'rain' ? 10 : 0, lng: focus, altitude: 2.1 }, 0);
       g.controls().autoRotate = true; g.controls().autoRotateSpeed = 0.35;
       var leg = el('div', 'globe-legend');
-      leg.innerHTML = '<b>' + ({ rain: 'boxes: rain, % of normal over 30 days', land: 'boxes: air anomaly over 30 days, °C', radiance: 'boxes: deep convection, % of footprints', moorings: 'boxes: NOAA weekly anomaly, °C' }[mode] || 'boxes: NOAA weekly anomaly, °C') + '</b> · sea: OISST anomaly ' + esc((G.sst || {}).date || '') + ' against 1971–2000' +
+      /* Подпись должна называть ИМЕННО то полотно, которое под боксами: раньше она при любой
+         сцене говорила «sea: OISST», даже когда смысл сцены был в другом. */
+      var under = (TEX[mode] || []).indexOf('clouds') >= 0
+        ? ((TEX[mode].indexOf('sst') >= 0 ? 'sea: OISST anomaly ' + esc((G.sst || {}).date || '') + ' against 1971–2000, and ' : '')
+           + 'white: deep cloud measured from orbit, ' + esc(((S.OLR || {}).date) || '') + ' (NOAA OLR; the colder the cloud top, the whiter)')
+        : 'sea: OISST anomaly ' + esc((G.sst || {}).date || '') + ' against 1971–2000';
+      leg.innerHTML = '<b>' + ({ rain: 'boxes: rain, % of normal over 30 days', land: 'boxes: air anomaly over 30 days, °C', radiance: 'boxes: deep convection, % of footprints', moorings: 'boxes: NOAA weekly anomaly, °C' }[mode] || 'boxes: NOAA weekly anomaly, °C') + '</b> · ' + under +
         '<span class="gl-bar"></span>−3 … +3 °C · drag to turn, wheel to zoom, point at a box' + (mode === 'moorings' ? '; pillars: warmest layer under each mooring' : '');
       box.appendChild(leg);
       S._globeInst = g; window.B42Globe = g;   // наружу — для отладки из консоли
