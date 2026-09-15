@@ -17,9 +17,12 @@
 
   var T = {
     fresh: 'fresh', stale: 'stale',
-    tabs: { brief: 'Briefing', verdict: 'Verdict', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Now', ocean: 'Ocean', radiance: 'Satellite', models: 'Models', track: 'Track record', weather: 'Weather', globe: 'Globe', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long term', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
+    tabs: { brief: 'Briefing', verdict: 'Verdict', phase: 'Phase change', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Now', ocean: 'Ocean', radiance: 'Satellite', models: 'Models', track: 'Track record', weather: 'Weather', globe: 'Globe', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long term', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
     tabHelp: {
       brief: 'The entry point: what is happening, what the data show, what to expect and when, the risks already showing, regions and food, what to watch — in plain words, with a link to every number.',
+      phase: 'The one question the rest of the panel does not ask: is this a very large swing of the system we know, or the system itself changing. '
+        + 'A record is a position on the curve; a change of regime is the curve giving way. Nothing here is a level of anything \u2014 only relations, '
+        + 'the memory of the long records, and whether the restoring force is still there. The reading is subjective and says so.',
       verdict: 'What the machine makes of it today: the verdict written from the numbers on this page, the turning point, the outlook, what to watch, the caveats.',
       overview: 'One screen with everything: a strip of key indicators and a mosaic of every chart, each a door into its section.',
       news: 'What changed in the last week — values, risks, alerts, the verdict — and what is due next week.',
@@ -51,6 +54,9 @@
       risks: 'The board of risks with their levels, horizons and series.'
     },
     subHelp: {
+      'phase/now': 'The reading, the rule that set it, and the five signs it rests on, each with its own figure.',
+      'phase/memory': 'Critical slowing down: how the memory of three long records has moved over the decades. The classic early warning, and an honest one only with its caveats.',
+      'phase/edge': 'How far past the range of its own calibration each of our instruments is working today.',
       'ocean/zones': 'The four Ni\u00f1o patches in the order they lie on the equator, west to east: which one warms first, '
         + 'how far an event leans east or centre, what followed in past weeks like today, and where the warm water sits below.',
       "track/today": "What the newest monthly issue says about the coming winter, and how far the models sit from each other.",
@@ -2233,7 +2239,7 @@
        рамкой, потом промежуток, потом чтение (брифинг, новости, упоминания, вердикт), ещё
        промежуток, потом последствия (еда, регионы). Research ушёл в служебную строку к методу
        и ссылкам. Порядок задан здесь явно, а не порядком ключей T.tabs. */
-    var GROUPS = [['overview', 'now', 'ocean', 'radiance', 'models', 'track', 'trend', 'air', 'weather', 'globe', 'planet'], ['brief', 'news', 'mentions', 'verdict'], ['food', 'regions']];
+    var GROUPS = [['overview', 'now', 'ocean', 'radiance', 'models', 'track', 'trend', 'air', 'weather', 'globe', 'planet'], ['brief', 'news', 'mentions', 'verdict', 'phase'], ['food', 'regions']];
     var SVC_ORDER = ['research', 'how', 'refs', 'chain', 'ops', 'about'];
     var DATA_TABS = GROUPS[0];
     GROUPS.forEach(function (g, gi) { if (gi) list.push(['_gap' + gi, '']); g.forEach(function (k) { if (T.tabs[k]) list.push([k, T.tabs[k]]); }); });
@@ -3770,6 +3776,134 @@
       (sub2 ? ' data-sub="' + esc(sub2) + '"' : '') +
       (deepKey ? ' data-subkey="' + esc(deepKey) + '" data-subval="' + esc(deepVal) + '"' : '') +
       '>' + esc(label) + ' \u2192</button>';
+  }
+
+  /* ══ ФАЗОВЫЙ ПЕРЕХОД ═════════════════════════════════════════════════════════════════
+     Владелец 15.09: «нужна метрика опасности высшего уровня, типа фазовый переход — отдельная
+     страница, отдельная оценка, пусть субъективно, пусть с рассуждениями, но честно».
+
+     Рекорд — это положение НА кривой; смену режима выдаёт разладка самой кривой. Поэтому на
+     этой странице нет ни одного «уровня»: только связи, память длинных рядов и запас обратного
+     хода. Уровень ставится ПРАВИЛОМ, правило написано рядом словами, и каждая часть показана
+     своим числом — чтобы можно было не согласиться с итогом, не отказываясь от данных.
+     Считает tools/enso/phase.py. */
+  var PH_STEP = ['nothing showing', 'past our calibration', 'one record slowing',
+                 'two records, or the air leaning out', 'a relation not holding', 'and no way back'];
+  function phaseHead() {
+    var P = S.PH || {};
+    if (!P.built) return 'Is this a swing of the system, or the system changing';
+    return 'Phase change watch: ' + P.level + ' of ' + P.of + ' \u2014 ' + esc(P.word || '');
+  }
+  function viewPhase() {
+    var P = S.PH || {}, k = sub('phase', 'now');
+    var body = stageShell(phaseHead(), [segBtn('phase', 'now', 'The reading', 'now'),
+      segBtn('phase', 'memory', 'Memory of the records', 'now'), segBtn('phase', 'edge', 'Beyond our edge', 'now')]);
+    if (!P.built) { body.appendChild(el('div', 'note warn', 'The phase watch has not been built yet: run tools/enso/phase.py.')); return; }
+
+    if (k === 'memory') {
+      plot(body, function (w, h) { return chartPhaseMemory(P, w, h); });
+      var kp = el('div', 'kpis');
+      kp.innerHTML = (P.memory || []).map(function (m) {
+        return trackKpi(esc(m.label), fnum(m.ar1_now, 3, false),
+          'the link between one reading and the next, inside a window of ' + m.window_points + ' points. '
+          + 'It stands at the ' + m.ar1_pct + 'th percentile of its own history; over the last third of the record its trend is '
+          + (m.tau_ar1_recent > 0 ? 'up' : 'down') + ' (\u03c4 ' + fnum(m.tau_ar1_recent, 2, false) + '). '
+          + 'The windows overlap, so the record holds only ' + m.n_independent_windows + ' independent ones',
+          'our arithmetic over ' + esc(m.label), m.to || '');
+      }).join('');
+      body.appendChild(kp);
+      body.appendChild(el('div', 'cap', '<strong>What this is.</strong> Before a system changes state it returns to its average more and more slowly, '
+        + 'and that shows up as a rising link between neighbouring readings and a rising spread. The line is that link, measured in a sliding window after the '
+        + 'annual cycle and the slow trend have been taken out. <strong>What it is not.</strong> ' + esc(P.false_alarms || '')));
+      return;
+    }
+
+    if (k === 'edge') {
+      /* Своя сетка: у таблицы зон подписи в одну строку с обрезкой, а здесь пояснение главное,
+         и обрезать его нельзя. Четыре колонки чисел, пояснение строкой во всю ширину. */
+      var w2 = el('div', 'zy-wrap ph-edge');
+      w2.innerHTML = '<div class="zy-r zy-h"><span>instrument</span><span>fitted up to</span><span>today</span><span>beyond by</span></div>'
+        + (P.out_of_range || []).map(function (o) {
+          return '<div class="zy-r"><span class="zy-y">' + esc(o.what) + '</span>'
+            + '<span><b>' + fnum(o.fitted_up_to, 2) + '</b></span>'
+            + '<span><b>' + fnum(o.today, 2) + '</b></span>'
+            + '<span class="zy-k">' + trackNum(o.beyond, 2) + ' \u00b0C</span>'
+            + '<span class="ph-note">' + esc(o.fitted_note || '') + '</span></div>';
+        }).join('');
+      body.appendChild(w2);
+      body.appendChild(el('div', 'cap', 'This is not a statement about nature. It is honesty about us: every tool on this panel was fitted on a range of the past, '
+        + 'and beyond that range its output is an extrapolation, not a measurement. The models\u2019 whole record of errors was collected below the highest ONI ever '
+        + 'recorded. The weekly ceilings were set before this event began. We are past both.'));
+      return;
+    }
+
+    /* Чтение: уровень, правило, пять признаков */
+    var lvl = el('div', 'ph-lvl');
+    lvl.innerHTML = PH_STEP.map(function (t, i) {
+      return '<span class="ph-s' + (i === P.level ? ' on' : (i < P.level ? ' past' : '')) + '"><b>' + i + '</b><small>' + esc(t) + '</small></span>';
+    }).join('');
+    body.appendChild(lvl);
+    var why = el('div', 'ph-why');
+    why.innerHTML = '<div class="ph-h">why this reading</div>' + (P.reasons || []).map(function (r) {
+      return '<div class="ph-r">' + esc(r) + '</div>';
+    }).join('') + '<div class="ph-n">' + esc(P.how_the_level_is_set || '') + '</div>';
+    body.appendChild(why);
+
+    var L = P.link || {}, C = P.coupling || {}, F = P.fuel || {}, mem = P.memory || [];
+    var hi = mem.filter(function (m) { return (m.ar1_pct || 0) >= 80 && (m.tau_ar1_recent || 0) > 0.2; }).length;
+    var kp2 = el('div', 'kpis');
+    kp2.innerHTML =
+      trackKpi('memory of the long records', hi + ' of ' + mem.length,
+        'records whose memory is both high in its own history and rising over the last third; the others are listed on the second tab with their numbers',
+        'our arithmetic over three records', (mem[0] || {}).to || '') +
+      trackKpi('sea \u2192 air, does the relation hold', (L.worst_abs_sd != null ? fnum(L.worst_abs_sd, 2, false) + '<small> prediction errors</small>' : '\u00b7'),
+        'the furthest any instrument sits from the fitted relation this year' + (L.all_same_sign ? ', and all of them lean the same way' : ', and they do not agree on the side')
+        + '. Ordinary is under two', 'NOAA-21 and NOAA-20 CrIS, Aqua AIRS', '') +
+      trackKpi('is the air answering at all', (C.score != null ? C.score + ' of ' + C.of : '\u00b7'),
+        'pressure across the Pacific, the cloud tower over the date line, the trade winds. When they stop answering, the event stops being an El Ni\u00f1o in the usual sense',
+        'our own arithmetic over the daily series', '') +
+      trackKpi('the way back', (F.discharging === false ? 'not started' : (F.discharging ? 'under way' : '\u00b7')),
+        'the warm water volume stands at ' + (F.share_of_record != null ? F.share_of_record + ' % of its record' : 'an unknown share of its record')
+        + (F.value_e14 != null ? ' (' + fnum(F.value_e14, 2, false) + '\u00d710\u00b9\u2074 m\u00b3\u00b7\u00b0C)' : '')
+        + '. An oscillation has a restoring force: the fuel burns and the system swings back. That swing is the test',
+        'NOAA warm water volume', F.date || '');
+    body.appendChild(kp2);
+    body.appendChild(el('div', 'cap', '<strong>' + esc(P.what_this_is || '') + '</strong> '
+      + esc(P.what_it_cannot_see || '')));
+  }
+
+  /* Память трёх рядов: одна линия на ряд, каждая в своей доле от собственного максимума. */
+  function chartPhaseMemory(P, W, H) {
+    var MEM = (P.memory || []).filter(function (m) { return m && m.series && (m.series.ar1 || []).length > 4; });
+    if (!MEM.length) return svgOpen(W, H) + '<text x="20" y="40">no long record is long enough yet</text></svg>';
+    var Lp = 46, Rp = 12, Tp = topPad(W), B = 26, pw = W - Lp - Rp, ph = H - Tp - B;
+    var all = [];
+    MEM.forEach(function (m) { (m.series.ar1 || []).forEach(function (v) { if (fin(v)) all.push(v); }); });
+    var vmin = Math.min.apply(null, all) - .02, vmax = Math.max.apply(null, all) + .02;
+    var y0 = 1900, y1 = 2027;
+    MEM.forEach(function (m) { (m.series.dates || []).forEach(function (d) { var y = +String(d).slice(0, 4); if (y < y0) y0 = y; }); });
+    var X = function (y) { return Lp + (y - y0) / Math.max(1, y1 - y0) * pw; };
+    var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
+    var COL = ['var(--ochre)', 'var(--nina)', 'var(--nino)'];
+    var s2 = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">How slowly each record returns to its own average: the link between one reading and the next</text>';
+    s2 += gridY(vmin, vmax, niceStep(vmax - vmin, 5), Y, Lp, Rp, W, 2);
+    var step = Math.max(5, Math.round((y1 - y0) / (W < 520 ? 5 : 9) / 5) * 5);
+    for (var yy = Math.ceil(y0 / step) * step; yy <= y1; yy += step) {
+      s2 += '<text x="' + X(yy).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + yy + '</text>';
+    }
+    MEM.forEach(function (m, i) {
+      var pts = [];
+      (m.series.dates || []).forEach(function (d, j) {
+        var v = m.series.ar1[j];
+        if (!fin(v)) return;
+        var yr = +String(d).slice(0, 4) + (+String(d).slice(5, 7) - 1) / 12;
+        pts.push([X(yr), Y(v)]);
+      });
+      s2 += segs(pts, COL[i % COL.length], 1.8, pickOp(m.id, .9));
+      if (pts.length) s2 += nowDot(pts[pts.length - 1][0], pts[pts.length - 1][1], COL[i % COL.length], 3.2);
+    });
+    legend(MEM.map(function (m, i) { return [m.label, COL[i % COL.length], 1.8, null, m.id]; }), W, H, 1, Tp);
+    return s2 + '</svg>';
   }
 
   function viewVerdict() {
@@ -8559,6 +8693,9 @@
     "track/settle": {"title": "How early the forecast stops moving", "what": "For each past event, the month after which the forecast no longer changed much — the point where the number could be relied on.", "see": "One bar per event: the open bar reaches the first issue after which every later issue stayed within a quarter of a degree of the peak that came, and the filled tip the stricter version, within 0.15 °C. The cards say how many events have a settled call, the typical lead in months, and whether the current event has settled.", "special": "Only issues published before the peak are counted. An issue published afterwards is forecasting the decline, and counting it would make the forecasts look far better than they were. This is the number to hold against any confident statement about a peak still months away.", "src": "Our archive of parsed IRI/CPC plume issues, scored against NOAA CPC ONI"},
     "track/error": {"title": "Twenty years of forecast error", "what": "How far the combined forecast has missed, year by year of publication, by how far ahead it was looking.", "see": "Lines run left to right by the year the forecast was issued, one line per lead time, with the average miss up the side. Beside them, dashed, the miss of two forecasts that take no skill at all: calling every season normal, and carrying today’s value forward with a slow fade. The cards give the error now, the error twenty years ago, and the share of the no-skill error that is left.", "special": "An error in degrees means nothing on its own, because some years are easy and some are hard. It becomes meaningful against a forecast that knows nothing: at three seasons ahead the centres now miss about a quarter of what calling every season normal would miss, against about half of it twenty years ago. At nine seasons ahead they are still close to no skill, and that is the honest reading of a long-range call.", "src": "Our arithmetic over 252 parsed IRI/CPC issues since 2002, scored against NOAA CPC ONI"},
     "track/all": {"title": "Every forecast since 2002, raw", "what": "All the monthly forecasts of the last twenty-four years drawn on one canvas, with what the ocean actually did over the top.", "see": "Each thin line is one issue, reaching forward from the month it was published; the heavy line is the ONI that came; the newest issue is drawn in ochre. The cards count the issues drawn, the seasons of ONI behind the heavy line, and where today’s issue stands.", "special": "Nothing here is averaged or scored — this is the material the rest of the scene is computed from, shown as it is, so the summary can be checked against it. The visible habit of the bundle is worth more than any single line: forecasts reach up towards a warm event and cluster below the heavy line while it is growing.", "src": "Every IRI/CPC plume issue we could parse since 2002, with NOAA CPC ONI"},
+    "phase/now": {"title": "Is this a swing, or the system changing", "what": "Every other page on this panel asks how strong the event is. This one asks a different question: is this a very large swing of the system we know, or the system itself moving to a different state. A record is a position on the curve. A change of regime is the curve giving way.", "see": "A scale of six steps with today's reading marked, the rule that set it written out underneath, and four figures it rests on: how many of the three long records have a memory that is both high and rising, how far the air sits from its fitted relation with the sea, whether the air is answering at all, and whether the way back has opened. The other two buttons show the memory of the records over the decades and how far past its own calibration each of our instruments is working.", "special": "Nothing on this page is a level of anything: not a temperature, not an index. Only relations, the memory of the long records and the restoring force. The strongest event ever measured can pass entirely inside the old regime, and a weak one can happen inside a new one. The reading is subjective and says so: nobody has measured the weights of these signs against each other, so adding them into one number would be an invention. The rule is printed instead, and every sign carries its own figure, so a reader who disagrees with the verdict can still keep the data.", "src": "NOAA CPC weekly and seasonal indices, the PSL monthly Niño 3.4 back to 1948, the satellite radiance relation from the CrIS and AIRS collectors, NOAA warm water volume; the arithmetic is ours, in tools/enso/phase.py"},
+    "phase/memory": {"title": "Critical slowing down, watched honestly", "what": "Before a system changes state it returns to its average more and more slowly. That shows up in the record as a rising link between one reading and the next, and as a rising spread. This is the classic early warning, and it is watched here on three records of different length and different step.", "see": "One line per record: the link between neighbouring readings, measured in a sliding window after the annual cycle and the slow trend have been removed. The cards give the current value, where it stands in that record's own history, which way it has moved over the last third of the record, and how many independent windows the record actually holds.", "special": "The honest part is the caveats, and they are printed with the figure. Rising memory has causes that are not a transition at all: a change of instrument, a long warm spell, the smoothing we applied ourselves. The windows overlap, so a trend across them looks far more significant than it is, which is why the count of independent windows stands beside it. Two of our three records currently disagree with the third about the direction, and that is shown rather than averaged away.", "src": "NOAA CPC ONI since 1950, PSL monthly Niño 3.4 since 1948, NOAA CPC weekly indices since 1981"},
+    "phase/edge": {"title": "How far past our own calibration we are", "what": "Every tool on this panel was fitted on a range of the past. This table says, for each of them, what that range was and where today sits against it.", "see": "One row per instrument: the value it was fitted up to, today's value, and the distance between them.", "special": "This is not a statement about nature, it is honesty about us. Beyond the fitted range a model's output is an extrapolation, not a measurement, and its record of past errors says nothing about the case in hand. The forecast models' entire error record was collected below the highest ONI ever recorded. The weekly ceilings were set before this event began. We are past both, and that alone is a reason to hold every forecast on this panel more loosely than usual.", "src": "our own arithmetic over the model archive since 2002 and the NOAA weekly record since 1981"},
     "ocean/zones": {"title": "Between the four patches", "what": "The four Ni\u00f1o patches are four pieces of the same strip of the equator, laid out west to east: Ni\u00f1o 4, then 3.4, then 3, then 1+2 on the coast of Peru. This scene asks which of them warms first, how far an event leans east or centre, what followed in past weeks that looked like today, and where the warm water sits below the surface.", "see": "Four buttons. 'Who warms first' puts one past event on each row and marks the week each patch reached its own highest value, measured from the week Ni\u00f1o 3.4 peaked; the event now running is drawn hollow because it has no peak yet. 'East or centre' draws the gap between the coastal strip and the middle of the Pacific for every week since 1981, with a dot on each past peak. 'What followed' takes every past week that looked like this one and shows what each patch did over the next four to twenty-six weeks, as a middle case with the middle half. 'Under the surface' follows the centre of the warm water along the equator month by month, with the four patches marked in their real places across the top.", "special": "The thing most people expect to see here is not there. At weekly resolution the patches do not hand warmth to each other in a queue: Ni\u00f1o 4, 3.4 and 3 reach their highest within a week or two of each other, and the only patch with a clear timing of its own is the coastal strip, which in most events peaks about ten weeks BEFORE the middle of the Pacific rather than after it. What does travel is below the surface, and that panel shows it in degrees of longitude a month. Two cautions the scene repeats on screen: these are surface temperatures, not a measured flow of energy, so no arrow of heat between patches is claimed; and Ni\u00f1o 3.4 and Ni\u00f1o 3 overlap between 150\u00b0W and 120\u00b0W, so part of what they share is the same water counted twice.", "src": "NOAA CPC weekly Ni\u00f1o indices since September 1981 against the 1991\u20132020 base, and NOAA GODAS reanalysis for the depth of the 20 \u00b0C isotherm; the arithmetic is ours, in tools/enso/zones_flow.py"},
     "weather/cities": {"title": "Seven-day forecasts against what came", "what": "A running score of how far three weather models miss the temperature, rain, wind, humidity, cloud or pressure they promised for fifty cities, once the day itself has arrived.", "see": "Pick a parameter along the top row and a view below it. The default chart puts the forecast horizon along the bottom, one day ahead to seven, and the average miss up the side, one coloured line per model (ECMWF IFS, GFS, ICON); 'by month' redraws that miss month by month for 1, 3, 5 and 7 days ahead with a dashed line at each January; 'by city' is a table sorted worst first, with the miss at one day and at five and the number of pairs behind each. The cards above count the forecast-and-fact pairs gathered so far and name the model with the smallest miss at five days for the chosen parameter.", "special": "The forecast scoreboards elsewhere on the panel test seasonal forecasts of the Pacific; this is the only place where the check is made at the scale of one city and one week. Read a city against its own history rather than against another city — a coastal city and a continental one miss by different amounts on an ordinary day.", "src": "Open-Meteo forecasts taken each morning against the ERA5 archive about two days later, in the daily run"},
     "weather/fires": {"title": "Active fires, region by region", "what": "Satellite detections of burning from the last 24 hours, counted by region and followed day by day since we began keeping the record.", "see": "Three buttons choose the instrument: VIIRS on Suomi NPP, VIIRS on NOAA-20, or MODIS on Aqua and Terra. The cards give the latest day's number of hotspots, how many of them were putting out more than 100 megawatts, the total heat all of them were giving off, and the three busiest regions with the day before's count beside each once the record holds more than one day. 'Regions today' is the full table of twelve regions with their count, that heat and the previous day's figure; 'day by day' draws one region's daily count as a single line from the first day of our record to the last.", "special": "It is the shortest-fused thing here: the file holds the last 24 hours of detections, while the ocean indices move over weeks. A detection is a hotspot, not an area burnt, nothing on this chart ties any fire to El Niño, and cloud and gaps between satellite passes make single days jumpy — so compare a region with its own course: savannah burning in Africa is a yearly practice, not a disaster.", "src": "NASA FIRMS open 24-hour global files from three instruments, in the daily run"},
@@ -8600,6 +8737,9 @@
                   : '<button type="button"' + attrs + '>i</button>';
   }
   var SCENE_INFO = {
+    phase: { source: 'Three long records of the index itself (PSL monthly Ni\u00f1o 3.4 since 1948, NOAA CPC ONI since 1950, NOAA CPC weekly since 1981), the sea-to-air relation fitted by the satellite radiance collector on twenty-odd years of CrIS and AIRS, the three coupling signs from our own daily series, and NOAA warm water volume. The arithmetic is ours.',
+      plain: 'The rest of the panel measures how big this event is. This page asks whether the rules themselves are still holding. A record is a position on the curve; a change of regime is the curve giving way. The reading is a judgement, not a measurement, and the rule that produced it is printed next to it.',
+      tech: 'Memory is the lag-1 autocorrelation of each record inside a sliding window, after removing the seasonal cycle by month-of-year means and a slow component by a Gaussian filter; the trend across windows is a Kendall tau, reported both over the whole record and over its last third, with the count of non-overlapping windows beside it because overlapping windows inflate significance. The link is the residual of this year against the fitted sea-to-air relation, in units of its prediction error, evaluated separately for the season and year-to-date windows. The level is set by a written rule, not a formula.' },
     verdict: { source: 'The verdict is written by DeepSeek V4 Pro from the numbers on this panel and checked by Claude (Fable) against the same numbers; nothing in it is typed by hand. The numbers come from the daily and weekly rows below.',
       plain: 'This is the machine’s summary of where the event stands today, in plain words: what is happening, whether it has turned, what to watch next and what we are not sure about. A second machine checks every number in it before it goes out.',
       tech: 'The model receives a digest of the panel’s state (series, ranks, records, detectors, model plume) and returns verdict, turning point, outlook, watch list, confidence and caveats; a review pass compares each number with the digest and edits wording only. Corrections to earlier verdicts stay in the history.' },
@@ -9274,6 +9414,7 @@
     if (narrow && (S.view === 'state' || S.view === 'risks')) { S.draw = null; S.plotEl = null; return; }
     if (S.view === 'risk') viewRisk();
     else if (S.view === 'verdict') viewVerdict();
+    else if (S.view === 'phase') viewPhase();
     else if (S.view === 'models') viewModels();
     else if (S.view === 'track') viewTrack();
     else if (S.view === 'weather') viewWeather();
@@ -9570,11 +9711,12 @@
     get('/data/enso/models-history.json').catch(function () { return {}; }),
     get('/data/enso/olr-grid.json').catch(function () { return {}; }),
     get('/data/enso/outliers.json').catch(function () { return {}; }),
-    get('/data/enso/zones-flow.json').catch(function () { return {}; })])
+    get('/data/enso/zones-flow.json').catch(function () { return {}; }),
+    get('/data/enso/phase.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
       fixRiskTitles(r[0]);                    // парные риски: «world ocean:» / «land+ocean:» читались как дубли (владелец 09.09)
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}   /* история прогнозов, облака, «кто выбивается» (15.09) */;
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}   /* история прогнозов, облака, «кто выбивается» (15.09) */;
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');

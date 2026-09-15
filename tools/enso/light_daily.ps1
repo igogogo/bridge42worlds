@@ -62,6 +62,9 @@ Say "=== fires, reservoirs, snow and glaciers"
 Say "=== between the zones (zones_flow.py)"
 & $py -u zones_flow.py 2>&1 | Out-File $log -Append -Encoding utf8
 
+Say "=== phase change watch (phase.py)"
+& $py -u phase.py 2>&1 | Out-File $log -Append -Encoding utf8
+
 Say "=== who stands out (outliers.py)"
 & $py -u outliers.py 2>&1 | Out-File $log -Append -Encoding utf8
 

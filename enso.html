@@ -634,6 +634,24 @@
   .so-wrap.narrow .so-n small{display:none}
   /* Сцены, где строка — это случай (события, месяцы): им нужна высота, иначе подписи слипаются */
   /* Таблица «наши четыре года»: строка на событие, колонка на зону (15.09) */
+  /* Шкала уровня фазового перехода (15.09): шесть ступеней, пройденные притушены */
+  .ph-lvl{display:flex;gap:4px;margin:6px 12px 8px;flex-wrap:wrap}
+  .ph-s{flex:1 1 120px;min-width:96px;border:1px solid var(--hair);border-radius:8px;padding:5px 7px;
+    display:flex;flex-direction:column;gap:2px;background:var(--surface);opacity:.45}
+  .ph-s b{font-family:var(--font-display);font-size:16px;line-height:1}
+  .ph-s small{font-family:var(--mono);font-size:9px;color:var(--soft);line-height:1.25}
+  .ph-s.past{opacity:.8}
+  .ph-s.on{opacity:1;border-color:var(--lv4);box-shadow:0 0 0 2px color-mix(in srgb, var(--lv4) 30%, transparent)}
+  .ph-s.on b{color:var(--lv4)}
+  .ph-edge .zy-r{grid-template-columns:minmax(120px,1.4fr) 92px 92px 96px}
+  .ph-edge .zy-r > span{white-space:normal}
+  .ph-edge .ph-note{grid-column:1/5;color:var(--soft);font-size:10px;line-height:1.45;padding:2px 0 3px}
+  @media (max-width:760px){ .ph-edge .zy-r{grid-template-columns:minmax(0,1.4fr) 1fr 1fr} .ph-edge .ph-note{grid-column:1/4} }
+  .ph-why{margin:0 12px 8px;padding:7px 10px;border:1px solid var(--hair);border-radius:9px;background:var(--surface)}
+  .ph-h{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-bottom:4px}
+  .ph-r{font-size:12.5px;line-height:1.45;margin:2px 0;padding-left:12px;position:relative}
+  .ph-r:before{content:'\2022';position:absolute;left:2px;color:var(--lv4)}
+  .ph-n{font-family:var(--mono);font-size:10px;color:var(--soft);line-height:1.45;margin-top:6px;border-top:1px solid var(--hair);padding-top:5px}
   .zy-wrap{display:flex;flex-direction:column;gap:2px;margin:4px 12px 8px}
   .zy-r{display:grid;grid-template-columns:minmax(96px,1.3fr) repeat(4,minmax(52px,1fr)) minmax(84px,1fr);
     align-items:center;gap:8px;padding:3px 8px;border-radius:7px;font-family:var(--mono);font-size:11px}
@@ -1338,7 +1356,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=f6e19d6611"></script>
+<script src="/js/enso.js?v=f751c16d97"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>

@@ -27,6 +27,7 @@ KEEP = 100
 
 KIND_LABEL = {
     # подписи этого словаря видны на экране, во вкладке Ops, — значит по-английски
+    "phase": "phase change watch: relations, memory of the long records, the way back",
     "zones_flow": "between the zones: which patch warms first, and how far the event leans",
     "full": "full update: rules, model verdict, snapshot",
     "light": "light run: rules only, fresh layer",

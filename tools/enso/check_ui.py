@@ -78,6 +78,7 @@ DAILY_OUT = {
     "cities.py": "cities.json", "fires.py": "fires.json", "water.py": "water.json",
     "ice_snow.py": "ice-snow.json", "glaciers.py": "glaciers.json", "precip.py": "precip.json",
     "zones_flow.py": "zones-flow.json", "outliers.py": "outliers.json",
+    "phase.py": "phase.json",
     "agent_state.py": "agent-state.json", "stats_layer.py": "stats.json",
 }
 fresh = set(PUB.FRESH_FILES)
