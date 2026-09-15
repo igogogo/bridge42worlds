@@ -1126,6 +1126,11 @@
   .cgo{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;
     color:var(--ochre);cursor:pointer;margin-top:6px;display:inline-block}
   .cgo:hover{text-decoration:underline}
+  /* переход от числа к его графику внутри строки состояния: тихий, пока не навели */
+  .cgo.mini{margin:0 0 0 5px;font-size:11px;line-height:1;vertical-align:baseline;opacity:.4;transition:opacity .15s}
+  .ln:hover .cgo.mini,.card:hover .cgo.mini,.th:hover .cgo.mini,.cgo.mini:hover{opacity:1}
+  /* на касании наведения нет вовсе: там стрелка стоит в полную силу, иначе её не найти */
+  @media (hover: none){ .cgo.mini{opacity:.85} }
   .vgo{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;
     color:var(--ochre);background:none;border:1px solid color-mix(in srgb, var(--ochre) 35%, var(--hair));
     border-radius:999px;padding:2px 8px;cursor:pointer;margin-inline-end:6px;margin-top:4px}
@@ -1333,7 +1338,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=9637900ac9"></script>
+<script src="/js/enso.js?v=f6e19d6611"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>

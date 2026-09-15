@@ -3137,7 +3137,9 @@
     var D = S.D, N = D.nino34, NW = D.noaa, ONI = D.oni, sm = D.summary || {}, P = S.P;
     var dailyDate = N.last_date || ((D.watch || {}).sst_nino34 || {}).last_date || '';
     var col = $('railL'); col.innerHTML = '';
-    var t = tile('State', term('type', 'event type: ' + NW.type) + cnBtn(['kpi:risk_index', 'term:riskindex', 'block:type', 'term:type'], 'graph') + railFullBtn('L'), 'grow');
+    var t = tile('State', term('type', 'event type: ' + NW.type)
+      + stGo('ocean', 'zones', 'zoneView:shape', 'how far this event leans east or west, week by week since 1981')
+      + cnBtn(['kpi:risk_index', 'term:riskindex', 'block:type', 'term:type'], 'graph') + railFullBtn('L'), 'grow');
     var idx = D.risk_index, gc = idx >= 80 ? 'var(--lv5)' : (idx >= 60 ? 'var(--lv4)' : (idx >= 40 ? 'var(--lv3)' : 'var(--ok)'));
     var ls = ONI.last_season;
     var ri = pair(idx, P ? P.risk_index : null, 0);
@@ -3154,13 +3156,19 @@
          (+2.7 за неделю до 2 сентября), а у точки на графике — суточный OISST (+2.83 за 6
          сентября), и два числа читались как рост, которого не было (см. 9я). */
       '<div class="g-side">' + '<button type="button" class="vgo" data-view="verdict">read the verdict →</button>' +
-      '<b>' + zone('nino34') + ' ' + fnum(N.current_day) + ' °C' + jchip('n34_daily') + '<small class="dsub">daily · ' + esc(String(dt(dailyDate)).replace(/<[^>]+>/g, '')) + '</small></b>' +
-      '<div class="ln">' + src({ name: 'Weekly against daily', def: 'Two products of the same sea. The daily is the OISST grid over our own box, one day behind and refreshed every morning. The weekly is the official NOAA index, published on Wednesdays for the week before: it lags the daily by several days, and while the event grows it always reads lower. The verdict and the risks use both.', src: 'NOAA CPC weekly · NOAA OISST daily', date: NW.date }, 'NOAA weekly ' + fnum(NW.latest.n34a, 1) + ' to ' + esc(String(dt(NW.date)).replace(/<[^>]+>/g, ''))) + jchip('n34_weekly') + '</div>' +
+      '<b>' + zone('nino34') + ' ' + fnum(N.current_day) + ' °C' + jchip('n34_daily')
+        + stGo('trend', 'sst_nino34', '', 'the daily series of this box, with its record and the 14-day outlook')
+        + '<small class="dsub">daily · ' + esc(String(dt(dailyDate)).replace(/<[^>]+>/g, '')) + '</small></b>' +
+      '<div class="ln">' + src({ name: 'Weekly against daily', def: 'Two products of the same sea. The daily is the OISST grid over our own box, one day behind and refreshed every morning. The weekly is the official NOAA index, published on Wednesdays for the week before: it lags the daily by several days, and while the event grows it always reads lower. The verdict and the risks use both.', src: 'NOAA CPC weekly · NOAA OISST daily', date: NW.date }, 'NOAA weekly ' + fnum(NW.latest.n34a, 1) + ' to ' + esc(String(dt(NW.date)).replace(/<[^>]+>/g, ''))) + jchip('n34_weekly')
+        + stGo('now', 'weekly_a', 'wkey:n34a', 'the official weekly index against the strongest past events') + '</div>' +
       /* Каждое утверждение — своей строкой и без точки в конце (владелец 07.09:
          «точки после предложений на карточках убрать, просто перенос строки»). */
-      '<div class="ln">rank ' + N.all_years_rank + ' of all years on the same 30 days</div>' +
-      '<div class="ln">' + ab('oni', 'ONI') + ' ' + fnum(ONI.current[ls]) + ' ' + ab('seasons', ls) + jchip('oni') + '</div>' +
-      '<div class="ln rscale">' + esc(riskScaleLine(D)) + '</div>' +
+      '<div class="ln">rank ' + N.all_years_rank + ' of all years on the same 30 days'
+        + stGo('trend', 'sst_nino34', '', 'where this rank comes from: the daily box against every year of its record') + '</div>' +
+      '<div class="ln">' + ab('oni', 'ONI') + ' ' + fnum(ONI.current[ls]) + ' ' + ab('seasons', ls) + jchip('oni')
+        + stGo('now', 'analogs', '', 'the official seasonal index against the analogue years') + '</div>' +
+      '<div class="ln rscale">' + esc(riskScaleLine(D))
+        + stGo('verdict', '', '', 'the risk index in full: every rule, its level and what it rests on') + '</div>' +
       '' + kmeta('risk_index') + freshLine() +
       '<div class="cgo" data-go="now" data-gosub="analogs">see where we are \u2192</div></div></div>';
     box.appendChild(k1);
@@ -6085,6 +6093,14 @@
      десять открываются, только если показания ушли ЗА исторический максимум этого дня,
      ушли быстро и сразу в нескольких системах. Строка говорит, из чего собрано число,
      чтобы 93 не читалось как «до конца света семь пунктов». */
+  /* ПЕРЕХОД ОТ ЧИСЛА К ЕГО ГРАФИКУ (владелец 15.09: «все KPI имеют ссылки на графики, а STATE
+     нет»). В ленте KPI кликается вся плитка; здесь так нельзя — в строках сидят термины со
+     своими карточками и значки истории, и общий клик по строке съел бы их. Поэтому переход —
+     отдельной маленькой стрелкой в конце строки, тихой, пока на строку не навели. */
+  function stGo(view, sub2, deep, title) {
+    return '<span class="cgo mini" data-go="' + esc(view) + '"' + (sub2 ? ' data-gosub="' + esc(sub2) + '"' : '')
+      + (deep ? ' data-gosub2="' + esc(deep) + '"' : '') + ' title="' + esc(title || 'open the chart this number lives on') + '">\u2192</span>';
+  }
   function riskScaleLine(D) {
     var rd = (D || {}).risk_index_detail, F = S.F || {}, pre = '';
     if (!rd && F.risk_index_detail && F.risk_index != null) {
@@ -9235,6 +9251,10 @@
     S.view = g.getAttribute('data-go');
     var sb = g.getAttribute('data-gosub');
     if (sb) S.sub[S.view] = sb;
+    /* Второй ярус: «ocean/zones» мало, нужен ещё выбранный вид внутри сцены. Пишется парой
+       «ключ:значение», потому что ключ у каждой сцены свой (zoneView, wkey, analogZone). */
+    var sb2 = g.getAttribute('data-gosub2');
+    if (sb2 && sb2.indexOf(':') > 0) S.sub[sb2.split(':')[0]] = sb2.split(':').slice(1).join(':');
     S.risk = null;
     render();
   });
