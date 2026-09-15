@@ -17,7 +17,7 @@
 
   var T = {
     fresh: 'fresh', stale: 'stale',
-    tabs: { brief: 'Briefing', verdict: 'Verdict', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Now', ocean: 'Ocean', radiance: 'Satellite', models: 'Models', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long term', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
+    tabs: { brief: 'Briefing', verdict: 'Verdict', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Now', ocean: 'Ocean', radiance: 'Satellite', models: 'Models', track: 'Track record', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long term', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
     tabHelp: {
       brief: 'The entry point: what is happening, what the data show, what to expect and when, the risks already showing, regions and food, what to watch — in plain words, with a link to every number.',
       verdict: 'What the machine makes of it today: the verdict written from the numbers on this page, the turning point, the outlook, what to watch, the caveats.',
@@ -52,7 +52,7 @@
       'air/coupling': 'The three atmospheric signs that the ocean and the air are coupled.', 'air/fuel': 'The warm water volume under the equator: the fuel gauge and its lead.', 'air/layers': 'The four satellite floors of the atmosphere and their delay.', 'air/wind': 'Daily zonal wind over the western Pacific and the westerly bursts.', 'air/mjo': 'The Madden–Julian Oscillation: phase and amplitude.', 'air/indices': 'MEI, the Indian Ocean Dipole and RONI next to our coupling score.',
       'trend/sst_nino34': 'Niño 3.4 daily: 400 days, the band of all years, the 14-day forecast, where past events went from here.', 'trend/sst_world': 'The world ocean, daily.', 'trend/t2_world': 'Land and ocean, daily.', 'trend/index': 'Our risk index by update, and the comparable core against past events.', 'trend/months': 'Thirteen months of the three series with their ranks.', 'trend/background': 'Ocean heat content and the energy imbalance: the state of the whole system.',
       'regions/table': 'Every region by season and scenario, with food vulnerability and what to do.', 'regions/place': 'One region at a time; the Gulf with its own measurements.',
-      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.', 'radiance/convection': 'Share of satellite footprints colder than 235 K: deep convection over Niño 3.4 and the warm pool, this year against 2023–2025.', 'radiance/walker': 'Brightness-temperature contrast east minus west: the Walker circulation read raw; a fall to zero means the convection moved east.', 'radiance/clouds': 'Each scene sorted by the window brightness temperature: deep, mid, low cloud and clear sky, shares per day; the day-time cloud share is the albedo proxy.', 'radiance/greenhouse': 'How much the atmosphere closes the 11 µm window: G on all scenes (follows cloud) and G_clear on the least cloudy scenes (the water-vapour greenhouse proxy), with the p90/p99 caveat.', 'radiance/profile': 'Temperature layers: infrared (blind under cloud) and microwave (through cloud), the last 14 days against each analogue year.', 'radiance/epochs': 'Twenty years of the same window: every year’s deep convection over the boxes on one scale (the CrIS chain SNPP → NOAA-20 → NOAA-21, AIRS for the early years), with error bars, ranks and the ratio to 2015; play the years to watch the record build.', 'radiance/regime': 'Not how high the reading is, but whether the link between sea temperature and the response of the air still holds: the slope of that link on a rolling window of years, and where this year sits against the range the link was fitted on.', 'radiance/cross': 'Independent instruments against each other: the 2026 shift of convection and of the atmospheric layers on NOAA-21 CrIS, NOAA-20 CrIS and Aqua AIRS, and how closely they agree day by day.', 'radiance/seismic': 'Earthquakes by Pacific-rim zone with aftershocks separated, and solar activity, from the same collector; side series, not El Niño physics.', 'models/board': 'Every model of the plume as a card: latest forecast, class, how far below reality.', 'models/revision': 'How each centre revised its forecast issue after issue.', 'refs/works': 'Our parsed arXiv works attached to the claims of this panel, with the reason for each link.', 'refs/sources': 'Every data source with its address, cadence and last date.', 'refs/literature': 'Literature and reports quoted on the panel, not measured by us.', 'refs/concepts': 'The concept register attached to every anchor of the panel: risks, alerts, blocks, regions and glossary terms, each with its nearest concepts and a link to the graph on that set.', 'refs/neighbours': 'Kindred projects: who else shows the planet on a globe or a map, with what data and under what licence, and what we can take from each.', 'trend/land_peru_coast': 'Air over the coast of Peru: the daily ERA5 box against its own all-years band, with the 14-day forecast and where past events went from this same day.', 'trend/land_gulf_north': 'Air over the north of the Persian Gulf: the same daily ERA5 box reading as the other land series.', 'trend/land_europe_central': 'Air over central Europe: the same daily ERA5 box reading.', 'trend/land_java': 'Air over Java: the same daily ERA5 box reading.', 'trend/land_east_africa': 'Air over east Africa: the same daily ERA5 box reading.', 'trend/land_north_india': 'Air over north India: the same daily ERA5 box reading.', 'trend/mountains': 'Thirteen mountain points where there is ice: the anomaly of the air over them read like any other series, and how much melt energy the year has already delivered against the 1991–2020 normal to the same day.', 'trend/rain': 'Rain by region (ERA5 box sums against the normal and against every year since 1981) and for the whole planet (GPCP monthly).', 'trend/spectral': 'A line at 2–7 days appearing in any daily series over the last 30 days: the owner’s hypothesis of a comb before a spontaneous transition, watched, not assumed.',
+      'food/prices': 'The FAO index and its five groups.', 'food/onset': 'The index, or one commodity, as a percentage of the onset month, against past events.', 'food/goods': 'Twelve commodities by name: price, month, year, since the onset.', 'food/abs': 'One commodity, five years, dollars per tonne; the start of the event marked.', 'ocean/motion': 'The reanalysis section as a film: one frame per month, a past event beside it.', 'radiance/convection': 'Share of satellite footprints colder than 235 K: deep convection over Niño 3.4 and the warm pool, this year against 2023–2025.', 'radiance/walker': 'Brightness-temperature contrast east minus west: the Walker circulation read raw; a fall to zero means the convection moved east.', 'radiance/clouds': 'Each scene sorted by the window brightness temperature: deep, mid, low cloud and clear sky, shares per day; the day-time cloud share is the albedo proxy.', 'radiance/greenhouse': 'How much the atmosphere closes the 11 µm window: G on all scenes (follows cloud) and G_clear on the least cloudy scenes (the water-vapour greenhouse proxy), with the p90/p99 caveat.', 'radiance/profile': 'Temperature layers: infrared (blind under cloud) and microwave (through cloud), the last 14 days against each analogue year.', 'radiance/epochs': 'Twenty years of the same window: every year’s deep convection over the boxes on one scale (the CrIS chain SNPP → NOAA-20 → NOAA-21, AIRS for the early years), with error bars, ranks and the ratio to 2015; play the years to watch the record build.', 'radiance/regime': 'Not how high the reading is, but whether the link between sea temperature and the response of the air still holds: the slope of that link on a rolling window of years, and where this year sits against the range the link was fitted on.', 'radiance/cross': 'Independent instruments against each other: the 2026 shift of convection and of the atmospheric layers on NOAA-21 CrIS, NOAA-20 CrIS and Aqua AIRS, and how closely they agree day by day.', 'radiance/seismic': 'Earthquakes by Pacific-rim zone with aftershocks separated, and solar activity, from the same collector; side series, not El Niño physics.', 'models/board': 'Every model of the plume as a card: latest forecast, class, how far below reality.', 'models/revision': 'How each centre revised its forecast issue after issue.', 'refs/works': 'Our parsed arXiv works attached to the claims of this panel, with the reason for each link.', 'refs/sources': 'Every data source with its address, cadence and last date.', 'refs/literature': 'Literature and reports quoted on the panel, not measured by us.', 'refs/concepts': 'The concept register attached to every anchor of the panel: risks, alerts, blocks, regions and glossary terms, each with its nearest concepts and a link to the graph on that set.', 'refs/neighbours': 'Kindred projects: who else shows the planet on a globe or a map, with what data and under what licence, and what we can take from each.', 'trend/land_peru_coast': 'Air over the coast of Peru: the daily ERA5 box against its own all-years band, with the 14-day forecast and where past events went from this same day.', 'trend/land_gulf_north': 'Air over the north of the Persian Gulf: the same daily ERA5 box reading as the other land series.', 'trend/land_europe_central': 'Air over central Europe: the same daily ERA5 box reading.', 'trend/land_java': 'Air over Java: the same daily ERA5 box reading.', 'trend/land_east_africa': 'Air over east Africa: the same daily ERA5 box reading.', 'trend/land_north_india': 'Air over north India: the same daily ERA5 box reading.', 'trend/mountains': 'Thirteen mountain points where there is ice: the anomaly of the air over them read like any other series, and how much melt energy the year has already delivered against the 1991–2020 normal to the same day.', 'trend/rain': 'Rain by region (ERA5 box sums against the normal and against every year since 1981) and for the whole planet (GPCP monthly).', 'track/today': 'What the centres say today: the combined forecast for the coming peak season, how far apart the models are, and where that sits against the highest ONI on record.', 'track/event': 'One event at a time: the peak the plume forecast at each monthly issue, with the spread of single models, against the peak the ONI actually reached.', 'track/summer': 'At this same point in past calendars, how far from what came the forecast landed. The default sample is chosen by what the centres said, not by what happened.', 'track/settle': 'How many months before the peak the plume stopped moving: the first issue after which every later one stayed within a quarter of a degree of the peak that came.', 'track/error': 'Mean miss of the combined forecast by the year it was published, beside the same error for a forecast that says neutral every time — without that line a quiet year looks like skill.', 'track/all': 'Twenty-four years of forecasts on one canvas, raw: every issue reaching forward from the month it was published, coloured by decade, with the ONI that came as the heavy line.', 'trend/spectral': 'A line at 2–7 days appearing in any daily series over the last 30 days: the owner’s hypothesis of a comb before a spontaneous transition, watched, not assumed.',
       'planet/snow': 'Snow cover of the northern hemisphere since 1966: the seasonal switch of how much sunlight the land throws back. The closest open stand-in for albedo.',
       'planet/glaciers': 'Annual mass balance of the measured glaciers since 1885, and the running total: how much water the ice gives up year after year.',
       'regions/fires': 'Active fire detections from three satellites, by region and day: where it burns now and how that compares with the days before.',
@@ -2138,7 +2138,7 @@
        рамкой, потом промежуток, потом чтение (брифинг, новости, упоминания, вердикт), ещё
        промежуток, потом последствия (еда, регионы). Research ушёл в служебную строку к методу
        и ссылкам. Порядок задан здесь явно, а не порядком ключей T.tabs. */
-    var GROUPS = [['overview', 'now', 'ocean', 'radiance', 'models', 'trend', 'air', 'planet'], ['brief', 'news', 'mentions', 'verdict'], ['food', 'regions']];
+    var GROUPS = [['overview', 'now', 'ocean', 'radiance', 'models', 'track', 'trend', 'air', 'planet'], ['brief', 'news', 'mentions', 'verdict'], ['food', 'regions']];
     var SVC_ORDER = ['research', 'how', 'refs', 'chain', 'ops', 'about'];
     var DATA_TABS = GROUPS[0];
     GROUPS.forEach(function (g, gi) { if (gi) list.push(['_gap' + gi, '']); g.forEach(function (k) { if (T.tabs[k]) list.push([k, T.tabs[k]]); }); });
@@ -3939,6 +3939,349 @@
     }
     body.appendChild(el('div', 'cap', esc(CT.note || '')));
   }
+  /* ══ ЧЕГО СТОИЛИ ПРОГНОЗЫ: 2002 → СЕГОДНЯ ═════════════════════════════════════════
+     Владелец 15.09: «как сдвигаются прогнозы, что было 10 и 20 лет назад и что сейчас; как
+     двигаются прогнозы по нашим особенным годам; и что происходит прямо сейчас».
+     Данные — models-history.json (tools/enso/models_history.py): 252 выпуска плюма IRI,
+     разобранные тем же кодом, что и сегодняшний.
+
+     ТРИ ПРАВИЛА ЧТЕНИЯ, ЗАШИТЫЕ В САМ ВИД (их поймал разбор вида, каждое убивает вывод):
+       · сырая ошибка по годам ничего не говорит: тихий год лёгок даром. Поэтому рядом с ошибкой
+         всегда стоит опора — «каждый сезон нейтральный» на ТЕХ ЖЕ целях;
+       · «в шести событиях из семи занижал» отобрано по ИСХОДУ. Про сегодняшний прогноз отвечает
+         другая выборка — по ПРОГНОЗУ: все августы, когда обещали тёплую зиму, включая те, из
+         которых ничего не вышло. Она и стоит по умолчанию, вторая подписана оговоркой;
+       · пик среднего площе пика ряда, поэтому основная мера — один и тот же сезон (NDJ). */
+  function trackKpi(name, val, sub2, src, dt2) {
+    return '<div class="kpi"><div class="kn">' + name + '</div><div class="kv">' + val + '</div><div class="km">' + sub2 + '</div>' + kmeta(null, src, dt2) + '</div>';
+  }
+  function trackNum(v, d) { return v == null ? '·' : (v > 0 ? '+' : '') + fnum(v, d == null ? 2 : d, false); }
+  /* ── ГРАФИКИ СЦЕНЫ «ЧЕГО СТОИЛИ ПРОГНОЗЫ» ──────────────────────────────────────────
+     Общее правило разметки, одно на все шесть: СПЛОШНОЕ И ЗАЛИТОЕ — измеренное (значение с
+     опубликованной фигуры или ONI от CPC); ПУНКТИР «2 2» И ПОЛЫЙ КОНТУР цветом --soft — наша
+     арифметика (медианы, средние, опоры). Длинный штрих «6 4» разделяет РЯДЫ и никогда не
+     значит «оценка». Пустая клетка со штрихом по диагонали — «не с чем сравнивать», а не ноль. */
+  /* ПОДПИСЬ НЕ ВЫЛЕЗАЕТ ЗА КРАЙ КАРТИНКИ. Крайние подписи осей и пояснения у правого края
+     уезжали за границу SVG и обрезались браузером (проверка 15.09 на всех шести видах).
+     Зажимаем координату по ширине надписи и, где не влезает, разворачиваем привязку. */
+  function clampX(x, W, anchor, approxW) {
+    var w = approxW || 40;
+    if (anchor === 'end') return Math.max(w + 2, Math.min(x, W - 2));
+    if (anchor === 'middle') return Math.max(w / 2 + 2, Math.min(x, W - w / 2 - 2));
+    return Math.max(2, Math.min(x, W - w - 2));
+  }
+  function trackAxes(W, H, x0, x1, y0, y1, xlab, ylab, xfmt) {
+    var Lp = 46, R = 14, Tp = topPad(W), B = 30, pw = W - Lp - R, ph = H - Tp - B;
+    var X = function (v) { return Lp + (v - x0) / ((x1 - x0) || 1) * pw; };
+    var Y = function (v) { return Tp + (y1 - v) / ((y1 - y0) || 1) * ph; };
+    var s = '', i, st = niceStep(y1 - y0, 5);
+    for (i = Math.ceil(y0 / st) * st; i <= y1 + 1e-9; i += st) {
+      s += '<line x1="' + Lp + '" y1="' + Y(i).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(i).toFixed(1) + '" style="stroke:var(--grid)"/>' +
+        '<text x="' + (Lp - 6) + '" y="' + (Y(i) + 3.5).toFixed(1) + '" text-anchor="end" font-size="9.5">' + fnum(i, Math.abs(st) < 1 ? 1 : 0, false) + '</text>';
+    }
+    if (y0 < 0 && y1 > 0) s += '<line x1="' + Lp + '" y1="' + Y(0).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(0).toFixed(1) + '" style="stroke:var(--text)" stroke-width="1.3" opacity=".7"/>';
+    return { s: s, X: X, Y: Y, Lp: Lp, R: R, Tp: Tp, B: B, pw: pw, ph: ph };
+  }
+
+  /* 1. Сегодняшний зов: одна числовая ось. Никакая метка из прошлого сюда не переносится. */
+  function chartTrackToday(d, W, H) {
+    var pk = d.peak, lo = d.lo, hi = d.hi, rec = d.rec;
+    if (pk == null) return svgOpen(W, H) + '<text x="20" y="40">no issue parsed yet</text></svg>';
+    var x1 = Math.max(hi == null ? pk : hi, rec == null ? pk : rec) + 0.35, x0 = 0;
+    var A = trackAxes(W, H, x0, x1, 0, 1, '', '', null), s = svgOpen(W, H);
+    var yMid = A.Tp + A.ph * 0.42;
+    s += '<text class="tt" x="' + A.Lp + '" y="15">What the centres say today \u00b7 ONI peak, \u00b0C</text>';
+    var st = niceStep(x1 - x0, 6), v;
+    for (v = 0; v <= x1 + 1e-9; v += st) {
+      s += '<line x1="' + A.X(v).toFixed(1) + '" y1="' + (yMid - 52) + '" x2="' + A.X(v).toFixed(1) + '" y2="' + (yMid + 22) + '" style="stroke:var(--grid)"/>' +
+        '<text x="' + A.X(v).toFixed(1) + '" y="' + (yMid + 36) + '" text-anchor="middle" font-size="9.5">' + fnum(v, 1, false) + '</text>';
+    }
+    if (lo != null && hi != null) {
+      s += '<rect x="' + A.X(lo).toFixed(1) + '" y="' + (yMid - 13) + '" width="' + Math.max(1, A.X(hi) - A.X(lo)).toFixed(1) + '" height="26" rx="4" style="fill:var(--ochre)" opacity=".16"/>';
+      s += '<text x="' + A.X(lo).toFixed(1) + '" y="' + (yMid - 19) + '" font-size="9.5" style="fill:var(--soft)">lowest model ' + fnum(lo, 2, false) + '</text>';
+      s += '<text x="' + A.X(hi).toFixed(1) + '" y="' + (yMid - 19) + '" text-anchor="end" font-size="9.5" style="fill:var(--soft)">highest ' + fnum(hi, 2, false) + '</text>';
+    }
+    s += '<circle cx="' + A.X(pk).toFixed(1) + '" cy="' + yMid + '" r="7" style="fill:var(--ochre)"/>' +
+      '<text x="' + A.X(pk).toFixed(1) + '" y="' + (yMid - 30) + '" text-anchor="middle" font-size="12" style="fill:var(--ochre)" font-weight="600">' + (pk > 0 ? '+' : '') + fnum(pk, 2, false) + ' \u00b0C</text>';
+    if (rec != null) {
+      s += '<line x1="' + A.X(rec).toFixed(1) + '" y1="' + (yMid - 58) + '" x2="' + A.X(rec).toFixed(1) + '" y2="' + (yMid + 24) + '" style="stroke:var(--nino)" stroke-width="1.6"/>' +
+        '<text x="' + clampX(A.X(rec) - 5, W, 'end', 176).toFixed(1) + '" y="' + (yMid + 54) + '" text-anchor="end" font-size="9.5" style="fill:var(--nino)">highest ONI on record ' + fnum(rec, 2, false) + ' \u00b7 ' + esc(d.recLabel || '') + '</text>';
+      s += '<text x="' + clampX(A.X(rec) + 5, W, 'start', 172).toFixed(1) + '" y="' + (yMid + 68) + '" font-size="9.5" style="fill:var(--soft)">beyond anything the record holds</text>';
+    }
+    return s + '</svg>';
+  }
+
+  /* 2. Путь прогноза пика по выпускам одного события. */
+  function chartTrackEvent(e, year, W, H) {
+    var p = e.path || [];
+    if (!p.length) return svgOpen(W, H) + '<text x="20" y="40">no issues for this event</text></svg>';
+    var vals = [], i;
+    p.forEach(function (q) { vals.push(q.peak_fc); if (q.models_lo != null) vals.push(q.models_lo); if (q.models_hi != null) vals.push(q.models_hi); });
+    if (e.observed_peak != null) vals.push(e.observed_peak);
+    var y0 = Math.min.apply(null, vals) - 0.25, y1 = Math.max.apply(null, vals) + 0.25;
+    var A = trackAxes(W, H, 0, p.length - 1 || 1, y0, y1, '', '', null);
+    var s = svgOpen(W, H) + '<text class="tt" x="' + A.Lp + '" y="15">' + esc(year) + ': the peak the plume forecast, issue by issue \u00b7 \u00b0C</text>' + A.s;
+    var band = [], bandB = [];
+    p.forEach(function (q, i2) { if (q.models_lo != null && q.models_hi != null) { band.push([A.X(i2), A.Y(q.models_hi)]); bandB.unshift([A.X(i2), A.Y(q.models_lo)]); } });
+    if (band.length) s += '<path d="M' + band.concat(bandB).map(function (t) { return t[0].toFixed(1) + ' ' + t[1].toFixed(1); }).join(' L') + ' Z" style="fill:var(--soft)" opacity=".13"/>';
+    if (e.observed_peak != null) {
+      s += '<line x1="' + A.Lp + '" y1="' + A.Y(e.observed_peak).toFixed(1) + '" x2="' + (W - A.R) + '" y2="' + A.Y(e.observed_peak).toFixed(1) + '" style="stroke:var(--text)" stroke-width="2"/>' +
+        '<text x="' + (W - A.R - 3) + '" y="' + (A.Y(e.observed_peak) - 5).toFixed(1) + '" text-anchor="end" font-size="10">what came: ' + fnum(e.observed_peak, 2, false) + ' \u00b7 ' + esc(e.observed_peak_season || '') + '</text>';
+    }
+    s += segs(p.map(function (q, i2) { return [A.X(i2), A.Y(q.peak_fc)]; }), 'var(--ochre)', 2.2, .95);
+    p.forEach(function (q, i2) {
+      s += '<circle cx="' + A.X(i2).toFixed(1) + '" cy="' + A.Y(q.peak_fc).toFixed(1) + '" r="3.4" style="fill:var(--ochre)"/>';
+      var every = Math.max(1, Math.round(p.length / Math.max(3, Math.floor(A.pw / 62))));
+      if (i2 % every === 0 || i2 === p.length - 1)
+        s += '<text x="' + clampX(A.X(i2), W, 'middle', 44).toFixed(1) + '" y="' + (H - 10) + '" text-anchor="middle" font-size="9">' + esc(String(q.issue || '').replace(' 20', " '")) + '</text>';
+    });
+    var lastq = p[p.length - 1];
+    s += '<text x="' + A.X(p.length - 1).toFixed(1) + '" y="' + (A.Y(lastq.peak_fc) - 9).toFixed(1) + '" text-anchor="end" font-size="11" style="fill:var(--ochre)" font-weight="600">' + (lastq.peak_fc > 0 ? '+' : '') + fnum(lastq.peak_fc, 2, false) + '</text>';
+    return s + '</svg>';
+  }
+
+  /* 3. Та же фаза календаря: куда легло то, что пришло. */
+  function chartTrackSummer(cases, mode, mon, W, H) {
+    if (!cases.length) return svgOpen(W, H) + '<text x="20" y="40">no cases in this sample</text></svg>';
+    var key = mode === 'forecast' ? 'miss_ndj' : 'miss_peak';
+    var vv = cases.map(function (c) { return c[key]; }).filter(fin);
+    var m = Math.max(0.35, Math.max.apply(null, vv.map(Math.abs)) + 0.12);
+    var A = trackAxes(W, H, -m, m, 0, 1, '', '', null);
+    var s = svgOpen(W, H) + '<text class="tt" x="' + A.Lp + '" y="15">' + esc(mon) + ' issues: the forecast minus what came, \u00b0C</text>';
+    var yMid = A.Tp + A.ph * 0.5, st = niceStep(2 * m, 6), v;
+    for (v = -Math.ceil(m / st) * st; v <= m + 1e-9; v += st)
+      s += '<line x1="' + A.X(v).toFixed(1) + '" y1="' + (yMid - 46) + '" x2="' + A.X(v).toFixed(1) + '" y2="' + (yMid + 30) + '" style="stroke:var(--grid)"/>' +
+        '<text x="' + clampX(A.X(v), W, 'middle', 26).toFixed(1) + '" y="' + (yMid + 44) + '" text-anchor="middle" font-size="9.5">' + (v > 0 ? '+' : '') + fnum(v, 1, false) + '</text>';
+    s += '<line x1="' + A.X(0).toFixed(1) + '" y1="' + (yMid - 52) + '" x2="' + A.X(0).toFixed(1) + '" y2="' + (yMid + 32) + '" style="stroke:var(--text)" stroke-width="1.8"/>' +
+      '<text x="' + A.X(0).toFixed(1) + '" y="' + (yMid - 58) + '" text-anchor="middle" font-size="10">what came</text>' +
+      '<text x="' + (A.X(0) - 10).toFixed(1) + '" y="' + (yMid - 34) + '" text-anchor="end" font-size="9.5" style="fill:var(--soft)">read it low \u2190</text>' +
+      '<text x="' + (A.X(0) + 10).toFixed(1) + '" y="' + (yMid - 34) + '" font-size="9.5" style="fill:var(--soft)">\u2192 read it high</text>';
+    cases.forEach(function (c, i) {
+      if (!fin(c[key])) return;
+      var x = A.X(c[key]), y = yMid + ((i % 2) ? 13 : -13) + (Math.floor(i / 2) % 2 ? 5 : -5);
+      var warm = mode === 'forecast' && c.became_event === false;
+      s += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="5" style="fill:var(--ochre)" opacity="' + (warm ? '.45' : '.9') + '"' + (warm ? ' stroke="var(--soft)" stroke-width="1.2"' : '') + '/>' +
+        '<text x="' + x.toFixed(1) + '" y="' + (y - 9).toFixed(1) + '" text-anchor="middle" font-size="9">' + esc(String(c.issue || c.year || '')) + '</text>';
+    });
+    if (vv.length) {
+      var sorted = vv.slice().sort(function (a, b) { return a - b; });
+      var med = sorted.length % 2 ? sorted[(sorted.length - 1) / 2] : (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2;
+      s += '<path d="M' + A.X(med).toFixed(1) + ' ' + (yMid - 8) + ' l7 8 l-7 8 l-7 -8 Z" style="fill:none;stroke:var(--soft)" stroke-width="1.5" stroke-dasharray="2 2"/>' +
+        '<text x="' + A.X(med).toFixed(1) + '" y="' + (yMid + 28) + '" text-anchor="middle" font-size="9" style="fill:var(--soft)">median ' + (med > 0 ? '+' : '') + fnum(med, 2, false) + ' \u00b7 our arithmetic</text>';
+    }
+    return s + '</svg>';
+  }
+
+  /* 4. Когда прогноз переставал двигаться. */
+  function chartTrackSettle(EV, W, H) {
+    var rows = Object.keys(EV).filter(function (y) { return EV[y].observed_peak != null; }).sort();
+    if (!rows.length) return svgOpen(W, H) + '<text x="20" y="40">no completed events</text></svg>';
+    var maxM = 1;
+    rows.forEach(function (y) { Object.keys(EV[y].settle || {}).forEach(function (t) { maxM = Math.max(maxM, EV[y].settle[t].months_before); }); });
+    var A = trackAxes(W, H, 0, maxM + 1, 0, 1, '', '', null);
+    var s = svgOpen(W, H) + '<text class="tt" x="' + A.Lp + '" y="15">Months before the peak when the plume stopped moving</text>';
+    var hh = A.ph / rows.length, i, v, st = 1;
+    for (v = 0; v <= maxM + 1; v += (maxM > 8 ? 2 : 1))
+      s += '<line x1="' + A.X(v).toFixed(1) + '" y1="' + A.Tp + '" x2="' + A.X(v).toFixed(1) + '" y2="' + (A.Tp + A.ph) + '" style="stroke:var(--grid)"/>' +
+        '<text x="' + A.X(v).toFixed(1) + '" y="' + (H - 10) + '" text-anchor="middle" font-size="9.5">' + v + '</text>';
+    rows.forEach(function (y, i2) {
+      var st25 = (EV[y].settle || {})['0.25'], st15 = (EV[y].settle || {})['0.15'];
+      var yy = A.Tp + i2 * hh + hh / 2;
+      s += '<text x="' + (A.Lp - 6) + '" y="' + (yy + 3.5).toFixed(1) + '" text-anchor="end" font-size="10">' + esc(y) + '</text>';
+      if (!st25) { s += '<text x="' + (A.Lp + 6) + '" y="' + (yy + 3.5).toFixed(1) + '" font-size="9.5" style="fill:var(--soft)">never settled within 0.25 \u00b0C</text>'; return; }
+      s += '<rect x="' + A.X(0).toFixed(1) + '" y="' + (yy - 7) + '" width="' + Math.max(1, A.X(st25.months_before) - A.X(0)).toFixed(1) + '" height="14" rx="3" style="fill:none;stroke:var(--soft)" stroke-width="1.3" stroke-dasharray="2 2"/>';
+      if (st15) s += '<rect x="' + A.X(0).toFixed(1) + '" y="' + (yy - 7) + '" width="' + Math.max(1, A.X(st15.months_before) - A.X(0)).toFixed(1) + '" height="14" rx="3" style="fill:var(--ochre)" opacity=".75"/>';
+      var note = esc(st25.issue) + ' \u00b7 ' + fnum(st25.value, 2, false) + ' against ' + fnum(EV[y].observed_peak, 2, false);
+      var nx = A.X(st25.months_before) + 6, fits = nx + note.length * 5.2 < W - 4;
+      s += '<text x="' + (fits ? nx : A.X(st25.months_before) - 6).toFixed(1) + '" y="' + (yy + 3.5).toFixed(1) + '"' + (fits ? '' : ' text-anchor="end"') + ' font-size="9.5" style="fill:var(--soft)">' + note + '</text>';
+    });
+    return s + '</svg>';
+  }
+
+  /* 5. Двадцать лет ошибки — и опора, без которой она ничего не значит. */
+  function chartTrackError(MH, lead, W, H) {
+    var Y = MH.years || {}, ys = Object.keys(Y).sort();
+    var pts = [], ref = [];
+    ys.forEach(function (y) {
+      var m = (Y[y].mae || {})[lead], c = (Y[y].mae_clim || {})[lead];
+      if (m != null) pts.push([+y, m]);
+      if (c != null) ref.push([+y, c]);
+    });
+    if (pts.length < 2) return svgOpen(W, H) + '<text x="20" y="40">not enough scored years at this lead</text></svg>';
+    var all = pts.concat(ref).map(function (t) { return t[1]; });
+    var A = trackAxes(W, H, pts[0][0], pts[pts.length - 1][0], 0, Math.max.apply(null, all) * 1.12, '', '', null);
+    var s = svgOpen(W, H) + '<text class="tt" x="' + A.Lp + '" y="15">Mean miss of the combined forecast, ' + esc(lead) + (lead === '1' ? ' season' : ' seasons') + ' ahead \u00b7 \u00b0C</text>' + A.s;
+    var i, step = Math.max(1, Math.round((pts[pts.length - 1][0] - pts[0][0]) / Math.max(3, Math.floor(A.pw / 54))));
+    for (i = 0; i < pts.length; i++) if (i % step === 0 || i === pts.length - 1)
+      s += '<text x="' + A.X(pts[i][0]).toFixed(1) + '" y="' + (H - 10) + '" text-anchor="middle" font-size="9.5">' + pts[i][0] + '</text>';
+    s += segs(ref.map(function (t) { return [A.X(t[0]), A.Y(t[1])]; }), 'var(--soft)', 1.4, .7, '6 4');
+    s += segs(pts.map(function (t) { return [A.X(t[0]), A.Y(t[1])]; }), 'var(--ochre)', 2.2, .95);
+    pts.forEach(function (t) { s += '<circle cx="' + A.X(t[0]).toFixed(1) + '" cy="' + A.Y(t[1]).toFixed(1) + '" r="2.6" style="fill:var(--ochre)"/>'; });
+    var lastRef = ref[ref.length - 1], lastP = pts[pts.length - 1];
+    if (lastRef) s += '<text x="' + (A.X(lastRef[0]) - 4).toFixed(1) + '" y="' + (A.Y(lastRef[1]) - 6).toFixed(1) + '" text-anchor="end" font-size="9.5" style="fill:var(--soft)">saying \u201cneutral\u201d every season</text>';
+    s += '<text x="' + (A.X(lastP[0]) - 4).toFixed(1) + '" y="' + (A.Y(lastP[1]) + 14).toFixed(1) + '" text-anchor="end" font-size="9.5" style="fill:var(--ochre)">the centres</text>';
+    return s + '</svg>';
+  }
+
+  /* 6. Все выпуски сразу, сырьём: каждая тонкая линия — один выпуск, жирная — что пришло. */
+  function chartTrackAll(SP, W, H) {
+    var iss = SP.issues || [], oni = SP.oni || [];
+    if (!iss.length) return svgOpen(W, H) + '<text x="20" y="40">no issues parsed</text></svg>';
+    var x0 = SP.x_from, x1 = SP.x_to, vals = oni.map(function (t) { return t[1]; });
+    iss.forEach(function (it) { it.pts.forEach(function (p) { vals.push(p[1]); }); });
+    var A = trackAxes(W, H, x0, x1, Math.min.apply(null, vals) - 0.2, Math.max.apply(null, vals) + 0.2, '', '', null);
+    var s = svgOpen(W, H) + '<text class="tt" x="' + A.Lp + '" y="15">Every issue since 2002, each reaching forward from the month it was published \u00b7 Ni\u00f1o 3.4, \u00b0C</text>' + A.s;
+    var y0 = Math.floor(x0 / 12), y1 = Math.floor(x1 / 12), step = Math.max(1, Math.round((y1 - y0) / Math.max(3, Math.floor(A.pw / 46))));
+    for (var yy = y0; yy <= y1; yy++) if ((yy - y0) % step === 0)
+      s += '<line x1="' + A.X(yy * 12 + 6).toFixed(1) + '" y1="' + A.Tp + '" x2="' + A.X(yy * 12 + 6).toFixed(1) + '" y2="' + (A.Tp + A.ph) + '" style="stroke:var(--grid)"/>' +
+        '<text x="' + A.X(yy * 12 + 6).toFixed(1) + '" y="' + (H - 10) + '" text-anchor="middle" font-size="9.5">' + yy + '</text>';
+    /* ЦВЕТ ПО ДЕСЯТИЛЕТИЮ, А НЕ ОДНИМ СЕРЫМ. Ради этого вида владелец и просил сырьё: «раньше и
+       сейчас» должно быть видно в самом облаке, а не только в средних на соседней вкладке.
+       Старые выпуски расходятся шире — это и есть ответ, увиденный глазом. */
+    var last = iss[iss.length - 1];
+    var DEC = [[2002, 2010, 'var(--a1982)'], [2011, 2020, 'var(--a2015)'], [2021, 2030, 'var(--cyan)']];
+    var colOf = function (y) { for (var i = 0; i < DEC.length; i++) if (y >= DEC[i][0] && y <= DEC[i][1]) return DEC[i][2]; return 'var(--soft)'; };
+    iss.forEach(function (it) {
+      var cur = it === last;
+      s += segs(it.pts.map(function (p) { return [A.X(p[0]), A.Y(p[1])]; }), cur ? 'var(--ochre)' : colOf(it.y), cur ? 2.4 : 0.8, cur ? .95 : .42);
+    });
+    s += segs(oni.map(function (t) { return [A.X(t[0]), A.Y(t[1])]; }), 'var(--text)', 2.4, .95);
+    var lgy = A.Tp + 10;
+    ['2002–2010', '2011–2020', '2021–now'].forEach(function (lab, i) {
+      s += '<line x1="' + (W - A.R - 96) + '" y1="' + (lgy + i * 12) + '" x2="' + (W - A.R - 82) + '" y2="' + (lgy + i * 12) + '" style="stroke:' + DEC[i][2] + '" stroke-width="1.6" opacity=".7"/>' +
+        '<text x="' + (W - A.R - 78) + '" y="' + (lgy + i * 12 + 3.5) + '" font-size="9">' + lab + '</text>';
+    });
+    s += '<text x="' + (W - A.R - 3) + '" y="' + (lgy + 36 + 3.5) + '" text-anchor="end" font-size="9.5" style="fill:var(--ochre)">the newest issue</text>';
+    s += '<text x="' + (W - A.R - 3) + '" y="' + (lgy + 48 + 3.5) + '" text-anchor="end" font-size="9.5">the ONI that came</text>';
+    return s + '</svg>';
+  }
+
+  function viewTrack() {
+    var MH = S.MH || {}, k = sub('track', 'today');
+    var body = stageShell(trackTitle(MH), [segBtn('track', 'today', 'Today\u2019s call', 'track'),
+      segBtn('track', 'event', 'This event so far', 'track'), segBtn('track', 'summer', 'Same summer, past issues', 'track'),
+      segBtn('track', 'settle', 'When it settles', 'track'), segBtn('track', 'error', 'Twenty years of error', 'track'),
+      segBtn('track', 'all', 'Every issue since 2002', 'track')]);
+    if (!MH.meta) { body.appendChild(el('div', 'note warn', 'The forecast archive has not been built yet: run tools/enso/models_history.py.')); return; }
+    var M = MH.meta, T = MH.today || {}, REC = MH.record || {}, SP = MH.same_phase || {};
+    var kp = el('div', 'kpis');
+
+    if (k === 'today') {
+      var lo = T.models_lo, hi = T.models_hi, pk = T.combined_peak, rec = REC.value;
+      plot(body, function (w, h) { return chartTrackToday({ lo: lo, hi: hi, peak: pk, rec: rec, recLabel: (REC.season || '') + ' ' + (REC.year || ''), since: REC.since }, w, h); });
+      var fa = (SP.forecast || {}).Aug || {};
+      kp.innerHTML =
+        trackKpi('the plume\u2019s peak today', trackNum(pk) + '<small> \u00b0C</small>', (T.peak_season || '') + ', from the ' + esc(T.issue || '') + ' issue of ' + (T.n_models || '\u00b7') + ' models', 'IRI/CPC plume', T.issue) +
+        trackKpi('the models disagree by', (lo != null && hi != null ? fnum(hi - lo, 2, false) : '\u00b7') + '<small> \u00b0C</small>', 'lowest model ' + trackNum(lo) + ', highest ' + trackNum(hi) + ' \u2014 the spread is not an error bar, it is how far the centres are from each other', 'IRI/CPC plume', T.issue) +
+        trackKpi('raised in a row', (T.run_up_n || 0) + '<small> issues</small>', T.run_up_from_value != null ? 'from ' + trackNum(T.run_up_from_value) + ' \u00b0C in the ' + esc(T.run_up_from_issue || '') + ' issue' : 'no run of upward revisions', 'IRI/CPC plume', T.issue) +
+        trackKpi('above the ONI record', rec != null && pk != null ? trackNum(pk - rec) + '<small> \u00b0C</small>' : '\u00b7', 'the highest ONI since ' + (REC.since || '') + ' is ' + trackNum(rec) + ' (' + esc((REC.season || '') + ' ' + (REC.year || '')) + '), so every error on this page was measured below that line', 'NOAA CPC ONI', '');
+      body.appendChild(kp);
+      body.appendChild(el('div', 'cap', 'What the centres say today, and nothing else: the combined forecast for the coming peak season, and how far apart the models are. ' +
+        'The past record on the other tabs was measured entirely below the line this event has already crossed, so it can say how these issues have erred before \u2014 not how far this one will land.'));
+      return;
+    }
+
+    if (k === 'event') {
+      var EV = MH.events || {}, years = Object.keys(EV).sort().reverse();
+      var pick = S.sub.trackEv || years[0];
+      var row = el('div', 'seg sub');
+      years.forEach(function (y) { var b = el('button', (pick === y ? 'on' : '') + ' sq', y + (EV[y].current ? ' \u00b7 now' : '')); b.type = 'button'; b.onclick = function () { S.sub.trackEv = y; render(); }; row.appendChild(b); });
+      body.appendChild(row);
+      var e = EV[pick] || {};
+      plot(body, function (w, h) { return chartTrackEvent(e, pick, w, h); });
+      var p = e.path || [], first = p[0] || {}, last = p[p.length - 1] || {};
+      kp.innerHTML =
+        trackKpi('the plume\u2019s peak, first issue', trackNum(first.peak_fc) + '<small> \u00b0C</small>', esc(first.issue || '') + ', ' + (first.n_models || '\u00b7') + ' models', 'IRI/CPC plume', first.issue) +
+        trackKpi('the plume\u2019s peak, last issue', trackNum(last.peak_fc) + '<small> \u00b0C</small>', esc(last.issue || ''), 'IRI/CPC plume', last.issue) +
+        (e.observed_peak != null
+          ? trackKpi('what the ONI reached', trackNum(e.observed_peak) + '<small> \u00b0C</small>', esc(e.observed_peak_season || ''), 'NOAA CPC ONI', '')
+          : trackKpi('what the ONI reached', 'not yet', 'this event has not peaked, so nothing here is an error \u2014 only a path', 'NOAA CPC ONI', '')) +
+        trackKpi('issues in the path', p.length + '', 'from ' + esc(first.issue || '') + ' to ' + esc(last.issue || '') + '; the peak is taken over one fixed window \u2014 seasons centred July to April \u2014 so issues are comparable', 'IRI/CPC plume', '');
+      body.appendChild(kp);
+      body.appendChild(el('div', 'cap', 'Each dot is one monthly issue: the highest value its combined forecast gave anywhere in the event\u2019s winter window. The band is the lowest and the highest single model of that issue. ' +
+        (e.observed_peak != null ? 'The flat line is what the ONI actually reached.' : 'There is no line of what came: this event is still running.')));
+      return;
+    }
+
+    if (k === 'summer') {
+      var mode = S.sub.trackSample || 'forecast', mon = S.sub.trackMon || 'Aug';
+      var row2 = el('div', 'seg sub');
+      [['forecast', 'all warm calls'], ['outcome', 'events only']].forEach(function (o) {
+        var b = el('button', (mode === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.trackSample = o[0]; render(); }; row2.appendChild(b);
+      });
+      row2.appendChild(el('span', 'seg-gap', ''));
+      ['Jun', 'Jul', 'Aug'].forEach(function (mm) { var b = el('button', (mon === mm ? 'on' : '') + ' sq', mm + ' issue'); b.type = 'button'; b.onclick = function () { S.sub.trackMon = mm; render(); }; row2.appendChild(b); });
+      body.appendChild(row2);
+      var blk = ((SP[mode] || {})[mon]) || {}, cases = blk.cases || [];
+      plot(body, function (w, h) { return chartTrackSummer(cases, mode, mon, w, h); });
+      kp.innerHTML =
+        trackKpi(mon + ' issues in this sample', (blk.n || 0) + '', mode === 'forecast'
+          ? 'every ' + mon + ' issue since ' + esc(M.first_issue || '') + ' whose forecast for the coming NDJ was +' + fnum(M.warm_call_c, 1, false) + ' \u00b0C or more, whatever followed'
+          : 'only the summers an El Ni\u00f1o followed \u2014 this sample cannot say how often a warm call came to nothing', 'IRI/CPC plume + ONI', '') +
+        trackKpi('landed below what came', (blk.low_n || 0) + ' of ' + (blk.n || 0), (blk.high_n || 0) + ' landed above; the miss is the forecast minus what the ONI reached', 'IRI/CPC plume + ONI', '') +
+        trackKpi('median miss', trackNum(blk.median) + '<small> \u00b0C</small>', 'the middle case, not an average: with ' + (blk.n || 0) + ' cases an average would follow one outlier', 'our arithmetic', '');
+      body.appendChild(kp);
+      body.appendChild(el('div', 'cap', mode === 'forecast'
+        ? 'The sample is chosen by what the centres said, not by what happened: every summer issue that called a warm winter is here, including any that came to nothing. That is the sample that can speak about a forecast standing today. With ' + (blk.n || 0) + ' cases it is small, and a median of ' + trackNum(blk.median) + ' \u00b0C is a direction, not a correction to apply.'
+        : 'This sample keeps only the summers an El Ni\u00f1o followed. It answers \u201chow did the plume do in past events\u201d and cannot answer \u201chow often does a warm call come to nothing\u201d \u2014 those summers are excluded by construction.'));
+      return;
+    }
+
+    if (k === 'settle') {
+      var EV2 = MH.events || {};
+      plot(body, function (w, h) { return chartTrackSettle(EV2, w, h); });
+      var rows = Object.keys(EV2).filter(function (y) { return (EV2[y].settle || {})['0.25']; });
+      var mm = rows.map(function (y) { return EV2[y].settle['0.25'].months_before; });
+      kp.innerHTML =
+        trackKpi('events with a settled call', rows.length + ' of ' + Object.keys(EV2).filter(function (y) { return EV2[y].observed_peak != null; }).length, 'settled = from that issue on, every later issue stayed within 0.25 \u00b0C of the peak that came', 'our arithmetic', '') +
+        trackKpi('typical lead of settling', (mm.length ? Math.round(mm.reduce(function (a, b) { return a + b; }, 0) / mm.length) : '\u00b7') + '<small> months</small>', 'before the peak season; earlier than that the number was still moving', 'our arithmetic', '') +
+        trackKpi('this event', (EV2['2026'] && EV2['2026'].current) ? 'still moving' : '\u00b7', 'the peak has not come, so nothing can be said to have settled', 'our arithmetic', '');
+      body.appendChild(kp);
+      body.appendChild(el('div', 'cap', 'How many months before the peak the plume stopped moving: the first issue after which every later issue stayed within 0.25 \u00b0C (open bar) and within 0.15 \u00b0C (filled tip) of the peak that came. Issues published after the peak are not counted \u2014 their window is already the decline.'));
+      return;
+    }
+
+    if (k === 'error') {
+      var lead = S.sub.trackLead || '3';
+      var row3 = el('div', 'seg sub');
+      ['1', '3', '6', '9'].forEach(function (l) { var b = el('button', (lead === l ? 'on' : '') + ' sq', l + (l === '1' ? ' season ahead' : ' seasons ahead')); b.type = 'button'; b.onclick = function () { S.sub.trackLead = l; render(); }; row3.appendChild(b); });
+      body.appendChild(row3);
+      plot(body, function (w, h) { return chartTrackError(MH, lead, w, h); });
+      var D3 = MH.decades || {}, a = D3['2002_2010'] || {}, b3 = D3['2021_2026'] || {};
+      var sk = function (d) { var x = (d || {})[lead]; return (x && x.mae != null && x.mae_clim) ? x.mae / x.mae_clim : null; };
+      var s1 = sk(a), s2 = sk(b3);
+      kp.innerHTML =
+        trackKpi('error now, ' + lead + ' seasons ahead', ((b3[lead] || {}).mae != null ? fnum(b3[lead].mae, 2, false) : '\u00b7') + '<small> \u00b0C</small>', '2021\u20132026, ' + ((b3[lead] || {}).n || 0) + ' scored forecasts', 'our arithmetic', '') +
+        trackKpi('error twenty years ago', ((a[lead] || {}).mae != null ? fnum(a[lead].mae, 2, false) : '\u00b7') + '<small> \u00b0C</small>', '2002\u20132010, ' + ((a[lead] || {}).n || 0) + ' scored forecasts', 'our arithmetic', '') +
+        trackKpi('share of the no-skill error', (s2 != null ? Math.round(s2 * 100) + ' %' : '\u00b7'), s1 != null ? 'against ' + Math.round(s1 * 100) + ' % in 2002\u20132010; 100 % would mean the centres did no better than calling every season neutral' : '', 'our arithmetic', '');
+      body.appendChild(kp);
+      body.appendChild(el('div', 'cap', 'Mean absolute error of the combined forecast against the ONI that came, by the year the issue was published. ' +
+        'The pale line is the same error for a forecast that says \u201cneutral\u201d every time, scored on exactly the same targets \u2014 without it a quiet year looks like skill. ' +
+        'The gap between the two lines is what the centres add.'));
+      return;
+    }
+
+    // ── все выпуски сразу
+    var SPG = MH.spaghetti || {};
+    plot(body, function (w, h) { return chartTrackAll(SPG, w, h); });
+    kp.innerHTML =
+      trackKpi('issues drawn', (SPG.issues || []).length + '', 'every monthly issue since ' + esc(M.first_issue || '') + ' that parsed; ' + (M.parse_failures || []).length + ' figures did not parse and ' + (M.missing_issues || []).length + ' were not published or not served', 'IRI/CPC plume', '') +
+      trackKpi('what came', (SPG.oni || []).length + '<small> seasons</small>', 'the ONI itself, the heavy line', 'NOAA CPC ONI', '') +
+      trackKpi('this event', trackNum(T.combined_peak) + '<small> \u00b0C</small>', 'the newest issue, drawn in ochre', 'IRI/CPC plume', T.issue);
+    body.appendChild(kp);
+    body.appendChild(el('div', 'cap', 'Twenty-four years of forecasts on one canvas, raw: each thin line is one issue reaching forward from the month it was published, the heavy line is the ONI that came. ' +
+      'Where a bundle of thin lines sits above the heavy line, the centres of that month were reading the coming season too warm; where below, too cold. Nothing here is averaged.'));
+  }
+
+  function trackTitle(MH) {
+    var T = (MH || {}).today || {}, REC = (MH || {}).record || {}, F = (((MH || {}).same_phase || {}).forecast || {}).Aug || {};
+    if (!MH || !MH.meta) return 'What the forecasts have been worth';
+    if (T.combined_peak != null && REC.value != null && T.combined_peak > REC.value)
+      return 'The plume puts this peak at ' + trackNum(T.combined_peak) + ' \u00b0C \u2014 ' + fnum(T.combined_peak - REC.value, 2, false) + ' \u00b0C above the highest the ONI has recorded since ' + REC.since + ', so every error on this page was measured below that line';
+    if (F.n) return 'At this point in past summers the plume\u2019s call landed below what came in ' + F.low_n + ' of ' + F.n + ' cases';
+    return 'What the forecasts have been worth, ' + esc(MH.meta.first_issue || '') + ' to ' + esc(MH.meta.last_issue || '');
+  }
+
   function viewModels() {
     var D = S.D, IRI = D.iri && !D.iri.error ? D.iri : null, NW = D.noaa, P = S.P;
     if (!IRI) { var b0 = stageShell('The IRI plume did not load', []); b0.appendChild(el('div', 'note warn', esc((D.iri || {}).error || ''))); return; }
@@ -8032,6 +8375,7 @@
     if (S.view === 'risk') viewRisk();
     else if (S.view === 'verdict') viewVerdict();
     else if (S.view === 'models') viewModels();
+    else if (S.view === 'track') viewTrack();
     else if (S.view === 'air') viewAir();
     else if (S.view === 'ocean') viewOcean();
     else if (S.view === 'radiance') viewRadiance();
@@ -8305,11 +8649,12 @@
     get('/data/enso/fires.json').catch(function () { return {}; }),
     get('/data/enso/water.json').catch(function () { return {}; }),
     get('/data/enso/ice-snow.json').catch(function () { return {}; }),
-    get('/data/enso/glaciers.json').catch(function () { return {}; })])
+    get('/data/enso/glaciers.json').catch(function () { return {}; }),
+    get('/data/enso/models-history.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
       fixRiskTitles(r[0]);                    // парные риски: «world ocean:» / «land+ocean:» читались как дубли (владелец 09.09)
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {};
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}   /* история прогнозов (models-history.json, 15.09) */;
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');
