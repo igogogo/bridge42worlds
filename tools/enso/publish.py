@@ -51,7 +51,7 @@ FILES = ["data/enso/latest.json", "data/enso/history.json", "data/enso/glossary.
          # раздел истории измерений (planet.py): медленные ряды, обновляются ежедневной обёрткой
          "data/enso/planet.json",
          # лента упоминаний (mentions.py) и Ховмёллер (subsurface.godas), тоже из ежедневной обёртки
-         "data/enso/mentions.json", "data/enso/hovmoller.json", "data/enso/spectral.json", "data/enso/regions-daily.json", "data/enso/precip.json", "data/enso/radiance.json", "data/enso/neighbours.json", "data/enso/globe.json", "data/enso/planet-regions.json", "data/enso/stats.json", "data/enso/agent-state.json", "data/enso/cities.json", "data/enso/fires.json", "data/enso/water.json", "data/enso/ice-snow.json", "data/enso/glaciers.json", "data/enso/models-history.json", "data/enso/olr-grid.json", "data/enso/outliers.json",
+         "data/enso/mentions.json", "data/enso/hovmoller.json", "data/enso/spectral.json", "data/enso/regions-daily.json", "data/enso/precip.json", "data/enso/radiance.json", "data/enso/neighbours.json", "data/enso/globe.json", "data/enso/planet-regions.json", "data/enso/stats.json", "data/enso/agent-state.json", "data/enso/cities.json", "data/enso/fires.json", "data/enso/water.json", "data/enso/ice-snow.json", "data/enso/glaciers.json", "data/enso/models-history.json", "data/enso/olr-grid.json", "data/enso/outliers.json", "data/enso/zones-flow.json",
          # кадры анимации разреза прошлых событий (subsurface.py --hov), грузятся по требованию
          "data/enso/sections-1982.json", "data/enso/sections-1997.json", "data/enso/sections-2015.json", "data/enso/sections-2023.json",
          # ЭТИХ ПЯТИ ЗДЕСЬ НЕ БЫЛО (найдено 10.09, та же болезнь, что 06.09): переключатель зон на
@@ -61,7 +61,12 @@ FILES = ["data/enso/latest.json", "data/enso/history.json", "data/enso/glossary.
          "data/enso/oisst/clim_nino12.json", "data/enso/oisst/clim_nino3.json", "data/enso/oisst/clim_nino34.json",
          "data/enso/oisst/clim_nino4.json", "data/enso/oisst/clim_gulf.json"]
 FRESH_FILES = ["data/enso/fresh.json", "data/enso/ops.json", "data/enso/runs.json", "data/enso/planet.json", "data/enso/cities.json", "data/enso/fires.json", "data/enso/water.json", "data/enso/ice-snow.json", "data/enso/glaciers.json",
-               "data/enso/mentions.json", "data/enso/hovmoller.json", "data/enso/spectral.json", "data/enso/regions-daily.json", "data/enso/precip.json", "data/enso/radiance.json", "data/enso/globe.json", "data/enso/sections-1982.json", "data/enso/sections-1997.json", "data/enso/sections-2015.json", "data/enso/sections-2023.json"]
+               "data/enso/mentions.json", "data/enso/hovmoller.json", "data/enso/spectral.json", "data/enso/regions-daily.json", "data/enso/precip.json", "data/enso/radiance.json", "data/enso/globe.json", "data/enso/sections-1982.json", "data/enso/sections-1997.json", "data/enso/sections-2015.json", "data/enso/sections-2023.json",
+               # ЭТИХ ЧЕТЫРЁХ ЗДЕСЬ НЕ БЫЛО (найдено 15.09, та же болезнь, что 06.09 и 10.09):
+               # ночная обёртка пересобирает их каждый день, а ежедневная выкладка не отправляла,
+               # и на сайте они менялись только с полным прогоном. Правило D check_ui теперь это ловит.
+               "data/enso/agent-state.json", "data/enso/stats.json", "data/enso/outliers.json",
+               "data/enso/zones-flow.json"]
 
 
 def stamp_asset():

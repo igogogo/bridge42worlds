@@ -104,8 +104,9 @@ def collect():
     # Зоны Niño: ранг считаем сами по недельному ряду — у них нет level30
     NW = L.get("noaa") or {}
     lat, hm, hmd = NW.get("latest") or {}, NW.get("hist_max") or {}, NW.get("hist_max_date") or {}
-    for zk, nm in (("n12a", "Niño 1+2, off Peru"), ("n3a", "Niño 3, the eastern Pacific"),
-                   ("n34a", "Niño 3.4, weekly"), ("n4a", "Niño 4, the western Pacific")):
+    # запад → восток; список потом сортируется по величине, так что это порядок при равенстве
+    for zk, nm in (("n4a", "Niño 4, the western Pacific"), ("n34a", "Niño 3.4, weekly"),
+                   ("n3a", "Niño 3, the eastern Pacific"), ("n12a", "Niño 1+2, off Peru")):
         v = lat.get(zk)
         if v is None or hm.get(zk) is None:
             continue

@@ -69,6 +69,23 @@ for scr in sorted(set(re.findall(r"-u (\w+\.py)", ps1))):
         except SyntaxError as e:
             bad.append(f"D wrapper script does not compile: {scr}: {e}")
 
+# D2. ЕЖЕДНЕВНЫЙ СЛОЙ ВЫКЛАДЫВАЕТСЯ ЦЕЛИКОМ. Трижды — 06.09, 10.09, 15.09 — обнаруживалось одно
+# и то же: сборщик кладёт свежий файл, а выкладка его не отправляет, и на сайте он меняется
+# только с полным прогоном, то есть когда придётся. Правило C ловит обратную сторону (файл
+# грузится панелью, но не выкладывается); эта ловит свою: скрипт в ночной обёртке пишет файл,
+# а файла нет в FRESH_FILES.
+DAILY_OUT = {
+    "cities.py": "cities.json", "fires.py": "fires.json", "water.py": "water.json",
+    "ice_snow.py": "ice-snow.json", "glaciers.py": "glaciers.json", "precip.py": "precip.json",
+    "zones_flow.py": "zones-flow.json", "outliers.py": "outliers.json",
+    "agent_state.py": "agent-state.json", "stats_layer.py": "stats.json",
+}
+fresh = set(PUB.FRESH_FILES)
+for scr in sorted(set(re.findall(r"-u (\w+\.py)", ps1))):
+    out = DAILY_OUT.get(scr)
+    if out and ("data/enso/" + out) not in fresh:
+        bad.append(f"D the daily wrapper rebuilds {out} but it is not in publish.FRESH_FILES")
+
 # E. свежесть
 today = date.today()
 for f in sorted(DATA.glob("*.json")):

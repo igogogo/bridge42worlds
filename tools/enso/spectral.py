@@ -340,8 +340,9 @@ def build(verbose=True):
         except Exception as e:                                   # noqa: BLE001
             series.append({"key": key, "label": label, "error": str(e)[:120]})
     # наши боксы OISST: текущий год + аналоги по календарю
-    for box, label in [("nino12", "Niño 1+2, own OISST box"), ("nino3", "Niño 3, own OISST box"),
-                       ("nino4", "Niño 4, own OISST box"), ("gulf", "Persian Gulf, own OISST box")]:
+    # запад → восток; 3.4 приходит раньше, из суточного сторожа, как sst_nino34
+    for box, label in [("nino4", "Niño 4, own OISST box"), ("nino3", "Niño 3, own OISST box"),
+                       ("nino12", "Niño 1+2, own OISST box"), ("gulf", "Persian Gulf, own OISST box")]:
         try:
             cur, an = _oisst_box(box)
             series.append(analyze("oisst_" + box, label, cur, an))

@@ -59,6 +59,12 @@ Say "=== fires, reservoirs, snow and glaciers"
 & $py -u water.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u ice_snow.py 2>&1 | Out-File $log -Append -Encoding utf8
 
+Say "=== between the zones (zones_flow.py)"
+& $py -u zones_flow.py 2>&1 | Out-File $log -Append -Encoding utf8
+
+Say "=== who stands out (outliers.py)"
+& $py -u outliers.py 2>&1 | Out-File $log -Append -Encoding utf8
+
 Say "=== panel state map (agent_state.py)"
 & $py -u agent_state.py 2>&1 | Out-File $log -Append -Encoding utf8
 

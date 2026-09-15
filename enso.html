@@ -608,6 +608,21 @@
   .so-wrap.narrow .so-r{grid-template-columns:minmax(0,1fr) 62px;row-gap:1px}
   .so-wrap.narrow .so-b,.so-wrap.narrow .so-p{grid-column:1/3}
   .so-wrap.narrow .so-n small{display:none}
+  /* Сцены, где строка — это случай (события, месяцы): им нужна высота, иначе подписи слипаются */
+  /* Таблица «наши четыре года»: строка на событие, колонка на зону (15.09) */
+  .zy-wrap{display:flex;flex-direction:column;gap:2px;margin:4px 12px 8px}
+  .zy-r{display:grid;grid-template-columns:minmax(96px,1.3fr) repeat(4,minmax(52px,1fr)) minmax(84px,1fr);
+    align-items:center;gap:8px;padding:3px 8px;border-radius:7px;font-family:var(--mono);font-size:11px}
+  .zy-r.zy-h{color:var(--soft);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase}
+  .zy-r.now{background:color-mix(in srgb, var(--ochre) 12%, transparent)}
+  .zy-r:not(.zy-h):hover{background:color-mix(in srgb, var(--ochre) 7%, transparent)}
+  .zy-r > span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .zy-r b{font-family:var(--font-display);font-size:13px;font-weight:600}
+  .zy-r small{color:var(--soft);font-size:9px}
+  .zy-y small{display:block}
+  .zy-k{color:var(--soft)}
+  @media (max-width:760px){ .zy-r{grid-template-columns:minmax(0,1.2fr) repeat(2,minmax(0,1fr));row-gap:2px} .zy-k{grid-column:1/4} }
+  .zones-tall .plot{min-height:330px;flex:1 1 auto}
   .gl-str{display:flex;align-items:center;gap:14px;margin:0 12px 5px;flex-shrink:0;flex-wrap:wrap}
   .gl-h{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
   .gl-i{display:flex;align-items:center;gap:6px} .gl-i b{font-size:10.5px;font-weight:500;color:var(--soft)}
@@ -1294,7 +1309,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=b3a9d6e51b"></script>
+<script src="/js/enso.js?v=9637900ac9"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>

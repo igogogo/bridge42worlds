@@ -35,7 +35,8 @@ def detect(cur, prev=None):
     if hm.get("n34a") is not None and lat["n34a"] > hm["n34a"]:
         _lvl(A, SHOUT, "Niño 3.4 is above anything measured since 1981",
              f"weekly index {lat['n34a']:+.1f} °C against {_vs('n34a')}")
-    for k, name in (("n12a", "Niño 1+2"), ("n3a", "Niño 3"), ("n4a", "Niño 4")):
+    # запад → восток (3.4 разобрана выше отдельно, со своей формулировкой)
+    for k, name in (("n4a", "Niño 4"), ("n3a", "Niño 3"), ("n12a", "Niño 1+2")):
         if hm.get(k) is not None and lat[k] > hm[k]:
             _lvl(A, SHOUT, f"{name} is above anything measured",
                  f"{lat[k]:+.1f} °C against {_vs(k)}")

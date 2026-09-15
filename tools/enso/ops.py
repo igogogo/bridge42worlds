@@ -26,6 +26,8 @@ OPS = ROOT / "ops.json"
 KEEP = 100
 
 KIND_LABEL = {
+    # подписи этого словаря видны на экране, во вкладке Ops, — значит по-английски
+    "zones_flow": "between the zones: which patch warms first, and how far the event leans",
     "full": "full update: rules, model verdict, snapshot",
     "light": "light run: rules only, fresh layer",
     "links": "links to our works",
@@ -223,7 +225,8 @@ def sources_status(cur):
     # 2. источники модулей: их состояние живёт в самих блоках
     stamp = cur.get("stamp")
     ob = (cur.get("oisst") or {}).get("boxes") or {}
-    for bk, bl in (("nino34", "Niño 3.4"), ("nino3", "Niño 3"), ("nino12", "Niño 1+2"), ("nino4", "Niño 4"), ("gulf", "Persian Gulf"), ("world", "World ocean")):
+    # запад → восток: в этом порядке строки лягут в таблицу источников на вкладке Ops
+    for bk, bl in (("nino4", "Niño 4"), ("nino34", "Niño 3.4"), ("nino3", "Niño 3"), ("nino12", "Niño 1+2"), ("gulf", "Persian Gulf"), ("world", "World ocean")):
         b = ob.get(bk) or {}
         if not b:
             continue
