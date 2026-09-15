@@ -2282,6 +2282,31 @@
     });
     return out;
   }
+  /* ЛЕНТА ЛИСТАЕТСЯ СТРЕЛКАМИ, А НЕ БЕГУНКОМ (владелец 15.09: «уходит вправо, нужна прокрутка,
+     но красивая»). По краям — круглые ‹ ›, каждая видна только с той стороны, куда ещё есть что
+     листать, край под ней растворяется в фон. Шаг — две трети видимой ширины, плавно. Пальцем и
+     колесом лента листается по-прежнему. */
+  function stripArrows(host) {
+    var wrap = host.parentNode;
+    if (!wrap || !wrap.classList.contains('kswrap')) {
+      wrap = el('div', 'kswrap'); host.parentNode.insertBefore(wrap, host); wrap.appendChild(host);
+      [['l', '\u2039', -1], ['r', '\u203a', 1]].forEach(function (a) {
+        var b = el('button', 'ksarr ' + a[0], a[1]); b.type = 'button'; b.title = a[2] < 0 ? 'earlier indicators' : 'more indicators';
+        b.onclick = function () { host.scrollBy({ left: a[2] * Math.round(host.clientWidth * 0.66), behavior: 'smooth' }); };
+        wrap.appendChild(b);
+      });
+      var upd = function () {
+        var max = host.scrollWidth - host.clientWidth;
+        wrap.classList.toggle('has-l', host.scrollLeft > 4);
+        wrap.classList.toggle('has-r', max - host.scrollLeft > 4);
+      };
+      host.addEventListener('scroll', upd, { passive: true });
+      window.addEventListener('resize', upd);
+      if (window.ResizeObserver) new ResizeObserver(upd).observe(host);
+      wrap._upd = upd;
+    }
+    requestAnimationFrame(function () { if (wrap._upd) wrap._upd(); });
+  }
   function buildStrip() {
     var host = $('kstrip'); if (!host) return;
     var items = [];
@@ -2313,6 +2338,7 @@
           (x.dv ? '<span class="ks-d ' + jsign(x.dv) + '">' + jarrow(x.dv) + (x.dv > 0 ? '+' : '') + jval(x.dv, dg) + '</span>' : '') + '</span>' +
           '<span class="ks-n">' + esc(STRIP_NAME[x.k] || x.r.title) + '</span></button>';
       }).join('');
+    stripArrows(host);
   }
   /* ══ ИССЛЕДОВАНИЕ В ДИАЛОГЕ (владелец 08.09; контур ведущей сессии — ЭЛЬНИНЬО-ЧАТ-ИССЛЕДОВАНИЕ-РУЧКА.md) ══
      «Чат с моделью: справа диалог, слева собираются наши KPI, граф, облако понятий и резюме
