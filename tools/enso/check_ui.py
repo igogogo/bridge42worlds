@@ -95,6 +95,11 @@ for f in sorted(DATA.glob("*.json")):
         bad.append(f"E unreadable json: {f.name}: {str(e)[:60]}"); continue
     if not isinstance(d, dict):
         continue
+    # ИСТОРИЯ НЕ ПРОТУХАЕТ. Разрезы прошлых событий (sections-1982 и прочие) собираются один
+    # раз и намеренно кэшируются: в них закрытое прошлое, которое не изменится. Правило
+    # свежести жаловалось на них каждый день и приучало не читать собственные предупреждения.
+    if re.match(r"^sections-(19|20)\d{2}\.json$", f.name):
+        continue
     st = d.get("built") or d.get("updated") or d.get("stamp") or d.get("generated")
     if st:
         m = re.match(r"(\d{4}-\d{2}-\d{2})", str(st))
