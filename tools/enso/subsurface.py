@@ -441,6 +441,10 @@ def build_analogs_godas(verbose=False):
 
 
 HOV_FILE = ROOT / "hovmoller.json"
+
+
+class _HovStale(Exception):
+    """Собранное окно короче сохранённого: пишем не его, а ничего."""
 HOV_LEVEL = 100.0
 
 
@@ -583,6 +587,20 @@ def godas(today=None, verbose=False):
         # лёгкий прогон тоже обновлял его, не трогая latest.json.
         try:
             hov = _hov_rows([f"{y}-{m:02d}" for y, m in zip(years, months_all)], secs, clim, lev)
+            # ХУДШЕЕ НЕ ПЕРЕЗАПИСЫВАЕТ ЛУЧШЕЕ. Поймано 15.09: GODAS не ответил, прогон собрал
+            # только прошлый год и молча заменил девятнадцать месяцев двенадцатью — на панели
+            # гребень «переехал» с 131° з.д. на 148° в.д. и «поехал на запад». Файл, который
+            # кончается раньше уже сохранённого, не пишется вовсе: неудача сбора не должна
+            # выглядеть как новость о климате.
+            _prev = _load(HOV_FILE, {})
+            _pm = ((_prev.get("current") or {}).get("months") or [])
+            _nm = hov.get("months") or []
+            if _pm and _nm and _nm[-1] < _pm[-1]:
+                print(f"  Ховмёллер НЕ переписан: собралось до {_nm[-1]}, на складе до {_pm[-1]} "
+                      f"(источник не дал свежих месяцев)")
+                # сообщение уходит в latest.json и может попасть на экран — по-английски
+                raise _HovStale(f"kept the stored window: this run reached only {_nm[-1]}, "
+                                f"the stored file reaches {_pm[-1]}, so the source gave nothing newer")
             hov["lons"] = [float(x) for x in lon]; hov["labels"] = [lon_label(x) for x in lon]
             sections = _sec_pack([f"{y}-{m:02d}" for y, m in zip(years, months_all)], secs, clim, lev, lon)
             HOV_FILE.write_text(json.dumps({"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "current": hov,
