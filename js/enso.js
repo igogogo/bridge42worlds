@@ -17,7 +17,7 @@
 
   var T = {
     fresh: 'fresh', stale: 'stale',
-    tabs: { brief: 'Briefing', verdict: 'Verdict', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Now', ocean: 'Ocean', radiance: 'Satellite', models: 'Models', track: 'Track record', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long term', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
+    tabs: { brief: 'Briefing', verdict: 'Verdict', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Now', ocean: 'Ocean', radiance: 'Satellite', models: 'Models', track: 'Track record', weather: 'Weather', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long term', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
     tabHelp: {
       brief: 'The entry point: what is happening, what the data show, what to expect and when, the risks already showing, regions and food, what to watch — in plain words, with a link to every number.',
       verdict: 'What the machine makes of it today: the verdict written from the numbers on this page, the turning point, the outlook, what to watch, the caveats.',
@@ -2138,7 +2138,7 @@
        рамкой, потом промежуток, потом чтение (брифинг, новости, упоминания, вердикт), ещё
        промежуток, потом последствия (еда, регионы). Research ушёл в служебную строку к методу
        и ссылкам. Порядок задан здесь явно, а не порядком ключей T.tabs. */
-    var GROUPS = [['overview', 'now', 'ocean', 'radiance', 'models', 'track', 'trend', 'air', 'planet'], ['brief', 'news', 'mentions', 'verdict'], ['food', 'regions']];
+    var GROUPS = [['overview', 'now', 'ocean', 'radiance', 'models', 'track', 'trend', 'air', 'weather', 'planet'], ['brief', 'news', 'mentions', 'verdict'], ['food', 'regions']];
     var SVC_ORDER = ['research', 'how', 'refs', 'chain', 'ops', 'about'];
     var DATA_TABS = GROUPS[0];
     GROUPS.forEach(function (g, gi) { if (gi) list.push(['_gap' + gi, '']); g.forEach(function (k) { if (T.tabs[k]) list.push([k, T.tabs[k]]); }); });
@@ -4156,6 +4156,47 @@
     return s + '</svg>';
   }
 
+  /* ══ ПОГОДА НА СУШЕ В ОДНОМ МЕСТЕ (владелец 15.09) ════════════════════════════════
+     Ни один вид здесь не написан заново: зовутся те же функции, что рисовали их под Models,
+     Dynamics и Regions. Переехала только точка входа, потому что для читателя это одна тема,
+     а не три. Старые адреса продолжают работать — weatherRedirect() переводит их сюда. */
+  var WEATHER_SUB = [['cities', 'Cities, 7 days'], ['land', 'Land regions'], ['rain', 'Rain'],
+                     ['mountains', 'Mountain ice'], ['fires', 'Fires'], ['water', 'Water held']];
+  function viewWeather() {
+    var k = sub('weather', 'cities');
+    var RD = (S.RD || {}).series || {}, RDK = Object.keys(RD);
+    var head = k === 'cities' ? 'Seven-day forecasts against what came, in fifty cities'
+      : k === 'land' ? 'Air over the land regions, day by day against their own record'
+      : k === 'rain' ? rainHead()
+      : k === 'mountains' ? 'Mountain ice: how far the air above the glaciers is from its normal'
+      : k === 'fires' ? 'Fires' : 'Water held';
+    var body = stageShell(head, WEATHER_SUB.map(function (o) { return segBtn('weather', o[0], o[1], 'cities'); }));
+    if (k === 'cities') { viewCities(body); return; }
+    if (k === 'rain') { viewRain(body); return; }
+    if (k === 'mountains') { viewGlaciers(body); return; }
+    if (k === 'fires') { viewFires(body); return; }
+    if (k === 'water') { viewWater(body); return; }
+    // шесть боксов суши: тот же вид, что на Dynamics, только выбор бокса живёт здесь
+    var pick = S.sub.weatherLand || RDK[0];
+    if (!RDK.length) { body.appendChild(el('div', 'note warn', 'The land regions have not been built yet.')); return; }
+    var row = el('div', 'seg sub');
+    RDK.forEach(function (q) {
+      var b = el('button', (pick === q ? 'on' : '') + ' sq', LAND_NAME[q] || q); b.type = 'button';
+      b.onclick = function () { S.sub.weatherLand = q; render(); }; row.appendChild(b);
+    });
+    body.appendChild(row);
+    trendSeries(body, pick, S.D.watch || {}, RD, S.P);
+  }
+  /* Старые адреса не ломаются: #trend/rain, #models/cities и прочие ведут в Weather. */
+  function weatherRedirect(view, k) {
+    var MAP = { 'trend/rain': 'rain', 'trend/mountains': 'mountains', 'models/cities': 'cities',
+                'regions/fires': 'fires', 'regions/water': 'water' };
+    var to = MAP[view + '/' + k];
+    if (to) { S.view = 'weather'; S.sub.weather = to; return true; }
+    if (view === 'trend' && ((S.RD || {}).series || {})[k]) { S.view = 'weather'; S.sub.weather = 'land'; S.sub.weatherLand = k; return true; }
+    return false;
+  }
+
   function viewTrack() {
     var MH = S.MH || {}, k = sub('track', 'today');
     var body = stageShell(trackTitle(MH), [segBtn('track', 'today', 'Today\u2019s call', 'track'),
@@ -4668,13 +4709,48 @@
     }
   }
 
+  /* ОБЩИЙ ВИД ОДНОГО СУТОЧНОГО РЯДА. Жил внутри viewTrend; с 15.09 его зовёт ещё и Weather
+     (боксы суши переехали туда), поэтому вынесен целиком, без копии. */
+  function trendSeries(body, k, W, RD, P) {
+      var w0 = W[k] || RD[k];
+      if (!w0) { body.appendChild(el('div', 'note', 'No series for ' + esc(k) + '.')); return; }
+      var isLand = !W[k];
+      // ряд сцены → показатель журнала: один и тот же кирпич обслуживает три ряда
+      var JK = { sst_nino34: 'n34_daily', sst_world: 'sst_world', t2_world: 't2_world' };
+      plot(body, function (w, h) { return chartRecent(w0, w, h); }, JK[k] || null);
+      var lv = pair(w0.last_value, P && P.daily ? P.daily[k] : null, 2, '°C');
+      var p50 = pair(w0.forecast14.p50, P && P.p50 ? P.p50[k] : null, 2, '°C');
+      var kp = el('div', 'kpis');
+      kp.innerHTML = '<div class="kpi"><div class="kn">last day</div><div class="kv">' + lv.big + '</div><div class="km">' + span(w0.last_date, 30) + ' ' + fnum(w0.level30.anom) + ', ' + term('rank', 'rank ' + w0.level30.rank_raw + ' of ' + w0.level30.of) + '</div>' + kmeta(JK[k]) + '</div>' +
+        '<div class="kpi"><div class="kn">' + term('analog', 'forecast +14 days') + '</div><div class="kv">' + p50.big + '</div><div class="km">' + term('p10p50p90', 'p10 … p90') + ': ' + fnum(w0.forecast14.p10) + ' … ' + fnum(w0.forecast14.p90) + '</div>' + kmeta('fc14_' + k) + '</div>' +
+        '<div class="kpi"><div class="kn">records and CUSUM</div><div class="kv" style="font-size:17px">' + w0.records.streak + '<small>days in a row</small></div><div class="km">' + w0.records.last30 + ' record days of 30; ' + term('cusum', 'CUSUM') + ' ' + (w0.cusum.alarm ? 'alarm' : 'quiet') + ', ' + term('trend', 'above trend') + ' ' + fnum(w0.level30.det) + '</div>' +
+        kmeta('rec_' + k) + '</div>';
+      body.appendChild(kp);
+      /* ТОТ ЖЕ РЯД, ТОЛЬКО ВСЕМИ ГОДАМИ СРАЗУ. Здесь полоса p10–p90: она отвечает на вопрос
+         «что обычно». Пучок линий отвечает на другой — «как далеко этот год ушёл от всех
+         остальных», и читатель задаёт его первым (владелец 14.09 искал пучок именно тут). */
+      var SPAG = { sst_world: 'sst_world', t2_world: 't2_world' };
+      if (k === 't2_world') {
+        body.appendChild(el('div', 'cap', 'Air over the land regions, rain by region, mountain ice, fires and water held now live on their own tab. ' +
+          vLink('the weather on land', 'weather', 'land')));
+      }
+      if (SPAG[k]) {
+        body.appendChild(el('div', 'cap', 'This chart shows the band of all years since 1981: the middle of the record and its edges. ' +
+          'The same series with <b>every year drawn as its own line</b>, the way climatereanalyzer shows it, is on the Long term tab. ' +
+          vLink('every year as a line', 'planet', 'temperature', 'planetTemp', SPAG[k])));
+      }
+      if (isLand) { body.appendChild(el('div', 'cap', esc((S.RD || {}).note || '') + ' Box ' + esc(boxLabel(w0.box)) + '; ' + esc(w0.source) + '; built ' + esc((S.RD || {}).built || '') + '. ' + (w0.region ? vLink('this region on the Regions tab', 'regions', 'place') : ''))); worksFoot(body, 'block:landbox'); }
+  }
+
   function viewTrend() {
     var D = S.D, W = D.watch, P = S.P;
     var k = sub('trend', 'sst_nino34');
     /* ТОЧКИ СУШИ КАК У NIÑO 3.4 (владелец 07.09): те же кирпичи watch, данные regions-daily.json. */
     var RD = (S.RD || {}).series || {}, RDK = Object.keys(RD);
     var RNAME = LAND_NAME;
-    var opts = [['sst_nino34', 'Niño 3.4'], ['sst_world', 'Ocean'], ['t2_world', 'Land+ocean']].concat(RDK.map(function (q) { return [q, RNAME[q] || q]; })).concat([['index', 'Our index'], ['months', '13 months'], ['rain', 'Rain'], ['mountains', 'Mountain ice'], ['background', 'Background'], ['spectral', 'Spectral watch']]);
+    /* Боксы суши, дожди и горный лёд переехали на Weather (владелец 15.09): здесь остаются
+       ряды самого события и наши сторожа. Ссылка на новое место стоит подписью под графиком. */
+    var opts = [['sst_nino34', 'Niño 3.4'], ['sst_world', 'Ocean'], ['t2_world', 'Land+ocean']].concat([['index', 'Our index'], ['months', '13 months'], ['rain'], ['mountains', 'Mountain ice'], ['background', 'Background'], ['spectral', 'Spectral watch']]);
     var body = stageShell(k === 'spectral' ? spectralHead() : k === 'rain' ? rainHead() : 'The world ocean has broken daily records for ' + W.sst_world.records.streak + ' days running, land+ocean for ' + W.t2_world.records.streak,
       opts.map(function (o) { return segBtn('trend', o[0], o[1], 'sst_nino34'); }));
     if (k === 'spectral') { viewSpectral(body); return; }
@@ -4738,30 +4814,7 @@
       body.appendChild(wrap);
       body.appendChild(el('div', 'cap', 'Red marks a month that became the warmest of its calendar month in the whole record. The current month is incomplete. Land columns are single ERA5 grid points (2 m air), not regional means.'));
     } else {
-      var w0 = W[k] || RD[k];
-      if (!w0) { body.appendChild(el('div', 'note', 'No series for ' + esc(k) + '.')); return; }
-      var isLand = !W[k];
-      // ряд сцены → показатель журнала: один и тот же кирпич обслуживает три ряда
-      var JK = { sst_nino34: 'n34_daily', sst_world: 'sst_world', t2_world: 't2_world' };
-      plot(body, function (w, h) { return chartRecent(w0, w, h); }, JK[k] || null);
-      var lv = pair(w0.last_value, P && P.daily ? P.daily[k] : null, 2, '°C');
-      var p50 = pair(w0.forecast14.p50, P && P.p50 ? P.p50[k] : null, 2, '°C');
-      var kp = el('div', 'kpis');
-      kp.innerHTML = '<div class="kpi"><div class="kn">last day</div><div class="kv">' + lv.big + '</div><div class="km">' + span(w0.last_date, 30) + ' ' + fnum(w0.level30.anom) + ', ' + term('rank', 'rank ' + w0.level30.rank_raw + ' of ' + w0.level30.of) + '</div>' + kmeta(JK[k]) + '</div>' +
-        '<div class="kpi"><div class="kn">' + term('analog', 'forecast +14 days') + '</div><div class="kv">' + p50.big + '</div><div class="km">' + term('p10p50p90', 'p10 … p90') + ': ' + fnum(w0.forecast14.p10) + ' … ' + fnum(w0.forecast14.p90) + '</div>' + kmeta('fc14_' + k) + '</div>' +
-        '<div class="kpi"><div class="kn">records and CUSUM</div><div class="kv" style="font-size:17px">' + w0.records.streak + '<small>days in a row</small></div><div class="km">' + w0.records.last30 + ' record days of 30; ' + term('cusum', 'CUSUM') + ' ' + (w0.cusum.alarm ? 'alarm' : 'quiet') + ', ' + term('trend', 'above trend') + ' ' + fnum(w0.level30.det) + '</div>' +
-        kmeta('rec_' + k) + '</div>';
-      body.appendChild(kp);
-      /* ТОТ ЖЕ РЯД, ТОЛЬКО ВСЕМИ ГОДАМИ СРАЗУ. Здесь полоса p10–p90: она отвечает на вопрос
-         «что обычно». Пучок линий отвечает на другой — «как далеко этот год ушёл от всех
-         остальных», и читатель задаёт его первым (владелец 14.09 искал пучок именно тут). */
-      var SPAG = { sst_world: 'sst_world', t2_world: 't2_world' };
-      if (SPAG[k]) {
-        body.appendChild(el('div', 'cap', 'This chart shows the band of all years since 1981: the middle of the record and its edges. ' +
-          'The same series with <b>every year drawn as its own line</b>, the way climatereanalyzer shows it, is on the Long term tab. ' +
-          vLink('every year as a line', 'planet', 'temperature', 'planetTemp', SPAG[k])));
-      }
-      if (isLand) { body.appendChild(el('div', 'cap', esc((S.RD || {}).note || '') + ' Box ' + esc(boxLabel(w0.box)) + '; ' + esc(w0.source) + '; built ' + esc((S.RD || {}).built || '') + '. ' + (w0.region ? vLink('this region on the Regions tab', 'regions', 'place') : ''))); worksFoot(body, 'block:landbox'); }
+      trendSeries(body, k, W, RD, P);
     }
   }
 
@@ -8290,6 +8343,8 @@
       if (parts[1]) S.sub.gulf = parts[1];
       return;
     }
+    // Погодные виды переехали на свою вкладку (15.09): старые адреса ведут туда же.
+    if (parts[1] && weatherRedirect(parts[0], parts[1])) return;
     if (parts[0] === 'risk' && parts[1] && S.D) {          // #risk/<id> — сцена риска по имени правила (08.09)
       var ri = -1; (S.D.risks || []).forEach(function (r, i) { if (ri < 0 && r.id === parts[1]) ri = i; });
       if (ri >= 0) { S.view = 'risk'; S.risk = ri; return; }
@@ -8376,6 +8431,7 @@
     else if (S.view === 'verdict') viewVerdict();
     else if (S.view === 'models') viewModels();
     else if (S.view === 'track') viewTrack();
+    else if (S.view === 'weather') viewWeather();
     else if (S.view === 'air') viewAir();
     else if (S.view === 'ocean') viewOcean();
     else if (S.view === 'radiance') viewRadiance();
