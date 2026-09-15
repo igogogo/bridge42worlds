@@ -145,7 +145,7 @@ def fetch_actuals(today, back=16):
         chunk = CITIES[i:i + BATCH]
         url = ("https://archive-api.open-meteo.com/v1/archive?latitude=" + ",".join(str(c[2]) for c in chunk)
                + "&longitude=" + ",".join(str(c[3]) for c in chunk)
-               + f"&start_date={start}&end_date={end}&daily=" + ",".join(PARAMS) + "&timezone=UTC")
+               + f"&start_date={start}&end_date={end}&daily=" + ",".join(PARAMS) + "&timezone=UTC&models=era5")
         res = get(url)
         if isinstance(res, dict):
             res = [res]

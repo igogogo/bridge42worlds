@@ -3738,12 +3738,14 @@
     var k = sub('now', 'analogs');
     var above = Object.keys(N.analogs).every(function (y) { return N.analogs[y].same30 < N.current30; });
     var segs2 = [segBtn('now', 'analogs', 'Against analogues', 'analogs'), segBtn('now', 'map', 'Pacific map', 'analogs'),
-      segBtn('now', 'weekly', 'Weekly indices', 'analogs'), segBtn('now', 'weekly_a', 'Weekly vs strongest', 'analogs')];
+      segBtn('now', 'weekly', 'Weekly indices', 'analogs'), segBtn('now', 'weekly_a', 'Weekly vs strongest', 'analogs'),
+      segBtn('now', 'standout', 'Standing out', 'analogs')];
     /* Полный экран у карты — как у обзора и цепочки данных. Владелец 06.09: «на мобильной
        тем более каша, надо предусмотреть полноэкранный режим: люди хотят увидеть на карте
        мира, где это находится». */
-    var body = stageShell(above ? 'Warmer today than any of the four strongest events were at this time of year'
+    var body = stageShell(k === 'standout' ? standOutHead() : above ? 'Warmer today than any of the four strongest events were at this time of year'
       : 'The event follows the strongest ones: rank ' + N.rank_same30 + ' among the analogues', segs2);
+    if (k === 'standout') { viewStandOut(body); return; }
     if (k === 'map') {
       // выбор года сравнения — прямо на сцене
       var years = Object.keys(NW.analog_week || {}).sort();
@@ -4209,6 +4211,63 @@
     if (to) { S.view = 'weather'; S.sub.weather = to; return true; }
     if (view === 'trend' && ((S.RD || {}).series || {})[k]) { S.view = 'weather'; S.sub.weather = 'land'; S.sub.weatherLand = k; return true; }
     return false;
+  }
+
+  /* ══ КТО ВЫБИВАЕТСЯ ══════════════════════════════════════════════════════════════
+     Владелец 15.09: «меня волнует Инсбрук и вообще всё, что начинает выбиваться». Рядов под
+     сотню, каждый на своей сцене; обойти их все человек не станет — обходит панель
+     (tools/enso/outliers.py). Здесь только вид.
+
+     ПОЧЕМУ СТОЛБИК — СИГМА, А НЕ ГРАДУСЫ. У Арктики разброс вчетверо шире тропиков, и «плюс
+     два» там и там значит разное. Сравнимы место в собственном ряду и сигма; градусы стоят
+     рядом числом, но длину столбика задают не они. */
+  function standOutHead() {
+    var O = S.OUT || {}, r = (O.rows || [])[0];
+    if (!r) return 'What stands out today';
+    return 'Furthest from its own normal right now: ' + r.name + (r.of ? ', ' + r.rank + ' of its ' + r.of + ' years' : '');
+  }
+  function viewStandOut(body) {
+    var O = S.OUT || {};
+    if (!O.rows || !O.rows.length) { body.appendChild(el('div', 'note warn', 'The outlier scan has not been built yet: run tools/enso/outliers.py.')); return; }
+    var rows = O.rows, mx = Math.max.apply(null, rows.map(function (r) { return r.score || 0; })) || 1;
+    var wrap = el('div', 'so-wrap');
+    var GRP = {};
+    rows.forEach(function (r) { (GRP[r.group] = GRP[r.group] || []).push(r); });
+    wrap.innerHTML = rows.map(function (r, i) {
+      var e = r.extra || {}, w = Math.max(3, Math.round(100 * (r.score || 0) / mx));
+      var place = r.of ? (r.rank + ' of ' + r.of + ' years') : (e.above_ceiling ? 'above everything measured before this event' : '');
+      var melt = (e.melt_now != null && e.melt_normal)
+        ? '<span class="so-x">melt ' + fnum(e.melt_now, 0, false) + ' against ' + fnum(e.melt_normal, 0, false) + ' normal</span>' : '';
+      var pay = { name: r.name, html: '<p>' + esc(r.name) + (r.where ? ' \u00b7 ' + esc(r.where) : '') + '</p>'
+        + '<p>The last 30 days sit ' + esc(trackNum(r.anom)) + ' \u00b0C from this series\u2019 own 1991\u20132020 normal for these calendar days'
+        + (r.of ? ', which is ' + r.rank + ' of its ' + r.of + ' years' : '') + (r.z != null ? ', about ' + fnum(Math.abs(r.z), 1, false) + ' standard deviations of its own spread' : '') + '.</p>'
+        + (e.what ? '<p>' + esc(e.what) + '</p>' : '') + (e.enso ? '<p>' + esc(e.enso) + '</p>' : '')
+        + (e.melt_now != null ? '<p>Melt energy so far this year: ' + fnum(e.melt_now, 0, false) + ' against ' + fnum(e.melt_normal, 0, false) + ' usual by this date'
+             + (e.melt_rank ? ', ' + e.melt_rank + ' of ' + e.melt_of : '') + '.</p>' : ''),
+        src: r.date ? ('data to ' + r.date) : '' };
+      return '<div class="so-r' + (r.stale ? ' stale' : '') + (i === 0 ? ' top' : '') + '" data-src="' + esc(JSON.stringify(pay)) + '">' +
+        '<span class="so-n">' + esc(r.name) + '<small>' + esc(r.group) + '</small></span>' +
+        '<span class="so-b"><i style="width:' + w + '%;background:' + (r.anom >= 0 ? 'var(--nino)' : 'var(--nina)') + '"></i></span>' +
+        '<span class="so-v">' + esc(trackNum(r.anom)) + '<small> \u00b0C</small></span>' +
+        '<span class="so-p">' + esc(place) + (r.z != null ? ' \u00b7 ' + fnum(Math.abs(r.z), 1, false) + '\u03c3' : '') + melt +
+        (r.stale ? '<span class="so-x">' + r.stale_days + ' days behind</span>' : '') + '</span></div>';
+    }).join('');
+    body.appendChild(wrap);
+    /* Раскладка по ширине СПИСКА, а не окна: сцена живёт в средней колонке и бывает узкой при
+       широком экране — правило по @media там не срабатывало, и строки жались. */
+    var fitRows = function () { if (wrap.isConnected) wrap.classList.toggle('narrow', wrap.clientWidth < 520); };
+    fitRows(); requestAnimationFrame(fitRows);
+    if (window.ResizeObserver) new ResizeObserver(fitRows).observe(wrap);
+    var top = rows[0] || {}, ice = rows.filter(function (r) { return r.group === 'mountain ice'; })[0] || {};
+    var kp = el('div', 'kpis');
+    kp.innerHTML =
+      trackKpi('furthest from its own normal', esc(top.name || '\u00b7'),
+        trackNum(top.anom) + ' \u00b0C over 30 days' + (top.of ? ', ' + top.rank + ' of ' + top.of + ' years' : ''), 'our arithmetic over the panel\u2019s own series', top.date || '') +
+      trackKpi('series compared', (O.n || 0) + '', 'everything the panel holds with at least ' + (O.min_years || 20) + ' years behind it; shorter records are left out because a rank out of fifteen says little', 'our arithmetic', '') +
+      trackKpi('the mountain that stands out most', esc(ice.name || '\u00b7'),
+        ice.extra && ice.extra.melt_now != null ? 'melt energy ' + fnum(ice.extra.melt_now, 0, false) + ' against ' + fnum(ice.extra.melt_normal, 0, false) + ' usual by this date' : (ice.of ? ice.rank + ' of ' + ice.of + ' years' : ''), 'ERA5-Land at the ice', ice.date || '');
+    body.appendChild(kp);
+    body.appendChild(el('div', 'cap', esc(O.note || '')));
   }
 
   function viewTrack() {
@@ -8962,11 +9021,12 @@
     get('/data/enso/ice-snow.json').catch(function () { return {}; }),
     get('/data/enso/glaciers.json').catch(function () { return {}; }),
     get('/data/enso/models-history.json').catch(function () { return {}; }),
-    get('/data/enso/olr-grid.json').catch(function () { return {}; })])
+    get('/data/enso/olr-grid.json').catch(function () { return {}; }),
+    get('/data/enso/outliers.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
       fixRiskTitles(r[0]);                    // парные риски: «world ocean:» / «land+ocean:» читались как дубли (владелец 09.09)
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}   /* история прогнозов и облака на шаре (15.09) */;
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}   /* история прогнозов, облака, «кто выбивается» (15.09) */;
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');

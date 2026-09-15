@@ -140,7 +140,7 @@ def main():
             chunk = CITIES[i:i + 5]
             url = ("https://archive-api.open-meteo.com/v1/archive?latitude=" + ",".join(str(c[2]) for c in chunk)
                    + "&longitude=" + ",".join(str(c[3]) for c in chunk)
-                   + f"&start_date={a.start}&end_date={a.end}&daily=" + ",".join(PARAMS) + "&timezone=UTC")
+                   + f"&start_date={a.start}&end_date={a.end}&daily=" + ",".join(PARAMS) + "&timezone=UTC&models=era5")
             res = get(url)
             if isinstance(res, dict):
                 res = [res]

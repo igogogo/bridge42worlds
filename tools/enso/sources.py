@@ -35,7 +35,7 @@ def kuwait_url():
     t = date.today() - timedelta(days=1)
     return ("https://archive-api.open-meteo.com/v1/archive?latitude=29.37&longitude=47.98"
             f"&start_date={t.year}-01-01&end_date={t.isoformat()}"
-            "&daily=temperature_2m_max,temperature_2m_min,temperature_2m_mean,precipitation_sum&timezone=UTC")
+            "&daily=temperature_2m_max,temperature_2m_min,temperature_2m_mean,precipitation_sum&timezone=UTC&models=era5")
 
 
 # name -> (url, kind); url может быть функцией — для адресов с датой

@@ -106,7 +106,7 @@ def build_clim(verbose=False):
     if cl.get("tmax"):
         return cl
     d = _get(f"{ARCH}?latitude={LAT}&longitude={LON}&start_date={CLIM_YEARS[0]}-01-01&end_date={CLIM_YEARS[1]}-12-31"
-             "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=UTC")
+             "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=UTC&models=era5")
     dd = d.get("daily") or {}
     times, tx, tn, pr = dd.get("time") or [], dd.get("temperature_2m_max") or [], dd.get("temperature_2m_min") or [], dd.get("precipitation_sum") or []
     sums = {k: np.zeros(366) for k in ("tmax", "tmin", "prec")}
@@ -151,7 +151,7 @@ def build_analogs(verbose=False):
             continue
         try:
             d = _get(f"{ARCH}?latitude={LAT}&longitude={LON}&start_date={y}-01-01&end_date={y}-12-31"
-                     "&daily=temperature_2m_max&timezone=UTC")
+                     "&daily=temperature_2m_max&timezone=UTC&models=era5")
         except Exception as e:                                   # noqa: BLE001
             if verbose:
                 print(f"  Кувейт {y}: {str(e)[:80]}")
