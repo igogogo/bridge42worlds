@@ -33,6 +33,9 @@
     /* прошлый год — не событие, поэтому нейтральный серый, а не цвет аналога */
     --a2025:#8A8F98; --a2024:#8A8F98;
     --rail:286px; --rail2:310px; --dockh:34px;
+    /* сила полосы прокрутки: на белом тот же процент читается слабее, чем на тёмном */
+    --sbar:color-mix(in srgb, var(--soft) 42%, transparent);
+    --sbar-on:color-mix(in srgb, var(--soft) 64%, transparent);
   }
   @media (prefers-color-scheme: dark){
     html:not([data-theme="light"]){ --nino:#E58973; --nina:#8FB1DE; --ok:#8FBE9B; --band:#5c5a55;
@@ -45,13 +48,34 @@
          --soft и --muted тоже подняты: на подложке карточек они давали 3,98 и 4,20. */
       --lv5:#E06B6B; --lv4:#E08A5C; --lv3:#E0A860; --lv2:#8b8880; --lv1:#63615c;
       --soft:#9AA3B4; --muted:#A2A9B8; --a1982:#A98BBB; --a1997:#D39BB9; --a2015:#E0A07E; --a2023:#E8B45C;
-      --a2025:#9AA0AA; --a2024:#9AA0AA; }
+      --a2025:#9AA0AA; --a2024:#9AA0AA;
+      --sbar:color-mix(in srgb, var(--soft) 26%, transparent);
+      --sbar-on:color-mix(in srgb, var(--soft) 48%, transparent); }
   }
   html[data-theme="dark"]{ --nino:#E58973; --nina:#8FB1DE; --ok:#8FBE9B; --band:#5c5a55;
       --lv5:#E06B6B; --lv4:#E08A5C; --lv3:#E0A860; --lv2:#8b8880; --lv1:#63615c;
       --soft:#9AA3B4; --muted:#A2A9B8; --a1982:#A98BBB; --a1997:#D39BB9; --a2015:#E0A07E; --a2023:#E8B45C;
-      --a2025:#9AA0AA; --a2024:#9AA0AA; }
+      --a2025:#9AA0AA; --a2024:#9AA0AA;
+      --sbar:color-mix(in srgb, var(--soft) 26%, transparent);
+      --sbar-on:color-mix(in srgb, var(--soft) 48%, transparent); }
 
+  /* ПОЛОСЫ ПРОКРУТКИ ПОТИШЕ (владелец 15.09: «не такие контрастные, на ночном немного помягче»).
+     Причина была не в толщине: `scrollbar-width: thin` стоял, а цвет — нет, и браузер рисовал
+     полосу своей серой. На тёмной подложке эта серая оказывалась светлее всего, что рядом, и
+     ползунок читался ярче самих данных. Цвет берём от --soft, того же, которым написаны
+     подписи осей: на тёмной теме он поднят до читаемого, и полоса выходит тише текста, но
+     видна. Ползунок в четверть силы, под курсором в половину; дорожка прозрачная.
+     Элементы, которые прячут полосу совсем (.tabs, .kstrip, .p-meta), имеют свои правила с
+     большей значимостью и остаются без полосы. */
+  *{scrollbar-width:thin;scrollbar-color:var(--sbar) transparent}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-corner{background:transparent}
+  /* рамка прозрачная + background-clip: ползунок кажется уже дорожки и не липнет к краю */
+  ::-webkit-scrollbar-thumb{background:var(--sbar);
+    border:3px solid transparent;background-clip:padding-box;border-radius:7px}
+  ::-webkit-scrollbar-thumb:hover{background:var(--sbar-on);
+    border:2px solid transparent;background-clip:padding-box}
   html,body{height:100%;overflow:hidden;overscroll-behavior:none}
   /* Общий стиль сайта держит body в читательской колонке (max-width 700px) — панели нужен
      весь экран, иначе середина схлопывается в 60 пикселей. */
