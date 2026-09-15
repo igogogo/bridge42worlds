@@ -177,10 +177,15 @@
   /* Вердикт — не такая вкладка, как остальные: это ответ на вопрос «ну и что?», и он должен
      бросаться в глаза первым (владелец 04.09: «ссылку на вердикт отдельным пунктом и поярче,
      может инверсно»). Инверсия: заливка цветом события, текст на ней светлый. */
-  .tab.verdict{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:600;
+  /* Вкладки с данными — квадратнее и с плотной рамкой; промежутки между группами (15.09). */
+  .tab.data{border-radius:7px;border-width:2px;font-weight:600;padding:4px 12px}
+  .tab.data.on{border-color:var(--ochre)}
+  .tgap{display:inline-block;width:14px;flex:0 0 14px}
+  /* Вердикт: без инверсного фона, текст чуть краснее (владелец 15.09). */
+  .tab.verdict{background:none;color:color-mix(in srgb, var(--nino) 70%, var(--text));border-color:color-mix(in srgb, var(--nino) 55%, var(--line, var(--hair)));font-weight:600;
     margin-inline-end:8px}
-  .tab.verdict:hover{background:var(--text);color:var(--bg)}
-  .tab.verdict.on{background:var(--bg);border-color:var(--ink);color:var(--ink)}
+  .tab.verdict:hover{color:var(--nino)}
+  .tab.verdict.on{background:var(--ochre);border-color:var(--ochre);color:var(--surface)}
   /* Кнопки «сейчас / что изменилось» больше нет: сравнение переехало на кирпичи. */
 
   /* ── строка обновления и источников (наверху, а не в подвале) ─────────────── */
@@ -296,14 +301,19 @@
   .verdict ul{margin:2px 0 0 15px;padding:0;font-size:12px;color:var(--muted)}
 
   /* ── сцена ───────────────────────────────────────────────────────────────── */
-  .stage{display:flex;flex-direction:column;min-height:0;min-width:0}
+  .stage{display:flex;flex-direction:column;min-height:0;min-width:0;position:relative}
   /* Заголовок сцены — своя строка, подменю всегда под ним: раньше подменю вставало рядом с
      коротким заголовком и прыгало вниз у длинного (владелец 07.09, Ocean). */
   .stage-head{display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:5px 12px 4px;flex-shrink:0}
   .stage-top{display:flex;align-items:flex-start;gap:10px}
   /* строка управления (08.09): слева source/notes, справа back · globe · ⛶ */
-  .stage-ctl{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-inline-start:auto}   /* кнопки в строке заголовка, у верхнего края (08.09) */
-  .ctl-nav{margin-left:auto;display:flex;gap:6px;align-items:center}
+  .stage-ctl{display:flex;align-items:center;gap:8px;flex-shrink:0}   /* своя строка под названием (15.09) */
+  .stage-ctl:empty{display:none}
+  .ctl-nav{margin-left:auto;display:flex;gap:6px;align-items:center;flex-shrink:0}
+  /* legend — в правом верхнем углу поля графика */
+  .plot .legbtn{position:absolute;top:2px;inset-inline-end:6px;z-index:5;font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;
+    padding:2px 8px;border-radius:999px;border:1px solid var(--soft);background:var(--surface);color:var(--text);cursor:pointer;opacity:.92}
+  .plot .legbtn.on,.plot .legbtn:hover{border-color:var(--ochre);color:var(--ochre)}
   .ctl-nav .back-go.bright{margin-left:0}
   .ctl-info:empty{display:none}
   /* SOURCE / NOTES / STATS / LEGEND — КАРТОЧКОЙ, А НЕ МЕЛКОЙ ПИЛЮЛЕЙ (владелец 11.09:
@@ -312,7 +322,7 @@
      Кегль и поля примерно вдвое, подложка и тень как у карточки; форму не трогаем. */
   /* .seg.ctl-info, а не .ctl-info: правило `.seg button` стоит ниже по файлу и при равной
      силе выигрывало у него, поэтому кнопки оставались прежнего кегля. */
-  .seg.ctl-info button{font-size:14px;padding:9px 18px;letter-spacing:.03em;font-weight:600;
+  .seg.ctl-info button{font-size:12px;padding:6px 13px;letter-spacing:.03em;font-weight:600;
     background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.14)}
   .seg.ctl-info button:hover{box-shadow:0 2px 6px rgba(0,0,0,.2)}
   .seg.ctl-info button.on{box-shadow:0 2px 7px rgba(0,0,0,.24)}
@@ -456,6 +466,11 @@
   @media (max-width:900px){ .rs{grid-template-columns:1fr} .rs-chat{order:-1;max-height:52vh} .rs-m.q{margin-inline-start:6%} }
   /* статистический слой за кнопкой stats (08.09) */
   .info-pane.stats{max-height:none}
+  .info-pane.stats.inline{margin:0 12px 6px;max-height:min(300px,40vh)}
+  .seg.ctl-info button.sw{display:inline-flex;align-items:center;gap:7px}
+  .swk{width:22px;height:12px;border-radius:999px;border:1.5px solid currentColor;position:relative;opacity:.75}
+  .swk::after{content:'';position:absolute;top:1px;left:1px;width:7px;height:7px;border-radius:50%;background:currentColor;transition:left .15s}
+  .sw.on .swk::after{left:11px}
   .st-note{font-family:var(--mono);font-size:9.5px;color:var(--soft);align-self:center;margin-inline-start:8px}
   .st-item{padding:8px 0 6px;border-top:1px solid var(--hair-soft, var(--hair))} .st-item:first-of-type{border-top:0}
   .st-t{font-family:var(--font-display);font-size:13px;font-weight:600;margin-bottom:6px}
@@ -473,6 +488,11 @@
   .br-s p{font-size:13.5px;line-height:1.55;margin:0 0 8px;max-width:72ch} .br-s p b{color:var(--text)}
   .br-big{font-family:var(--font-display);font-size:16px;line-height:1.5;max-width:64ch}
   .br-two{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(220px,.8fr);gap:14px;align-items:start}
+  .br-side .br-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:0}
+  .br-side .br-kpis > *{min-width:0}
+  @media (max-width:760px){ .br-two{grid-template-columns:1fr} }
+  /* стрелка и так есть — подчёркивания у переходов брифинга нет (владелец 15.09) */
+  .brief .br-go,.brief .br-go:hover,.stage-body .brief a.br-go,.stage-body .brief a.br-go:hover{text-decoration:none;border-bottom:0}
   .br-sparks{display:flex;flex-direction:column;gap:6px}
   .br-sp{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:0 8px;padding:6px 8px;border:1px solid var(--hair);border-radius:9px;background:var(--surface);text-decoration:none;color:var(--text)}
   .br-sp:hover{border-color:var(--ochre)} .br-sp svg{grid-column:1/3;width:100%;height:34px;display:block}
@@ -481,7 +501,7 @@
   .br-ul{margin:0;padding-left:0;list-style:none} .br-ul li{font-size:13px;line-height:1.5;margin:0 0 7px;max-width:76ch;position:relative} .br-ul.small li{font-size:12px;margin-bottom:3px}
   .br-l{display:inline-block;width:18px;height:18px;border-radius:5px;color:#fff;font-family:var(--mono);font-size:11px;font-weight:700;text-align:center;line-height:18px;margin-inline-end:2px;vertical-align:1px}
   .br-links{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:4px}
-  .br-go{font-family:var(--mono);font-size:10.5px;color:var(--cyan);text-decoration:none;white-space:nowrap} .br-go:hover{text-decoration:underline}
+  .br-go{font-family:var(--mono);font-size:10.5px;color:var(--cyan);text-decoration:none;white-space:nowrap} .br-go:hover{color:var(--ochre)}
   .br-m{color:var(--soft);font-size:11.5px}
   .br-how p{max-width:80ch}
   @media (max-width:900px){ .br-two{grid-template-columns:1fr} .br-big{font-size:15px} }
@@ -525,7 +545,7 @@
   /* стандарт сцены (владелец 08.09): описание источника и разбор — за переключателями, работы — кнопкой справа внизу */
   .info-pane{font-size:11.5px;line-height:1.45;border:1px solid var(--hair);border-radius:8px;padding:8px 10px;color:var(--text);opacity:.92;max-height:38vh;overflow:auto;flex-shrink:0}
   /* окошко под своей кнопкой: сцена не съезжает, график не пересчитывается (владелец 10.09) */
-  .info-pane.info-pop{position:absolute;z-index:60;min-width:240px;max-height:min(430px,58vh);
+  .info-pane.info-pop{position:absolute;z-index:60;min-width:220px;max-width:min(340px,70vw);max-height:min(430px,58vh);
     background:var(--surface);opacity:1;box-shadow:0 12px 30px rgba(0,0,0,.28)}
   .info-pane.info-pop.stats{max-height:min(430px,58vh)}
   .works-foot{display:flex;justify-content:flex-end;gap:6px;flex-shrink:0;margin-top:2px}
@@ -1200,7 +1220,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=b34a3a6815"></script>
+<script src="/js/enso.js?v=68f3c464ae"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>

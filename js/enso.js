@@ -2124,17 +2124,26 @@
        должен видеть, из чего она состоит. Свернётся оно само, как только он выберет раздел. */
     if (S.navOpen == null) S.navOpen = true;
     if (window.matchMedia('(max-width:900px)').matches) list.push(['state', T.railTabs.state], ['risks', T.railTabs.risks]);
-    Object.keys(T.tabs).forEach(function (k) { list.push([k, T.tabs[k]]); });
+    /* ГРУППЫ ПО СМЫСЛУ (владелец 15.09): сперва вкладки с данными — квадратнее и с плотной
+       рамкой, потом промежуток, потом чтение (брифинг, новости, упоминания, вердикт), ещё
+       промежуток, потом последствия (еда, регионы). Research ушёл в служебную строку к методу
+       и ссылкам. Порядок задан здесь явно, а не порядком ключей T.tabs. */
+    var GROUPS = [['overview', 'now', 'ocean', 'radiance', 'models', 'trend', 'air', 'planet'], ['brief', 'news', 'mentions', 'verdict'], ['food', 'regions']];
+    var SVC_ORDER = ['research', 'how', 'refs', 'chain', 'ops', 'about'];
+    var DATA_TABS = GROUPS[0];
+    GROUPS.forEach(function (g, gi) { if (gi) list.push(['_gap' + gi, '']); g.forEach(function (k) { if (T.tabs[k]) list.push([k, T.tabs[k]]); }); });
+    SVC_ORDER.forEach(function (k) { if (T.tabs[k]) list.push([k, T.tabs[k]]); });
     /* ДВА РЯДА (владелец 07.09: «меню разрослось; основные вверху влево, служебные ниже вправо»). */
     var rowMain = el('div', 'trow'), rowSvc = el('div', 'trow svc');
     list.forEach(function (v) {
       /* Служебные вкладки (метод, цепочка, о панели) выглядят иначе: пунктирная рамка,
          приглушённый цвет; вердикт — контрастный чёрно-белый. У каждой — подсказка,
          что это (владелец 05.09). */
-      var svc = v[0] === 'how' || v[0] === 'chain' || v[0] === 'about' || v[0] === 'refs' || v[0] === 'ops';
+      if (v[0].indexOf('_gap') === 0) { rowMain.appendChild(el('span', 'tgap', '')); return; }
+      var svc = SVC_ORDER.indexOf(v[0]) >= 0;
       /* Подсказка к пункту меню — на значке «i» справа от текста, а не на самой кнопке
          (владелец 05.09: «для меню неудобно тултипы — пусть будет небольшая иконка i»). */
-      var b = el('button', 'tab' + (v[0] === 'verdict' ? ' verdict' : '') + (svc ? ' svc' : '') + (S.view === v[0] ? ' on' : ''),
+      var b = el('button', 'tab' + (v[0] === 'verdict' ? ' verdict' : '') + (svc ? ' svc' : '') + (DATA_TABS.indexOf(v[0]) >= 0 ? ' data' : '') + (S.view === v[0] ? ' on' : ''),
         esc(v[1]));
       b.type = 'button';
       /* Подсказка — на самой плашке, без значка i (владелец 09.09: меню на ноуте разрослось на
@@ -2297,7 +2306,8 @@
         var dg = x.r.digits, u = x.r.unit || '', sign = x.dv > 0 && x.last.v >= 0 && dg > 0 ? '' : '';
         var pay = { name: x.r.title, def: (x.prev ? 'Was ' + jval(x.prev.v, dg) + ' on ' + x.prev.d + ', now ' + jval(x.last.v, dg) + ' on ' + x.last.d + '.' : 'First reading we hold: ' + jval(x.last.v, dg) + ' on ' + x.last.d + '.') + ' Click for the history.', src: x.r.src, date: x.last.d };
         if (x.rec) pay.def = 'A record: ' + x.rec + '. ' + pay.def;
-        return '<button type="button" class="ks' + (x.rec ? ' rec' : '') + '" data-hist="' + esc(x.k) + '" data-src="' + esc(JSON.stringify(pay)) + '">' +
+        pay.def = pay.def.replace(' Click for the history.', ' Click to open its chart; the history is on that scene.');
+        return '<button type="button" class="ks' + (x.rec ? ' rec' : '') + '" data-go="' + esc(KPI_SCENE[x.k] || 'overview') + '" data-src="' + esc(JSON.stringify(pay)) + '">' +
           (x.rec ? '<span class="ks-rec">record</span>' : '') +
           '<span class="ks-row"><span class="ks-v">' + (x.k === 'oni' || /nino|n34|n12|sst_world|wind|mjo/.test(x.k) && x.last.v > 0 ? '+' : '') + jval(x.last.v, dg) + (u ? '<small>' + esc(u) + '</small>' : '') + '</span>' +
           (x.dv ? '<span class="ks-d ' + jsign(x.dv) + '">' + jarrow(x.dv) + (x.dv > 0 ? '+' : '') + jval(x.dv, dg) + '</span>' : '') + '</span>' +
@@ -2996,10 +3006,9 @@
     var shouts = (D.alerts || []).filter(function (a) { return a.level === 'SHOUT'; });
     var s = '';
     // ── 1. одним абзацем
-    s += '<section class="br-s br-lead"><h3>In one paragraph</h3>' +
+    s += '<section class="br-s br-lead"><h3>In one paragraph</h3><div class="br-two"><div>' +
       '<p class="br-big">A <b>very strong El Niño</b> is under way, and it is running ahead of every event we can compare it with. The central Pacific is <b>' + fnum(N.current_day) + ' °C</b> warmer than normal by the daily reading (the weekly NOAA index says ' + fnum(n34, 1) + ') — ' + (rank === 1 ? 'the warmest these calendar days have ever been' : 'rank ' + rank + ' for these calendar days') + ' — and the official index, ' + fnum(oni) + ' for ' + esc(ls) + ', already says “very strong” in the language forecasters use. Our own risk index stands at <b>' + idx + ' of 100</b>. The heat is not a spike: the water below the surface is loaded, the winds have joined in, and the storms have moved east. The event is still growing; the peak, by every past example, comes in winter.</p>' +
-      briefTiles(['n34_daily', 'n34_weekly', 'oni', 'risk_index', 'wwv_share', 'iri_share_below', 'food_index']) +
-      '<div class="br-links">' + briefLink('#now/analogs', 'this year against the strongest events') + briefLink('#verdict', 'the verdict of the day') + briefLink('#now/map', 'the map of the Pacific') + '</div></section>';
+      '<div class="br-links">' + briefLink('#now/analogs', 'this year against the strongest events') + briefLink('#verdict', 'the verdict of the day') + briefLink('#now/map', 'the map of the Pacific') + '</div></div><div class=\"br-side\">' + briefTiles(['n34_daily', 'n34_weekly', 'oni', 'risk_index', 'wwv_share', 'iri_share_below', 'food_index']) + '</div></div></section>';
     // ── 2. что мы видим в данных
     s += '<section class="br-s"><h3>What the data show</h3><div class="br-two"><div>' +
       '<p><b>The surface.</b> Niño 3.4 crossed into a new regime on <b>' + esc(brk ? brk.value : 'spring') + '</b>: our change-point test finds the level jumped ' + (shift ? esc(shift.value) + ' °C' : 'by two degrees') + ' and that the jump is not noise. Since then every week has come in warmer than the same week of 1997, 2015 and 2023. The world ocean as a whole ' + (streak ? 'has set a daily record for <b>' + streak + ' days running</b>' : 'is at record warmth') + '; land and ocean together are at their warmest for the date too.</p>' +
@@ -3009,34 +3018,33 @@
       '</div><div class="br-sparks">' + briefSpark('event_strength', 'Niño 3.4, NOAA weekly') + briefSpark('fuel_charged', 'fuel: warm water volume') + briefSpark('subsurface_warm', 'warmest layer under the moorings') + briefSpark('world_ocean_record_streak', 'world ocean, daily') + briefSpark('models_below_reality', 'models below reality') + '</div></div>' +
       '<div class="br-links">' + briefLink('#trend/sst_nino34', 'the trend and the break') + briefLink('#air', 'the fuel gauge') + briefLink('#ocean/moorings', 'the moorings') + briefLink('#radiance/cross', 'two satellites') + briefLink('#models/breakdown', 'how the models break') + '</div></section>';
     // ── 3. чего ждать и когда
-    s += '<section class="br-s"><h3>What to expect, and when</h3>' +
+    s += '<section class="br-s"><h3>What to expect, and when</h3><div class="br-two"><div>' +
       '<p><b>The peak comes in winter.</b> Every past event of this strength peaked between mid-November and early February. It is early September, so two or three more months of growth are the normal course, not a surprise. ' +
       (pk ? 'Scaling this summer by how past events grew, the likely winter peak is <b>around ' + esc(briefKpi(pk, 'implied winter peak').value) + ' °C</b>, with <b>' + esc(briefKpi(pk, 'chance to top 1997').value) + ' %</b> odds of beating 1997–98 and ' + esc(briefKpi(pk, 'chance to top 2015').value) + ' % of beating 2015–16; the stored fuel is not in that sum, so the odds may be conservative. ' : '') +
       (ext && ext.value !== '·' ? 'Even the summer level alone is a once-in-' + esc(ext.value) + '-years height for a yearly peak. ' : '') + '</p>' +
       '<p><b>The next two weeks.</b> The analogue years point to Niño 3.4 near <b>' + (fc.value != null ? fnum(fc.value) : '·') + ' °C</b> in a fortnight' + (ar ? '; pure persistence would give ' + esc(ar.value) + ' °C, which is the floor, not the forecast' : '') + '. The forecast centres expect a combined peak of <b>' + fnum((IRI.revisions || {}).combined_peak_cur != null ? IRI.revisions.combined_peak_cur : IRI.combined_peak) + ' °C</b>; their next issue is due around the 19th.</p>' +
       '<p><b>The year after.</b> The impacts of a peak land mostly in the following year: 2027 is likely to be warmer than 2026 for the planet as a whole, because the ocean releases its heat to the air with a lag of a few months. A La Niña usually follows within a year or two — the swing back, with its own set of droughts and floods in mirror image.</p>' +
-      '<div class="br-links">' + briefLink('#now/analogs', 'where the past events went from here') + briefLink('#trend/sst_nino34', 'the 14-day view') + briefLink('#models/plume', 'the model plume') + briefLink('#risk/warmer_next_year', 'the year after the peak') + '</div></section>';
+      '<div class="br-links">' + briefLink('#now/analogs', 'where the past events went from here') + briefLink('#trend/sst_nino34', 'the 14-day view') + briefLink('#models/plume', 'the model plume') + briefLink('#risk/warmer_next_year', 'the year after the peak') + '</div></div><div class="br-side br-sparks">' + briefSpark('peak_ahead', 'Niño 3.4, daily: where the peak is judged from') + briefSpark('models_revise_up', 'the model peak, issue by issue') + briefSpark('fast_sst_nino34', '14-day change of Niño 3.4') + '</div></div></section>';
     // ── 4. что уже реализуется
     var live = (D.risks || []).filter(function (r) { return +r.level >= 4 && !/next_year|la_nina_after|stale|warmer_next/.test(r.id || ''); }).sort(function (a, b) { return (+b.level) - (+a.level); }).slice(0, 6);
     s += '<section class="br-s"><h3>Risks already showing</h3><p>These are not forecasts: each one is a rule that has already fired on the data.</p><ul class="br-ul">' +
       live.map(function (r) { return '<li><span class="rl br-l" style="background:' + lvlColor(r.level) + '">' + r.level + '</span> <b>' + esc(r.title) + '.</b> ' + esc(rsFirstSentences(r.plain || '', 2)) + ' ' + briefLink('#risk/' + r.id, 'evidence and what to watch') + '</li>'; }).join('') +
       (shouts.length ? '<li><span class="rl br-l" style="background:var(--nino)">!</span> <b>Loud alerts today:</b> ' + shouts.map(function (a) { return esc(a.title) + (a.detail ? ' (' + esc(a.detail) + ')' : ''); }).join('; ') + '. ' + briefLink('#now/analogs', 'the alert cards') + '</li>' : '') + '</ul></section>';
     // ── 5. регионы и еда
-    s += '<section class="br-s"><h3>Regions and food</h3>' +
+    s += '<section class="br-s"><h3>Regions and food</h3><div class="br-two"><div>' +
       '<p>' + (RG ? 'Under the “' + esc(scen) + '” scenario <b>' + hot.length + ' of ' + RG.items.length + ' regions</b> are at level 4–5: ' + esc(hot.join(', ')) + '. ' : '') +
       'The usual pattern of a strong El Niño is dry in Indonesia, Australia, southern Africa and the Sahel, wet on the coast of Peru and in East Africa’s short rains, a weak monsoon in India. ' + (tele ? 'On our own measured boxes over 45 summers the same pattern shows without any literature: ' + esc(tele.plain.replace(/\.$/, '')) + '. ' : '') +
       'Food prices react with a lag of months through rice, palm oil, sugar and fish; the index has begun to climb, and the commodities most exposed are on the Food page.</p>' +
-      briefTiles(['food_index', 'food_yoy', 'gulf_sst', 'kuwait_tmax30']) +
-      '<div class="br-links">' + briefLink('#regions', 'regions by level') + briefLink('#trend/rain', 'rain by region') + briefLink('#food', 'food prices') + briefLink('#regions/place/gulf_arabia', 'Kuwait and the Gulf') + '</div></section>';
+      '<div class="br-links">' + briefLink('#regions', 'regions by level') + briefLink('#trend/rain', 'rain by region') + briefLink('#food', 'food prices') + briefLink('#regions/place/gulf_arabia', 'Kuwait and the Gulf') + '</div></div><div class="br-side">' + briefTiles(['food_index', 'food_yoy', 'gulf_sst', 'kuwait_tmax30']) + '</div></div></section>';
     // ── 6. на что смотреть
     var watch = (sm.watch || []).slice(0, 4);
-    s += '<section class="br-s"><h3>What to watch in the coming weeks</h3><ul class="br-ul">' +
+    s += '<section class="br-s"><h3>What to watch in the coming weeks</h3><div class="br-two"><div><ul class="br-ul">' +
       '<li><b>The first fall of the fuel.</b> The monthly PMEL update: the first clear drop of the warm water volume is the earliest honest sign that the peak is near.</li>' +
       '<li><b>The 14-day change of Niño 3.4 turning negative</b>, and the end of the daily record run: the surface stops climbing before it turns.</li>' +
       '<li><b>The next model issue around the 19th</b>: whether the centres raise the peak again or the plume starts to close.</li>' +
       '<li><b>The satellite detectors</b>: 36 turning-point detectors on two platforms are silent now; a fired one is a two-week change worth a look.</li>' +
       watch.map(function (w) { return '<li class="br-m">From the verdict: ' + esc(w) + '</li>'; }).join('') + '</ul>' +
-      '<div class="br-links">' + briefLink('#news', 'the calendar of releases') + briefLink('#air', 'the fuel') + briefLink('#radiance/cross', 'the detectors') + '</div></section>';
+      '<div class="br-links">' + briefLink('#news', 'the calendar of releases') + briefLink('#air', 'the fuel') + briefLink('#radiance/cross', 'the detectors') + '</div></div><div class="br-side">' + briefTiles(['wwv_share', 'fc14_sst_nino34', 'iri_peak', 'wind_week']) + '</div></div></section>';
     // ── 7. как читать
     s += '<section class="br-s br-how"><h3>How to read this panel</h3><p>The strip under the menu holds the main indicators with their change since the last reading; click one for its history. Every scene has <b>source</b> and <b>notes</b> (in plain words or technical) and, where we computed something ourselves, <b>stats</b> with the method explained. Every number has a card with where it comes from and the concepts behind it; <b>graph</b> opens those concepts as a map. <b>Research</b> lets you ask in your own words and builds a board from the answers.</p>' +
       '<p class="br-m">Data as of ' + esc(D.stamp || '') + (sm.confidence ? ' · confidence of the verdict: ' + esc(String(sm.confidence)) : '') + '. ' + ((sm.caveats || []).length ? 'Caveats: ' + esc(sm.caveats.slice(0, 2).join(' ')) : '') + ' Written by hand; the numbers refresh with the panel.</p></section>';
@@ -3224,11 +3232,15 @@
     /* Владелец 08.09: «source и notes в подменю первой строкой слева, справа back, globe,
        потом со следующей строки само подменю». Заголовок остаётся один в своей строке;
        кнопки уходят в строку управления, source/notes в неё же вешает sceneInfoBar. */
-    var ctl = el('div', 'stage-ctl'), nav = el('div', 'ctl-nav');
-    ctl.appendChild(el('div', 'seg ctl-info'));
+    /* ТРИ СТРОКИ (владелец 15.09): 1) название сцены, справа у края back и ⛶; 2) source · notes ·
+       stats; 3) и дальше — подменю. Кнопка legend живёт не здесь, а в правом верхнем углу
+       самого графика (syncLegendBar). */
+    var nav = el('div', 'ctl-nav');
     [].slice.call(top.querySelectorAll('.back-go')).forEach(function (b) { nav.appendChild(b); });
-    ctl.appendChild(nav);
-    top.appendChild(ctl);                     // в той же строке, что заголовок (владелец 08.09, вторая правка)
+    top.appendChild(nav);
+    var ctl = el('div', 'stage-ctl');
+    ctl.appendChild(el('div', 'seg ctl-info'));
+    head.appendChild(ctl);
     requestAnimationFrame(fitStageTitle); setTimeout(fitStageTitle, 120);
     if (segs2 && segs2.length) {
       var seg = el('div', 'seg');
@@ -3350,7 +3362,7 @@
       if (!tts.length) return;
       // значок легенды бывает двух видов: сворачиваемая метка и «leg-i» из legIcon —
       // место под правый значок надо держать в обоих случаях (09.09, наезд на телефоне)
-      var hasLeg = !!svg.querySelector('[data-legtoggle], .leg-i');
+      var hasLeg = !!svg.querySelector('[data-legtoggle], .leg-i') || !!(svg.parentNode && svg.parentNode.querySelector && svg.parentNode.querySelector('.legbtn'));
       /* Сосед справа мешает только если он на ТОЙ ЖЕ строке: у разреза и недельных индексов
          подписи мини-панелей тоже помечены как заголовки, но лежат ниже (07.09). */
       var pos = tts.map(function (t) { return { t: t, x: parseFloat(t.getAttribute('x')) || 0, y: parseFloat(t.getAttribute('y')) || 0 }; });
@@ -3362,7 +3374,7 @@
         if (alone && Math.abs(o.y - topY) < 8 && x > 8) { x = 8; t.setAttribute('x', 8); }
         var near = pos.filter(function (q) { return q !== o && Math.abs(q.y - o.y) < 8 && q.x > x; });
         var next = near.length ? Math.min.apply(null, near.map(function (q) { return q.x; })) : 0;
-        var avail = next ? next - x - 10 : W - x - (hasLeg && Math.abs(o.y - topY) < 8 ? 86 : 8);
+        var avail = next ? next - x - 10 : W - x - (hasLeg && Math.abs(o.y - topY) < 8 ? 104 : 8);
         if (avail <= 20) return;
         /* Кегль задаём СТИЛЕМ, а не атрибутом: правило .plot svg text{font-size:11px} сильнее
            презентационного атрибута, и уменьшение молча не срабатывало (07.09). */
@@ -3404,14 +3416,15 @@
     return '<svg viewBox="0 0 24 10" width="24" height="10" aria-hidden="true"><line x1="1" y1="5" x2="23" y2="5" style="stroke:' + col + '" stroke-width="' + (it[2] || 2) + '"' + (it[3] ? ' stroke-dasharray="' + it[3] + '"' : '') + '/></svg>';
   }
   function syncLegendBar() {
-    var head = document.querySelector('.stage-head'), ci = head && head.querySelector('.ctl-info');
+    var head = document.querySelector('.stage'), ci = head && head.querySelector('.ctl-info');
     var old = head && head.querySelector('.leg-bar'); if (old) old.remove();
-    var items = S._legItems || [], btn = ci && ci.querySelector('.legbtn');
-    if (!items.length || !ci) { if (btn) btn.remove(); return; }
-    if (!btn) {
+    var items = S._legItems || [], host = (S.plotEl && S.plotEl.isConnected) ? S.plotEl : ci, btn = head && head.querySelector('.legbtn');
+    if (!items.length || !host) { if (btn) btn.remove(); return; }
+    if (!btn || btn.parentNode !== host) {
+      if (btn) btn.remove();
       btn = el('button', 'sq legbtn', ''); btn.type = 'button';
-      btn.onclick = function () { S.legOpen = !S.legOpen; syncLegendBar(); };
-      ci.appendChild(btn);
+      btn.onclick = function (e) { e.stopPropagation(); S.legOpen = !S.legOpen; syncLegendBar(); };
+      host.appendChild(btn);
     }
     btn.className = 'sq legbtn' + (S.legOpen ? ' on' : ''); btn.textContent = 'legend ' + (S.legOpen ? '▴' : '▾');
     if (!S.legOpen) return;
@@ -3433,7 +3446,7 @@
     head.appendChild(bar);
     var place = function () {
       var r = btn.getBoundingClientRect(), hr = head.getBoundingClientRect();
-      bar.style.top = (Math.max(r.bottom - hr.top, head.clientHeight - 2) + 4) + 'px';   // ниже последнего ряда меню, чтобы не закрыть его
+      bar.style.top = (r.bottom - hr.top + 4) + 'px';   // под кнопкой legend в углу графика
       bar.style.insetInlineEnd = Math.max(4, hr.right - r.right) + 'px';
     };
     place(); requestAnimationFrame(function () { if (bar.isConnected) place(); });
@@ -6804,14 +6817,28 @@
     var st = statsFor(S.view);                                   // статистический слой и на сценах со своими кнопками
     if (st.length && !items.some(function (i) { return i.key === 'stats'; })) items.push({ key: 'stats', label: 'stats · ' + st.length, html: statsHtml(st, S.sub.noteMode || 'plain'), stats: true });
     items.forEach(function (it) {
-      var b = el('button', (S.sub.info === it.key ? 'on' : '') + ' sq' + (it.stats ? ' stats' : ''), it.label + (S.sub.info === it.key ? ' ▴' : ' ▾'));
+      /* stats — ПЕРЕКЛЮЧАТЕЛЬ, а не окошко (владелец 15.09): включил — статистический слой
+         стоит под управлением сцены и переживает перерисовки, выключил — ушёл. */
+      if (it.stats) {
+        var sw = el('button', 'sq stats sw' + (S.sub.statsOn ? ' on' : ''), '<i class="swk"></i>' + it.label);
+        sw.type = 'button'; sw.title = 'statistics layer: on / off';
+        sw.onclick = function () { S.sub.statsOn = !S.sub.statsOn; render(); };
+        row.appendChild(sw); return;
+      }
+      var b = el('button', (S.sub.info === it.key ? 'on' : '') + ' sq', it.label + (S.sub.info === it.key ? ' ▴' : ' ▾'));
       b.type = 'button'; b.setAttribute('data-info', it.key);
       b.onclick = function () { S.sub.info = S.sub.info === it.key ? null : it.key; render(); };
       row.appendChild(b);
     });
   }
   function infoPane(body, items) {
-    var it = items.filter(function (q) { return q.key === S.sub.info; })[0];
+    var stI = items.filter(function (q) { return q.stats; })[0];
+    if (stI && S.sub.statsOn) {
+      var sp = el('div', 'info-pane stats inline'); sp.innerHTML = stI.html;
+      sp.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } });
+      body.appendChild(sp);
+    }
+    var it = items.filter(function (q) { return q.key === S.sub.info && !q.stats; })[0];
     if (!it) return;
     var p = el('div', 'info-pane'), mode = S.sub.noteMode || 'plain';
     if (it.plain) {
@@ -7530,9 +7557,21 @@
     var caps = [].slice.call(body.querySelectorAll('.cap')).map(function (c) { c.hidden = true; return c.innerHTML; }).filter(Boolean);
     var open = S.sub.info, mode = S.sub.noteMode || 'plain';
     var stItems = statsFor(view);
-    if (open === 'stats' && !stItems.length) open = null;
+    if (open === 'stats') open = null;           // stats больше не окошко
     [['source', 'source'], ['notes', 'notes']].concat(stItems.length ? [['stats', 'stats · ' + stItems.length]] : []).forEach(function (o) {
-      var b = el('button', (open === o[0] ? 'on' : '') + ' sq' + (o[0] === 'stats' ? ' stats' : ''), o[1] + (open === o[0] ? ' ▴' : ' ▾')); b.type = 'button'; b.setAttribute('data-info', o[0]);
+      if (o[0] === 'stats') {                    // переключатель, а не окошко (владелец 15.09)
+        var swb = el('button', 'sq stats sw' + (S.sub.statsOn ? ' on' : ''), '<i class="swk"></i>' + o[1]); swb.type = 'button';
+        swb.title = 'statistics layer: on / off';
+        swb.onclick = function () { S.sub.statsOn = !S.sub.statsOn; render(); };
+        seg.appendChild(swb);
+        if (S.sub.statsOn) {
+          var spI = el('div', 'info-pane stats inline'); spI.innerHTML = statsHtml(stItems, mode);
+          spI.addEventListener('click', function (e) { var b2 = e.target.closest('[data-notemode]'); if (b2) { S.sub.noteMode = b2.getAttribute('data-notemode'); render(); } });
+          body.insertBefore(spI, body.firstChild);
+        }
+        return;
+      }
+      var b = el('button', (open === o[0] ? 'on' : '') + ' sq', o[1] + (open === o[0] ? ' ▴' : ' ▾')); b.type = 'button'; b.setAttribute('data-info', o[0]);
       if (o[0] === 'stats') b.setAttribute('data-src', esc(JSON.stringify({ name: 'Our statistics on this scene', def: 'Regression, change-points, persistence, clusters, extremes, correlations — computed by us from the same series the chart shows, with the method explained in plain words and technically.' })));
       b.onclick = function () { S.sub.info = S.sub.info === o[0] ? null : o[0]; render(); };
       seg.appendChild(b);
@@ -8167,6 +8206,9 @@
       else laterHide();
     });
     document.addEventListener('click', function (e) {
+      /* Плитка ленты KPI ведёт на свой график или раздел (владелец 15.09). */
+      var go = e.target.closest && e.target.closest('.ks[data-go]');
+      if (go) { hide(); S.pinned = null; location.hash = '#' + go.getAttribute('data-go'); return; }
       var h = e.target.closest && e.target.closest('[data-hist]');
       if (h) {                                   // кнопка «history» на кирпиче
         S.pinned = h;
