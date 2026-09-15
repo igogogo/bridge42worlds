@@ -992,30 +992,86 @@
      сезона (это факт), а вертикаль над ней и под ней — куда может уехать среднее за сезон,
      когда допишутся оставшиеся месяцы. Засечки на концах подписаны, доля прожитого стоит
      подписью рядом: у прожитого целиком сезона вертикали нет вовсе — там нечему двигаться. */
-  function livedMark(x, w, p, Y) {
+  /* «2026-09» → «Sep»: на графике месяц числом читается как ещё одно измерение. */
+  function monName(k) { var m = +String(k).slice(5, 7); return MON3[m - 1] || esc(String(k)); }
+  /* Отметка прожитой части сезона — засечка, а не мигающая точка «сейчас»: мигающая на всей
+     панели значит последнее измерение, и на плюме её принимали за сегодняшнюю температуру. */
+  function seasonMark(x, y) {
+    return '<rect x="' + (x - 4.2).toFixed(1) + '" y="' + (y - 4.2).toFixed(1) + '" width="8.4" height="8.4" rx="1.4" ' +
+      'style="fill:var(--nino)" opacity=".95" transform="rotate(45 ' + x.toFixed(1) + ' ' + y.toFixed(1) + ')"/>';
+  }
+  /* tight — узкое поле: подписи трёх сезонов стоят в первых трёх столбцах и на телефоне
+     налезают друг на друга, поэтому там от подписи остаётся одно число, остальное в подсказке. */
+  function livedMark(x, w, p, Y, tight, isLast, leftEdge) {
     var s = '';
     if (p.complete || !fin(p.lo) || !fin(p.hi)) {
       s += '<circle cx="' + x.toFixed(1) + '" cy="' + Y(p.todate).toFixed(1) + '" r="4.5" style="fill:var(--ok)"/>';
       return s;
     }
     var cap = Math.max(5, w * .3);
+    /* Все три месяца уже посчитаны, но последний ещё идёт: остатку неоткуда взяться, и отрезок
+       вырождается в точку. Рисуем её красной (не зелёной, как у прожитого целиком) и говорим
+       в подписи, на скольких неделях стоит идущий месяц. */
+    if (Math.abs((p.hi || 0) - (p.lo || 0)) < 0.02) {
+      var rr = p.running || {};
+      return seasonMark(x, Y(p.todate)) +
+        /* Слева поля подпись по центру уезжала за край, справа налезала на соседний сезон:
+           ставим её выше отметки и от левого края самой отметки. */
+        /* Три отметки стоят в трёх соседних столбцах, и подписи ложатся в три разные строки:
+           эта выше всех, у следующей строка над точкой, у третьей — справа от точки. */
+        '<text x="' + (x - 3).toFixed(1) + '" y="' + (Y(p.todate) - 24).toFixed(1) + '" font-size="9" style="fill:var(--nino)">' +
+        fnum(p.todate) + '</text>' +
+        '<title>' + esc(p.season + ': all three months counted, but ' + (rr.month ? monName(rr.month) + ' is measured on ' + rr.weeks + ' week' + (rr.weeks === 1 ? '' : 's') + ' so far' : 'the last one is still running')
+          + ', so this is not the finished season mean yet.') + '</title>';
+    }
     /* ТОЧКА ВНУТРИ ОТРЕЗКА. Владелец 05.09: «если мы в середине или начале периода —
        отображается не точка, а вертикальный отрезок, и точка должна быть внутри отрезка».
        Отрезок идёт от прожитого (точка) до того, где может кончиться среднее за сезон
        по разбросу живых моделей: «где мы сейчас и где будем». */
-    var segLo = Math.min(p.lo, p.todate), segHi = Math.max(p.hi, p.todate);
-    s += '<line x1="' + x.toFixed(1) + '" y1="' + Y(segHi).toFixed(1) + '" x2="' + x.toFixed(1) +
-      '" y2="' + Y(segLo).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="3" opacity=".55"/>';
+    /* ОТРЕЗОК — ЭТО ОТРЕЗОК МОДЕЛЕЙ, А НЕ ОТ ТОЧКИ ДО НИХ. Раньше он тянулся от min(lo, todate),
+       то есть при растущем событии всегда начинался у точки, а настоящий нижний край болтался
+       засечкой внутри: у отрезка получалось два разных «низа» (владелец 15.09: «для ASO нижняя
+       часть начинается там же, и то странно»). Теперь полоса стоит ровно между своими краями, а
+       расстояние до прожитого показывает тонкая связка. */
+    s += '<line x1="' + x.toFixed(1) + '" y1="' + Y(p.hi).toFixed(1) + '" x2="' + x.toFixed(1) +
+      '" y2="' + Y(p.lo).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="3" opacity=".55"/>';
+    if (p.todate < p.lo || p.todate > p.hi) {
+      s += '<line x1="' + x.toFixed(1) + '" y1="' + Y(p.todate).toFixed(1) + '" x2="' + x.toFixed(1) +
+        '" y2="' + Y(p.todate < p.lo ? p.lo : p.hi).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1" stroke-dasharray="2 3" opacity=".5"/>';
+    }
     [p.lo, p.hi].forEach(function (v) {
       s += '<line x1="' + (x - cap).toFixed(1) + '" y1="' + Y(v).toFixed(1) + '" x2="' + (x + cap).toFixed(1) +
         '" y2="' + Y(v).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1.6" opacity=".8"/>';
     });
-    s += nowDot(x, Y(p.todate), 'var(--nino)', 4.5);
+    /* ЧТО ЗНАЧИТ ОТРЕЗОК. Владелец 15.09: «модели эти не ошибаются, но мы всё равно болтаемся
+       под отрезками». Под ними и должны: точка — среднее уже измеренных месяцев сезона, отрезок —
+       где может оказаться среднее за ВЕСЬ сезон, если остаток пойдёт по краям пучка живых
+       моделей. Пока событие растёт, среднее за три месяца выше среднего за прожитые два. Здесь
+       это сказано числом: сколько должен дать остаток, чтобы попасть в край отрезка. */
+    var rest = p.rest_from || [], rm = 3 - (p.months_done || 0);
+    s += '<title>' + esc(p.season + ': measured so far ' + fnum(p.todate) + ' °C over ' + (p.months_done || 0)
+      + ' month' + ((p.months_done || 0) === 1 ? '' : 's')
+      + ((p.running || {}).month ? ' (the last of them, ' + monName(p.running.month) + ', on ' + p.running.weeks + ' week' + (p.running.weeks === 1 ? '' : 's') + ' so far)' : '')
+      + '. The bar is where the three-month mean can end: '
+      + fnum(p.lo) + ' to ' + fnum(p.hi) + '.' + (rest.length === 2 && rm > 0
+        ? ' For that, the remaining ' + rm + ' month' + (rm === 1 ? '' : 's') + ' must average ' + fnum(rest[0]) + ' to ' + fnum(rest[1]) + ' °C.' : '')) + '</title>';
+    s += seasonMark(x, Y(p.todate));
     /* Подписи двух прожитых сезонов стоят рядом и на телефоне налезали друг на друга: у
        второй (меньше прожито) уводим строку ВЫШЕ точки, у первой оставляем справа. */
     var upLab = p.months_done < 2;
-    s += '<text x="' + (upLab ? x + cap + 4 : x + cap + 4).toFixed(1) + '" y="' + (Y(p.todate) + (upLab ? -7 : 3.5)).toFixed(1) + '" font-size="9" style="fill:var(--nino)">' +
-      p.months_done + '/3 lived, ' + fnum(p.todate) + '</text>';
+    var over = p.months_over == null ? p.months_done : p.months_over, run = p.running || {};
+    /* Подпись не-последней отметки уходит влево от неё: справа стоит следующий сезон, и две
+       подписи ложились друг на друга (проверено на экране 15.09). */
+    /* Подпись уходит влево от отметки, чтобы не лечь на соседний сезон, — но если слева уже
+       шкала, разворачиваем вправо: цифра оси и цифра отметки рядом читаются как одно число. */
+    var toLeft = !isLast && (leftEdge == null || x - cap - 4 - 34 > leftEdge);
+    var lx = toLeft ? x - cap - 4 : x + cap + 4, anc = toLeft ? ' text-anchor="end"' : '';
+    s += '<text x="' + lx.toFixed(1) + '" y="' + (Y(p.todate) + (upLab ? -7 : 3.5)).toFixed(1) + '"' + anc + ' font-size="9" style="fill:var(--nino)">' +
+      /* ТОЛЬКО ЧИСЛО. Три отметки стоят в трёх соседних столбцах, и словами их подписи не
+         умещаются ни на телефоне, ни на полном экране: «1/3 lived» наезжало то на соседнюю
+         подпись, то на шкалу. Что это за число, сказано в подсказке отметки, в строке «our
+         firmest reading» и в подписи под графиком. */
+      fnum(p.todate) + '</text>';
     return s;
   }
 
@@ -1132,12 +1188,13 @@
       if (!p) return;
       if (p.complete) {                                   // сезон прожит целиком — сплошной отрезок во всю ширину
         var wc = Math.max(14, pw / Math.max(5, cols.length) * .62);
-        s += livedMark(XK(k), wc, p, Y) +
+        s += livedMark(XK(k), wc, p, Y, W < 620) +
           '<text x="' + XK(k).toFixed(0) + '" y="' + (Y(p.todate) - 9).toFixed(0) + '" text-anchor="middle" font-size="10" style="fill:var(--ok)">' + esc(p.season) + ' ' + fnum(p.todate) + '</text>';
         return;
       }
       var x = XK(k), w2 = Math.max(14, pw / Math.max(5, cols.length) * .62);
-      s += livedMark(x, w2, p, Y);
+      // у не-последней отметки подпись уходит ВЛЕВО от неё: справа стоит соседний сезон
+      s += livedMark(x, w2, p, Y, W < 620, k === cols.length - 1 || !cols.slice(k + 1).some(function (q) { return q.pos; }), Lp);
       if (best && p.season === best.season && W >= 560)
         s += '<text x="' + (x + w2 / 2 + 5).toFixed(0) + '" y="' + (Y(p.hi) - 6).toFixed(0) + '" class="tt">' +
           esc(p.season) + ' ' + fnum(p.lo) + ' … ' + fnum(p.hi) + '</text>';
@@ -1153,9 +1210,10 @@
       /* На узком экране эта строка (полсотни знаков, привязка к правому краю) уезжала за
          левый край поля и ложилась на подписи шкалы — там она короткая (владелец 09.09). */
       s += W < 560
-        ? '<text x="' + Lp + '" y="' + (Tp + 11) + '" class="tt" font-size="10" style="fill:var(--nino)">firmest: ' + esc(best.season) + ' ' + fnum(best.todate) + ', ' + best.months_done + '/3</text>'
+        ? '<text x="' + Lp + '" y="' + (Tp + 11) + '" class="tt" font-size="10" style="fill:var(--nino)">firmest: ' + esc(best.season) + ' ' + fnum(best.todate) + ', ' + (best.months_over == null ? best.months_done : best.months_over) + '/3</text>'
         : '<text x="' + (W - R - 10) + '" y="' + (Tp + 12) + '" text-anchor="end" class="tt" style="fill:var(--nino)">our firmest reading: ' +
-        esc(best.season) + ' ' + fnum(best.todate) + ', ' + best.months_done + ' of 3 months measured</text>';
+        esc(best.season) + ' ' + fnum(best.todate) + ', ' + (best.months_over == null ? best.months_done : best.months_over) + ' of 3 months finished' +
+        ((best.running || {}).month ? ' and ' + best.running.weeks + ' week' + (best.running.weeks === 1 ? '' : 's') + ' of ' + monName(best.running.month) : '') + '</text>';
     }
     // счёт «сколько ниже прожитого» ушёл в фишки под графиком: на графике он налезал на полосу
     var LVn = IRI.live || {}, tally2 = IRI.class_tally || {};
@@ -1170,7 +1228,12 @@
       ['published, all ' + (LVn.n_all || '—'), 'var(--soft)', 1.1, '3 3', 'pub'],
       ['previous issue' + (hist.length > 1 ? ' (' + hist[1].issued + ')' : ''), 'var(--soft)', 1.6, '5 4', 'prev'],
       [''],
-      [esc(ao.season) + ' so far ' + fnum(ref), 'var(--nino)', 1, '4 3'], ['below the lived part ' + (ao.below || []).length, 'var(--lv5)', 'dot', null, 'below'], ['above it ' + (ao.above || []).length, 'var(--ok)', 'dot', null, 'above']];
+      /* СЧЁТ ПРОТИВ ТОЙ ЖЕ ЧЕРТЫ, ЧТО НАРИСОВАНА. Фишки брали счёт из сравнения с НЕДЕЛЬНЫМ
+         значением, а подписывали черту, проведённую по прожитой части сезона: два числа под
+         одной подписью (найдено проверкой 15.09). lowN/totN считались здесь же и пропадали. */
+      [esc(ao.season) + ' so far ' + fnum(ref), 'var(--nino)', 1, '4 3'],
+      ['below the lived part ' + lowN, 'var(--lv5)', 'dot', null, 'below'],
+      ['above it ' + Math.max(0, totN - lowN), 'var(--ok)', 'dot', null, 'above']];
     if (IRI.last_full_season) leg.push([esc(IRI.last_full_season.season) + ' lived in full', 'var(--ok)', 1, '2 4']);
     leg.push(['lived part of a season: dot', 'var(--nino)', 'dot']);
     leg.push(['where its mean can end: bar', 'var(--nino)', 4]);
@@ -3893,7 +3956,8 @@
                противоречила графику над собой (проверка роем 10.09). */
             ? '<strong>Peak estimate.</strong> The peak estimate and the seasons below are computed for Niño 3.4 only, so they are not shown while another zone is selected. Switch the zone back to Niño 3.4 to read them.'
             : '<strong>Peak estimate.</strong> ' + esc(pe.note) + ' Typical peak window ' + esc(pe.typical_peak_window) + '.' +
-              (lf ? ' The last season lived through in full is ' + esc(lf.season) + ' at ' + fnum(lf.value) + ' °C' + (td ? '; the current ' + esc(td.season) + ' is ' + td.months_done + ' month of 3 measured, at ' + fnum(td.observed_todate) + ' °C.' : '.') : ''))));
+              (lf ? ' The last season lived through in full is ' + esc(lf.season) + ' at ' + fnum(lf.value) + ' °C' + (td ? '; the current ' + esc(td.season) + ' is ' + td.months_done + ' month' + (td.months_done === 1 ? '' : 's') + ' of 3 measured, at ' + fnum(td.observed_todate) + ' °C'
+                  + ((td.running || {}).month ? ', and the last of them only on ' + td.running.weeks + ' week' + (td.running.weeks === 1 ? '' : 's') : '') + '.' : '.') : ''))));
     body.appendChild(cap);
 
     var wk = pair(NW.latest.n34a, P && P.noaa ? P.noaa.n34a : null, 1, '°C');
@@ -4456,7 +4520,9 @@
     if (k === 'plume') {
       plot(body, function (w, h) { return chartPlume(IRI, NW.latest.n34a, w, h); });
       var hist = (IRI.history || []).filter(function (h2) { return h2.combined; }).map(function (h2) { return h2.issued + ': ' + fnum(Math.max.apply(null, h2.combined.filter(fin))); });
-      body.appendChild(el('div', 'cap', 'Each thin line is one model, coloured by its class: keeping up, lagging, broken. Thick is the combined mean, dashed the previous issue. The red dot is this week’s reality. Combined peak by issue: ' + hist.reverse().join(' → ') + '.' +
+      body.appendChild(el('div', 'cap', 'Each thin line is one model, coloured by its class: keeping up, lagging, broken. '
+        + 'The thick ochre line is ours: a weighted mean over the models we do not count broken, and the published average of all of them is the thin pale dashed line. The grey dashed line is the previous issue. '
+        + '<strong>The red marks are not today.</strong> Each one is the part of that season already measured — a mean of one, two or three months — so they stand at different heights while the water has one temperature; the bar above each is where the models put that season\u2019s three-month mean. Combined peak by issue: ' + hist.reverse().join(' → ') + '.' +
         ((IRI.position || []).filter(function (q) { return !q.complete; }).map(function (q) {
           return ' Where we stand on this scale is a band, not a dot: ' + q.season + ' has ' + q.months_done +
             ' month' + (q.months_done > 1 ? 's' : '') + ' of 3 measured (' + fnum(q.todate) + '), and the rest of the season is taken from the spread of the live models, ' +
@@ -4572,7 +4638,11 @@
       body.appendChild(el('div', 'cap', 'Click a row to light that model in the plume. The forecast for ' + esc(ao.season) + ' is a three-month mean while reality is a weekly point, so the comparison is honest only as “the model is below a level already reached”.'));
     }
     var tl = el('div', 'tally');
-    tl.innerHTML = '<span class="pick' + (S.pick === 'below' ? ' on' : '') + '" data-pick="below" title="highlight the models below the lived level"><i style="background:var(--nino)"></i>below reality ' + ao.below.length + jchip('models_below_n') + '</span>' +
+    /* СЧЁТ И ЧЕРТА — ОДИН ПОРОГ. Здесь считали против недельного значения, а черта на плюме
+       проведена по прожитой части сезона: под одной подписью стояли два разных сравнения
+       (найдено проверкой 15.09). IRI.todate считает ровно против прожитого — берём его. */
+    var TD0 = (S.D.iri || {}).todate || {}, belowN = (TD0.below || ao.below).length, totM = TD0.n || (ao.n || 0);
+    tl.innerHTML = '<span class="pick' + (S.pick === 'below' ? ' on' : '') + '" data-pick="below" title="models whose three-month forecast is below the part of this season already measured — they would need the rest of the season to be colder than what has been lived"><i style="background:var(--nino)"></i>below the lived part ' + belowN + jchip('models_below_n') + '</span>' +
       '<span class="pick' + (S.pick === 'above' ? ' on' : '') + '" data-pick="above" title="highlight the models above it"><i style="background:var(--ok)"></i>above ' + ao.above.length + jchip('models_above') + '</span>' +
       /* КЛАССЫ ВНИЗУ — НАЖИМАЮТСЯ. Владелец 09.09: «вот там внизу классификация, кто сломался,
          можно при нажатии их ярче высвечивать». Те же ключи, что у легенды: клик по чипу

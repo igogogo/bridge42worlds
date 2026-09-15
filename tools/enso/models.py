@@ -104,7 +104,7 @@ def _errors(issues, obs):
     return per_model
 
 
-def classify(iri, oni, observed_weekly):
+def classify(iri, oni, observed_weekly, observed_todate=None):
     issues = _issues()
     if not issues:
         return {"classes": {}, "tally": {}, "targets": [], "note": "no stored issues"}
@@ -127,8 +127,13 @@ def classify(iri, oni, observed_weekly):
         cls, since = None, None
         below_now = False
         cur_m = cur_models.get(name)
+        # Сравнивать надо ОДНОРОДНОЕ: у модели трёхмесячное среднее, значит и у нас должно быть
+        # среднее прожитой части сезона, а не отдельная неделя. Недельное число выше прожитого
+        # (2.90 против 2.69 на 15.09), и по нему в «сломанные» попадали модели, которые ничему
+        # ещё не противоречат.
+        ref_now = observed_todate if observed_todate is not None else observed_weekly
         if cur_m and cur_first is not None and cur_m["values"][cur_first] is not None \
-                and observed_weekly is not None and cur_m["values"][cur_first] < observed_weekly:
+                and ref_now is not None and cur_m["values"][cur_first] < ref_now:
             below_now = True
         if short:
             if any(e["err"] <= -1.0 for e in short):
@@ -155,9 +160,9 @@ def classify(iri, oni, observed_weekly):
                     systematic = len(signs) >= 3 and (all(x < -0.2 for x in signs) or all(x > 0.2 for x in signs))
                     cls = "ok" if ok and not systematic else "lag"
                     since = None if cls == "ok" else short[0]["issue"]
-        if below_now and cls != "broke":
-            cls = "broke"
-            since = since or (iri or {}).get("issued")
+        # «Ниже прожитой части сезона» — это отдельный признак, а не класс: он говорит о ещё
+        # не кончившемся сезоне, а класс — о проверенных прошлых выпусках. Показывается он
+        # своей фишкой под графиком и своей подсветкой, и вес модели больше не обнуляет.
         # Одного «ниже в большинстве выпусков» мало: модель могла догнать. Рядом с классом —
         # ошибка двух последних проверяемых выпусков, с знаком и величиной (экспертиза 04.09).
         last2 = [{"issue": e["issue"], "season": e["season"], "err": e["err"]} for e in short[-2:]]
@@ -307,8 +312,15 @@ def live(iri, classes):
     for nm, m in (iri.get("models") or {}).items():
         if m.get("section") not in ("dyn", "stat") or not m.get("values"):
             continue
-        cls = (classes.get(nm) or {}).get("cls") or "none"
-        rows.append((nm, cls, WEIGHTS.get(cls, 0.6), m["values"]))
+        cr = classes.get(nm) or {}
+        cls = cr.get("cls") or "none"
+        # СКОЛЬКО ЗА КЛАССОМ ПРОВЕРОК. «Keeping up» без минимума выборки даётся и по одной
+        # сверке: правило «все ошибки в пределах 0,5» на выборке из одной ошибки истинно само
+        # собой, а проверка на систематический знак требует трёх и просто не срабатывает. Такая
+        # модель входила в сводную линию полным голосом. Теперь голос растёт с числом проверок
+        # и добирает полный вес к третьей (найдено проверкой 15.09).
+        w = WEIGHTS.get(cls, 0.6) * min(1.0, max(1, cr.get("n_checked") or 0) / 3.0)
+        rows.append((nm, cls, round(w, 3), m["values"]))
     mean, rms, lo, hi, n = [], [], [], [], []
     for i in range(len(seasons)):
         vals = [(r[3][i], r[2]) for r in rows
@@ -388,22 +400,39 @@ def position(iri, td_list, live_stats, month_range=None):
         i = seasons.index(td["season"]) if td["season"] in seasons else None
         done, val = td["months_done"], td["value"]
         rec = {"season": td["season"], "i": i, "months_done": done, "months": 3,
-               "todate": val, "complete": done >= 3}
-        if done >= 3:
+               "todate": val, "months_over": td.get("months_over", done),
+               "running": td.get("running"),
+               # прожит — значит все три месяца кончились; «посчитан» этого не значит
+               "complete": bool(td.get("complete", done >= 3))}
+        if rec["complete"] or done >= 3:
+            # done >= 3 без complete — это «все три месяца посчитаны, последний ещё идёт»:
+            # остатка, который можно расписать по моделям, нет, и полоса вырождается в точку.
+            # Писать при этом «остаток должен дать столько-то» нельзя — остатка нет.
             rec["lo"] = rec["hi"] = val
         else:
             s = val * done
             mlo = (live_stats.get("lo") or [None] * len(seasons))[i] if i is not None else None
             mhi = (live_stats.get("hi") or [None] * len(seasons))[i] if i is not None else None
-            if mlo is None or mhi is None:
+            if mlo is not None and mhi is not None:
+                # СЕЗОН ЕСТЬ В ПРОГНОЗАХ. Тогда полоса — это и есть их собственный разброс за
+                # этот сезон, и пересчитывать нечего: модель уже сказала, каким будет среднее за
+                # три месяца. Прежде здесь p10/p90 СЕЗОННОГО среднего подставлялись как значение
+                # одного оставшегося МЕСЯЦА, и полоса садилась ниже самих моделей (15.09).
+                rec["lo"], rec["hi"] = round(mlo, 2), round(mhi, 2)
+                mr = _monthly_range(td, live_stats, i)
+                if mr:
+                    # отдельное, куда более говорящее число: сколько должен дать ОСТАТОК сезона,
+                    # чтобы модели оказались правы
+                    rec["rest_from"] = [round(mr[0], 2), round(mr[1], 2)]
+            else:
                 # Сезона нет в прогнозах моделей (JJA, JAS: плюм начинает с ASO) — берём
                 # коридор для оставшихся месяцев с ближайшего сезона, который они дают.
                 if not month_range:
                     continue
                 mlo, mhi = month_range
                 rec["rest_via"] = "the nearest forecast season"
-            rec["lo"] = round((s + (3 - done) * mlo) / 3, 2)
-            rec["hi"] = round((s + (3 - done) * mhi) / 3, 2)
-            rec["rest_from"] = [round(mlo, 2), round(mhi, 2)]
+                rec["lo"] = round((s + (3 - done) * mlo) / 3, 2)
+                rec["hi"] = round((s + (3 - done) * mhi) / 3, 2)
+                rec["rest_from"] = [round(mlo, 2), round(mhi, 2)]
         out.append(rec)
     return out

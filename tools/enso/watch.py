@@ -707,15 +707,24 @@ SEASON_MONTHS = {"DJF": (12, 1, 2), "JFM": (1, 2, 3), "FMA": (2, 3, 4), "MAM": (
 
 
 def season_todate(NW, label, year):
-    """Среднее ТЕХ месяцев сезона, что уже измерены: {value, months_done, months, parts}.
+    """Среднее ТЕХ месяцев сезона, что уже измерены: {value, months_done, complete, parts}.
 
-    Месяц считается измеренным, если в нём есть хотя бы две недели: одна неделя — это ещё
-    не месяц, и среднее по ней сдвигает картину сильнее, чем помогает.
+    ДВЕ РАЗНЫЕ ВЕЩИ: месяц ПОСЧИТАН и месяц ПРОЖИТ. В счёт он идёт, когда в нём есть хотя бы
+    две недели: по одной неделе среднее врёт сильнее, чем помогает. А прожитым становится
+    только когда кончился, то есть когда недельный ряд ушёл в следующий месяц.
+
+    Раньше этой разницы не было, и сезон объявлялся прожитым целиком в его же последнем месяце:
+    15 сентября JAS стоял на панели как «прожит целиком, 2.49» — зелёной точкой, чертой через
+    весь плюм и словами «последний сезон, прожитый полностью», — хотя сентябрь был измерен на
+    две недели из четырёх. При растущем событии две первые недели месяца ниже целого месяца,
+    так что число было ещё и занижено (владелец 15.09: «для ASO это странно, проверь всё»).
     """
     months = SEASON_MONTHS.get(label)
     if not months:
         return None
     monthly, weeks = NW.get("monthly") or {}, NW.get("monthly_weeks") or {}
+    last = str(NW.get("date") or "")
+    ly, lm = (int(last[:4]), int(last[5:7])) if len(last) >= 7 else (None, None)
     vals, parts, y = [], [], year
     prev = None
     for m in months:
@@ -724,11 +733,18 @@ def season_todate(NW, label, year):
         prev = m
         key = f"{y}-{m:02d}"
         if key in monthly and weeks.get(key, 0) >= 2:
+            # месяц кончился, если последняя неделя ряда лежит уже в следующем месяце
+            over = bool(ly is not None and (y, m) < (ly, lm))
             vals.append(monthly[key])
-            parts.append({"month": key, "value": monthly[key], "weeks": weeks.get(key, 0)})
+            parts.append({"month": key, "value": monthly[key], "weeks": weeks.get(key, 0), "over": over})
     if not vals:
         return None
+    run = [p for p in parts if not p["over"]]
     return {"season": label, "value": round(sum(vals) / len(vals), 2), "months_done": len(vals),
+            "months_over": sum(1 for p in parts if p["over"]),
+            # прожит целиком — это три КОНЧИВШИХСЯ месяца, и ничто другое
+            "complete": sum(1 for p in parts if p["over"]) >= 3,
+            "running": (run[0] if run else None),
             "months": 3, "parts": parts}
 
 
@@ -746,6 +762,8 @@ def models_vs_todate(IRI, td):
         return None
     below = sorted(nm for nm, v in vals if v < td["value"])
     return {"season": td["season"], "observed_todate": td["value"], "months_done": td["months_done"],
+            # чтобы подпись под графиком говорила то же, что отметки на нём
+            "months_over": td.get("months_over"), "running": td.get("running"),
             "n": len(vals), "below": below, "share_below": round(100 * len(below) / len(vals)),
             "note": ("the models forecast a three-month mean; this compares them with the part of that season "
                      "already measured, so a model below this number would need the rest of the season to be "
@@ -1178,7 +1196,10 @@ def run(fetch=True):
     if IRI and "error" not in IRI:
         try:
             import models as MD
-            cl = MD.classify(IRI, ONI, NW["latest"]["n34a"])
+            _td_now = season_todate(NW, (IRI.get("against_observed") or {}).get("season") or "",
+                                    int(NW["date"][:4]))
+            cl = MD.classify(IRI, ONI, NW["latest"]["n34a"],
+                             observed_todate=(_td_now or {}).get("value"))
             IRI["classes"] = cl["classes"]; IRI["class_tally"] = cl["tally"]
             IRI["class_targets"] = cl["targets"]; IRI["class_issues"] = cl["issues"]
             # Как ломаются модели во времени: доля ниже реальности по выпускам и постоянные
@@ -1202,7 +1223,7 @@ def run(fetch=True):
         IRI["todate"] = models_vs_todate(IRI, td) if td else None
         for lab in ("JJA", "JAS", "ASO", "SON"):
             full = season_todate(NW, lab, yr)
-            if full and full["months_done"] == 3:
+            if full and full.get("complete"):
                 IRI["last_full_season"] = full
         if IRI.get("todate"):
             IRI["todate"]["parts"] = td["parts"]
