@@ -39,6 +39,8 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path.cwd()
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from s2_ids import s2_ids   # ARXIV или DOI: у работ не из arXiv свой ключ
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "cloudflare"))
 sys.path.insert(0, str(ROOT / "tools"))
@@ -79,7 +81,7 @@ def fetch_batches(ids, key):
     failed = []
     for i in range(0, len(ids), CHUNK):
         chunk = ids[i:i + CHUNK]
-        body = {"ids": ["ARXIV:" + bare(x) for x in chunk]}
+        body = {"ids": s2_ids(chunk)}
         for attempt in range(5):
             try:
                 r = requests.post(S2_BATCH, params={"fields": "externalIds,authors"},

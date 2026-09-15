@@ -336,14 +336,51 @@ _TAG = re.compile(r"<[^>]+>")
 _DROP = re.compile(r"(?is)<(ref-list|back|fn-group|table-wrap|supplementary-material)\b.*?</\1>")
 
 
+_EMAIL_TAG = re.compile(r"(?is)<email[^>]*>(.*?)</email>")
+_MAILTO = re.compile(r"(?i)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+
+
+def jats_contacts(xml):
+    """Адреса авторов для переписки из шапки JATS. Пустой список — законный ответ.
+
+    ЗАЧЕМ. Письма авторам берут адрес из fulltext.txt — так устроен реестр контактов
+    (tools/author_contacts.py), и для arXiv это работает: адрес напечатан на первой
+    странице PDF, и он попадает в текст. У JATS шапка ОТДЕЛЬНО от тела: авторы, их
+    институты и адреса лежат в <front>, а мы брали только <body>. Замер 15.09: адрес
+    нашёлся в 1% наших био-работ против 74% у arXiv — то есть рассылка по биологии была
+    бы невозможна, и причина была бы невидима.
+
+    Машинный вход сервера адресов не отдаёт вовсе: там имя автора для переписки и его
+    институт, но не почта. Единственный источник — эта шапка.
+    """
+    front = re.search(r"(?is)<front\b.*?</front>", xml)
+    if not front:
+        return []
+    seen, out = set(), []
+    for raw in _EMAIL_TAG.findall(front.group(0)):
+        for m in _MAILTO.findall(re.sub(r"<[^>]+>", " ", raw)):
+            a = m.strip().lower()
+            if a not in seen:
+                seen.add(a)
+                out.append(a)
+    return out
+
+
 def jats_text(url):
     """Текст работы из JATS XML источника.
 
     У bioRxiv вход ЧИЩЕ, чем у arXiv: там PDF, который надо вытряхивать (и он бывает под
     сорок мегабайт), здесь размеченный XML с разделами. Выкидываем список литературы,
     служебные блоки и таблицы — в пересказ они не идут, а объём съедают.
+
+    Шапку с адресами приписываем в начало: файл читает реестр контактов, и без неё
+    рассылка по био-работам не с чем работать (см. jats_contacts).
     """
     x = _get(url).decode("utf-8", "replace")
+    head = ""
+    mails = jats_contacts(x)
+    if mails:
+        head = "Corresponding author(s): " + ", ".join(mails) + "\n\n"
     body = re.search(r"(?is)<body\b[^>]*>(.*)</body>", x)
     if not body:
         return ""
@@ -355,7 +392,7 @@ def jats_text(url):
     t = t.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
     t = re.sub(r"[ \t]+", " ", t)
     t = re.sub(r"\n\s*\n+", "\n\n", t)
-    return t.strip()
+    return head + t.strip()
 
 
 # ── заготовка для intake ─────────────────────────────────────────────────────

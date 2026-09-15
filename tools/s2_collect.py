@@ -27,6 +27,9 @@ import time
 import urllib.request
 from pathlib import Path
 
+from urllib.parse import quote
+from s2_ids import s2_id, s2_ids   # ARXIV или DOI — см. tools/s2_ids.py
+
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 OUT = ROOT / "data" / "s2"
@@ -136,7 +139,7 @@ def ask_batch(chunk, k, depth=0):
     отказ теперь означает «спроси меньше».
     """
     d = req(f"https://api.semanticscholar.org/graph/v1/paper/batch?fields={BATCH_FIELDS}",
-            {"ids": [f"ARXIV:{i.split('v')[0]}" for i in chunk]}, k)
+            {"ids": s2_ids(chunk)}, k)
     if d is not None:
         return dict(zip(chunk, d))
     if len(chunk) <= 25 or depth >= 4:
@@ -177,11 +180,14 @@ def graph_pass(ids, papers, k):
     todo = [i for i in ids if i not in done and papers.get(i)]
     log(f"граф цитирований: {len(todo)} статей (~{len(todo) * 2 * PAUSE / 60:.0f} мин)")
     for n, aid in enumerate(todo, 1):
-        bare = aid.split("v")[0]
-        cits = req(f"https://api.semanticscholar.org/graph/v1/paper/ARXIV:{bare}/citations"
+        # Ключ тот же, что и в пакетной ручке: у работ не из arXiv он свой (DOI).
+        # Здесь его надо ещё и закодировать — в DOI есть косая черта, а он идёт
+        # частью ПУТИ, и сырой слэш увёл бы запрос на несуществующий адрес.
+        key = quote(s2_id(aid), safe=":")
+        cits = req(f"https://api.semanticscholar.org/graph/v1/paper/{key}/citations"
                    f"?fields={GRAPH_FIELDS}&limit=100", None, k)
         time.sleep(PAUSE)
-        refs = req(f"https://api.semanticscholar.org/graph/v1/paper/ARXIV:{bare}/references"
+        refs = req(f"https://api.semanticscholar.org/graph/v1/paper/{key}/references"
                    f"?fields={GRAPH_FIELDS}&limit=100", None, k)
         time.sleep(PAUSE)
         slim = lambda rows, kk: [
