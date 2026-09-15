@@ -572,6 +572,18 @@
   .info-pane.info-pop.stats{max-height:min(430px,58vh)}
   .works-foot{display:flex;justify-content:flex-end;gap:6px;flex-shrink:0;margin-top:2px}
   /* шар (пилот 08.09): контейнер вместо графика, подпись поверх */
+  /* Панель слоёв глобуса (15.09) */
+  .gl-layers{display:flex;flex-direction:column;gap:2px;margin:0 12px 6px;flex-shrink:0}
+  .gl-row{display:flex;align-items:center;gap:9px;padding:4px 8px;border:1px solid var(--hair);border-radius:8px;opacity:.55;transition:opacity .15s,border-color .15s}
+  .gl-row.on{opacity:1;border-color:color-mix(in srgb, var(--cyan) 40%, var(--hair))}
+  .gl-tog{width:22px;height:22px;flex:0 0 22px;border-radius:50%;border:1px solid var(--soft);background:transparent;color:var(--soft);font-size:11px;line-height:20px;padding:0;cursor:pointer}
+  .gl-row.on .gl-tog{border-color:var(--cyan);color:var(--cyan)}
+  .gl-n{display:flex;flex-direction:column;min-width:0;flex:1 1 auto}
+  .gl-n b{font-size:12px} .gl-n span{font-size:10.5px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gl-a{width:96px;flex:0 0 96px;accent-color:var(--cyan)}
+  .gl-s{font-family:var(--mono);font-size:9.5px;color:var(--soft);flex:0 0 auto;max-width:34%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .globe-scene .globe-box{min-height:380px}
+  @media (max-width:760px){ .gl-s{display:none} .gl-a{width:64px;flex:0 0 64px} }
   .globe-box{flex:1 1 60%;min-height:340px;position:relative;overflow:hidden;border-radius:10px;background:radial-gradient(circle at 50% 50%, #151a24 0, #0f1219 70%)}
   .globe-wait{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--soft);font-family:var(--mono);font-size:12px}
   .globe-legend{position:absolute;left:10px;bottom:8px;font-size:11px;color:#eee;background:rgba(20,24,32,.75);padding:5px 9px;border-radius:8px;max-width:70%;line-height:1.4}
@@ -1242,7 +1254,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=25f4bf539b"></script>
+<script src="/js/enso.js?v=622a202d23"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>

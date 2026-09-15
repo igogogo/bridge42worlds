@@ -17,7 +17,7 @@
 
   var T = {
     fresh: 'fresh', stale: 'stale',
-    tabs: { brief: 'Briefing', verdict: 'Verdict', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Now', ocean: 'Ocean', radiance: 'Satellite', models: 'Models', track: 'Track record', weather: 'Weather', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long term', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
+    tabs: { brief: 'Briefing', verdict: 'Verdict', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Now', ocean: 'Ocean', radiance: 'Satellite', models: 'Models', track: 'Track record', weather: 'Weather', globe: 'Globe', air: 'Air & fuel', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long term', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
     tabHelp: {
       brief: 'The entry point: what is happening, what the data show, what to expect and when, the risks already showing, regions and food, what to watch — in plain words, with a link to every number.',
       verdict: 'What the machine makes of it today: the verdict written from the numbers on this page, the turning point, the outlook, what to watch, the caveats.',
@@ -2141,7 +2141,7 @@
        рамкой, потом промежуток, потом чтение (брифинг, новости, упоминания, вердикт), ещё
        промежуток, потом последствия (еда, регионы). Research ушёл в служебную строку к методу
        и ссылкам. Порядок задан здесь явно, а не порядком ключей T.tabs. */
-    var GROUPS = [['overview', 'now', 'ocean', 'radiance', 'models', 'track', 'trend', 'air', 'weather', 'planet'], ['brief', 'news', 'mentions', 'verdict'], ['food', 'regions']];
+    var GROUPS = [['overview', 'now', 'ocean', 'radiance', 'models', 'track', 'trend', 'air', 'weather', 'globe', 'planet'], ['brief', 'news', 'mentions', 'verdict'], ['food', 'regions']];
     var SVC_ORDER = ['research', 'how', 'refs', 'chain', 'ops', 'about'];
     var DATA_TABS = GROUPS[0];
     GROUPS.forEach(function (g, gi) { if (gi) list.push(['_gap' + gi, '']); g.forEach(function (k) { if (T.tabs[k]) list.push([k, T.tabs[k]]); }); });
@@ -7708,6 +7708,132 @@
   }
   /* Шрифт подписей на шаре знает только ASCII: «Niño» ломалось (владелец 08.09), ° тоже. */
   function gl(t) { return String(t).replace(/ñ/g, 'n').replace(/Ñ/g, 'N').replace(/°/g, '').replace(/−/g, '-').replace(/[^\x20-\x7e]/g, ''); }
+  /* ══ ГЛОБУС КАК ОТДЕЛЬНАЯ СРЕДА ══════════════════════════════════════════════════
+     Список слоёв — единственное место, где написано, что на шаре бывает. Поле kind: 'paint'
+     рисуется в текстуру сферы (в порядке списка, снизу вверх), 'over' — средствами библиотеки
+     поверх неё. Прозрачность у каждого своя, движок один. */
+  var LAYERS = [
+    { id: 'sst', kind: 'paint', name: 'Ocean surface', on: true, alpha: 1,
+      line: 'how far the sea surface is from its normal for the date',
+      src: 'OISST v2.1, daily, 1° grid' },
+    { id: 'clouds', kind: 'paint', name: 'Deep cloud', on: true, alpha: 0.55,
+      line: 'where the tall storm clouds are standing today',
+      src: 'NOAA OLR Climate Data Record v2, daily, 1° grid' },
+    { id: 'cloudanom', kind: 'paint', name: 'Cloud against normal', on: false, alpha: 0.5,
+      line: 'more or less deep cloud than usual on this date',
+      src: 'the same record, against its 1991–2020 mean for the day' },
+    { id: 'boxes', kind: 'over', name: 'The boxes we watch', on: true, alpha: 1,
+      line: 'Niño zones, our land boxes and the satellite boxes',
+      src: 'NOAA weekly indices, ERA5 land boxes, our satellite count' },
+    { id: 'moorings', kind: 'over', name: 'Moorings on the equator', on: false, alpha: 1,
+      line: 'TAO buoys: the pillar is the warmest layer under each one',
+      src: 'TAO/TRITON array, five-day means' },
+    { id: 'coast', kind: 'paint', name: 'Coastlines', on: true, alpha: 1,
+      line: 'where the land is', src: 'Natural Earth, simplified' }
+  ];
+  function glOn(id) { var l = LAYERS.filter(function (q) { return q.id === id; })[0]; return l && (S.gl && S.gl[id] != null ? S.gl[id] : l.on); }
+  function glAlpha(id) { var l = LAYERS.filter(function (q) { return q.id === id; })[0]; return (S.glA && S.glA[id] != null) ? S.glA[id] : (l ? l.alpha : 1); }
+
+  /* Цвет облака: по излучению. 120 Вт/м² — вершина грозы, белое и плотное; 280 — ясно, пусто. */
+  function cloudColor(v, alpha) {
+    if (v == null) return null;
+    var t = Math.max(0, Math.min(1, (250 - v) / 130));            // 250 → 0, 120 → 1
+    if (t <= 0.04) return null;
+    return 'rgba(244,246,250,' + (t * alpha).toFixed(3) + ')';
+  }
+  function cloudAnomColor(v, alpha) {
+    if (v == null) return null;
+    var t = Math.max(-1, Math.min(1, v / 40));
+    if (Math.abs(t) < 0.08) return null;
+    return t < 0 ? 'rgba(126,168,214,' + (-t * alpha).toFixed(3) + ')'     // больше облака, чем обычно
+                 : 'rgba(214,166,106,' + (t * alpha).toFixed(3) + ')';     // меньше: небо расчистилось
+  }
+  function paintGrid(x, W, H, G, field, colf, alpha) {
+    if (!G || !G[field]) return false;
+    var rows = G[field], st = G.step || 1, px = W / 360 * st, py = H / 180 * st;
+    rows.forEach(function (row, i) {
+      var lat = (G.lat0 != null ? G.lat0 : 90) + i * (G.lat0 > 0 ? -st : st);
+      row.forEach(function (v, j) {
+        var col = colf(v, alpha); if (!col) return;
+        var lon = (G.lon0 || 0) + j * st; if (lon > 180) lon -= 360;
+        x.fillStyle = col;
+        x.fillRect((lon + 180) / 360 * W, (90 - lat - (G.lat0 > 0 ? 0 : st)) / 180 * H, px + .6, py + .6);
+      });
+    });
+    return true;
+  }
+  function globeTextureLayered(G) {
+    var W = 2048, H = 1024, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+    var x = cv.getContext('2d');
+    x.fillStyle = '#141a24'; x.fillRect(0, 0, W, H);
+    LAYERS.forEach(function (L) {
+      if (L.kind !== 'paint' || !glOn(L.id)) return;
+      var a = glAlpha(L.id);
+      if (L.id === 'sst') {
+        var g = G.sst;
+        if (g && g.rows) {
+          x.globalAlpha = a; x.fillStyle = '#243044'; x.fillRect(0, H * (30 / 180), W, H * (120 / 180));
+          var st = g.step || 1, px = W / 360 * st, py = H / 180 * st;
+          g.rows.forEach(function (row, i) {
+            var lat = g.lat0 + i * st;
+            row.forEach(function (v, j) {
+              var col = sstColor(v); if (!col) return;
+              var lon = g.lon0 + j * st;
+              x.fillStyle = col; x.fillRect((lon + 180) / 360 * W, (90 - lat - st) / 180 * H, px + .6, py + .6);
+            });
+          });
+          x.globalAlpha = 1;
+        }
+      } else if (L.id === 'clouds') {
+        paintGrid(x, W, H, S.OLR, 'olr', cloudColor, a);
+      } else if (L.id === 'cloudanom') {
+        paintGrid(x, W, H, S.OLR, 'anom', cloudAnomColor, a);
+      } else if (L.id === 'coast') {
+        var CO = S.COAST;
+        if (CO && CO.polys) {
+          x.strokeStyle = 'rgba(235,225,205,' + (0.55 * a).toFixed(2) + ')'; x.lineWidth = 1.4;
+          CO.polys.forEach(function (poly) {
+            x.beginPath();
+            poly.forEach(function (q, k) { var X = (q[0] + 180) / 360 * W, Y = (90 - q[1]) / 180 * H; if (k) x.lineTo(X, Y); else x.moveTo(X, Y); });
+            x.stroke();
+          });
+        }
+      }
+    });
+    return cv.toDataURL('image/png');
+  }
+
+  function viewGlobeScene() {
+    var body = stageShell(globeHead(), []);
+    body.classList.add('globe-scene');
+    var panel = el('div', 'gl-layers');
+    LAYERS.forEach(function (L) {
+      var on = glOn(L.id);
+      var row = el('div', 'gl-row' + (on ? ' on' : ''));
+      row.innerHTML = '<button type="button" class="gl-tog' + (on ? ' on' : '') + '">' + (on ? '\u25cf' : '\u25cb') + '</button>' +
+        '<div class="gl-n"><b>' + esc(L.name) + '</b><span>' + esc(L.line) + '</span></div>' +
+        (L.kind === 'paint' ? '<input class="gl-a" type="range" min="15" max="100" value="' + Math.round(glAlpha(L.id) * 100) + '" title="how strongly this layer shows">' : '') +
+        '<span class="gl-s">' + esc(L.src) + '</span>';
+      row.querySelector('.gl-tog').onclick = function () { S.gl = S.gl || {}; S.gl[L.id] = !on; render(); };
+      var sl = row.querySelector('.gl-a');
+      if (sl) sl.oninput = function () { S.glA = S.glA || {}; S.glA[L.id] = +sl.value / 100; globeRepaint(); };
+      panel.appendChild(row);
+    });
+    body.appendChild(panel);
+    mountGlobe('scene');
+    var d = (S.OLR || {}).date, sd = ((S.GL || {}).sst || {}).date;
+    body.appendChild(el('div', 'cap', 'One sphere, several measured layers, each with its own switch and its own strength. ' +
+      'The cloud layer is not a picture of clouds: it is the heat the Earth sends back to space, measured from orbit — where a tall storm stands, its frozen top radiates little, so the dark places on that scale are the storms. ' +
+      (d ? 'Cloud field: ' + esc(d) + '. ' : '') + (sd ? 'Sea surface: ' + esc(sd) + '.' : '')));
+  }
+  function globeHead() {
+    var n = LAYERS.filter(function (L) { return glOn(L.id); }).length;
+    return 'The planet with ' + n + ' measured layer' + (n === 1 ? '' : 's') + ' on it';
+  }
+  function globeRepaint() {
+    if (S._globeInst && S.GL) S._globeInst.globeImageUrl(globeTextureLayered(S.GL));
+  }
+
   function mountGlobe(mode) {
     var body = document.querySelector('.stage-body'); if (!body) return;
     var plot = body.querySelector('.plot');
@@ -7718,7 +7844,8 @@
       if (!box.isConnected) return;
       var G = r[1], W = Math.max(300, box.clientWidth), H = Math.max(300, box.clientHeight);
       box.innerHTML = '';
-      var kinds = { nino: ['nino'], land: ['land'], moorings: ['nino'], radiance: ['radiance'], rain: ['land'] }[mode] || ['nino'];
+      var kinds = { nino: ['nino'], land: ['land'], moorings: ['nino'], radiance: ['radiance'], rain: ['land'],
+                    scene: (glOn('boxes') ? ['nino', 'land', 'radiance'] : []) }[mode] || ['nino'];
       var polys = (G.boxes || []).filter(function (b) { return kinds.indexOf(b.kind) >= 0; });
       function val(b) { return mode === 'rain' ? b.rain_pct : b.value; }
       var vmaxSet = 0; polys.forEach(function (b) { var v = val(b); if (fin(v) && mode !== 'rain') vmaxSet = Math.max(vmaxSet, Math.abs(v)); });
@@ -7730,7 +7857,7 @@
       }
       var g = Globe({ animateIn: false })(box)
         .width(W).height(H).backgroundColor('rgba(0,0,0,0)')
-        .globeImageUrl(globeTexture(G)).showAtmosphere(true).atmosphereColor('#7C9BCB').atmosphereAltitude(0.12)
+        .globeImageUrl(mode === 'scene' ? globeTextureLayered(G) : globeTexture(G)).showAtmosphere(true).atmosphereColor('#7C9BCB').atmosphereAltitude(0.12)
         .polygonsData(polys.map(function (b) { return { geo: boxPoly(b), b: b }; }))
         .polygonGeoJsonGeometry(function (d) { return d.geo; })
         .polygonCapColor(function (d) { return colr(d.b); })
@@ -7741,13 +7868,13 @@
         .labelsData(polys.map(function (b) { var lc = (b.lon[0] + b.lon[1]) / 2; if (lc > 180) lc -= 360; return { lat: (b.lat[0] + b.lat[1]) / 2, lng: lc, sz: 1.1, text: gl(b.label.replace(/^Satellite: /, '') + (fin(val(b)) ? '  ' + (mode === 'rain' ? val(b) + ' %' : fnum(val(b), 1) + (mode === 'radiance' ? ' %' : ' C')) : '')) }; })
           .concat(mode === 'moorings' ? (G.moorings || []).map(function (m) { return { lat: m.lat + 1.2, lng: m.lon, sz: 0.7, text: gl((m.label || m.id || '').replace(/^TAO /, '') + (fin(m.value) ? '  ' + fnum(m.value, 1) + ' C at ' + m.depth + ' m' : '')) }; }) : []))
         .labelSize(function (d) { return d.sz; }).labelColor(function () { return '#f2e9d8'; }).labelDotRadius(0).labelAltitude(0.012);
-      if (mode === 'moorings') {
+      if (mode === 'moorings' || (mode === 'scene' && glOn('moorings'))) {
         g.pointsData(G.moorings || []).pointLat('lat').pointLng('lon')
           .pointAltitude(function (d) { return fin(d.value) ? 0.02 + d.value / 60 : 0.02; })
           .pointRadius(0.6).pointColor(function (d) { return fin(d.value) ? '#D4735C' : '#888'; })
           .pointLabel(function (d) { return '<div style="font:12px/1.4 system-ui;padding:4px 6px;background:rgba(20,24,32,.9);color:#eee;border-radius:6px"><b>' + esc(d.label) + '</b><br>' + esc(d.text) + (d.date ? '<br><small>' + esc(d.date) + '</small>' : '') + '</div>'; });
       }
-      var focus = { nino: -140, land: 40, moorings: -150, radiance: -170, rain: 40 }[mode] || -140;
+      var focus = { nino: -140, land: 40, moorings: -150, radiance: -170, rain: 40, scene: -160 }[mode] || -140;
       g.pointOfView({ lat: mode === 'land' || mode === 'rain' ? 10 : 0, lng: focus, altitude: 2.1 }, 0);
       g.controls().autoRotate = true; g.controls().autoRotateSpeed = 0.35;
       var leg = el('div', 'globe-legend');
@@ -8469,6 +8596,7 @@
     else if (S.view === 'models') viewModels();
     else if (S.view === 'track') viewTrack();
     else if (S.view === 'weather') viewWeather();
+    else if (S.view === 'globe') viewGlobeScene();
     else if (S.view === 'air') viewAir();
     else if (S.view === 'ocean') viewOcean();
     else if (S.view === 'radiance') viewRadiance();
@@ -8744,11 +8872,12 @@
     get('/data/enso/water.json').catch(function () { return {}; }),
     get('/data/enso/ice-snow.json').catch(function () { return {}; }),
     get('/data/enso/glaciers.json').catch(function () { return {}; }),
-    get('/data/enso/models-history.json').catch(function () { return {}; })])
+    get('/data/enso/models-history.json').catch(function () { return {}; }),
+    get('/data/enso/olr-grid.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
       fixRiskTitles(r[0]);                    // парные риски: «world ocean:» / «land+ocean:» читались как дубли (владелец 09.09)
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}   /* история прогнозов (models-history.json, 15.09) */;
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}   /* история прогнозов и облака на шаре (15.09) */;
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');
