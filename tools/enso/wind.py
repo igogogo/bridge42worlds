@@ -315,7 +315,11 @@ def build(today=None, verbose=False):
             "note": "ERA5 is the field, the moorings are the check: two independent measures of the same wind."}
 
 
-STALE_DAYS = 5             # сколько суток молчания ещё терпимо для суждения о прорыве
+# СКОЛЬКО СУТОК МОЛЧАНИЯ ЕЩЁ ТЕРПИМО. Было пять — под прежний набор, который архив выбирал сам и
+# отдавал с отставанием в трое суток. С 15.09 ключ прибит (models=era5), а этот набор приходит
+# на шестые сутки: со старым порогом панель каждый день объявляла бы «поле ветра не ответило» на
+# исправном источнике. Девять — это обычное отставание плюс трое суток на настоящий отказ.
+STALE_DAYS = 9
 
 
 def risks(WIND):
@@ -343,6 +347,31 @@ def risks(WIND):
             None, "data", "wind_silent"))
         return out
     ev = e.get("events") or []
+    # ПРОРЫВ, КОТОРЫЙ ЕЩЁ НЕ ПРОРЫВ. Наше определение требует пяти суток подряд выше порога, и
+    # это правильный порог — но при четырёх сутках панель молчала совсем, хотя ветер на экране
+    # уже вдвое выше нормы. Поймано 15.09, когда прибивка набора (models=era5) опустила ряд на
+    # полметра в секунду и пятидневная серия стала четырёхдневной: риск исчез, а ветер остался.
+    # Правило ничего не выдумывает: оно называет ровно то, что посчитано, и вслух говорит, что
+    # это ещё не прорыв по нашему же счёту.
+    run, peak = 0, None
+    for d, a in zip(reversed(e.get("dates") or []), reversed(e.get("anom") or [])):
+        if a is None or a < (e.get("threshold") or 1e9):
+            break
+        run += 1
+        peak = a if peak is None else max(peak, a)
+    if not e.get("active") and run >= 3:
+        out.append((
+            "A westerly wind anomaly has been running for days without yet counting as a burst", 3, "2–3 months",
+            f"{run} days in a row at or above {e.get('threshold')} m/s to {e.get('last_date')}, peak {round(peak, 2)} m/s "
+            f"(ERA5 10 m wind, six points 130°E–180°). Our own definition of a burst asks for five days in a row, "
+            f"so this is {5 - run} day{'s' if 5 - run != 1 else ''} short of one.",
+            "The trade winds have given way over the warm pool, and if it holds another day or two it becomes a burst "
+            "by our own counting. The field is published with a lag of about six days, so the days that would settle "
+            "it may already exist and simply have not reached us.",
+            "the next update of the wind field: it either completes the run or ends it",
+            {"name": "Westerly wind anomaly, 130°E–180°, daily", "unit": "m/s", "step": "day",
+             "dates": e["dates"], "values": e["anom"], "analogs": e.get("analogs") or {}},
+            "climate", "wwb_building"))
     if e.get("active"):
         last = ev[-1]
         out.append((
