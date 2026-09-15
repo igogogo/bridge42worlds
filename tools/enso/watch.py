@@ -346,6 +346,17 @@ def nino34_analogs(ds):
     }
     out["rank_same30"] = 1 + sum(1 for v in out["analogs"].values() if v["same30"] > cur30)
     out["current_series"] = [None if not np.isfinite(v) else round(float(v), 2) for v in cur]
+    # СРЕДНИЙ УРОВЕНЬ ПОСЛЕДНИХ ДВАДЦАТИ ЛЕТ (владелец 15.09: «чтобы видеть уровень общий»).
+    # Аналоги — четыре сильнейших события, то есть верхний край того, что бывает; ноль — норма
+    # 1991–2020. Между ними не хватало обычного года наших дней: насколько тёплым стал фон.
+    # Берём среднюю аномалию по дню года за двадцать полных лет до текущего.
+    recent = [y for y in sorted(anom) if ycur - 20 <= y < ycur]
+    if len(recent) >= 10:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            m20 = np.nanmean(np.array([anom[y] for y in recent]), axis=0)
+        out["mean20"] = [None if not np.isfinite(v) else round(float(v), 2) for v in m20]
+        out["mean20_years"] = [recent[0], recent[-1]]
     # все годы: ранг текущих 30 дней среди всех
     allsame = []
     for y in sorted(years):

@@ -166,6 +166,17 @@ METRICS = {
         title="Niño 1+2, weekly anomaly", unit="°C", digits=2, src="NOAA CPC weekly, anomaly against 1991–2020",
         val=lambda d: _g(d, "noaa", "latest", "n12a"), date=lambda d: _g(d, "noaa", "date"),
         at=lambda d, ym: _weekly_at(d, ym, "n12a")),
+    # Все четыре зоны, а не две. Владелец 15.09: «по зоне Niño 3 мы перешагнули общий рекорд, а
+    # в ленте KPI не вижу». Зона была в тревогах и в вердикте, но не в журнале — значит, и плитки
+    # для неё быть не могло.
+    "n3_weekly": dict(
+        title="Niño 3, weekly anomaly", unit="°C", digits=2, src="NOAA CPC weekly, anomaly against 1991–2020",
+        val=lambda d: _g(d, "noaa", "latest", "n3a"), date=lambda d: _g(d, "noaa", "date"),
+        at=lambda d, ym: _weekly_at(d, ym, "n3a")),
+    "n4_weekly": dict(
+        title="Niño 4, weekly anomaly", unit="°C", digits=2, src="NOAA CPC weekly, anomaly against 1991–2020",
+        val=lambda d: _g(d, "noaa", "latest", "n4a"), date=lambda d: _g(d, "noaa", "date"),
+        at=lambda d, ym: _weekly_at(d, ym, "n4a")),
     "n34_daily": dict(
         title="Niño 3.4, daily anomaly", unit="°C", digits=2, src="OISST v2.1 daily, anomaly against 1991–2020",
         val=lambda d: _g(d, "watch", "sst_nino34", "last_value"),

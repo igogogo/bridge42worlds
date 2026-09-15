@@ -728,6 +728,7 @@
   }
   function chartAnalogs(N, W, H) {
     var years = Object.keys(N.analogs).sort();
+    var M20 = N.mean20 || null, M20Y = N.mean20_years || null;
     var RC = (W >= 640 && years.length) ? Math.max(110, Math.min(190, Math.round(W * .24))) : 0;
     var Lp = 46, R = RC ? 12 : legendW(W), Tp = topPad(W), B = 26;
     var pw = W - Lp - R - (RC ? RC + 14 : 8), ph = H - Tp - B, n = 366 + 120;
@@ -752,6 +753,14 @@
       // пик года — число, а не украшение: он остаётся в подписи на любой ширине (09.09)
       leg.push([y + '→' + String(parseInt(y, 10) + 1).slice(2) + ': peak ' + fnum(a.peak), 'var(--a' + y + ')', 1.6, dashOf(yi + 1), y]);
     });
+    /* ФОН ПОСЛЕДНИХ ДВАДЦАТИ ЛЕТ. Аналоги — верхний край того, что бывает, ноль — норма
+       1991–2020; между ними не хватало обычного года наших дней (владелец 15.09). Линия идёт
+       под аналогами, тонкая и приглушённая: это не событие, это уровень, от которого событие
+       считается. Продолжение в следующий год — те же дни года. */
+    if (M20 && M20.length) {
+      var m20full = M20.concat(M20.slice(0, 120));
+      s += segs(m20full.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', 1.2, pickOp('mean20', .75), '6 4');
+    }
     s += segs(N.current_series.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.6, pickOp('now'));
     s += nowDot(X(N.day), Y(N.current_day), 'var(--nino)', 4.5);
     /* ЧИСЛО У МИГАЮЩЕЙ ТОЧКИ. Владелец 09.09: «на телефоне цифры не видны — на now against
@@ -806,6 +815,7 @@
     // Расшифровка налезала на мини-панели: в правом поле теперь живут они. Когда панели
     // показаны, легенда уходит внутрь графика, слева вверху (владелец 04.09).
     var legItems = [[(N.year || 'now') + ' — now', 'var(--text)', 2.6, '', 'now']].concat(leg);
+    if (M20 && M20.length) legItems.push([(M20Y ? M20Y[0] + '–' + M20Y[1] : 'last 20 years') + ': the ordinary level of our days', 'var(--soft)', 1.2, '6 4', 'mean20']);
     if (ftA.length) legItems.push(['fresh, not yet assessed', 'var(--ochre)', 1.6, '3 3', 'fresh']);
     if (RC) s += legendAt(legItems, Lp + 8, Tp + 12);
     else s += legend(legItems, W, H, R, Tp);
@@ -2243,8 +2253,8 @@
      в ряд: просто цифра с названием и стрелкой вверху; на стрелочку — историю»). Источник —
      журнал (journal.json), тот же, что у стрелок на плашках: значение последней записи,
      изменение к предыдущей. Порядок — по важности; сначала те, что изменились. */
-  var STRIP_KEYS = ['n34_daily', 'n34_weekly', 'n12_weekly', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
-  var STRIP_NAME = { n34_weekly: 'Niño 3.4 weekly', n34_daily: 'Niño 3.4 daily', n12_weekly: 'Niño 1+2 weekly', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean, anom', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
+  var STRIP_KEYS = ['n34_daily', 'n34_weekly', 'n12_weekly', 'n3_weekly', 'n4_weekly', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
+  var STRIP_NAME = { n34_weekly: 'Niño 3.4 weekly', n34_daily: 'Niño 3.4 daily', n12_weekly: 'Niño 1+2 weekly', n3_weekly: 'Niño 3 weekly', n4_weekly: 'Niño 4 weekly', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean, anom', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
   /* РЕКОРДЫ ВПЕРЁД И РАМКОЙ. Владелец 10.09: «рекорды тоже как-то в ленте KPI отображать —
      мерцанием красной рамки или вперёд ставить». Панель уже знает про рекорды в четырёх
      местах, просто молчала об этом в полосе: ранг 1 у суточного Niño 3.4 и у поясов планеты,
@@ -2271,9 +2281,15 @@
        и ничто иное. Тот же тест, что у сборщика тревог в tools/enso/alerts.py. */
     var tw = (((D.subsurface || {}).tao || {}).warmest) || {};
     if (tw.above_record === true) put('subsurface_warmest', 'the warmest layer ever measured under these moorings' + (tw.prev_max ? ', past ' + fnum(tw.prev_max.value, 1) + ' °C of ' + esc(String(tw.prev_max.date || '').slice(0, 7)) : ''));
-    var nwL = ((D.noaa || {}).latest) || {}, nwM = ((D.noaa || {}).hist_max) || {};
-    if (fin(nwL.n34a) && fin(nwM.n34a) && nwL.n34a > nwM.n34a) put('n34_weekly', 'above the highest weekly value of the record, ' + fnum(nwM.n34a, 1) + ' °C');
-    if (fin(nwL.n12a) && fin(nwM.n12a) && nwL.n12a > nwM.n12a) put('n12_weekly', 'above the highest weekly value of the record, ' + fnum(nwM.n12a, 1) + ' °C');
+    /* ВСЕ ЧЕТЫРЕ ЗОНЫ ОДНИМ ПРАВИЛОМ. Проверялись только 3.4 и 1+2, поэтому рекорд Niño 3
+       (+3.7 против +3.3 до события) в ленте не отмечался — владелец 15.09. Потолок берётся
+       тот же, что у тревог: максимум ДО начала события, с его датой (watch.noaa_weekly_watch). */
+    var nwL = ((D.noaa || {}).latest) || {}, nwM = ((D.noaa || {}).hist_max) || {}, nwD = ((D.noaa || {}).hist_max_date) || {};
+    [['n34a', 'n34_weekly'], ['n12a', 'n12_weekly'], ['n3a', 'n3_weekly'], ['n4a', 'n4_weekly']].forEach(function (z) {
+      if (!fin(nwL[z[0]]) || !fin(nwM[z[0]]) || nwL[z[0]] <= nwM[z[0]]) return;
+      put(z[1], 'above the highest weekly value before this event began, ' + fnum(nwM[z[0]], 1) + ' °C'
+        + (nwD[z[0]] ? ' (' + nwD[z[0]] + ')' : ''));
+    });
     (D.alerts || []).forEach(function (a) {
       if ((a.level || '') !== 'SHOUT') return;
       var t = (a.title || '').toLowerCase();
@@ -2334,7 +2350,7 @@
         pay.def = pay.def.replace(' Click for the history.', ' Click to open its chart; the history is on that scene.');
         return '<button type="button" class="ks' + (x.rec ? ' rec' : '') + '" data-go="' + esc(KPI_SCENE[x.k] || 'overview') + '" data-src="' + esc(JSON.stringify(pay)) + '">' +
           (x.rec ? '<span class="ks-rec">record</span>' : '') +
-          '<span class="ks-row"><span class="ks-v">' + (x.k === 'oni' || /nino|n34|n12|sst_world|wind|mjo/.test(x.k) && x.last.v > 0 ? '+' : '') + jval(x.last.v, dg) + (u ? '<small>' + esc(u) + '</small>' : '') + '</span>' +
+          '<span class="ks-row"><span class="ks-v">' + (x.k === 'oni' || /nino|^n(34|12|3|4)_|sst_world|wind|mjo/.test(x.k) && x.last.v > 0 ? '+' : '') + jval(x.last.v, dg) + (u ? '<small>' + esc(u) + '</small>' : '') + '</span>' +
           (x.dv ? '<span class="ks-d ' + jsign(x.dv) + '">' + jarrow(x.dv) + (x.dv > 0 ? '+' : '') + jval(x.dv, dg) + '</span>' : '') + '</span>' +
           '<span class="ks-n">' + esc(STRIP_NAME[x.k] || x.r.title) + '</span></button>';
       }).join('');
@@ -2348,6 +2364,7 @@
      чтение ответа одной функцией. Без ручки (localhost) — извлечённый ответ с пометкой demo и
      сохранение в браузере. */
   var KPI_SCENE = { n34_weekly: 'now/weekly', n12_weekly: 'now/weekly', n34_daily: 'trend/sst_nino34', n34_30d: 'trend/sst_nino34', rec_sst_nino34: 'trend/sst_nino34', fc14_sst_nino34: 'trend/sst_nino34',
+    n3_weekly: 'now/weekly', n4_weekly: 'now/weekly',
     n34_box: 'ocean/surface', n12_box: 'ocean/surface', gulf_sst: 'ocean/surface', subsurface_warmest: 'ocean/moorings', d20_east: 'ocean/section',
     oni: 'now/analogs', roni: 'now/analogs', risk_index: 'verdict', n_risks: 'now/analogs', n_alerts: 'now/analogs', scenario: 'regions',
     sst_world: 'trend', t2_world: 'trend', rec_sst_world: 'trend', rec_t2_world: 'trend', fc14_sst_world: 'trend', fc14_t2_world: 'trend',
