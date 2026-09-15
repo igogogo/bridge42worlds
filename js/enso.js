@@ -1985,11 +1985,11 @@
       /* Подсказка: колонкой, имя и одна строка смысла (владелец 08.09: «в аккуратную колонку»). */
       return '<div class="cn col"><span class="cn-h">concepts</span>' +
         show.map(function (c) { return '<a class="cn-r" href="' + cnUrl(c.id) + '" target="_blank" rel="noopener"><b>' + esc(cnName(c)) + '</b><span>' + esc(c.line || '') + '</span></a>'; }).join('') +
-        '<div class="cn-f">' + (cs.length > show.length ? '<span class="cn-more">all ' + cs.length + ' on the graph</span>' : '') + gbtn + '</div></div>';
+        '<div class="cn-f">' + gbtn + '</div></div>';
     }
     return '<div class="cn"><span class="cn-h">concepts</span>' +
       show.map(function (c) { return '<a class="cn-c" href="' + cnUrl(c.id) + '" target="_blank" rel="noopener" data-src="' + cnPay(c) + '">' + esc(cnName(c)) + '</a>'; }).join('') +
-      (cs.length > show.length ? '<span class="cn-c more">all ' + cs.length + ' on the graph</span>' : '') + gbtn + '</div>';
+      gbtn + '</div>';
   }
   /* МИНИ-ГРАФ В КАРТОЧКЕ (второй шаг задания, владелец 08.09: «граф должен открываться
      отдельно, в конце»). Движок общий — js/b42-graph-core.js + js/b42-mini.js, тот же, что на
@@ -2007,8 +2007,11 @@
      крестик, Esc и клик мимо. Узлы и «весь граф» открываются новой вкладкой, панель остаётся. */
   function cnBtn(anchors, label) {
     var a = Array.isArray(anchors) ? anchors : [anchors];
-    if (!conceptsFor(a).length) return '';
-    return '<button type="button" class="cn-mg rail" data-anchors="' + esc(a.join(',')) + '">' + esc(label || 'graph') + '</button>';
+    var n = conceptsFor(a).length;
+    if (!n) return '';
+    /* Число — на самой кнопке (владелец 15.09): подпись «all 17 on the graph» стояла рядом,
+       говорила число и ничего не делала, а кнопка открывала граф и числа не знала. */
+    return '<button type="button" class="cn-mg rail" data-anchors="' + esc(a.join(',')) + '" title="' + n + ' concepts on the graph">' + esc(label || 'graph') + ' <b>' + n + '</b></button>';
   }
   function closeGraphModal() { var m = $('cnModal'); if (m) m.remove(); }
   function openGraphModal(ids, focus, width, anchors) {   // width — ширина карточки, из которой открыли (владелец 08.09: «в размер карточки»); anchors — показать и облако
@@ -2352,7 +2355,7 @@
           (x.rec ? '<span class="ks-rec">record</span>' : '') +
           '<span class="ks-row"><span class="ks-v">' + (x.k === 'oni' || /nino|^n(34|12|3|4)_|sst_world|wind|mjo/.test(x.k) && x.last.v > 0 ? '+' : '') + jval(x.last.v, dg) + (u ? '<small>' + esc(u) + '</small>' : '') + '</span>' +
           (x.dv ? '<span class="ks-d ' + jsign(x.dv) + '">' + jarrow(x.dv) + (x.dv > 0 ? '+' : '') + jval(x.dv, dg) + '</span>' : '') + '</span>' +
-          '<span class="ks-n">' + esc(STRIP_NAME[x.k] || x.r.title) + '</span></button>';
+          '<span class="ks-n">' + esc(STRIP_NAME[x.k] || x.r.title) + (KPI_SCENE[x.k] ? plainBtn(String(KPI_SCENE[x.k]).split('/')[0], String(KPI_SCENE[x.k]).split('/')[1] || '', 'ks-i') : '') + '</span></button>';
       }).join('');
     stripArrows(host);
   }
@@ -2947,7 +2950,7 @@
     board.innerHTML =
       '<div class="rs-h">KPI in this conversation</div>' + (rs.kpis.length ? '<div class="rs-kpis">' + rs.kpis.map(rsKpiTile).join('') + '</div>' : '<div class="rs-empty">' + (empty ? 'Ask about a number and it appears here with its arrow and history.' : 'No indicator matched yet.') + '</div>') +
       '<div class="rs-h">Concepts</div>' + (cids.length ? '<div class="cn"><span class="cn-h">concepts</span>' + cids.slice(0, 24).map(function (id) { var c = rs.concepts[id]; return '<a class="cn-c" href="' + cnUrl(id) + '" target="_blank" rel="noopener" data-src="' + cnPay(c) + '">' + esc(cnName(c)) + '</a>'; }).join('') +
-        (cids.length > 24 ? '<span class="cn-c more">all ' + cids.length + ' on the graph</span>' : '') + '<button type="button" class="cn-mg" data-ids="' + esc(cids.join(',')) + '" data-focus="' + esc(cids[0]) + '">graph</button></div>' : '<div class="rs-empty">The cloud grows with every question; the graph opens on the whole set.</div>') +
+        '<button type="button" class="cn-mg" data-ids="' + esc(cids.join(',')) + '" data-focus="' + esc(cids[0]) + '">graph</button></div>' : '<div class="rs-empty">The cloud grows with every question; the graph opens on the whole set.</div>') +
       '<div class="rs-h">On the panel</div>' + (lks.length ? '<div class="rs-links">' + lks.map(function (k) { var l = rs.links[k]; return '<a href="enso.html' + esc(l.hash) + '" target="_blank" rel="noopener"' + (l.cited ? ' class="cited"' : '') + '><b>' + esc(l.kind) + '</b>' + esc(l.title) + (l.cited ? ' <i>cited</i>' : '') + ' ↗</a>'; }).join('') + '</div>' : '<div class="rs-empty">Risks, alerts and scenes the conversation touched — where to go and look.</div>') +
       '<div class="rs-h">Works we parsed</div>' + (wks.length ? '<div class="rs-works">' + wks.slice(0, 6).map(function (id) { return rsWorkRow(rs.works[id]); }).join('') + '</div>' : '<div class="rs-empty">Parsed papers attached to the same anchors.</div>') +
       '<div class="rs-h">Summary of the conversation</div>' + (rs.summary.length ? '<div class="rs-sum"><ol>' + rs.summary.map(function (l, i) { var v = (rs.verdicts || [])[i]; return '<li>' + esc(l) + (v && v.status ? ' <span class="rs-v ' + esc(v.status) + '" data-src="' + esc(JSON.stringify({ name: 'Checked by the model: ' + v.status, def: v.why || '' })) + '">' + esc(v.status) + '</span>' : '') + '</li>'; }).join('') + '</ol></div>' : '<div class="rs-empty">One line per turn; “verify” sends the lines back to the model to check them against the sources.</div>') +
@@ -3324,6 +3327,9 @@
       render();
     });
     body.appendChild(p);
+    /* Кнопка «i» в левом верхнем углу поля графика — напротив legend в правом (владелец 15.09). */
+    var pb = plainBtn(S.view, sub(S.view, ''), null);
+    if (pb) { var pw2 = el('span', 'plain-i-wrap'); pw2.innerHTML = pb; p.appendChild(pw2); }
     S.plotEl = p; S.draw = draw; S.pw = 0; S.ph = 0;
     // дата данных — значок в правом нижнем углу поля графика
     var wrapB = el('span', 'dcal-wrap', dateBadge(jk || plotKey(draw)));
@@ -5856,7 +5862,7 @@
       var allIds = {}; keys.forEach(function (a) { CNA[a].forEach(function (c) { allIds[c.id] = 1; }); });
       var nIds = Object.keys(allIds).length;
       body.appendChild(el('div', 'note', esc((S.CN || {}).note || '') + ' Built ' + esc((S.CN || {}).built || '') + '; ' + keys.length + ' anchors, ' + ((S.CN || {}).n_links || 0) + ' links, ' + nIds + ' distinct concepts. Names open the concept page in your language; ' +
-        '<a href="' + cnGraph(Object.keys(allIds)) + '" target="_blank" rel="noopener">all ' + nIds + ' on the graph ↗</a>'));
+        '<a class="cn-mg" href="' + cnGraph(Object.keys(allIds)) + '" target="_blank" rel="noopener" title="' + nIds + ' concepts on the graph">graph <b>' + nIds + '</b></a>'));
       function anchorLabel(a) {
         var p = a.split(':'), id = p.slice(1).join(':');
         if (p[0] === 'term') return (S.G[id] || {}).name || id;
@@ -5947,9 +5953,12 @@
     /* Подсказка — чистым текстом: имя показателя приходит с плашкой зоны, а подсказка
        экранирует разметку и показывала «/span» (владелец 05.09). */
     d.setAttribute('data-src', JSON.stringify(pay || { name: plainText(kn), def: plainText(big) + ' — ' + plainText(small), why: 'Click to open the section.' }));
-    d.innerHTML = '<div class="kn">' + kn + '</div><div class="ov-row"><div class="kv">' + big + '</div><div class="ov-vis">' + (vis || '') + '</div></div><div class="km">' + small + '</div>' +
+    /* «i» на плитке обзора (владелец 15.09): карточка того раздела, куда плитка ведёт, —
+       читатель понимает, что откроется, ещё до нажатия. */
+    var ovI = go ? plainBtn(go[0], go[1] || '', 'ov-i') : '';
+    d.innerHTML = '<div class="kn">' + kn + ovI + '</div><div class="ov-row"><div class="kv">' + big + '</div><div class="ov-vis">' + (vis || '') + '</div></div><div class="km">' + small + '</div>' +
       (jk ? '<span class="dcal-wrap">' + (typeof jk === 'string' ? dateBadge(jk) : dateBadge(null, jk[0], jk[1])) + '</span>' : '');
-    d.addEventListener('click', function (ev) { if (ev.target.closest('.dcal')) return; S._back = 'overview'; S.full = false; S.view = go[0]; if (go[1]) S.sub[go[0]] = go[1]; S.risk = null; render(); });
+    d.addEventListener('click', function (ev) { if (ev.target.closest('.dcal') || ev.target.closest('.plain-i')) return; S._back = 'overview'; S.full = false; S.view = go[0]; if (go[1]) S.sub[go[0]] = go[1]; S.risk = null; render(); });
     return d;
   }
   function arcGauge(v, max, color, markAt) {
@@ -7754,6 +7763,34 @@
      сцены здесь: source — откуда числа; plain — в чём суть, двумя-тремя фразами для обычного
      человека; tech — техническое, к нему прибавляются подписи сцены (.cap), которые с экрана
      убираются в этот же разбор. Стандарт сцены: сверху график, ниже плашки, слова — за кнопками. */
+  /* ══ «О ЧЁМ ЭТОТ ГРАФИК» ПРОСТЫМИ СЛОВАМИ ════════════════════════════════════════
+     Четыре коротких поля на каждый визуал, и все четыре отвечают на вопрос читателя, а не
+     на вопрос составителя:
+       what    — что это вообще такое, одной фразой без единого термина;
+       see     — что на картинке видно глазом: где что лежит, что значит цвет и форма;
+       special — почему эта картинка вообще есть: что она умеет, чего не умеют соседние;
+       src     — откуда числа и как часто обновляются.
+     Ключ — адрес сцены «вид/подвид»; есть и ключ «вид» для сцены целиком. Нет текста —
+     кнопки нет: пустая карточка хуже её отсутствия. */
+  var PLAIN = {};
+  function plainCard(view, subk) {
+    var e = PLAIN[view + '/' + subk] || PLAIN[view];
+    if (!e) {
+      var h = T.subHelp[view + '/' + subk];          // запасной путь: однострочная подсказка подвкладки
+      if (!h) return null;
+      e = { what: h };
+    }
+    var body = '';
+    if (e.what) body += '<p>' + esc(e.what) + '</p>';
+    if (e.see) body += '<p><b>What you see.</b> ' + esc(e.see) + '</p>';
+    if (e.special) body += '<p><b>Why this chart exists.</b> ' + esc(e.special) + '</p>';
+    return { name: e.title || 'About this chart', html: body, src: e.src || '' };
+  }
+  function plainBtn(view, subk, cls) {
+    var c = plainCard(view, subk);
+    if (!c) return '';
+    return '<button type="button" class="plain-i' + (cls ? ' ' + cls : '') + '" title="what this chart is, in plain words" data-src="' + esc(JSON.stringify(c)) + '">i</button>';
+  }
   var SCENE_INFO = {
     verdict: { source: 'The verdict is written by DeepSeek V4 Pro from the numbers on this panel and checked by Claude (Fable) against the same numbers; nothing in it is typed by hand. The numbers come from the daily and weekly rows below.',
       plain: 'This is the machine’s summary of where the event stands today, in plain words: what is happening, whether it has turned, what to watch next and what we are not sure about. A second machine checks every number in it before it goes out.',
@@ -8655,7 +8692,8 @@
     });
     document.addEventListener('click', function (e) {
       /* Плитка ленты KPI ведёт на свой график или раздел (владелец 15.09). */
-      var go = e.target.closest && e.target.closest('.ks[data-go]');
+      if (e.target.closest && e.target.closest('.plain-i')) { /* карточка «о чём это» — не переход */ }
+      var go = (e.target.closest && !e.target.closest('.plain-i')) ? e.target.closest('.ks[data-go]') : null;
       if (go) { hide(); S.pinned = null; location.hash = '#' + go.getAttribute('data-go'); return; }
       var h = e.target.closest && e.target.closest('[data-hist]');
       if (h) {                                   // кнопка «history» на кирпиче

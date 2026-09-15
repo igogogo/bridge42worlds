@@ -311,6 +311,13 @@
   .stage-ctl:empty{display:none}
   .ctl-nav{margin-left:auto;display:flex;gap:6px;align-items:center;flex-shrink:0}
   /* legend — в правом верхнем углу поля графика */
+  /* Кнопка «i» — в левом верхнем углу поля графика, напротив legend в правом (15.09). */
+  .plain-i-wrap{position:absolute;top:0;left:0;width:0;height:0;z-index:5}
+  .plain-i{position:absolute;top:2px;left:6px;width:19px;height:19px;border-radius:50%;
+    border:1px solid var(--soft);background:var(--surface);color:var(--soft);
+    font-family:var(--mono);font-size:11px;line-height:17px;text-align:center;padding:0;cursor:pointer;opacity:.85}
+  .plain-i:hover{border-color:var(--cyan);color:var(--cyan);opacity:1}
+  .kpi .plain-i,.tile .plain-i,.ks .plain-i{position:static;margin-inline-start:6px;width:15px;height:15px;font-size:9.5px;line-height:13px;vertical-align:middle}
   .plot .legbtn{position:absolute;top:2px;inset-inline-end:6px;z-index:5;font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;
     padding:2px 8px;border-radius:999px;border:1px solid var(--soft);background:var(--surface);color:var(--text);cursor:pointer;opacity:.92}
   .plot .legbtn.on,.plot .legbtn:hover{border-color:var(--ochre);color:var(--ochre)}
@@ -344,8 +351,10 @@
   .cn-c[data-src],.cn-in[data-src]{text-decoration:none} .cn-in[data-src]{text-decoration:underline dotted color-mix(in srgb, var(--cyan) 70%, transparent)}
   .cn-c:hover{background:var(--cyan);color:var(--surface);border-color:var(--cyan)}
   .cn-c.more{border-style:dashed;color:var(--soft)}
-  .cn-mg{margin-inline-start:auto;font-family:var(--mono);font-size:10.5px;color:var(--cyan);background:transparent;border:1px solid color-mix(in srgb, var(--cyan) 55%, transparent);border-radius:999px;padding:0 8px;cursor:pointer;white-space:nowrap}
-  .cn-mg:hover,.cn-mg.on{background:var(--cyan);color:var(--surface)}
+  /* Пунктирная рамка выделяет кнопку графа среди сплошных кнопок панели (владелец 15.09). */
+  .cn-mg{margin-inline-start:auto;font-family:var(--mono);font-size:10.5px;color:var(--cyan);background:transparent;border:1px dashed color-mix(in srgb, var(--cyan) 70%, transparent);border-radius:999px;padding:0 8px;cursor:pointer;white-space:nowrap}
+  .cn-mg:hover,.cn-mg.on{background:var(--cyan);color:var(--surface);border-style:dashed}
+  .cn-mg b{font-weight:600;opacity:.85;margin-inline-start:1px}
   /* понятия колонкой в подсказке */
   .cn.col{display:block}
   .cn.col .cn-h{display:block;margin-bottom:3px}
@@ -1233,7 +1242,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=e6a9b7cbe3"></script>
+<script src="/js/enso.js?v=25f4bf539b"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>
