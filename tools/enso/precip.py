@@ -63,13 +63,13 @@ def fetch_box_precip(box, d0, d1, per_point=False, verbose=False):
     acc, wsum = {}, {}
     if not per_point:
         u = ("https://archive-api.open-meteo.com/v1/archive?latitude=" + ",".join(f"{p[0]:.3f}" for p in pts) +
-             "&longitude=" + ",".join(f"{p[1]:.3f}" for p in pts) + f"&start_date={d0}&end_date={d1}&daily=precipitation_sum&timezone=UTC")
+             "&longitude=" + ",".join(f"{p[1]:.3f}" for p in pts) + f"&start_date={d0}&end_date={d1}&daily=precipitation_sum&timezone=UTC&models=era5")
         res = _om_get(u)
         for (la, lo), one in zip(pts, [res] if isinstance(res, dict) else res):
             _merge(acc, wsum, la, one["daily"])
     else:
         for n, (la, lo) in enumerate(pts):
-            u = f"https://archive-api.open-meteo.com/v1/archive?latitude={la:.3f}&longitude={lo:.3f}&start_date={d0}&end_date={d1}&daily=precipitation_sum&timezone=UTC"
+            u = f"https://archive-api.open-meteo.com/v1/archive?latitude={la:.3f}&longitude={lo:.3f}&start_date={d0}&end_date={d1}&daily=precipitation_sum&timezone=UTC&models=era5"
             for attempt in range(6):
                 try:
                     _merge(acc, wsum, la, _om_get(u)["daily"]); break

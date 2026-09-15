@@ -64,7 +64,7 @@ def _get(url):
 def _daily_u(lat, lon, t0, t1):
     """Среднесуточная зональная компонента ветра на 10 м, м/с: {дата: u}. Восток — плюс."""
     d = _get(f"{ARCH}?latitude={lat}&longitude={lon}&start_date={t0}&end_date={t1}"
-             "&hourly=wind_speed_10m,wind_direction_10m&wind_speed_unit=ms&timezone=UTC")
+             "&hourly=wind_speed_10m,wind_direction_10m&wind_speed_unit=ms&timezone=UTC&models=era5")
     h = d.get("hourly") or {}
     times, sp, dr = h.get("time") or [], h.get("wind_speed_10m") or [], h.get("wind_direction_10m") or []
     acc = {}

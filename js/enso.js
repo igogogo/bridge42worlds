@@ -29,6 +29,14 @@
       models: 'The forecast models: the plume, three issues stacked, the scoreboard of who keeps up, how they break, how they revise.',
       air: 'The atmosphere and the fuel: the coupling, the warm water volume, the satellite floors, daily wind and bursts, the MJO, the other indices.',
       radiance: 'Measured by us from raw NOAA-21 granules (CrIS infrared, ATMS microwave): deep convection and the raw Walker contrast over the Pacific boxes, temperature layers through cloud, plus earthquakes and the sun from the same collector.',
+      track: 'How the forecasts themselves have done since 2002: the error by lead time year by year, '
+        + 'against what a forecast that just says \u201cnormal\u201d would score, the past El Ni\u00f1o events '
+        + 'replayed as they were forecast at the time, and how this event is being called right now.',
+      weather: 'The weather side of the same data: cities against their forecasts, the land boxes, rain, '
+        + 'mountain ice, fires and water \u2014 the things a person feels, gathered in one place.',
+      globe: 'The sphere as a place to look: measured layers painted onto the planet \u2014 sea surface, deep '
+        + 'cloud, cloud against normal, the boxes we watch, the moorings \u2014 each switched on or off from '
+        + 'the row of buttons, each painted layer with its own strength.',
       trend: 'Dynamics: the daily series with records and the 14-day analogue forecast, our own index against past events, the background of ocean heat.',
       regions: 'What it means where you live: 17 regions by season and scenario; the Gulf measured directly.',
       food: 'Food: the FAO index, its path since the onset against past events, and the commodities by name.',
@@ -43,6 +51,15 @@
       risks: 'The board of risks with their levels, horizons and series.'
     },
     subHelp: {
+      "track/today": "What the newest monthly issue says about the coming winter, and how far the models sit from each other.",
+      "track/event": "One El Niño at a time: every issue published during it, against what the ocean finally did.",
+      "track/summer": "Only the issues published at this time of year, and how they landed — by the call they made, or by the year that came.",
+      "track/settle": "How many months before the peak the forecast stopped moving, event by event.",
+      "track/error": "The miss of the combined forecast year by year, against forecasts that take no skill at all.",
+      "track/all": "Every parsed issue since 2002 on one canvas, with the ONI that came over the top.",
+      'now/standout': 'One list for the whole panel: every daily series it holds, asked the same question \u2014 '
+        + 'how unusual are the last thirty days for THIS series on THESE calendar days. Ranked by its own '
+        + 'spread, not by degrees, so cold counts as much as warm.',
       'verdict/now': 'Today\'s verdict.', 'verdict/history': 'Every verdict that actually changed, in order.',
       'now/analogs': 'Daily Niño 3.4 this year against the four strongest past events on the same days.', 'now/map': 'The four Niño boxes on the map, this week against the same week of a past event.',
       'now/weekly': 'The four weekly indices over the last weeks, with the same weeks of past events beside them.', 'now/weekly_a': 'One weekly index against the strongest events on the same calendar.',
@@ -2357,7 +2374,9 @@
         var pay = { name: x.r.title, def: (x.prev ? 'Was ' + jval(x.prev.v, dg) + ' on ' + x.prev.d + ', now ' + jval(x.last.v, dg) + ' on ' + x.last.d + '.' : 'First reading we hold: ' + jval(x.last.v, dg) + ' on ' + x.last.d + '.') + ' Click for the history.', src: x.r.src, date: x.last.d };
         if (x.rec) pay.def = 'A record: ' + x.rec + '. ' + pay.def;
         pay.def = pay.def.replace(' Click for the history.', ' Click to open its chart; the history is on that scene.');
-        return '<button type="button" class="ks' + (x.rec ? ' rec' : '') + '" data-go="' + esc(KPI_SCENE[x.k] || 'overview') + '" data-src="' + esc(JSON.stringify(pay)) + '">' +
+        var pk = KPI_PICK[x.k];
+        return '<button type="button" class="ks' + (x.rec ? ' rec' : '') + '" data-go="' + esc(KPI_SCENE[x.k] || 'overview') + '"' +
+          (pk ? ' data-pick="' + esc(pk[0]) + '" data-pickv="' + esc(pk[1]) + '"' : '') + ' data-src="' + esc(JSON.stringify(pay)) + '">' +
           (x.rec ? '<span class="ks-rec">record</span>' : '') +
           '<span class="ks-row"><span class="ks-v">' + (x.k === 'oni' || /nino|^n(34|12|3|4)_|sst_world|wind|mjo/.test(x.k) && x.last.v > 0 ? '+' : '') + jval(x.last.v, dg) + (u ? '<small>' + esc(u) + '</small>' : '') + '</span>' +
           (x.dv ? '<span class="ks-d ' + jsign(x.dv) + '">' + jarrow(x.dv) + (x.dv > 0 ? '+' : '') + jval(x.dv, dg) + '</span>' : '') + '</span>' +
@@ -2372,8 +2391,11 @@
      режим verify), /api/research/save|list|delete в D1 по uid. Здесь — вид: доска, диалог,
      чтение ответа одной функцией. Без ручки (localhost) — извлечённый ответ с пометкой demo и
      сохранение в браузере. */
-  var KPI_SCENE = { n34_weekly: 'now/weekly', n12_weekly: 'now/weekly', n34_daily: 'trend/sst_nino34', n34_30d: 'trend/sst_nino34', rec_sst_nino34: 'trend/sst_nino34', fc14_sst_nino34: 'trend/sst_nino34',
-    n3_weekly: 'now/weekly', n4_weekly: 'now/weekly',
+  /* Второй ярус перехода: мало попасть на сцену, надо выбрать там ту зону, о которой была
+     плитка. Ключ — поле в S.sub, значение — что в него положить. */
+  var KPI_PICK = { n34_weekly: ['wkey', 'n34a'], n12_weekly: ['wkey', 'n12a'], n3_weekly: ['wkey', 'n3a'], n4_weekly: ['wkey', 'n4a'] };
+  var KPI_SCENE = { n34_weekly: 'now/weekly_a', n12_weekly: 'now/weekly_a', n34_daily: 'trend/sst_nino34', n34_30d: 'trend/sst_nino34', rec_sst_nino34: 'trend/sst_nino34', fc14_sst_nino34: 'trend/sst_nino34',
+    n3_weekly: 'now/weekly_a', n4_weekly: 'now/weekly_a',
     n34_box: 'ocean/surface', n12_box: 'ocean/surface', gulf_sst: 'ocean/surface', subsurface_warmest: 'ocean/moorings', d20_east: 'ocean/section',
     oni: 'now/analogs', roni: 'now/analogs', risk_index: 'verdict', n_risks: 'now/analogs', n_alerts: 'now/analogs', scenario: 'regions',
     sst_world: 'trend', t2_world: 'trend', rec_sst_world: 'trend', rec_t2_world: 'trend', fc14_sst_world: 'trend', fc14_t2_world: 'trend',
@@ -3418,6 +3440,9 @@
       // значок легенды бывает двух видов: сворачиваемая метка и «leg-i» из legIcon —
       // место под правый значок надо держать в обоих случаях (09.09, наезд на телефоне)
       var hasLeg = !!svg.querySelector('[data-legtoggle], .leg-i') || !!(svg.parentNode && svg.parentNode.querySelector && svg.parentNode.querySelector('.legbtn'));
+      /* Слева у поля может стоять значок «о чём этот график» — тогда заголовок начинается за
+         ним, а не у самого края (владелец 15.09: «кнопка i наезжает на текст над графиком»). */
+      var L0 = (svg.parentNode && svg.parentNode.querySelector && svg.parentNode.querySelector('.plain-i')) ? 36 : 8;
       /* Сосед справа мешает только если он на ТОЙ ЖЕ строке: у разреза и недельных индексов
          подписи мини-панелей тоже помечены как заголовки, но лежат ниже (07.09). */
       var pos = tts.map(function (t) { return { t: t, x: parseFloat(t.getAttribute('x')) || 0, y: parseFloat(t.getAttribute('y')) || 0 }; });
@@ -3426,7 +3451,8 @@
       pos.forEach(function (o) {
         var t = o.t, x = o.x;
         if ((t.getAttribute('text-anchor') || '') === 'end') return;   // подпись у правого края — не заголовок
-        if (alone && Math.abs(o.y - topY) < 8 && x > 8) { x = 8; t.setAttribute('x', 8); }
+        if (alone && Math.abs(o.y - topY) < 8 && x > L0) { x = L0; t.setAttribute('x', L0); }
+        else if (Math.abs(o.y - topY) < 8 && x < L0) { x = L0; t.setAttribute('x', L0); }   // и тот, что левее значка, — вправо
         var near = pos.filter(function (q) { return q !== o && Math.abs(q.y - o.y) < 8 && q.x > x; });
         var next = near.length ? Math.min.apply(null, near.map(function (q) { return q.x; })) : 0;
         var avail = next ? next - x - 10 : W - x - (hasLeg && Math.abs(o.y - topY) < 8 ? 104 : 8);
@@ -3461,9 +3487,10 @@
     S._legItems = null;
     var keepI = p.querySelector('.plain-i-wrap');   // кнопка «о чём это» — тоже переживает (15.09)
     p.innerHTML = String(S.draw(w, h));
-    fitSvgTitles(p);                            // заголовок меряется по-настоящему, уже в документе
     if (badge) p.appendChild(badge);           // значок даты данных переживает перерисовку
     if (keepI) p.appendChild(keepI);
+    /* Значок возвращается ДО подгонки заголовка: именно по нему та решает, откуда начинать текст. */
+    fitSvgTitles(p);                            // заголовок меряется по-настоящему, уже в документе
     syncLegendBar();
   }
   function legSwatch(it) {
@@ -4272,10 +4299,10 @@
 
   function viewTrack() {
     var MH = S.MH || {}, k = sub('track', 'today');
-    var body = stageShell(trackTitle(MH), [segBtn('track', 'today', 'Today\u2019s call', 'track'),
-      segBtn('track', 'event', 'This event so far', 'track'), segBtn('track', 'summer', 'Same summer, past issues', 'track'),
-      segBtn('track', 'settle', 'When it settles', 'track'), segBtn('track', 'error', 'Twenty years of error', 'track'),
-      segBtn('track', 'all', 'Every issue since 2002', 'track')]);
+    var body = stageShell(trackTitle(MH), [segBtn('track', 'today', 'Today\u2019s call', 'today'),
+      segBtn('track', 'event', 'This event so far', 'today'), segBtn('track', 'summer', 'Same summer, past issues', 'today'),
+      segBtn('track', 'settle', 'When it settles', 'today'), segBtn('track', 'error', 'Twenty years of error', 'today'),
+      segBtn('track', 'all', 'Every issue since 2002', 'today')]);
     if (!MH.meta) { body.appendChild(el('div', 'note warn', 'The forecast archive has not been built yet: run tools/enso/models_history.py.')); return; }
     var M = MH.meta, T = MH.today || {}, REC = MH.record || {}, SP = MH.same_phase || {};
     var kp = el('div', 'kpis');
@@ -7870,24 +7897,37 @@
     return cv.toDataURL('image/png');
   }
 
+  /* ВЫБОР СЛОЁВ — СТРОКОЙ МЕНЮ (владелец 15.09: «вынести отдельно как в меню и там выбор того,
+     что отображать»). Шесть рядов панели съедали половину сцены, шару оставалась треть; и это
+     был единственный на панели выбор, устроенный не так, как везде. Теперь слои — обычные
+     кнопки подменю сцены, каждая со своей карточкой «что это», а под шаром одна тонкая строка
+     силы для тех полотен, что сейчас включены. */
   function viewGlobeScene() {
-    var body = stageShell(globeHead(), []);
+    var body = stageShell(globeHead(), LAYERS.map(function (L) {
+      return {
+        label: L.name, on: glOn(L.id),
+        help: L.line + ' \u2014 ' + L.src + '. ' +
+          (L.kind === 'paint' ? 'Painted into the sphere itself, so its strength can be dialled down.'
+                              : 'Drawn over the sphere: boxes and pillars you can point at.'),
+        click: function () { S.gl = S.gl || {}; S.gl[L.id] = !glOn(L.id); render(); }
+      };
+    }));
     body.classList.add('globe-scene');
-    var panel = el('div', 'gl-layers');
-    LAYERS.forEach(function (L) {
-      var on = glOn(L.id);
-      var row = el('div', 'gl-row' + (on ? ' on' : ''));
-      row.innerHTML = '<button type="button" class="gl-tog' + (on ? ' on' : '') + '">' + (on ? '\u25cf' : '\u25cb') + '</button>' +
-        '<div class="gl-n"><b>' + esc(L.name) + '</b><span>' + esc(L.line) + '</span></div>' +
-        (L.kind === 'paint' ? '<input class="gl-a" type="range" min="15" max="100" value="' + Math.round(glAlpha(L.id) * 100) + '" title="how strongly this layer shows">' : '') +
-        '<span class="gl-s">' + esc(L.src) + '</span>';
-      row.querySelector('.gl-tog').onclick = function () { S.gl = S.gl || {}; S.gl[L.id] = !on; render(); };
-      var sl = row.querySelector('.gl-a');
-      if (sl) sl.oninput = function () { S.glA = S.glA || {}; S.glA[L.id] = +sl.value / 100; globeRepaint(); };
-      panel.appendChild(row);
-    });
-    body.appendChild(panel);
     mountGlobe('scene');
+    var paints = LAYERS.filter(function (L) { return L.kind === 'paint' && L.id !== 'coast' && glOn(L.id); });
+    if (paints.length) {
+      var bar = el('div', 'gl-str');
+      bar.innerHTML = '<span class="gl-h">strength</span>' + paints.map(function (L) {
+        return '<span class="gl-i"><b>' + esc(L.name) + '</b><input data-l="' + esc(L.id) + '" type="range" min="15" max="100" value="' +
+          Math.round(glAlpha(L.id) * 100) + '" title="how strongly this layer shows through"></span>';
+      }).join('');
+      bar.addEventListener('input', function (e) {
+        var t = e.target, id = t && t.getAttribute && t.getAttribute('data-l');
+        if (!id) return;
+        S.glA = S.glA || {}; S.glA[id] = +t.value / 100; globeRepaint();
+      });
+      body.appendChild(bar);
+    }
     var d = (S.OLR || {}).date, sd = ((S.GL || {}).sst || {}).date;
     body.appendChild(el('div', 'cap', 'One sphere, several measured layers, each with its own switch and its own strength. ' +
       'The cloud layer is not a picture of clouds: it is the heat the Earth sends back to space, measured from orbit — where a tall storm stands, its frozen top radiates little, so the dark places on that scale are the storms. ' +
@@ -7905,7 +7945,7 @@
     var body = document.querySelector('.stage-body'); if (!body) return;
     var plot = body.querySelector('.plot');
     var box = el('div', 'globe-box'); box.innerHTML = '<div class="globe-wait">loading the globe…</div>';
-    if (plot) body.replaceChild(box, plot); else body.insertBefore(box, body.firstChild.nextSibling || null);
+    if (plot) body.replaceChild(box, plot); else body.insertBefore(box, body.firstChild ? body.firstChild.nextSibling : null);
     S.plotEl = null; S.draw = null;
     Promise.all([globeLib(), globeData()]).then(function (r) {
       if (!box.isConnected) return;
@@ -8026,6 +8066,12 @@
     "trend/sst_world": {"title": "The whole ocean's surface, daily", "what": "The average surface temperature of the world ocean between 60° south and 60° north, day by day, against the normal for that day of the year.", "see": "The same drawing as the Niño 3.4 chart: 400 days of the daily line with the last 30 picked out, the band of every year of the record behind it, the level at the previous update marked by a faint dashed line, and the 14-day outlook at the right end. What is missing here is the continuation of past events — they are carried forward only on the Niño 3.4 chart, because for this series we have nothing honest to draw. The cards give the latest day, the 30-day average with its rank among all the years, how many of the last 30 days set records, and whether our drift alarm is on: it adds up how far the series has stayed above the level it began the window at, and trips at a set threshold.", "special": "El Niño moves the whole ocean, not only the box it is named after, and this is where that shows — though a record here is a statement about the global ocean, not proof of what the event did. The caption links to the Long term tab, which draws the same series with every year as its own line instead of a band.", "src": "Daily OISST sea-surface temperature via climatereanalyzer.org, read at every update"},
     "trend/t2_world": {"title": "Air over land and sea, daily", "what": "The daily air temperature two metres above the ground and the water, averaged over the whole planet, against the normal for that day of the year.", "see": "Built exactly like the two sea charts — 400 days, the last 30 thicker, the band of every year of the record behind, the 14-day outlook at the right — but on air rather than water. Three cards follow: the latest day with the 30-day average and its rank among all the years; the outlook with its low and high; and one card holding the run of record days, our drift alarm and how far the last 30 days sit above the long warming trend. A note under the chart points to the Weather tab, where the air over particular land regions now lives.", "special": "This is the number news stories mean by \"the hottest day on record\", so the panel keeps it beside the event's own series. The figure for how far the last 30 days sit above the long warming trend is the one that separates what the event is doing from what the decades were already doing.", "src": "Daily ERA5 2 m air temperature via climatereanalyzer.org, read at every update"},
     "verdict": {"title": "What the machine makes of today", "what": "A short written summary of where the event stands today, made from the numbers on this panel by one language model and checked against the same numbers by another.", "see": "At the top is the verdict itself, with the name of the model that wrote it and the one that checked it; under it come rows in a fixed order: whether the event has turned, the next two or three weeks, what changed since the previous update, how confident the writer is, what to watch, and what to doubt, each with a link under it to the numbers or the method behind it. Three boxes below hold our risk index out of 100 with the count of risks and alerts on the board, how many distinct verdicts are stored, and who wrote and who checked. The second button at the top, \"How it changed\", lists the stored verdicts newest first with their date, their model and their risk index, and prints a correction under any verdict a later check found wrong.", "special": "It is where the panel's separate readings are pulled into one statement about the event, and that statement is written by a model rather than measured, which is why every row carries a link back to the numbers. Nothing in it is a source: each claim is meant to be opened on the scene it came from, and the rows carry the links for that.", "src": "our own numbers, written up by DeepSeek V4 Pro on each full update and checked by Fable (Claude) before publication; only verdicts that actually changed are kept"},
+    "track/today": {"title": "What the centres are saying today", "what": "The forecast for the coming winter as it stands in the newest monthly issue, and how far the models are from each other.", "see": "One bar: the lowest and the highest single model of the issue, the combined forecast marked inside it, and a line where the highest ONI of the whole record sits. The cards give the combined peak with its season, the spread between the outermost models, how many issues in a row the forecast has been raised, and how far above the record the current call stands.", "special": "The spread between models is not an error bar. It is how far the centres are from each other, and a narrow spread can be confidently wrong. The record line matters because everything measured on the other tabs of this scene happened below it: the archive can say how these forecasts have erred before, not how far this one will land.", "src": "The newest IRI/CPC plume issue we have parsed, and NOAA CPC ONI for the record line"},
+    "track/event": {"title": "How this event was forecast, issue by issue", "what": "Every monthly forecast made during one El Niño, laid out in the order it was published, against what the ocean finally did.", "see": "Each dot is one issue: the highest value its combined forecast reached anywhere in that event’s winter, with a band for the lowest and the highest single model of the same issue. A horizontal line marks the ONI peak that came, where the event has already peaked. Buttons choose the event; the current one is marked “now”.", "special": "The peak of every issue is taken over one fixed window, the seasons centred July to April, so an issue from May and an issue from December are compared on the same target. For an event that has not peaked there is no error line at all, only a path: nothing here says that this event will land where the dots point.", "src": "Our archive of parsed IRI/CPC plume issues since 2002, with NOAA CPC ONI for what came"},
+    "track/summer": {"title": "Past forecasts made at this time of year", "what": "Only the issues published in the same month of the year as today, scored against what the ONI later reached.", "see": "A row of cases with the miss of each, and cards counting how many landed below what came, how many above, and the middle case of the misses. The two buttons choose the sample: issues that called an El Niño, or years that turned out to be El Niño.", "special": "The two samples answer different questions and can disagree. Taking the years that turned out warm and looking back at their forecasts uses knowledge nobody had at the time; taking the issues that called a warm event is the honest test of a call like today’s, and it includes the calls that did not come true. The middle case is used rather than an average because a handful of cases lets one outlier carry the answer.", "src": "Our archive of parsed IRI/CPC plume issues, scored against NOAA CPC ONI"},
+    "track/settle": {"title": "How early the forecast stops moving", "what": "For each past event, the month after which the forecast no longer changed much — the point where the number could be relied on.", "see": "One bar per event: the open bar reaches the first issue after which every later issue stayed within a quarter of a degree of the peak that came, and the filled tip the stricter version, within 0.15 °C. The cards say how many events have a settled call, the typical lead in months, and whether the current event has settled.", "special": "Only issues published before the peak are counted. An issue published afterwards is forecasting the decline, and counting it would make the forecasts look far better than they were. This is the number to hold against any confident statement about a peak still months away.", "src": "Our archive of parsed IRI/CPC plume issues, scored against NOAA CPC ONI"},
+    "track/error": {"title": "Twenty years of forecast error", "what": "How far the combined forecast has missed, year by year of publication, by how far ahead it was looking.", "see": "Lines run left to right by the year the forecast was issued, one line per lead time, with the average miss up the side. Beside them, dashed, the miss of two forecasts that take no skill at all: calling every season normal, and carrying today’s value forward with a slow fade. The cards give the error now, the error twenty years ago, and the share of the no-skill error that is left.", "special": "An error in degrees means nothing on its own, because some years are easy and some are hard. It becomes meaningful against a forecast that knows nothing: at three seasons ahead the centres now miss about a quarter of what calling every season normal would miss, against about half of it twenty years ago. At nine seasons ahead they are still close to no skill, and that is the honest reading of a long-range call.", "src": "Our arithmetic over 252 parsed IRI/CPC issues since 2002, scored against NOAA CPC ONI"},
+    "track/all": {"title": "Every forecast since 2002, raw", "what": "All the monthly forecasts of the last twenty-four years drawn on one canvas, with what the ocean actually did over the top.", "see": "Each thin line is one issue, reaching forward from the month it was published; the heavy line is the ONI that came; the newest issue is drawn in ochre. The cards count the issues drawn, the seasons of ONI behind the heavy line, and where today’s issue stands.", "special": "Nothing here is averaged or scored — this is the material the rest of the scene is computed from, shown as it is, so the summary can be checked against it. The visible habit of the bundle is worth more than any single line: forecasts reach up towards a warm event and cluster below the heavy line while it is growing.", "src": "Every IRI/CPC plume issue we could parse since 2002, with NOAA CPC ONI"},
     "weather/cities": {"title": "Seven-day forecasts against what came", "what": "A running score of how far three weather models miss the temperature, rain, wind, humidity, cloud or pressure they promised for fifty cities, once the day itself has arrived.", "see": "Pick a parameter along the top row and a view below it. The default chart puts the forecast horizon along the bottom, one day ahead to seven, and the average miss up the side, one coloured line per model (ECMWF IFS, GFS, ICON); 'by month' redraws that miss month by month for 1, 3, 5 and 7 days ahead with a dashed line at each January; 'by city' is a table sorted worst first, with the miss at one day and at five and the number of pairs behind each. The cards above count the forecast-and-fact pairs gathered so far and name the model with the smallest miss at five days for the chosen parameter.", "special": "The forecast scoreboards elsewhere on the panel test seasonal forecasts of the Pacific; this is the only place where the check is made at the scale of one city and one week. Read a city against its own history rather than against another city — a coastal city and a continental one miss by different amounts on an ordinary day.", "src": "Open-Meteo forecasts taken each morning against the ERA5 archive about two days later, in the daily run"},
     "weather/fires": {"title": "Active fires, region by region", "what": "Satellite detections of burning from the last 24 hours, counted by region and followed day by day since we began keeping the record.", "see": "Three buttons choose the instrument: VIIRS on Suomi NPP, VIIRS on NOAA-20, or MODIS on Aqua and Terra. The cards give the latest day's number of hotspots, how many of them were putting out more than 100 megawatts, the total heat all of them were giving off, and the three busiest regions with the day before's count beside each once the record holds more than one day. 'Regions today' is the full table of twelve regions with their count, that heat and the previous day's figure; 'day by day' draws one region's daily count as a single line from the first day of our record to the last.", "special": "It is the shortest-fused thing here: the file holds the last 24 hours of detections, while the ocean indices move over weeks. A detection is a hotspot, not an area burnt, nothing on this chart ties any fire to El Niño, and cloud and gaps between satellite passes make single days jumpy — so compare a region with its own course: savannah burning in Africa is a yearly practice, not a disaster.", "src": "NASA FIRMS open 24-hour global files from three instruments, in the daily run"},
     "weather/land": {"title": "Air over six land regions, daily", "what": "The daily temperature of the air over six patches of land where people live, given as the distance from what that calendar day is normally, so that a hot day in July can be set beside a hot day in January.", "see": "Buttons choose the patch: northern Gulf, central Europe, the Peru coast, Java, east Africa, northern India. The chart runs about 400 days left to right — a dark line for the whole stretch, a red line for the last thirty days — behind two shaded bands holding what every year since 1981 did on those same calendar days: the stronger band the middle 10 to 90 per cent, the faint one the full spread from coldest to warmest. On the right a shaded wedge with a dashed centre carries today's value forward fourteen days by adding what every past year did over the same two weeks of the calendar, and the cards below give the last day, that outlook with its low and high, and the record days — how many of the last thirty were the warmest of their calendar day, and how many are running in a row now.", "special": "This is the treatment the Pacific boxes get, applied over land: it answers how far the air where people live has moved against its own record, in a form directly comparable with the ocean series. Unlike the Niño 3.4 chart, no past-event lines run forward here — those data do not exist for these boxes.", "src": "ERA5 box means of a 3×3 grid via Open-Meteo, rebuilt in the daily run"},
@@ -8970,7 +9016,16 @@
       /* Плитка ленты KPI ведёт на свой график или раздел (владелец 15.09). */
       if (e.target.closest && e.target.closest('.plain-i')) { /* карточка «о чём это» — не переход */ }
       var go = (e.target.closest && !e.target.closest('.plain-i')) ? e.target.closest('.ks[data-go]') : null;
-      if (go) { hide(); S.pinned = null; location.hash = '#' + go.getAttribute('data-go'); return; }
+      if (go) {
+        hide(); S.pinned = null;
+        var pk = go.getAttribute('data-pick');
+        if (pk) S.sub[pk] = go.getAttribute('data-pickv');
+        var to = '#' + go.getAttribute('data-go');
+        /* Уже на этой сцене — адрес не меняется, hashchange не придёт, и щелчок выглядел бы
+           пустым. Перерисовываем сами: выбор зоны всё равно изменился. */
+        if ((location.hash || '') === to) render(); else location.hash = to;
+        return;
+      }
       var h = e.target.closest && e.target.closest('[data-hist]');
       if (h) {                                   // кнопка «history» на кирпиче
         S.pinned = h;

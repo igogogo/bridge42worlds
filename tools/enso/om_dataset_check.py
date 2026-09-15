@@ -42,6 +42,26 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 
 
 # имя, чей сборщик, точки, переменные, срез (daily|hourly), поле
+# У каждой пробы — файл сборщика: прибитый ключ ищется в нём самом, а не в памяти автора.
+COLLECTOR = {"wind": "wind.py", "boxes": "spectral.py", "precip": "precip.py",
+             "gulf": "gulf.py", "kuwait": "sources.py", "cities": "cities.py"}
+
+
+def pinned_model(probe):
+    """Какой набор прибит у сборщика этой пробы. None — ключа нет, набор выбирает архив."""
+    f = COLLECTOR.get(probe)
+    if not f:
+        return None
+    try:
+        src = (Path(__file__).resolve().parent / f).read_text(encoding="utf-8")
+    except Exception:                                            # noqa: BLE001
+        return None
+    for m in ("era5_land", "era5"):
+        if "models=" + m in src:
+            return m
+    return None
+
+
 PROBES = [
     ("wind", "wind.py — на нём стоит тревога и риск 4-го уровня о западном прорыве",
      [(0.0, 130.0), (0.0, 150.0), (0.0, 170.0)], "wind_speed_10m", "hourly", "&wind_speed_unit=ms"),
@@ -136,15 +156,23 @@ def run(only=None, pause=2.0):
             return sum(v) / len(v) if v else None
         a_old, a_new = avg("старые"), avg("свежие")
         drift = None if (a_old is None or a_new is None) else a_new - a_old
+        pin = pinned_model(name)
+        # Разрыв меряется против УМОЛЧАНИЯ. Если сборщик умолчанием не пользуется, этот разрыв
+        # ряду не грозит: он остаётся свойством архива, а не нашего файла.
         verdict = ("данных нет" if drift is None else
                    "РОВНО: склейка не мешает" if abs(drift) < 0.05 else
                    "СЛАБО: сдвиг мал, но есть" if abs(drift) < 0.3 else
                    "ЗНАЧИМО: свежие годы уехали против старых — ряд чинить")
+        if pin and drift is not None:
+            verdict = ("ключ прибит (models=" + pin + "), ряду подмена не грозит; "
+                       + "сдвиг относится к умолчанию, которым мы не пользуемся")
+        elif drift is not None and abs(drift) >= 0.05:
+            verdict += " — и ключ НЕ ПРИБИТ"
         print(f"    разрыв старые {a_old if a_old is None else round(a_old, 2)} → "
               f"свежие {a_new if a_new is None else round(a_new, 2)}; сдвиг эпох "
               f"{drift if drift is None else round(drift, 2)} → {verdict}")
         rows.append({"probe": name, "whose": whose, "var": var, "gap_old": a_old, "gap_new": a_new,
-                     "era_drift": drift, "verdict": verdict,
+                     "era_drift": drift, "verdict": verdict, "pinned": pin,
                      "values": {f"{y}|{m or 'default'}": v for (y, m), v in got.items()}})
     return rows, stopped
 
