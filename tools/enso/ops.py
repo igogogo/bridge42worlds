@@ -16,7 +16,7 @@
 import json
 import sys
 import time
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -258,12 +258,99 @@ def sources_status(cur):
     return out
 
 
+HIST = ROOT / "ops-history.json"
+HIST_KEEP = 40                     # сколько приходов держим на источник
+
+
+def _history(srcs):
+    """Когда у источника появлялся новый день данных — и что из этого следует.
+
+    Владелец 16.09: «можно там видеть history тоже, кнопочку — когда обновлялся, то есть
+    появлялись данные за когда, и когда следующие».
+
+    ЗАПИСЫВАЕМ НЕ КАЖДЫЙ ПРОГОН, А КАЖДОЕ ИЗМЕНЕНИЕ. Прогонов в сутки несколько, и если писать
+    все, файл распухнет, а читать его будет нечего: строка «источник ответил то же самое» —
+    не событие. Событие — это НОВЫЙ последний день данных. Его и кладём, вместе с датой, когда
+    мы его увидели: разница между ними и есть настоящее отставание источника.
+
+    КАДЕНЦИЯ ИЗМЕРЯЕТСЯ, А НЕ ОБЪЯВЛЯЕТСЯ. В таблице у источников стоит текстовое поле вроде
+    «daily, 1–3 weeks behind» — это то, что мы сами про них написали. Здесь считается медиана
+    фактических промежутков между приходами, и «ждать следующего» строится по ней. Пока
+    приходов меньше трёх, ничего не обещаем и так и пишем.
+    """
+    prev = _load(HIST, {})
+    store = prev.get("sources") if isinstance(prev, dict) else {}
+    store = store if isinstance(store, dict) else {}
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    for s0 in srcs:
+        k = s0.get("key")
+        if not k:
+            continue
+        rec = store.setdefault(k, {"arrivals": []})
+        arr = rec["arrivals"]
+        to = s0.get("data_to")
+        if to and (not arr or arr[-1].get("data_to") != to):
+            arr.append({"data_to": to, "seen": now,
+                        "behind_days": s0.get("behind_days"),
+                        "error": (s0.get("error") or "")[:60] or None})
+            del arr[:-HIST_KEEP]
+        # сколько суток подряд источник не приносит нового дня
+        rec["last_change_seen"] = arr[-1]["seen"] if arr else None
+        rec["n_arrivals"] = len(arr)
+        gaps = []
+        for a, b in zip(arr, arr[1:]):
+            try:
+                d0 = datetime.strptime(a["seen"][:10], "%Y-%m-%d")
+                d1 = datetime.strptime(b["seen"][:10], "%Y-%m-%d")
+                g = (d1 - d0).days
+                if g > 0:
+                    gaps.append(g)
+            except Exception:                                    # noqa: BLE001
+                pass
+        if len(gaps) >= 2:
+            gaps_sorted = sorted(gaps)
+            med = gaps_sorted[len(gaps_sorted) // 2]
+            rec["cadence_measured_days"] = med
+            rec["cadence_spread_days"] = [gaps_sorted[0], gaps_sorted[-1]]
+            try:
+                last = datetime.strptime(arr[-1]["seen"][:10], "%Y-%m-%d")
+                rec["next_expected"] = (last + timedelta(days=med)).strftime("%Y-%m-%d")
+                rec["overdue_days"] = max(0, (datetime.now() - (last + timedelta(days=med))).days)
+            except Exception:                                    # noqa: BLE001
+                pass
+        else:
+            rec["cadence_measured_days"] = None
+            rec["next_expected"] = None
+            rec["overdue_days"] = None
+    doc = {"built": now, "keep": HIST_KEEP, "sources": store,
+           "note": ("One line per ARRIVAL, not per run: a row appears when a source first hands us a new last "
+                    "day of data. The gap between that day and the moment we saw it is the source's real lag. "
+                    "The cadence here is measured from those gaps, not taken from what we wrote about the source; "
+                    "until three arrivals are on record nothing is promised.")}
+    _save(HIST, doc)
+    return store
+
+
 def build(cur, fresh=None):
     """ops.json: источники, хвост журнала прогонов, свежий слой одной строкой, календарь."""
     try:
         srcs = sources_status(cur)
     except Exception as e:                                       # noqa: BLE001
         srcs = [{"key": "ops", "label": "sources status failed", "error": str(e)[:160], "fresh": False}]
+    try:
+        hist = _history(srcs)
+    except Exception as e:                                       # noqa: BLE001
+        hist = {}
+        print("история источников не записана:", str(e)[:100])
+    for s0 in srcs:
+        h = hist.get(s0.get("key")) or {}
+        # в саму таблицу кладём только итог: сам список приходов живёт в ops-history.json
+        s0["n_arrivals"] = h.get("n_arrivals")
+        s0["cadence_measured_days"] = h.get("cadence_measured_days")
+        s0["next_expected"] = h.get("next_expected")
+        s0["overdue_days"] = h.get("overdue_days")
+        s0["last_change_seen"] = h.get("last_change_seen")
+        s0["arrivals"] = (h.get("arrivals") or [])[-8:]
     doc = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "assessed_stamp": cur.get("stamp"),
            "assessed_generated": cur.get("generated"),
            "sources": srcs,

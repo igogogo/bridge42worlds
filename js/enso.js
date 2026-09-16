@@ -3207,7 +3207,6 @@
     var dailyDate = N.last_date || ((D.watch || {}).sst_nino34 || {}).last_date || '';
     var col = $('railL'); col.innerHTML = '';
     var t = tile('State', term('type', 'event type: ' + NW.type)
-      + stGo('ocean', 'zones', 'zoneView:shape', 'how far this event leans east or west, week by week since 1981')
       + cnBtn(['kpi:risk_index', 'term:riskindex', 'block:type', 'term:type'], 'graph') + railFullBtn('L'), 'grow');
     var idx = D.risk_index, gc = idx >= 80 ? 'var(--lv5)' : (idx >= 60 ? 'var(--lv4)' : (idx >= 40 ? 'var(--lv3)' : 'var(--ok)'));
     var ls = ONI.last_season;
@@ -3225,19 +3224,18 @@
          (+2.7 за неделю до 2 сентября), а у точки на графике — суточный OISST (+2.83 за 6
          сентября), и два числа читались как рост, которого не было (см. 9я). */
       '<div class="g-side">' + '<button type="button" class="vgo" data-view="verdict">read the verdict →</button>' +
-      '<b>' + zone('nino34') + ' ' + fnum(N.current_day) + ' °C' + jchip('n34_daily')
-        + stGo('trend', 'sst_nino34', '', 'the daily series of this box, with its record and the 14-day outlook')
+      '<b class="go"' + stGo('trend', 'sst_nino34', '', 'the daily series of this box, with its record and the 14-day outlook') + '>'
+        + zone('nino34') + ' ' + fnum(N.current_day) + ' °C' + jchip('n34_daily')
         + '<small class="dsub">daily · ' + esc(String(dt(dailyDate)).replace(/<[^>]+>/g, '')) + '</small></b>' +
-      '<div class="ln">' + src({ name: 'Weekly against daily', def: 'Two products of the same sea. The daily is the OISST grid over our own box, one day behind and refreshed every morning. The weekly is the official NOAA index, published on Wednesdays for the week before: it lags the daily by several days, and while the event grows it always reads lower. The verdict and the risks use both.', src: 'NOAA CPC weekly · NOAA OISST daily', date: NW.date }, 'NOAA weekly ' + fnum(NW.latest.n34a, 1) + ' to ' + esc(String(dt(NW.date)).replace(/<[^>]+>/g, ''))) + jchip('n34_weekly')
-        + stGo('now', 'weekly_a', 'wkey:n34a', 'the official weekly index against the strongest past events') + '</div>' +
+      '<div class="ln go"' + stGo('now', 'weekly_a', 'wkey:n34a', 'the official weekly index against the strongest past events') + '>' + src({ name: 'Weekly against daily', def: 'Two products of the same sea. The daily is the OISST grid over our own box, one day behind and refreshed every morning. The weekly is the official NOAA index, published on Wednesdays for the week before: it lags the daily by several days, and while the event grows it always reads lower. The verdict and the risks use both.', src: 'NOAA CPC weekly · NOAA OISST daily', date: NW.date }, 'NOAA weekly ' + fnum(NW.latest.n34a, 1) + ' to ' + esc(String(dt(NW.date)).replace(/<[^>]+>/g, ''))) + jchip('n34_weekly') + '</div>' +
       /* Каждое утверждение — своей строкой и без точки в конце (владелец 07.09:
          «точки после предложений на карточках убрать, просто перенос строки»). */
-      '<div class="ln">rank ' + N.all_years_rank + ' of all years on the same 30 days'
-        + stGo('trend', 'sst_nino34', '', 'where this rank comes from: the daily box against every year of its record') + '</div>' +
-      '<div class="ln">' + ab('oni', 'ONI') + ' ' + fnum(ONI.current[ls]) + ' ' + ab('seasons', ls) + jchip('oni')
-        + stGo('now', 'analogs', '', 'the official seasonal index against the analogue years') + '</div>' +
-      '<div class="ln rscale">' + esc(riskScaleLine(D))
-        + stGo('verdict', '', '', 'the risk index in full: every rule, its level and what it rests on') + '</div>' +
+      '<div class="ln go"' + stGo('trend', 'sst_nino34', '', 'where this rank comes from: the daily box against every year of its record')
+        + '>rank ' + N.all_years_rank + ' of all years on the same 30 days</div>' +
+      '<div class="ln go"' + stGo('now', 'analogs', '', 'the official seasonal index against the analogue years') + '>'
+        + ab('oni', 'ONI') + ' ' + fnum(ONI.current[ls]) + ' ' + ab('seasons', ls) + jchip('oni') + '</div>' +
+      '<div class="ln rscale go"' + stGo('verdict', '', '', 'the risk index in full: every rule, its level and what it rests on')
+        + '>' + esc(riskScaleLine(D)) + '</div>' +
       '' + kmeta('risk_index') + freshLine() +
       '<div class="cgo" data-go="now" data-gosub="analogs">see where we are \u2192</div></div></div>';
     box.appendChild(k1);
@@ -6313,8 +6311,12 @@
      своими карточками и значки истории, и общий клик по строке съел бы их. Поэтому переход —
      отдельной маленькой стрелкой в конце строки, тихой, пока на строку не навели. */
   function stGo(view, sub2, deep, title) {
-    return '<span class="cgo mini" data-go="' + esc(view) + '"' + (sub2 ? ' data-gosub="' + esc(sub2) + '"' : '')
-      + (deep ? ' data-gosub2="' + esc(deep) + '"' : '') + ' title="' + esc(title || 'open the chart this number lives on') + '">\u2192</span>';
+    /* ПЕРЕХОДОМ СТАЛА САМА СТРОКА (владелец 16.09: «зачем там стрелочки, ведь сама строка есть
+       ссылка»). Здесь возвращаются только атрибуты: строка получает их и класс go, а обработчик
+       пропускает клик, если он попал во что-то своё — в термин с карточкой, в значок истории,
+       в кнопку. Так строка целиком ведёт на график, но термины внутри неё продолжают работать. */
+    return ' data-go="' + esc(view) + '"' + (sub2 ? ' data-gosub="' + esc(sub2) + '"' : '')
+      + (deep ? ' data-gosub2="' + esc(deep) + '"' : '') + ' title="' + esc(title || 'open the chart this number lives on') + '"';
   }
   function riskScaleLine(D) {
     var rd = (D || {}).risk_index_detail, F = S.F || {}, pre = '';
@@ -9181,6 +9183,41 @@
 
   /* ВКЛАДКА OPS (владелец 06.09): журнал прогонов, состояние источников, свежий слой с триггерами.
      Всё из data/enso/ops.json и fresh.json, которые пишутся в конце каждого прогона, не живьём. */
+  /* Измеренная каденция второй строкой: то, что мы про источник НАПИСАЛИ, и то, что он на
+     самом деле делает, — разные вещи, и стоять они должны рядом. */
+  function opsCad(s) {
+    if (s.cadence_measured_days == null) {
+      // длинная фраза распирала колонку: подробности всё равно в карточке истории
+      return s.n_arrivals ? '<div class="sub">measured: ' + s.n_arrivals + ' arrival' + (s.n_arrivals === 1 ? '' : 's') + ' so far</div>' : '';
+    }
+    return '<div class="sub">measured: every ' + s.cadence_measured_days + ' d</div>';
+  }
+  function opsDue(s) {
+    if (!s.next_expected) return '<span class="sub">\u2014</span>';
+    return esc(s.next_expected) + ((s.overdue_days || 0) > 0 ? ' <b>+' + s.overdue_days + ' d</b>' : '');
+  }
+  /* Кнопка истории: карточка со списком приходов — за какой день данные и когда мы их увидели. */
+  function opsHist(s) {
+    var a = s.arrivals || [];
+    if (!a.length) return '';
+    var rows = a.slice().reverse().map(function (q) {
+      return '<li>data to <b>' + esc(q.data_to) + '</b> \u2014 seen ' + esc(q.seen)
+        + (q.behind_days != null ? ', ' + q.behind_days + ' d behind' : '')
+        + (q.error ? ' <span style="color:var(--lv5)">' + esc(q.error) + '</span>' : '') + '</li>';
+    }).join('');
+    var pay = { name: (s.label || s.key) + ': when the data arrived',
+      html: '<p>Each line is an <b>arrival</b>: the first run that saw a new last day of data from this source. '
+        + 'Runs that brought nothing new are not listed \u2014 they are not events.</p><ul>' + rows + '</ul>'
+        + (s.cadence_measured_days != null
+          ? '<p>Measured cadence: a new day every <b>' + s.cadence_measured_days + ' days</b>, median of the gaps above. '
+            + 'Next expected ' + esc(s.next_expected || '\u2014')
+            + ((s.overdue_days || 0) > 0 ? ', <b>overdue by ' + s.overdue_days + ' days</b>' : '') + '.</p>'
+          : '<p>Too few arrivals on record to measure a cadence yet, so nothing is promised about the next one.</p>')
+        + '<p>The cadence in the table beside this is what we wrote about the source. This one is what the source actually does.</p>',
+      src: 'our own log, data/enso/ops-history.json' };
+    return ' <span class="cn-mg" data-src="' + esc(JSON.stringify(pay)) + '" title="when this source handed us new data">history ' + a.length + '</span>';
+  }
+
   function viewOps() {
     var D = S.D || {}, O = S.O || {}, F = S.F || {};
     var k = sub('ops', 'runs');
@@ -9213,11 +9250,16 @@
       body.appendChild(el('div', 'cap', 'Every run writes one line when it finishes: full updates (rules, model verdict, snapshot), light runs (rules only, the fresh layer), links to our works, mooring records, publishing, review marks. Not live: a run in progress appears only when it ends. Journal data/enso/runs.json, last ' + runs.length + ' shown, written ' + esc(O.runs_built || O.built || '') + '.'));
     } else if (k === 'sources') {
       var wrap2 = el('div'); wrap2.style.cssText = 'flex:1;min-height:0;overflow:auto';
-      wrap2.innerHTML = '<table class="e"><thead><tr><th>source</th><th>cadence</th><th>data from</th><th>to</th><th class="num">behind</th><th>last update</th><th>status</th></tr></thead><tbody>' +
+      /* КОГДА ПРИХОДИЛИ ДАННЫЕ И КОГДА ЖДАТЬ СЛЕДУЮЩИХ (владелец 16.09). Таблица показывала
+         только «сейчас»: докуда данные и когда мы их забрали. Теперь рядом измеренная каденция
+         (медиана фактических промежутков, а не то, что мы сами про источник написали), срок
+         следующего прихода и кнопка с историей приходов по этому источнику. */
+      wrap2.innerHTML = '<table class="e"><thead><tr><th>source</th><th>cadence</th><th>data from</th><th>to</th><th class="num">behind</th><th>last update</th><th>next due</th><th>status</th></tr></thead><tbody>' +
         srcs.map(function (s) {
-          return '<tr><td>' + (s.url ? '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.label) + '</a>' : esc(s.label)) + '<div class="sub">' + esc(s.key) + (s.group === 'modules' ? ' · module, fetched inside the run' : (s.group === 'long record' ? ' · long record (planet.py)' : '')) + '</div></td>' +
-            '<td>' + esc(s.cadence || '') + '</td><td>' + esc(s.data_from || '') + '</td><td>' + esc(s.data_to || '') + '</td>' +
+          return '<tr><td>' + (s.url ? '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.label) + '</a>' : esc(s.label)) + opsHist(s) + '<div class="sub">' + esc(s.key) + (s.group === 'modules' ? ' · module, fetched inside the run' : (s.group === 'long record' ? ' · long record (planet.py)' : '')) + '</div></td>' +
+            '<td>' + esc(s.cadence || '') + opsCad(s) + '</td><td>' + esc(s.data_from || '') + '</td><td>' + esc(s.data_to || '') + '</td>' +
             '<td class="num">' + (s.behind_days != null ? s.behind_days + ' d' : '') + '</td><td>' + esc(s.fetched || '') + '</td>' +
+            '<td' + ((s.overdue_days || 0) > 0 ? ' class="st-bad"' : '') + '>' + opsDue(s) + '</td>' +
             '<td class="' + (s.fresh ? 'st-ok' : 'st-bad') + '">' + (s.fresh ? 'answered' : 'stale, last good copy') + (s.error ? '<div class="sub">' + esc(s.error) + '</div>' : '') + '</td></tr>';
         }).join('') + '</tbody></table>';
       body.appendChild(wrap2);
@@ -9467,8 +9509,11 @@
      разбору поломок, вердикт — на свою вкладку. Обработчик один на все, чтобы новая
      карточка получала переход одной строкой разметки. */
   document.addEventListener('click', function (e) {
-    var g = e.target.closest && e.target.closest('.cgo[data-go]');
+    var g = e.target.closest && e.target.closest('.cgo[data-go], .go[data-go]');
     if (!g) return;
+    /* Клик попал в собственный элемент строки — термин с карточкой, значок истории, кнопку,
+       ссылку: он не наш, строка молчит. */
+    if (g.classList.contains('go') && e.target.closest('[data-src], [data-hist], a, button, .cn-mg, .plain-i, .pick')) return;
     e.stopPropagation();
     S.view = g.getAttribute('data-go');
     var sb = g.getAttribute('data-gosub');

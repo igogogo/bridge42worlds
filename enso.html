@@ -1145,6 +1145,12 @@
     color:var(--ochre);cursor:pointer;margin-top:6px;display:inline-block}
   .cgo:hover{text-decoration:underline}
   /* переход от числа к его графику внутри строки состояния: тихий, пока не навели */
+  /* Строка состояния, которая ведёт на свой график: подсвечивается целиком, без стрелки */
+  .g-side .go{cursor:pointer;border-radius:5px;margin-inline:-4px;padding-inline:4px;
+    transition:background .12s, box-shadow .12s}
+  .g-side .go:hover{background:color-mix(in srgb, var(--ochre) 11%, transparent);
+    box-shadow:inset 2px 0 0 var(--ochre)}
+  .g-side .go [data-src],.g-side .go a,.g-side .go button{cursor:help}
   .cgo.mini{margin:0 0 0 5px;font-size:11px;line-height:1;vertical-align:baseline;opacity:.4;transition:opacity .15s}
   .ln:hover .cgo.mini,.card:hover .cgo.mini,.th:hover .cgo.mini,.cgo.mini:hover{opacity:1}
   /* на касании наведения нет вовсе: там стрелка стоит в полную силу, иначе её не найти */
@@ -1356,7 +1362,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=f751c16d97"></script>
+<script src="/js/enso.js?v=589e8b6358"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>
