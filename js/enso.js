@@ -5436,7 +5436,7 @@
         return b.levels.base - a.levels.base || b.levels.strong - a.levels.strong ||
           b.levels.record - a.levels.record || b.vulnerability.level - a.vulnerability.level;
       });
-      wrap.innerHTML = '<table class="e regions"><thead><tr><th>region</th>' +
+      wrap.innerHTML = '<table class="e regions" style="min-width:660px"><thead><tr><th>region</th>' +
         RG.seasons.map(function (s2) { return '<th>' + src({ name: s2, def: notes[s2] || '', src: 'three-month season, the same convention as ONI', date: RG.as_of }, s2) + '</th>'; }).join('') +
         '<th class="vul">' + src({ name: 'Food vulnerability', def: 'Five bars: how exposed the region is through food — the share of imports in cereal consumption and the size of the population close to the margin. Point at a region name for the detail and the source.', src: 'FAO / World Bank', date: RG.as_of }, 'food') + '</th>' +
         '<th class="lvls">' + ['base', 'strong', 'record'].map(function (c) {
@@ -6599,7 +6599,9 @@
     }
     body.classList.add('scroll');
     if (!nodes.length) { body.appendChild(el('div', 'note warn', 'The chain reference did not load (data/enso/chain-ref.json).')); return; }
-    if (window.matchMedia('(max-width:900px)').matches) body.appendChild(el('div', 'note', 'The diagram with its links is a desktop view; on a phone the nodes are listed layer by layer. ' + vLink('the register', 'refs', 'sources')));
+    var flatNote = el('div', 'note', 'Too narrow for the diagram with its links: the nodes are listed layer by layer instead. Open the scene full screen for the wiring. ' + vLink('the register', 'refs', 'sources'));
+    flatNote.style.display = 'none';
+    body.appendChild(flatNote);
     body.appendChild(el('div', 'lead', 'Point at anything: what it is, why it is here, where it comes from and when its data last changed. Click a node to light its chain; click again to release. ' +
       'The dot is the state of the source on the last update (' + esc((D.stamp || '').slice(0, 16)) + '): green answered, ochre did not answer and the last good copy is shown, grey not part of this update.'));
     var wrap = el('div', 'chain');
@@ -6647,8 +6649,21 @@
       });
       svg.innerHTML = s;
     }
-    requestAnimationFrame(drawEdges);
-    setTimeout(drawEdges, 250);
+    /* ШИРИНА МЕРЯЕТСЯ, А НЕ УГАДЫВАЕТСЯ ПО ОКНУ. Сцена живёт между двумя рельсами и занимает
+       меньше половины окна, поэтому «телефонные» правила по @media здесь не срабатывают там,
+       где уже тесно. Столбцов столько, сколько помещается читаемыми; рёбра рисуются только при
+       всех четырёх слоях в ряд — в два столбца они шли бы поперёк и мешали, а не объясняли. */
+    function fitChain() {
+      var w = wrap.clientWidth || 0;
+      var n = w >= 680 ? 4 : (w >= 330 ? 2 : 1);
+      cols.style.gridTemplateColumns = 'repeat(' + n + ',minmax(0,1fr))';
+      svg.style.display = n === 4 ? '' : 'none';
+      flatNote.style.display = n === 4 ? 'none' : '';
+      if (n === 4) drawEdges();
+    }
+    requestAnimationFrame(fitChain);
+    setTimeout(fitChain, 250);
+    if (window.ResizeObserver) new ResizeObserver(fitChain).observe(wrap);
     body.appendChild(el('div', 'cap', vLink('the register of sources and references', 'refs', 'sources') + ' Reference: data/enso/chain-ref.json, written by hand; dates and the dots come from data/enso/latest.json and the value journal at every update. ' +
       'The climatologies (1991–2020 for every box, mooring and point; the reanalysis section by month) and the past-event series are built once and cached — an update pulls only the tails.'));
   }
@@ -9254,7 +9269,7 @@
     if (k === 'runs') {
       var rows = runs.slice().reverse();
       var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
-      wrap.innerHTML = '<table class="e"><thead><tr><th>started</th><th>kind</th><th class="num">seconds</th><th>status</th><th>data stamp</th><th class="num">index</th><th class="num">risks</th><th class="num">alerts</th><th>outcome, errors</th></tr></thead><tbody>' +
+      wrap.innerHTML = '<table class="e" style="min-width:770px"><thead><tr><th>started</th><th class="prose">kind</th><th class="num">seconds</th><th>status</th><th>data stamp</th><th class="num">index</th><th class="num">risks</th><th class="num">alerts</th><th>outcome, errors</th></tr></thead><tbody>' +
         rows.map(function (r) {
           var bad = r.status && r.status !== 'ok' && r.status !== 'cleared';
           var errs = (r.errors || []).concat(r.errors_list || []).concat(r.model_error ? ['model: ' + r.model_error] : []);
@@ -9264,7 +9279,7 @@
             r.files != null ? r.files + ' files' + (r.reviewed != null ? (r.reviewed ? ', reviewed' : ', NOT reviewed') : '') : '',
             r.anchors != null ? r.anchors + ' of ' + r.of + ' anchors, ' + r.links + ' links' : '',
             r.stations != null ? r.stations + ' moorings' : '', r.model ? r.model : ''].filter(Boolean).join(' · ');
-          return '<tr><td>' + esc(r.started || '') + '</td><td>' + esc(r.label || r.kind || '') + '</td><td class="num">' + (fin(r.secs) ? r.secs : '') + '</td>' +
+          return '<tr><td>' + esc(r.started || '') + '</td><td class="prose">' + esc(r.label || r.kind || '') + '</td><td class="num">' + (fin(r.secs) ? r.secs : '') + '</td>' +
             '<td class="' + (bad ? 'st-bad' : 'st-ok') + '">' + esc(r.status || '') + '</td><td>' + esc(r.stamp || '') + '</td>' +
             '<td class="num">' + (r.risk_index != null ? r.risk_index : '') + '</td><td class="num">' + (r.n_risks != null ? r.n_risks : '') + '</td>' +
             '<td class="num">' + (r.n_alerts != null ? r.n_alerts : '') + (r.shout ? ' <b>SHOUT</b>' : '') + '</td>' +
@@ -9278,7 +9293,7 @@
          только «сейчас»: докуда данные и когда мы их забрали. Теперь рядом измеренная каденция
          (медиана фактических промежутков, а не то, что мы сами про источник написали), срок
          следующего прихода и кнопка с историей приходов по этому источнику. */
-      wrap2.innerHTML = '<table class="e"><thead><tr><th>source</th><th>cadence</th><th>data from</th><th>to</th><th class="num">behind</th><th>last update</th><th>next due</th><th>status</th></tr></thead><tbody>' +
+      wrap2.innerHTML = '<table class="e" style="min-width:800px"><thead><tr><th class="prose">source</th><th class="prose">cadence</th><th>data from</th><th>to</th><th class="num">behind</th><th>last update</th><th>next due</th><th>status</th></tr></thead><tbody>' +
         srcs.map(function (s) {
           return '<tr><td>' + (s.url ? '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.label) + '</a>' : esc(s.label)) + opsHist(s) + '<div class="sub">' + esc(s.key) + (s.group === 'modules' ? ' · module, fetched inside the run' : (s.group === 'long record' ? ' · long record (planet.py)' : '')) + '</div></td>' +
             '<td>' + esc(s.cadence || '') + opsCad(s) + '</td><td>' + esc(s.data_from || '') + '</td><td>' + esc(s.data_to || '') + '</td>' +
