@@ -3849,7 +3849,7 @@
     }).join('') + '<div class="ph-n">' + esc(P.how_the_level_is_set || '') + '</div>';
     body.appendChild(why);
 
-    var L = P.link || {}, C = P.coupling || {}, F = P.fuel || {}, mem = P.memory || [];
+    var L = P.link || {}, C = P.coupling || {}, F = P.fuel || {}, RC = P.recharge || {}, mem = P.memory || [];
     var hi = mem.filter(function (m) { return (m.ar1_pct || 0) >= 80 && (m.tau_ar1_recent || 0) > 0.2; }).length;
     var kp2 = el('div', 'kpis');
     kp2.innerHTML =
@@ -3862,11 +3862,22 @@
       trackKpi('is the air answering at all', (C.score != null ? C.score + ' of ' + C.of : '\u00b7'),
         'pressure across the Pacific, the cloud tower over the date line, the trade winds. When they stop answering, the event stops being an El Ni\u00f1o in the usual sense',
         'our own arithmetic over the daily series', '') +
-      trackKpi('the way back', (F.discharging === false ? 'not started' : (F.discharging ? 'under way' : '\u00b7')),
-        'the warm water volume stands at ' + (F.share_of_record != null ? F.share_of_record + ' % of its record' : 'an unknown share of its record')
-        + (F.value_e14 != null ? ' (' + fnum(F.value_e14, 2, false) + '\u00d710\u00b9\u2074 m\u00b3\u00b7\u00b0C)' : '')
-        + '. An oscillation has a restoring force: the fuel burns and the system swings back. That swing is the test',
-        'NOAA warm water volume', F.date || '');
+      /* Возвращающая сила — из замера сборщика радиансов (v10, 16.09): у него этот признак
+         обставлен восемью условиями и умеет отказываться. Пока отказывается — так и написано. */
+      trackKpi('the way back', (RC.conclusive === false ? 'cannot be judged yet'
+          : ((RC.discharged_m != null && RC.discharged_m <= 0) ? 'not started' : 'under way')),
+        (RC.rank_pct != null
+          ? 'the fuel stands at the ' + fnum(RC.rank_pct, 2, false) + 'th percentile of ' + RC.weeks_total
+            + ' weeks, and over ' + RC.weeks_since_onset + ' weeks of this event it has not fallen but risen by '
+            + Math.abs(Math.round((RC.discharged_m || 0) * 1000)) + ' mm. '
+          : '')
+        + (RC.conclusive === false
+          ? 'The collector refuses to conclude: ' + RC.conditions_passed + ' of ' + RC.conditions_total
+            + ' conditions are met and these are not \u2014 ' + (RC.failed || []).map(function (q) { return esc(q.id); }).join(', ')
+            + '. In ten more weeks it will speak, and then it is either an ordinary swing or a first observation'
+          : 'An oscillation has a restoring force: the fuel burns and the system swings back')
+        + '. The volume here is a stand-in measured from sea level by altimetry, not water counted above the 20 \u00b0C isotherm',
+        'radiance collector v10, NASA-SSH altimetry', RC.date || F.date || '');
     body.appendChild(kp2);
     body.appendChild(el('div', 'cap', '<strong>' + esc(P.what_this_is || '') + '</strong> '
       + esc(P.what_it_cannot_see || '')));

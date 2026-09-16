@@ -266,6 +266,72 @@ def coupling_and_fuel():
     return cpl, fl
 
 
+def recharge():
+    """Осциллятор с подзарядкой: сборщик радиансов v10 (16.09), блок `recharge`.
+
+    Почему берём его, а не свой. У нас тёплый объём был числом без проверки: «на рекорде и не
+    разряжается». У них то же самое, но с восемью условиями, при которых эту фразу вообще можно
+    произносить, и с отказом, когда условия не пройдены. Два из восьми сейчас не пройдены —
+    событию девять недель при нужных девятнадцати и сравнимых событий два при нужных трёх, —
+    и их вердикт звучит «вывод пока не осмыслен». Мы переносим это слово в слово: наш уровень
+    не имеет права опираться на признак, который сам себя объявил непросчитанным.
+
+    И ещё одно, чего у нас не было: объём там ЗАМЕНИТЕЛЬ (аномалия уровня моря по альтиметрии),
+    а не измеренный объём воды выше изотермы 20 °C. Так и подписано.
+    """
+    p = ROOT / "radiance.json"
+    if not p.exists():
+        return None
+    R = json.loads(p.read_text(encoding="utf-8"))
+    rc = ((R.get("sources") or {}).get("recharge") or {})
+    if not rc:
+        return None
+    cond = rc.get("conditions") or []
+    failed = [c for c in cond if not c.get("passed")]
+    dis = (rc.get("discharge") or {}).get("current") or {}
+    now = rc.get("now") or {}
+    pp = rc.get("phase_portrait") or {}
+    return {
+        "verdict": rc.get("verdict"),
+        "conclusive": not failed,
+        "conditions_passed": len(cond) - len(failed), "conditions_total": len(cond),
+        "failed": [{"id": c.get("id"), "value": c.get("value"), "text": c.get("text")} for c in failed],
+        "weeks_since_onset": dis.get("weeks_since_onset"), "onset": dis.get("onset_date"),
+        "charge_max_m": dis.get("charge_max_m"), "now_m": dis.get("v_now_m"),
+        # отрицательное «разряжено» значит, что объём не упал, а вырос
+        "discharged_m": dis.get("discharged_m"),
+        "rank_pct": now.get("volume_rank_pct"), "weeks_above": now.get("volume_weeks_above"),
+        "weeks_total": now.get("volume_weeks_total"), "date": now.get("date"),
+        "lead_median_weeks": pp.get("lead_median_weeks"), "loop_sense": pp.get("loop_sense_all_record"),
+        "kind": ((rc.get("measurement_kind") or {}).get("warm_volume")),
+        "coverage": rc.get("coverage"),
+    }
+
+
+def provenance():
+    """Версия обработки и журнал её изменений: то, без чего эта страница опасна.
+
+    Сама идея «связь разладилась» держится на том, что ряд не менял под собой обработку. Сборщик
+    радиансов v10 отдаёт это явно: сколько суток у каждого прибора, в скольких из них смешаны
+    версии и какие версии вообще встречались. Скачок, совпавший с датой из журнала, — это не
+    новость о климате.
+    """
+    p = ROOT / "radiance.json"
+    if not p.exists():
+        return None
+    R = json.loads(p.read_text(encoding="utf-8"))
+    pr = ((R.get("sources") or {}).get("provenance") or {})
+    src = pr.get("sources") or {}
+    rows = []
+    for k, v in src.items():
+        if not isinstance(v, dict):
+            continue
+        rows.append({"source": k, "n_days": v.get("n_days"), "mixed": v.get("days_mixed_versions"),
+                     "mixed_first": v.get("mixed_first"), "mixed_last": v.get("mixed_last"),
+                     "versions": list((v.get("versions_seen") or {}).keys())[:4]})
+    return {"rows": rows, "why": pr.get("why")} if rows else None
+
+
 def out_of_range():
     """Насколько сегодня система вышла за пределы, на которых подогнаны наши инструменты."""
     out = []
@@ -298,7 +364,7 @@ def out_of_range():
 
 
 # ── ОЦЕНКА ──────────────────────────────────────────────────────────────────────────────────
-def assess(mem, link, cpl, fuel, oor):
+def assess(mem, link, cpl, fuel, oor, rch=None):
     """Уровень ставится правилом, правило написано словами. Веса никто не измерял — и так сказано.
 
     0 — ничего из сторожевых признаков не сработало.
@@ -342,10 +408,23 @@ def assess(mem, link, cpl, fuel, oor):
     if cpl and cpl.get("score") is not None and cpl.get("of") and cpl["score"] <= cpl["of"] - 2:
         level = max(level, 4)
         reasons.append(f"The coupling has come apart: {cpl['score']} of {cpl['of']} signs left")
-    if level >= 4 and fuel and fuel.get("share_of_record") is not None \
-            and fuel["share_of_record"] >= 99 and fuel.get("discharging") is False:
+    # ВОЗВРАЩАЮЩАЯ СИЛА — ТОЛЬКО ПО ПРОВЕРЕННОМУ ТЕСТУ. Свой прежний признак («объём на рекорде
+    # и не разряжается») звучал как вывод, хотя был просто двумя числами. У сборщика радиансов
+    # тот же признак обставлен восемью условиями и умеет отказываться. Пока он отказывается,
+    # уровень на него не опирается — но молчать об этом нельзя, и отказ печатается как есть.
+    if rch and rch.get("conclusive") and level >= 4 \
+            and (rch.get("discharged_m") or 0) <= 0 and (rch.get("rank_pct") or 0) >= 99:
         level = 5
-        reasons.append("And the restoring force has not come: the fuel stands at its record and is not discharging")
+        reasons.append("And the restoring force has not come: the fuel stands at its record and has not discharged")
+    elif rch and not rch.get("conclusive"):
+        # ВЕРДИКТ СБОРЩИКА ПРИХОДИТ ПО-РУССКИ, А ЭТО ЭКРАН: передаём смысл, не строку.
+        f = ", ".join(c["id"] for c in (rch.get("failed") or []))
+        reasons.append("The restoring force cannot be judged yet, and the collector refuses to judge it: "
+                       + f"{rch.get('conditions_passed')} of {rch.get('conditions_total')} conditions are met, "
+                       + f"and these are not: {f}. "
+                       + f"The fuel stands at the {rch.get('rank_pct')}th percentile of {rch.get('weeks_total')} weeks "
+                       + f"and over {rch.get('weeks_since_onset')} weeks of this event it has not fallen but risen by "
+                       + f"{abs(round((rch.get('discharged_m') or 0) * 1000)):.0f} mm")
     if not reasons:
         reasons.append("None of the watch signs has fired")
     return level, reasons
@@ -376,7 +455,8 @@ def build(show=False):
     link = link_integrity()
     cpl, fuel = coupling_and_fuel()
     oor = out_of_range()
-    level, reasons = assess(mem, link, cpl, fuel, oor)
+    rch, prov = recharge(), provenance()
+    level, reasons = assess(mem, link, cpl, fuel, oor, rch)
 
     doc = {
         "built": datetime.now().strftime("%Y-%m-%d %H:%M"),
@@ -384,6 +464,7 @@ def build(show=False):
         "reasons": reasons,
         "subjective": True,
         "memory": mem, "link": link, "coupling": cpl, "fuel": fuel, "out_of_range": oor,
+        "recharge": rch, "provenance": prov,
         "what_this_is": ("A watch for a change of regime, which is a different question from how strong the "
                          "event is. A record is a position on the curve; a change of regime is the curve itself "
                          "giving way. Nothing on this page is a level of anything — these are relations, the "

@@ -20,6 +20,7 @@ import math
 import os
 import re
 import subprocess
+import time
 import sys
 from pathlib import Path
 
@@ -115,9 +116,19 @@ def push_index(no_index, why):
     # облака по позавчерашнему реестру и никому об этом не говорила (владелец 10.09:
     # «делаем сами вектор, включи везде, чтобы не терялось»).
     # Считается по готовой матрице карточек, модель не зовётся — секунды и ноль денег.
-    rc2 = subprocess.run([sys.executable, "concepts_link.py", "--run"],
-                         cwd=str(HERE),
-                         env=dict(os.environ, PYTHONIOENCODING="utf-8")).returncode
+    # ПОВТОР ПРИ СРЫВЕ. На этой машине запись json изредка падает с OSError 22 и проходит со
+    # второго раза (поймано трижды 15–16.09: дважды здесь, один раз в phase.py). Один повтор
+    # убирает ложное «НЕ обновлены» на совершенно исправном коде.
+    rc2 = 1
+    for _try in range(2):
+        rc2 = subprocess.run([sys.executable, "concepts_link.py", "--run"],
+                             cwd=str(HERE),
+                             env=dict(os.environ, PYTHONIOENCODING="utf-8")).returncode
+        if rc2 == 0:
+            break
+        if _try == 0:
+            print("облака понятий: сорвалось, повторяю один раз")
+            time.sleep(3)
     print("облака понятий:", "обновлены" if rc2 == 0 else f"НЕ обновлены (код {rc2}) — "
           "починить: python tools/enso/concepts_link.py --run")
 
