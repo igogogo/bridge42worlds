@@ -4623,8 +4623,15 @@ def update_all_authors(only=None):
         by_id = articles_by_lang.get(lang, {})
         _pick = set(only or ())
         _done = 0
+        # СПИСОК НЕ ПОКАЗЫВАЕМЫХ. Автор, попросивший снять себя, не должен возвращаться
+        # следующей пересборкой: страница собирается из его оставшихся работ и воскресла
+        # бы сама. Проверка здесь, у самой записи файла, а не выше по течению — тогда её
+        # нельзя обойти ни одним из пяти мест, что зовут update_all_authors.
+        from tools.authors_banned import is_banned as _no_show
         for author_name, data in graph.items():
             if _pick and author_name not in _pick:
+                continue
+            if _no_show(author_name):
                 continue
             slug = author_slug(author_name)
             articles_html = "".join(

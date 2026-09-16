@@ -101,6 +101,38 @@ def embed(texts, acc, tok, tries=5):
     raise RuntimeError("эмбеддинги не получены")
 
 
+def _authors_of(a):
+    """Имена авторов кандидата, в каком бы виде они ни пришли."""
+    v = a.get("authors") or a.get("authors_parsed") or a.get("author") or []
+    if isinstance(v, str):
+        return [x.strip() for x in v.replace(";", ",").split(",") if x.strip()]
+    out = []
+    for x in v:
+        if isinstance(x, str):
+            out.append(x)
+        elif isinstance(x, dict):
+            out.append(x.get("name") or " ".join(str(y) for y in x.values() if y))
+        elif isinstance(x, (list, tuple)):
+            out.append(" ".join(str(y) for y in x if y))
+    return out
+
+
+def drop_banned(articles):
+    """Убрать работы авторов, попросивших нас их не разбирать.
+
+    СТОИТ ДО ВСЕХ ПОРОГОВ, и это не стиль, а условие. Ниже у отсева есть запасной путь:
+    «порезали слишком много — беру всех», он возвращает ИСХОДНЫЙ список. Поставь проверку
+    после порогов — и в день с малым уловом забаненный автор вернулся бы в разбор, а мы
+    бы об этом не узнали.
+    """
+    from tools.authors_banned import any_banned
+    kept = [a for a in articles if not any_banned(_authors_of(a))]
+    n = len(articles) - len(kept)
+    if n:
+        print(f"   не разбираем по просьбе авторов: {n}")
+    return kept
+
+
 def prefilter(articles, keep_min=40):
     """Отсев краёв ПЕРЕД моделью. Зовётся из gen_llm.select_best().
 
@@ -121,6 +153,7 @@ def prefilter(articles, keep_min=40):
     БЕЗОПАСНОСТЬ. Любой сбой — возвращаем список как был. Отбор не должен падать
     из-за вспомогательного слоя: без него он работает как раньше, с ним дешевле.
     """
+    articles = drop_banned(articles)
     if len(articles) <= keep_min:
         return articles, "кандидатов мало, отсев не нужен"
     try:
