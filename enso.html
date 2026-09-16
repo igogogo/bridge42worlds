@@ -295,6 +295,9 @@
      слева, а справа шла колонка мелких строк: цифра терялась, а мелкая подпись под шкалой
      не читалась вовсе — её убрали. */
   .gauge-row{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+  /* Сам круг стоит по центру, а всё под ним — по левому краю: столбик разнородных чисел
+     читается по ровной кромке, а по середине разъезжается (владелец 16.09). */
+  .gauge-row .g-side{text-align:start}
   .gauge-row .g-side{width:100%}
   /* ПОСЛЕДНЯЯ ДЕСЯТАЯ ШКАЛЫ — ЗАПАС ЗА ПРЕДЕЛОМ ЗАПИСИ (владелец 10.09). Слоями снизу вверх:
      серый круг, слабая заливка сектора 90–100, само значение, чёрная засечка на 90. Девяносто
@@ -313,7 +316,11 @@
   .g-side .glab{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;
     text-transform:uppercase;color:var(--soft);margin-bottom:3px}
   .g-side{font-size:12px;line-height:1.45;color:var(--muted);min-width:0}
-  .g-side b{display:block;font-family:var(--font-display);font-size:14px;color:var(--text);line-height:1.25;margin-bottom:2px}
+  /* ТОЛЬКО ПРЯМОЙ РЕБЁНОК. Правило било по любому <b> внутри карточки, и стрелка изменения
+     («↓ −2») оказывалась блоком: «since Sep 14» уезжало на вторую строку, а число повисало
+     отдельно. Это и был тот самый «−2 непонятно к чему» (владелец 16.09). */
+  .g-side > b{display:block;font-family:var(--font-display);font-size:14px;color:var(--text);line-height:1.25;margin-bottom:2px}
+  .g-side .fresh b{display:block}   /* «3 triggers, assessment needed» — своей строкой, это вывод */
   .g-side .rscale{font-family:var(--mono);font-size:10px;letter-spacing:.03em;color:var(--soft);line-height:1.4}
 
   .verdict .vv{font-family:var(--font-display);font-size:13.5px;line-height:1.4;margin:0 0 6px}
@@ -667,8 +674,9 @@
   .zones-tall .plot{min-height:330px;flex:1 1 auto}
   .gl-str{display:flex;align-items:center;gap:14px;margin:0 12px 5px;flex-shrink:0;flex-wrap:wrap}
   .gl-h{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
-  .gl-i{display:flex;align-items:center;gap:6px} .gl-i b{font-size:10.5px;font-weight:500;color:var(--soft)}
-  .gl-i input{width:86px;accent-color:var(--cyan)}
+  .gl-str .gl-sl{display:flex;align-items:center;gap:6px}
+  .gl-str .gl-sl b{font-family:var(--mono);font-size:10.5px;font-weight:500;color:var(--soft)}
+  .gl-str .gl-sl input{width:86px;accent-color:var(--cyan)}
   .globe-scene .globe-box{flex:1 1 auto;min-height:420px}
   .gl-layers{display:flex;flex-direction:column;gap:2px;margin:0 12px 6px;flex-shrink:0}
   .gl-row{display:flex;align-items:center;gap:9px;padding:4px 8px;border:1px solid var(--hair);border-radius:8px;opacity:.55;transition:opacity .15s,border-color .15s}
@@ -962,7 +970,7 @@
     background:color-mix(in srgb, var(--ochre) 10%, transparent)}
 
   .gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
-  .gl-i{border:1px solid var(--line, var(--hair));border-radius:10px;padding:9px 11px;font-size:12px;line-height:1.5}
+  .gl-i{display:block;border:1px solid var(--line, var(--hair));border-radius:10px;padding:9px 11px;font-size:12px;line-height:1.5}
   .gl-i b{font-family:var(--font-display);font-size:13.5px;display:block;margin-bottom:2px}
   .gl-i .why{color:var(--muted);margin-top:3px}
   .gl-i .s{font-family:var(--mono);font-size:10px;color:var(--soft);margin-top:4px}
@@ -1009,7 +1017,14 @@
      (владелец 07.09). Вместо этого внизу оставлена полоса, в которой и стоит пара. */
   .kj .jsrc,.risk .rf{padding-inline-end:0;padding-bottom:17px;min-height:16px}
   .g-side .ln{display:block;line-height:1.45}   /* утверждения карточки State — по строке, без точек */
-  .kpi-card .cgo{padding-inline-end:82px}   /* ссылка внизу карточки State не уходит под кнопку */
+  /* В карточке состояния журнал стоит в середине, вплотную к своему индексу. Пара
+     «history + значок даты» приклеена к низу карточки только там, где журнал идёт последним;
+     здесь она обязана остаться при своей строке, иначе оба значка оказываются под чужими
+     числами в самом низу (16.09). */
+  .kpi-card .kj .jsrc{padding-bottom:0;min-height:0}
+  .kpi-card .kj .jsrc .jh,.kpi-card .kj .jsrc .dcal,.kpi-card .kj .jsrc .cn-mg.rail{position:static;inset:auto;margin:0}
+  .kpi-card .kj-r{margin-top:1px;margin-bottom:3px}
+  .kpi-card .kj-s{margin-top:3px}
   .risk .rf{display:flex;justify-content:flex-end;align-items:center;gap:6px;margin-top:4px}
   .chain{overflow-x:hidden}
   .chain-node .cn-s,.chain-node .cn-m{overflow-wrap:anywhere}
@@ -1146,6 +1161,12 @@
   .cgo:hover{text-decoration:underline}
   /* переход от числа к его графику внутри строки состояния: тихий, пока не навели */
   /* Строка состояния, которая ведёт на свой график: подсвечивается целиком, без стрелки */
+  /* Подписи групп в карточке состояния: числа разного рода не должны стоять вперемешку */
+  .g-side .ghd{font-family:var(--mono);font-size:8.5px;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--soft);margin:0 0 3px;display:flex;align-items:baseline;gap:4px}
+  .g-side .ghd b{font-family:var(--font-display);font-size:13px;letter-spacing:0;color:var(--text)}
+  .g-side .ghd.gsep{margin-top:9px;padding-top:7px;border-top:1px solid var(--hair)}
+  .g-side .vgo{margin-top:5px}
   .g-side .go{cursor:pointer;border-radius:5px;margin-inline:-4px;padding-inline:4px;
     transition:background .12s, box-shadow .12s}
   .g-side .go:hover{background:color-mix(in srgb, var(--ochre) 11%, transparent);
@@ -1362,7 +1383,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=589e8b6358"></script>
+<script src="/js/enso.js?v=f77482512a"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>

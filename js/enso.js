@@ -3223,7 +3223,20 @@
          суточные мы обновляем каждый день». Раньше заголовком стоял недельный индекс NOAA
          (+2.7 за неделю до 2 сентября), а у точки на графике — суточный OISST (+2.83 за 6
          сентября), и два числа читались как рост, которого не было (см. 9я). */
-      '<div class="g-side">' + '<button type="button" class="vgo" data-view="verdict">read the verdict →</button>' +
+      /* ТРИ ГРУППЫ, А НЕ СТОЛБИК ЧИСЕЛ (владелец 16.09: «бах какая-то цифра −2, к чему
+         относится, непонятно»). Числа тут разного рода, и стояли вперемешку: индекс риска, его
+         изменение, показания воды и то, что новее оценки. Хуже всего пришлось изменению индекса:
+         оно печаталось В КОНЦЕ, через четыре чужие строки от самого индекса, и читалось как
+         «минус два» неизвестно чего. Теперь у каждой группы своя подпись, а изменение индекса
+         стоит вплотную к индексу. */
+      '<div class="g-side">'
+      + '<div class="ghd">' + term('riskindex', 'risk index') + ' \u00b7 <b>' + idx + '</b> of 100</div>'
+      + kmeta('risk_index', null, null, 'r')
+      + '<div class="ln rscale go"' + stGo('verdict', '', '', 'the risk index in full: every rule, its level and what it rests on')
+        + '>' + esc(riskScaleLine(D)) + '</div>'
+      + kmeta('risk_index', null, null, 's')
+      + '<button type="button" class="vgo" data-view="verdict">read the verdict →</button>'
+      + '<div class="ghd gsep">where the water stands</div>' +
       '<b class="go"' + stGo('trend', 'sst_nino34', '', 'the daily series of this box, with its record and the 14-day outlook') + '>'
         + zone('nino34') + ' ' + fnum(N.current_day) + ' °C' + jchip('n34_daily')
         + '<small class="dsub">daily · ' + esc(String(dt(dailyDate)).replace(/<[^>]+>/g, '')) + '</small></b>' +
@@ -3234,9 +3247,7 @@
         + '>rank ' + N.all_years_rank + ' of all years on the same 30 days</div>' +
       '<div class="ln go"' + stGo('now', 'analogs', '', 'the official seasonal index against the analogue years') + '>'
         + ab('oni', 'ONI') + ' ' + fnum(ONI.current[ls]) + ' ' + ab('seasons', ls) + jchip('oni') + '</div>' +
-      '<div class="ln rscale go"' + stGo('verdict', '', '', 'the risk index in full: every rule, its level and what it rests on')
-        + '>' + esc(riskScaleLine(D)) + '</div>' +
-      '' + kmeta('risk_index') + freshLine() +
+      (freshLine() ? '<div class="ghd gsep">newer than the assessment</div>' + freshLine() : '') +
       '<div class="cgo" data-go="now" data-gosub="analogs">see where we are \u2192</div></div></div>';
     box.appendChild(k1);
 
@@ -3675,17 +3686,25 @@
     for (var i = 0; i < PLOT_KEY.length; i++) if (PLOT_KEY[i][0].test(src)) return PLOT_KEY[i][1];
     return null;
   }
-  function kmeta(k, src0, date0) {
-    var r = jrec(k), out = '<div class="kj">';
+  /* part: 'r' — только изменение, 's' — только строка происхождения, пусто — обе, как было.
+     Половинки понадобились карточке состояния: там изменение обязано стоять вплотную к своему
+     числу, иначе «−2» повисает само по себе и относится непонятно к чему (владелец 16.09). */
+  function kmeta(k, src0, date0, part) {
+    var r = jrec(k), out = '<div class="kj' + (part ? ' kj-' + part : '') + '">';
     if (!r) {
+      if (part === 'r') return '';
       if (!src0 && !date0) return '';
       return out + '<div class="jsrc"><span>' + mark(src0 || '') + (date0 ? ' · ' + dt(date0) : '') + '</span>' + dateBadge(null, src0, date0) + '</div></div>';
     }
-    var e = r.entries || [], last = e[e.length - 1], prev = e[e.length - 2], dg = r.digits;
+    var e = r.entries || [], last = e[e.length - 1], prev = e[e.length - 2], dg = r.digits, nr = 0;
     function moved(a, b) { return typeof a === 'number' && typeof b === 'number' ? a !== b : a !== b; }
-    if (last && prev && moved(last.v, prev.v)) out += '<div class="jr">' + jdelta(last.v, prev.v, dg) + ' since ' + dt(prev.d) + '</div>';
-    if (last && r.since_event && moved(last.v, r.since_event.v))
-      out += '<div class="jr">' + jdelta(last.v, r.since_event.v, dg) + ' since the event began, ' + dt(r.since_event.d) + '</div>';
+    if (part !== 's') {
+      if (last && prev && moved(last.v, prev.v)) { out += '<div class="jr">' + jdelta(last.v, prev.v, dg) + ' since ' + dt(prev.d) + '</div>'; nr++; }
+      if (last && r.since_event && moved(last.v, r.since_event.v)) {
+        out += '<div class="jr">' + jdelta(last.v, r.since_event.v, dg) + ' since the event began, ' + dt(r.since_event.d) + '</div>'; nr++;
+      }
+      if (part === 'r') return nr ? out + '</div>' : '';
+    }
     /* СТРОКА ИСТОЧНИКА — ТОЖЕ ПОДСКАЗКА, И БЕЗ ОБРЫВА. Владелец 04.09: «что там за многоточия
        в тексте, немного почётче пиши». Многоточие рисовала обрезка по ширине: длинное имя
        источника не влезало в строку кирпича. Теперь подпись переносится и сама стала якорем:
@@ -8538,7 +8557,12 @@
     if (paints.length) {
       var bar = el('div', 'gl-str');
       bar.innerHTML = '<span class="gl-h">strength</span>' + paints.map(function (L) {
-        return '<span class="gl-i"><b>' + esc(L.name) + '</b><input data-l="' + esc(L.id) + '" type="range" min="15" max="100" value="' +
+        /* СОБСТВЕННОЕ ИМЯ, А НЕ ЧУЖОЕ. Ползунок здесь звался gl-i — тем же классом, каким по всей
+           панели названы карточки пояснений (вердикт, справочник, источники, регионы). Правило
+           глобуса делало их display:flex, и каждый кусок текста внутри карточки становился
+           отдельной колонкой: слова вставали по одному в строку. Владелец 16.09: «текст в
+           карточки не помещается, карточки очень вытянуты». */
+        return '<span class="gl-sl"><b>' + esc(L.name) + '</b><input data-l="' + esc(L.id) + '" type="range" min="15" max="100" value="' +
           Math.round(glAlpha(L.id) * 100) + '" title="how strongly this layer shows through"></span>';
       }).join('');
       bar.addEventListener('input', function (e) {
