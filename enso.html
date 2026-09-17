@@ -588,7 +588,14 @@
   .br-how p{max-width:80ch}
   @media (max-width:900px){ .br-two{grid-template-columns:1fr} .br-big{font-size:15px} }
   /* карточка устойчивости системы в колонке рисков (09.09) */
-  .risk.stab{border-style:dashed}
+  /* РАМКА, А НЕ ОБРЫВОК ЛИНИИ. У .risk есть только ВЕРХНЯЯ граница — она разделяет риски в
+     списке. Объявленный здесь border-style:dashed красил пунктиром именно её, и карточка
+     читалась как карточка со съеденной рамкой: сверху пунктир, дальше ничего, а если сторож
+     оказывался первым в списке, правило .risk:first-child снимало и его (владелец 17.09).
+     Сторожу нужна СВОЯ рамка целиком: он не правило вердикта, и пунктир вокруг это говорит. */
+  .risk.stab{border:1px dashed color-mix(in srgb, var(--soft) 45%, var(--hair));border-radius:10px;
+    padding:8px 9px;margin:7px 0 3px}
+  .risk.stab:first-child{border-top:1px dashed color-mix(in srgb, var(--soft) 45%, var(--hair))}
   .stab-k{display:flex;flex-wrap:wrap;gap:3px 8px;margin:4px 0 2px;font-family:var(--mono);font-size:9.5px;color:var(--soft)}
   .stab-k span{border:1px solid var(--hair);border-radius:999px;padding:0 6px;text-decoration:none;cursor:default} .stab-k span b{color:var(--text)}
   .stab-k span.on{border-color:var(--nino);color:var(--nino)} .stab-k span.on b{color:var(--nino)}
@@ -659,6 +666,13 @@
   .ph-s.past{opacity:.8}
   .ph-s.on{opacity:1;border-color:var(--lv4);box-shadow:0 0 0 2px color-mix(in srgb, var(--lv4) 30%, transparent)}
   .ph-s.on b{color:var(--lv4)}
+  /* Ступень шкалы и карточка признака ведут на свой график: курсор и подсветка говорят об
+     этом до нажатия, стрелок не ставим — ведёт вся плашка целиком (17.09). */
+  .ph-s.go,.kpi.go{cursor:pointer;transition:border-color .12s, background .12s}
+  .ph-s.go:hover{border-color:var(--ochre);background:color-mix(in srgb, var(--ochre) 8%, transparent)}
+  .kpi.go:hover{border-color:color-mix(in srgb, var(--ochre) 55%, var(--hair));
+    background:color-mix(in srgb, var(--ochre) 6%, transparent)}
+  .kpi.go [data-src],.kpi.go .jh,.kpi.go .dcal,.kpi.go .cn-mg{cursor:help}
   .ph-edge .zy-r{grid-template-columns:minmax(120px,1.4fr) 92px 92px 96px}
   .ph-edge .zy-r > span{white-space:normal}
   .ph-edge .ph-note{grid-column:1/5;color:var(--soft);font-size:10px;line-height:1.45;padding:2px 0 3px}
@@ -779,7 +793,10 @@
   .ref{border:1px solid var(--line, var(--hair));border-radius:9px;padding:7px 10px;background:var(--surface);min-width:0}
   .ref:hover{border-color:var(--ochre)}
   .ref .ref-t{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text);line-height:1.35}
-  .ref .ref-t a{color:var(--text);text-decoration:none;border-bottom:1px solid color-mix(in srgb, var(--cyan) 45%, transparent);min-width:0}
+  /* min-width:0 разрешал названию сжаться до самого длинного слова, и в узкой колонке
+     «NOAA-21 CrIS + ATMS granules (NODD S3)» вставало столбиком (обход 16.09). Имени нужен
+     пол: ниже него оно перестаёт быть именем. */
+  .ref .ref-t a{color:var(--text);text-decoration:none;border-bottom:1px solid color-mix(in srgb, var(--cyan) 45%, transparent);min-width:min(150px,100%)}
   .ref .ref-t a:hover{color:var(--cyan);border-bottom-color:var(--cyan)}
   .ref .ref-t .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);flex:none}
   .ref .ref-t .dot.bad{background:var(--ochre)} .ref .ref-t .dot.off{background:var(--soft);opacity:.5}
@@ -910,7 +927,7 @@
   table.e{border-collapse:collapse;width:100%;font-size:12px}
   table.e th{position:sticky;top:0;z-index:1;background:var(--surface);font-family:var(--mono);font-size:9.5px;
     letter-spacing:.07em;text-transform:uppercase;color:var(--soft);text-align:left;padding:6px 8px;
-    border-bottom:1px solid var(--line, var(--hair));white-space:nowrap;cursor:pointer}
+    border-bottom:1px solid var(--line, var(--hair));white-space:normal;cursor:pointer}
   table.e th.sorted{color:var(--ochre)}
   .fresh{font-family:var(--mono);font-size:10px;color:var(--soft);margin-top:6px;padding-top:5px;border-top:1px dashed var(--line, var(--hair));line-height:1.5}
   .fresh b{color:var(--ochre);font-weight:600}
@@ -930,14 +947,22 @@
   /* КОЛОНКА-РАССКАЗ ЗАБИРАЛА ШИРИНУ У КОЛОНКИ-ИМЕНИ (обход сцен 16.09). Браузер раздаёт
      ширину по содержимому: «what to do» и «outcome, errors» тянут своё, а имя региона или
      название прогона сжимается до самого длинного слова и встаёт столбиком по слову в строку
-     («East / Africa», «publish / to the / site»). Ставим пол: заголовок колонки не рвётся —
-     он и задаёт минимум, — а у колонок с прозой минимум объявлен прямо. Если после этого
-     таблица не помещается, она уезжает вбок в своей обёртке: строку можно прокрутить,
-     а вертикальный столбик обрубков прочитать нельзя.
+     («East / Africa», «publish / to the / site»). Ставим пол: колонка с прозой объявляет свою
+     ширину сама. Если после этого таблица не помещается, она уезжает вбок в своей обёртке:
+     строку можно прокрутить, а вертикальный столбик обрубков прочитать нельзя.
+
      ПОЛ СТАВИТСЯ ШИРИНОЙ ЗАГОЛОВКА, А НЕ min-width: в табличной раскладке Chrome min-width
      у ячейки молча не работает (проверено вживую: объявленные 118 пикселей, использованные 69),
-     а объявленная width у заголовка колонки соблюдается. */
-  table.e th{white-space:nowrap}
+     а объявленная width у заголовка колонки соблюдается. Выйти за край поля таблица соглашается
+     только по СВОЕЙ min-width — её ставят те немногие таблицы, где колонок больше, чем помещается
+     читаемыми.
+
+     ЗАГОЛОВКИ ПРИ ЭТОМ ПЕРЕНОСЯТСЯ (правило выше, table.e th). Там годами стоял nowrap: расчёт,
+     что
+     заголовок задаст колонке пол. Где заголовки короткие, так и вышло; где заголовок это фраза,
+     вышло наоборот: «the data last changed» забрал 147 пикселей, «the source answered» 134, а
+     колонке «what it is», ради которой таблицу и читают, осталось 84 — и описание встало
+     столбиком. Заголовок это подпись, ему не жалко лишней строки высоты. */
   table.e th.prose{width:145px}
   table.e th.act{width:185px}
   table.e:has(td.act) th:first-child{width:130px}
@@ -1297,6 +1322,9 @@
     /* НИЧЕГО НЕ ЕЗДИТ ВБОК. Сцена прокручивалась горизонтально (518 пикселей в 366), потому
        что ряд кирпичей стоял в две колонки и не влезал. По вертикали листать нормально, а
        вбок — нет: половина числа за краем экрана читается как ошибка вёрстки. */
+    /* Подсказка про мышь приходит из библиотеки глобуса. На телефоне она бессмысленна — нет
+       ни колеса, ни правой кнопки, — и при этом вылезает за поле шара (обход раскладки 17.09). */
+    .globe-box .scene-nav-info{display:none}
     .stage-body{overflow-y:auto;overflow-x:hidden}
     .stage-body > *{max-width:100%;min-width:0}
     .plot{min-height:220px}
@@ -1413,7 +1441,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=fa5c26931d"></script>
+<script src="/js/enso.js?v=7e2f808e95"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>

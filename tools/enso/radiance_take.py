@@ -12,6 +12,10 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 SRC = Path(r"C:\CL\radiance\data\radiance.json")
 SRC_FULL = Path(r"C:\CL\radiance\data\radiance-full.json")
 DST = Path(__file__).resolve().parents[2] / "data" / "enso" / "radiance.json"
@@ -92,7 +96,7 @@ def _write(d, t0, note_prefix):
     old = json.loads(DST.read_text(encoding="utf-8")).get("updated") if DST.exists() else None
     if old == d.get("updated") and DST.stat().st_size == len(raw.encode("utf-8")):
         return "ok", f"unchanged: {d.get('updated')}"
-    DST.write_text(raw, encoding="utf-8")
+    safeio.write_text(DST, raw)
     return "ok", f"{note_prefix}: updated {d.get('updated')}, series years {sorted(series_years(d))}, {len(raw) // 1024} KB"
 
 

@@ -41,6 +41,11 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "enso"
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+import pathlib as _pl
+_sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 SNAP = ROOT / "snapshots"
 
 
@@ -477,7 +482,7 @@ def build(verbose=False):
 
     doc = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "onset": onset,
            "snapshots": len(snaps), "metrics": out, "verdicts": verdicts[-40:]}
-    (ROOT / "journal.json").write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(ROOT / "journal.json", json.dumps(doc, ensure_ascii=False))
     if verbose:
         moved = sorted(((len(v["entries"]), k) for k, v in out.items()), reverse=True)
         print(f"журнал: снимков {len(snaps)}, показателей {len(out)}, начало события {onset}")

@@ -27,6 +27,10 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 DATA = ROOT / "data" / "enso"
 OUT = DATA / "agent-state.json"
 
@@ -187,7 +191,7 @@ def main():
         print(f"   {r['level']} {r['id']:28s} {r['title'][:60]}")
     if a.plan:
         return
-    OUT.write_text(body, encoding="utf-8")
+    safeio.write_text(OUT, body)
     print(f"✅ {OUT.relative_to(ROOT)}")
 
 

@@ -25,6 +25,10 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 ROOT = HERE.parents[1]
 sys.path.insert(0, str(HERE))
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
@@ -60,14 +64,17 @@ FILES = ["data/enso/latest.json", "data/enso/history.json", "data/enso/glossary.
          # На сайт они попадали только полной пересборкой сайта, то есть когда придётся; свежее
          # продолжение аналогов в следующий год без этого осталось бы лежать на машине.
          "data/enso/oisst/clim_nino12.json", "data/enso/oisst/clim_nino3.json", "data/enso/oisst/clim_nino34.json",
-         "data/enso/oisst/clim_nino4.json", "data/enso/oisst/clim_gulf.json"]
+         "data/enso/oisst/clim_nino4.json", "data/enso/oisst/clim_gulf.json",
+         "data/enso/layout-check.json"]
 FRESH_FILES = ["data/enso/fresh.json", "data/enso/ops.json", "data/enso/runs.json", "data/enso/planet.json", "data/enso/cities.json", "data/enso/fires.json", "data/enso/water.json", "data/enso/ice-snow.json", "data/enso/glaciers.json",
                "data/enso/mentions.json", "data/enso/hovmoller.json", "data/enso/spectral.json", "data/enso/regions-daily.json", "data/enso/precip.json", "data/enso/radiance.json", "data/enso/globe.json", "data/enso/sections-1982.json", "data/enso/sections-1997.json", "data/enso/sections-2015.json", "data/enso/sections-2023.json",
                # ЭТИХ ЧЕТЫРЁХ ЗДЕСЬ НЕ БЫЛО (найдено 15.09, та же болезнь, что 06.09 и 10.09):
                # ночная обёртка пересобирает их каждый день, а ежедневная выкладка не отправляла,
                # и на сайте они менялись только с полным прогоном. Правило D check_ui теперь это ловит.
                "data/enso/agent-state.json", "data/enso/stats.json", "data/enso/outliers.json",
-               "data/enso/zones-flow.json", "data/enso/phase.json"]
+               "data/enso/zones-flow.json", "data/enso/phase.json",
+               # отчёт ночного обхода раскладки (check_layout.py, 16.09): панель показывает его на Ops
+               "data/enso/layout-check.json"]
 
 
 def stamp_asset():
@@ -87,7 +94,7 @@ def stamp_asset():
     cur = re.search(r"/js/enso\.js\?v=([0-9a-f]+)", t)
     if cur and cur.group(1) == h:
         return
-    html.write_text(re.sub(r"/js/enso\.js\?v=[0-9a-f]+", "/js/enso.js?v=" + h, t), encoding="utf-8")
+    safeio.write_text(html, re.sub(r"/js/enso\.js\?v=[0-9a-f]+", "/js/enso.js?v=" + h, t))
     print(f"версия скрипта поднята: {cur.group(1) if cur else '—'} → {h} (иначе на сайте остался бы прежний код)")
 
 
@@ -171,7 +178,7 @@ def json_guard(files):
             return o
 
         body = json.dumps(clean(d), ensure_ascii=False, separators=(",", ":"), allow_nan=False)
-        f.write_text(body, encoding="utf-8")
+        safeio.write_text(f, body)
         fixed.append(rel)
     if fixed:
         print("починено перед выкладкой (NaN/Infinity → null):", ", ".join(fixed))

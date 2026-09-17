@@ -84,7 +84,8 @@
       'regions/water': 'What the reservoirs hold: stored energy in Brazil and storage in California, day by day.',
       'planet/gases': 'CO₂, CH₄ and N₂O since the start of measurement, with the annual growth of CO₂.', 'planet/ice': 'Arctic and Antarctic sea ice extent, every year as a line against the 1981–2010 median.', 'planet/temperature': 'Land+ocean and ocean daily temperature every year since 1940 and 1981; global annual means since 1850.', 'planet/sea': 'Global mean sea level from satellites since 1993.',
       'how/glossary': 'Every underlined term explained.', 'how/method': 'How things are computed, and which numbers are parameters.', 'how/sources': 'Every source, whether it answered, and when its data last changed.', 'how/calendar': 'When each source publishes next.', 'how/changed': 'What changed since the previous update.',
-      'ops/runs': 'Every run on record: when, what kind, how long, how it ended.', 'ops/sources': 'Every source: date range held, last update, answered or stale, errors.', 'ops/fresh': 'Fresh data since the last assessment and the triggers that decide whether it deserves one.'
+      'ops/runs': 'Every run on record: when, what kind, how long, how it ended.', 'ops/sources': 'Every source: date range held, last update, answered or stale, errors.', 'ops/fresh': 'Fresh data since the last assessment and the triggers that decide whether it deserves one.',
+      'ops/layout': 'The nightly walk through every scene in a headless browser: where text does not fit, where it is cut without a mark, where a scene came up empty.'
     },
     railTabs: { state: 'State', risks: 'Risks' },
     dockHint: 'Point at anything underlined — definition, source and date appear here.',
@@ -472,7 +473,9 @@
     base = base || sr.assessed_last_date;
     if (!base) return [];
     var t0 = Date.parse(base + 'T00:00:00Z');
-    return sr.tail.map(function (p) { return [Math.round((Date.parse(p[0] + 'T00:00:00Z') - t0) / 86400000), p[1]]; }).filter(function (p) { return p[0] > 0 && fin(p[1]); });
+    /* Третьим членом — дата. Прежние вызовы берут [0] и [1] и её не замечают, а подписи у
+       свежей точки без даты нельзя: «+2.94» без дня не отличить от разобранного значения. */
+    return sr.tail.map(function (p) { return [Math.round((Date.parse(p[0] + 'T00:00:00Z') - t0) / 86400000), p[1], p[0]]; }).filter(function (p) { return p[0] > 0 && fin(p[1]); });
   }
   function freshDot(x, y, r) { return '<circle class="fresh-dot" cx="' + (+x).toFixed(1) + '" cy="' + (+y).toFixed(1) + '" r="' + (r || 4.5) + '" style="stroke:var(--ochre)"/>'; }
   /* МЕСТА ПОД ЛЕГЕНДУ В КАРТИНКЕ БОЛЬШЕ НЕ ДЕРЖИМ. Владелец 11.09: «на dynamics на графиках
@@ -801,8 +804,19 @@
     if (ftA.length && fin(N.current_day)) {
       var tpA = [[X(N.day), Y(N.current_day)]].concat(ftA.map(function (p) { return [X(N.day + p[0]), Y(p[1])]; }));
       s += poly(tpA, 'var(--ochre)', 1.6, 1, '3 3');
-      var lA = tpA[tpA.length - 1];
+      var lA = tpA[tpA.length - 1], fA = ftA[ftA.length - 1];
       s += freshDot(lA[0], lA[1], 4.5);
+      /* ЧИСЛО У ПУНКТИРНОЙ ТОЧКИ (владелец 17.09: «вижу пунктирную точку, а значения где
+         смотреть после быстрого прогона»). Точка означает день, который уже измерен, но ещё
+         не разобран; без числа она говорит только «что-то новое есть», и читателю приходится
+         идти за ним на другую вкладку. Пишем охрой — тем же цветом, каким на панели помечено
+         всё неразобранное, — и с датой, чтобы значение нельзя было спутать с разобранным.
+         Справа от точки, если там есть место, иначе над ней: слева стоит главное число. */
+      var fRoom = Lp + pw - lA[0] > 46;
+      var fx = fRoom ? lA[0] + 7 : lA[0], fAnch = fRoom ? 'start' : 'middle';
+      var HALOF = 'fill:var(--ochre);paint-order:stroke;stroke:var(--surface);stroke-width:3;stroke-linejoin:round;font-weight:700';
+      s += '<text x="' + fx.toFixed(1) + '" y="' + (lA[1] - 9).toFixed(1) + '" text-anchor="' + fAnch + '" font-size="11.5" style="' + HALOF + '">' + fnum(fA[1]) + '</text>'
+        + '<text x="' + fx.toFixed(1) + '" y="' + (lA[1] + 2).toFixed(1) + '" text-anchor="' + fAnch + '" font-size="8" style="fill:var(--soft)">fresh \u00b7 ' + esc(String(fA[2] || '').slice(5)) + '</text>';
     }
     if (fin(N.current_day)) {
       var dx = X(N.day), dy = Y(N.current_day), rightRoom = Lp + pw - dx > 54 && !ftA.length;
@@ -3806,6 +3820,17 @@
      Считает tools/enso/phase.py. */
   var PH_STEP = ['nothing showing', 'past our calibration', 'one record slowing',
                  'two records, or the air leaning out', 'a relation not holding', 'and no way back'];
+  /* У КАЖДОЙ СТУПЕНИ ЕСТЬ МЕСТО, ГДЕ ЕЁ ПРИЗНАК ВИДНО (владелец 17.09: «в верхнем ряду пусть
+     они останутся, но при нажатии должен быть соответствующий график»). Шкала объясняет, по
+     какому правилу поставлен уровень; чтобы с правилом можно было спорить, к каждой ступени
+     нужен её собственный график, а не общее «читайте панель». */
+  var PH_STEP_GO = ['phase/memory', 'phase/edge', 'phase/memory', 'air/coupling', 'radiance/regime', 'air/fuel'];
+  var PH_STEP_WHY = ['the memory of the long records: what “nothing showing” looks like',
+                     'how far past the range our own tools were fitted on we are',
+                     'the memory of the long records, record by record',
+                     'whether the air is still answering the ocean',
+                     'the sea-to-air relation against the satellite record that fitted it',
+                     'the fuel below the surface and whether it has begun to be spent'];
   function phaseHead() {
     var P = S.PH || {};
     if (!P.built) return 'Is this a swing of the system, or the system changing';
@@ -3857,7 +3882,10 @@
     /* Чтение: уровень, правило, пять признаков */
     var lvl = el('div', 'ph-lvl');
     lvl.innerHTML = PH_STEP.map(function (t, i) {
-      return '<span class="ph-s' + (i === P.level ? ' on' : (i < P.level ? ' past' : '')) + '"><b>' + i + '</b><small>' + esc(t) + '</small></span>';
+      var g = String(PH_STEP_GO[i] || '').split('/');
+      return '<span class="ph-s go' + (i === P.level ? ' on' : (i < P.level ? ' past' : '')) + '"'
+        + ' data-go="' + esc(g[0]) + '"' + (g[1] ? ' data-gosub="' + esc(g[1]) + '"' : '')
+        + ' title="' + esc(PH_STEP_WHY[i] || '') + '"><b>' + i + '</b><small>' + esc(t) + '</small></span>';
     }).join('');
     body.appendChild(lvl);
     var why = el('div', 'ph-why');
@@ -3872,13 +3900,13 @@
     kp2.innerHTML =
       trackKpi('memory of the long records', hi + ' of ' + mem.length,
         'records whose memory is both high in its own history and rising over the last third; the others are listed on the second tab with their numbers',
-        'our arithmetic over three records', (mem[0] || {}).to || '') +
+        'our arithmetic over three records', (mem[0] || {}).to || '', 'phase/memory') +
       trackKpi('sea \u2192 air, does the relation hold', (L.worst_abs_sd != null ? fnum(L.worst_abs_sd, 2, false) + '<small> prediction errors</small>' : '\u00b7'),
         'the furthest any instrument sits from the fitted relation this year' + (L.all_same_sign ? ', and all of them lean the same way' : ', and they do not agree on the side')
-        + '. Ordinary is under two', 'NOAA-21 and NOAA-20 CrIS, Aqua AIRS', '') +
+        + '. Ordinary is under two', 'NOAA-21 and NOAA-20 CrIS, Aqua AIRS', '', 'radiance/regime') +
       trackKpi('is the air answering at all', (C.score != null ? C.score + ' of ' + C.of : '\u00b7'),
         'pressure across the Pacific, the cloud tower over the date line, the trade winds. When they stop answering, the event stops being an El Ni\u00f1o in the usual sense',
-        'our own arithmetic over the daily series', '') +
+        'our own arithmetic over the daily series', '', 'air/coupling') +
       /* Возвращающая сила — из замера сборщика радиансов (v10, 16.09): у него этот признак
          обставлен восемью условиями и умеет отказываться. Пока отказывается — так и написано. */
       trackKpi('the way back', (RC.conclusive === false ? 'cannot be judged yet'
@@ -3894,7 +3922,7 @@
             + '. In ten more weeks it will speak, and then it is either an ordinary swing or a first observation'
           : 'An oscillation has a restoring force: the fuel burns and the system swings back')
         + '. The volume here is a stand-in measured from sea level by altimetry, not water counted above the 20 \u00b0C isotherm',
-        'radiance collector v10, NASA-SSH altimetry', RC.date || F.date || '');
+        'radiance collector v10, NASA-SSH altimetry', RC.date || F.date || '', 'air/fuel');
     body.appendChild(kp2);
     body.appendChild(el('div', 'cap', '<strong>' + esc(P.what_this_is || '') + '</strong> '
       + esc(P.what_it_cannot_see || '')));
@@ -4236,8 +4264,18 @@
          другая выборка — по ПРОГНОЗУ: все августы, когда обещали тёплую зиму, включая те, из
          которых ничего не вышло. Она и стоит по умолчанию, вторая подписана оговоркой;
        · пик среднего площе пика ряда, поэтому основная мера — один и тот же сезон (NDJ). */
-  function trackKpi(name, val, sub2, src, dt2) {
-    return '<div class="kpi"><div class="kn">' + name + '</div><div class="kv">' + val + '</div><div class="km">' + sub2 + '</div>' + kmeta(null, src, dt2) + '</div>';
+  /* ШЕСТОЙ ДОВОД — КУДА ВЕДЁТ КАРТОЧКА (владелец 17.09: «при нажатии должен быть
+     соответствующий график»). Карточка — это утверждение, и у каждого утверждения на панели
+     есть место, где лежат его числа; без перехода читателю приходится искать это место по
+     вкладкам руками. Переход описывается строкой «вкладка/подвкладка». */
+  function trackKpi(name, val, sub2, src, dt2, go) {
+    var cls = 'kpi', at = '';
+    if (go) {
+      var p = String(go).split('/');
+      cls += ' go';
+      at = ' data-go="' + esc(p[0]) + '"' + (p[1] ? ' data-gosub="' + esc(p[1]) + '"' : '');
+    }
+    return '<div class="' + cls + '"' + at + '><div class="kn">' + name + '</div><div class="kv">' + val + '</div><div class="km">' + sub2 + '</div>' + kmeta(null, src, dt2) + '</div>';
   }
   function trackNum(v, d) { return v == null ? '·' : (v > 0 ? '+' : '') + fnum(v, d == null ? 2 : d, false); }
   /* ── ГРАФИКИ СЦЕНЫ «ЧЕГО СТОИЛИ ПРОГНОЗЫ» ──────────────────────────────────────────
@@ -4782,7 +4820,7 @@
         return { name: nm, sec: m.section, v: v, was: was, gap: fin(v) ? v - ao.observed_weekly : null, peak: pk, dpk: r.d_peak, cls: c };
       }).sort(function (a, b) { return (a.gap == null ? 9 : a.gap) - (b.gap == null ? 9 : b.gap); });
       var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
-      wrap.innerHTML = '<table class="e"><thead><tr><th>model</th><th>type</th>' + (tally ? '<th>class · since</th>' : '') + '<th>' + esc(ao.season) + '</th>' +
+      wrap.innerHTML = '<table class="e" style="min-width:620px"><thead><tr><th class="prose">model</th><th>type</th>' + (tally ? '<th class="prose">class · since</th>' : '') + '<th>' + esc(ao.season) + '</th>' +
         (S.delta ? '<th>since last update</th>' : '<th>vs reality</th>') + '<th></th><th>peak</th><th>shift</th></tr></thead><tbody>' +
         list.map(function (r) {
           var cc = r.cls && r.cls.cls ? '<span class="cls ' + r.cls.cls + '">' + ({ ok: T.okC, lag: T.lagC, broke: T.brokeC }[r.cls.cls] || T.naC) + '</span>' + (r.cls.since ? ' <span class="src">' + esc(r.cls.since) + '</span>' : '') : '<span class="cls na">' + T.naC + '</span>';
@@ -5364,8 +5402,8 @@
       var rows = CM.items.slice().sort(function (a, b) { return (fin(b[gk]) ? b[gk] : -1e9) - (fin(a[gk]) ? a[gk] : -1e9); });
       function th(label, key, num) { return '<th' + (num ? ' class="num' : ' class="') + (gs === key ? ' sorted' : '') + '"' + (key ? ' data-gs="' + key + '"' : '') + '>' + label + (gs === key ? ' ↓' : '') + '</th>'; }
       var wrapG = el('div'); wrapG.style.cssText = 'flex:1;min-height:0;overflow:auto';
-      wrapG.innerHTML = '<table class="e goods"><thead><tr>' + th('commodity', null) + th(term('foodweight', 'weight'), 'weight', true) + th('price', 'value', true) +
-        th('month', 'mom', true) + th('year', 'yoy', true) + th('since the event began', 'onset', true) + th('why it is here', null) + '</tr></thead><tbody>' +
+      wrapG.innerHTML = '<table class="e goods" style="min-width:760px"><thead><tr>' + th('commodity', null) + th(term('foodweight', 'weight'), 'weight', true) + th('price', 'value', true) +
+        th('month', 'mom', true) + th('year', 'yoy', true) + th('since onset', 'onset', true) + th('why it is here', null) + '</tr></thead><tbody>' +
         rows.map(function (c) {
           var w = c.weight || 1;
           var pay = { name: c.name + ' (' + c.unit + ')', def: c.why + ' Price ' + c.value + ' ' + c.unit + ' in ' + c.date + '.' + (c.gulf ? ' Imported by the Gulf states.' : ''), src: 'World Bank Pink Sheet, monthly', date: c.date };
@@ -5489,7 +5527,8 @@
     if (k === 'calendar') {
       var CAL = ((D.background || {}).calendar) || {};
       var tc = el('table', 'e');
-      tc.innerHTML = '<thead><tr><th>what</th><th>who</th><th>next</th><th>in</th><th>rule</th></tr></thead><tbody>' +
+      tc.style.minWidth = '620px';
+      tc.innerHTML = '<thead><tr><th class="prose">what</th><th>who</th><th>next</th><th>in</th><th class="prose">rule</th></tr></thead><tbody>' +
         (CAL.items || []).map(function (x) { return '<tr><td>' + esc(x.name) + '</td><td>' + esc(x.src) + '</td><td class="num">' + esc(x.next) + '</td><td class="num' + (x.in_days <= 2 ? ' top' : '') + '">' + (x.in_days === 0 ? 'today' : x.in_days + ' d') + '</td><td>' + esc(x.rule) + '</td></tr>'; }).join('') + '</tbody>';
       body.appendChild(tc);
       body.appendChild(el('div', 'cap', esc(CAL.note || '') + ' Today: ' + esc(CAL.today || '') + '.'));
@@ -5509,7 +5548,8 @@
         soi: 'soi', olr: 'olr', u850_west: 'u850_west', wwv: 'wwv',
         uah_tlt: 'tlt_tropics', uah_tls: 'tls_tropics', wb_pink: 'price_palm_oil' };
       var t = el('table', 'e');
-      t.innerHTML = '<thead><tr><th>series</th><th>what it is</th><th>the source answered</th><th>the data last changed</th></tr></thead><tbody>' +
+      t.style.minWidth = '560px';
+      t.innerHTML = '<thead><tr><th>series</th><th class="prose">what it is</th><th>the source answered</th><th>the data last changed</th></tr></thead><tbody>' +
         Object.keys(D.sources).map(function (key) {
           var v = D.sources[key], jr = jrec(SRCJ[key]), e = jr ? (jr.entries || []) : [];
           var last = e[e.length - 1], prev = e[e.length - 2];
@@ -6881,7 +6921,7 @@
     body.appendChild(rowV);
     if (view === 'regions') {
       var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
-      wrap.innerHTML = '<table class="e"><thead><tr><th>region</th><th class="num">hotspots</th><th class="num">strong</th><th class="num">power, MW</th><th class="num">yesterday</th></tr></thead><tbody>' +
+      wrap.innerHTML = '<table class="e" style="min-width:480px"><thead><tr><th class="prose">region</th><th class="num">hotspots</th><th class="num">strong</th><th class="num">power, MW</th><th class="num">yesterday</th></tr></thead><tbody>' +
         top.map(function (t) {
           var y = days.length > 1 ? (((ser[days[days.length - 2]] || {}).regions || {})[t.r.id] || 0) : null;
           return '<tr><td>' + esc(t.r.name) + '</td><td class="num' + (t.n === top[0].n ? ' top' : '') + '">' + t.n.toLocaleString('en') + '</td><td class="num src">' + '' + '</td><td class="num">' + Math.round(t.frp).toLocaleString('en') + '</td><td class="num src">' + (y == null ? '—' : y.toLocaleString('en')) + '</td></tr>';
@@ -6930,7 +6970,7 @@
       var res = WA.brazil_reservoirs || {}, items = (res.items || []).slice(0, 10);
       if (items.length) {
         var wrap = el('div'); wrap.style.cssText = 'max-height:150px;overflow:auto';
-        wrap.innerHTML = '<table class="e"><thead><tr><th>the ten lowest reservoirs on ' + esc(res.date || '') + '</th><th>basin</th><th>subsystem</th><th class="num">% of max</th></tr></thead><tbody>' +
+        wrap.innerHTML = '<table class="e" style="min-width:560px"><thead><tr><th class="prose">the ten lowest reservoirs on ' + esc(res.date || '') + '</th><th class="prose">basin</th><th class="prose">subsystem</th><th class="num">% of max</th></tr></thead><tbody>' +
           items.map(function (x) { return '<tr><td>' + esc(x.name) + '</td><td class="src">' + esc(x.basin) + '</td><td class="src">' + esc(x.subsystem) + '</td><td class="num' + (x.pct < 30 ? ' top' : '') + '">' + fnum(x.pct, 1, false) + '</td></tr>'; }).join('') + '</tbody></table>';
         body.appendChild(wrap);
       }
@@ -7622,13 +7662,13 @@
     body.classList.add('scroll');
     function cell(v) { if (!fin(v)) return '<td class="num">·</td>'; var c = v >= TH.chi99 ? ' top' : (v >= TH.chi95 ? ' warn' : ''); return '<td class="num' + c + '">' + fnum(v, 1, false) + '</td>'; }
     var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
-    wrap.innerHTML = '<table class="e"><thead><tr><th>series</th><th>verdict</th>' + per.map(function (p) { return '<th class="num">' + p + ' d</th>'; }).join('') +
-      '<th class="num">band 2–7 d</th><th class="num">history pct</th><th>same window in our years</th></tr></thead><tbody>' +
+    wrap.innerHTML = '<table class="e" style="min-width:880px"><thead><tr><th class="prose">series</th><th>verdict</th>' + per.map(function (p) { return '<th class="num">' + p + ' d</th>'; }).join('') +
+      '<th class="num">band 2–7 d</th><th class="num prose">history pct</th><th class="prose">same window in our years</th></tr></thead><tbody>' +
       ser.map(function (s) {
         if (s.error) return '<tr><td>' + esc(s.label) + '</td><td class="st-bad" colspan="' + (per.length + 4) + '">' + esc(s.error) + '</td></tr>';
         var nw = s.now, h = s.history, an = s.analogs || {};
         var vcls = s.verdict === 'signal' ? ' st-bad' : (s.verdict === 'candidate' ? ' top' : (s.verdict === 'weak' ? ' warn' : ' st-ok'));
-        return '<tr><td>' + esc(s.label) + '<div class="sub">' + esc(s.window[0]) + ' → ' + esc(s.window[1]) + '</div></td>' +
+        return '<tr><td class="prose">' + esc(s.label) + '<div class="sub">' + esc(s.window[0]) + ' → ' + esc(s.window[1]) + '</div></td>' +
           '<td class="' + vcls + '"><b>' + esc(s.verdict) + '</b>' + (s.persist_updates ? '<div class="sub">' + s.persist_updates + ' update(s) at 99 %</div>' : '') + '</td>' +
           per.map(function (p) { return cell(nw.lines[String(p)]); }).join('') +
           '<td class="num">' + fnum(nw.band_share * 100, 0, false) + ' %</td>' +
@@ -8303,7 +8343,7 @@
       var n20x = function (r) { return r[0].indexOf('Deep convection') === 0 ? shift(N20, r[5], 'conv_frac') : pshift(N20, r[6], r[7]); };
       rowsX[0].push('nino34_A'); rowsX[1].push('nino34_D'); rowsX[2].push('warmpool_A'); rowsX[3].push('warmpool_D');
       rowsX[4].push(null, 'nino34', '662'); rowsX[5].push(null, 'nino34', '690'); rowsX[6].push(null, 'warmpool', '690'); rowsX[7].push(null, 'warmpool', '900'); rowsX[8].push(null, 'nino34', '900');
-      wx.innerHTML = '<table class="e"><thead><tr><th>2026 against 2023–2025</th><th class="num">Aqua AIRS</th><th class="num">NOAA-21 CrIS</th>' + (N20.series ? '<th class="num">NOAA-20 CrIS</th>' : '') + '<th class="num">AIRS − NOAA-21</th></tr></thead><tbody>' +
+      wx.innerHTML = '<table class="e" style="min-width:560px"><thead><tr><th class="prose">2026 against 2023–2025</th><th class="num">Aqua AIRS</th><th class="num">NOAA-21 CrIS</th>' + (N20.series ? '<th class="num">NOAA-20 CrIS</th>' : '') + '<th class="num">AIRS − NOAA-21</th></tr></thead><tbody>' +
         rowsX.map(function (r) { var a = fin(r[1]) ? r[1] * r[3] : null, c = fin(r[2]) ? r[2] * r[3] : null, n2 = N20.series ? n20x(r) : null; n2 = fin(n2) ? n2 * r[3] : null; var d = fin(a) && fin(c) ? a - c : null; var close = fin(d) && Math.abs(d) <= (r[4] === ' pt' ? 1 : 0.5); return '<tr><td>' + esc(r[0]) + '</td><td class="num">' + (fin(a) ? fnum(a, r[4] === ' pt' ? 1 : 2) + r[4] : '·') + '</td><td class="num">' + (fin(c) ? fnum(c, r[4] === ' pt' ? 1 : 2) + r[4] : '·') + '</td>' + (N20.series ? '<td class="num">' + (fin(n2) ? fnum(n2, r[4] === ' pt' ? 1 : 2) + r[4] : '·') + '</td>' : '') + '<td class="num' + (close ? ' st-ok' : '') + '">' + (fin(d) ? fnum(d, r[4] === ' pt' ? 1 : 2) + r[4] : '·') + '</td></tr>'; }).join('') + '</tbody></table>' +
         '<div class="cap">Green difference: within 1 point of convection share or 0.5 K. The eastward jump of convection (+7 points over Niño 3.4, −5 to −6 over the warm pool) is the same on both instruments; the window channel differs by kelvins because the two overpasses see different cloud phases.</div>';
       body.appendChild(wx);
@@ -8784,7 +8824,11 @@
     if (!c) return '';
     /* Внутри плитки ленты (сама плитка — кнопка) вложенная кнопка недопустима: браузер
        выбрасывает её наружу, и значок уезжал из плитки в ряд. Там — span с ролью кнопки. */
-    var attrs = ' class="plain-i' + (cls ? ' ' + cls : '') + '" title="what this chart is, in plain words" data-src="' + esc(JSON.stringify(c)) + '"';
+    /* БЕЗ ВТОРОЙ ПОДСКАЗКИ. Наведение на «i» открывает нашу карточку — что это за график
+       простыми словами. Системная подсказка браузера выводила поверх неё строчку «what this
+       chart is, in plain words», то есть повторяла буквой то, что буква «i» и означает
+       (владелец 17.09: «это уже лишнее, и так буква i сама за себя говорит»). */
+    var attrs = ' class="plain-i' + (cls ? ' ' + cls : '') + '" data-src="' + esc(JSON.stringify(c)) + '"';
     return asSpan ? '<span role="button" tabindex="0"' + attrs + '>i</span>'
                   : '<button type="button"' + attrs + '>i</button>';
   }
@@ -8856,6 +8900,12 @@
      Ключ — подпись плашки (текст .kn до « · », без дат и чисел) или её термин; кнопка «?»
      раскрывает абзац человеческими словами. Подписи без записи в словаре кнопки не получают. */
   var KPI_PLAIN = {
+    /* Четыре признака фазового перехода (17.09): без этих строк карточки оставались
+       единственными на панели без объяснения простыми словами. */
+    'memory of the long records': 'How slowly each long record comes back to its own average. The slower it comes back, and the more that slowness grows, the closer the system is to changing state.',
+    'sea \u2192 air, does the relation hold': 'The ocean heats the air by a relation the satellites measured over twenty years. This is how far the air sits from that relation now, counted in the usual error of the prediction.',
+    'is the air answering at all': 'Three signs that the atmosphere is doing what it does during an El Ni\u00f1o: the pressure seesaw, the cloud tower over the date line, the trade winds. The count is how many of them are in place.',
+    'the way back': 'An oscillation has a restoring force: the warm water stored below is spent and the system swings back. This says whether that spending has begun.',
     'same 30 days in our years': 'The same calendar days in each of our reference events, so this year is compared like with like.',
     'who wrote and who checked': 'Who produced the readings on this page and who checked them afterwards.',
     'who publishes most': 'The outlet that has written most about the event in our mentions feed over the window.',
@@ -9146,7 +9196,7 @@
       body.appendChild(row);
       var list = arts.filter(function (a) { return lf === 'all' || a.lang === lf; }).slice(0, 120);
       var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
-      wrap.innerHTML = '<table class="e"><thead><tr><th>date</th><th>language</th><th>source</th><th>headline</th></tr></thead><tbody>' +
+      wrap.innerHTML = '<table class="e" style="min-width:620px"><thead><tr><th>date</th><th>language</th><th class="prose">source</th><th class="act">headline</th></tr></thead><tbody>' +
         list.map(function (a) { return '<tr><td style="white-space:nowrap">' + dt(a.date || '') + '</td><td>' + esc(a.lang) + '</td><td>' + esc(a.source || '') + '</td><td class="act"><a href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.title) + '</a></td></tr>'; }).join('') + '</tbody></table>';
       body.appendChild(wrap);
       body.appendChild(el('div', 'cap', 'Headlines as written by the publishers, newest first, duplicates removed; a link goes to the publisher through Google News or Bing News. Not our words and not a source of numbers.'));
@@ -9257,14 +9307,53 @@
     return ' <span class="cn-mg" data-src="' + esc(JSON.stringify(pay)) + '" title="when this source handed us new data">history ' + a.length + '</span>';
   }
 
+  /* ОБХОД РАСКЛАДКИ — НА ЭКРАНЕ, А НЕ ТОЛЬКО В ЛОГЕ. Владелец 16.09: «сделай такой обход
+     постоянной проверкой». Проверка, результат которой негде посмотреть, через неделю
+     превращается в строчку в ночном логе, которую никто не открывает. Здесь видно, когда она
+     проходила, по каким ширинам, сколько сцен обошла и что нашла. */
+  var LYKIND = { stack: 'words in a column', cutW: 'cut off sideways', cutH: 'cut off at the bottom',
+    outOfCard: 'spills over its card', sceneWide: 'wider than its field', empty: 'scene came up empty',
+    js: 'javascript error' };
+  function viewOpsLayout(body, LY) {
+    var g = el('div', 'gloss');
+    if (!LY.built) {
+      body.appendChild(el('div', 'note warn', 'The layout walk has not run against this copy of the panel yet (data/enso/layout-check.json is missing). Run it with: python tools/enso/check_layout.py'));
+      return;
+    }
+    var f = LY.findings || [];
+    var okLine = LY.status !== 'ok' ? 'the walk did not finish: ' + esc(LY.why || 'no reason recorded')
+      : (f.length ? f.length + ' finding' + (f.length > 1 ? 's' : '') + ' — see the table below'
+                  : 'nothing found: every scene fits on every width checked');
+    g.innerHTML = '<div class="gl-i"><b>Last walk</b>' + esc(LY.built) + ' \u00b7 ' + (LY.secs != null ? LY.secs + ' s' : '') +
+        '<div class="why">' + okLine + '</div><div class="s">' + esc(LY.base || '') + '</div></div>' +
+      '<div class="gl-i"><b>What was walked</b>' + (LY.scenes_checked || 0) + ' scene openings across widths ' +
+        esc((LY.widths || []).join(', ')) +
+        '<div class="why">Every tab and every sub-tab is opened at each width and measured. 1024 matters as much as 375: between the two rails the scene there is narrower than on a phone, and phone rules do not fire.</div></div>' +
+      '<div class="gl-i"><b>Accepted on purpose</b>' + (LY.n_accepted || 0) + ' place' + ((LY.n_accepted || 0) === 1 ? '' : 's') +
+        '<div class="why">Known exceptions, each with a reason and a ceiling, in tools/enso/layout-accepted.json. Over the ceiling they are reported again.</div></div>';
+    body.appendChild(g);
+    if (f.length) {
+      var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto;margin-top:8px';
+      wrap.innerHTML = '<table class="e" style="min-width:720px"><thead><tr><th class="prose">scene</th><th class="num">width</th><th class="prose">what</th><th class="prose">where</th><th class="act">the text</th></tr></thead><tbody>' +
+        f.map(function (x) {
+          return '<tr><td class="prose">' + esc(x.scene || '') + '</td><td class="num">' + (x.width || '') + '</td>' +
+            '<td class="prose">' + esc(LYKIND[x.t] || x.t || '') + '</td><td class="prose"><code>' + esc(x.p || '') + '</code></td>' +
+            '<td class="act">' + esc(x.x || '') + (x.over_accepted ? '<div class="sub">over an accepted exception: ' + esc(x.over_accepted) + '</div>' : '') + '</td></tr>';
+        }).join('') + '</tbody></table>';
+      body.appendChild(wrap);
+    }
+    body.appendChild(el('div', 'cap', 'Why a browser is needed for this. The other checks read our own files and catch things that are properties of the TEXT \u2014 a term without an entry, a file left out of the publish, a tab without a render branch. Whether a line fits is a property of the LAYOUT: it depends on the width of the scene, on the length of the text beside it (which arrives with the data and changes every day) and on which rule won in the cascade. None of the three is visible in a file. The walk opens every scene in a headless browser at 375, 1024 and 1440 pixels, measures every line, and also collects javascript errors on the way \u2014 a scene that throws gives itself away here rather than at the reader. Report: data/enso/layout-check.json, written by tools/enso/check_layout.py, which also keeps the walk itself in the runs journal above.'));
+  }
+
   function viewOps() {
     var D = S.D || {}, O = S.O || {}, F = S.F || {};
     var k = sub('ops', 'runs');
     /* источники раздела истории измерений (planet.json) — той же таблицей, своей группой */
     var plS = (((S.PL || {}).sources) || []).map(function (q) { return { key: q.key, label: q.label, group: 'long record', cadence: 'daily wrapper, slow series', url: q.page || q.url, data_from: q.data_from, data_to: q.data_to, behind_days: null, fetched: q.fetched, fresh: q.fresh, error: q.error }; });
-    var runs = O.runs || [], srcs = (O.sources || []).concat(plS);
+    var runs = O.runs || [], srcs = (O.sources || []).concat(plS), LY = S.LY || {};
     var body = stageShell('Runs and sources: ' + runs.length + ' runs on record, ' + srcs.length + ' sources, ' + ((O.stale || []).length + plS.filter(function (q) { return q.fresh === false; }).length) + ' stale',
-      [segBtn('ops', 'runs', 'Runs (' + runs.length + ')', 'runs'), segBtn('ops', 'sources', 'Sources (' + srcs.length + ')', 'runs'), segBtn('ops', 'fresh', 'Fresh layer', 'runs')]);
+      [segBtn('ops', 'runs', 'Runs (' + runs.length + ')', 'runs'), segBtn('ops', 'sources', 'Sources (' + srcs.length + ')', 'runs'), segBtn('ops', 'fresh', 'Fresh layer', 'runs'),
+        segBtn('ops', 'layout', 'Layout check' + (LY.n_findings ? ' (' + LY.n_findings + ')' : ''), 'runs')]);
     body.classList.add('scroll');
     if (k === 'runs') {
       var rows = runs.slice().reverse();
@@ -9303,6 +9392,8 @@
         }).join('') + '</tbody></table>';
       body.appendChild(wrap2);
       body.appendChild(el('div', 'cap', esc(O.note || '') + ' Assessed state ' + esc(O.assessed_stamp || '') + ', written ' + esc(O.built || '') + '. ' + vLink('the chain of data', 'chain') + ' ' + vLink('the release calendar', 'how', 'calendar')));
+    } else if (k === 'layout') {
+      viewOpsLayout(body, LY);
     } else {
       var g = el('div', 'gloss'), tr = F.triggers || [];
       g.innerHTML = '<div class="gl-i"><b>' + (F.stamp ? 'Light run ' + esc(F.stamp) + ' against the assessment ' + esc(F.assessed_stamp || '') : 'No fresh layer yet') + '</b>' + esc(F.summary || '') +
@@ -9807,11 +9898,12 @@
     get('/data/enso/olr-grid.json').catch(function () { return {}; }),
     get('/data/enso/outliers.json').catch(function () { return {}; }),
     get('/data/enso/zones-flow.json').catch(function () { return {}; }),
-    get('/data/enso/phase.json').catch(function () { return {}; })])
+    get('/data/enso/phase.json').catch(function () { return {}; }),
+    get('/data/enso/layout-check.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
       fixRiskTitles(r[0]);                    // парные риски: «world ocean:» / «land+ocean:» читались как дубли (владелец 09.09)
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}   /* история прогнозов, облака, «кто выбивается» (15.09) */;
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}; S.LY = r[30] || {}   /* история прогнозов, облака, «кто выбивается» (15.09), обход раскладки (16.09) */;
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');

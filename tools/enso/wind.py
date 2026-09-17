@@ -25,6 +25,11 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+import pathlib as _pl
+_sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 CACHE = ROOT / "wind"
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 ARCH = "https://archive-api.open-meteo.com/v1/archive"
@@ -52,7 +57,7 @@ def _load(p, default):
 
 def _save(p, obj):
     p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(obj, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(p, json.dumps(obj, ensure_ascii=False))
 
 
 def _get(url):

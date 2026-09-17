@@ -9,7 +9,10 @@ C. Файлы: каждый get('/data/enso/*.json') в загрузчике е�
 D. Обёртка: каждый скрипт, который зовёт light_daily.ps1, существует и компилируется.
 E. Свежесть данных: у каждого json в data/enso дата сборки (built/updated/stamp) — сколько дней назад.
 F. Вкладки: каждый ключ T.tabs имеет tabHelp и ветку в render().
-Выход: список расхождений; код возврата 1, если есть блокирующие (A, C, D, F).
+G. Источники: у каждого ключа sources.SOURCES есть подпись в sources.LABELS.
+H. Данные: ни одного NaN/Infinity — браузерный JSON.parse такого не разберёт.
+I. Раскладка: отчёт ночного обхода сцен в браузере (check_layout.py) — его находки и его возраст.
+Выход: список расхождений; код возврата 1, если есть блокирующие (A, C, D, F, G, H, I).
 """
 import json
 import re
@@ -80,6 +83,7 @@ DAILY_OUT = {
     "zones_flow.py": "zones-flow.json", "outliers.py": "outliers.json",
     "phase.py": "phase.json",
     "agent_state.py": "agent-state.json", "stats_layer.py": "stats.json",
+    "check_layout.py": "layout-check.json",
 }
 fresh = set(PUB.FRESH_FILES)
 for scr in sorted(set(re.findall(r"-u (\w+\.py)", ps1))):
@@ -138,6 +142,33 @@ for f in sorted(DATA.glob("*.json")):
         continue
     if re.search(r'(?<![\"\w])(NaN|-?Infinity)(?![\"\w])', t):
         bad.append(f"H {f.name}: NaN/Infinity — браузер такой JSON не разберёт (publish.py чинит, но источник надо править)")
+
+# I. ОБХОД РАСКЛАДКИ (владелец 16.09: «сделай такой обход постоянной проверкой»). Сам обход
+# живёт в браузере и идёт ночью — tools/enso/check_layout.py; здесь читается его отчёт, чтобы
+# ОДНА команда по-прежнему отвечала на вопрос «панель цела или нет». Без этого проверка осталась
+# бы строкой в ночном логе, которую никто не открывает, — а такая проверка всё равно что нет.
+LY = DATA / "layout-check.json"
+try:
+    ly = json.loads(LY.read_text(encoding="utf-8"))
+except Exception:                                                # noqa: BLE001
+    ly = None
+if ly is None:
+    warn.append("I layout walk has never run here: python tools/enso/check_layout.py")
+elif ly.get("status") == "skipped":
+    # на машине нет браузера — это не поломка панели, а отсутствие инструмента
+    warn.append(f"I layout walk skipped: {ly.get('why')}")
+elif ly.get("status") != "ok":
+    bad.append(f"I layout walk did not finish: {ly.get('why')}")
+else:
+    for f in (ly.get("findings") or [])[:12]:
+        bad.append("I layout {t} at {w} px · {scene} · {p} · {x}".format(
+            t=f.get("t"), w=f.get("width"), scene=str(f.get("scene"))[:26],
+            p=str(f.get("p"))[:34], x=str(f.get("x"))[:60]))
+    m = re.match(r"(\d{4}-\d{2}-\d{2})", str(ly.get("built") or ""))
+    if m:
+        age = (date.today() - date.fromisoformat(m.group(1))).days
+        if age > 3:
+            warn.append(f"I layout walk is {age} days old (built {m.group(1)}): it only guards what it has seen")
 
 print(f"check_ui: {len(bad)} blocking, {len(warn)} warnings")
 for b in bad:

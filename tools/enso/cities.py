@@ -38,6 +38,10 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 RAW = ROOT / "data" / "enso" / "raw" / "cities"
 OUT = ROOT / "data" / "enso" / "cities.json"
 FORECASTS = RAW / "forecasts.jsonl"
@@ -270,11 +274,11 @@ def main():
             if d not in actuals.get(c, {}):
                 n_new += 1
             actuals.setdefault(c, {})[d] = rec
-    ACTUALS.write_text(json.dumps(actuals, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    safeio.write_text(ACTUALS, json.dumps(actuals, ensure_ascii=False, separators=(",", ":")))
     last_fact = max((d for days in actuals.values() for d in days), default="-")
     print(f"actuals: +{n_new} city-days, latest fact {last_fact}")
     summary = summarize(forecasts + archive, actuals, today)
-    OUT.write_text(json.dumps(summary, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(summary, ensure_ascii=False, separators=(",", ":")))
     print(f"cities.json: {summary['issues']} issue(s) since {summary['since']}, {summary['pairs']} forecast-fact pairs, "
           f"{OUT.stat().st_size // 1024} KB, {time.time() - t0:.0f} s")
     try:

@@ -32,6 +32,11 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+import pathlib as _pl
+_sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 ARCH = "https://archive-api.open-meteo.com/v1/archive"
 OLD_YEARS = ["2005", "2012"]          # заведомо старая эпоха
 NEW_YEARS = ["2023", "2025"]          # заведомо новая
@@ -185,8 +190,7 @@ def main():
     a = ap.parse_args()
     rows, stopped = run(a.only, a.pause)
     if a.json and rows:
-        Path(a.json).write_text(json.dumps({"probes": rows, "stopped": stopped}, ensure_ascii=False, indent=1),
-                                encoding="utf-8")
+        safeio.write_text(Path(a.json), json.dumps({"probes": rows, "stopped": stopped}, ensure_ascii=False, indent=1))
         print(f"\nчисла сложены в {a.json}")
     if stopped:
         print(f"\nпроба не закончена: {stopped}")

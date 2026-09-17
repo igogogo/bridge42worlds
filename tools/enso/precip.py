@@ -27,6 +27,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio                                                    # запись с повтором и подменой целиком (17.09)
 import spectral as SPX                                          # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
@@ -95,7 +96,7 @@ def era5_box(key, box, verbose=False):
             if verbose:
                 print(f"    tail: {str(e)[:60]}")
     if m:
-        p.write_text(json.dumps(m), encoding="utf-8")
+        safeio.write_text(p, json.dumps(m))
     return m
 
 
@@ -177,7 +178,7 @@ def gpcp(boxes, verbose=False):
             sub = pr[:, mi][:, :, mj]
             ww = np.cos(np.radians(lat[mi]))[:, None] * np.ones((1, int(mj.sum())))
             out["boxes"][key] = [round(float(np.nansum(np.where(np.isfinite(a), a, 0) * ww) / np.nansum(np.where(np.isfinite(a), ww, 0))), 3) for a in sub]
-        p.write_text(json.dumps(out), encoding="utf-8")
+        safeio.write_text(p, json.dumps(out))
         if verbose:
             print(f"  GPCP: {ym[0]}..{ym[-1]}, {len(ym)} months")
         return out, True
@@ -261,7 +262,7 @@ def build(verbose=True):
                     "calendar window and against every year since 1981; a reanalysis is biased in the tropics, so read the "
                     "percentages, not the millimetres. Planet: GPCP monthly (satellites and gauges, land and ocean) since 1979, "
                     "the only series that answers whether the world as a whole got more or less rain.")}
-    OUT.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False))
     if verbose:
         print(f"precip.json: {len(regions)} regions, GPCP {'ok' if gl else 'none'}, {doc['secs']} s")
     try:

@@ -33,6 +33,10 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 CACHE = ROOT / "oisst"
 E = "https://coastwatch.pfeg.noaa.gov/erddap/griddap/"
 NRT = "ncdcOisst21NrtAgg_LonPM180"
@@ -136,7 +140,7 @@ def _load(p, default):
 
 def _save(p, obj):
     p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(obj, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(p, json.dumps(obj, ensure_ascii=False))
 
 
 def update_tail(box, today=None, verbose=False):

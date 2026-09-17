@@ -22,6 +22,11 @@
 стоит текущая неделя в истории и восточный ли это тип события.
 """
 import json
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+import pathlib as _pl
+_sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 from datetime import date, timedelta
 
 import warnings
@@ -1421,7 +1426,7 @@ if __name__ == "__main__":
     import sys
     out = run(fetch="--cached" not in sys.argv)
     p = S.ROOT / "latest.json"
-    p.write_text(json.dumps(out, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+    safeio.write_text(p, json.dumps(out, ensure_ascii=False, indent=1, default=str))
     W = out["watch"]
     for k in ("sst_nino34", "sst_world", "t2_world"):
         w = W[k]

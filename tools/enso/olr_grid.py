@@ -36,6 +36,10 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 OUT = ROOT / "olr-grid.json"
 # ДЕЙСТВУЮЩИЙ РЯД, А НЕ АРХИВНЫЙ. Первым взял interp_OLR — он закончился 31.12.2022, и «облака
 # сейчас» показывали позапрошлую эпоху. У PSL пять наборов OLR; живых два, оба доходят до
@@ -144,7 +148,7 @@ def build(stride=2, verbose=True):
                     "The anomaly is against the 1991–2020 mean of the same day of the year, the same base as every "
                     "other anomaly on this panel: negative means more deep cloud than usual on that date."),
            "secs": int(time.time() - t0)}
-    OUT.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False))
     if verbose:
         kb = OUT.stat().st_size / 1024
         print(f"olr-grid.json: {doc['nlat']}×{doc['nlon']} на {doc['date']}, {kb:.0f} КБ, {doc['secs']} с")

@@ -24,6 +24,10 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 LATEST = ROOT / "latest.json"
 
 
@@ -58,7 +62,7 @@ def main():
         print("отмечено:", sm["review"]["model"], sm["review"]["at"],
               f"· находок {a.findings} · правок {a.edits}" + (" · ЕСТЬ БЛОКИРУЮЩЕЕ" if a.blocking else ""))
     d["summary"] = sm
-    LATEST.write_text(json.dumps(d, ensure_ascii=False, separators=(",", ":"), allow_nan=False), encoding="utf-8")
+    safeio.write_text(LATEST, json.dumps(d, ensure_ascii=False, separators=(",", ":"), allow_nan=False))
     try:                                                         # в журнал прогонов (вкладка Ops)
         sys.path.insert(0, str(Path(__file__).resolve().parent))
         import ops as OPSLOG

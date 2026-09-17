@@ -26,6 +26,10 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 SNAP = ROOT / "snapshots"
 SEEN_FILE = ROOT / "risk-seen.json"
 ALERT_FILE = ROOT / "alert-seen.json"   # id риска -> когда впервые увидели (см. шапку)
@@ -114,7 +118,7 @@ def _remember(path, ids, today, label=None):
         reg[i].pop("gone", None)                                 # вернулась — снова живая
     if fresh and label:
         print(label + ": запомнили " + str(len(fresh)) + " новых id" + (" (молча)" if quiet else ""))
-    path.write_text(json.dumps(reg, ensure_ascii=False, indent=1), encoding="utf-8")
+    safeio.write_text(path, json.dumps(reg, ensure_ascii=False, indent=1))
     return reg
 
 
@@ -139,7 +143,7 @@ def build(verbose=False):
     ASEEN = _remember(ALERT_FILE, list(ALERTS_NOW), today, verbose and "тревоги")
     for aid, a in ALERTS_NOW.items():                            # заголовок нужен строке «снята»
         ASEEN[aid]["title"] = a.get("title") or aid
-    ALERT_FILE.write_text(json.dumps(ASEEN, ensure_ascii=False, indent=1), encoding="utf-8")
+    safeio.write_text(ALERT_FILE, json.dumps(ASEEN, ensure_ascii=False, indent=1))
 
     # 1. значения
     for key, (title, view, sub) in WATCHED.items():
@@ -224,7 +228,7 @@ def build(verbose=False):
         s["gone"] = day
         changed = True
     if changed:
-        ALERT_FILE.write_text(json.dumps(ASEEN, ensure_ascii=False, indent=1), encoding="utf-8")
+        safeio.write_text(ALERT_FILE, json.dumps(ASEEN, ensure_ascii=False, indent=1))
 
     # 4. вердикт. «Changed» — только когда сменились ЧИСЛА; модель переписывает текст при
     # каждом прогоне, и три строки «The verdict changed» за неделю на одних и тех же числах
@@ -259,7 +263,7 @@ def build(verbose=False):
            "note": ("Built by rules from the value journal: a line appears when a value, a risk level, an alert "
                     "or the verdict actually changed in the last " + str(DAYS) + " days, with the date of the data. "
                     "Nothing here is written by hand.")}
-    (ROOT / "news.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    safeio.write_text(ROOT / "news.json", json.dumps(out, ensure_ascii=False, indent=1))
     if verbose:
         print(f"новости: {len(items)} за неделю, {len(nxt)} впереди")
     return out

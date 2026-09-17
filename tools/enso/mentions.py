@@ -30,6 +30,10 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 HERE = Path(__file__).resolve().parent
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 sys.path.insert(0, str(HERE))
 ROOT = HERE.parents[1] / "data" / "enso"
 CACHE = ROOT / "mentions"
@@ -86,7 +90,7 @@ def _cached(key, fetch):
     p = CACHE / f"{key}.json"
     try:
         obj = fetch()
-        p.write_text(json.dumps(obj, ensure_ascii=False), encoding="utf-8")
+        safeio.write_text(p, json.dumps(obj, ensure_ascii=False))
         return obj, datetime.now().strftime("%Y-%m-%d %H:%M"), True, ""
     except Exception as e:                                       # noqa: BLE001
         if p.exists():
@@ -268,7 +272,7 @@ def build(verbose=True):
                    "reads about it on Wikipedia, and what the forecast centres publish. Headlines are shown as written; a "
                    "link goes to the publisher.")
     doc["secs"] = int(time.time() - t0)
-    OUT.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False))
     try:
         import ops as OPSLOG
         stale = [s["key"] for s in doc["sources"] if not s["fresh"]]

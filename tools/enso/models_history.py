@@ -47,6 +47,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio                                                    # запись с повтором и подменой целиком (17.09)
 import iri_plume as IP                                          # noqa: E402
 import sources as S                                             # noqa: E402
 
@@ -137,7 +138,7 @@ def parsed(y, m):
     keep = {"addr": [y, m], "issued": pl.get("issued"), "seasons": pl.get("seasons") or [],
             "models": {k: {"section": v["section"], "values": v["values"]}
                        for k, v in (pl.get("models") or {}).items() if v.get("values")}}
-    cache.write_text(json.dumps(keep, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(cache, json.dumps(keep, ensure_ascii=False))
     return keep
 
 
@@ -452,7 +453,7 @@ def build(verbose=True):
                     "followed; the outcome-conditional sample keeps only the summers an El Niño followed and cannot "
                     "say how often a warm call came to nothing."),
            "secs": int(time.time() - t0)}
-    OUT.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False))
     if verbose:
         print(f"models-history.json: {len(rows)} выпусков, {doc['meta']['first_issue']} → {doc['meta']['last_issue']}, {doc['secs']} с")
         for n, d in decades.items():

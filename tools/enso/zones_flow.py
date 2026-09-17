@@ -43,6 +43,11 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+import pathlib as _pl
+_sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 SRC = ROOT / "last_good" / "noaa_weekly.txt"
 HOV = ROOT / "hovmoller.json"
 OUT = ROOT / "zones-flow.json"
@@ -589,7 +594,7 @@ def build(show=False):
                  "150°W and 120°W, so part of what they share is the same water counted twice. The water that does "
                  "move is below: the subsurface panel shows it, measured."),
     }
-    OUT.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False))
     kb = OUT.stat().st_size / 1024
     print(f"zones-flow.json: {N} недель, {len(events)} событий ({len(done)} законченных), {kb:.0f} КБ, {time.time()-t0:.0f} с")
     if show:

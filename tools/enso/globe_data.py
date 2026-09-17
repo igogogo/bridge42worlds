@@ -20,6 +20,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio                                                    # запись с повтором и подменой целиком (17.09)
 import oisst as OI                                              # noqa: E402
 import spectral as SPX                                          # noqa: E402
 import subsurface as SB                                         # noqa: E402
@@ -116,7 +117,7 @@ def build(verbose=True):
                     "and rain against normal, the satellite boxes with deep convection, and the TAO moorings with the warmest layer. "
                     "Everything shown is already on the panel; the globe only puts it in one place."),
            "errors": [err] if err else [], "secs": int(time.time() - t0)}
-    OUT.write_text(json.dumps(doc, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False, separators=(",", ":")))
     if verbose:
         print(f"globe.json: sst {'ok ' + grid['date'] if grid else 'none'}, boxes {len(doc['boxes'])}, moorings {len(doc['moorings'])}, {OUT.stat().st_size // 1024} KB, {doc['secs']} s" + (f"; {err}" if err else ""))
     try:

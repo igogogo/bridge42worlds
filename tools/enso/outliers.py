@@ -35,6 +35,10 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 OUT = ROOT / "outliers.json"
 MIN_YEARS = 20                  # короче — ранг ничего не значит
 STALE_DAYS = 14                 # старше — в конец списка, с пометкой
@@ -147,7 +151,7 @@ def build(top=10, verbose=True):
                     "fifteen says little; anything more than " + str(STALE_DAYS) + " days behind is moved to the end "
                     "and marked, because a stale series shows the past as the present."),
            "secs": int(time.time() - t0)}
-    OUT.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False))
     if verbose:
         print(f"outliers.json: {len(rows)} рядов, {doc['secs']} с")
         for r in doc["rows"][:top]:

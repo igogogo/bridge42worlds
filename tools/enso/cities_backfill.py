@@ -32,6 +32,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio                                                    # запись с повтором и подменой целиком (17.09)
 from cities import CITIES, MODELS, RAW, get  # noqa: E402
 
 ARCHIVE = RAW / "forecasts-archive.jsonl"
@@ -152,9 +153,9 @@ def main():
                         acts.setdefault(c[0], {})[day] = rec
                         n_act += 1
             time.sleep(a.pause)
-        ACTUALS.write_text(json.dumps(acts, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        safeio.write_text(ACTUALS, json.dumps(acts, ensure_ascii=False, separators=(",", ":")))
         state["actuals_from"] = a.start
-        STATE.write_text(json.dumps(state), encoding="utf-8")
+        safeio.write_text(STATE, json.dumps(state))
         print(f"actuals: +{n_act} city-days from {a.start}")
     n_rows = 0
     with ARCHIVE.open("a", encoding="utf-8") as fh:
@@ -170,7 +171,7 @@ def main():
             n_rows += len(rows)
             done.add(key)
             state["done"] = sorted(done)
-            STATE.write_text(json.dumps(state), encoding="utf-8")
+            safeio.write_text(STATE, json.dumps(state))
             if k % 25 == 0:
                 print(f"  {k}/{len(todo)} · rows {n_rows} · {time.time() - t0:.0f} s")
             time.sleep(a.pause)

@@ -28,6 +28,10 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 CACHE = ROOT / "subsurface"
 E = "https://coastwatch.pfeg.noaa.gov/erddap/tabledap/pmelTaoDyT.csv"
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
@@ -64,7 +68,7 @@ def _load(p, default):
 
 def _save(p, obj):
     p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(obj, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(p, json.dumps(obj, ensure_ascii=False))
 
 
 # ------------------------------------------------------------------ TAO
@@ -512,7 +516,7 @@ def build_hov_analogs(verbose=False):
             cl[str(y)] = _hov_rows(months_ym, secs, C, np.array(lev))
             pk = _sec_pack(months_ym, secs, C, np.array(lev), np.array(lon))
             pk["built"] = datetime.now().strftime("%Y-%m-%d %H:%M"); pk["event"] = y
-            sec_file.write_text(json.dumps(pk, ensure_ascii=False), encoding="utf-8")
+            safeio.write_text(sec_file, json.dumps(pk, ensure_ascii=False))
             if verbose:
                 print(f"  Ховмёллер {y}: {len(months_ym)} мес; разрезы -> {sec_file.name}")
     _save(p, cl)
@@ -603,7 +607,7 @@ def godas(today=None, verbose=False):
                                 f"the stored file reaches {_pm[-1]}, so the source gave nothing newer")
             hov["lons"] = [float(x) for x in lon]; hov["labels"] = [lon_label(x) for x in lon]
             sections = _sec_pack([f"{y}-{m:02d}" for y, m in zip(years, months_all)], secs, clim, lev, lon)
-            HOV_FILE.write_text(json.dumps({"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "current": hov,
+            safeio.write_text(HOV_FILE, json.dumps({"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "current": hov,
                                             "sections": sections,
                                             "analogs": _load(CACHE / "hov_analogs.json", {}), "level": hov["level"],
                                             "note": ("Time runs down the page, longitude across: the warm anomaly of a "
@@ -611,7 +615,7 @@ def godas(today=None, verbose=False):
                                                      "three months. Left: this event; right: a past strong event on the "
                                                      "same calendar months. GODAS reanalysis, monthly, anomaly against "
                                                      f"our {CLIM_YEARS[0]}–{CLIM_YEARS[1]} climatology.")},
-                                           ensure_ascii=False), encoding="utf-8")
+                                           ensure_ascii=False))
             out["hovmoller_file"] = "data/enso/hovmoller.json"
         except Exception as e:                                   # noqa: BLE001
             out["hovmoller_error"] = str(e)[:120]

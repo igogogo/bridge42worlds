@@ -25,6 +25,10 @@ from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 ML = ROOT.parent / "b42-ml"
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
@@ -106,7 +110,7 @@ def main():
         print("(показ; чтобы записать, добавьте --run)")
         return 0
 
-    OUT.write_text(json.dumps({
+    safeio.write_text(OUT, json.dumps({
         "built": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "floor": a.floor, "top": a.top,
         "n_anchors": len(anc), "n_links": tot,
@@ -114,7 +118,7 @@ def main():
                 "anchor text and the concept card; no model asked. A link means 'this "
                 "term explains what is being said here', not 'this is the source'.",
         "anchors": out,
-    }, ensure_ascii=False), encoding="utf-8")
+    }, ensure_ascii=False))
     print(f"✅ {OUT.relative_to(ROOT)}: {len(out)} якорей, {tot} связей")
     return 0
 

@@ -21,6 +21,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio                                                    # запись с повтором и подменой целиком (17.09)
 import cities as C                                              # noqa: E402
 
 DAYS = 90                        # кусок истории на один запрос
@@ -86,7 +87,7 @@ def main():
                     store.setdefault(city, {})[day] = rec; n += 1
         got += n
         print(f"  {cur}…{to}: +{n} город-дней, всего {sum(len(v) for v in store.values())}", flush=True)
-        C.ACTUALS.write_text(json.dumps(store, ensure_ascii=False), encoding="utf-8")
+        safeio.write_text(C.ACTUALS, json.dumps(store, ensure_ascii=False))
         cur = to + timedelta(days=1)
         time.sleep(a.pause)
     total = sum(len(v) for v in store.values())

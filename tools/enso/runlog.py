@@ -14,6 +14,10 @@ from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 RUNS = ROOT / "data" / "pipeline-runs.json"
 _IDS = {}                                                        # род → id текущего прогона
 
@@ -53,7 +57,7 @@ def report(kind="topic", plan=None, done=None, current=None, steps=None,
     if finish:
         rec["finished"] = now
     try:
-        RUNS.write_text(json.dumps(runs[-30:], ensure_ascii=False, indent=1), encoding="utf-8")
+        safeio.write_text(RUNS, json.dumps(runs[-30:], ensure_ascii=False, indent=1))
     except OSError as e:
         print(f"  ⚠️ журнал прогонов не записан: {e}")
     return rid

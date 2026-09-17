@@ -34,6 +34,11 @@ from datetime import date, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+import pathlib as _pl
+_sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 OUT = ROOT / "data" / "enso" / "water.json"
 CACHE = ROOT / "data" / "enso" / "raw" / "water"
 
@@ -241,7 +246,7 @@ def main():
             print(f"  california total          {tot['last']['pct']:>6.1f} % of capacity on {tot['last']['date']}")
     except Exception as e:                                       # noqa: BLE001
         doc["errors"].append(f"california: {str(e)[:100]}")
-    OUT.write_text(json.dumps(doc, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False, separators=(",", ":")))
     print(f"water.json: {OUT.stat().st_size // 1024} KB, {time.time() - t0:.0f} s"
           + (f", errors: {len(doc['errors'])}" if doc["errors"] else ""))
     try:

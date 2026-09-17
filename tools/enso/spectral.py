@@ -34,6 +34,10 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 LG = ROOT / "last_good"
 OUT = ROOT / "spectral.json"
 W = 30                      # окно, дней
@@ -150,7 +154,7 @@ def _mark_pinned(key):
         PINNED.parent.mkdir(parents=True, exist_ok=True)
         d = json.loads(PINNED.read_text(encoding="utf-8")) if PINNED.exists() else {}
         d[key] = {"models": "era5", "at": datetime.now().strftime("%Y-%m-%d %H:%M")}
-        PINNED.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
+        safeio.write_text(PINNED, json.dumps(d, ensure_ascii=False, indent=1))
     except Exception:                                            # noqa: BLE001
         pass
 
@@ -165,7 +169,7 @@ def _region(key, box):
         try:
             d0 = "1981-01-01" if not m else (today - timedelta(days=90)).isoformat()
             m.update(_om_box(box, d0, today.isoformat()))
-            p.write_text(json.dumps(m), encoding="utf-8")
+            safeio.write_text(p, json.dumps(m))
             _mark_pinned(key)
             err = None
             break
@@ -387,7 +391,7 @@ def build(verbose=True):
                     "(nine days) and, where history exists, sits above the 99th percentile of all past windows. Analog years show how the "
                     "same calendar window looked in 1982, 1997, 2015 and 2023."),
            "secs": int(time.time() - t0)}
-    OUT.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False))
     if verbose:
         print(f"spectral.json: {len(series)} рядов, {doc['secs']} с")
         for s in series:

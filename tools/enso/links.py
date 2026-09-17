@@ -37,6 +37,10 @@ from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 DATA = ROOT / "data" / "enso"
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
@@ -450,7 +454,7 @@ def main():
                "note": "vector finds what is about the same thing; the model decides whether it belongs next to the "
                        "statement. A link means 'this is what the research says about this', not 'this is the source "
                        "of that number'."}
-    OUT.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(payload, ensure_ascii=False))
     run.finish("ok", anchors=len(links), of=len(anc), works=len(wks), links=sum(len(v) for v in links.values()))
     print(f"\n✅ {OUT.name}: ссылки у {len(links)} якорей из {len(anc)}; работ в пуле {len(wks)}")
     return 0

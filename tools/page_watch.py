@@ -98,15 +98,56 @@ class Browser:
             return json.loads(r.read().decode())
 
     def close(self):
+        """Закрыть браузер целиком — вместе с детьми.
+
+        НАЙДЕНО 16.09. terminate() убивал ТОЛЬКО тот процесс, который мы запустили, а браузер
+        держит ещё десяток своих: отрисовщики, GPU, служебные. Они оставались жить, и папку
+        профиля удалить было нельзя — она занята. После десятка прогонов проверки на машине
+        висела сотня процессов msedge, свободной памяти не оставалось, и та же самая проверка,
+        что сначала шла 42 секунды, стала идти 448, а потом и вовсе объявила, что панель не
+        собралась за 40 секунд. То есть инструмент проверки сам портил то, что проверял.
+
+        Порядок: сперва вежливо — команда Browser.close по протоколу отладки, браузер закрывает
+        детей сам; если не вышло, сносим дерево процессов по идентификатору (на Windows это
+        taskkill /T, на остальных — своя ветка); в конце убираем папку профиля.
+        """
         if self.keep:
             print(f"браузер оставлен: {self.base}")
             return
-        try:
-            self.proc.terminate()
-            self.proc.wait(timeout=10)
-        except Exception:
-            self.proc.kill()
-        shutil.rmtree(self.profile, ignore_errors=True)
+        try:                                                     # 1. вежливо, по протоколу
+            import websocket
+            with urllib.request.urlopen(f"{self.base}/json/version", timeout=3) as r:
+                ws_url = json.loads(r.read().decode()).get("webSocketDebuggerUrl")
+            if ws_url:
+                ws = websocket.create_connection(ws_url, timeout=5, suppress_origin=True)
+                ws.send(json.dumps({"id": 1, "method": "Browser.close"}))
+                try:
+                    ws.recv()
+                except Exception:                                # noqa: BLE001
+                    pass
+                ws.close()
+                self.proc.wait(timeout=10)
+        except Exception:                                        # noqa: BLE001
+            pass
+        if self.proc.poll() is None:                             # 2. по-плохому, всем деревом
+            try:
+                if os.name == "nt":
+                    subprocess.run(["taskkill", "/T", "/F", "/PID", str(self.proc.pid)],
+                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=20)
+                else:
+                    self.proc.terminate()
+                self.proc.wait(timeout=10)
+            except Exception:                                    # noqa: BLE001
+                try:
+                    self.proc.kill()
+                except Exception:                                # noqa: BLE001
+                    pass
+        # папку профиля отдаёт только мёртвый браузер: пробуем несколько раз
+        for _ in range(6):
+            shutil.rmtree(self.profile, ignore_errors=True)
+            if not Path(self.profile).exists():
+                break
+            time.sleep(0.5)
 
 
 def look(browser, url, wait=12):

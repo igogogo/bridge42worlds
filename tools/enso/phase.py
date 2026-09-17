@@ -53,6 +53,10 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 LAST = ROOT / "last_good"
 OUT = ROOT / "phase.json"
 
@@ -483,7 +487,7 @@ def build(show=False):
                          "windows is printed beside each record for that reason."),
         "secs": int(time.time() - t0),
     }
-    OUT.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False))
     print(f"phase.json: уровень {level} из 5, {len(mem)} рядов памяти, {OUT.stat().st_size/1024:.0f} КБ, {doc['secs']} с")
     if show:
         print(f"\n  слово: {doc['word']}")

@@ -46,6 +46,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio                                                    # запись с повтором и подменой целиком (17.09)
 import sources as S                                              # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
@@ -1117,7 +1118,7 @@ def build(verbose=True):
                     "Computed offline from the same data the charts show; no model. Each item names its method in plain words and technically, "
                     "with the caveats that apply."),
            "secs": round(time.time() - t0, 1)}
-    OUT.write_text(json.dumps(doc, ensure_ascii=False, allow_nan=False, default=str), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False, allow_nan=False, default=str))
     if verbose:
         print(f"stats.json: {len(items)} items, {OUT.stat().st_size // 1024} KB, {doc['secs']} s" + (f"; errors: {errors}" if errors else ""))
         for it in items:

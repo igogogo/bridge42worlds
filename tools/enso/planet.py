@@ -30,6 +30,10 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 HERE = Path(__file__).resolve().parent
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 sys.path.insert(0, str(HERE))
 ROOT = HERE.parents[1] / "data" / "enso"
 CACHE = ROOT / "planet"
@@ -387,9 +391,9 @@ def build(verbose=True):
     # пояса — в свой файл: planet.json грузится при старте панели, а пять суточных рядов с 1940
     # года весят больше, чем всё остальное вместе
     regions = {k: doc["temperature"].pop(k) for k in ("t2_nh", "t2_sh", "t2_tropics", "t2_arctic", "t2_antarctic") if k in doc["temperature"]}
-    OUT_R.write_text(json.dumps({"built": doc["built"], "temperature": regions, "elnino_years": ELNINO_YEARS}, ensure_ascii=False, allow_nan=False), encoding="utf-8")
+    safeio.write_text(OUT_R, json.dumps({"built": doc["built"], "temperature": regions, "elnino_years": ELNINO_YEARS}, ensure_ascii=False, allow_nan=False))
     doc["regions_file"] = "data/enso/planet-regions.json"; doc["regions_keys"] = list(regions.keys())
-    OUT.write_text(json.dumps(doc, ensure_ascii=False, allow_nan=False), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False, allow_nan=False))
     try:
         import ops as OPSLOG
         OPSLOG.record_run("planet", datetime.fromtimestamp(t0).strftime("%Y-%m-%d %H:%M:%S"),

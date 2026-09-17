@@ -39,6 +39,10 @@ from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
 
@@ -311,14 +315,14 @@ def main():
         return 0
 
     if a.run or a.push:
-        OUT.write_text(json.dumps({
+        safeio.write_text(OUT, json.dumps({
             "built": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "n": len(rows), "namespace": NAMESPACE,
             "note": "Units of the panel for the research chat: one short English text per "
                     "risk, alert, indicator, term, scene, verdict and the week's feed. "
                     "Concepts are not here — they live in the 'concepts' namespace.",
             "units": rows,
-        }, ensure_ascii=False), encoding="utf-8")
+        }, ensure_ascii=False))
         print(f"→ {OUT.relative_to(ROOT)}")
     if a.push:
         push(rows)

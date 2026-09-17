@@ -20,6 +20,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio                                                    # запись с повтором и подменой целиком (17.09)
 import watch as WT                                              # noqa: E402
 import spectral as SPX                                          # noqa: E402
 
@@ -94,7 +95,7 @@ def build(verbose=True):
                     "since 1981, records, CUSUM and a 14-day analogue forecast. Air over land swings more day to day "
                     "than the ocean boxes; the band is wider for that reason, not because the data are worse."),
            "secs": int(time.time() - t0)}
-    OUT.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False))
     if verbose:
         print(f"regions-daily.json: {len(out)} series, {doc['secs']} s")
     try:

@@ -20,6 +20,10 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 ROOT = HERE.parents[1] / "data" / "enso"
 RUNS = ROOT / "runs.json"
 OPS = ROOT / "ops.json"
@@ -44,6 +48,7 @@ KIND_LABEL = {
     "precip": "rain: ERA5 box sums and GPCP planet",
     "radiance": "raw satellite granules (external collector C:\\CL\\radiance), copied in",
     "stats": "statistics layer: regression, change-points, persistence, clusters, extremes, correlations",
+    "layout": "layout walk: every scene in a headless browser at three widths",
 }
 
 
@@ -56,7 +61,7 @@ def _load(p, default):
 
 def _save(p, obj):
     p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(obj, ensure_ascii=False, indent=1), encoding="utf-8")
+    safeio.write_text(p, json.dumps(obj, ensure_ascii=False, indent=1))
 
 
 # ------------------------------------------------------------------ журнал прогонов

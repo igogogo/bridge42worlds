@@ -35,6 +35,10 @@ from datetime import date, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 RAW = ROOT / "data" / "enso" / "raw" / "fires"
 OUT = ROOT / "data" / "enso" / "fires.json"
 
@@ -213,7 +217,7 @@ def main():
                    "Cloud and swath gaps make single days noisy - read the seven-day mean. Compare a "
                    "region with its own course, not regions with each other: African savannah burning "
                    "is a yearly practice, not a disaster.")
-    OUT.write_text(json.dumps(doc, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False, separators=(",", ":")))
     days = len(next(iter(doc.get("series", {}).values()), {}))
     print(f"fires.json: {days} day(s), {OUT.stat().st_size // 1024} KB, {time.time() - t0:.0f} s"
           + (f", errors: {len(errs)}" if errs else ""))

@@ -33,6 +33,11 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"   # данные дашборда живут в data/enso/, код в tools/enso/
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+import pathlib as _pl
+_sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 SNAP = ROOT / "snapshots"
 
 
@@ -215,7 +220,7 @@ def main(fetch=True, llm=True, light=False):
         import fresh as FR
         assessed = json.loads((ROOT / "latest.json").read_text(encoding="utf-8")) if (ROOT / "latest.json").exists() else {}
         fr = FR.build(clean(cur), assessed)
-        (ROOT / "fresh.json").write_text(json.dumps(fr, ensure_ascii=False, default=str, allow_nan=False), encoding="utf-8")
+        safeio.write_text(ROOT / "fresh.json", json.dumps(fr, ensure_ascii=False, default=str, allow_nan=False))
         OPSLOG.build(clean(cur), fr)
         run.finish("ok", stamp=cur["stamp"], assessed_stamp=assessed.get("stamp"), risk_index=cur["risk_index"],
                    n_risks=len(cur["risks"]), n_alerts=len(cur["alerts"]), shout=bool(cur["shout"]), stale=stale,
@@ -244,11 +249,9 @@ def main(fetch=True, llm=True, light=False):
     step("снимок и история")
     cur["prev"] = compact(prev)
     cur = clean(cur)
-    (ROOT / "latest.json").write_text(json.dumps(cur, ensure_ascii=False, default=str, allow_nan=False), encoding="utf-8")
-    (SNAP / (datetime.now().strftime("%Y%m%d_%H%M%S") + ".json")).write_text(
-        json.dumps(cur, ensure_ascii=False, default=str), encoding="utf-8")
-    (ROOT / "history.json").write_text(json.dumps(history(sorted(SNAP.glob("*.json"))), ensure_ascii=False),
-                                       encoding="utf-8")
+    safeio.write_text(ROOT / "latest.json", json.dumps(cur, ensure_ascii=False, default=str, allow_nan=False))
+    safeio.write_text(SNAP / (datetime.now().strftime("%Y%m%d_%H%M%S") + ".json"), json.dumps(cur, ensure_ascii=False, default=str))
+    safeio.write_text(ROOT / "history.json", json.dumps(history(sorted(SNAP.glob("*.json"))), ensure_ascii=False))
     # ЖУРНАЛ ЗНАЧЕНИЙ — здесь же, а не отдельной командой. Панель показывает на каждом кирпиче
     # «что изменилось с прошлого ЗНАЧЕНИЯ»; если журнал собирать руками, он однажды отстанет
     # от снимков, и стрелки начнут врать молча. Собирается по всем снимкам, поэтому порядок
@@ -273,7 +276,7 @@ def main(fetch=True, llm=True, light=False):
     try:
         import fresh as FR
         fr = FR.build(cur, cur)
-        (ROOT / "fresh.json").write_text(json.dumps(fr, ensure_ascii=False, default=str, allow_nan=False), encoding="utf-8")
+        safeio.write_text(ROOT / "fresh.json", json.dumps(fr, ensure_ascii=False, default=str, allow_nan=False))
         OPSLOG.build(cur, fr)
     except Exception as e:                                       # noqa: BLE001
         print("  свежий слой не записался:", str(e)[:160])

@@ -74,6 +74,22 @@ Say "=== panel state map (agent_state.py)"
 Say "=== statistics layer (stats_layer.py)"
 & $py -u stats_layer.py 2>&1 | Out-File $log -Append -Encoding utf8
 
+# ОБХОД РАСКЛАДКИ (владелец 16.09). Единственная наша проверка, которой нужен браузер: всё
+# остальное — свойства текста, а «не помещается» — свойство раскладки, и зависит оно в том числе
+# от длины текста, который приходит с данными и меняется каждый день. Поэтому проверка ночная,
+# а не разовая: сегодня строка влезла, завтра пришло длинное имя источника — и не влезла.
+# Идёт ПЕРЕД выкладкой: свежий отчёт должен уехать вместе со служебным слоем и лечь на вкладку Ops.
+Say "=== layout walk over every scene (check_layout.py)"
+& $py -u check_layout.py --quiet 2>&1 | Out-File $log -Append -Encoding utf8
+if ($LASTEXITCODE -eq 1) { Say "layout walk found something: see data\enso\layout-check.json or the Ops tab" }
+if ($LASTEXITCODE -eq 2) { Say "layout walk did not run: see the log above" }
+
+# Статическая проверка согласованности — та же одна команда, что и руками. Её код возврата
+# теперь учитывает и находки обхода выше.
+Say "=== consistency check (check_ui.py)"
+& $py -u check_ui.py 2>&1 | Out-File $log -Append -Encoding utf8
+if ($LASTEXITCODE -ne 0) { Say "check_ui: blocking findings, see the log" }
+
 $fresh = $null
 try { $fresh = Get-Content "$root\data\enso\fresh.json" -Raw -Encoding utf8 | ConvertFrom-Json } catch { Say "fresh.json unreadable: $_" }
 if ($fresh -and $fresh.needs_assessment) {

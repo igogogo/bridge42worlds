@@ -52,6 +52,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import safeio                                                    # запись с повтором и подменой целиком (17.09)
 import watch as WT                                              # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
@@ -158,7 +159,7 @@ def load_store(key):
 
 def save_store(key, st):
     RAW.mkdir(parents=True, exist_ok=True)
-    store_path(key).write_text(json.dumps(st, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(store_path(key), json.dumps(st, ensure_ascii=False))
 
 
 def top_up(key, lat, lon, full=False, verbose=True):
@@ -377,7 +378,7 @@ def build(full=False, verbose=True, pause=3.0, offline=False, only=None):
                     "point, and these are indices of the pressure on the ice, not a mass balance. The measured mass "
                     "balance is the annual WGMS record on the Long term tab."),
            "secs": int(time.time() - t0)}
-    OUT.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+    safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False))
     if verbose:
         print(f"glaciers.json: {len(series)} точек, {doc['secs']} с" + (f", ошибок {len(errs)}" if errs else ""))
     try:

@@ -16,6 +16,11 @@ from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"   # данные дашборда живут в data/enso/, код в tools/enso/
+# Своя запись файлов: повтор при осечке файловой системы и подмена целиком (17.09).
+import sys as _sys
+import pathlib as _pl
+_sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
+import safeio   # noqa: E402
 OUTDIR = ROOT / "summaries"
 MODEL = os.environ.get("ELNINO_LLM_MODEL", "deepseek-v4-pro")
 
@@ -272,8 +277,7 @@ def summarize(cur):
         result["error"] = err or "DEEPSEEK_API_KEY is not set"
     result["stamp"] = cur["stamp"]
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    (OUTDIR / f"{stamp}.json").write_text(json.dumps({"facts": facts, "summary": result}, ensure_ascii=False, indent=1),
-                                          encoding="utf-8")
+    safeio.write_text(OUTDIR / f"{stamp}.json", json.dumps({"facts": facts, "summary": result}, ensure_ascii=False, indent=1))
     return result
 
 
