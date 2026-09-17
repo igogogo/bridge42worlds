@@ -92,6 +92,7 @@ for scr in sorted(set(re.findall(r"-u (\w+\.py)", ps1))):
         bad.append(f"D the daily wrapper rebuilds {out} but it is not in publish.FRESH_FILES")
 
 # E. свежесть
+BY_HAND = {"neighbours.json", "models-ref.json", "chain-ref.json"}
 today = date.today()
 for f in sorted(DATA.glob("*.json")):
     try:
@@ -104,6 +105,14 @@ for f in sorted(DATA.glob("*.json")):
     # раз и намеренно кэшируются: в них закрытое прошлое, которое не изменится. Правило
     # свежести жаловалось на них каждый день и приучало не читать собственные предупреждения.
     if re.match(r"^sections-(19|20)\d{2}\.json$", f.name):
+        continue
+    # СПРАВОЧНИК, НАПИСАННЫЙ РУКОЙ, ТОЖЕ НЕ ПРОТУХАЕТ (17.09). neighbours.json — список
+    # родственных проектов с их лицензиями, проверенными у источника; он меняется, когда мы
+    # его пересматриваем, а не каждые сутки. Правило свежести девять дней подряд называло его
+    # несвежим, и это ровно тот шум, от которого перестают читать собственные предупреждения.
+    # Список ЯВНЫЙ: молчать по одной фразе в примечании файла нельзя — опечатка заглушила бы
+    # настоящую поломку.
+    if f.name in BY_HAND:
         continue
     st = d.get("built") or d.get("updated") or d.get("stamp") or d.get("generated")
     if st:

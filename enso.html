@@ -140,7 +140,7 @@
   /* значок «i» с подсказкой у пунктов меню и подменю */
   .ti{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:50%;
     border:1px solid currentColor;font:italic 600 8.5px/1 Georgia,serif;padding:0 0 1px 0;box-sizing:border-box;margin-inline-start:6px;opacity:.55;
-    cursor:help;vertical-align:1px}
+    cursor:help;vertical-align:1px;text-transform:none}
   .ti:hover{opacity:1}
   .tab.on .ti,.seg button.on .ti{opacity:.85}
   @media (max-width:560px){ .tab .ti{display:none} }   /* на телефоне меню и так в пять строк */   /* отбивка от рамки сцены: меню не должно лежать на ней */
@@ -355,6 +355,11 @@
     display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;
     border:1.5px solid color-mix(in srgb, var(--cyan) 60%, var(--soft));background:var(--surface);color:var(--cyan);
     font-family:var(--mono);font-size:13px;font-weight:600;line-height:1;text-align:center;padding:0;cursor:pointer;opacity:.95;
+    /* БУКВА ВСЕГДА СТРОЧНАЯ. Значок ставится внутрь чужих подписей, а некоторые из них набраны
+       прописными (.ks-n в ленте KPI, заголовки плашек), и наследуемый text-transform превращал
+       «i» в «I» — в ленте это было видно, на сцене нет (владелец 17.09). Отменяем наследование
+       здесь, а не в каждом месте, куда значок попадает. */
+    text-transform:none;
     animation:b42-ipulse 3.2s ease-in-out infinite}
   .plain-i:hover{border-color:var(--cyan);color:var(--cyan);opacity:1;animation:none;
     box-shadow:0 0 0 4px color-mix(in srgb, var(--cyan) 22%, transparent)}
@@ -1441,7 +1446,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=7e2f808e95"></script>
+<script src="/js/enso.js?v=e9cf779bc9"></script>
 <script src="/js/sitenav.js?v=7eea96bcba"></script>
 </body>
 </html>

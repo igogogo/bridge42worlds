@@ -212,19 +212,39 @@ def gpcp_stats(g, series, months_back=36):
 
 
 # ── CHIRPS (проба) ─────────────────────────────────────────────────────────────────────
+CHIRPS_URL = "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_monthly/netcdf/chirps-v2.0.monthly.nc"
+
+
 def chirps_probe(verbose=False):
-    """ClimateSERV отдаёт CHIRPS по полигону асинхронно; здесь только проверка доступности."""
+    """Спрашиваем сам источник, а не посредника.
+
+    ДО 17.09 проба стучалась в ClimateSERV (`/api/getDataSetList/`) — службу, которая раздаёт
+    CHIRPS по полигону. Её публичный интерфейс данных исчез: корень отвечает, а по этому адресу
+    404, и на обоих её хостах остался только служебный ETL-интерфейс. Проба честно отвечала
+    «CHIRPS not reachable», и панель писала это на экране — хотя недоступен был посредник, а не
+    данные. Это ровно тот случай, когда наша строка говорит о МИРЕ то, что верно про НАС.
+
+    Теперь спрашиваем UCSB, где CHIRPS и живёт, и заголовком HEAD берём не только «отвечает ли»,
+    но и дату последней сборки файла: «доступен и собран 11 сентября» полезнее, чем «доступен».
+    """
     try:
-        with urllib.request.urlopen(urllib.request.Request("https://climateserv.servirglobal.net/api/getDataSetList/", headers=UA), timeout=40) as r:
-            txt = r.read().decode("utf-8", "replace")
-        ok = "CHIRPS" in txt.upper()
+        req = urllib.request.Request(CHIRPS_URL, headers=UA, method="HEAD")
+        with urllib.request.urlopen(req, timeout=40) as r:
+            lm = r.headers.get("Last-Modified") or ""
+        when = ""
+        if lm:
+            try:
+                from email.utils import parsedate_to_datetime
+                when = parsedate_to_datetime(lm).strftime("%Y-%m-%d")
+            except Exception:                                    # noqa: BLE001
+                when = ""
         if verbose:
-            print(f"  CHIRPS via ClimateSERV: {'reachable' if ok else 'list without CHIRPS'}")
-        return ok
+            print(f"  CHIRPS at UCSB: reachable{', built ' + when if when else ''}")
+        return {"reachable": True, "updated": when or None, "url": CHIRPS_URL}
     except Exception as e:                                       # noqa: BLE001
         if verbose:
             print(f"  CHIRPS probe failed: {str(e)[:80]}")
-        return False
+        return {"reachable": False, "updated": None, "url": CHIRPS_URL, "error": str(e)[:120]}
 
 
 def build(verbose=True):
@@ -255,7 +275,8 @@ def build(verbose=True):
               "boxes": {("land_" + k): gpcp_stats(g, [np.nan if v is None else v for v in v_], months_back=24) for k, v_ in g["boxes"].items()},
               "fresh": fresh, "source": "GPCP v2.3 monthly, NOAA PSL OPeNDAP, 2.5°, mm/day"}
     chirps = chirps_probe(verbose=verbose)
-    doc = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "regions": regions, "gpcp": gl, "chirps_reachable": chirps,
+    doc = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "regions": regions, "gpcp": gl,
+           "chirps_reachable": bool(chirps.get("reachable")), "chirps": chirps,
            "errors": errors, "secs": int(time.time() - t0),
            "note": ("Rain by region and for the planet. Regions: ERA5 daily precipitation summed over the box (Open-Meteo, "
                     "3×3 grid, cosine weights) since 1981, the last 30 and 90 days against the 1991–2020 normal of the same "

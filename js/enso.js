@@ -3962,6 +3962,25 @@
     return s2 + '</svg>';
   }
 
+  /* НА КАКОЕ ЧИСЛО ЭТИ ЧИСЛА (владелец 17.09: «смотрю дневной 3.4 уже выше, а там старые
+     данные или что»). Вердикт пишется в момент полного разбора и дальше НЕ переписывается —
+     это правило панели: написанное остаётся написанным, поправка приписывается снизу. А ряды
+     между разборами живут дальше, и лёгкий прогон их пересчитывает. Значит список «что
+     отслеживать» может отстать от собственных чисел панели, и молчать об этом нельзя: читатель
+     видит +2.9 в вердикте и +2.96 на графике и не знает, какое из них сегодняшнее. Пишем прямо:
+     числа — на момент разбора, а вот что стало с тех пор. */
+  function watchAsOf() {
+    var D = S.D || {}, F = S.F || {}, out = 'Numbers as at the assessment of ' + esc((D.stamp || '').slice(0, 16))
+      + ': the verdict is written once and not recomputed between assessments, while the series go on.';
+    var a = ((F.series || {}).sst_nino34) || {};
+    if (F.stamp && F.assessed_stamp === D.stamp && a.last_date && a.last_date !== a.assessed_last_date) {
+      out += ' Since then the daily ' + zone('nino34') + ' has moved from ' + fnum(a.assessed_last_value)
+        + ' (' + esc(a.assessed_last_date) + ') to <b>' + fnum(a.last_value) + '</b> (' + esc(a.last_date)
+        + '), which no rule here has been applied to yet.';
+    }
+    return '<div class="why">' + out + '</div>';
+  }
+
   function viewVerdict() {
     var D = S.D, sm = D.summary || {}, J = S.J || {};
     var k = sub('verdict', 'now');
@@ -4008,7 +4027,7 @@
       return '<div class="gl-i"><b>' + esc(r[0]) + '</b>' + mark(r[1]) + '<div class="s">' + vLink('open the numbers', r[2], r[3]) + '</div></div>';
     }).join('') +
       '<div class="gl-i"><b>What to watch</b><ul>' + (sm.watch || []).map(function (x) { return '<li>' + mark(x) + '</li>'; }).join('') +
-      '</ul><div class="s">' + vLink('risks and their series', 'now', 'analogs') + ' ' + vLink('models', 'models', 'plume') + ' ' + vLink('air and fuel', 'air', 'fuel') + '</div></div>' +
+      '</ul>' + watchAsOf() + '<div class="s">' + vLink('risks and their series', 'now', 'analogs') + ' ' + vLink('models', 'models', 'plume') + ' ' + vLink('air and fuel', 'air', 'fuel') + '</div></div>' +
       (cav.length ? '<div class="gl-i"><b>Caveats</b><ul>' + cav.map(function (x) { return '<li>' + mark(x) + '</li>'; }).join('') + '</ul>' +
         '<div class="s">' + vLink('sources and freshness', 'how', 'sources') + '</div></div>' : '');
     body.appendChild(dl);
@@ -7785,7 +7804,9 @@
       keys.map(function (k) { var r2 = RG[k], a = r2.sum30, b = r2.sum90, gb2 = G && G.boxes ? G.boxes[k] : null; var cls = fin(a.pct_of_normal) ? (a.pct_of_normal < 60 ? ' top' : (a.pct_of_normal > 160 ? ' warn' : '')) : '';
         return '<tr><td style="white-space:nowrap;min-width:190px">' + esc(LAND_NAME[k] || k) + '<div class="sub">' + esc(boxLabel(r2.box)) + '</div></td><td class="num">' + fnum(a.now, 0, false) + '</td><td class="num' + cls + '">' + a.pct_of_normal + ' %</td><td class="num">' + a.rank_pct + ' % of years</td><td class="num">' + b.pct_of_normal + ' %</td><td class="act">' + Object.keys(a.analogs).sort().map(function (y) { return y + ': ' + fnum(a.analogs[y], 0, false); }).join(' · ') + '</td><td class="num">' + (gb2 ? gb2.pct_of_normal + ' %' : '·') + '</td></tr>'; }).join('') + '</tbody></table>';
     body.appendChild(wrap);
-    body.appendChild(el('div', 'cap', esc(PR.note || '') + ' Red: under 60 % of normal over 30 days, amber: over 160 %. Built ' + esc(PR.built) + (PR.chirps_reachable ? '; CHIRPS reachable, not yet wired' : '; CHIRPS not reachable') + '.'));
+    body.appendChild(el('div', 'cap', esc(PR.note || '') + ' Red: under 60 % of normal over 30 days, amber: over 160 %. Built ' + esc(PR.built) + (PR.chirps_reachable
+        ? '; CHIRPS is reachable at its source' + ((PR.chirps || {}).updated ? ' and was built ' + esc((PR.chirps || {}).updated) : '') + ', not yet wired'
+        : '; CHIRPS did not answer at its source today') + '.'));
     worksFoot(body, 'block:rain');
   }
 
