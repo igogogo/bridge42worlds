@@ -38,6 +38,7 @@ import sys as _sys
 import pathlib as _pl
 _sys.path.insert(0, str(_pl.Path(__file__).resolve().parent))
 import safeio   # noqa: E402
+from numfmt import r2   # noqa: E402
 SNAP = ROOT / "snapshots"
 
 
@@ -51,7 +52,7 @@ def diff_against(prev, cur):
         if c["last_date"] != p["last_date"]:
             out.append(f"{lab}: data advanced from {p['last_date']} to {c['last_date']}; "
                        f"last day {c['last_value']:+.2f} °C (was {p['last_value']:+.2f}), "
-                       f"30-day anomaly {c['level30']['anom']:+.2f} (was {p['level30']['anom']:+.2f}).")
+                       f"30-day anomaly {r2(c['level30']['anom']):+.2f} (was {r2(p['level30']['anom']):+.2f}).")
         else:
             out.append(f"{lab}: no new days, the series still ends on {c['last_date']}.")
         if c["records"]["streak"] != p["records"]["streak"]:

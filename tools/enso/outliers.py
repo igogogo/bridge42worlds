@@ -39,6 +39,7 @@ ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
 import sys as _sys
 _sys.path.insert(0, str(Path(__file__).resolve().parent))
 import safeio   # noqa: E402
+from numfmt import r2   # noqa: E402  одно округление на всех (17.09)
 OUT = ROOT / "outliers.json"
 MIN_YEARS = 20                  # короче — ранг ничего не значит
 STALE_DAYS = 14                 # старше — в конец списка, с пометкой
@@ -59,8 +60,8 @@ def _rows_from_watch(key, name, group, w, where=None, extra=None):
     z = l30.get("z")
     stale = (w or {}).get("days_stale")
     return {"key": key, "name": name, "group": group, "where": where,
-            "anom": round(float(l30["anom"]), 2), "rank": rank, "of": of,
-            "z": (round(float(z), 2) if z is not None else None),
+            "anom": r2(l30["anom"]), "rank": rank, "of": of,
+            "z": r2(z),
             "pct": l30.get("pct"), "date": (w or {}).get("last_date"),
             "stale_days": stale, "unit": "°C",
             "extra": extra or {}}

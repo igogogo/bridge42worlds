@@ -144,6 +144,10 @@ def build(verbose=False):
     for aid, a in ALERTS_NOW.items():                            # заголовок нужен строке «снята»
         ASEEN[aid]["title"] = a.get("title") or aid
     safeio.write_text(ALERT_FILE, json.dumps(ASEEN, ensure_ascii=False, indent=1))
+    for rid, r in risks_by_id.items():                           # и риску тоже: снятый уже без заголовка
+        if rid and rid in SEEN:
+            SEEN[rid]["title"] = r.get("title") or rid
+    safeio.write_text(SEEN_FILE, json.dumps(SEEN, ensure_ascii=False, indent=1))
 
     # 1. значения
     for key, (title, view, sub) in WATCHED.items():
@@ -208,9 +212,29 @@ def build(verbose=False):
                 items.append({"date": d, "kind": "risk", "title": (r.get("title") or m.get("title") or rid) + ": level " + str(prev["v"]) + " → " + str(last["v"]),
                               "detail": r.get("horizon") or "", "why": (r.get("plain") or "")[:280], "go": ["risk", rid]})
 
+    # 2а. риск снят. «New risk» лента писала, «Alert cleared» писала, а конца у истории риска
+    # не было: два риска, снятые разбором 17.09, висели в ленте «новыми» с 14 и 15 сентября.
+    # Тот же порядок, что у тревог: печатаем один раз, пометка gone держит строку от повтора.
+    day = (D.get("generated") or "")[:10]
+    changed_r = False
+    for rid, s in SEEN.items():
+        if rid in risks_by_id or s.get("quiet") or s.get("gone"):
+            continue
+        if (s.get("last") or "") >= since.isoformat():
+            # День снятия — первый разбор ПОСЛЕ последнего дня, когда риск ещё стоял; не «сегодня»:
+            # риск, снятый три дня назад, иначе получил бы сегодняшнюю дату.
+            gone_day = min([p.stem[:8] for p in _all_snaps if p.stem[:8] > (s.get("last") or "").replace("-", "")] or [day.replace("-", "")])
+            gone_day = gone_day[:4] + "-" + gone_day[4:6] + "-" + gone_day[6:8] if len(gone_day) == 8 else day
+            title = s.get("title") or ((J.get("metrics") or {}).get("risk:" + rid) or {}).get("title") or rid
+            items.append({"date": gone_day, "kind": "risk", "title": "Risk cleared: " + title,
+                          "detail": "the rule no longer fires on the " + gone_day + " assessment", "why": "", "go": ["verdict", None]})
+        s["gone"] = day
+        changed_r = True
+    if changed_r:
+        safeio.write_text(SEEN_FILE, json.dumps(SEEN, ensure_ascii=False, indent=1))
+
     # 3. тревоги: сравнение с тем, что было неделю назад
     since_note = ""
-    day = (D.get("generated") or "")[:10]
     for aid, a in ALERTS_NOW.items():
         s = ASEEN.get(aid) or {}
         if s.get("first") and s["first"] >= since.isoformat() and not s.get("quiet"):

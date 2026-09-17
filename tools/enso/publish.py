@@ -140,6 +140,21 @@ def push_index(no_index, why):
           "починить: python tools/enso/concepts_link.py --run")
 
 
+def deploy(files, env, run):
+    """Выкладчик отдельным процессом; его вывод — на консоль как прежде, а при отказе ещё
+    и в журнал прогона: код возврата без слов на вкладке Ops ничего не объясняет (17.09)."""
+    p = subprocess.run([sys.executable, "cloudflare/deploy_r2.py", "--only", *files], cwd=str(ROOT), env=env,
+                       capture_output=True, text=True, encoding="utf-8", errors="replace")
+    if p.stdout:
+        print(p.stdout, end="")
+    if p.stderr:
+        print(p.stderr, end="", file=sys.stderr)
+    if p.returncode != 0:
+        tail = [ln.strip() for ln in (p.stderr + "\n" + p.stdout).splitlines() if ln.strip()]
+        run.error(" | ".join(tail[-3:]) or f"deploy_r2 exit code {p.returncode}")
+    return p.returncode
+
+
 def json_guard(files):
     """NaN и Infinity в наших файлах — это МЁРТВАЯ вкладка, а не мелочь.
 
@@ -205,7 +220,7 @@ def main():
         run = OPSLOG.Run("publish-fresh")
         env = dict(os.environ, B42_DEPLOY_OK="1", PYTHONIOENCODING="utf-8")
         json_guard(FRESH_FILES)
-        rc = subprocess.run([sys.executable, "cloudflare/deploy_r2.py", "--only", *FRESH_FILES], cwd=str(ROOT), env=env).returncode
+        rc = deploy(FRESH_FILES, env, run)
         run.finish("ok" if rc == 0 else "failed", files=len(FRESH_FILES))
         print("выкладка свежего слоя:", "ок" if rc == 0 else f"код {rc}")
         if rc == 0:
@@ -240,7 +255,7 @@ def main():
     run = OPSLOG.Run("publish")
     env = dict(os.environ, B42_DEPLOY_OK="1", PYTHONIOENCODING="utf-8")
     json_guard(FILES)
-    rc = subprocess.run([sys.executable, "cloudflare/deploy_r2.py", "--only", *FILES], cwd=str(ROOT), env=env).returncode
+    rc = deploy(FILES, env, run)
     run.finish("ok" if rc == 0 else "failed", stamp=cur.get("stamp"), files=len(FILES),
                reviewed=bool((s.get("review") or {}).get("stamp") == cur.get("stamp")))
     print("выкладка:", "ок" if rc == 0 else f"код {rc}")
