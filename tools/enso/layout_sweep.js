@@ -149,6 +149,24 @@
 
   /* Подпись кнопки — только её собственный текст. В кнопке подвкладки сидит ещё значок
      подсказки <i class="ti">, и textContent приклеивал его к названию: «Sourcesi». */
+  /* ЖДЁМ, ПОКА СЦЕНА ПЕРЕСТАНЕТ МЕНЯТЬСЯ. Постоянной паузы мало: глобус тянет свою библиотеку
+     и дорисовывает узлы уже после неё, и обход мерил наполовину собранную сцену — отсюда
+     замечания, которых на готовой странице нет (17.09). Смотрим на размер разметки сцены двумя
+     замерами подряд: совпали — значит встала. Потолок держим, чтобы вечная анимация не
+     остановила обход. */
+  async function settle(ms, capMs) {
+    await wait(ms);
+    var b = document.querySelector('.stage-body');
+    if (!b) return;
+    var end = Date.now() + (capMs || 2600), prev = -1;
+    while (Date.now() < end) {
+      var now = b.innerHTML.length + '|' + Math.round(b.scrollHeight);
+      if (now === prev) return;
+      prev = now;
+      await wait(260);
+    }
+  }
+
   function label(el) {
     var own = '';
     [].forEach.call(el.childNodes, function (n) { if (n.nodeType === 3) own += n.nodeValue; });
@@ -164,7 +182,7 @@
 
   async function sweep(opts) {
     opts = opts || {};
-    var settle = opts.settle || SETTLE;
+    var pause = opts.settle || SETTLE;
     var out = [], scenes = 0;
 
     function take(name, roots) {
@@ -186,7 +204,7 @@
       if (i >= tabs.length) break;
       var name = label(tabs[i]);
       tabs[i].click();
-      await wait(settle);
+      await settle(pause);
       var m = segs().length;
       if (!m) { take(name, ['.stage-body']); continue; }
       for (var j = 0; j < m; j++) {
@@ -194,7 +212,7 @@
         if (!ss[j]) break;
         var sub = label(ss[j]);
         ss[j].click();
-        await wait(settle);
+        await settle(pause);
         take(name + ' / ' + sub, ['.stage-body']);
       }
     }

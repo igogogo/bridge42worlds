@@ -6446,6 +6446,23 @@
   }
   function arrow(v, d) { return fin(v) ? '<span class="' + upDown(v) + '">' + (v > 0 ? '▲' : (v < 0 ? '▼' : '=')) + ' ' + fnum(Math.abs(v), d == null ? 1 : d, false) + '</span>' : ''; }
 
+  /* ПОЛНЫЙ НАБОР, А НЕ ПЕРВЫЕ СОРОК ВОСЕМЬ (владелец 17.09: «в идеале должен быть полный
+     набор»). Потолок стоял из-за отрисовки: обзор рисовал ВСЕ плитки сразу и дважды, и шесть
+     десятков графиков на телефоне были заметны. Резало при этом ровно риски — они добавляются
+     последними, — то есть из обзора выпадало именно то, ради чего панель существует: сегодня
+     семнадцать штук. Теперь плитка рисуется, когда доходит до экрана (см. drawOne ниже), и
+     держать потолок незачем; двести остаются сторожем от бесконечного цикла, а не мерой. */
+  var OV_MAX = 200;
+  /* «i» НА КАЖДОМ ГРАФИКЕ ОБЗОРА (владелец 17.09). У плиток KPI он есть с 15.09, а у мозаики
+     графиков не было: читатель видел маленькую картинку и заголовок, а что она значит — только
+     если догадается навести на саму плитку. Берём карточку той сцены, куда плитка ведёт; у
+     плитки риска своей сцены нет, там объяснение самого риска. */
+  function ovTileI(t) {
+    var c = t.go[0] === 'risk' ? null : plainCard(t.go[0], t.go[1] == null ? '' : String(t.go[1]));
+    if (!c) c = { name: t.title, def: t.meaning, why: 'Click the tile itself to open the scene this chart lives on.' };
+    return '<span role="button" tabindex="0" class="plain-i ov-i" data-src="' + esc(JSON.stringify(c)) + '">i</span>';
+  }
+
   function ovTiles() {
     S._ovCut = 0;
     var D = S.D, NW = D.noaa, N = D.nino34, IRI = D.iri && !D.iri.error ? D.iri : null, A = D.air || {}, O = D.oisst || {}, SB = D.subsurface || {}, BG = D.background || {}, FO = D.food && !D.food.error ? D.food : null, G = D.gulf || {};
@@ -6494,8 +6511,19 @@
     /* плитки новых источников 07.09 */
     var RA1 = S.RA || {}, PR1 = S.PR || {}, RD1 = (S.RD || {}).series || {}, HV1 = S.HV || {}, MN1 = S.MN || {};
     var cr1 = ((RA1.sources || {}).n21_cris || {}).series || {}, cur1 = String((RA1.window || {}).current || 2026), dl1 = RA1.window ? radDays(RA1) : null;
-    if (cr1.walker_A) add('Raw Walker contrast', 'East minus west brightness temperature from raw granules; near zero this year.', ['radiance', 'walker'], function (w, h) { return chartRadSeries({ byYear: cr1.walker_A, cur: cur1, n: nWin, dayLabel: dl1, zero: true, title: 'Raw Walker, K, day' }, w, h); });
-    if (cr1.nino34_A && cr1.nino34_A.conv_frac) add('Deep convection over Niño 3.4', 'Share of cold cloud tops, this year against 2023–2025.', ['radiance', 'convection'], function (w, h) { var by = {}; Object.keys(cr1.nino34_A.conv_frac).forEach(function (y) { by[y] = {}; Object.keys(cr1.nino34_A.conv_frac[y]).forEach(function (d) { by[y][d] = cr1.nino34_A.conv_frac[y][d] * 100; }); }); return chartRadSeries({ byYear: by, cur: cur1, n: nWin, dayLabel: dl1, zero: true, title: 'Convection, % of footprints, day' }, w, h); });
+    /* ДЛИНА ОКНА СЧИТАЕТСЯ ЗДЕСЬ, А НЕ БЕРЁТСЯ ИЗ ЧУЖОЙ ОБЛАСТИ. Две плитки звали nWin —
+       переменную из viewRadiance, которой в этой функции нет, и обе падали с «nWin is not
+       defined». Не было видно: обе стояли за потолком в 48 плиток и никогда не рисовались.
+       Нашлось, как только потолок сняли (17.09). */
+    var W1 = RA1.window || {};
+    var nWin1 = (function () {
+      if (!W1.start || !W1.end) return 68;
+      var y = +cur1;
+      function d(md) { return new Date(y, parseInt(md.slice(0, 2), 10) - 1, parseInt(md.slice(3), 10)); }
+      return Math.round((d(W1.end) - d(W1.start)) / 864e5) + 1;
+    })();
+    if (cr1.walker_A) add('Raw Walker contrast', 'East minus west brightness temperature from raw granules; near zero this year.', ['radiance', 'walker'], function (w, h) { return chartRadSeries({ byYear: cr1.walker_A, cur: cur1, n: nWin1, dayLabel: dl1, zero: true, title: 'Raw Walker, K, day' }, w, h); });
+    if (cr1.nino34_A && cr1.nino34_A.conv_frac) add('Deep convection over Niño 3.4', 'Share of cold cloud tops, this year against 2023–2025.', ['radiance', 'convection'], function (w, h) { var by = {}; Object.keys(cr1.nino34_A.conv_frac).forEach(function (y) { by[y] = {}; Object.keys(cr1.nino34_A.conv_frac[y]).forEach(function (d) { by[y][d] = cr1.nino34_A.conv_frac[y][d] * 100; }); }); return chartRadSeries({ byYear: by, cur: cur1, n: nWin1, dayLabel: dl1, zero: true, title: 'Convection, % of footprints, day' }, w, h); });
     var gp1 = (PR1.gpcp || {}).global;
     if (gp1) add('Rain over the planet', gp1.pct_of_normal + ' % of normal in ' + gp1.last + '.', ['trend', 'rain'], function (w, h) { return chartRainBars({ ym: gp1.ym, values: gp1.values, normal: gp1.normal_series, title: 'Planet, mm per day, GPCP', unit: 'mm/day' }, w, h); });
     Object.keys(PR1.regions || {}).slice(0, 2).forEach(function (k) { var r0 = PR1.regions[k]; add('Rain, ' + (LAND_NAME[k] || k), r0.sum30.pct_of_normal + ' % of normal over 30 days.', ['trend', 'rain'], function (w, h) { return chartRainBars({ ym: r0.months.map(function (m) { return m.ym; }), values: r0.months.map(function (m) { return m.mm; }), normal: r0.months_normal, title: (LAND_NAME[k] || k) + ', mm per month', unit: 'mm', partialLast: true }, w, h); }); });
@@ -6505,12 +6533,12 @@
     (D.risks || []).forEach(function (r, i) {
       // усечение больше не молчаливое: считаем, сколько плиток не влезло, и говорим вслух
       if (!r.metric || !r.metric.values) return;
-      if (T2.length >= 48) { S._ovCut = (S._ovCut || 0) + 1; return; }
+      if (T2.length >= OV_MAX) { S._ovCut = (S._ovCut || 0) + 1; return; }
       if (T2.some(function (t) { return t.title === r.title; })) return;
       add(r.title, 'Level ' + r.level + ' · ' + r.horizon + '. ' + (r.plain || '').slice(0, 160), ['risk', i], function (w, h) { return chartMetric(r.metric, w, h, r.metric.name); });
     });
-    if (T2.length > 48) S._ovCut = (S._ovCut || 0) + (T2.length - 48);
-    return T2.slice(0, 48);
+    if (T2.length > OV_MAX) S._ovCut = (S._ovCut || 0) + (T2.length - OV_MAX);
+    return T2.slice(0, OV_MAX);
   }
 
   function viewOverview() {
@@ -6562,8 +6590,8 @@
       /* Название — отдельным элементом, а не голым текстом: голый текст внутри flex
          становится безымянным элементом, который не умеет ужиматься, и на телефоне длинное
          название выталкивало метку «legend» за край плитки (проверка 06.09, 375 px). */
-      d.innerHTML = '<div class="ov-t"><span class="ov-tt">' + esc(t.title) + '</span></div><div class="ov-p"></div>';
-      d.addEventListener('click', function (e) { if (e.target.closest('[data-pick]')) return; S._back = 'overview'; S.full = false; S.pick = null; if (t.go[0] === 'risk') { S.risk = t.go[1]; S.view = 'risk'; } else { S.view = t.go[0]; if (t.go[1] != null) S.sub[t.go[0]] = t.go[1]; S.risk = null; } mScreen(t.go[0] + (t.go[1] != null && t.go[0] !== 'risk' ? '/' + t.go[1] : '')); render(); });
+      d.innerHTML = '<div class="ov-t"><span class="ov-tt">' + esc(t.title) + '</span>' + ovTileI(t) + '</div><div class="ov-p"></div>';
+      d.addEventListener('click', function (e) { if (e.target.closest('[data-pick], .plain-i')) return; S._back = 'overview'; S.full = false; S.pick = null; if (t.go[0] === 'risk') { S.risk = t.go[1]; S.view = 'risk'; } else { S.view = t.go[0]; if (t.go[1] != null) S.sub[t.go[0]] = t.go[1]; S.risk = null; } mScreen(t.go[0] + (t.go[1] != null && t.go[0] !== 'risk' ? '/' + t.go[1] : '')); render(); });
       grid.appendChild(d);
       t._el = d;
     });
@@ -6572,9 +6600,11 @@
     body.appendChild(el('div', 'cap', tiles.length + ' tiles: the same charts as on their scenes, drawn small. Point at a tile for its meaning; click to open.' +
       (cut ? ' ' + cut + ' more would not fit and are not drawn here; every one of them is on its own scene.' : '') + ' ' + esc((D.stamp || '').slice(0, 16)) + '.'));
     // рисуем после раскладки: у окон должны быть настоящие размеры
-    function drawAll() {
-      tiles.forEach(function (t) {
+    function drawOne(t) {
+      (function () {
+        if (t._drawn) return;
         var host = t._el.querySelector('.ov-p'); if (!host || !host.isConnected) return;
+        t._drawn = true;
         var w = Math.max(160, Math.round(host.clientWidth)), h = Math.max(110, Math.round(host.clientHeight));
         /* В плитке легенда не помещается ни у одного графика: 300 пикселей ширины на
            картинку и подписи (владелец 06.09: «легенды везде сделать иконкой и открывать в
@@ -6594,10 +6624,32 @@
           }
         }
         S._tight = false; S._legend = null;
-      });
+      })();
     }
-    requestAnimationFrame(drawAll);
-    setTimeout(drawAll, 300);
+    /* ПЛИТКА РИСУЕТСЯ, КОГДА ДОХОДИТ ДО ЭКРАНА, И РЕШАЕТ ЭТО ЗАМЕР, А НЕ НАБЛЮДАТЕЛЬ.
+       Прежде обзор рисовал все плитки сразу и повторял через 300 мс — шесть десятков графиков
+       на первом же открытии, и ради этого стоял потолок в 48 штук, резавший как раз риски.
+
+       Первым делом здесь стоял IntersectionObserver, и он оказался негоден: в невидимой или
+       незакрашенной странице он молчит про ВСЕ элементы разом — проверено вживую, свой
+       наблюдатель поверх той же сетки выдал ноль пересечений на плитках, которые в этот момент
+       были на экране. А панель живёт и в скрытой вкладке, и в безоконном браузере ночного
+       обхода, где рисование как раз и нужно проверить. Поэтому считаем сами: прямоугольник
+       плитки против прямоугольника сцены, с запасом в 600 пикселей, по событию прокрутки.
+       Если у сцены нет размеров вовсе (окно скрыто, замер бессмыслен) — рисуем всё: лишняя
+       работа там, где её никто не ждёт, лучше пустого обзора. */
+    function nearView(t) {
+      var rb = body.getBoundingClientRect();
+      if (rb.height < 40) return true;                       // размеров нет — не гадаем
+      var r = t._el.getBoundingClientRect();
+      return r.bottom > rb.top - 600 && r.top < rb.bottom + 600;
+    }
+    function drawVisible() {
+      for (var i = 0; i < tiles.length; i++) if (!tiles[i]._drawn && nearView(tiles[i])) drawOne(tiles[i]);
+    }
+    body.addEventListener('scroll', drawVisible, { passive: true });
+    requestAnimationFrame(drawVisible);
+    setTimeout(drawVisible, 300);
   }
 
   // ---------------------------------------------------------------- News (владелец 05.09)
