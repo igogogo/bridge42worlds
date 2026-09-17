@@ -990,6 +990,10 @@
 
   /* Сводное по живым моделям на сезоне сравнения — то самое число, ради которого всё
      затевалось: «а то мы показываем, что всё хорошо, а это не так» (владелец 04.09). */
+  /* Какие товары журнал ведёт своими рядами. Остальные одиннадцать показываются так же, но
+     истории у них нет: в журнал попали те четыре, что важнее прочих для продовольствия (17.09). */
+  var PRICE_JK = { palm_oil: 'price_palm_oil', rice: 'price_rice', fishmeal: 'price_fishmeal', wheat: 'price_wheat' };
+
   function liveNow(IRI, which) {
     var LV = IRI.live, ao = IRI.against_observed || {}, ss = IRI.seasons || [];
     var arr = LV && (which === 'rms' ? LV.rms : LV.mean);
@@ -4046,6 +4050,8 @@
 
     var kp = el('div', 'kpis');
     kp.innerHTML = '<div class="kpi"><div class="kn">' + term('riskindex', 'risk index') + '</div><div class="kv">' + D.risk_index + '<small>of 100</small></div><div class="km">' + (D.risks || []).length + ' risks on the board, ' + (D.alerts || []).length + ' alerts<br>' + esc(riskScaleLine(D)) + '</div>' + kmeta('risk_index') + '</div>' +
+      '<div class="kpi"><div class="kn">risks on the board</div><div class="kv">' + (D.risks || []).length + '<small>of them ' + (D.risks || []).filter(function (r) { return +r.level >= 4; }).length + ' at level 4\u20135</small></div>'
+        + '<div class="km">every rule that fired today; the index above is their saturating sum, not their count</div>' + kmeta('n_risks') + '</div>' +
       '<div class="kpi"><div class="kn">verdicts stored</div><div class="kv" style="font-size:17px">' + ((J.verdicts || []).length) + '</div><div class="km">only the ones that actually changed</div>' + kmeta(null, 'our own record', (J.built || '').slice(0, 10)) + '</div>' +
       '<div class="kpi"><div class="kn">who wrote and who checked</div>' +
       '<div class="kv crew"><span class="cr-r">writes</span> ' + esc(sm.model || 'rules') + '<br>' +
@@ -4187,6 +4193,9 @@
     var kp = el('div', 'kpis');
     kp.innerHTML =
       '<div class="kpi"><div class="kn">' + term('oisst', 'daily OISST') + '</div><div class="kv">' + dy.big + '</div><div class="km">30 days ' + fnum(N.current30) + ', ' + term('rank', 'rank ' + N.all_years_rank) + ' of all years</div><div class="kd"><span>slope ' + fnum(n34.slope14.now) + '</span><span>' + term('cusum', 'CUSUM') + ' ' + (n34.cusum.alarm ? 'alarm' : 'quiet') + '</span></div>' + kmeta('n34_daily') + '</div>' +
+      '<div class="kpi"><div class="kn">' + zone('nino34') + ' mean of 30 days</div><div class="kv">' + fnum(N.current30) + '<small>\u00b0C</small></div>'
+        + '<div class="km">' + term('rank', 'rank ' + N.all_years_rank) + ' of all years on the same 30 days; the single day above is noisier and the month slower</div>'
+        + kmeta('n34_30d') + '</div>' +
       '<div class="kpi"><div class="kn">' + term('weekly', 'NOAA weekly') + '</div><div class="kv">' + wk.big + '</div><div class="km">' + term('percentile', ord(Math.round(NW.n34_rank_pct)) + ' percentile') + ' of this season’s weeks</div><div class="kd"><span>4 w <span class="' + upDown(c4.n34a) + '">' + fnum(c4.n34a, 1) + '</span></span><span>8 w <span class="' + upDown(c8.n34a) + '">' + fnum(c8.n34a, 1) + '</span></span></div>' + kmeta('n34_weekly') + '</div>' +
       '<div class="kpi"><div class="kn">' + term('oni', 'ONI official') + ' · ' + term('roni', 'RONI') + '</div><div class="kv">' + on.big + '<small>' + esc(ls) + '</small></div><div class="km">analogues: ' + [1982, 1997, 2015, 2023].map(function (y) { return y + ' ' + fnum((ONI.analogs[y] || {})[ls]); }).join(', ') + '</div>' +
       (ONI.roni && !ONI.roni.error && fin(ONI.roni.last) ? '<div class="chgline">' + term('roni', 'RONI') + ' ' + fnum(ONI.roni.last) + ' (' + esc(ONI.roni.last_season) + '); ONI − RONI = ' + fnum(ONI.roni.gap_last) + ' is the warm background</div>' : '') + kmeta('oni') + '</div>' +
@@ -4779,6 +4788,25 @@
             '<td class="num">' + c.issues_low + ' / ' + c.of + '</td><td class="num">' + fnum(c.mean_err) + '</td><td class="num' + ((c.worst_err || 0) <= -1 ? ' top' : '') + '">' + fnum(c.worst_err) + '</td><td>' + esc(c.since || '—') + '</td></tr>';
         }).join('') + '</tbody></table>';
       body.appendChild(tb);
+      /* ШЕСТЬ ЧИСЕЛ, КОТОРЫЕ СЧИТАЮТСЯ КАЖДЫЙ ПРОГОН И НИГДЕ НЕ БЫЛИ НАЗВАНЫ (17.09). Классы
+         моделей стояли только в заголовке сцены и в подписях легенды: ни стрелки «с прошлого
+         выпуска», ни истории у них не было, хотя журнал их держит с самого начала. */
+      var kpm = el('div', 'kpis');
+      kpm.innerHTML = (tally ? '<div class="kpi"><div class="kn">keeping up</div><div class="kv">' + (tally.ok || 0) + '<small>models</small></div>'
+          + '<div class="km">within a quarter degree of the official index for the season they forecast</div>' + kmeta('models_ok') + '</div>'
+        + '<div class="kpi"><div class="kn">lagging</div><div class="kv">' + (tally.lag || 0) + '<small>models</small></div>'
+          + '<div class="km">behind reality but still following it</div>' + kmeta('models_lag') + '</div>'
+        + '<div class="kpi"><div class="kn">broken</div><div class="kv">' + (tally.broke || 0) + '<small>models</small></div>'
+          + '<div class="km">no longer tracking the event at all</div>' + kmeta('models_broke') + '</div>' : '')
+        + '<div class="kpi"><div class="kn">below reality</div><div class="kv">' + ((ao.below || []).length || 0) + '<small>of ' + (ao.n || 0) + '</small></div>'
+          + '<div class="km">in the ' + esc(ao.season || '') + ' season of the latest issue</div>' + kmeta('models_below_n') + '</div>'
+        + '<div class="kpi"><div class="kn">above reality</div><div class="kv">' + Math.max(0, (ao.n || 0) - ((ao.below || []).length || 0)) + '<small>of ' + (ao.n || 0) + '</small></div>'
+          + '<div class="km">the rest of the same issue</div>' + kmeta('models_above') + '</div>'
+        + '<div class="kpi"><div class="kn">live models</div><div class="kv">' + (((IRI.live || {}).n_live) != null ? IRI.live.n_live : '·') + '<small>of ' + (((IRI.live || {}).n_all) != null ? IRI.live.n_all : '·') + '</small></div>'
+          + '<div class="km">still counted in the live mean; the broken ones carry weight zero</div>' + kmeta('n_live') + '</div>'
+        + '<div class="kpi"><div class="kn">mean over the live models</div><div class="kv">' + fnum(liveNow(IRI, 'mean')) + '<small>\u00b0C</small></div>'
+          + '<div class="km">weighted by how well each has been keeping up</div>' + kmeta('live_mean') + '</div>';
+      body.appendChild(kpm);
       body.appendChild(el('div', 'cap', 'For every stored issue we take its nearest season that now has an official ONI and count the models that came in below it. ' + (rows.length ? 'From ' + esc(rows[0].issue) + ' (' + rows[0].share + ' %) to ' + esc(rows[rows.length - 1].issue) + ' (' + rows[rows.length - 1].share + ' %). ' : '') + esc(bd.note || '')));
     } else if (k === 'revision') {
       /* ТРИ ВЫПУСКА, А НЕ ДВА. Владелец 04.09: «в revisions хотели не за один месяц изменения,
@@ -5112,12 +5140,31 @@
       body.appendChild(kp);
     } else if (k === 'layers' && L) {
       plot(body, function (w, h) { return chartLayers(L.items, w, h); });
+      /* Четыре этажа были только линиями на графике. Два из них журнал ведёт рядами
+         (тропосфера и стратосфера тропиков), и до сегодня эти ряды не были названы нигде. */
+      var kpl = el('div', 'kpis');
+      var LJK = { tlt: 'tlt_tropics', tls: 'tls_tropics' };
+      kpl.innerHTML = (L.items || []).map(function (p) {
+        var jk = LJK[p.key];
+        return '<div class="kpi"><div class="kn">' + esc(p.title) + '</div><div class="kv">' + fnum(p.tropics) + '<small>\u00b0C, tropics</small></div>'
+          + '<div class="km">globe ' + fnum(p.globe) + '; the ocean leads this floor by ' + (p.lag != null ? p.lag + ' months' : 'an unmeasured lag')
+          + (fin(p.r) ? ', fit r ' + fnum(p.r, 2, false) : '') + '</div>'
+          + (jk ? kmeta(jk) : kmeta(null, 'UAH satellite v6.1', p.date || '')) + '</div>';
+      }).join('');
+      body.appendChild(kpl);
       body.appendChild(el('div', 'cap', esc(L.note)));
     } else if (C) {
       plot(body, function (w, h) { return chartAir(C.parts, w, h); });
       body.appendChild(el('div', 'cap', esc(C.note)));
       var kp2 = el('div', 'kpis');
-      kp2.innerHTML = C.parts.slice(0, 4).map(function (p) {
+      /* Счёт признаков («3 из 5») жил только в заголовке сцены, а это отдельный ряд журнала
+         со своей историей: сколько признаков держится — и держится ли их больше или меньше,
+         чем в прошлый раз (17.09). */
+      kp2.innerHTML = '<div class="kpi"><div class="kn">' + term('coupling', 'signs in place') + '</div><div class="kv">'
+          + (C.score != null ? C.score : '\u00b7') + '<small>of ' + (C.of != null ? C.of : '\u00b7') + '</small></div>'
+          + '<div class="km">' + esc(C.verdict || '') + '; when they stop answering, the event stops being an El Ni\u00f1o in the usual sense</div>'
+          + kmeta('coupling_score') + '</div>'
+        + C.parts.slice(0, 4).map(function (p) {
         return '<div class="kpi"><div class="kn">' + esc(p.title) + '</div><div class="kv">' + fnum(p.value) + '<small>σ</small></div>' +
           '<div class="km">' + (p.on ? 'in place' : 'not in place') + '; three-month mean ' + fnum(p.mean3) + '</div>' + kmeta(p.key) + '</div>';
       }).join('');
@@ -5417,7 +5464,7 @@
         var itA = items.filter(function (x) { return x.key === pk2; })[0] || items[0], serA = itA.series || {}, nA = (serA.months || []).length, PA = pathsOf(itA.key);
         plot(body, function (w, h) { return chartPrice(itA, w, h, { paths: PA, align: align }); });
         var kA = el('div', 'kpis');
-        kA.innerHTML = '<div class="kpi"><div class="kn">' + esc(itA.name) + ' · ' + esc(itA.date) + '</div><div class="kv">' + fnum(itA.value, itA.value > 100 ? 0 : 2, false) + '<small> ' + esc(itA.unit.replace(/[()]/g, '')) + '</small></div><div class="km">month ' + fnum(itA.mom_pct, 1) + ' %, year ' + fnum(itA.yoy_pct, 1) + ' %' + (fin(itA.since_onset_pct) ? ', since the event began ' + fnum(itA.since_onset_pct, 1) + ' %' : '') + '</div>' + kmeta(null, 'World Bank Pink Sheet', itA.date) + '</div>' +
+        kA.innerHTML = '<div class="kpi"><div class="kn">' + esc(itA.name) + ' · ' + esc(itA.date) + '</div><div class="kv">' + fnum(itA.value, itA.value > 100 ? 0 : 2, false) + '<small> ' + esc(itA.unit.replace(/[()]/g, '')) + '</small></div><div class="km">month ' + fnum(itA.mom_pct, 1) + ' %, year ' + fnum(itA.yoy_pct, 1) + ' %' + (fin(itA.since_onset_pct) ? ', since the event began ' + fnum(itA.since_onset_pct, 1) + ' %' : '') + '</div>' + (PRICE_JK[itA.key] ? kmeta(PRICE_JK[itA.key]) : kmeta(null, 'World Bank Pink Sheet', itA.date)) + '</div>' +
           (PA && itA.onset && fin(itA.value) ? '<div class="kpi"><div class="kn">where the past events went</div><div class="kv" style="font-size:14px">' + Object.keys(PA.analogs).sort().map(function (y) { var r = PA.analogs[y], k12 = 6 + 12, k24 = 6 + 24, b0 = (itA.series.values || [])[(itA.series.months || []).indexOf(itA.onset)]; return y + ': ' + (fin(r.values[k12]) && b0 ? fnum(b0 * r.values[k12] / 100, 0, false) : '…') + ' at +12, ' + (fin(r.values[k24]) && b0 ? fnum(b0 * r.values[k24] / 100, 0, false) : '…') + ' at +24'; }).join(' · ') + '</div><div class="km">months after the onset, through the onset price</div>' + kmeta(null, 'Pink Sheet, our onset dates', itA.date) + '</div>' : '') +
           '<div class="kpi"><div class="kn">' + term('foodweight', 'food-security weight') + '</div><div class="kv">' + (itA.weight || 1) + '<small> of 5</small></div><div class="km">' + esc(itA.weight_basis || '') + '</div>' + kmeta(null, CM.weight_src || '', itA.date) + '</div>';
         body.appendChild(kA);
@@ -5454,6 +5501,22 @@
         if (t) { S.sub.goodsSort = t.getAttribute('data-gs'); render(); }
       });
       body.appendChild(wrapG);
+      /* ЧЕТЫРЕ ИМЕНОВАННЫХ КАНАЛА — СВОИМИ КАРТОЧКАМИ (17.09). Журнал ведёт ряды по пальмовому
+         маслу, рису, рыбной муке и пшенице, но на панели они жили только строками таблицы, а
+         строка таблицы не карточка: у неё нет ни стрелки «с прошлого значения», ни истории.
+         Сама карточка одного товара есть на соседней вкладке, но она за выбором, то есть
+         большую часть времени её никто не видит — и проверка её тоже не видит. */
+      var kg = el('div', 'kpis');
+      kg.innerHTML = ['palm_oil', 'rice', 'fishmeal', 'wheat'].map(function (key) {
+        var it = (CM.items || []).filter(function (x) { return x.key === key; })[0];
+        if (!it) return '';
+        return '<div class="kpi go" data-go="food" data-gosub="abs"><div class="kn">' + esc(it.name.replace(/,.*$/, '')) + '</div>'
+          + '<div class="kv">' + fnum(it.value, it.value > 100 ? 0 : 2, false) + '<small> ' + esc(String(it.unit || '').replace(/[()]/g, '')) + '</small></div>'
+          + '<div class="km">month ' + fnum(it.mom_pct, 1) + ' %, year ' + fnum(it.yoy_pct, 1) + ' %'
+          + (fin(it.since_onset_pct) ? ', since onset ' + fnum(it.since_onset_pct, 1) + ' %' : '') + '</div>'
+          + kmeta(PRICE_JK[key]) + '</div>';
+      }).join('');
+      body.appendChild(kg);
       body.appendChild(el('div', 'cap', esc(CM.note) + ' Prices are ' + esc(CM.as_of) + ', one month fresher than the FAO index. Click a column header to sort; red marks a rise unusual for the month or of 30 % and more over the year, blue a fall of the same size.'));
     }
   }

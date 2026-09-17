@@ -359,12 +359,11 @@ METRICS = {
     "price_wheat": dict(
         title="Wheat, US HRW", unit="$/mt", digits=0, src="World Bank Pink Sheet",
         val=lambda d: _price(d, "wheat"), date=lambda d: _price_date(d, "wheat")),
-    "peak_estimate": dict(
-        title="Peak estimate by analogues", unit="°C", digits=2, src="analogues 1982/1997/2015/2023",
-        val=lambda d: (_g(d, "nino34", "peak_estimate", "value")
-                       if isinstance(_g(d, "nino34", "peak_estimate"), dict)
-                       else _g(d, "nino34", "peak_estimate")),
-        date=lambda d: _g(d, "watch", "sst_nino34", "last_date")),
+    # «peak_estimate» снят 17.09. Он читал nino34.peak_estimate.value, а такого поля нет и не
+    # было: оценка пика — это вилка (additive_low/mid/high, ratio_mid) и потолок ряда, и панель
+    # НАМЕРЕННО отказывается называть пик одним числом (это записано в оговорках вердикта).
+    # Ряд, у которого значения не бывает по устройству, — не показатель, а обещание, которое
+    # некому исполнить.
 }
 
 
