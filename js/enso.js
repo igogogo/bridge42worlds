@@ -2368,8 +2368,12 @@
      в ряд: просто цифра с названием и стрелкой вверху; на стрелочку — историю»). Источник —
      журнал (journal.json), тот же, что у стрелок на плашках: значение последней записи,
      изменение к предыдущей. Порядок — по важности; сначала те, что изменились. */
-  var STRIP_KEYS = ['n34_daily', 'n4_weekly', 'n34_weekly', 'n3_weekly', 'n12_weekly', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
-  var STRIP_NAME = { n34_weekly: 'Niño 3.4 weekly', n34_daily: 'Niño 3.4 daily', n12_weekly: 'Niño 1+2 weekly', n3_weekly: 'Niño 3 weekly', n4_weekly: 'Niño 4 weekly', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean, anom', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
+  /* Суточные по зонам стоят рядом со своими недельными: неделя выходит по средам за прошлую
+     неделю и во время роста всегда отстаёт, а сутки — вчерашние. Порядок зон с запада на восток,
+     как везде на панели (17.09). */
+  var STRIP_KEYS = ['n34_daily', 'n4_weekly', 'n4_box', 'n34_weekly', 'n3_weekly', 'n3_box', 'n12_weekly', 'n12_box', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
+  var STRIP_NAME = { n34_weekly: 'Niño 3.4 weekly', n34_daily: 'Niño 3.4 daily', n12_weekly: 'Niño 1+2 weekly', n3_weekly: 'Niño 3 weekly', n4_weekly: 'Niño 4 weekly',
+    n4_box: 'Niño 4 daily, our box', n3_box: 'Niño 3 daily, our box', n12_box: 'Niño 1+2 daily, our box', n34_box: 'Niño 3.4 daily, our box', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean, anom', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
   /* РЕКОРДЫ ВПЕРЁД И РАМКОЙ. Владелец 10.09: «рекорды тоже как-то в ленте KPI отображать —
      мерцанием красной рамки или вперёд ставить». Панель уже знает про рекорды в четырёх
      местах, просто молчала об этом в полосе: ранг 1 у суточного Niño 3.4 и у поясов планеты,
@@ -2485,7 +2489,7 @@
   var KPI_PICK = { n34_weekly: ['wkey', 'n34a'], n12_weekly: ['wkey', 'n12a'], n3_weekly: ['wkey', 'n3a'], n4_weekly: ['wkey', 'n4a'] };
   var KPI_SCENE = { n34_weekly: 'now/weekly_a', n12_weekly: 'now/weekly_a', n34_daily: 'trend/sst_nino34', n34_30d: 'trend/sst_nino34', rec_sst_nino34: 'trend/sst_nino34', fc14_sst_nino34: 'trend/sst_nino34',
     n3_weekly: 'now/weekly_a', n4_weekly: 'now/weekly_a',
-    n34_box: 'ocean/surface', n12_box: 'ocean/surface', gulf_sst: 'ocean/surface', subsurface_warmest: 'ocean/moorings', d20_east: 'ocean/section',
+    n34_box: 'ocean/surface', n12_box: 'ocean/surface', n3_box: 'ocean/surface', n4_box: 'ocean/surface', gulf_sst: 'ocean/surface', subsurface_warmest: 'ocean/moorings', d20_east: 'ocean/section',
     oni: 'now/analogs', roni: 'now/analogs', risk_index: 'verdict', n_risks: 'now/analogs', n_alerts: 'now/analogs', scenario: 'regions',
     sst_world: 'trend', t2_world: 'trend', rec_sst_world: 'trend', rec_t2_world: 'trend', fc14_sst_world: 'trend', fc14_t2_world: 'trend',
     models_broke: 'models/breakdown', models_ok: 'models/breakdown', models_lag: 'models/breakdown', models_above: 'models/breakdown', models_below_n: 'models/breakdown', iri_share_below: 'models/breakdown', iri_peak: 'models/plume', live_mean: 'models/plume', n_live: 'models/plume',
@@ -6049,11 +6053,24 @@
           vLink('every year as a line', 'planet', 'temperature', 'planetTemp', 'sst_world')));
       }
       body.appendChild(el('div', 'cap', esc(O.note || '') + ' ' + esc(O.clim || '') + '. Dashes: the same days of 1982, 1997, 2015, 2023 and last year on the same box.' +
-        (ck ? ' Check against climatereanalyzer on ' + ck.n_days + ' overlapping days: mean offset ' + fnum(ck.offset, 3) + ' °C (sd ' + ck.sd + '); the spliced tail carries this offset.' : '')));
+        (ck ? ' Check against climatereanalyzer on ' + ck.n_days + ' overlapping days: mean offset ' + fnum(ck.offset, 3) + ' °C (sd ' + ck.sd + '); the spliced tail carries this offset.' : '') +
+        /* ДВЕ СУТОЧНЫЕ АНОМАЛИИ ОДНОГО БОКСА — ЭТО ДВЕ БАЗЫ, А НЕ ДВА ИЗМЕРЕНИЯ. Сверка выше
+           говорит о самой ВОДЕ: наш бокс и climatereanalyzer расходятся на сотые. Аномалии же
+           считаются от разных норм — здесь от нашей климатологии 1991–2020, а заглавное суточное
+           Niño 3.4 на карточке состояния приходит от climatereanalyzer с их нормой. Разница
+           постоянная и заметная, и молчать о ней нельзя: читатель видит два числа одной зоны за
+           один день (владелец 17.09). */
+        ((function () {
+          var ours = ((boxes.nino34 || {}).last_anom), head = ((D.nino34 || {}).current_day);
+          if (!fin(ours) || !fin(head)) return '';
+          return ' Every anomaly on this scene is against our own climatology of that box, so the zones here are comparable with each other.'
+            + ' The headline daily ' + zone('nino34') + ' on the state card comes from climatereanalyzer against its own normal: for ' + esc((boxes.nino34 || {}).last_date || '')
+            + ' ours reads ' + fnum(ours) + ' °C and theirs ' + fnum(head) + ' °C. The water is the same to within ' + (ck ? ck.sd : '0.07') + ' °C, as the check above shows; the gap is the reference normal, not the measurement.';
+        })())));
       var kp = el('div', 'kpis');
       kp.innerHTML = BOX_ORDER.map(function (o) {
         var b = boxes[o[0]]; if (!b || b.error && !b.dates) return '';
-        var jk = { nino34: 'n34_box', nino12: 'n12_box', gulf: 'gulf_sst' }[o[0]];
+        var jk = { nino34: 'n34_box', nino12: 'n12_box', nino3: 'n3_box', nino4: 'n4_box', gulf: 'gulf_sst' }[o[0]];
         return '<div class="kpi"><div class="kn">' + (ZONES[o[0]] ? zone(o[0]) : esc(o[1])) + '</div><div class="kv">' + (fin(b.last_anom) ? fnum(Math.abs(b.last_anom) < 0.005 ? 0 : b.last_anom) : fnum(b.last_sst, 2, false)) + '<small>' + (fin(b.last_anom) ? '°C anom' : '°C abs') + '</small></div><div class="km">' + esc(b.last_date) + (fin(b.chg30) ? '; 30 d ' + fnum(b.chg30) : '') + (fin(b.mean7) ? '; 7 d mean ' + fnum(b.mean7) : '') + (b.error ? '; NRT did not answer, showing the last good tail' : '') + '</div>' + (jk ? kmeta(jk) : kmeta(null, 'NOAA OISST NRT via ERDDAP', b.last_date)) + '</div>';
       }).join('');
       body.appendChild(kp);

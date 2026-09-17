@@ -233,6 +233,14 @@ METRICS = {
     "n12_box": dict(
         title="Niño 1+2, our box, daily NRT", unit="°C", digits=2, src="NOAA OISST NRT via ERDDAP",
         val=lambda d: _g(d, "oisst", "boxes", "nino12", "last_anom"), date=lambda d: _g(d, "oisst", "boxes", "nino12", "last_date")),
+    # Ниньо 3 и 4 собирались каждый день наравне с остальными, но в журнал не попадали, и у них
+    # одних не было ни стрелки «с прошлого значения», ни истории (владелец 17.09).
+    "n3_box": dict(
+        title="Niño 3, our box, daily NRT", unit="°C", digits=2, src="NOAA OISST NRT via ERDDAP",
+        val=lambda d: _g(d, "oisst", "boxes", "nino3", "last_anom"), date=lambda d: _g(d, "oisst", "boxes", "nino3", "last_date")),
+    "n4_box": dict(
+        title="Niño 4, our box, daily NRT", unit="°C", digits=2, src="NOAA OISST NRT via ERDDAP",
+        val=lambda d: _g(d, "oisst", "boxes", "nino4", "last_anom"), date=lambda d: _g(d, "oisst", "boxes", "nino4", "last_date")),
     "gulf_sst": dict(
         title="Persian Gulf SST, daily", unit="°C", digits=2, src="NOAA OISST NRT via ERDDAP",
         val=lambda d: _g(d, "oisst", "boxes", "gulf", "last_sst"), date=lambda d: _g(d, "oisst", "boxes", "gulf", "last_date")),
