@@ -11,7 +11,8 @@ E. Свежесть данных: у каждого json в data/enso дата �
 F. Вкладки: каждый ключ T.tabs имеет tabHelp и ветку в render().
 G. Источники: у каждого ключа sources.SOURCES есть подпись в sources.LABELS.
 H. Данные: ни одного NaN/Infinity — браузерный JSON.parse такого не разберёт.
-I. Раскладка: отчёт ночного обхода сцен в браузере (check_layout.py) — его находки и его возраст.
+I. Раскладка и показатели: отчёт ночного обхода сцен (check_layout.py) — находки, сверка
+   журнальных рядов (один ключ — одно число везде) и возраст самого отчёта.
 Выход: список расхождений; код возврата 1, если есть блокирующие (A, C, D, F, G, H, I).
 """
 import json
@@ -173,6 +174,16 @@ else:
         bad.append("I layout {t} at {w} px · {scene} · {p} · {x}".format(
             t=f.get("t"), w=f.get("width"), scene=str(f.get("scene"))[:26],
             p=str(f.get("p"))[:34], x=str(f.get("x"))[:60]))
+    # СВЕРКА ПОКАЗАТЕЛЕЙ (17.09). Тот же обход по дороге собирает, какой журнальный ряд где
+    # показан: один ключ обязан давать одно число везде. Расхождение — это либо ссылка карточки
+    # не на свой ряд (нашли три таких), либо два разных вычисления одного и того же.
+    kp = ly.get("kpi") or {}
+    for x in (kp.get("out_of_sync") or [])[:8]:
+        vals = " | ".join("%s: %s" % (v.get("v"), ", ".join(v.get("scenes") or [])[:40]) for v in (x.get("values") or []))
+        bad.append("I indicator %s (%s) shows different numbers — %s" % (x.get("key"), str(x.get("title"))[:40], vals))
+    ns = kp.get("not_shown") or []
+    if ns:
+        warn.append("I %d journal rows are on no card: %s" % (len(ns), ", ".join(y["key"] for y in ns[:10])))
     m = re.match(r"(\d{4}-\d{2}-\d{2})", str(ly.get("built") or ""))
     if m:
         age = (date.today() - date.fromisoformat(m.group(1))).days

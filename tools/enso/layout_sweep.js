@@ -132,6 +132,34 @@
     return out;
   }
 
+  /* ЧТО ИМЕННО ПОКАЗАНО ИЗ РЕЕСТРА НА ЭТОЙ СЦЕНЕ. Панель помечает каждое журнальное число
+     двумя способами: строка происхождения несёт data-kpi (её ставит kmeta), плашка ленты —
+     data-hist. Берём ключ и то ЧИСЛО, которое читатель видит рядом: у карточки это .kv, у
+     плашки ленты .ks-v. Числа сравним потом, собрав их со всех сцен и всех ширин. */
+  function kpiScan() {
+    var out = [];
+    function grab(key, el) {
+      if (!key) return;
+      /* Плашка — это .kpi, .ov-kpi, .ks или .risk. Шире не берём: у .tile или .gl-i «своим»
+         числом окажется чужое, из соседней карточки, и сверка начнёт выдумывать расхождения. */
+      var card = el.closest('.kpi, .ov-kpi, .ks, .risk');
+      if (!card) return;
+      var v = card && (card.querySelector('.kv') || card.querySelector('.ks-v'));
+      /* ТОЛЬКО СОБСТВЕННЫЙ ТЕКСТ. В плашке рядом с числом стоит <small> с единицей или месяцем,
+         и textContent склеивал их в одну строку: «133.3» + «2026-08» читалось как 133.32026.
+         Берём текстовые узлы самой плашки — ровно то, что читатель видит крупным. */
+      var raw = '';
+      if (v) { [].forEach.call(v.childNodes, function (n) { if (n.nodeType === 3) raw += n.nodeValue; }); }
+      raw = raw.replace(/\s+/g, ' ').trim();
+      if (!raw && v) raw = (v.textContent || '').replace(/\s+/g, ' ').trim();
+      var m = raw.replace(/\u2212/g, '-').match(/-?\d+(?:[.,]\d+)?/);
+      out.push({ k: key, raw: raw.slice(0, 32), n: m ? parseFloat(m[0].replace(',', '.')) : null });
+    }
+    [].forEach.call(document.querySelectorAll('[data-kpi]'), function (n) { grab(n.getAttribute('data-kpi'), n); });
+    [].forEach.call(document.querySelectorAll('[data-hist]'), function (n) { grab(n.getAttribute('data-hist'), n); });
+    return out;
+  }
+
   /* Кнопки подвкладок: только те, что переключают сцену. source/notes/stats открывают панель
      пояснений, ⛶ уводит в полный экран — их трогать нельзя, иначе обход уедет не туда.
      РЯДОВ С КЛАССОМ .seg В ШАПКЕ ДВА: первый — .seg.ctl-info внутри .stage-ctl (source, notes,
@@ -183,10 +211,11 @@
   async function sweep(opts) {
     opts = opts || {};
     var pause = opts.settle || SETTLE;
-    var out = [], scenes = 0;
+    var out = [], kpis = [], scenes = 0;
 
     function take(name, roots) {
       scenes++;
+      kpiScan().forEach(function (x) { x.scene = name; kpis.push(x); });
       if (roots.indexOf('.stage-body') >= 0 && emptyScene()) {
         out.push({ scene: name, t: 'empty', p: '.stage-body', x: 'сцена отрисовалась пустой' });
         return;
@@ -216,8 +245,8 @@
         take(name + ' / ' + sub, ['.stage-body']);
       }
     }
-    return { version: VERSION, width: window.innerWidth, scenes: scenes, findings: out };
+    return { version: VERSION, width: window.innerWidth, scenes: scenes, findings: out, kpis: kpis };
   }
 
-  window.B42Layout = { version: VERSION, audit: audit, segs: segs, sweep: sweep };
+  window.B42Layout = { version: VERSION, audit: audit, segs: segs, sweep: sweep, kpiScan: kpiScan };
 })();

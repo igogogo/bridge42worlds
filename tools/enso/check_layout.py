@@ -226,6 +226,69 @@ def split_accepted(findings, rules):
 
 
 # ------------------------------------------------------------------ сам обход
+def kpi_report(seen):
+    """Сводка по реестру показателей: где расходятся числа и чего не видно вовсе.
+
+    ОДИН КЛЮЧ — ОДНО ЧИСЛО. Панель показывает журнальный ряд в нескольких местах, и каждое
+    берёт значение само: лента KPI из журнала, карточка сцены из своего поля, обзор из третьего.
+    Разойтись они могут тихо — как 15.09 разошлись два суточных Niño 3.4 (2.71 и 2.90, разные
+    климатологии) и как 2.715 печаталось то 2.71, то 2.72. Расхождение не всегда ошибка, но
+    всегда вопрос, на который должен быть ответ.
+
+    ЧЕГО НЕ ВИДНО. Ряд, который считается каждый прогон и нигде не показан, — это либо забытая
+    работа, либо мёртвый код. Сегодня таких нашлось семнадцать из пятидесяти шести.
+    """
+    reg = {}
+    try:
+        j = json.loads((ROOT / "data" / "enso" / "journal.json").read_text(encoding="utf-8"))
+        for k, v in (j.get("metrics") or {}).items():
+            reg[k] = {"title": v.get("title") or k, "digits": v.get("digits"),
+                      "last": ((v.get("entries") or [{}])[-1] or {}).get("v")}
+    except Exception:                                            # noqa: BLE001
+        pass
+    by = {}
+    for x in seen:
+        by.setdefault(x.get("k"), []).append(x)
+    out_of_sync, rounding, shown = [], [], sorted(by.keys())
+    for k, rows in sorted(by.items()):
+        vals = {}
+        for r in rows:
+            if r.get("n") is None:
+                continue
+            vals.setdefault(round(float(r["n"]), 4), []).append(r.get("scene"))
+        if len(vals) > 1:
+            items = sorted(vals.items())
+            spread = max(v for v, _ in items) - min(v for v, _ in items)
+            # ОКРУГЛЕНИЕ — НЕ РАСХОЖДЕНИЕ. Одно и то же число можно честно показать с разной
+            # точностью: 33.25 в ленте и 33.2 на своей сцене — это одно значение, а не два.
+            # Судим по САМОЙ ГРУБОЙ из показанных точностей: округляем к ней все значения
+            # ключа, и если они сошлись в одно — спор был о последнем знаке, а не о числе.
+            def _dec(r):
+                s = str(r.get("raw") or "")
+                return len(s.split(".")[1]) if "." in s else 0
+            nd = min((_dec(r) for r in rows if r.get("n") is not None), default=0)
+            same = {round(float(r["n"]), nd) for r in rows if r.get("n") is not None}
+            eps = spread + 1.0 if len(same) == 1 else 0.0
+            rec = {"key": k, "title": (reg.get(k) or {}).get("title", k),
+                   "spread": round(spread, 4),
+                   "values": [{"v": v, "scenes": sorted(set(sc))[:4], "n": len(sc)} for v, sc in items][:6]}
+            if eps and spread <= eps:
+                rec["rounding"] = True
+                rounding.append(rec)
+            else:
+                out_of_sync.append(rec)
+    # Ряды риска — не «потерянные показатели»: их заводит сам риск, и виден такой ряд ровно
+    # тогда, когда его риск стоит на доске. Снялся риск — ряд остаётся в журнале историей.
+    not_shown = [{"key": k, "title": reg[k]["title"]} for k in sorted(reg)
+                 if k not in by and not k.startswith("risk:")]
+    ghost = [k for k in shown if reg and k not in reg]
+    return {"registry": len(reg), "shown": len(shown), "out_of_sync": out_of_sync,
+            "rounding": rounding,
+            "not_shown": not_shown, "not_in_registry": sorted(ghost),
+            "note": ("Реестр показателей — журнал значений. Здесь сведено то, что панель реально "
+                     "показала на всех обойдённых сценах: один ключ должен давать одно число везде.")}
+
+
 def run(base, widths, keep, quiet):
     import page_watch                                            # оснастка браузера уже написана
 
@@ -235,7 +298,7 @@ def run(base, widths, keep, quiet):
 
     sweep_js = SWEEP.read_text(encoding="utf-8")
     br = page_watch.Browser(exe, keep=keep)
-    findings, scenes, js_errors = [], 0, []
+    findings, scenes, js_errors, kpis = [], 0, [], []
     try:
         tab = br.open_tab(base + PAGE)
         s = Session(tab)
@@ -256,6 +319,9 @@ def run(base, widths, keep, quiet):
             for f in got:
                 f["width"] = w
                 findings.append(f)
+            for x in (r.get("kpis") or []):
+                x["width"] = w
+                kpis.append(x)
             if not quiet:
                 print("  ширина %d: сцен %d, замечаний %d" % (w, r.get("scenes") or 0, len(got)))
         js_errors = sorted(set(s.errors))
@@ -266,7 +332,7 @@ def run(base, widths, keep, quiet):
     for e in js_errors:
         findings.append({"t": "js", "p": "console", "x": e, "scene": "любая", "width": 0})
 
-    return {"status": "ok", "scenes": scenes, "findings": findings}, 0
+    return {"status": "ok", "scenes": scenes, "findings": findings, "kpi": kpi_report(kpis)}, 0
 
 
 def main():
@@ -306,6 +372,7 @@ def main():
         "n_findings": len(new),
         "n_accepted": len(taken),
         "findings": new[:80],
+        "kpi": res.get("kpi") or {},
         "note": ("Обход всех сцен панели в безоконном браузере на каждой ширине: где текст не "
                  "помещается, где обрезан без многоточия, где налезает на соседа, где сцена "
                  "отрисовалась пустой и где упал javascript. Признанные исключения перечислены "
@@ -340,6 +407,14 @@ def main():
     if not a.quiet or new:
         print("check_layout: %d замечаний, %d признанных, сцен %d, %d с"
               % (len(new), len(taken), doc["scenes_checked"], doc["secs"]))
+    kp = doc.get("kpi") or {}
+    if kp and not a.quiet:
+        print("реестр показателей: %d рядов, показано %d, расходятся %d (плюс %d на округлении), не показаны %d"
+              % (kp.get("registry", 0), kp.get("shown", 0), len(kp.get("out_of_sync") or []),
+                 len(kp.get("rounding") or []), len(kp.get("not_shown") or [])))
+        for x in (kp.get("out_of_sync") or [])[:10]:
+            print("  ~~ %-18s %s: %s" % (x["key"], x["title"][:30],
+                                         " | ".join("%s на %s" % (v["v"], ", ".join(v["scenes"])[:40]) for v in x["values"])))
     for f in new[:40]:
         print("  !! %-9s %4s  %-28s  %s" % (f.get("t"), f.get("width"), str(f.get("scene"))[:28],
                                             str(f.get("x"))[:70]))

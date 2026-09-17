@@ -2458,7 +2458,12 @@
        поменялось», это «такого ещё не было», и в ленте он должен стоять первым. */
     var recs = items.filter(function (x) { return x.rec; });
     var changed = items.filter(function (x) { return !x.rec && x.dv; }), still = items.filter(function (x) { return !x.rec && !x.dv; });
-    var show = recs.concat(changed, still).slice(0, 12);
+    /* ЛЕНТА ПОКАЗЫВАЕТ ВСЁ, ЧТО В НЕЁ ПОЛОЖЕНО. Здесь стоял потолок в двенадцать плашек, и из
+       двадцати ключей восемь молча не доезжали: первыми занимали место рекорды и изменившиеся,
+       а недельные Niño 3 и Niño 4 вместе с суточными боксами выпадали совсем. Лента и так
+       горизонтальная и прокручивается пальцем — резать её незачем (владелец 17.09: «проверь,
+       чтобы везде было всё, все KPI, где они не появлялись»). */
+    var show = recs.concat(changed, still);
     if (!show.length) { host.hidden = true; return; }
     host.hidden = false;
     host.innerHTML = '<span class="ks-h" data-src="' + esc(JSON.stringify({ name: 'Main indicators', def: 'The value of the last reading and its change against the previous one, from the panel journal; the ones that moved come first. Click any to see its history.' })) + '">KPI</span>' +
@@ -2468,7 +2473,10 @@
         if (x.rec) pay.def = 'A record: ' + x.rec + '. ' + pay.def;
         pay.def = pay.def.replace(' Click for the history.', ' Click to open its chart; the history is on that scene.');
         var pk = KPI_PICK[x.k];
-        return '<button type="button" class="ks' + (x.rec ? ' rec' : '') + '" data-go="' + esc(KPI_SCENE[x.k] || 'overview') + '"' +
+        /* Плашка ленты НАЗЫВАЕТ СВОЙ РЯД. Прежде она несла только адрес сцены и карточку, и по
+           разметке нельзя было понять, какой именно ряд журнала на ней показан: сверка
+           показателей 17.09 из-за этого считала половину ленты «нигде не показанной». */
+        return '<button type="button" class="ks' + (x.rec ? ' rec' : '') + '" data-kpi="' + esc(x.k) + '" data-go="' + esc(KPI_SCENE[x.k] || 'overview') + '"' +
           (pk ? ' data-pick="' + esc(pk[0]) + '" data-pickv="' + esc(pk[1]) + '"' : '') + ' data-src="' + esc(JSON.stringify(pay)) + '">' +
           (x.rec ? '<span class="ks-rec">record</span>' : '') +
           '<span class="ks-row"><span class="ks-v">' + (x.k === 'oni' || /nino|^n(34|12|3|4)_|sst_world|wind|mjo/.test(x.k) && x.last.v > 0 ? '+' : '') + jval(x.last.v, dg) + (u ? '<small>' + esc(u) + '</small>' : '') + '</span>' +
@@ -5068,8 +5076,8 @@
       plot(body, function (w, h) { return chartMJO(MJ, w, h); });
       body.appendChild(el('div', 'cap', esc(MJ.note) + ' Source: ' + esc(MJ.src) + '.'));
       var km = el('div', 'kpis');
-      km.innerHTML = '<div class="kpi"><div class="kn">' + term('mjo', 'phase today') + '</div><div class="kv">' + MJ.last.phase + '<small>of 8</small></div><div class="km">' + ({ 1: 'Western Hemisphere and Africa', 2: 'Indian Ocean', 3: 'Indian Ocean', 4: 'Maritime Continent', 5: 'Maritime Continent', 6: 'western Pacific', 7: 'western Pacific', 8: 'Western Hemisphere' }[MJ.last.phase] || '') + '</div>' + kmeta('mjo_amp') + '</div>' +
-        '<div class="kpi"><div class="kn">amplitude</div><div class="kv">' + fnum(MJ.last.amp, 1, false) + '</div><div class="km">' + (MJ.active ? 'organised pulse (≥ 1)' : 'below 1: no organised pulse') + '</div>' + kmeta(null, 'NOAA PSL OMI', MJ.last.d) + '</div>' +
+      km.innerHTML = '<div class="kpi"><div class="kn">' + term('mjo', 'phase today') + '</div><div class="kv">' + MJ.last.phase + '<small>of 8</small></div><div class="km">' + ({ 1: 'Western Hemisphere and Africa', 2: 'Indian Ocean', 3: 'Indian Ocean', 4: 'Maritime Continent', 5: 'Maritime Continent', 6: 'western Pacific', 7: 'western Pacific', 8: 'Western Hemisphere' }[MJ.last.phase] || '') + '</div>' + kmeta(null, 'NOAA PSL OMI index', MJ.last.d || '') + '</div>' +
+        '<div class="kpi"><div class="kn">amplitude</div><div class="kv">' + fnum(MJ.last.amp, 1, false) + '</div><div class="km">' + (MJ.active ? 'organised pulse (≥ 1)' : 'below 1: no organised pulse') + '</div>' + kmeta('mjo_amp') + '</div>' +
         '<div class="kpi"><div class="kn">burst window</div><div class="kv" style="font-size:17px">' + (MJ.burst_window ? 'open' : 'closed') + '</div><div class="km">' + MJ.days_in_6_8_of_15 + ' of the last 15 days in phases 6–8 with amplitude ≥ 1</div>' + kmeta(null, 'our rule', MJ.last.d) + '</div>';
       body.appendChild(km);
       return;
@@ -5098,7 +5106,7 @@
       body.appendChild(el('div', 'cap', esc(F.note) + ' The lead of ' + ((F.lead || {}).lag) + ' months and the correlation ' + ((F.lead || {}).r) + ' are computed on our own series, by trying every shift from zero to twelve months.'));
       var kp = el('div', 'kpis');
       kp.innerHTML = '<div class="kpi"><div class="kn">' + term('wwv', 'warm water volume') + '</div><div class="kv">' + fnum(F.value / 1e14) + '<small>·10¹⁴ m³</small></div><div class="km">' + F.share_of_record + ' % of the highest value since 1980</div>' + kmeta('wwv') + '</div>' +
-        '<div class="kpi"><div class="kn">peak of the charge</div><div class="kv" style="font-size:17px">' + esc(F.peak_date) + '</div><div class="km">' + (F.months_since_peak ? F.months_since_peak + ' months ago; ' : 'this month; ') + (F.discharging ? 'the fuel is being spent' : 'not spent yet') + '</div>' + kmeta('wwv_share') + '</div>' +
+        '<div class="kpi"><div class="kn">peak of the charge</div><div class="kv" style="font-size:17px">' + esc(F.peak_date) + '</div><div class="km">' + (F.months_since_peak ? F.months_since_peak + ' months ago; ' : 'this month; ') + (F.discharging ? 'the fuel is being spent' : 'not spent yet') + '</div>' + kmeta(null, 'NOAA PMEL/TAO warm water volume', F.date || '') + '</div>' +
         '<div class="kpi"><div class="kn">lead over the surface</div><div class="kv" style="font-size:17px">' + ((F.lead || {}).lag) + '<small>months</small></div><div class="km">correlation ' + ((F.lead || {}).r) + ', on the whole record since 1980</div>' + kmeta(null, 'NOAA PMEL / TAO', F.date) + '</div>' +
         (F.t300 ? '<div class="kpi"><div class="kn">' + term('t300', 'upper 300 m') + '</div><div class="kv">' + fnum(F.t300.value) + '<small>°C</small></div><div class="km">the same heat as a temperature, not a volume</div>' + kmeta(null, 'NOAA PMEL / TAO', F.t300.date) + '</div>' : '');
       body.appendChild(kp);
@@ -5535,7 +5543,7 @@
       var fi = pair(FO.index, P ? P.food_index : null, 1, '');
       var worst = Object.keys(G3).sort(function (a, b) { return (G3[b].yoy_pct || 0) - (G3[a].yoy_pct || 0); })[0];
       kp.innerHTML = '<div class="kpi"><div class="kn">' + term('fao', 'FAO food price index') + '</div><div class="kv">' + fi.big + '<small>' + esc(FO.last_month) + '</small></div><div class="km">month ' + fnum(FO.mom, 1) + ' · year ' + fnum(FO.yoy_pct, 1) + ' %</div>' + kmeta('food_index') + '</div>' +
-        '<div class="kpi"><div class="kn">strongest rise, year on year</div><div class="kv" style="font-size:17px">' + esc(worst) + '<small>' + fnum(G3[worst].yoy_pct, 1) + ' %</small></div><div class="km">' + esc(worst) + ' index ' + fnum(G3[worst].last, 1, false) + '</div>' + kmeta('food_yoy') + '</div>' +
+        '<div class="kpi"><div class="kn">strongest rise, year on year</div><div class="kv" style="font-size:17px">' + esc(worst) + '<small>' + fnum(G3[worst].yoy_pct, 1) + ' %</small></div><div class="km">' + esc(worst) + ' index ' + fnum(G3[worst].last, 1, false) + '</div>' + kmeta(null, 'FAO food price index, by group', FO.last_month || '') + '</div>' +
         '<div class="kpi"><div class="kn">scenario in force</div><div class="kv" style="font-size:17px">' + esc(RG ? RG.current_scenario : '—') + '</div><div class="km">chosen by the data: where reality sits against the model spread</div>' +
         kmeta('scenario') + '</div>';
       body.appendChild(kp);
@@ -6071,7 +6079,8 @@
       kp.innerHTML = BOX_ORDER.map(function (o) {
         var b = boxes[o[0]]; if (!b || b.error && !b.dates) return '';
         var jk = { nino34: 'n34_box', nino12: 'n12_box', nino3: 'n3_box', nino4: 'n4_box', gulf: 'gulf_sst' }[o[0]];
-        return '<div class="kpi"><div class="kn">' + (ZONES[o[0]] ? zone(o[0]) : esc(o[1])) + '</div><div class="kv">' + (fin(b.last_anom) ? fnum(Math.abs(b.last_anom) < 0.005 ? 0 : b.last_anom) : fnum(b.last_sst, 2, false)) + '<small>' + (fin(b.last_anom) ? '°C anom' : '°C abs') + '</small></div><div class="km">' + esc(b.last_date) + (fin(b.chg30) ? '; 30 d ' + fnum(b.chg30) : '') + (fin(b.mean7) ? '; 7 d mean ' + fnum(b.mean7) : '') + (b.error ? '; NRT did not answer, showing the last good tail' : '') + '</div>' + (jk ? kmeta(jk) : kmeta(null, 'NOAA OISST NRT via ERDDAP', b.last_date)) + '</div>';
+        var absOnly = o[0] === 'gulf';                      // у Залива журнал держит абсолютную
+        return '<div class="kpi"><div class="kn">' + (ZONES[o[0]] ? zone(o[0]) : esc(o[1])) + '</div><div class="kv">' + ((fin(b.last_anom) && !absOnly) ? fnum(Math.abs(b.last_anom) < 0.005 ? 0 : b.last_anom) : fnum(b.last_sst, 2, false)) + '<small>' + ((fin(b.last_anom) && !absOnly) ? '°C anom' : '°C abs') + '</small></div><div class="km">' + esc(b.last_date) + (fin(b.chg30) ? '; 30 d ' + fnum(b.chg30) : '') + (fin(b.mean7) ? '; 7 d mean ' + fnum(b.mean7) : '') + (b.error ? '; NRT did not answer, showing the last good tail' : '') + '</div>' + (jk ? kmeta(jk) : kmeta(null, 'NOAA OISST NRT via ERDDAP', b.last_date)) + '</div>';
       }).join('');
       body.appendChild(kp);
       return;
@@ -6141,7 +6150,7 @@
       else body.appendChild(el('div', 'note warn', 'The Gulf box has not loaded yet.'));
       body.appendChild(el('div', 'cap', esc(sea.note || '') + ' Dashes: the same days of the strongest past events and last year on the same box.'));
       var ks = el('div', 'kpis');
-      ks.innerHTML = '<div class="kpi"><div class="kn">' + term('gulfbox', 'Gulf today') + '</div><div class="kv">' + fnum(sea.last_sst, 1, false) + '<small>°C</small></div><div class="km">anomaly ' + fnum(Math.abs(sea.last_anom) < 0.005 ? 0 : sea.last_anom) + ' on ' + esc(sea.last_date) + (fin(sea.chg30) ? '; 30 d ' + fnum(sea.chg30) : '') + '</div>' + kmeta('gulf_sst') + '</div>' +
+      ks.innerHTML = '<div class="kpi"><div class="kn">' + term('gulfbox', 'Gulf today') + '</div><div class="kv">' + fnum(sea.last_sst, 2, false) + '<small>°C</small></div><div class="km">anomaly ' + fnum(Math.abs(sea.last_anom) < 0.005 ? 0 : sea.last_anom) + ' on ' + esc(sea.last_date) + (fin(sea.chg30) ? '; 30 d ' + fnum(sea.chg30) : '') + '</div>' + kmeta('gulf_sst') + '</div>' +
         '<div class="kpi"><div class="kn">days above 35 °C</div><div class="kv">' + (sea.days_over_35 == null ? '—' : sea.days_over_35) + '<small>of 120</small></div><div class="km">peak ' + fnum(sea.max_sst, 1, false) + ' °C on ' + esc(sea.max_sst_date || '') + '; the stress line for desalination and fisheries</div>' + kmeta(null, 'NOAA OISST NRT, our box', sea.last_date) + '</div>' +
         '<div class="kpi"><div class="kn">the box</div><div class="kv" style="font-size:15px;line-height:1.3">24–30°N<br>48–56°E</div><div class="km">sea cells only, full 0.25° resolution, own 1991–2020 climatology</div>' + kmeta(null, 'our box mean on the NOAA grid', sea.fetched) + '</div>';
       body.appendChild(ks);
@@ -9431,6 +9440,29 @@
             '<td class="act">' + esc(x.x || '') + (x.over_accepted ? '<div class="sub">over an accepted exception: ' + esc(x.over_accepted) + '</div>' : '') + '</td></tr>';
         }).join('') + '</tbody></table>';
       body.appendChild(wrap);
+    }
+    /* СВЕРКА ПОКАЗАТЕЛЕЙ — ЗДЕСЬ ЖЕ. Владелец 17.09: «у тебя есть реестр — проверь, чтобы везде
+       было всё обновлено синхронно, все KPI, где они не появлялись». Обход всё равно заходит на
+       каждую сцену, и по дороге собирает, какой журнальный ряд где показан и с каким числом. */
+    var K = LY.kpi || {};
+    if (K.registry) {
+      var g2 = el('div', 'gloss'); g2.style.marginTop = '10px';
+      var os = K.out_of_sync || [], rn = K.rounding || [], ns = K.not_shown || [];
+      g2.innerHTML = '<div class="gl-i"><b>Indicators, one number everywhere</b>'
+          + (os.length ? '<span class="st-bad">' + os.length + ' disagree</span>' : 'no disagreement')
+          + '<div class="why">' + K.shown + ' of ' + K.registry + ' journal rows are attached to a card somewhere. '
+          + 'The same row must read the same on every scene: the strip takes it from the journal, a scene card from its own field, '
+          + 'and they can drift apart quietly.</div>'
+          + (rn.length ? '<div class="s">' + rn.length + ' differ only in the last digit shown, which is a choice of precision, not a disagreement</div>' : '') + '</div>'
+        + (os.length ? os.slice(0, 6).map(function (x) {
+            return '<div class="gl-i"><b>' + esc(x.title) + '</b><code>' + esc(x.key) + '</code>'
+              + '<div class="why">' + (x.values || []).map(function (v) { return '<b>' + v.v + '</b> on ' + esc((v.scenes || []).join(', ')); }).join(' \u00b7 ') + '</div></div>';
+          }).join('') : '')
+        + (ns.length ? '<div class="gl-i"><b>In the journal, on no card</b>' + ns.length + ' row' + (ns.length === 1 ? '' : 's')
+            + '<div class="why">Counted every run and shown nowhere with their name, so they carry no arrow since the last reading and no history button. '
+            + 'The number itself may well be on screen \u2014 it just does not say which row it is.</div>'
+            + '<div class="s">' + ns.slice(0, 24).map(function (x) { return esc(x.key); }).join(' \u00b7 ') + '</div></div>' : '');
+      body.appendChild(g2);
     }
     body.appendChild(el('div', 'cap', 'Why a browser is needed for this. The other checks read our own files and catch things that are properties of the TEXT \u2014 a term without an entry, a file left out of the publish, a tab without a render branch. Whether a line fits is a property of the LAYOUT: it depends on the width of the scene, on the length of the text beside it (which arrives with the data and changes every day) and on which rule won in the cascade. None of the three is visible in a file. The walk opens every scene in a headless browser at 375, 1024 and 1440 pixels, measures every line, and also collects javascript errors on the way \u2014 a scene that throws gives itself away here rather than at the reader. Report: data/enso/layout-check.json, written by tools/enso/check_layout.py, which also keeps the walk itself in the runs journal above.'));
   }
