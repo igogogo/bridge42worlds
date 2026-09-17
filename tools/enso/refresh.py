@@ -281,6 +281,21 @@ def main(fetch=True, llm=True, light=False):
     except Exception as e:                                       # noqa: BLE001
         print("  свежий слой не записался:", str(e)[:160])
         failed.append("свежий слой: " + str(e)[:90])
+    # ПРОИЗВОДНЫЕ СЛОИ — ЧАСТЬЮ ТОГО ЖЕ ПРОГОНА. Каждый из них читает latest.json и считает
+    # своё поверх: «кто выбивается», статистика, переток между зонами, фазовый сторож, карта
+    # состояния. Пока их запускала только ночная обёртка, полный разбор оставлял их вчерашними,
+    # и на одной панели рядом стояли числа за разные дни (владелец 17.09). Сбой одного слоя не
+    # роняет разбор: он стоит строки в отчёте, а не работы.
+    if not light:
+        for mod, what in (("zones_flow", "переток между зонами"), ("phase", "фазовый сторож"),
+                          ("outliers", "кто выбивается"), ("stats_layer", "слой статистики"),
+                          ("agent_state", "карта состояния панели")):
+            step("производный слой: " + what)
+            try:
+                __import__(mod).build()
+            except Exception as e:                               # noqa: BLE001
+                print("  %s не пересобрался: %s" % (what, str(e)[:140]))
+                failed.append(what + ": " + str(e)[:90])
     sm_ = cur.get("summary") or {}
     run.finish("ok" if not failed else "partial", stamp=cur["stamp"], risk_index=cur["risk_index"],
                n_risks=len(cur["risks"]), n_alerts=len(cur["alerts"]), shout=bool(cur["shout"]), stale=stale,

@@ -11,6 +11,8 @@ E. Свежесть данных: у каждого json в data/enso дата �
 F. Вкладки: каждый ключ T.tabs имеет tabHelp и ветку в render().
 G. Источники: у каждого ключа sources.SOURCES есть подпись в sources.LABELS.
 H. Данные: ни одного NaN/Infinity — браузерный JSON.parse такого не разберёт.
+J. Производные слои: ни один не собран раньше разбора, рядом с которым показан.
+K. Дубликаты величин: одно и то же число, лежащее в нескольких файлах, всюду одинаково.
 I. Раскладка и показатели: отчёт ночного обхода сцен (check_layout.py) — находки, сверка
    журнальных рядов (один ключ — одно число везде) и возраст самого отчёта.
 Выход: список расхождений; код возврата 1, если есть блокирующие (A, C, D, F, G, H, I).
@@ -91,6 +93,114 @@ for scr in sorted(set(re.findall(r"-u (\w+\.py)", ps1))):
     out = DAILY_OUT.get(scr)
     if out and ("data/enso/" + out) not in fresh:
         bad.append(f"D the daily wrapper rebuilds {out} but it is not in publish.FRESH_FILES")
+
+# J. ПРОИЗВОДНЫЙ СЛОЙ НЕ МОЖЕТ БЫТЬ СТАРШЕ РАЗБОРА, РЯДОМ С КОТОРЫМ ОН ПОКАЗАН (17.09).
+# Каждый из этих файлов читает latest.json и считает своё поверх. Собранный раньше разбора,
+# он показывает вчерашние числа рядом с сегодняшними, и заметить это можно только глазами:
+# журнальных рядов у них нет, они сами себе источник. Владелец и заметил — «на Standing out
+# +2.69, хотя у нас уже 2.96».
+DERIVED = ["outliers.json", "stats.json", "zones-flow.json", "phase.json", "agent-state.json"]
+try:
+    _cur = json.loads((DATA / "latest.json").read_text(encoding="utf-8"))
+    _stamp = str(_cur.get("stamp") or "")[:16]
+    for _f in DERIVED:
+        try:
+            _b = str(json.loads((DATA / _f).read_text(encoding="utf-8")).get("built") or "")[:16]
+        except Exception:                                        # noqa: BLE001
+            bad.append(f"J derived layer unreadable: {_f}")
+            continue
+        if not _b:
+            warn.append(f"J {_f}: no build stamp, cannot tell whether it matches the assessment")
+            continue
+        # У части слоёв штамп без времени («2026-09-17»): сравнивать его со строкой
+        # «2026-09-17 07:15» побуквенно значит объявлять сегодняшний слой вчерашним.
+        _cmp = _stamp[:len(_b)] if len(_b) < len(_stamp) else _stamp
+        if _b < _cmp:
+            bad.append(f"J {_f} was built {_b}, before the assessment {_stamp}: it shows older numbers beside newer ones")
+except Exception as e:                                           # noqa: BLE001
+    warn.append(f"J derived layers not checked: {str(e)[:70]}")
+
+# K. ОДНА ВЕЛИЧИНА — ОДНО ЧИСЛО ВО ВСЕХ ФАЙЛАХ (17.09).
+#
+# Сверка показателей в обходе сравнивает то, что показано на ЭКРАНЕ и названо журнальным ключом.
+# Но производные слои сами себе источник: они переписывают числа разбора к себе и ключей не
+# называют. Сцена «кто выбивается» так и показала +2.69 рядом со сценами, где стоит +2.72, —
+# и никакая экранная сверка этого поймать не могла.
+#
+# Здесь перечислены ВЕЛИЧИНЫ, которые лежат больше чем в одном файле, и места, где они лежат.
+# Список явный: он и есть тот самый реестр дубликатов, которого не хватало. Появился новый слой,
+# переписавший чужое число, — строка сюда, иначе расхождение опять будет некому заметить.
+#
+# Сравниваем с допуском по САМОЙ ГРУБОЙ из записанных точностей: слой может держать два знака
+# там, где разбор держит три, и это не расхождение, а выбор точности.
+def _dig(x):
+    s = repr(float(x))
+    return len(s.split(".")[1].rstrip("0")) if "." in s else 0
+
+
+def _row(doc, key):
+    for r in (doc.get("rows") or []):
+        if r.get("key") == key:
+            return r
+    return {}
+
+
+def _at(doc, path):
+    cur = doc
+    for p in path:
+        if isinstance(cur, dict):
+            cur = cur.get(p)
+        else:
+            return None
+    return cur
+
+
+try:
+    _D = json.loads((DATA / "latest.json").read_text(encoding="utf-8"))
+    _OU = json.loads((DATA / "outliers.json").read_text(encoding="utf-8"))
+    _ZF = json.loads((DATA / "zones-flow.json").read_text(encoding="utf-8"))
+    _PH = json.loads((DATA / "phase.json").read_text(encoding="utf-8"))
+    DUP = [
+        # (что это, (значение А, откуда А), (значение Б, откуда Б))
+        ("Niño 3.4, 30-day mean", _row(_OU, "sst_nino34").get("anom"), "outliers",
+         _at(_D, ["nino34", "current30"]), "latest.nino34.current30"),
+        ("world ocean, 30-day mean", _row(_OU, "sst_world").get("anom"), "outliers",
+         _at(_D, ["watch", "sst_world", "level30", "anom"]), "latest.watch.sst_world.level30"),
+        ("land+ocean, 30-day mean", _row(_OU, "t2_world").get("anom"), "outliers",
+         _at(_D, ["watch", "t2_world", "level30", "anom"]), "latest.watch.t2_world.level30"),
+        ("Niño 3, weekly", _row(_OU, "zone_n3a").get("anom"), "outliers",
+         _at(_D, ["noaa", "latest", "n3a"]), "latest.noaa.latest.n3a"),
+        ("Niño 4, weekly", _at(_ZF, ["now", "values", "n4"]), "zones-flow",
+         _at(_D, ["noaa", "latest", "n4a"]), "latest.noaa.latest.n4a"),
+        ("Niño 3.4, weekly", _at(_ZF, ["now", "values", "n34"]), "zones-flow",
+         _at(_D, ["noaa", "latest", "n34a"]), "latest.noaa.latest.n34a"),
+        ("Niño 3, weekly (zones)", _at(_ZF, ["now", "values", "n3"]), "zones-flow",
+         _at(_D, ["noaa", "latest", "n3a"]), "latest.noaa.latest.n3a"),
+        ("Niño 1+2, weekly", _at(_ZF, ["now", "values", "n12"]), "zones-flow",
+         _at(_D, ["noaa", "latest", "n12a"]), "latest.noaa.latest.n12a"),
+        ("coupling score", _at(_PH, ["coupling", "score"]), "phase",
+         _at(_D, ["air", "coupling", "score"]), "latest.air.coupling.score"),
+        ("coupling, of how many", _at(_PH, ["coupling", "of"]), "phase",
+         _at(_D, ["air", "coupling", "of"]), "latest.air.coupling.of"),
+    ]
+    for _what, _a, _pa, _b, _pb in DUP:
+        if _a is None or _b is None:
+            warn.append(f"K {_what}: missing in {_pa if _a is None else _pb}, cannot compare")
+            continue
+        _nd = min(_dig(_a), _dig(_b))
+        # ОДИН ШАГ ПОСЛЕДНЕГО РАЗРЯДА — ЭТО ОКРУГЛЕНИЕ. Обе стороны хранят уже округлённое
+        # число, и 2.715 честно записывается то как 2.71, то как 2.72 (питон округляет к
+        # чётному, javascript — от нуля). Придираться к этому значит приучить не читать
+        # красное. Всё, что дальше одного шага, — уже разные числа.
+        _eps = (10.0 ** -_nd) * 1.001
+        if abs(float(_a) - float(_b)) > _eps:
+            bad.append(f"K {_what}: {_pa} has {_a}, {_pb} has {_b} — the same quantity, two numbers")
+    # дата тоже величина: слой, стоящий на другой неделе, покажет другое число
+    _zd, _nd2 = _at(_ZF, ["now", "date"]), _at(_D, ["noaa", "date"])
+    if _zd and _nd2 and _zd != _nd2:
+        bad.append(f"K weekly date: zones-flow stands at {_zd}, the assessment at {_nd2}")
+except Exception as e:                                           # noqa: BLE001
+    warn.append(f"K duplicated quantities not checked: {str(e)[:80]}")
 
 # E. свежесть
 BY_HAND = {"neighbours.json", "models-ref.json", "chain-ref.json"}

@@ -2498,7 +2498,11 @@
      сохранение в браузере. */
   /* Второй ярус перехода: мало попасть на сцену, надо выбрать там ту зону, о которой была
      плитка. Ключ — поле в S.sub, значение — что в него положить. */
-  var KPI_PICK = { n34_weekly: ['wkey', 'n34a'], n12_weekly: ['wkey', 'n12a'], n3_weekly: ['wkey', 'n3a'], n4_weekly: ['wkey', 'n4a'] };
+  /* Плашка ведёт не просто на сцену, а на СВОЮ зону: сцена океана открывается на своём боксе
+     по умолчанию, и «Niño 1+2, наш бокс» приводила на Niño 3.4 — читатель нажимал одно число,
+     а попадал на другое (владелец 17.09). Первый член — ключ выбора на сцене, второй — значение. */
+  var KPI_PICK = { n34_weekly: ['wkey', 'n34a'], n12_weekly: ['wkey', 'n12a'], n3_weekly: ['wkey', 'n3a'], n4_weekly: ['wkey', 'n4a'],
+    n34_box: ['obox', 'nino34'], n12_box: ['obox', 'nino12'], n3_box: ['obox', 'nino3'], n4_box: ['obox', 'nino4'], gulf_sst: ['obox', 'gulf'] };
   var KPI_SCENE = { n34_weekly: 'now/weekly_a', n12_weekly: 'now/weekly_a', n34_daily: 'trend/sst_nino34', n34_30d: 'trend/sst_nino34', rec_sst_nino34: 'trend/sst_nino34', fc14_sst_nino34: 'trend/sst_nino34',
     n3_weekly: 'now/weekly_a', n4_weekly: 'now/weekly_a',
     n34_box: 'ocean/surface', n12_box: 'ocean/surface', n3_box: 'ocean/surface', n4_box: 'ocean/surface', gulf_sst: 'ocean/surface', subsurface_warmest: 'ocean/moorings', d20_east: 'ocean/section',
@@ -6075,8 +6079,18 @@
   function viewOcean() {
     var D = S.D, O = D.oisst || {}, SB = D.subsurface || {}, k = sub('ocean', 'surface');
     var boxes = O.boxes || {}, T34 = boxes.nino34 || {}, TAO = SB.tao || {}, GD = SB.godas || {};
+    /* ЗАГОЛОВОК ГОВОРИТ О ТОМ БОКСЕ, КОТОРЫЙ ВЫБРАН. Он был прибит к Niño 3.4 и называл его
+       даже тогда, когда на экране стоял другой бокс: плашка «Niño 1+2» приводила сюда, график
+       показывал Niño 1+2, а заголовок утверждал «Niño 3.4 today: +2.80» (владелец 17.09).
+       Читатель нажимает одно число и видит над ним другое — этого достаточно, чтобы не верить
+       ни одному. */
+    var HB = S.sub.obox || 'nino34', TB = boxes[HB] || T34;
     var head = 'Ocean';
-    if (k === 'surface') head = fin(T34.last_anom) ? 'Niño 3.4 today: ' + fnum(T34.last_anom) + ' °C on our box, ' + (T34.days_stale === 1 ? 'one day' : T34.days_stale + ' days') + ' behind' : 'Daily boxes straight from the NOAA grid';
+    /* У Залива и ряд журнала, и плашка держат АБСОЛЮТНУЮ температуру: там имеет смысл порог
+       35 °C, а не отклонение. Заголовок обязан называть то же число, что плашка, с которой на
+       него пришли, иначе нажатие на 33.25 приводит к заголовку «+0.27». */
+    var hbAbs = HB === 'gulf' && fin(TB.last_sst);
+    if (k === 'surface') head = (hbAbs || fin(TB.last_anom)) ? (TB.title || 'Niño 3.4') + ' today: ' + (hbAbs ? fnum(TB.last_sst, 2, false) + ' °C' : fnum(TB.last_anom) + ' °C') + ' on our box, ' + (TB.days_stale === 1 ? 'one day' : TB.days_stale + ' days') + ' behind' : 'Daily boxes straight from the NOAA grid';
     else if (k === 'moorings') head = TAO.warmest ? 'Water ' + fnum(TAO.warmest.value, 1) + ' °C above normal is sitting at ' + TAO.warmest.depth + ' m under ' + TAO.warmest.station : 'Below the surface: the moorings';
     else head = GD.max_anom ? 'Reanalysis, ' + esc(GD.month) + ': up to ' + fnum(GD.max_anom.value, 1) + ' °C above normal at ' + GD.max_anom.depth + ' m, ' + esc(GD.max_anom.label) : 'Reanalysis section along the equator';
     if (k === 'hovmoller') head = 'How the heat moves: month by month, beside a past event';
@@ -9358,8 +9372,23 @@
       body.appendChild(row);
       var list = arts.filter(function (a) { return lf === 'all' || a.lang === lf; }).slice(0, 120);
       var wrap = el('div'); wrap.style.cssText = 'flex:1;min-height:0;overflow:auto';
-      wrap.innerHTML = '<table class="e" style="min-width:620px"><thead><tr><th>date</th><th>language</th><th class="prose">source</th><th class="act">headline</th></tr></thead><tbody>' +
-        list.map(function (a) { return '<tr><td style="white-space:nowrap">' + dt(a.date || '') + '</td><td>' + esc(a.lang) + '</td><td>' + esc(a.source || '') + '</td><td class="act"><a href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.title) + '</a></td></tr>'; }).join('') + '</tbody></table>';
+      /* ЗАГОЛОВОК — ГЛАВНОЕ В ЭТОЙ ТАБЛИЦЕ, И ЕМУ ДОСТАВАЛОСЬ МЕНЬШЕ ВСЕХ (владелец 17.09:
+         «расширь колонку, чтобы больше строк помещалось»). Дата и язык — два коротких столбца —
+         занимали 290 пикселей из 620, а на сам заголовок оставалось 185, и каждая новость шла в
+         три строки. Коротким колонкам объявлена их настоящая ширина; заголовок не получает
+         ширины вовсе — значит, забирает весь остаток и растёт вместе с окном. */
+      /* ИЗДАТЕЛЬ НЕ ПОВТОРЯЕТСЯ ДВАЖДЫ В ОДНОЙ СТРОКЕ. Агрегатор отдаёт заголовок с хвостом
+         «… - NBC 7 San Diego», и тот же издатель стоит соседней колонкой: два десятка знаков
+         из каждой строки уходили на повтор. Снимаем хвост, если он совпадает с колонкой. */
+      function cutTail(title, src) {
+        var t = String(title || '').trim(), s = String(src || '').trim();
+        if (!s) return t;
+        var m = t.match(/^([\s\S]*?)\s*[-–—·|]\s*([^-–—·|]{2,60})$/);
+        if (m && m[2].trim().toLowerCase() === s.toLowerCase()) return m[1].trim() || t;
+        return t;
+      }
+      wrap.innerHTML = '<table class="e" style="min-width:560px"><thead><tr><th style="width:76px">date</th><th style="width:72px">language</th><th style="width:116px">source</th><th>headline</th></tr></thead><tbody>' +
+        list.map(function (a) { return '<tr><td style="white-space:nowrap">' + dt(a.date || '') + '</td><td>' + esc(a.lang) + '</td><td>' + esc(a.source || '') + '</td><td><a href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(cutTail(a.title, a.source)) + '</a></td></tr>'; }).join('') + '</tbody></table>';
       body.appendChild(wrap);
       body.appendChild(el('div', 'cap', 'Headlines as written by the publishers, newest first, duplicates removed; a link goes to the publisher through Google News or Bing News. Not our words and not a source of numbers.'));
     } else {
