@@ -13,6 +13,8 @@ G. Источники: у каждого ключа sources.SOURCES есть п�
 H. Данные: ни одного NaN/Infinity — браузерный JSON.parse такого не разберёт.
 J. Производные слои: ни один не собран раньше разбора, рядом с которым показан.
 K. Дубликаты величин: одно и то же число, лежащее в нескольких файлах, всюду одинаково.
+L. Застрявшие источники: отвечает без ошибки, но данные не двигаются дольше двенадцати дней.
+M. Один ряд — один последний день во всех файлах (кроме тех, о ком уже сказало L).
 I. Раскладка и показатели: отчёт ночного обхода сцен (check_layout.py) — находки, сверка
    журнальных рядов (один ключ — одно число везде) и возраст самого отчёта.
 Выход: список расхождений; код возврата 1, если есть блокирующие (A, C, D, F, G, H, I).
@@ -201,6 +203,65 @@ try:
         bad.append(f"K weekly date: zones-flow stands at {_zd}, the assessment at {_nd2}")
 except Exception as e:                                           # noqa: BLE001
     warn.append(f"K duplicated quantities not checked: {str(e)[:80]}")
+
+# L. ИСТОЧНИК ОТВЕЧАЕТ, НО НЕ ПРИНОСИТ НОВОГО (17.09). «Свежий» в таблице источников до сих пор
+# значило «ответил»: забор прошёл, ошибки нет, галочка зелёная. А climatereanalyzer в это время
+# три недели отдавал один и тот же последний день по суточному океану — и панель молчала.
+# Отставание данных — не то же самое, что отказ связи, и называть это надо отдельно.
+STUCK_DAYS = 12                      # дольше этого «ещё не обновили» перестаёт быть объяснением
+try:
+    _ops = json.loads((DATA / "ops.json").read_text(encoding="utf-8"))
+    for _s in (_ops.get("sources") or []):
+        _bd = _s.get("behind_days")
+        if isinstance(_bd, int) and _bd > STUCK_DAYS and not _s.get("error"):
+            warn.append("L {k}: answers without error, but its data has not moved for {d} days (to {t}) — "
+                        "the source has stopped, not the fetch".format(
+                            k=_s.get("key"), d=_bd, t=_s.get("data_to")))
+except Exception as e:                                           # noqa: BLE001
+    warn.append(f"L stuck sources not checked: {str(e)[:70]}")
+
+# M. ОДИН РЯД — ОДИН ПОСЛЕДНИЙ ДЕНЬ ВО ВСЕХ ФАЙЛАХ (17.09).
+#
+# Правило K сравнивает ЗНАЧЕНИЯ у перечисленных вручную пар. Это ловит расхождение арифметики,
+# но не ловит расхождение ВРЕМЕНИ: файл может держать то же число, просто позавчерашнее. Здесь
+# наоборот — обходим все файлы разом и смотрим, до какого дня доведён каждый ряд. Так и нашлась
+# остановка суточного океана: на всех сценах 15 сентября, на «Long term» — 30 августа.
+#
+# Ряд, отставший из-за ЗАСТРЯВШЕГО ИСТОЧНИКА, здесь молчит: о нём уже сказало правило L, и
+# повторять одно и то же двумя голосами значит приучить не читать ни один.
+try:
+    _files = {}
+    for _n in ("latest", "planet", "outliers", "fresh"):
+        try:
+            _files[_n] = json.loads((DATA / f"{_n}.json").read_text(encoding="utf-8"))
+        except Exception:                                        # noqa: BLE001
+            _files[_n] = {}
+    _where = {}                                                  # ряд -> {файл: последний день}
+    for _k, _v in ((_files["latest"].get("watch") or {})).items():
+        _where.setdefault(_k, {})["latest.watch"] = _v.get("last_date")
+    for _k, _v in ((_files["planet"].get("temperature") or {})).items():
+        if isinstance(_v, dict) and (_v.get("last") or {}).get("date"):
+            _where.setdefault(_k, {})["planet"] = (_v.get("last") or {}).get("date")
+    for _r in (_files["outliers"].get("rows") or []):
+        if _r.get("key") and _r.get("date"):
+            _where.setdefault(_r["key"], {})["outliers"] = _r["date"]
+    for _k, _v in ((_files["fresh"].get("series") or {})).items():
+        _where.setdefault(_k, {})["fresh"] = _v.get("last_date")
+    # какие ряды уже объявлены застрявшими правилом L — о них здесь молчим
+    _stuck = set()
+    try:
+        for _s in (json.loads((DATA / "ops.json").read_text(encoding="utf-8")).get("sources") or []):
+            if isinstance(_s.get("behind_days"), int) and _s["behind_days"] > STUCK_DAYS:
+                _stuck.add(_s.get("key"))
+    except Exception:                                            # noqa: BLE001
+        pass
+    for _k, _m in sorted(_where.items()):
+        _ds = {str(v)[:10] for v in _m.values() if v}
+        if len(_ds) > 1 and _k not in _stuck:
+            bad.append("M {k}: the same series ends on different days — {w}".format(
+                k=_k, w=", ".join(f"{f} {str(d)[:10]}" for f, d in sorted(_m.items()) if d)))
+except Exception as e:                                           # noqa: BLE001
+    warn.append(f"M series dates not checked: {str(e)[:70]}")
 
 # E. свежесть
 BY_HAND = {"neighbours.json", "models-ref.json", "chain-ref.json"}

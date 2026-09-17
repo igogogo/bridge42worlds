@@ -7208,6 +7208,21 @@
       caps.push('Sea ice extent from passive microwave satellites since October 1978 (NSIDC Sea Ice Index, version 4). Every year is a line; the current year in ochre, El Niño onset years by their dashes, the 1981–2010 median dashed grey. Click a legend entry to fade the rest. Days before 1988 were measured every other day and are filled in between.');
     } else if (k === 'temperature') {
       var RK = PL.regions_keys || [];
+      /* ОСТАНОВКА ИСТОЧНИКА — ЭТО ТОЖЕ ДАННЫЕ. Ряд, который не двигался неделю и больше, нельзя
+         показывать молча: график просто кончается, и читатель не знает, кончились ли данные или
+         событие. Считаем разрыв между последним днём ряда и последним днём, который панель знает
+         по своему сбору, и говорим о нём словами (17.09). */
+      function stuckNote(T3) {
+        var d0 = (T3 && (T3.last || {}).date) || T3 && T3.last_date;
+        if (!d0 || String(d0).length < 10) return null;
+        var mine = ((S.D.watch || {}).sst_world || {}).last_date || (S.D.stamp || '').slice(0, 10);
+        var gap = Math.round((Date.parse(mine + 'T00:00:00Z') - Date.parse(String(d0).slice(0, 10) + 'T00:00:00Z')) / 86400000);
+        if (!(gap > 6)) return null;
+        return el('div', 'note warn', 'This series has not moved since <b>' + esc(String(d0).slice(0, 10)) + '</b> \u2014 '
+          + gap + ' days. The source answers every day and returns the same last day: the file at climatereanalyzer has stopped, not our fetch. '
+          + 'The panel\u2019s own reading of the same water is current: it splices the NOAA grid onto this series and runs to ' + esc(mine)
+          + ', which is the number the rest of the panel shows. Here the source is drawn as it is, so the stop is visible.');
+      }
       var tk = pickRow([['t2_world', 'Land+ocean, daily'], ['sst_world', 'Ocean, daily'], ['land_m', 'Land, monthly'], ['t2_nh', 'N. hemisphere, daily'], ['t2_sh', 'S. hemisphere, daily'], ['t2_tropics', 'Tropics, daily'], ['t2_arctic', 'Arctic, daily'], ['t2_antarctic', 'Antarctic, daily'], ['hadcrut', 'Global, annual since 1850'], ['crutem', 'Land, annual since 1850']].filter(function (o) { return (PL.temperature || {})[o[0]] || RK.indexOf(o[0]) >= 0; }), 'planetTemp', 't2_world');
       /* Пояса лежат в своём файле (1,3 МБ) и берутся по первому запросу (владелец 08.09: «интересная разбивка, давай возьмём»). */
       if (RK.indexOf(tk) >= 0 && !S.PLR) {
@@ -7225,6 +7240,7 @@
         kp.innerHTML += kpi('Land, monthly · ' + esc(LM.date), fnum(LM.value, 2), ' °C', (fin(LM.median_norm) ? fnum(LM.value - LM.median_norm, 2) + ' against the ' + T2.clim_years.join('–') + ' mean for the month · ' : '') + (LM.rank_high === 1 ? 'the warmest ' + MONTHS[LM.month - 1] + ' in the record' : ord(LM.rank_high) + ' warmest ' + MONTHS[LM.month - 1] + ' of ' + LM.of) + ' · record ' + LM.record.year + ' at ' + fnum(LM.record.value, 2), 'NOAA NCEI Climate at a Glance, land only', LM.date);
         caps.push('Global land-only air temperature by month, NOAA NCEI Climate at a Glance, anomalies against 1901–2000, every year as a line with the 1991–2020 monthly mean dashed. No daily land-only series exists in the open near-real-time sources (climatereanalyzer and Climate Pulse publish land+ocean and ocean; Berkeley Earth daily stops in 2022), so the month is the finest step for land. Highlighted: the onset years of the strongest El Niños and the years after them.');
       } else if (T2 && !annual) {
+        var sn = stuckNote(T2); if (sn) body.appendChild(sn);
         var hlT = []; EY.forEach(function (y) { hlT.push(y); if (T2.years[String(y + 1)]) hlT.push(y + 1); });
         plot(body, function (w, h) { return chartYears({ title: T2.label + ': daily mean, every year since ' + Object.keys(T2.years).sort()[0] + '; dashed: ' + T2.clim_years.join('–') + ' mean', years: T2.years, clim: T2.clim, climLabel: 'mean ' + T2.clim_years.join('–'), highlight: hlT, current: T2.last.year, digits: 1, signed: false }, w, h); });
         var LT = T2.last;
