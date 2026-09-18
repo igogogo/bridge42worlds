@@ -341,6 +341,13 @@ METRICS = {
     "wwv_share": dict(
         title="Fuel, share of the record", unit="%", digits=0, src="NOAA PMEL / TAO",
         val=lambda d: _g(d, "air", "fuel", "share_of_record"), date=lambda d: _g(d, "air", "fuel", "date")),
+    # та же вода температурой и теплом (владелец 18.09): в полосу, историю и реестр
+    "t300": dict(
+        title="Upper 300 m temperature, equatorial Pacific", unit="°C", digits=2, src="NOAA PMEL / TAO",
+        val=lambda d: _g(d, "air", "fuel", "t300", "value"), date=lambda d: _g(d, "air", "fuel", "t300", "date")),
+    "heat_e22": dict(
+        title="Stored heat of the upper 300 m, our estimate", unit="×10²² J", digits=2, src="our estimate on PMEL T300",
+        val=lambda d: _g(d, "air", "fuel", "heat", "value"), date=lambda d: _g(d, "air", "fuel", "heat", "date")),
     "tlt_tropics": dict(
         title="Lower troposphere, tropics", unit="°C", digits=2, src="UAH satellite v6.1",
         val=lambda d: _layer(d, "tlt"), date=lambda d: _layer_date(d, "tlt")),

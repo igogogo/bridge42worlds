@@ -2374,9 +2374,9 @@
   /* Суточные по зонам стоят рядом со своими недельными: неделя выходит по средам за прошлую
      неделю и во время роста всегда отстаёт, а сутки — вчерашние. Порядок зон с запада на восток,
      как везде на панели (17.09). */
-  var STRIP_KEYS = ['n34_daily', 'n4_weekly', 'n4_box', 'n34_weekly', 'n3_weekly', 'n3_box', 'n12_weekly', 'n12_box', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
+  var STRIP_KEYS = ['n34_daily', 'n4_weekly', 'n4_box', 'n34_weekly', 'n3_weekly', 'n3_box', 'n12_weekly', 'n12_box', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 't300', 'heat_e22', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
   var STRIP_NAME = { n34_weekly: 'Niño 3.4 weekly', n34_daily: 'Niño 3.4 daily', n12_weekly: 'Niño 1+2 weekly', n3_weekly: 'Niño 3 weekly', n4_weekly: 'Niño 4 weekly',
-    n4_box: 'Niño 4 daily, our box', n3_box: 'Niño 3 daily, our box', n12_box: 'Niño 1+2 daily, our box', n34_box: 'Niño 3.4 daily, our box', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean, anom', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
+    n4_box: 'Niño 4 daily, our box', n3_box: 'Niño 3 daily, our box', n12_box: 'Niño 1+2 daily, our box', n34_box: 'Niño 3.4 daily, our box', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean, anom', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', t300: 'upper 300 m, temp', heat_e22: 'stored heat, est.', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
   /* РЕКОРДЫ ВПЕРЁД И РАМКОЙ. Владелец 10.09: «рекорды тоже как-то в ленте KPI отображать —
      мерцанием красной рамки или вперёд ставить». Панель уже знает про рекорды в четырёх
      местах, просто молчала об этом в полосе: ранг 1 у суточного Niño 3.4 и у поясов планеты,
@@ -2469,7 +2469,8 @@
     var show = recs.concat(changed, still);
     if (!show.length) { host.hidden = true; return; }
     host.hidden = false;
-    host.innerHTML = '<span class="ks-h" data-src="' + esc(JSON.stringify({ name: 'Main indicators', def: 'The value of the last reading and its change against the previous one, from the panel journal; the ones that moved come first. Click any to see its history.' })) + '">KPI</span>' +
+    // надпись «KPI» перед полосой снята: она ничего не добавляла (владелец 18.09)
+    host.innerHTML =
       show.map(function (x) {
         var dg = x.r.digits, u = x.r.unit || '', sign = x.dv > 0 && x.last.v >= 0 && dg > 0 ? '' : '';
         var pay = { name: x.r.title, def: (x.prev ? 'Was ' + jval(x.prev.v, dg) + ' on ' + x.prev.d + ', now ' + jval(x.last.v, dg) + ' on ' + x.last.d + '.' : 'First reading we hold: ' + jval(x.last.v, dg) + ' on ' + x.last.d + '.') + ' Click for the history.', src: x.r.src, date: x.last.d };
@@ -2509,7 +2510,7 @@
     sst_world: 'trend', t2_world: 'trend', rec_sst_world: 'trend', rec_t2_world: 'trend', fc14_sst_world: 'trend', fc14_t2_world: 'trend',
     models_broke: 'models/breakdown', models_ok: 'models/breakdown', models_lag: 'models/breakdown', models_above: 'models/breakdown', models_below_n: 'models/breakdown', iri_share_below: 'models/breakdown', iri_peak: 'models/plume', live_mean: 'models/plume', n_live: 'models/plume',
     food_index: 'food/prices', food_yoy: 'food/prices', price_palm_oil: 'food/goods', price_rice: 'food/goods', price_fishmeal: 'food/goods', price_wheat: 'food/goods',
-    wwv: 'air', wwv_share: 'air', wind_week: 'air', mjo_amp: 'air', dmi: 'air', soi: 'air', olr: 'air', u850_west: 'air', coupling_score: 'air', tlt_tropics: 'air', tls_tropics: 'air',
+    wwv: 'air', wwv_share: 'air', t300: 'air/fuel', heat_e22: 'air/fuel', wind_week: 'air', mjo_amp: 'air', dmi: 'air', soi: 'air', olr: 'air', u850_west: 'air', coupling_score: 'air', tlt_tropics: 'air', tls_tropics: 'air',
     ohc_2000: 'planet', kuwait_tmax30: 'regions/place/gulf_arabia', peak_estimate: 'now/analogs' };
   var RS_STOP = { the: 1, and: 1, for: 1, with: 1, that: 1, this: 1, what: 1, why: 1, how: 1, does: 1, are: 1, is: 1, of: 1, to: 1, in: 1, on: 1, a: 1, an: 1, it: 1, its: 1, be: 1, will: 1, was: 1, were: 1, has: 1, have: 1, from: 1, about: 1, than: 1, now: 1, our: 1, we: 1, you: 1, can: 1, not: 1, which: 1, when: 1, where: 1, there: 1, into: 1, over: 1, any: 1, all: 1 };
   var RS_SYN = { nino: 'niño', 'el': '', nina: 'niña', temperature: 'temperature warm', warming: 'warm', rain: 'rain precipitation', rainfall: 'rain', drought: 'rain dry', prices: 'price food', food: 'food price', models: 'model forecast', forecast: 'forecast model', ocean: 'ocean sea', sea: 'sea ocean', wind: 'wind westerly', volume: 'volume fuel', fuel: 'fuel volume', peak: 'peak', strength: 'strong', strong: 'strong' };
@@ -5184,7 +5185,7 @@
         var rk2 = yearRank(F.t300_years, F.t300.date);
         plot(body, function (w, h) { return chartYears({ title: 'Upper 300 m temperature anomaly, \u00b0C, every year since ' + Object.keys(F.t300_years).sort()[0] + ' (PMEL, monthly)', years: F.t300_years, monthly: true, highlight: HLY, current: curYear, digits: 2 }, w, h); });
         var kt = el('div', 'kpis');
-        kt.innerHTML = '<div class="kpi"><div class="kn">' + term('t300', 'this month among all years') + '</div><div class="kv">' + (rk2.rank > 0 ? rk2.rank + '<small> of ' + rk2.of + '</small>' : '\u00b7') + '</div><div class="km">' + fnum(F.t300.value) + ' \u00b0C in ' + esc(monthName(F.t300.date)) + (rk2.top && rk2.top[0] !== curYear ? '; the highest was ' + esc(rk2.top[0]) + ' at ' + fnum(rk2.top[1]) : '; this year is the highest') + '</div>' + kmeta(null, 'NOAA PMEL / TAO', F.t300.date) + '</div>' +
+        kt.innerHTML = '<div class="kpi"><div class="kn">' + term('t300', 'this month among all years') + '</div><div class="kv">' + (rk2.rank > 0 ? rk2.rank + '<small> of ' + rk2.of + '</small>' : '\u00b7') + '</div><div class="km">' + fnum(F.t300.value) + ' \u00b0C in ' + esc(monthName(F.t300.date)) + (rk2.top && rk2.top[0] !== curYear ? '; the highest was ' + esc(rk2.top[0]) + ' at ' + fnum(rk2.top[1]) : '; this year is the highest') + '</div>' + kmeta('t300') + '</div>' +
           (F.t300_levels ? '<div class="kpi"><div class="kn">same month in the strongest events</div><div class="kv" style="font-size:15px">' + HLY.filter(function (y) { return fin(F.t300_levels[y]); }).map(function (y) { return '<span style="color:var(--a' + y + ')">' + y + ' ' + fnum(F.t300_levels[y]) + '</span>'; }).join(' \u00b7 ') + '<small>\u00b0C</small></div><div class="km">the same heat as a temperature: the mean of the upper 300 m over the same box</div>' + kmeta(null, 'NOAA PMEL / TAO', F.t300.date) + '</div>' : '');
         body.appendChild(kt);
         body.appendChild(el('div', 'cap', 'The same water as the volume, read as a temperature: the mean anomaly of the upper 300 m over 5\u00b0S\u20135\u00b0N, 120\u00b0E\u201380\u00b0W. Monthly, since 1980.'));
@@ -5192,7 +5193,7 @@
         var HT = F.heat, rk3 = yearRank(HT.years, HT.date);
         plot(body, function (w, h) { return chartYears({ title: 'Stored heat anomaly of the upper 300 m, 10\u00b2\u00b2 J \u2014 our estimate from T300, every year since ' + Object.keys(HT.years).sort()[0], years: HT.years, monthly: true, highlight: HLY, current: curYear, digits: 1 }, w, h); });
         var kh2 = el('div', 'kpis');
-        kh2.innerHTML = '<div class="kpi"><div class="kn">stored heat, our estimate</div><div class="kv">' + fnum(HT.value) + '<small>\u00b710\u00b2\u00b2 J</small></div><div class="km">' + esc(String(HT.date)) + '; this is not measured but computed: ' + esc(HT.how) + '</div>' + kmeta(null, 'our estimate on PMEL T300', HT.date) + '</div>' +
+        kh2.innerHTML = '<div class="kpi"><div class="kn">stored heat, our estimate</div><div class="kv">' + fnum(HT.value) + '<small>\u00b710\u00b2\u00b2 J</small></div><div class="km">' + esc(String(HT.date)) + '; this is not measured but computed: ' + esc(HT.how) + '</div>' + kmeta('heat_e22') + '</div>' +
           '<div class="kpi"><div class="kn">in everyday units</div><div class="kv" style="font-size:17px">' + (HT.years_of_world_electricity || 0).toLocaleString('en') + '<small> years</small></div><div class="km">of the world\u2019s electricity generation (about 30\u202f000 TWh a year) held as extra heat in that one box of ocean</div>' + kmeta(null, 'our estimate', HT.date) + '</div>' +
           '<div class="kpi"><div class="kn">same month in the strongest events</div><div class="kv" style="font-size:15px">' + HLY.filter(function (y) { return fin((HT.levels || {})[y]); }).map(function (y) { return '<span style="color:var(--a' + y + ')">' + y + ' ' + fnum(HT.levels[y]) + '</span>'; }).join(' \u00b7 ') + '<small>\u00b710\u00b2\u00b2 J</small></div><div class="km">' + (rk3.rank > 0 ? 'this month ranks ' + rk3.rank + ' of ' + rk3.of + ' years' : '') + '</div>' + kmeta(null, 'our estimate on PMEL T300', HT.date) + '</div>';
         body.appendChild(kh2);
@@ -5208,7 +5209,7 @@
         '<div class="kpi"><div class="kn">same month in the strongest events</div><div class="kv" style="font-size:15px">' +
           ['1982', '1997', '2015', '2023'].filter(function (y) { return fin((F.levels || {})[y]); }).map(function (y) { return '<span style="color:var(--a' + y + ')">' + y + ' ' + fnum(F.levels[y]) + '</span>'; }).join(' \u00b7 ') +
           '<small>\u00b710\u00b9\u2074 m\u00b3</small></div><div class="km">warm water volume in ' + esc(String(F.date || '').slice(5)) + ' of each of those years; this year ' + fnum(F.value / 1e14) + (F.value / 1e14 > Math.max.apply(null, Object.keys(F.levels || {}).map(function (y) { return F.levels[y]; }).filter(fin).concat([-Infinity])) ? ' is above every one of them' : ' is not above all of them') + '</div>' + kmeta(null, 'NOAA PMEL', F.date) + '</div>' +
-        (F.t300 ? '<div class="kpi"><div class="kn">' + term('t300', 'upper 300 m') + '</div><div class="kv">' + fnum(F.t300.value) + '<small>°C</small></div><div class="km">the same heat as a temperature, not a volume</div>' + kmeta(null, 'NOAA PMEL / TAO', F.t300.date) + '</div>' : '');
+        (F.t300 ? '<div class="kpi"><div class="kn">' + term('t300', 'upper 300 m') + '</div><div class="kv">' + fnum(F.t300.value) + '<small>°C</small></div><div class="km">the same heat as a temperature, not a volume</div>' + kmeta('t300') + '</div>' : '');
       body.appendChild(kp);
     } else if (k === 'layers' && L) {
       plot(body, function (w, h) { return chartLayers(L.items, w, h); });

@@ -62,6 +62,21 @@ J_PER_K = RHO_CP * BOX_VOLUME            # Дж на градус аномали
 WORLD_ELECTRICITY_J = 30000 * 3.6e15     # Дж: мировая выработка электричества за год (~30 000 ТВт·ч)
 
 
+def t300_record(t300):
+    """Рекорд ли последний месяц для всего ряда, кто был рекордом до него, сколько месяцев подряд рост."""
+    ks = sorted(t300)
+    last_k = ks[-1]
+    prev = max((k for k in ks[:-12]), key=lambda k: t300[k])   # прежний рекорд — до этого события, не прошлый месяц
+    rising = 0
+    for i in range(len(ks) - 1, 0, -1):
+        if t300[ks[i]] > t300[ks[i - 1]]:
+            rising += 1
+        else:
+            break
+    return {"is_record": t300[last_k] > t300[prev], "prev_date": prev, "prev_value": round(t300[prev], 2),
+            "rising_months": rising, "date": last_k, "value": round(t300[last_k], 2)}
+
+
 def stored_heat(t300):
     """Аномалия тепла верхних 300 м коробки, 10²² Дж, и то же по тем же месяцам аналогов."""
     if not t300:
@@ -185,6 +200,7 @@ def fuel(wwv, t300, n34_monthly):
             "t300_levels": same_month_levels(t300, last_k) if t300 else None,
             "granularity": "monthly since 1980",
             "heat": stored_heat(t300),
+            "t300_record": t300_record(t300) if t300 else None,
             "note": ("Warm water volume is the fuel gauge: the heat piled up in the upper 300 m of the "
                      "equatorial Pacific before it reaches the surface. It leads the surface index, so it "
                      "answers the one question the models only guess at — whether the event still has "
@@ -451,6 +467,22 @@ def _metric(series, name, unit="σ", step="month", extra=None):
     return m
 
 
+def _t300_sentence(F):
+    """Та же вода температурой и теплом (владелец 18.09): рекорд ряда, рост, кратность к 1997."""
+    R, H = (F or {}).get("t300_record"), (F or {}).get("heat")
+    if not R:
+        return ""
+    s = (f" The same water read as a temperature: the upper 300 m are {R['value']:+.2f} °C above normal"
+         + (f", the highest month of the whole series since 1980 (the previous record was {R['prev_date']}, "
+            f"{R['prev_value']:+.2f})" if R.get("is_record") else "")
+         + (f", rising for {R['rising_months']} months in a row" if R.get("rising_months", 0) >= 2 else "") + ".")
+    if H and H.get("value") is not None:
+        l97 = (H.get("levels") or {}).get("1997")
+        s += (f" As stored heat, our estimate is {H['value']:.2f}·10²² J"
+              + (f", {H['value'] / l97:.1f} times the same month of 1997" if l97 else "") + ".")
+    return s
+
+
 def risks(A, n34_now=None):
     """Риски, которых без атмосферы, топлива и слоёв просто не существовало.
 
@@ -501,7 +533,8 @@ def risks(A, n34_now=None):
                 f"Warm water volume {F['value'] / 1e14:.2f}·10¹⁴ m³, {share} % of the highest value of the "
                 f"series since 1980; "
                 f"{'the latest month, ' + str(F.get('date')) + ', is itself the peak' if not since else 'the peak was ' + str(since) + ' months ago, in ' + str(F.get('peak_date'))}. "
-                f"On our own data this gauge leads the surface index by {lead} months.",
+                f"On our own data this gauge leads the surface index by {lead} months."
+                + _t300_sentence(F),
                 "The heat that will surface later is already piled up under the equator, and it is at a record "
                 "for the whole series. This is measured, not forecast: the surface has not yet shown what is "
                 "already stored below. While the gauge is not falling, the event has something to grow on.",
