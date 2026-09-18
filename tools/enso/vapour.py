@@ -227,7 +227,8 @@ def summarise(reg, ser, today):
             "clim": [round(clim[d], 2) if d in clim else None for d in range(1, 367)],
             "this_year": year_series(ld.year),
             "analogs": {str(y): year_series(y) for y in ANALOGS},
-            "years_max": {str(y): round(max(ser[dt] for dt in dates if dt.startswith(str(y))), 2) for y in range(FIRST_YEAR, ld.year + 1)}}
+            "years_max": {str(y): round(max(v), 2) for y in range(FIRST_YEAR, ld.year + 1)
+                          for v in [[ser[dt] for dt in dates if dt.startswith(str(y))]] if v}}   # годы с пропуском ещё не скачаны
 
 
 def main():
