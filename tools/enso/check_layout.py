@@ -298,7 +298,7 @@ def run(base, widths, keep, quiet):
 
     sweep_js = SWEEP.read_text(encoding="utf-8")
     br = page_watch.Browser(exe, keep=keep)
-    findings, scenes, js_errors, kpis = [], 0, [], []
+    findings, scenes, js_errors, kpis, cons = [], 0, [], [], []
     try:
         tab = br.open_tab(base + PAGE)
         s = Session(tab)
@@ -322,6 +322,11 @@ def run(base, widths, keep, quiet):
             for x in (r.get("kpis") or []):
                 x["width"] = w
                 kpis.append(x)
+            # согласованность не зависит от ширины: берём с первой ширины, остальные только дополняют
+            for c in (r.get("consist") or []):
+                key = (c.get("t"), c.get("scene"), c.get("p"), (c.get("x") or "")[:30])
+                if key not in {(q.get("t"), q.get("scene"), q.get("p"), (q.get("x") or "")[:30]) for q in cons}:
+                    cons.append(c)
             if not quiet:
                 print("  ширина %d: сцен %d, замечаний %d" % (w, r.get("scenes") or 0, len(got)))
         js_errors = sorted(set(s.errors))
@@ -332,7 +337,12 @@ def run(base, widths, keep, quiet):
     for e in js_errors:
         findings.append({"t": "js", "p": "console", "x": e, "scene": "любая", "width": 0})
 
-    return {"status": "ok", "scenes": scenes, "findings": findings, "kpi": kpi_report(kpis)}, 0
+    if not quiet and cons:
+        by = {}
+        for c in cons:
+            by[c["t"]] = by.get(c["t"], 0) + 1
+        print("  согласованность: " + ", ".join(f"{k} {v}" for k, v in sorted(by.items())))
+    return {"status": "ok", "scenes": scenes, "findings": findings, "kpi": kpi_report(kpis), "consist": cons}, 0
 
 
 def main():
@@ -373,6 +383,8 @@ def main():
         "n_accepted": len(taken),
         "findings": new[:80],
         "kpi": res.get("kpi") or {},
+        "consist": (res.get("consist") or [])[:200],     # согласованность: i, источник и дата, пустое, битое, кириллица
+        "n_consist": len(res.get("consist") or []),
         "note": ("Обход всех сцен панели в безоконном браузере на каждой ширине: где текст не "
                  "помещается, где обрезан без многоточия, где налезает на соседа, где сцена "
                  "отрисовалась пустой и где упал javascript. Признанные исключения перечислены "

@@ -226,7 +226,7 @@ def breakdown(classes_result, iri, oni):
                         "worst_err": min(errs) if errs else None, "below_now": c.get("below_now")})
     chronic.sort(key=lambda r: (-(r["issues_low"] or 0), r["mean_err"] if r["mean_err"] is not None else 0))
     return {"by_issue": by_issue, "chronic": chronic[:14], "n_models": len(classes),
-            "note": "per issue: models whose nearest verifiable forecast came in below the ONI that season actually had"}
+            "note": "Per issue: models whose nearest verifiable forecast came in below the ONI that season actually had"}
 
 
 def alerts(iri, bd):

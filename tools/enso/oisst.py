@@ -368,7 +368,7 @@ def build(today=None, cr_nino34=None, cr_world=None, verbose=False):
     CACHE.mkdir(parents=True, exist_ok=True)
     out = {"boxes": {}, "source": f"NOAA OISST v2.1 NRT ({NRT}) via CoastWatch ERDDAP, box means computed by us",
            "clim": f"own {CLIM_YEARS[0]}–{CLIM_YEARS[1]} daily climatology from the final OISST grid, 15-day smoothing",
-           "note": ("Direct from the NOAA grid, one day behind. The preliminary (NRT) values of the last "
+           "note": ("Direct from the NOAA grid, a day or two behind. The preliminary (NRT) values of the last "
                     "two weeks are revised by NOAA later, so the last days can move by a few hundredths. "
                     "The Niño 3.4 box is checked every day against climatereanalyzer on the days both have.")}
     for box, b in BOXES.items():

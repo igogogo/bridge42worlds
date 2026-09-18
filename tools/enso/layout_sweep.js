@@ -132,6 +132,56 @@
     return out;
   }
 
+  /* СОГЛАСОВАННОСТЬ СЦЕНЫ (владелец 18.09: «кнопки i не везде аккуратно, значки с пометкой
+     данных не везде справа в углу, форматирование, консистентность»). Раскладка ловит, где текст
+     не помещается; здесь — где не хватает того, что положено каждому числу и графику:
+       noI       — график (.plot) без кнопки i;
+       noMeta    — карточка .kpi без строки источника и даты (.kj);
+       metaNotLast — строка источника стоит не последней в карточке (значок даты не в углу);
+       emptyVal  — значение карточки пустое («·», «—», «undefined»);
+       badVal    — на экране NaN / undefined / null / Infinity / [object;
+       cyr       — кириллица на экране;
+       bigI      — кнопка подсказки с заглавной I или иным текстом;
+       dupUnit   — единица напечатана дважды подряд («°C °C», «% %»);
+       spacing   — пробел перед запятой/точкой, двойная точка, «the the». */
+  function consist(roots) {
+    var out = [];
+    function push(t, el, x) { out.push({ t: t, p: path(el), x: (x || '').replace(/\s+/g, ' ').trim().slice(0, 70) }); }
+    roots.forEach(function (sel) {
+      var root = document.querySelector(sel);
+      if (!root) return;
+      [].forEach.call(root.querySelectorAll('.plot'), function (p) {
+        if (!p.querySelector('.plain-i') && !p.closest('.ov-tile')) push('noI', p, (p.querySelector('text.tt') || {}).textContent || '');
+      });
+      [].forEach.call(root.querySelectorAll('.kpi'), function (k) {
+        var kn = (k.querySelector('.kn') || {}).textContent || '', kv = k.querySelector('.kv'), kj = k.querySelector('.kj');
+        var kvt = kv ? (kv.textContent || '').replace(/\s+/g, ' ').trim() : '';
+        if (!kj) push('noMeta', k, kn);
+        else if (k.lastElementChild !== kj) push('metaNotLast', k, kn);
+        if (kv && (kvt === '' || kvt === '·' || kvt === '—' || kvt === '-' || /^undefined|^NaN/.test(kvt))) push('emptyVal', k, kn + ' = ' + kvt);
+      });
+      [].forEach.call(root.querySelectorAll('.plain-i, .ov-i'), function (b) {
+        var t = (b.textContent || '').trim();
+        if (t !== 'i') push('bigI', b, t);
+      });
+      [].forEach.call(root.querySelectorAll('*'), function (el) {
+        if (el.children.length) return;
+        var cs = getComputedStyle(el);
+        if (cs.display === 'none' || cs.visibility === 'hidden') return;
+        if (el.closest('a[href^="http"]')) return;             // заголовки чужих изданий на их языках — содержимое
+        var txt = (el.textContent || '');
+        if (!txt.trim()) return;
+        if (/[\u0400-\u04FF]/.test(txt)) push('cyr', el, txt);
+        if (/\bNaN\b|\bundefined\b|\bnull\b|\bInfinity\b|\[object/.test(txt)) push('badVal', el, txt);
+        if (/(°C|kg\/m²|m³\/s|mm|%)\s+\1(?![\w])/.test(txt)) push('dupUnit', el, txt);
+        if (/\s[,.;:](?!\.)|\.\.(?!\.)|\bthe the\b|\ba a\b|\bof of\b/.test(txt)) push('spacing', el, txt);
+      });
+    });
+    var seen = {}, uniq = [];
+    out.forEach(function (b) { var k = b.t + '|' + b.p + '|' + b.x.slice(0, 30); if (!seen[k]) { seen[k] = 1; uniq.push(b); } });
+    return uniq;
+  }
+
   /* ЧТО ИМЕННО ПОКАЗАНО ИЗ РЕЕСТРА НА ЭТОЙ СЦЕНЕ. Панель помечает каждое журнальное число
      двумя способами: строка происхождения несёт data-kpi (её ставит kmeta), плашка ленты —
      data-hist. Берём ключ и то ЧИСЛО, которое читатель видит рядом: у карточки это .kv, у
@@ -211,11 +261,12 @@
   async function sweep(opts) {
     opts = opts || {};
     var pause = opts.settle || SETTLE;
-    var out = [], kpis = [], scenes = 0;
+    var out = [], kpis = [], cons = [], scenes = 0;
 
     function take(name, roots) {
       scenes++;
       kpiScan().forEach(function (x) { x.scene = name; kpis.push(x); });
+      consist(roots).forEach(function (f) { f.scene = name; cons.push(f); });
       if (roots.indexOf('.stage-body') >= 0 && emptyScene()) {
         out.push({ scene: name, t: 'empty', p: '.stage-body', x: 'сцена отрисовалась пустой' });
         return;
@@ -225,6 +276,7 @@
 
     // рельсы одинаковы во всех сценах — смотрим один раз (на телефоне они и так свои вкладки)
     audit(['#railL', '#railR', '.kstrip']).forEach(function (f) { f.scene = 'rails'; out.push(f); });
+    consist(['#railL', '#railR', '.kstrip']).forEach(function (f) { f.scene = 'rails'; cons.push(f); });
 
     var n = document.querySelectorAll('.tab').length;
     for (var i = 0; i < n; i++) {
@@ -245,8 +297,8 @@
         take(name + ' / ' + sub, ['.stage-body']);
       }
     }
-    return { version: VERSION, width: window.innerWidth, scenes: scenes, findings: out, kpis: kpis };
+    return { version: VERSION, width: window.innerWidth, scenes: scenes, findings: out, kpis: kpis, consist: cons };
   }
 
-  window.B42Layout = { version: VERSION, audit: audit, segs: segs, sweep: sweep, kpiScan: kpiScan };
+  window.B42Layout = { version: VERSION, audit: audit, consist: consist, segs: segs, sweep: sweep, kpiScan: kpiScan };
 })();

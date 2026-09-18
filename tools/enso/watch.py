@@ -347,7 +347,7 @@ def nino34_analogs(ds):
         "note": ("The current level is already above every analogue on these same days, so both adding and "
                  "multiplying their gain lead beyond anything measured (record of the series "
                  f"{hist_ceiling:+.2f} °C). The real question is not how much higher but when the growth "
-                 "stops: for the analogues that happened in November or December."),
+                 "stops; for the analogues it happened in November or December."),
     }
     out["rank_same30"] = 1 + sum(1 for v in out["analogs"].values() if v["same30"] > cur30)
     out["current_series"] = [None if not np.isfinite(v) else round(float(v), 2) for v in cur]
