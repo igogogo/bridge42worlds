@@ -6136,8 +6136,17 @@
       lastRow.forEach(function (v, j) { if (fin(v) && v > mx) { mx = v; mj = j; } });
       var kh = el('div', 'kpis');
       if (mj >= 0) kh.innerHTML = '<div class="kpi"><div class="kn">' + (hm === 'anom100' ? 'warmest at ' + Math.round(cur.level) + ' m' : 'deepest thermocline anomaly') + ' · ' + esc(cur.months[cur.months.length - 1]) + '</div><div class="kv">' + fnum(mx, 1) + '<small>' + (hm === 'anom100' ? ' °C' : ' m') + ' at ' + esc(cur.labels[mj]) + '</small></div><div class="km">the eastern edge of the warm band is where the wave surfaces</div>' + kmeta(null, 'GODAS via PSL', cur.months[cur.months.length - 1]) + '</div>';
+      var an = ha ? (HV.analogs || {})[ha] : null, ymNow = (cur.months || [])[(cur.months || []).length - 1];
+      if (an && hm === 'anom100' && ymNow && mj >= 0) {
+        var offY = parseInt(ha, 10) - parseInt(ymNow.slice(0, 4), 10), keyA = (parseInt(ymNow.slice(0, 4), 10) + offY) + ymNow.slice(4);
+        var ia = (an.months || []).indexOf(keyA), thenM = ia >= 0 ? rowMax(an.anom100[ia], cur.labels) : null;
+        // пик того события за весь его ряд: до какой высоты доходило и когда
+        var pk = null; (an.months || []).forEach(function (m, i) { var r = rowMax(an.anom100[i], cur.labels); if (r && (!pk || r.value > pk.value)) { pk = r; pk.month = m; } });
+        kh.innerHTML += '<div class="kpi"><div class="kn">same month in ' + esc(ha) + ' · ' + esc(keyA) + '</div><div class="kv">' + (thenM ? fnum(thenM.value, 1) + '<small> °C at ' + esc(thenM.label) + '</small>' : '<small>no frame</small>') + '</div>'
+          + '<div class="km">' + (thenM ? 'this event is ' + thenNow({ value: mx, label: cur.labels[mj] }, thenM, ha, '°C') : '') + (pk ? '; that event peaked at ' + fnum(pk.value, 1) + ' °C in ' + esc(pk.month) : '') + '</div>' + kmeta(null, 'GODAS, our climatology', keyA) + '</div>';
+      }
       body.appendChild(kh);
-      body.appendChild(el('div', 'cap', esc(HV.note || '') + ' Built ' + esc(HV.built || '') + '. ' + vLink('the reanalysis section for the last month', 'ocean', 'section') + ' ' + vLink('the moorings, daily', 'ocean', 'moorings')));
+      body.appendChild(el('div', 'cap', esc(HV.note || '') + (ha ? ' How to read the pair: the band is the warm water of a Kelvin wave; compare where it stands on the same calendar month (further east means closer to surfacing off Peru), how strong it is, and whether it arrived earlier or later than in ' + esc(ha) + '. The extra year on the right shows what followed then, not what will follow now.' : '') + ' Built ' + esc(HV.built || '') + '. ' + vLink('the reanalysis section for the last month', 'ocean', 'section') + ' ' + vLink('the moorings, daily', 'ocean', 'moorings')));
       return;
     }
 
@@ -7295,6 +7304,28 @@
      Время вниз по странице, долгота поперёк; волна Кельвина — тёплая полоса, сползающая с запада
      на восток. Слева это событие, справа прошлое сильное на тех же календарных месяцах,
      сдвинутых на годы. Данные data/enso/hovmoller.json (GODAS, месяц, наша климатология). */
+  /* «Тот же месяц в прошлом событии» — словами. Оба разреза лежат рядом, но читателю
+     оставалось сравнивать глазами (владелец 18.09). Здесь две самые тёплые аномалии и где они
+     стояли: теплее или холоднее, восточнее или западнее. Долгота берётся из подписи вида
+     «104.5°W», восток — это больше градусов E и меньше W. */
+  function lonNum(label) {
+    var m = /^([\d.]+)°([EW])$/.exec(String(label || '').trim());
+    if (!m) return null;
+    return m[2] === 'E' ? +m[1] : 360 - +m[1];
+  }
+  function thenNow(now, then, year, unit) {
+    if (!now || !then || !fin(now.value) || !fin(then.value)) return '';
+    var d = now.value - then.value, a = lonNum(now.label), b = lonNum(then.label), out = [];
+    out.push(Math.abs(d) < .05 ? 'the same strength as in ' + year : (d > 0 ? fnum(d, 1, false) + ' ' + unit + ' warmer than in ' + year : fnum(-d, 1, false) + ' ' + unit + ' colder than in ' + year));
+    if (a != null && b != null) out.push(Math.abs(a - b) < 1 ? 'at the same longitude' : (a > b ? Math.round(a - b) + '° further east' : Math.round(b - a) + '° further west'));
+    return out.join(', ');
+  }
+  function rowMax(row, labels) {
+    var mx = -Infinity, mj = -1;
+    (row || []).forEach(function (v, j) { if (fin(v) && v > mx) { mx = v; mj = j; } });
+    return mj >= 0 ? { value: mx, label: (labels || [])[mj] } : null;
+  }
+
   function chartHovmoller(HV, W, H, opts) {
     var cur = HV.current || {}, metric = (opts && opts.metric) || 'anom100', an = (opts && opts.analog) ? (HV.analogs || {})[opts.analog] : null;
     if (!cur.months || !cur.months.length) return svgOpen(W, H) + '<text x="20" y="40">no Hovmöller data yet</text></svg>';
@@ -7861,6 +7892,14 @@
     var mx = SC.max[S.animI], kh = el('div', 'kpis');
     kh.innerHTML = (mx ? '<div class="kpi"><div class="kn">warmest anomaly · ' + esc(SC.months[S.animI]) + '</div><div class="kv">' + fnum(mx.value, 1) + '<small> °C at ' + mx.depth + ' m</small></div><div class="km">' + esc(mx.label) + '</div>' + kmeta(null, 'GODAS via PSL', SC.months[S.animI]) + '</div>' : '') +
       '<div class="kpi"><div class="kn">frames</div><div class="kv" style="font-size:17px">' + n + ' months</div><div class="km">' + esc(SC.months[0]) + ' → ' + esc(SC.months[n - 1]) + (ha ? '; the ' + esc(ha) + ' event on the same calendar months' : '') + '</div>' + kmeta(null, 'GODAS, our climatology', SC.months[n - 1]) + '</div>';
+    // тот же месяц прошлого события — числом и словами, а не только картинкой рядом (18.09)
+    var A3 = ha ? (S.SEC || {})[ha] : null;
+    if (A3 && mx) {
+      var ym3 = SC.months[S.animI], key3 = (parseInt(ym3.slice(0, 4), 10) + (parseInt(ha, 10) - parseInt(SC.months[n - 1].slice(0, 4), 10))) + ym3.slice(4);
+      var j3 = (A3.months || []).indexOf(key3), m3 = j3 >= 0 ? (A3.max || [])[j3] : null;
+      kh.innerHTML += '<div class="kpi"><div class="kn">same month in ' + esc(ha) + ' · ' + esc(key3) + '</div><div class="kv">' + (m3 ? fnum(m3.value, 1) + '<small> °C at ' + m3.depth + ' m, ' + esc(m3.label) + '</small>' : '<small>no frame</small>') + '</div>'
+        + '<div class="km">' + (m3 ? 'this event is ' + thenNow(mx, m3, ha, '°C') + (fin(m3.depth) && fin(mx.depth) ? (mx.depth < m3.depth ? ', and ' + Math.round(m3.depth - mx.depth) + ' m closer to the surface' : (mx.depth > m3.depth ? ', and ' + Math.round(mx.depth - m3.depth) + ' m deeper' : ', at the same depth')) : '') : '') + '</div>' + kmeta(null, 'GODAS via PSL', key3) + '</div>';
+    }
     body.appendChild(kh);
     body.appendChild(el('div', 'cap', 'The reanalysis section along the equator, one frame per month: red warmer than normal, blue colder with hatching, the solid line the 20 °C isotherm now and the dashed one its normal depth. Play it and watch the warm water slide east and up along the thermocline. Beside it the same calendar month of a past strong event, shifted by whole years. ' + (ha && (S.SECload || {})[ha] === 'failed' ? 'The ' + esc(ha) + ' frames did not load. ' : '') + vLink('the Hovmöller diagram of the same motion', 'ocean', 'hovmoller') + ' ' + vLink('the last month in full', 'ocean', 'section')));
   }
