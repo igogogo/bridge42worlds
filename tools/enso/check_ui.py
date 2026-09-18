@@ -83,7 +83,7 @@ for scr in sorted(set(re.findall(r"-u (\w+\.py)", ps1))):
 # грузится панелью, но не выкладывается); эта ловит свою: скрипт в ночной обёртке пишет файл,
 # а файла нет в FRESH_FILES.
 DAILY_OUT = {
-    "cities.py": "cities.json", "fires.py": "fires.json", "water.py": "water.json",
+    "cities.py": "cities.json", "fires.py": "fires.json", "water.py": "water.json", "futures.py": "futures.json",
     "ice_snow.py": "ice-snow.json", "glaciers.py": "glaciers.json", "precip.py": "precip.json",
     "zones_flow.py": "zones-flow.json", "outliers.py": "outliers.json",
     "phase.py": "phase.json",

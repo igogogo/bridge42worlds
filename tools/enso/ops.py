@@ -36,6 +36,7 @@ KIND_LABEL = {
     "full": "full update: rules, model verdict, snapshot",
     "light": "light run: rules only, fresh layer",
     "links": "links to our works",
+    "futures": "exchange futures for food goods: daily and weekly closes",
     "records": "mooring records",
     "publish": "publish to the site",
     "publish-fresh": "publish the fresh layer only",
