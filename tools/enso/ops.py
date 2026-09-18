@@ -37,6 +37,7 @@ KIND_LABEL = {
     "light": "light run: rules only, fresh layer",
     "links": "links to our works",
     "futures": "exchange futures for food goods: daily and weekly closes",
+    "radiance_places": "sixty-five named places on the microwave sounder, this year against 2018–2025",
     "records": "mooring records",
     "publish": "publish to the site",
     "publish-fresh": "publish the fresh layer only",
