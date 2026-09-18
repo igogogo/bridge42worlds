@@ -840,7 +840,10 @@
     background:none;border:1px solid var(--line, var(--hair));border-radius:999px;padding:3px 9px;cursor:pointer;white-space:nowrap}
   .seg button:hover{color:var(--ochre)}
   .seg button.on{color:var(--surface);border-color:var(--ochre);background:var(--ochre);font-weight:600}
-  .stage-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 12px 8px;gap:8px}
+  /* СЦЕНА ПРОКРУЧИВАЕТСЯ ВСЕГДА. На низком окне видно только график, а карточки под ним обрезались
+     без прокрутки — прокрутка была лишь у сцен с классом scroll и на телефоне (владелец 18.09:
+     «если экрана не хватает — график видно, остальное нет, и это на всех сценах»). */
+  .stage-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 12px 8px;gap:8px;overflow-y:auto;overflow-x:hidden}
   .stage-body.scroll{overflow:auto}
   /* График — главный житель сцены: не меньше половины её высоты, что бы ни делали подписи. */
   .plot{flex:1 1 55%;min-height:170px;display:block;position:relative}
