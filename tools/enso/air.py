@@ -40,6 +40,46 @@ def _mean(v):
     return sum(v) / len(v) if v else None
 
 
+def _years(d, div=1.0, nd=2):
+    """Каждый год строкой из двенадцати месяцев: сравнение с другими годами на одной картинке
+    (владелец 18.09). Пропуски — None, деление — чтобы 10¹⁴ м³ читались как 3.24, а не 3.24e14."""
+    out = {}
+    for k in sorted(d or {}):
+        if d[k] is None or len(k) < 7:
+            continue
+        y, m = k[:4], int(k[5:7]) - 1
+        out.setdefault(y, [None] * 12)[m] = round(float(d[k]) / div, nd)
+    return out
+
+
+# ОЦЕНКА ЗАПАСЁННОГО ТЕПЛА. T300 у PMEL — аномалия средней температуры верхних 300 м над
+# коробкой 5°S–5°N, 120°E–80°W. Тепло аномалии = ρ·cp · объём коробки · ΔT. Это ОЦЕНКА:
+# прямо его никто не меряет, и на панели оно живёт рядом с формулой и словом estimate.
+RHO_CP = 1025.0 * 3990.0                 # Дж/(м³·К): плотность × теплоёмкость морской воды
+BOX_AREA = (10 * 111.2e3) * (160 * 111.32e3)   # м²: 10° широты × 160° долготы на экваторе
+BOX_VOLUME = BOX_AREA * 300.0            # м³: верхние 300 м
+J_PER_K = RHO_CP * BOX_VOLUME            # Дж на градус аномалии
+WORLD_ELECTRICITY_J = 30000 * 3.6e15     # Дж: мировая выработка электричества за год (~30 000 ТВт·ч)
+
+
+def stored_heat(t300):
+    """Аномалия тепла верхних 300 м коробки, 10²² Дж, и то же по тем же месяцам аналогов."""
+    if not t300:
+        return None
+    ks = sorted(t300)
+    last_k = ks[-1]
+    e22 = J_PER_K * float(t300[last_k]) / 1e22
+    return {"date": last_k, "value": round(e22, 2), "unit": "10²² J",
+            "years_of_world_electricity": round(e22 * 1e22 / WORLD_ELECTRICITY_J),
+            "levels": {y: round(J_PER_K * v / 1e22, 2) for y, v in same_month_levels(t300, last_k).items()},
+            "years": {y: [None if v is None else round(J_PER_K * v / 1e22, 2) for v in row]
+                      for y, row in _years(t300, 1.0, 4).items()},
+            "estimate": True,
+            "how": ("ρ·cp × box volume × T300 anomaly: 4.09·10⁶ J/(m³·K) × 5.94·10¹⁵ m³ (5°S–5°N, "
+                    "120°E–80°W, upper 300 m) = 2.43·10²² J per °C; T300 is the PMEL anomaly of the mean "
+                    "temperature of that box")}
+
+
 def _corr(a, b):
     n = len(a)
     if n < 24:
@@ -140,6 +180,11 @@ def fuel(wwv, t300, n34_monthly):
             "t300": ({"date": _last(t300)[0][0], "value": _last(t300)[0][1], "series": _tail(t300)}
                      if t300 else None),
             "series": _tail(wwv),
+            # каждый год строкой и запасённое тепло (18.09); PMEL даёт месяц, ряд с 1980
+            "years": _years(wwv, 1e14), "t300_years": _years(t300, 1.0, 3) if t300 else None,
+            "t300_levels": same_month_levels(t300, last_k) if t300 else None,
+            "granularity": "monthly since 1980",
+            "heat": stored_heat(t300),
             "note": ("Warm water volume is the fuel gauge: the heat piled up in the upper 300 m of the "
                      "equatorial Pacific before it reaches the surface. It leads the surface index, so it "
                      "answers the one question the models only guess at — whether the event still has "

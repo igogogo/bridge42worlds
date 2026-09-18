@@ -419,10 +419,9 @@
   /* Подпись деления: у больших единиц (кубометры воды) обычная запись не помещается и
      ничего не сообщает — показываем порядок, как в науке: 2.7e15. */
   function gridLabel(g, step, dg) {
-    if (Math.abs(g) >= 1e4) {
-      var e = Math.floor(Math.log(Math.abs(g)) / Math.LN10);
-      return (g / Math.pow(10, e)).toFixed(1) + 'e' + e;
-    }
+    // «3.0e4» на оси очагов читалось как формула; тысячи — k, миллионы — M (18.09)
+    if (Math.abs(g) >= 1e6) return (g < 0 ? '−' : '') + (Math.abs(g) / 1e6).toFixed(Math.abs(g) % 1e6 ? 1 : 0) + 'M';
+    if (Math.abs(g) >= 1e4) return (g < 0 ? '−' : '') + Math.round(Math.abs(g) / 1e3) + 'k';
     return fnum(g, dg == null ? (step < 0.5 ? 2 : 1) : dg);
   }
   function gridY(vmin, vmax, step, Y, L, R, W, dg) {
@@ -5154,6 +5153,52 @@
       return;
     }
     if (k === 'fuel' && F) {
+      /* ЧЕТЫРЕ ВИДА ОДНОГО ТОПЛИВА (владелец 18.09). Шкала — как было; «по годам» — каждый год
+         строкой по двенадцати месяцам (PMEL даёт месяц, ряд с 1980), сильнейшие события своими
+         цветами; тепло — оценка через теплоёмкость, и подписана оценкой. */
+      var fv = S.sub.fuelView || 'gauge', rowF = el('div', 'seg sub');
+      [['gauge', 'the gauge'], ['vol_years', 'volume, every year'], ['t300_years', 'temperature 0\u2013300 m, every year'], ['heat', 'stored heat']].forEach(function (o) {
+        if (o[0] === 't300_years' && !F.t300_years) return;
+        if (o[0] === 'heat' && !F.heat) return;
+        if (o[0] === 'vol_years' && !F.years) return;
+        var b = el('button', (fv === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.fuelView = o[0]; render(); }; rowF.appendChild(b);
+      });
+      body.appendChild(rowF);
+      var HLY = ['1982', '1997', '2015', '2023'], curYear = String(F.date || '').slice(0, 4);
+      function yearRank(years, ym) {                     // место этого месяца среди тех же месяцев всех лет
+        var m = parseInt(String(ym).slice(5, 7), 10) - 1, vals = [];
+        Object.keys(years || {}).forEach(function (y) { var v = (years[y] || [])[m]; if (fin(v)) vals.push([y, v]); });
+        vals.sort(function (a, b) { return b[1] - a[1]; });
+        var r = -1; vals.forEach(function (p, i) { if (p[0] === curYear) r = i + 1; });
+        return { rank: r, of: vals.length, top: vals[0] };
+      }
+      if (fv === 'vol_years') {
+        var rk = yearRank(F.years, F.date);
+        plot(body, function (w, h) { return chartYears({ title: 'Warm water volume anomaly, 10\u00b9\u2074 m\u00b3, every year since ' + Object.keys(F.years).sort()[0] + ' (PMEL, monthly)', years: F.years, monthly: true, highlight: HLY, current: curYear, digits: 2 }, w, h); });
+        var kv = el('div', 'kpis');
+        kv.innerHTML = '<div class="kpi"><div class="kn">' + term('wwv', 'this month among all years') + '</div><div class="kv">' + (rk.rank > 0 ? rk.rank + '<small> of ' + rk.of + '</small>' : '\u00b7') + '</div><div class="km">' + esc(monthName(F.date || '')) + ' of every year since 1980' + (rk.top && rk.top[0] !== curYear ? '; the highest was ' + esc(rk.top[0]) + ' at ' + fnum(rk.top[1]) : '; this year is the highest') + '</div>' + kmeta('wwv') + '</div>' +
+          '<div class="kpi"><div class="kn">granularity</div><div class="kv" style="font-size:17px">monthly</div><div class="km">' + esc(F.granularity || 'monthly since 1980') + '; the volume above the 20 \u00b0C isotherm, 5\u00b0S\u20135\u00b0N, 120\u00b0E\u201380\u00b0W, as an anomaly</div>' + kmeta(null, 'NOAA PMEL', F.date) + '</div>';
+        body.appendChild(kv);
+        body.appendChild(el('div', 'cap', 'Each thin line is one year, January to December; the four strongest events carry their own colours, this year is ochre. Read the height of this year against the same month of the others, not against the line as a whole: the seasonal cycle is the same for all of them.'));
+      } else if (fv === 't300_years') {
+        var rk2 = yearRank(F.t300_years, F.t300.date);
+        plot(body, function (w, h) { return chartYears({ title: 'Upper 300 m temperature anomaly, \u00b0C, every year since ' + Object.keys(F.t300_years).sort()[0] + ' (PMEL, monthly)', years: F.t300_years, monthly: true, highlight: HLY, current: curYear, digits: 2 }, w, h); });
+        var kt = el('div', 'kpis');
+        kt.innerHTML = '<div class="kpi"><div class="kn">' + term('t300', 'this month among all years') + '</div><div class="kv">' + (rk2.rank > 0 ? rk2.rank + '<small> of ' + rk2.of + '</small>' : '\u00b7') + '</div><div class="km">' + fnum(F.t300.value) + ' \u00b0C in ' + esc(monthName(F.t300.date)) + (rk2.top && rk2.top[0] !== curYear ? '; the highest was ' + esc(rk2.top[0]) + ' at ' + fnum(rk2.top[1]) : '; this year is the highest') + '</div>' + kmeta(null, 'NOAA PMEL / TAO', F.t300.date) + '</div>' +
+          (F.t300_levels ? '<div class="kpi"><div class="kn">same month in the strongest events</div><div class="kv" style="font-size:15px">' + HLY.filter(function (y) { return fin(F.t300_levels[y]); }).map(function (y) { return '<span style="color:var(--a' + y + ')">' + y + ' ' + fnum(F.t300_levels[y]) + '</span>'; }).join(' \u00b7 ') + '<small>\u00b0C</small></div><div class="km">the same heat as a temperature: the mean of the upper 300 m over the same box</div>' + kmeta(null, 'NOAA PMEL / TAO', F.t300.date) + '</div>' : '');
+        body.appendChild(kt);
+        body.appendChild(el('div', 'cap', 'The same water as the volume, read as a temperature: the mean anomaly of the upper 300 m over 5\u00b0S\u20135\u00b0N, 120\u00b0E\u201380\u00b0W. Monthly, since 1980.'));
+      } else if (fv === 'heat') {
+        var HT = F.heat, rk3 = yearRank(HT.years, HT.date);
+        plot(body, function (w, h) { return chartYears({ title: 'Stored heat anomaly of the upper 300 m, 10\u00b2\u00b2 J \u2014 our estimate from T300, every year since ' + Object.keys(HT.years).sort()[0], years: HT.years, monthly: true, highlight: HLY, current: curYear, digits: 1 }, w, h); });
+        var kh2 = el('div', 'kpis');
+        kh2.innerHTML = '<div class="kpi"><div class="kn">stored heat, our estimate</div><div class="kv">' + fnum(HT.value) + '<small>\u00b710\u00b2\u00b2 J</small></div><div class="km">' + esc(String(HT.date)) + '; this is not measured but computed: ' + esc(HT.how) + '</div>' + kmeta(null, 'our estimate on PMEL T300', HT.date) + '</div>' +
+          '<div class="kpi"><div class="kn">in everyday units</div><div class="kv" style="font-size:17px">' + (HT.years_of_world_electricity || 0).toLocaleString('en') + '<small> years</small></div><div class="km">of the world\u2019s electricity generation (about 30\u202f000 TWh a year) held as extra heat in that one box of ocean</div>' + kmeta(null, 'our estimate', HT.date) + '</div>' +
+          '<div class="kpi"><div class="kn">same month in the strongest events</div><div class="kv" style="font-size:15px">' + HLY.filter(function (y) { return fin((HT.levels || {})[y]); }).map(function (y) { return '<span style="color:var(--a' + y + ')">' + y + ' ' + fnum(HT.levels[y]) + '</span>'; }).join(' \u00b7 ') + '<small>\u00b710\u00b2\u00b2 J</small></div><div class="km">' + (rk3.rank > 0 ? 'this month ranks ' + rk3.rank + ' of ' + rk3.of + ' years' : '') + '</div>' + kmeta(null, 'our estimate on PMEL T300', HT.date) + '</div>';
+        body.appendChild(kh2);
+        body.appendChild(el('div', 'cap', 'An estimate, and shown as one: nobody measures the heat of this box directly. It is the T300 anomaly multiplied by the heat capacity of the water in the box, so its shape is exactly the temperature curve and only the unit changes. It says how much energy the event holds, not where it will go.'));
+      }
+      if (fv !== 'gauge') return;
       plot(body, function (w, h) { return chartFuel(F, D.noaa, w, h); });
       body.appendChild(el('div', 'cap', esc(F.note) + ' The lead of ' + ((F.lead || {}).lag) + ' months and the correlation ' + ((F.lead || {}).r) + ' are computed on our own series, by trying every shift from zero to twelve months.'));
       var kp = el('div', 'kpis');
@@ -6946,7 +6991,7 @@
     var dg = cfg.digits == null ? 1 : cfg.digits;
     var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText(cfg.title, W, 12) + '</text>';
     s += gridY(vmin, vmax, niceStep(vmax - vmin), Y, Lp, R + 8, W, dg);
-    for (var m = 0; m < 12; m++) if (W > 470 || m % 2 === 0) s += '<text x="' + X((ME[m] + ME[m + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + MONTHS[m] + '</text>';
+    for (var m = 0; m < 12; m++) if (W > 470 || m % 2 === 0) s += '<text x="' + (cfg.monthly ? X(m) : X((ME[m] + ME[m + 1]) / 2)).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + MONTHS[m] + '</text>';
     var hl = (cfg.highlight || []).map(String).filter(function (y) { return cfg.years[y] && y !== cur; });
     ys.forEach(function (y, k) {
       if (y === cur || hl.indexOf(y) >= 0) return;
@@ -7071,7 +7116,7 @@
   }
   /* Простой линейный/столбчатый график по x/y — для рядов, у которых нет своей сцены. */
   function chartSeriesSimple(o, W, H) {
-    var xs = o.x || [], ys = o.y || [];
+    var xs = o.x || [], ys = o.y || (o.lines && o.lines[0] ? (o.lines[0].y || []) : []);   // при пучке линий ось строится по первой
     var pts = xs.map(function (x, i) { return [x, ys[i]]; }).filter(function (p) { return fin(p[1]); });
     if (pts.length < 2) return svgOpen(W, H) + '<text x="20" y="40">not enough points</text></svg>';
     var Lp = 52, Rp = 12, Tp = topPad(W), B = 26, pw = W - Lp - Rp, ph = H - Tp - B;
@@ -7084,7 +7129,39 @@
     var s2 = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText(esc(o.title || ''), W - Lp - Rp, 11) + '</text>';
     s2 += gridY(vmin, vmax, niceStep(vmax - vmin, 5), Y, Lp, Rp, W, o.digits == null ? 1 : o.digits);
     var step = Math.max(1, Math.round((x1 - x0) / (W < 520 ? 5 : 9)));
-    for (var x = Math.ceil(x0 / step) * step; x <= x1; x += step) s2 += '<text x="' + X(x).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + x + '</text>';
+    /* ОСЬ X — ДАТАМИ, А НЕ НОМЕРАМИ ТОЧЕК. Ряды по дням шли с x = 0, 1, 2… и подписи внизу были
+       «0 5 10» (владелец 18.09: «шкалы по x непонятны»). o.xlab — подпись каждой точки; из ISO-даты
+       берём день-месяц, если ряд короче года, иначе год-месяц. */
+    var XL = o.xlab || null, spanDays = XL && XL.length > 1 && /^\d{4}-\d{2}-\d{2}/.test(XL[0]) ? (Date.parse(XL[XL.length - 1]) - Date.parse(XL[0])) / 864e5 : 0;
+    function xlab(x) {
+      if (!XL) return x;
+      var t = XL[Math.round(x)]; if (t == null) return '';
+      t = String(t);
+      if (/^\d{4}-\d{2}-\d{2}/.test(t)) return spanDays < 370 ? t.slice(5, 10) : t.slice(0, 7);
+      return t;
+    }
+    if (XL) step = Math.max(1, Math.round((x1 - x0) / (W < 520 ? 4 : 7)));
+    for (var x = Math.ceil(x0 / step) * step; x <= x1; x += step) s2 += '<text x="' + X(x).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + esc(String(xlab(x))) + '</text>';
+    // несколько рядов на одном поле, каждый своим цветом, имена в легенде (пожары по регионам, 18.09)
+    if (o.lines && o.lines.length) {
+      var all2 = []; o.lines.forEach(function (L2) { all2 = all2.concat((L2.y || []).filter(fin)); });
+      if (all2.length) {
+        vmin = Math.min.apply(null, all2); vmax = Math.max.apply(null, all2); if (o.zero) vmin = Math.min(vmin, 0);
+        pad = (vmax - vmin) * .12 || 1; vmin -= pad; vmax += pad * 1.6;
+      }
+      var Y3 = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
+      var s3 = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText(esc(o.title || ''), W - Lp - Rp, 11) + '</text>' + gridY(vmin, vmax, niceStep(vmax - vmin, 5), Y3, Lp, Rp, W, o.digits == null ? 1 : o.digits);
+      for (var x3 = Math.ceil(x0 / step) * step; x3 <= x1; x3 += step) s3 += '<text x="' + X(x3).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + esc(String(xlab(x3))) + '</text>';
+      var leg3 = [];
+      o.lines.forEach(function (L2, li) {
+        var col = L2.color || BUNDLE_COLORS[li % BUNDLE_COLORS.length];
+        s3 += segs(xs.map(function (x, i) { return [X(x), fin((L2.y || [])[i]) ? Y3(L2.y[i]) : NaN]; }), col, S.pick === (L2.key || L2.name) ? 2.8 : 1.6, pickOp(L2.key || L2.name, 1));
+        var lv = (L2.y || []).slice().reverse().filter(fin)[0];
+        leg3.push([L2.name + (fin(lv) ? ' ' + fnum(lv, o.digits == null ? 1 : o.digits, false) : ''), col, 1.6, '', L2.key || L2.name]);
+      });
+      s3 += legend(leg3, W, H, Rp, Tp);
+      return s3 + '</svg>';
+    }
     if (vmin < 0 && vmax > 0) s2 += '<line x1="' + Lp + '" y1="' + Y(0).toFixed(1) + '" x2="' + (W - Rp) + '" y2="' + Y(0).toFixed(1) + '" style="stroke:var(--soft)" stroke-width=".8"/>';
     if (o.bars) {
       var bw = Math.max(1.2, pw / pts.length * .7);
@@ -7117,9 +7194,10 @@
     var last = ser[days[days.length - 1]], regs = FR.regions || [];
     var kp = el('div', 'kpis');
     var top = regs.map(function (r) { return { r: r, n: (last.regions || {})[r.id] || 0, frp: (last.frp || {})[r.id] || 0 }; }).sort(function (a, b) { return b.n - a.n; });
+    var kpF = kp;
     kp.innerHTML = '<div class="kpi"><div class="kn">hotspots in the last 24 hours</div><div class="kv">' + (last.total.n || 0).toLocaleString('en') + '</div><div class="km">' + (last.total.strong || 0) + ' of them stronger than 100 MW · ' + Math.round(last.total.frp).toLocaleString('en') + ' MW of radiative power in all</div>' + kmeta(null, 'NASA FIRMS, ' + esc(inst.replace('_', ' ')), days[days.length - 1]) + '</div>' +
       top.slice(0, 3).map(function (t) { return '<div class="kpi"><div class="kn">' + esc(t.r.name) + '</div><div class="kv">' + t.n.toLocaleString('en') + '</div><div class="km">' + Math.round(t.frp).toLocaleString('en') + ' MW · ' + (days.length > 1 ? 'yesterday ' + (((ser[days[days.length - 2]] || {}).regions || {})[t.r.id] || 0).toLocaleString('en') : 'the first day of our record') + '</div></div>'; }).join('');
-    body.appendChild(kp);
+    // карточки — ПОД графиком, как на остальных сценах (владелец 18.09)
     var view = S.sub.fireView || 'regions', rowV = el('div', 'seg sub');
     [['regions', 'regions today'], ['series', 'day by day']].forEach(function (o) {
       var b = el('button', (view === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.fireView = o[0]; render(); }; rowV.appendChild(b);
@@ -7134,16 +7212,16 @@
         }).join('') + '</tbody></table>';
       body.appendChild(wrap);
     } else {
-      var pick = S.sub.fireRegion || (top[0] && top[0].r.id) || 'amazon';
-      var rowR = el('div', 'seg sub');
-      regs.forEach(function (r) { var b = el('button', (pick === r.id ? 'on' : '') + ' sq', r.name.split(' (')[0]); b.type = 'button'; b.onclick = function () { S.sub.fireRegion = r.id; render(); }; rowR.appendChild(b); });
-      body.appendChild(rowR);
+      /* ВСЕ РЕГИОНЫ НА ОДНОМ ПОЛЕ, ИМЕНА В ЛЕГЕНДЕ (владелец 18.09): раньше по кнопке на регион,
+         и сравнить их ход было негде. Нажатие на имя в легенде выделяет линию. */
       plot(body, function (w, h) {
-        return chartSeriesSimple({ title: (regs.filter(function (r) { return r.id === pick; })[0] || {}).name + ': hotspots a day, ' + esc(inst.replace('_', ' ')),
-          x: days.map(function (d, i) { return i; }), y: days.map(function (d) { return (ser[d].regions || {})[pick] || 0; }), digits: 0 }, w, h);
+        return chartSeriesSimple({ title: 'Hotspots a day by region, ' + esc(inst.replace('_', ' ')) + ', since ' + days[0],
+          x: days.map(function (d, i) { return i; }), xlab: days, zero: true, digits: 0,
+          lines: regs.map(function (r, i) { return { name: r.name.split(' (')[0], key: r.id, color: BUNDLE_COLORS[i % BUNDLE_COLORS.length], y: days.map(function (d) { return (ser[d].regions || {})[r.id] || 0; }) }; }) }, w, h);
       });
-      body.appendChild(el('div', 'cap', 'One point per day since we started keeping this record (' + days[0] + '). The open FIRMS channel holds only the last day, so the series grows from the day we began.'));
+      body.appendChild(el('div', 'cap', 'One point per day since we started keeping this record (' + days[0] + '): the open FIRMS channel publishes only the last 24 hours and no archive without a key, so the history here is exactly as long as our own collection. Compare a region with its own course; the regions differ in size, so their heights are not comparable with each other.'));
     }
+    body.appendChild(kpF);
     body.appendChild(el('div', 'cap', esc(FR.note || '')));
   }
 
@@ -7165,14 +7243,14 @@
         var b = BR[k2], L = b.last || {};
         return '<div class="kpi"><div class="kn">' + esc(b.name) + '</div><div class="kv">' + fnum(L.pct, 1, false) + '<small> % of max</small></div><div class="km">' + Math.round(L.mwmonth || 0).toLocaleString('en') + ' MW-months stored' + (L.rank_high ? ' · ' + ord(L.rank_high) + ' highest of ' + L.of + ' years for the date' : '') + '</div>' + kmeta(null, 'ONS Brazil', L.date) + '</div>';
       }).join('');
-      body.appendChild(kp);
       var pickB = S.sub.waterSub || subs[0], rowB = el('div', 'seg sub');
       subs.forEach(function (k2) { var b = el('button', (pickB === k2 ? 'on' : '') + ' sq', BR[k2].name); b.type = 'button'; b.onclick = function () { S.sub.waterSub = k2; render(); }; rowB.appendChild(b); });
       body.appendChild(rowB);
       var B2 = BR[pickB] || {};
       plot(body, function (w, h) {
-        return chartSeriesSimple({ title: B2.name + ': stored energy, % of the subsystem maximum', x: (B2.dates || []).map(function (d, i) { return i; }), y: B2.pct || [], digits: 1, unit: ' %' }, w, h);
+        return chartSeriesSimple({ title: B2.name + ': stored energy, % of the subsystem maximum', x: (B2.dates || []).map(function (d, i) { return i; }), xlab: B2.dates || [], y: B2.pct || [], digits: 1, unit: ' %' }, w, h);
       });
+      body.appendChild(kp);                                    // карточки под графиком (18.09)
       var res = WA.brazil_reservoirs || {}, items = (res.items || []).slice(0, 10);
       if (items.length) {
         var wrap = el('div'); wrap.style.cssText = 'max-height:150px;overflow:auto';
@@ -7185,7 +7263,6 @@
       var L2 = CAt.last || {};
       kp.innerHTML = '<div class="kpi"><div class="kn">ten largest reservoirs together</div><div class="kv">' + fnum(L2.pct, 1, false) + '<small> % of capacity</small></div><div class="km">' + Math.round((L2.af || 0) / 1000).toLocaleString('en') + ' thousand acre-feet of ' + Math.round((CAt.capacity_af || 0) / 1000).toLocaleString('en') + '</div>' + kmeta(null, 'California CDEC', L2.date) + '</div>' +
         ids.slice(0, 3).map(function (id) { var b = CAr[id], L3 = b.last || {}; return '<div class="kpi"><div class="kn">' + esc(b.name) + '</div><div class="kv">' + fnum(L3.pct, 1, false) + '<small> %</small></div><div class="km">' + Math.round((L3.af || 0) / 1000).toLocaleString('en') + ' of ' + Math.round(b.capacity_af / 1000).toLocaleString('en') + ' thousand acre-feet</div></div>'; }).join('');
-      body.appendChild(kp);
       var pickC = S.sub.waterRes || 'total', rowC = el('div', 'seg sub');
       [['total', 'all ten']].concat(ids.map(function (id) { return [id, CAr[id].name]; })).forEach(function (o) {
         var b = el('button', (pickC === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.waterRes = o[0]; render(); }; rowC.appendChild(b);
@@ -7193,8 +7270,9 @@
       body.appendChild(rowC);
       var C2 = pickC === 'total' ? CAt : (CAr[pickC] || {});
       plot(body, function (w, h) {
-        return chartSeriesSimple({ title: C2.name + ': storage, % of capacity', x: (C2.dates || []).map(function (d, i) { return i; }), y: C2.pct || [], digits: 1, unit: ' %' }, w, h);
+        return chartSeriesSimple({ title: C2.name + ': storage, % of capacity', x: (C2.dates || []).map(function (d, i) { return i; }), xlab: C2.dates || [], y: C2.pct || [], digits: 1, unit: ' %' }, w, h);
       });
+      body.appendChild(kp);                                    // карточки под графиком (18.09)
     }
     body.appendChild(el('div', 'cap', esc(WA.note || '')));
   }
