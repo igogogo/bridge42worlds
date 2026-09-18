@@ -4530,7 +4530,7 @@
      Ни один вид здесь не написан заново: зовутся те же функции, что рисовали их под Models,
      Dynamics и Regions. Переехала только точка входа, потому что для читателя это одна тема,
      а не три. Старые адреса продолжают работать — weatherRedirect() переводит их сюда. */
-  var WEATHER_SUB = [['cities', 'Cities, 7 days'], ['land', 'Land regions'], ['rain', 'Rain'],
+  var WEATHER_SUB = [['cities', 'Cities, 7 days'], ['land', 'Land regions'], ['rain', 'Rain'], ['rivers', 'Rivers'],
                      ['mountains', 'Mountain ice'], ['fires', 'Fires'], ['water', 'Water held']];
   function viewWeather() {
     var k = sub('weather', 'cities');
@@ -4539,11 +4539,12 @@
       : k === 'land' ? 'Air over the land regions, day by day against their own record'
       : k === 'rain' ? rainHead()
       : k === 'mountains' ? 'Mountain ice: how far the air above the glaciers is from its normal'
-      : k === 'fires' ? 'Fires' : 'Water held';
+      : k === 'fires' ? 'Fires' : (k === 'rivers' ? ((S.RV || {}).board ? S.RV.board.below_p25 + ' of ' + S.RV.board.n + ' rivers below their lower quartile, ' + S.RV.board.record_low.length + ' at a record low for the date' : 'Rivers') : 'Water held');
     var body = stageShell(head, WEATHER_SUB.map(function (o) { return segBtn('weather', o[0], o[1], 'cities'); }));
     if (k === 'cities') { viewCities(body); return; }
     if (k === 'rain') { viewRain(body); return; }
     if (k === 'mountains') { viewGlaciers(body); return; }
+    if (k === 'rivers') { viewRivers(body); return; }
     if (k === 'fires') { viewFires(body); return; }
     if (k === 'water') { viewWater(body); return; }
     // шесть боксов суши: тот же вид, что на Dynamics, только выбор бокса живёт здесь
@@ -5111,10 +5112,38 @@
     if (k === 'wind' && WD && !WD.error) head = WD.active ? 'A westerly wind burst is under way' : ((WD.events || []).length + ' westerly bursts in the last 120 days' + (WD.days_since_last != null ? ', the latest ' + WD.days_since_last + ' days ago' : ''));
     if (k === 'mjo' && MJ && !MJ.error) head = 'MJO phase ' + MJ.last.phase + ', amplitude ' + MJ.last.amp + (MJ.burst_window ? ': the window for a wind burst is open' : ': ' + (MJ.active ? 'organised, but away from the western Pacific' : 'no organised pulse'));
     if (k === 'indices') head = 'Three independent indices next to our three-sign coupling';
+    if (k === 'vapour') { var VP0 = S.VP || {}, tr0 = ((VP0.items || []).filter(function (x) { return x.key === 'tropics'; })[0]); head = tr0 && tr0.mean30 ? 'Water vapour over the tropics: ' + fnum(tr0.mean30.value, 1, false) + ' kg/m\u00b2 over 30 days, rank ' + tr0.mean30.rank + ' of ' + tr0.mean30.of + ' years' : 'Water vapour'; }
     var body = stageShell(head, [segBtn('air', 'coupling', 'Coupling', 'coupling'),
       segBtn('air', 'fuel', 'Fuel', 'coupling'), segBtn('air', 'layers', 'Layers', 'coupling'),
-      segBtn('air', 'wind', 'Wind, daily', 'coupling'), segBtn('air', 'mjo', 'MJO', 'coupling'), segBtn('air', 'indices', 'MEI · IOD · RONI', 'coupling')]);
+      segBtn('air', 'wind', 'Wind, daily', 'coupling'), segBtn('air', 'mjo', 'MJO', 'coupling'), segBtn('air', 'indices', 'MEI · IOD · RONI', 'coupling'), segBtn('air', 'vapour', 'Water vapour', 'coupling')]);
 
+    if (k === 'vapour') {
+      /* ВОДЯНОЙ ПАР (владелец 18.09, C3S: рекорд 27,35 кг/м² в августе). Глобальное среднее из
+         редкой сетки не подделываем: пояс 20°S–20°N и наши боксы, ERA5 через Open-Meteo, суточно
+         с 1991; глобальная цифра C3S цитируется как reported. Считает vapour.py. */
+      var VP = S.VP || {};
+      if (!VP.built) { body.appendChild(el('div', 'note', 'No vapour.json yet: run python tools/enso/vapour.py (the first run backfills 1991 onward, about twenty minutes).')); return; }
+      var vit = VP.items || [], vk = S.sub.vapReg || 'tropics', V = vit.filter(function (x) { return x.key === vk; })[0] || vit[0];
+      var rowV = el('div', 'seg sub');
+      vit.forEach(function (x) { var b = el('button', (x.key === V.key ? 'on' : ''), x.name); b.type = 'button'; b.onclick = function () { S.sub.vapReg = x.key; render(); }; rowV.appendChild(b); });
+      body.appendChild(rowV);
+      var ty = V.this_year || [], xl = ty.map(function (s) { return s[0]; });
+      function doyOf(md) { var d = new Date('2025-' + md + 'T00:00:00Z'); return Math.round((d - Date.UTC(2025, 0, 1)) / 864e5); }
+      var lines = [{ name: String(new Date().getUTCFullYear()), key: 'now', color: 'var(--text)', y: ty.map(function (s) { return s[1]; }) }];
+      Object.keys(V.analogs || {}).forEach(function (y) { var byMd = {}; (V.analogs[y] || []).forEach(function (s) { byMd[s[0]] = s[1]; }); lines.push({ name: y, key: y, color: 'var(--a' + y + ')', y: xl.map(function (md) { return byMd[md]; }) }); });
+      lines.push({ name: 'median 1991\u20132020', key: 'clim', color: 'var(--soft)', y: xl.map(function (md) { return (V.clim || [])[doyOf(md)]; }) });
+      plot(body, function (w, h) { return chartSeriesSimple({ title: V.name + ': column water vapour, kg/m\u00b2, this year beside 1997, 2015, 2023 and the median', x: xl.map(function (d, i) { return i; }), xlab: xl.map(function (md) { return '2026-' + md; }), digits: 1, lines: lines }, w, h); });
+      var kv = el('div', 'kpis');
+      kv.innerHTML = '<div class="kpi"><div class="kn">' + esc(V.name) + ' \u00b7 last 30 days</div><div class="kv">' + fnum(V.mean30.value, 1, false) + '<small> kg/m\u00b2</small></div><div class="km">' + fnum(V.mean30.anom, 1) + ' against 1991\u20132020 for these days; rank ' + V.mean30.rank + ' of ' + V.mean30.of + ' years' + (V.mean30.record ? ' \u2014 <b>the highest</b>' : '') + '</div>' + kmeta(null, 'ERA5 via Open-Meteo, ' + V.n_points + ' points', V.last.date) + '</div>' +
+        '<div class="kpi"><div class="kn">last day</div><div class="kv">' + fnum(V.last.value, 1, false) + '<small> kg/m\u00b2</small></div><div class="km">' + fnum(V.last.anom, 1) + ' against the median for the date; ' + esc(V.why) + '</div>' + kmeta(null, 'ERA5 via Open-Meteo', V.last.date) + '</div>' +
+        '<div class="kpi"><div class="kn">global record, as reported</div><div class="kv">' + fnum((VP.c3s || {}).value, 2, false) + '<small> kg/m\u00b2</small></div><div class="km">' + esc((VP.c3s || {}).month || '') + ', ' + esc((VP.c3s || {}).quote || '') + '; previous ' + esc(((VP.c3s || {}).previous || {}).month || '') + '. Reported by C3S, not measured here: a global mean needs the full grid.</div>' + kmeta(null, (VP.c3s || {}).source || 'C3S', (VP.c3s || {}).month) + '</div>';
+      body.appendChild(kv);
+      var yrs = V.mean30.by_year || {}, ks = Object.keys(yrs).sort(), wrapY = el('div'); wrapY.style.cssText = 'max-height:150px;overflow:auto';
+      wrapY.innerHTML = '<table class="e" style="min-width:420px"><thead><tr><th class="prose">the same 30 days in every year</th>' + ks.slice(-12).map(function (y) { return '<th class="num">' + y + '</th>'; }).join('') + '<th class="num">now</th></tr></thead><tbody><tr><td class="src">kg/m\u00b2</td>' + ks.slice(-12).map(function (y) { return '<td class="num">' + fnum(yrs[y], 1, false) + '</td>'; }).join('') + '<td class="num top">' + fnum(V.mean30.value, 1, false) + '</td></tr></tbody></table>';
+      body.appendChild(wrapY);
+      body.appendChild(el('div', 'cap', esc(VP.note || '') + ' Built ' + esc(VP.built || '') + '.'));
+      return;
+    }
     if (k === 'wind') {
       if (!WD || WD.error) { body.appendChild(el('div', 'note warn', 'The daily wind did not load: ' + esc((WD || {}).error || 'no data'))); return; }
       plot(body, function (w, h) { return chartWind(WD, w, h); });
@@ -7232,6 +7261,61 @@
   /* ══ ПОЖАРЫ ════════════════════════════════════════════════════════════════════
      Активные очаги NASA FIRMS: три прибора, суточные глобальные файлы. Очаг это не площадь,
      а обнаружение; мощность в мегаваттах. Регион сравниваем с его собственным ходом. */
+  /* ══ РЕКИ ══════════════════════════════════════════════════════════════════════
+     Владелец 18.09 (WMO: 36 % бассейнов ниже нормы в 2025): живой эквивалент того же модельного
+     семейства — GloFAS через Open-Meteo, четырнадцать рек, завязанных на Эль-Ниньо, против их
+     же климатологии 2000–2020. Модельный расход, не гидропост; плотин модель не знает. */
+  function viewRivers(body) {
+    var RV = S.RV || {};
+    if (!RV.built) { body.appendChild(el('div', 'note', 'No rivers.json yet: run python tools/enso/rivers.py.')); return; }
+    var items = RV.items || [], B = RV.board || {}, pick = S.sub.river || (items[0] || {}).key, sp = S.sub.riverSpan || 'two';
+    var it = items.filter(function (x) { return x.key === pick; })[0] || items[0];
+    var rowR = el('div', 'seg sub');
+    items.forEach(function (x) { var b = el('button', (x.key === it.key ? 'on' : ''), x.name.replace(/ at .*$| ,.*$|, .*$/, '')); b.type = 'button'; b.title = x.name; b.onclick = function () { S.sub.river = x.key; render(); }; rowR.appendChild(b); });
+    body.appendChild(rowR);
+    var rowS = el('div', 'seg sub');
+    [['two', 'last two years'], ['year', 'this year against 2015 and 2023']].forEach(function (o) { var b = el('button', (sp === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.riverSpan = o[0]; render(); }; rowS.appendChild(b); });
+    body.appendChild(rowS);
+    if (it) {
+      var ser = it.series || [], dates = ser.map(function (s) { return s[0]; });
+      function climAt(dt, key) { var d = new Date(dt + 'T00:00:00Z'), start = Date.UTC(d.getUTCFullYear(), 0, 1), doy = Math.round((d - start) / 864e5); return (it.clim[key] || [])[Math.min(365, doy)]; }
+      if (sp === 'two') {
+        plot(body, function (w, h) {
+          return chartSeriesSimple({ title: it.name + ': modelled discharge, m\u00b3/s, with the 2000\u20132020 median and p10\u2013p90 band for the date', x: dates.map(function (d, i) { return i; }), xlab: dates, digits: 0, zero: true,
+            lines: [{ name: 'this river', key: 'now', color: 'var(--text)', y: ser.map(function (s) { return s[1]; }) },
+              { name: 'median 2000\u20132020', key: 'p50', color: 'var(--soft)', y: dates.map(function (d) { return climAt(d, 'p50'); }) },
+              { name: 'p10', key: 'p10', color: 'var(--nina)', y: dates.map(function (d) { return climAt(d, 'p10'); }) },
+              { name: 'p90', key: 'p90', color: 'var(--nino)', y: dates.map(function (d) { return climAt(d, 'p90'); }) }] }, w, h);
+        });
+      } else {
+        var cy = String(new Date().getUTCFullYear()), thisY = ser.filter(function (s) { return s[0].slice(0, 4) === cy; }), xl = thisY.map(function (s) { return s[0]; });
+        var lines = [{ name: cy, key: 'now', color: 'var(--text)', y: thisY.map(function (s) { return s[1]; }) }];
+        Object.keys(it.analogs || {}).forEach(function (y) {
+          var A = it.analogs[y], byMd = {}; A.forEach(function (s) { byMd[s[0].slice(5)] = s[1]; });
+          lines.push({ name: y, key: y, color: 'var(--a' + y + ')', y: xl.map(function (d) { return byMd[d.slice(5)]; }) });
+        });
+        lines.push({ name: 'median 2000\u20132020', key: 'p50', color: 'var(--soft)', y: xl.map(function (d) { return climAt(d, 'p50'); }) });
+        plot(body, function (w, h) { return chartSeriesSimple({ title: it.name + ': ' + cy + ' beside 2015 and 2023 on the same calendar, m\u00b3/s', x: xl.map(function (d, i) { return i; }), xlab: xl, digits: 0, zero: true, lines: lines }, w, h); });
+      }
+      var kr = el('div', 'kpis');
+      kr.innerHTML = '<div class="kpi"><div class="kn">' + esc(it.name) + ' \u00b7 last day</div><div class="kv">' + (it.last.value || 0).toLocaleString('en') + '<small> m\u00b3/s</small></div><div class="km">percentile ' + fnum(it.last.pct, 0, false) + ' for the date (median ' + (it.last.p50 || 0).toLocaleString('en') + ')</div>' + kmeta(null, 'GloFAS via Open-Meteo', it.last.date) + '</div>' +
+        '<div class="kpi"><div class="kn">last 30 days</div><div class="kv">' + (it.mean30.value || 0).toLocaleString('en') + '<small> m\u00b3/s</small></div><div class="km">percentile ' + fnum(it.mean30.pct, 0, false) + ' among the same 30 days of ' + it.mean30.n_years + ' years' + (it.record_low_30d ? '; <b>the lowest of the record</b>' : (it.record_high_30d ? '; <b>the highest of the record</b>' : '')) + '</div>' + kmeta(null, 'GloFAS via Open-Meteo, 2000\u20132020 climatology', it.last.date) + '</div>' +
+        '<div class="kpi"><div class="kn">why this river</div><div class="kv" style="font-size:14px;line-height:1.35">' + esc(it.why) + '</div><div class="km">river cell ' + fnum(it.lat, 2, false) + '\u00b0, ' + fnum(it.lon, 2, false) + '\u00b0 on the 0.05\u00b0 grid</div>' + kmeta(null, 'GloFAS v4', it.last.date) + '</div>';
+      body.appendChild(kr);
+    }
+    var wrap = el('div'); wrap.style.cssText = 'max-height:220px;overflow:auto';
+    wrap.innerHTML = '<table class="e" style="min-width:560px"><thead><tr><th class="prose">river</th><th class="num">last day, m\u00b3/s</th><th class="num">pct</th><th class="num">30-day pct</th><th class="prose">note</th></tr></thead><tbody>' +
+      items.slice().sort(function (a, b) { return (a.mean30.pct || 0) - (b.mean30.pct || 0); }).map(function (x) {
+        return '<tr><td>' + esc(x.name) + '</td><td class="num">' + (x.last.value || 0).toLocaleString('en') + '</td><td class="num">' + fnum(x.last.pct, 0, false) + '</td><td class="num' + ((x.mean30.pct || 0) < 25 || (x.mean30.pct || 0) > 75 ? ' top' : '') + '">' + fnum(x.mean30.pct, 0, false) + '</td><td class="src">' + (x.record_low_30d ? 'lowest 30 days of the record' : (x.record_high_30d ? 'highest 30 days of the record' : '')) + '</td></tr>';
+      }).join('') + '</tbody></table>';
+    body.appendChild(wrap);
+    var kb = el('div', 'kpis');
+    kb.innerHTML = '<div class="kpi"><div class="kn">rivers below their lower quartile</div><div class="kv">' + (B.below_p25 || 0) + '<small> of ' + (B.n || 0) + '</small></div><div class="km">30-day mean under p25 of the same days 2000\u20132020; ' + (B.above_p75 || 0) + ' above p75; record low for the date: ' + ((B.record_low || []).length ? B.record_low.join(', ') : 'none') + '</div>' + kmeta(null, 'our count on GloFAS', B.as_of) + '</div>' +
+      '<div class="kpi"><div class="kn">WMO, as reported</div><div class="kv" style="font-size:15px;line-height:1.35">' + esc((RV.wmo || {}).as_reported || '') + '</div><div class="km">' + esc((RV.wmo || {}).note || '') + '</div>' + kmeta(null, (RV.wmo || {}).report || 'WMO', '2025') + '</div>';
+    body.appendChild(kb);
+    body.appendChild(el('div', 'cap', esc(RV.note || '') + ' Built ' + esc(RV.built || '') + '.'));
+  }
+
   function viewFires(body) {
     var FR = S.FR || {};
     if (!FR.built) { body.appendChild(el('div', 'note', 'No fires.json yet: run python tools/enso/fires.py.')); return; }
@@ -9186,6 +9270,8 @@
     "radiance/greenhouse": {"title": "How much heat the air traps", "what": "The gap between the temperature of the sea and the temperature the satellite reads looking down at it, which is what the air, and any cloud, hold back.", "see": "Two buttons choose the version: G_clear uses only the clearest scenes of each day and is the water-vapour reading, while G uses every scene and so mostly follows how cloudy the day was. The chart is one line per year, this year thick with a dot at its last day and 2023 to 2025 thin and dashed, with tiles below comparing this year's last fourteen days to each earlier year's window average. The vertical scale is in degrees, and larger means more heat held in.", "special": "Its neighbours count cloud; this one asks how much of the sea's warmth the air keeps in when there is no cloud to do it. The night button takes the sun's direct heating out of the reading, and the notes warn that over the western pool genuinely clear days are rare, so its value there is an upper limit.", "src": "NOAA's daily sea-surface temperature minus the satellite's infrared window reading, from the same collector"},
     "radiance/profile": {"title": "A temperature ladder through the air", "what": "Tables of how warm each layer above a Pacific box has read to the satellite over the last two weeks, set against each of the last three years averaged over the panel's whole window.", "see": "The tables are stacked by instrument: NOAA-21's infrared channels, which stop at whatever cloud is in the way, the same kind of channels on NASA's Aqua as a second opinion, and NOAA-21's microwave channels, which see through cloud. Each row is one layer, named by where it looks, from the stratosphere, the thin air above the weather, down to the surface or the cloud top for infrared, and by air pressure for microwave. The first number column is the last fourteen days in degrees; the next three are the difference from the whole-window average of 2025, 2024 and 2023, and a cell is coloured once that difference passes one degree either way.", "special": "This is the only view on the scene that reaches the air itself rather than the cloud below it. Setting infrared beside microwave shows exactly where the two part company: over the central Pacific the infrared rows sit far further from earlier years than the microwave rows do, because infrared is stopped by the cloud tops while microwave reads through them.", "src": "NOAA-21 CrIS infrared and ATMS microwave granules, with Aqua AIRS where it has data, from the same collector"},
     "radiance/regime": {"title": "Is the old rule still holding", "what": "A watch on whether the long-standing rule, warmer sea means more storm cloud, is still the same rule.", "see": "The line is the steepness of that rule, fitted again and again on a moving twelve-year window of years, with a shaded band showing how uncertain each fit is; the dashed horizontal line is the single fit over all years, labelled at the right edge, and the newest window carries a dot and its number. A line that stays level means the rule has not moved. The buttons above choose which instrument and which hour of the day the rule is fitted on and whether to read the season or the year so far, while the tiles below give the fit over all years, the distance between the first and last window against their combined uncertainty, how much cloud this year has against what the rule expects, and whether all four variants — two instruments, by day and by night — put this year on the same side of the line.", "special": "Its neighbours ask how extreme the reading is; this one asks whether the machinery behind the reading has changed, which no record value can answer. The panel refuses to print where this year lands on the rule as a measurement, because this year's sea is warmer than any year the rule was fitted on, so that position is a claim about the curve past the end of the data.", "src": "the collector's regime block, Nino 3.4 sea temperature against storm-cloud share; the first-to-last comparison is the panel's own subtraction"},
+    "weather/rivers": {"title": "Fourteen rivers against their own past", "what": "Modelled river discharge (GloFAS, the Copernicus flood model) for fourteen rivers whose basins answer El Nino: the last two years against the 2000-2020 median and p10-p90 band for the date, this year beside 2015 and 2023, and a board of how many rivers sit below their lower quartile.", "why": "The WMO's annual water report says a third of rivers were normal in 2025 and 36 % of basin area was below normal; that report has no live feed, so the panel follows the same model family day by day.", "tech": "Open-Meteo Flood API, GloFAS v4, 0.05 degree grid, since 2000; the river cell is the wettest cell within 0.25 degrees of the gauge. A model on observed weather, not a gauge: it knows no dams or irrigation. Climatology by day of year in a 15-day window; the 30-day percentile is against the same 30 days of each year. rivers.py, daily light run."},
+    "air/vapour": {"title": "Water vapour over the tropics", "what": "Column water vapour, kg per square metre of the air column, from ERA5 through Open-Meteo: the tropical belt 20S-20N on a 10 by 30 degree grid weighted by cos(latitude), and the Nino boxes on 3 by 5 points; daily since 1991, this year beside 1997, 2015 and 2023, the 30-day mean ranked among all years.", "why": "C3S reported August 2026 as the wettest month of the ERA5 record (27.35 kg/m2) and named the tropical oceans and El Nino as the source; this is the part of that record we can watch every day.", "tech": "Not a global mean: a sparse grid cannot give one honestly, so the global number is quoted from C3S as reported. Hourly ERA5 points averaged to days; climatology 1991-2020 in a 15-day window. First run backfills 1991 onward into data/enso/raw/vapour; then only new days. vapour.py, daily light run."},
     "radiance/places": {"title": "Sixty-five named places", "what": "Named places on the microwave sounder (ATMS, NOAA-20, 2.5 degree grid), each with the mechanism by which it could fail: the edge of convection, a bistable axis, a far teleconnection, or a control that must not move. For each, this year's continuous block against the same season of 2018-2025, in K and in sigmas of those years, day and night passes separately.", "why": "A cell without a name gives an anomaly nobody can interpret; a place with a mechanism turns the same number into a statement about what moved.", "tech": "Vertical contrast ch10 minus ch13 (tropopause minus middle stratosphere), corrected to nadir, with the raw value kept beside it; days below the completeness gate dropped; local time of overpass printed with every number because an uneven schedule fakes a regime change. Not a detection threshold: the collector withdrew its thresholds on 2026-09-16, and raises no alarms. Built by radiance_places.py from the collector's places_daily.csv."},
     "radiance/seismic": {"title": "Earthquakes and the sun, watched separately", "what": "Counts of Pacific-rim earthquakes over the same stretch of calendar, and the sun's activity over the same days.", "see": "Zone buttons run from the zone that is busiest against its own history, and the default chart is one bar per day of earthquakes of magnitude 4.5 and above that are not aftershocks of another quake. A table button shows every zone at once with the raw count, the count after aftershocks are set aside, that zone's usual and highest values, its rank among the 27 windows since 2000, the magnitude 5.5 count, and a per-decade trend that mostly measures the growing sensitivity of the detection network rather than the Earth; a sun button swaps in the daily sunspot number. The tiles carry the chosen zone's count against its usual and highest, and the sun's numbers for the window.", "special": "It is here because readers ask, and the counts are shown with aftershocks set aside: roughly half of any earthquake catalogue is aftershocks, so a raw count can turn one strong sequence into an apparent wave of seismicity. The panel states that no link to El Nino is claimed or established, and that the US Geological Survey holds weather and earthquakes to be unrelated.", "src": "the USGS earthquake catalogue, thinned of aftershocks by the Gardner-Knopoff method, plus sunspot, radio-flux and magnetic indices from GFZ Potsdam"},
     "radiance/walker": {"title": "East minus west, seen raw", "what": "How much warmer the middle of the Pacific looks to the satellite than the warm western Pacific, day by day.", "see": "One line per year on the calendar, this year thick with a dot at its last day, earlier years thin and dashed, and the zero line drawn heavier than the other grid lines. A large positive value is the ordinary state, the cloudy west hiding its warmth while the clear east shows it; a line sinking towards zero means the cloud has moved east. The tiles below give this year's last fourteen days against each earlier year's average over the window.", "special": "The Walker circulation, the east-west overturning of air across the Pacific, is usually read from pressure or wind reports; here it is one subtraction between two raw satellite readings with no model in between. Day and night buttons let you check the same contrast twelve hours apart.", "src": "two brightness readings from the same NOAA-21 infrared granules, subtracted; NOAA-20 and NASA's Aqua available as alternatives"},
@@ -10366,11 +10452,13 @@
     get('/data/enso/phase.json').catch(function () { return {}; }),
     get('/data/enso/layout-check.json').catch(function () { return {}; }),
     get('/data/enso/futures.json').catch(function () { return {}; }),
-    get('/data/enso/radiance-places.json').catch(function () { return {}; })])
+    get('/data/enso/radiance-places.json').catch(function () { return {}; }),
+    get('/data/enso/rivers.json').catch(function () { return {}; }),
+    get('/data/enso/vapour.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
       fixRiskTitles(r[0]);                    // парные риски: «world ocean:» / «land+ocean:» читались как дубли (владелец 09.09)
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}; S.LY = r[30] || {}   /* история прогнозов, облака, «кто выбивается» (15.09), обход раскладки (16.09) */; S.FU = r[31] || {};   /* биржевые котировки (18.09) */ S.RP = r[32] || {};   /* 65 мест радианса (18.09) */
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}; S.LY = r[30] || {}   /* история прогнозов, облака, «кто выбивается» (15.09), обход раскладки (16.09) */; S.FU = r[31] || {};   /* биржевые котировки (18.09) */ S.RP = r[32] || {};   /* 65 мест радианса (18.09) */ S.RV = r[33] || {}; S.VP = r[34] || {};   /* реки и водяной пар (18.09) */
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');

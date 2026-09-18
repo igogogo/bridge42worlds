@@ -38,6 +38,8 @@ KIND_LABEL = {
     "links": "links to our works",
     "futures": "exchange futures for food goods: daily and weekly closes",
     "radiance_places": "sixty-five named places on the microwave sounder, this year against 2018–2025",
+    "rivers": "river discharge, GloFAS via Open-Meteo: fourteen rivers against their own climatology",
+    "vapour": "column water vapour, ERA5 via Open-Meteo: tropics belt and the Niño boxes",
     "records": "mooring records",
     "publish": "publish to the site",
     "publish-fresh": "publish the fresh layer only",
