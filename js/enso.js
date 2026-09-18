@@ -5115,14 +5115,14 @@
     if (k === 'vapour') { var VP0 = S.VP || {}, tr0 = ((VP0.items || []).filter(function (x) { return x.key === 'tropics'; })[0]); head = tr0 && tr0.mean30 ? 'Water vapour over the tropics: ' + fnum(tr0.mean30.value, 1, false) + ' kg/m\u00b2 over 30 days, rank ' + tr0.mean30.rank + ' of ' + tr0.mean30.of + ' years' : 'Water vapour'; }
     var body = stageShell(head, [segBtn('air', 'coupling', 'Coupling', 'coupling'),
       segBtn('air', 'fuel', 'Fuel', 'coupling'), segBtn('air', 'layers', 'Layers', 'coupling'),
-      segBtn('air', 'wind', 'Wind, daily', 'coupling'), segBtn('air', 'mjo', 'MJO', 'coupling'), segBtn('air', 'indices', 'MEI · IOD · RONI', 'coupling'), segBtn('air', 'vapour', 'Water vapour', 'coupling')]);
+      segBtn('air', 'wind', 'Wind, daily', 'coupling'), segBtn('air', 'mjo', 'MJO', 'coupling'), segBtn('air', 'indices', 'MEI · IOD · RONI', 'coupling')].concat((S.VP && S.VP.built) ? [segBtn('air', 'vapour', 'Water vapour', 'coupling')] : []));
 
     if (k === 'vapour') {
       /* ВОДЯНОЙ ПАР (владелец 18.09, C3S: рекорд 27,35 кг/м² в августе). Глобальное среднее из
          редкой сетки не подделываем: пояс 20°S–20°N и наши боксы, ERA5 через Open-Meteo, суточно
          с 1991; глобальная цифра C3S цитируется как reported. Считает vapour.py. */
       var VP = S.VP || {};
-      if (!VP.built) { body.appendChild(el('div', 'note', 'No vapour.json yet: run python tools/enso/vapour.py (the first run backfills 1991 onward, about twenty minutes).')); return; }
+      if (!VP.built) { body.appendChild(el('div', 'note', 'This layer has no data file yet: the daily run collects it, and the scene fills in on its own.')); return; }
       var vit = VP.items || [], vk = S.sub.vapReg || 'tropics', V = vit.filter(function (x) { return x.key === vk; })[0] || vit[0];
       var rowV = el('div', 'seg sub');
       vit.forEach(function (x) { var b = el('button', (x.key === V.key ? 'on' : ''), x.name); b.type = 'button'; b.onclick = function () { S.sub.vapReg = x.key; render(); }; rowV.appendChild(b); });
@@ -5401,7 +5401,7 @@
 
   function viewGlaciers(body) {
     var rows = iceRows();
-    if (!rows.length) { body.appendChild(el('div', 'note', 'No glaciers.json yet: run python tools/enso/glaciers.py.')); return; }
+    if (!rows.length) { body.appendChild(el('div', 'note', 'This layer has no data file yet: the daily run collects it, and the scene fills in on its own.')); return; }
     /* МОЛЧАЩАЯ ТОЧКА ДОЛЖНА БЫТЬ ВИДНА. Иначе таблица из семи строк вместо тринадцати
        читается как «столько их и есть», а не «шесть не ответили». */
     var planned = ((S.IC || {}).points || []).length, errN = ((S.IC || {}).errors || []).length;
@@ -7148,7 +7148,7 @@
      tools/enso/ice_snow.py. */
   function planetSnowIce(body, k, kp, kpi) {
     var IS = S.IS || {};
-    if (!IS.built) { body.appendChild(el('div', 'note', 'No ice-snow.json yet: run python tools/enso/ice_snow.py.')); return; }
+    if (!IS.built) { body.appendChild(el('div', 'note', 'This layer has no data file yet: the daily run collects it, and the scene fills in on its own.')); return; }
     if (k === 'snow') {
       var which = S.sub.snowKey || 'nh_month', SN = (IS.snow || {})[which];
       var rowS = el('div', 'seg sub');
@@ -7267,7 +7267,7 @@
      же климатологии 2000–2020. Модельный расход, не гидропост; плотин модель не знает. */
   function viewRivers(body) {
     var RV = S.RV || {};
-    if (!RV.built) { body.appendChild(el('div', 'note', 'No rivers.json yet: run python tools/enso/rivers.py.')); return; }
+    if (!RV.built) { body.appendChild(el('div', 'note', 'This layer has no data file yet: the daily run collects it, and the scene fills in on its own.')); return; }
     var items = RV.items || [], B = RV.board || {}, pick = S.sub.river || (items[0] || {}).key, sp = S.sub.riverSpan || 'two';
     var it = items.filter(function (x) { return x.key === pick; })[0] || items[0];
     var rowR = el('div', 'seg sub');
@@ -7318,7 +7318,7 @@
 
   function viewFires(body) {
     var FR = S.FR || {};
-    if (!FR.built) { body.appendChild(el('div', 'note', 'No fires.json yet: run python tools/enso/fires.py.')); return; }
+    if (!FR.built) { body.appendChild(el('div', 'note', 'This layer has no data file yet: the daily run collects it, and the scene fills in on its own.')); return; }
     var inst = S.sub.fireInst || 'viirs_snpp', rowI = el('div', 'seg sub');
     [['viirs_snpp', 'VIIRS · Suomi NPP'], ['viirs_n20', 'VIIRS · NOAA-20'], ['modis', 'MODIS · Aqua+Terra']].forEach(function (o) {
       var b = el('button', (inst === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.fireInst = o[0]; render(); }; rowI.appendChild(b);
@@ -7365,7 +7365,7 @@
      океана: юг Бразилии при событии заливает, Калифорния мокнет зимой. */
   function viewWater(body) {
     var WA = S.WA || {};
-    if (!WA.built) { body.appendChild(el('div', 'note', 'No water.json yet: run python tools/enso/water.py.')); return; }
+    if (!WA.built) { body.appendChild(el('div', 'note', 'This layer has no data file yet: the daily run collects it, and the scene fills in on its own.')); return; }
     var side = S.sub.waterSide || 'brazil', rowS = el('div', 'seg sub');
     [['brazil', 'Brazil, stored energy'], ['california', 'California, storage']].forEach(function (o) {
       var b = el('button', (side === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.waterSide = o[0]; render(); }; rowS.appendChild(b);
@@ -8620,7 +8620,7 @@
          сплошного отрезка этого года против того же сезона 2018–2025, в K и в сигмах. Не порог и
          не тревога: пороги сборщик снял, тревог у него ноль. Слой обновляется лёгким прогоном. */
       var RP = S.RP || {};
-      if (!RP.built) { body.appendChild(el('div', 'note', 'No radiance-places.json yet: run python tools/enso/radiance_places.py.')); return; }
+      if (!RP.built) { body.appendChild(el('div', 'note', 'This layer has no data file yet: the daily run collects it, and the scene fills in on its own.')); return; }
       var hyp = (RP.places || []).filter(function (p) { return p.bank === 'hypothesis'; }), latt = (RP.places || []).filter(function (p) { return p.bank === 'lattice'; });
       var pick = S.sub.rpPlace || (hyp[0] || {}).id, nodeP = S.sub.rpNode || 'A', SM = RP.summary || {}, CO = RP.collector || {};
       var rowP = el('div', 'seg sub');
