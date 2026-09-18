@@ -47,7 +47,7 @@ _sys.path.insert(0, str(Path(__file__).resolve().parent))
 import safeio   # noqa: E402
 RAW = ROOT / "data" / "enso" / "raw"
 OUT = ROOT / "data" / "enso" / "ice-snow.json"
-WGMS_ZIP = RAW / "wgms-fog-2024-01.zip"
+WGMS_ZIP = RAW / "wgms-fog-2026-02.zip"   # выпуск 2026-02: балансы до 2025 года (владелец 18.09: «свежих нет?»)
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -59,7 +59,7 @@ SNOW = {
     "namerica_month": ("https://climate.rutgers.edu/snowcover/files/moncov.namgnld.txt", "North America and Greenland, monthly"),
     "nh_week": ("https://climate.rutgers.edu/snowcover/files/wkcov.nhland.txt", "Northern Hemisphere land, weekly"),
 }
-WGMS_URL = "https://wgms.ch/downloads/DOI-WGMS-FoG-2024-01.zip"
+WGMS_URL = "https://wgms.ch/downloads/DOI-WGMS-FoG-2026-02-10.zip"
 MIN_GLACIERS = 30            # год с меньшим числом измерений считаем предварительным
 
 
@@ -123,13 +123,18 @@ def glaciers(zip_path):
     with z.open("data/mass_balance.csv") as f:
         rd = csv.DictReader(io.TextIOWrapper(f, encoding="utf-8", errors="replace"))
         by_year = {}
-        for r in rd:
-            # только строки за ледник целиком: у полос высот заданы границы
-            lb, ub = (r.get("LOWER_BOUND") or "").strip(), (r.get("UPPER_BOUND") or "").strip()
+        for r0 in rd:
+            # ДВЕ СХЕМЫ. До выпуска 2024-01 колонки были ЗАГЛАВНЫМИ и полосы высот лежали в том же
+            # файле (LOWER_BOUND/UPPER_BOUND = 9999 у ледника целиком). С выпуска 2025-02 имена
+            # строчные, полосы вынесены в mass_balance_band.csv, и каждая строка — ледник целиком.
+            r = {k.lower(): v for k, v in r0.items() if k}
+            lb, ub = (r.get("lower_bound") or "").strip(), (r.get("upper_bound") or "").strip()
             if lb not in ("9999", "") or ub not in ("9999", ""):
                 continue
             try:
-                y = int(r["YEAR"]); b = float(r["ANNUAL_BALANCE"])
+                y = int(r["year"]); b = float(r["annual_balance"])
+                if "YEAR" not in r0:                              # новая схема хранит балансы в м в.э., старая — в мм
+                    b *= 1000.0
             except (TypeError, ValueError, KeyError):
                 continue
             if abs(b) > 12000:                                    # мусорные значения
