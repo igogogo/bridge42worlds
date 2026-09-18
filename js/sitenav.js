@@ -68,6 +68,9 @@
         // Дашборд Эль-Ниньо — английский на всех языках (владелец 03.09): подпись пункта тоже.
         enso:       { ru: 'El Niño 2026–2027', en: 'El Niño 2026–2027', es: 'El Niño 2026–2027', ar: 'El Niño 2026–2027', fr: 'El Niño 2026–2027', zh: 'El Niño 2026–2027' },
         research:   { ru: 'Что исследовать',   en: 'What to explore', es: 'Qué investigar',       ar: 'اتجاهات البحث', fr: 'Quoi explorer' , zh: '研究方向'},
+        // Направления — подборки работ по одной большой теме, решение человека, а не тега
+        // (владелец 18.09: «мне надо отдельный признак на эту тему»). Список в data/directions.json.
+        directions: { ru: 'Направления',        en: 'Directions',      es: 'Direcciones',          ar: 'الاتجاهات',     fr: 'Directions' , zh: '方向'},
         ideas:      { ru: 'Идеи проектов',     en: 'Project ideas',   es: 'Ideas de proyectos',   ar: 'أفكار مشاريع',  fr: 'Idées de projets' , zh: '项目构想'},
         community:  { ru: 'Авторские работы',  en: 'Author works',    es: 'Trabajos de autor',    ar: 'أعمال المؤلفين', fr: 'Travaux d’auteurs' , zh: '作者作品'},
         // Пункты, которые раньше стояли только в меню ленты и оставались без перевода:
@@ -133,6 +136,7 @@
         ['enso', '/enso.html'],
         // Страницы одни на все языки — язык передаём параметром, как учебным материалам.
         ['research', '/research.html?lang=' + L],
+        ['directions', '/directions.html?lang=' + L],
         ['ideas', '/ideas.html?lang=' + L],
         ['comments', '/lang/' + L + '/comments.html'],
         // Авторские работы — последними, намеренно (владелец 06.08): раздел находится

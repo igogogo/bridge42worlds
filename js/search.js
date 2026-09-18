@@ -3253,7 +3253,8 @@ document.addEventListener('DOMContentLoaded', function () {
         s.src = src; s.async = true; s.onerror = function () {};
         document.head.appendChild(s);
     }
-    var go = function () { load('/js/metrics.js'); load('/js/spark.js'); };
+    // Плашка направления (js/directions.js) — тем же путём: живёт без пересборки.
+    var go = function () { load('/js/metrics.js'); load('/js/spark.js'); load('/js/directions.js'); };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go);
     else go();
 })();
