@@ -4970,7 +4970,7 @@
     var X = function (i) { return Lp + i / (n - 1) * pw; };
     var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
     var lag = (F.lead || {}).lag || 0, n34Leg = '';
-    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">Warm water volume under the equator, 10¹⁴ m³ (left) and Ni\u00f1o 3.4, \u00b0C (right)</text>';
+    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + (S._tight ? 'Warm water volume, 10¹⁴ m³ (left) \u00b7 Ni\u00f1o 3.4, \u00b0C (right)' : 'Warm water volume under the equator, 10¹⁴ m³ (left) and Ni\u00f1o 3.4, \u00b0C (right)') + '</text>';
     s += gridY(vmin, vmax, 1, Y, Lp, R + 8, W, 1);
     ser.months.forEach(function (m, i) { if (m.slice(5) === '01') s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + esc(m.slice(0, 4)) + '</text>'; });
     s += '<line x1="' + Lp + '" y1="' + Y(0).toFixed(1) + '" x2="' + (W - R - 8) + '" y2="' + Y(0).toFixed(1) + '" style="stroke:var(--grid)" stroke-width="1"/>';
