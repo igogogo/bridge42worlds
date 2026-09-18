@@ -1374,9 +1374,15 @@ def run(fetch=True):
         OMI = {"error": str(e)[:200]}
 
     RR, ridx = risks(W, N34, NW, ONI, IRI if IRI and "error" not in IRI else None, AIRB)
+    # реки и пар (18.09): сводка из rivers.json и vapour.json, собранных лёгким прогоном
+    try:
+        import hydro
+        HYD = hydro.block()
+    except Exception as e:                                       # noqa: BLE001
+        HYD = {"error": str(e)[:200]}
     # правила новых блоков — тем же форматом, что у воздуха; индекс пересчитывается после
     extra = []
-    for mod, blk in (("subsurface", SUB), ("wind", WIND), ("gulf", GULF), ("background", BACK)):
+    for mod, blk in (("subsurface", SUB), ("wind", WIND), ("gulf", GULF), ("background", BACK), ("hydro", HYD)):
         if not blk or blk.get("error"):
             continue
         try:
@@ -1417,7 +1423,7 @@ def run(fetch=True):
            "watch": W, "nino34": N34, "noaa": NW, "oni": ONI, "iri": IRI, "risks": RR, "risk_index": ridx,
            "risk_index_detail": _rdet,
            "food": FOOD, "regions": REG, "air": AIRB, "risk_core": CORE,
-           "oisst": OIS, "subsurface": SUB, "wind": WIND, "gulf": GULF, "background": BACK, "mjo": OMI}
+           "oisst": OIS, "subsurface": SUB, "wind": WIND, "gulf": GULF, "background": BACK, "mjo": OMI, "hydro": HYD}
     ONI.pop("psl_raw", None)          # служебный длинный ряд наружу не отдаём
     return out
 

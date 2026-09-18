@@ -348,6 +348,20 @@ METRICS = {
     "heat_e22": dict(
         title="Stored heat of the upper 300 m, our estimate", unit="×10²² J", digits=2, src="our estimate on PMEL T300",
         val=lambda d: _g(d, "air", "fuel", "heat", "value"), date=lambda d: _g(d, "air", "fuel", "heat", "date")),
+    # реки и пар (18.09): из блока hydro разбора
+    "rivers_below": dict(
+        title="Rivers below their lower quartile", unit="of 14", digits=0, src="GloFAS via Open-Meteo, our count",
+        val=lambda d: _g(d, "hydro", "rivers", "below_p25"), date=lambda d: _g(d, "hydro", "rivers", "as_of")),
+    "rivers_record_low": dict(
+        title="Rivers at a record low for the date", unit="rivers", digits=0, src="GloFAS via Open-Meteo, our count",
+        val=lambda d: (len(_g(d, "hydro", "rivers", "record_low") or []) if _g(d, "hydro", "rivers") else None),
+        date=lambda d: _g(d, "hydro", "rivers", "as_of")),
+    "tcwv_tropics": dict(
+        title="Water vapour over the tropics, 30 days", unit="kg/m²", digits=1, src="ERA5 via Open-Meteo, our belt",
+        val=lambda d: _g(d, "hydro", "vapour", "regions", "tropics", "mean30"), date=lambda d: _g(d, "hydro", "vapour", "regions", "tropics", "date")),
+    "tcwv_n34": dict(
+        title="Water vapour over Niño 3.4, 30 days", unit="kg/m²", digits=1, src="ERA5 via Open-Meteo, our box",
+        val=lambda d: _g(d, "hydro", "vapour", "regions", "nino34", "mean30"), date=lambda d: _g(d, "hydro", "vapour", "regions", "nino34", "date")),
     "tlt_tropics": dict(
         title="Lower troposphere, tropics", unit="°C", digits=2, src="UAH satellite v6.1",
         val=lambda d: _layer(d, "tlt"), date=lambda d: _layer_date(d, "tlt")),

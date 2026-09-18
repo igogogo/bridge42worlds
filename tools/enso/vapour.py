@@ -73,7 +73,9 @@ def get(lat_list, lon_list, y0, y1, tries=3):
                 return d if isinstance(d, list) else [d]
         except Exception as e:                                   # noqa: BLE001
             last = e
-            time.sleep(10 + 10 * k)
+            # 429 — исчерпана квота Open-Meteo на тяжёлые почасовые запросы (18.09: забор встал на
+            # 2004-м после 13 лет). Ждём долго; если не отпустило — год остаётся на следующий прогон.
+            time.sleep(120 + 120 * k if "429" in str(e) else 10 + 10 * k)
     raise last
 
 
@@ -113,17 +115,34 @@ def fetch_year(year, end=None):
     return out
 
 
-def load_years(today):
-    """Годы с диска; недостающие и текущий (если отстал) — с сети."""
+MAX_NEW_YEARS = 4          # сколько недостающих лет добирать за один прогон: квота Open-Meteo дневная
+
+
+def load_years(today, max_new=MAX_NEW_YEARS):
+    """Годы с диска; недостающие — с сети, но В ПОРЯДКЕ НУЖНОСТИ: сначала текущий год (без него
+    сцены нет), потом аналоги (1997, 2015, 2023), потом климатология с самых свежих лет назад.
+    За прогон добираем не больше max_new лет: квота Open-Meteo дневная, и лучше сцена с частичной
+    климатологией сегодня, чем полная через неделю (18.09)."""
     years = {}
-    for y in range(FIRST_YEAR, today.year + 1):
+    order = [today.year] + [y for y in ANALOGS if y != today.year] + [y for y in range(today.year - 1, FIRST_YEAR - 1, -1) if y not in ANALOGS]
+    fetched = 0
+    for y in order:
         f = RAW / f"{y}.json"
         d = json.loads(f.read_text(encoding="utf-8")) if f.exists() else None
         want_to = (today - timedelta(days=6)).isoformat() if y == today.year else f"{y}-12-31"
-        if d is None or (y == today.year and (d.get("to") or "") < want_to):
+        need = d is None or (y == today.year and (d.get("to") or "") < want_to)
+        if need and fetched < max_new:
             print(f"  vapour {y}: fetching…", flush=True)
-            d = fetch_year(y, want_to if y == today.year else None)
-        years[y] = d
+            try:
+                d = fetch_year(y, want_to if y == today.year else None)
+                fetched += 1
+            except Exception as e:                               # noqa: BLE001
+                print(f"  vapour {y}: not fetched ({str(e)[:60]}); left for the next run", flush=True)
+                if "429" in str(e):
+                    break                                        # квота кончилась — дальше бессмысленно
+                d = None
+        if d:
+            years[y] = d
     return years
 
 
@@ -199,7 +218,9 @@ def summarise(reg, ser, today):
     clim30 = [clim.get(((ld - timedelta(days=i)).timetuple().tm_yday)) for i in range(30)]
     clim30 = [c for c in clim30 if c is not None]
     anom30 = round(m30 - sum(clim30) / len(clim30), 2) if m30 is not None and clim30 else None
+    clim_have = sorted({date.fromisoformat(dt).year for dt in dates if CLIM[0] <= date.fromisoformat(dt).year <= CLIM[1]})
     return {"key": reg, "name": name, "why": why, "n_points": len(lats) * len(lons),
+            "clim_years_have": clim_have, "clim_complete": len(clim_have) >= (CLIM[1] - CLIM[0] + 1),
             "last": {"date": last_dt, "value": ser[last_dt], "anom": anom_last},
             "mean30": {"value": round(m30, 2) if m30 is not None else None, "anom": anom30, "rank": rank, "of": len(yrs) + 1,
                        "record": rank == 1, "by_year": yrs},
@@ -212,7 +233,14 @@ def summarise(reg, ser, today):
 def main():
     t0 = time.time()
     today = date.today()
-    years = load_years(today)
+    years = load_years(today, max_new=0 if "--no-fetch" in sys.argv else MAX_NEW_YEARS)
+    if today.year not in years:
+        # без текущего года сцены нет: пишем честную заглушку, панель прячет вкладку, проверки видят файл
+        doc = {"built": None, "pending": True, "years_have": sorted(years), "first_year": FIRST_YEAR,
+               "note": "the current year has not been fetched yet (Open-Meteo daily quota); the daily run retries"}
+        safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False, separators=(",", ":")))
+        print(f"vapour.json: pending, {len(years)} years on disk, current year missing")
+        return 0
     doc = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "first_year": FIRST_YEAR, "clim_years": list(CLIM),
            "analog_years": list(ANALOGS), "c3s": C3S, "items": [],
            "source": {"label": "ERA5 total column water vapour via the Open-Meteo archive API, hourly points averaged to days",
