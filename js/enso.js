@@ -4961,16 +4961,28 @@
      и видно, что поверхность идёт по следу объёма, а не наоборот. */
   function chartFuel(F, NW, W, H) {
     var ser = F.series, n = ser.values.length;
-    var Lp = 52, R = legendW(W), Tp = topPad(W), B = 26, pw = W - Lp - R - 8, ph = H - Tp - B;
+    /* ВТОРАЯ ШКАЛА — СПРАВА И ВИДИМАЯ. Niño 3.4 рисовалась по скрытой шкале: линия есть,
+       чисел нет (владелец 18.09). Справа отведено место под ось в °C. */
+    var Rax = S._tight ? 30 : 44;
+    var Lp = 52, R = legendW(W) + Rax, Tp = topPad(W), B = 26, pw = W - Lp - R - 8, ph = H - Tp - B;
     var vals = ser.values.filter(fin).map(function (v) { return v / 1e14; });
     var vmin = Math.min.apply(null, vals) - .3, vmax = Math.max.apply(null, vals) + .3;
     var X = function (i) { return Lp + i / (n - 1) * pw; };
     var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
-    var lag = (F.lead || {}).lag || 0;
-    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">Warm water volume under the equator, 10¹⁴ m³ — the fuel of the event</text>';
+    var lag = (F.lead || {}).lag || 0, n34Leg = '';
+    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">Warm water volume under the equator, 10¹⁴ m³ (left) and Ni\u00f1o 3.4, \u00b0C (right)</text>';
     s += gridY(vmin, vmax, 1, Y, Lp, R + 8, W, 1);
     ser.months.forEach(function (m, i) { if (m.slice(5) === '01') s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + esc(m.slice(0, 4)) + '</text>'; });
     s += '<line x1="' + Lp + '" y1="' + Y(0).toFixed(1) + '" x2="' + (W - R - 8) + '" y2="' + Y(0).toFixed(1) + '" style="stroke:var(--grid)" stroke-width="1"/>';
+    // уровни того же месяца в сильнейших событиях — планки цветами аналогов, подписи в легенде
+    var LV = F.levels || {}, lvItems = [], kd = 0;
+    ['1982', '1997', '2015', '2023'].forEach(function (y) {
+      if (!fin(LV[y])) return;
+      kd++;
+      s += '<line x1="' + Lp + '" y1="' + Y(LV[y]).toFixed(1) + '" x2="' + (W - R - 8) + '" y2="' + Y(LV[y]).toFixed(1) +
+        '" style="stroke:var(--a' + y + ')" stroke-width="1" stroke-dasharray="' + dashOf(kd) + '" opacity=".85"/>';
+      lvItems.push([y + ' same month ' + fnum(LV[y]), 'var(--a' + y + ')', 1, dashOf(kd), '']);
+    });
     // поверхностный индекс на вторую шкалу, сдвинутый на опережение
     var mon = (NW || {}).monthly || {}, sk = Object.keys(mon).sort();
     if (sk.length > 6) {
@@ -4984,12 +4996,20 @@
         pts.push([X(i), fin(mon[key]) ? Y2(mon[key]) : NaN]);
       });
       s += segs(pts, 'var(--nino)', 1.8, pickOp('n34', .95), '5 3');
+      // ось справа: деления в °C по той же шкале, что и пунктир
+      var st2 = niceStep(Math.max(.5, smax - smin), 4), xr = W - R - 8 + 4;
+      for (var t2 = Math.ceil(smin / st2) * st2; t2 <= smax + 1e-9; t2 += st2) {
+        s += '<text x="' + xr + '" y="' + (Y2(t2) + 4).toFixed(1) + '" text-anchor="start" style="fill:var(--nino)">' + fnum(t2, 1) + '</text>';
+      }
+      s += '<text x="' + xr + '" y="' + (Tp - 4) + '" text-anchor="start" style="fill:var(--nino)">\u00b0C</text>';
+      var lastK = sk[sk.length - 1];
+      var n34Leg = 'Ni\u00f1o 3.4 ' + fnum(mon[lastK]) + ' \u00b0C (' + esc(lastK) + '), shifted \u2212' + lag + ' months';
     }
     s += segs(ser.months.map(function (m, i) { return [X(i), fin(ser.values[i]) ? Y(ser.values[i] / 1e14) : NaN]; }), 'var(--text)', 2.6, pickOp('wwv'));
     var li = n - 1;
     s += nowDot(X(li), Y(ser.values[li] / 1e14), 'var(--text)', 4);
-    s += legend([['warm water volume ' + fnum(ser.values[li] / 1e14) + '·10¹⁴', 'var(--text)', 2.6, '', 'wwv'],
-      ['Niño 3.4, −' + lag + ' months', 'var(--nino)', 1.8, '5 3', 'n34']], W, H, R, Tp);
+    s += legend([['warm water volume ' + fnum(ser.values[li] / 1e14) + '\u00b710\u00b9\u2074 (' + esc(ser.months[li]) + ')', 'var(--text)', 2.6, '', 'wwv'],
+      [n34Leg || ('Ni\u00f1o 3.4, \u2212' + lag + ' months'), 'var(--nino)', 1.8, '5 3', 'n34']].concat(lvItems), W, H, R, Tp);
     return s + '</svg>';
   }
 
@@ -5140,6 +5160,9 @@
       kp.innerHTML = '<div class="kpi"><div class="kn">' + term('wwv', 'warm water volume') + '</div><div class="kv">' + fnum(F.value / 1e14) + '<small>·10¹⁴ m³</small></div><div class="km">' + F.share_of_record + ' % of the highest value since 1980</div>' + kmeta('wwv') + '</div>' +
         '<div class="kpi"><div class="kn">peak of the charge</div><div class="kv" style="font-size:17px">' + esc(F.peak_date) + '</div><div class="km">' + (F.months_since_peak ? F.months_since_peak + ' months ago; ' : 'this month; ') + (F.discharging ? 'the fuel is being spent' : 'not spent yet') + '</div>' + kmeta(null, 'NOAA PMEL/TAO warm water volume', F.date || '') + '</div>' +
         '<div class="kpi"><div class="kn">lead over the surface</div><div class="kv" style="font-size:17px">' + ((F.lead || {}).lag) + '<small>months</small></div><div class="km">correlation ' + ((F.lead || {}).r) + ', on the whole record since 1980</div>' + kmeta(null, 'NOAA PMEL / TAO', F.date) + '</div>' +
+        '<div class="kpi"><div class="kn">same month in the strongest events</div><div class="kv" style="font-size:15px">' +
+          ['1982', '1997', '2015', '2023'].filter(function (y) { return fin((F.levels || {})[y]); }).map(function (y) { return '<span style="color:var(--a' + y + ')">' + y + ' ' + fnum(F.levels[y]) + '</span>'; }).join(' \u00b7 ') +
+          '<small>\u00b710\u00b9\u2074 m\u00b3</small></div><div class="km">warm water volume in ' + esc(String(F.date || '').slice(5)) + ' of each of those years; this year ' + fnum(F.value / 1e14) + (F.value / 1e14 > Math.max.apply(null, Object.keys(F.levels || {}).map(function (y) { return F.levels[y]; }).filter(fin).concat([-Infinity])) ? ' is above every one of them' : ' is not above all of them') + '</div>' + kmeta(null, 'NOAA PMEL', F.date) + '</div>' +
         (F.t300 ? '<div class="kpi"><div class="kn">' + term('t300', 'upper 300 m') + '</div><div class="kv">' + fnum(F.t300.value) + '<small>°C</small></div><div class="km">the same heat as a temperature, not a volume</div>' + kmeta(null, 'NOAA PMEL / TAO', F.t300.date) + '</div>' : '');
       body.appendChild(kp);
     } else if (k === 'layers' && L) {
