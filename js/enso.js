@@ -2502,16 +2502,20 @@
      по умолчанию, и «Niño 1+2, наш бокс» приводила на Niño 3.4 — читатель нажимал одно число,
      а попадал на другое (владелец 17.09). Первый член — ключ выбора на сцене, второй — значение. */
   var KPI_PICK = { n34_weekly: ['wkey', 'n34a'], n12_weekly: ['wkey', 'n12a'], n3_weekly: ['wkey', 'n3a'], n4_weekly: ['wkey', 'n4a'],
-    n34_box: ['obox', 'nino34'], n12_box: ['obox', 'nino12'], n3_box: ['obox', 'nino3'], n4_box: ['obox', 'nino4'], gulf_sst: ['obox', 'gulf'] };
+    n34_box: ['obox', 'nino34'], n12_box: ['obox', 'nino12'], n3_box: ['obox', 'nino3'], n4_box: ['obox', 'nino4'], gulf_sst: ['obox', 'gulf'],
+    wwv: ['fuelView', 'gauge'], wwv_share: ['fuelView', 'gauge'], t300: ['fuelView', 't300_years'], heat_e22: ['fuelView', 'heat'] };
   var KPI_SCENE = { n34_weekly: 'now/weekly_a', n12_weekly: 'now/weekly_a', n34_daily: 'trend/sst_nino34', n34_30d: 'trend/sst_nino34', rec_sst_nino34: 'trend/sst_nino34', fc14_sst_nino34: 'trend/sst_nino34',
     n3_weekly: 'now/weekly_a', n4_weekly: 'now/weekly_a',
     n34_box: 'ocean/surface', n12_box: 'ocean/surface', n3_box: 'ocean/surface', n4_box: 'ocean/surface', gulf_sst: 'ocean/surface', subsurface_warmest: 'ocean/moorings', d20_east: 'ocean/section',
-    oni: 'now/analogs', roni: 'now/analogs', risk_index: 'verdict', n_risks: 'now/analogs', n_alerts: 'now/analogs', scenario: 'regions',
-    sst_world: 'trend', t2_world: 'trend', rec_sst_world: 'trend', rec_t2_world: 'trend', fc14_sst_world: 'trend', fc14_t2_world: 'trend',
+    n_alerts: 'now/analogs', scenario: 'regions',
+    sst_world: 'trend/sst_world', t2_world: 'trend/t2_world', rec_sst_world: 'trend/sst_world', rec_t2_world: 'trend/t2_world', fc14_sst_world: 'trend/sst_world', fc14_t2_world: 'trend/t2_world',
     models_broke: 'models/breakdown', models_ok: 'models/breakdown', models_lag: 'models/breakdown', models_above: 'models/breakdown', models_below_n: 'models/breakdown', iri_share_below: 'models/breakdown', iri_peak: 'models/plume', live_mean: 'models/plume', n_live: 'models/plume',
     food_index: 'food/prices', food_yoy: 'food/prices', price_palm_oil: 'food/goods', price_rice: 'food/goods', price_fishmeal: 'food/goods', price_wheat: 'food/goods',
-    wwv: 'air', wwv_share: 'air', t300: 'air/fuel', heat_e22: 'air/fuel', wind_week: 'air', mjo_amp: 'air', dmi: 'air', soi: 'air', olr: 'air', u850_west: 'air', coupling_score: 'air', tlt_tropics: 'air', tls_tropics: 'air',
-    ohc_2000: 'planet', kuwait_tmax30: 'regions/place/gulf_arabia', peak_estimate: 'now/analogs' };
+    /* Каждая плашка — на свою сцену И свой вид: раньше половина воздуха вела на первую кнопку
+       вкладки, и «рекорд тепла» открывал шкалу вместо stored heat (владелец 18.09). Вид внутри
+       сцены задаёт KPI_PICK. */
+    wwv: 'air/fuel', wwv_share: 'air/fuel', t300: 'air/fuel', heat_e22: 'air/fuel', wind_week: 'air/wind', mjo_amp: 'air/mjo', dmi: 'air/indices', roni: 'air/indices', soi: 'air/coupling', olr: 'air/coupling', u850_west: 'air/coupling', coupling_score: 'air/coupling', tlt_tropics: 'air/layers', tls_tropics: 'air/layers',
+    ohc_2000: 'trend/background', kuwait_tmax30: 'regions/place/gulf_arabia', oni: 'now/weekly_a', risk_index: 'verdict/history', n_risks: 'verdict/history' };
   var RS_STOP = { the: 1, and: 1, for: 1, with: 1, that: 1, this: 1, what: 1, why: 1, how: 1, does: 1, are: 1, is: 1, of: 1, to: 1, in: 1, on: 1, a: 1, an: 1, it: 1, its: 1, be: 1, will: 1, was: 1, were: 1, has: 1, have: 1, from: 1, about: 1, than: 1, now: 1, our: 1, we: 1, you: 1, can: 1, not: 1, which: 1, when: 1, where: 1, there: 1, into: 1, over: 1, any: 1, all: 1 };
   var RS_SYN = { nino: 'niño', 'el': '', nina: 'niña', temperature: 'temperature warm', warming: 'warm', rain: 'rain precipitation', rainfall: 'rain', drought: 'rain dry', prices: 'price food', food: 'food price', models: 'model forecast', forecast: 'forecast model', ocean: 'ocean sea', sea: 'sea ocean', wind: 'wind westerly', volume: 'volume fuel', fuel: 'fuel volume', peak: 'peak', strength: 'strong', strong: 'strong' };
   /* Ручка: явный адрес, иначе своя на сайте; на localhost ручки нет — демо. */
