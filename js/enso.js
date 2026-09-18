@@ -5459,6 +5459,12 @@
     if (CM && CM.items && CM.items.length) segs2.push(segBtn('food', 'goods', 'By commodity', 'prices'), segBtn('food', 'abs', 'Price, $ per tonne', 'prices'));
     var body = stageShell(FO ? 'World food prices: index ' + fnum(FO.index, 1, false) + ' in ' + esc(FO.last_month) + ', ' + fnum(FO.yoy_pct, 1) + ' % on the year'
       : 'What it means for food', segs2);
+    /* ЦЕНЫ НЕ ЗАМЕРЛИ — ОНИ МЕСЯЧНЫЕ (владелец 18.09: «по ценам всё замерло?»). Обе таблицы
+       выходят раз в месяц; ежедневный лёгкий прогон их проверяет, и новый месяц — триггер
+       свежего слоя. Говорим это словами и датой следующего выпуска из календаря. */
+    var CALF = (((D.background || {}).calendar || {}).items || []).filter(function (c) { return /FAO|Pink/.test(c.name); });
+    if (CALF.length) body.appendChild(el('div', 'note', 'Both series are monthly, data to <b>' + esc((FO && FO.last_month) || (CM && CM.as_of) || '') + '</b>. Next: ' +
+      CALF.map(function (c) { return esc(c.name) + ' ' + esc(c.next) + ' (' + esc(c.rule) + ')'; }).join('; ') + '. The daily light run checks both, and a new month raises a trigger on the Ops tab.'));
 
     if (k === 'prices' && FO) {
       plot(body, function (w, h) { return chartFood(FO, w, h); });

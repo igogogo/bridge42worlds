@@ -94,6 +94,10 @@ def build(cur, assessed):
     FD, AFD = cur.get("food") or {}, A.get("food") or {}
     if isinstance(FD, dict) and isinstance(AFD, dict):
         new_issue("FAO month", FD.get("last_month"), AFD.get("last_month"), ["food", "prices"])
+    # цены товаров (Pink Sheet) — тоже выпуск раз в месяц; лёгкий прогон обязан заметить новый месяц (владелец 18.09)
+    CM, ACM = ((cur.get("air") or {}).get("commodities") or {}), ((A.get("air") or {}).get("commodities") or {})
+    if isinstance(CM, dict) and isinstance(ACM, dict):
+        new_issue("Pink Sheet month", CM.get("as_of"), ACM.get("as_of"), ["food", "goods"])
     O, AO = cur.get("oni") or {}, A.get("oni") or {}
     new_issue("ONI season", O.get("last_season"), AO.get("last_season"), ["now", "analogs"])
     fu, afu = ((cur.get("air") or {}).get("fuel") or {}), ((A.get("air") or {}).get("fuel") or {})
