@@ -8655,6 +8655,7 @@
         '<div class="kpi"><div class="kn">lattice points beyond 2\u03c3</div><div class="kv">' + (sm.lattice_n_above_2 || 0) + '<small> of ' + latt.length + '</small></div><div class="km">forty even points for coverage; no mechanism named, so no verdict of their own</div>' + kmeta(null, 'our count', RP.block.last) + '</div>' +
         '<div class="kpi"><div class="kn">how much is the level</div><div class="kv" style="font-size:17px">' + esc(((CO.level_share_verdict || {})[nodeP] === '\u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u043d\u0430\u044f') ? 'structural' : String((CO.level_share_verdict || {})[nodeP] || '\u00b7')) + '</div><div class="km">median r\u00b2 of the contrast against the 88 GHz window level ' + fnum((CO.level_share_r2_median || {})[nodeP], 2, false) + ': the contrast is not just the level in disguise</div>' + kmeta(null, 'radiance collector, level share', CO.date) + '</div>';
       body.appendChild(kc);
+      var toGlobe = el('div', 'cap', ''); var ga = el('a', 'go', 'See the sixty-five places on the 3D globe \u2192'); ga.href = '#globe'; ga.onclick = function (e) { e.preventDefault(); S.gl = S.gl || {}; S.gl.places = true; S.view = 'globe'; S.risk = null; render(); }; toGlobe.appendChild(ga); body.appendChild(toGlobe);
       body.appendChild(el('div', 'cap', esc(RP.note || '') + ' Groups: ' + Object.keys(RP.groups || {}).map(function (g) { return '<b>' + esc(g) + '</b> \u2014 ' + esc(RP.groups[g]); }).join('; ') + '. Days that failed the completeness gate are excluded: ' + esc(CO.complete_gate || '') + '. List frozen ' + esc(RP.frozen || '') + '; built ' + esc(RP.built || '') + '.'));
     } else if (k === 'convection') {
       row = boxRow(true);
@@ -9021,6 +9022,9 @@
     { id: 'moorings', kind: 'over', name: 'Moorings on the equator', on: false, alpha: 1,
       line: 'TAO buoys: the pillar is the warmest layer under each one',
       src: 'TAO/TRITON array, five-day means' },
+    { id: 'places', kind: 'over', name: 'Named places (microwave)', on: false, alpha: 1,
+      line: 'the sixty-five places of the radiance collector: the pillar is this year against 2018–2025 in sigmas, red above, blue below, grey for the lattice',
+      src: 'ATMS on NOAA-20, 2.5° grid, via the radiance collector' },
     { id: 'coast', kind: 'paint', name: 'Coastlines', on: true, alpha: 1,
       line: 'where the land is', src: 'Natural Earth, simplified' }
   ];
@@ -9191,10 +9195,26 @@
         .labelsData(polys.map(function (b) { var lc = (b.lon[0] + b.lon[1]) / 2; if (lc > 180) lc -= 360; return { lat: (b.lat[0] + b.lat[1]) / 2, lng: lc, sz: 1.1, text: gl(b.label.replace(/^Satellite: /, '') + (fin(val(b)) ? '  ' + (mode === 'rain' ? val(b) + ' %' : fnum(val(b), 1) + (mode === 'radiance' ? ' %' : ' C')) : '')) }; })
           .concat(mode === 'moorings' ? (G.moorings || []).map(function (m) { return { lat: m.lat + 1.2, lng: m.lon, sz: 0.7, text: gl((m.label || m.id || '').replace(/^TAO /, '') + (fin(m.value) ? '  ' + fnum(m.value, 1) + ' C at ' + m.depth + ' m' : '')) }; }) : []))
         .labelSize(function (d) { return d.sz; }).labelColor(function () { return '#f2e9d8'; }).labelDotRadius(0).labelAltitude(0.012);
+      /* ТОЧКИ НА ШАРЕ — ОДИН НАБОР. Буи и 65 мест радианса (владелец 18.09: «а я их на глобусе
+         могу увидеть?») идут в одном pointsData: у каждой точки свои высота, цвет и подсказка. */
+      var gpts = [];
       if (mode === 'moorings' || (mode === 'scene' && glOn('moorings'))) {
-        g.pointsData(G.moorings || []).pointLat('lat').pointLng('lon')
-          .pointAltitude(function (d) { return fin(d.value) ? 0.02 + d.value / 60 : 0.02; })
-          .pointRadius(0.6).pointColor(function (d) { return fin(d.value) ? '#D4735C' : '#888'; })
+        (G.moorings || []).forEach(function (m) { gpts.push({ lat: m.lat, lon: m.lon, alt: fin(m.value) ? 0.02 + m.value / 60 : 0.02, col: fin(m.value) ? '#D4735C' : '#888', r: 0.6, label: m.label, text: m.text, date: m.date }); });
+      }
+      if (mode === 'radiance' || (mode === 'scene' && glOn('places'))) {
+        var RPg = S.RP || {}, nodeG = S.sub.rpNode || 'A';
+        (RPg.places || []).forEach(function (p) {
+          var n = (p.nodes || {})[nodeG] || {}, z = n.z, latt = p.bank === 'lattice';
+          gpts.push({ lat: p.lat, lon: p.lon, alt: fin(z) ? 0.015 + Math.min(4, Math.abs(z)) * 0.03 : 0.015, r: latt ? 0.35 : 0.55,
+            col: latt ? 'rgba(200,200,200,.55)' : (!fin(z) ? '#888' : (z > 0 ? '#D4735C' : '#5B8FD6')),
+            label: p.name + (latt ? '' : ' \u00b7 ' + p.group), date: (n.last || {}).date,
+            text: (latt ? 'lattice point, no mechanism named' : p.why) + (fin(n.delta) ? '; this year ' + fnum(n.delta, 2) + ' K, ' + fnum(z, 1) + '\u03c3 against 2018\u20132025 (' + (nodeG === 'A' ? 'day' : 'night') + ' pass)' : '; no comparison yet') });
+        });
+      }
+      if (gpts.length) {
+        g.pointsData(gpts).pointLat('lat').pointLng('lon')
+          .pointAltitude(function (d) { return d.alt; })
+          .pointRadius(function (d) { return d.r; }).pointColor(function (d) { return d.col; })
           .pointLabel(function (d) { return '<div style="font:12px/1.4 system-ui;padding:4px 6px;background:rgba(20,24,32,.9);color:#eee;border-radius:6px"><b>' + esc(d.label) + '</b><br>' + esc(d.text) + (d.date ? '<br><small>' + esc(d.date) + '</small>' : '') + '</div>'; });
       }
       var focus = { nino: -140, land: 40, moorings: -150, radiance: -170, rain: 40, scene: -160 }[mode] || -140;
@@ -9208,7 +9228,7 @@
            + 'white: deep cloud measured from orbit, ' + esc(((S.OLR || {}).date) || '') + ' (NOAA OLR; the colder the cloud top, the whiter)')
         : 'sea: OISST anomaly ' + esc((G.sst || {}).date || '') + ' against 1971–2000';
       leg.innerHTML = '<b>' + ({ rain: 'boxes: rain, % of normal over 30 days', land: 'boxes: air anomaly over 30 days, °C', radiance: 'boxes: deep convection, % of footprints', moorings: 'boxes: NOAA weekly anomaly, °C' }[mode] || 'boxes: NOAA weekly anomaly, °C') + '</b> · ' + under +
-        '<span class="gl-bar"></span>−3 … +3 °C · drag to turn, wheel to zoom, point at a box' + (mode === 'moorings' ? '; pillars: warmest layer under each mooring' : '');
+        '<span class="gl-bar"></span>−3 … +3 °C · drag to turn, wheel to zoom, point at a box' + (mode === 'moorings' ? '; pillars: warmest layer under each mooring' : '') + (mode === 'radiance' || (mode === 'scene' && glOn('places')) ? '; pillars: the 65 named places, height = this year against 2018\u20132025 in \u03c3, red above, blue below, grey lattice' : '');
       box.appendChild(leg);
       S._globeInst = g; window.B42Globe = g;   // наружу — для отладки из консоли
     }).catch(function (e) { box.innerHTML = '<div class="note warn">The globe did not load: ' + esc(String(e.message || e)) + '. The flat view is one click away.</div>'; });
