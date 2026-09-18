@@ -943,7 +943,7 @@ def cmd_links(args):
     sys.exit(1 if broken else 0)
 
 
-def _post_generation(full=True):
+def _post_generation(full=True, ids=None):
     """Шаги ПОСЛЕ генерации — те же, что делает фабрика перед публикацией.
 
     Владелец 2026-08-19: «если делаешь что-то руками, придерживайся общих правил, почему ты
@@ -963,8 +963,13 @@ def _post_generation(full=True):
         ("понятия в тексте", [sys.executable, "tools/highlight_concepts.py"]),
         ("формулы", [sys.executable, "tools/fix_inline_math.py"]),
     ]
-    if full:
-        steps.append(("машина знаний", [sys.executable, "tools/recommend.py", "--all-full"]))
+    # ✛ ТОЛЬКО ДЛЯ ТОГО, ЧТО СЕЙЧАС СГЕНЕРИРОВАНО. Было `--all-full` — «всем полным статьям
+    # без разбора»: шаг тихо шёл по всему архиву назад (18.09 успел взять 195 старых работ
+    # 2010–2012 годов и старую биологию, пока не убили). Владелец: «вперёд, назад не
+    # смотрим» — платный шаг обязан знать свои id.
+    if full and ids:
+        for aid in ids:
+            steps.append(("машина знаний " + aid, [sys.executable, "tools/recommend.py", aid]))
     for title, cmd in steps:
         print("\n> " + title)
         rc = subprocess.run(cmd).returncode
@@ -991,7 +996,7 @@ def cmd_ids(args):
                               allow_restricted=getattr(args, 'allow_restricted', False),
                               only_langs=only_langs)
     if n and not getattr(args, "no_post", False):
-        _post_generation(full=not getattr(args, "express", False))
+        _post_generation(full=not getattr(args, "express", False), ids=ids)
 
 
 def cmd_author(args):
