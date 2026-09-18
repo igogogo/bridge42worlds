@@ -243,12 +243,28 @@ def _get(url, tries=6, timeout=120):
     raise last
 
 
+def _get_json(url, tries=6):
+    """JSON с повтором. Ответ 200 с HTML-заглушкой вместо JSON (сервер «прилёг») ронял
+    весь сбор за год на 19-й неделе из 37 (18.09): _get видит успешный ответ и не
+    повторяет, а json.loads падает. Кривой ответ — такая же заминка, как 504.
+    """
+    last = None
+    for i in range(tries):
+        try:
+            return json.loads(_get(url).decode("utf-8", "replace"))
+        except json.JSONDecodeError as e:
+            last = e
+            if i < tries - 1:
+                time.sleep(min(60, 5 * 2 ** i))
+    raise last
+
+
 def _fetch_window(server, frm, to):
     """Записи сервера за один промежуток. Страница — 30 записей, курсор по смещению."""
     out, seen, cur, total = [], set(), 0, None
     while True:
         url = f"https://api.biorxiv.org/details/{server}/{frm}/{to}/{cur}"
-        d = json.loads(_get(url).decode("utf-8", "replace"))
+        d = _get_json(url)
         if total is None:
             total = int((d.get("messages") or [{}])[0].get("total", 0))
         rows = d.get("collection") or []

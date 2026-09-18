@@ -25,6 +25,10 @@ import json
 import os
 import re
 import sys
+# Консоль Windows по умолчанию cp1252: печать русской строки с «→» роняла шаг «машина
+# знаний» целиком, когда его звал run.py без -X utf8 (18.09, UnicodeEncodeError).
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace", line_buffering=True)
 from datetime import datetime, timezone
 from pathlib import Path
 
