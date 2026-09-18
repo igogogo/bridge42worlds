@@ -112,6 +112,37 @@ def load_places():
     return out, P.get("frozen"), P.get("changelog") or []
 
 
+def provenance():
+    """Версия обработки по суткам и прибору (provenance_daily.csv сборщика): сколько суток, с какой
+    по какую, какие версии и сколько суток на каждой, версия последних суток, сколько суток
+    собраны из двух версий сразу. Для вкладки Ops: смена версии — то, что маскируется под климат."""
+    p = CL / "provenance_daily.csv" if (CL / "provenance_daily.csv").exists() else INCOMING / "provenance_daily.csv"
+    if not p.exists():
+        return None
+    by = {}
+    for r in csv.DictReader(open(p, encoding="utf-8")):
+        r["versions"] = (r.get("versions") or "").replace("неизвестна", "unknown")   # панель английская
+        by.setdefault(r["src"], []).append(r)
+    out = []
+    for s, rs in sorted(by.items()):
+        rs.sort(key=lambda r: r["date"])
+        cnt = {}
+        for r in rs:
+            for v in (r.get("versions") or "").split(";"):
+                v = v.split(":")[0].strip()
+                if v:
+                    cnt[v] = cnt.get(v, 0) + 1
+        top = sorted(cnt.items(), key=lambda kv: -kv[1])
+        last = rs[-1]
+        out.append({"src": s, "days": len(rs), "first": rs[0]["date"], "last": last["date"],
+                    "last_version": ";".join(v.split(":")[0] for v in (last.get("versions") or "").split(";")),
+                    "versions": [{"v": v, "days": n} for v, n in top[:6]], "n_versions": len(cnt),
+                    "multi_version_days": sum(1 for r in rs if int(float(r.get("n_versions") or 1)) > 1),
+                    "unknown_days": sum(1 for r in rs if "unknown" in (r.get("versions") or ""))})
+    return {"file": str(p.name), "items": out,
+            "note": "Processing version of each instrument's granules, day by day, reconstructed from granule names by the collector. A version change is the first suspect when a series steps."}
+
+
 def main():
     t0 = time.time()
     rows, src = load_rows()
@@ -181,7 +212,7 @@ def main():
                       "level_share_verdict": {n: (ls.get("vc_10_13_" + n) or {}).get("verdict") for n in ("A", "D")},
                       "level_share_r2_median": {n: (ls.get("vc_10_13_" + n) or {}).get("r2_level_median") for n in ("A", "D")},
                       "complete_gate": "days with fewer than 236 of 241 granules are dropped: a missing granule is a piece of orbit and biases one way (0.41 K on a day with 179 granules)"},
-        "groups": GROUP_WHY_EN, "summary": summary, "places": out_places,
+        "groups": GROUP_WHY_EN, "summary": summary, "places": out_places, "provenance": provenance(),
         "note": ("Sixty-five named places on the microwave sounder, each with the mechanism by which it can fail: the edge of convection, "
                  "a bistable axis, a far teleconnection, or a control that must not move. The number is the block mean of this year's "
                  "continuous run against the same season of 2018–2025, in K and in sigmas of those years. Not a threshold and not an alarm: "

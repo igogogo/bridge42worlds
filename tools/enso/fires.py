@@ -57,6 +57,52 @@ SATS = {
     "viirs_n20": "https://firms.modaps.eosdis.nasa.gov/data/active_fire/noaa-20-viirs-c2/csv/J1_VIIRS_C2_Global_7d.csv",
     "modis": "https://firms.modaps.eosdis.nasa.gov/data/active_fire/modis-c6.1/csv/MODIS_C6_1_Global_7d.csv",
 }
+# АРХИВ ПО КЛЮЧУ (владелец 18.09: «история пожаров — только кусок»). Открытые файлы держат неделю;
+# глубже — area API FIRMS по бесплатному MAP_KEY (регистрация на firms.modaps.eosdis.nasa.gov,
+# ключ кладётся в переменную окружения FIRMS_MAP_KEY). Окно запроса — не больше 10 суток; NRT
+# покрывает последние ~2 месяца, SP (стандартная обработка) — глубже, но с задержкой.
+ARCHIVE_API = "https://firms.modaps.eosdis.nasa.gov/api/area/csv/{key}/{src}/world/{days}/{date}"
+ARCHIVE_SRC = {"viirs_snpp": ("VIIRS_SNPP_NRT", "VIIRS_SNPP_SP"), "viirs_n20": ("VIIRS_NOAA20_NRT", "VIIRS_NOAA20_SP"),
+               "modis": ("MODIS_NRT", "MODIS_SP")}
+NRT_DAYS = 60                                                  # глубже этого NRT пуст, берём SP
+
+
+def backfill(doc, days_back, key):
+    """Дописать в ряд полные сутки из архива за days_back суток назад; уже полные сутки не трогаем."""
+    from datetime import timedelta
+    today = date.today()
+    added, errs = 0, []
+    for sat, (nrt, sp) in ARCHIVE_SRC.items():
+        store = doc.setdefault("series", {}).setdefault(sat, {})
+        end = today - timedelta(days=1)
+        while (today - end).days <= days_back:
+            start = end - timedelta(days=9)
+            src = nrt if (today - start).days <= NRT_DAYS else sp
+            url = ARCHIVE_API.format(key=key, src=src, days=10, date=start.isoformat())
+            try:
+                rows = parse(get(url))
+                by_day = {}
+                for r in rows:
+                    d = (r[3] or "")[:10]
+                    if len(d) == 10:
+                        by_day.setdefault(d, []).append(r)
+                for d, rr in by_day.items():
+                    prev = store.get(d) or {}
+                    if prev and not prev.get("partial", True):
+                        continue
+                    reg_d, tot_d = aggregate(rr)
+                    store[d] = {"total": tot_d, "regions": {k: v["n"] for k, v in reg_d.items()},
+                                "frp": {k: v["frp"] for k, v in reg_d.items()}, "partial": False, "archive": src}
+                    added += 1
+                print(f"  {sat:11s} {start}…{end} {src}: {len(rows)} hotspots, {len(by_day)} days")
+                time.sleep(2)
+            except Exception as e:                               # noqa: BLE001
+                errs.append(f"{sat} {start}: {str(e)[:80]}")
+                print(f"  {sat:11s} {start}…{end} ERR {str(e)[:80]}")
+            end = start - timedelta(days=1)
+    return added, errs
+
+
 # Регионы, у которых пожарный сезон завязан на Эль-Ниньо, плюс крупные для фона.
 # (юг, север, запад, восток) в градусах; долгота −180…180.
 REGIONS = [
@@ -142,7 +188,21 @@ def thin_points(rows, keep=1400):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--plan", action="store_true")
+    ap.add_argument("--backfill", type=int, default=0, help="дописать архив за N суток назад (нужен FIRMS_MAP_KEY)")
     a = ap.parse_args()
+    if a.backfill:
+        import os
+        key = os.environ.get("FIRMS_MAP_KEY", "").strip()
+        if not key:
+            print("FIRMS_MAP_KEY не задан: ключ бесплатный, регистрация на https://firms.modaps.eosdis.nasa.gov/api/map_key/; "
+                  "положите его в переменную окружения и повторите")
+            return 2
+        doc0 = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {"series": {}}
+        added, errs = backfill(doc0, a.backfill, key)
+        doc0["backfilled"] = {"days_back": a.backfill, "added_days": added, "at": datetime.now().strftime("%Y-%m-%d %H:%M"), "errors": errs}
+        safeio.write_text(OUT, json.dumps(doc0, ensure_ascii=False, separators=(",", ":")))
+        print(f"fires.json: archive added {added} instrument-days, errors {len(errs)}")
+        return 0
     if a.plan:
         for r in REGIONS:
             print(f"  {r[0]:16s} {r[1]:44s} lat {r[2]:>4}…{r[3]:<4} lon {r[4]:>5}…{r[5]}")
