@@ -3785,12 +3785,18 @@
     if (!r) return '<b>No history</b>This number is not in the value journal yet.';
     var e = (r.entries || []).slice().reverse(), n = e.length, dg = r.digits;
     var rows = all ? e : e.slice(0, 8);
+    /* У РИСКА ИСТОРИЯ — ЭТО СМЕНЫ УРОВНЯ, а не даты данных: имена у рисков появились 04.09, с тех пор
+       уровень 5 держится, и одна строка «2026-09-04» читалась как застрявшие данные (владелец 19.09).
+       Говорим прямо: с какого дня уровень, и какого числа данные под ним. */
+    var isRisk = String(k).indexOf('risk:') === 0, rk = isRisk ? (((S.D || {}).risks || []).filter(function (q) { return 'risk:' + q.id === k; })[0] || null) : null;
+    var rkDate = rk && rk.metric && rk.metric.dates && rk.metric.dates.length ? rk.metric.dates[rk.metric.dates.length - 1] : null;
     var s = '<b>' + esc(r.title || k) + '</b>' +
-      'Every line is a change of the DATA, not of our refresh: the panel can update six times a day and this list stay still.' +
+      (isRisk ? 'Every line is a change of the LEVEL this rule assigned, not a data update: the rule is re-run on every refresh and stays silent while the level holds.' + (rkDate ? ' The data under it run to <b>' + esc(String(rkDate)) + '</b>.' : '')
+              : 'Every line is a change of the DATA, not of our refresh: the panel can update six times a day and this list stay still.') +
       (janom(r) ? '<div class="jnote">This is an anomaly: how far the reading sits from the 1991–2020 average for the same date, not the temperature itself. The absolute value for the world ocean lives on Long term · Temperature — about 21 °C in late summer.</div>' : '') +
       /* Подписи колонок: без них столбик чисел и стрелок читался как одно месиво
          (владелец 06.09: «не понятно расположено до конца»). */
-      '<table class="htab"><tr class="hh"><td>date of the data</td><td class="v">value</td>' +
+      '<table class="htab"><tr class="hh"><td>' + (isRisk ? 'level since' : 'date of the data') + '</td><td class="v">' + (isRisk ? 'level' : 'value') + '</td>' +
       '<td class="a">change</td></tr>' + rows.map(function (x, i) {
         var nx = rows[i + 1];
         return '<tr><td>' + esc(x.d) + '</td><td class="v">' + jval(x.v, dg) + (r.unit ? ' ' + esc(r.unit) : '') +
