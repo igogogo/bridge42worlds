@@ -14,7 +14,7 @@ H. Данные: ни одного NaN/Infinity — браузерный JSON.pa
 J. Производные слои: ни один не собран раньше разбора, рядом с которым показан.
 K. Дубликаты величин: одно и то же число, лежащее в нескольких файлах, всюду одинаково.
 L. Застрявшие источники: отвечает без ошибки, но данные не двигаются дольше двенадцати дней.
-M. Один ряд — один последний день во всех файлах (кроме тех, о ком уже сказало L).
+M. Один ряд — один последний день в файлах одного разбора (latest и производные; слои лёгкого прогона — planet, fresh — по определению новее).
 I. Раскладка и показатели: отчёт ночного обхода сцен (check_layout.py) — находки, сверка
    журнальных рядов (один ключ — одно число везде) и возраст самого отчёта.
 Выход: список расхождений; код возврата 1, если есть блокирующие (A, C, D, F, G, H, I).
@@ -233,7 +233,7 @@ except Exception as e:                                           # noqa: BLE001
 # повторять одно и то же двумя голосами значит приучить не читать ни один.
 try:
     _files = {}
-    for _n in ("latest", "planet", "outliers"):
+    for _n in ("latest", "outliers"):
         try:
             _files[_n] = json.loads((DATA / f"{_n}.json").read_text(encoding="utf-8"))
         except Exception:                                        # noqa: BLE001
@@ -241,9 +241,9 @@ try:
     _where = {}                                                  # ряд -> {файл: последний день}
     for _k, _v in ((_files["latest"].get("watch") or {})).items():
         _where.setdefault(_k, {})["latest.watch"] = _v.get("last_date")
-    for _k, _v in ((_files["planet"].get("temperature") or {})).items():
-        if isinstance(_v, dict) and (_v.get("last") or {}).get("date"):
-            _where.setdefault(_k, {})["planet"] = (_v.get("last") or {}).get("date")
+    # planet.json — тоже слой лёгкого прогона (planet.py каждую ночь), а не разбора: как и свежий
+    # слой, он между разборами уходит вперёд разобранного, и это его смысл (19.09). В M остаются
+    # только файлы одного разбора: latest.json и производные от него.
     for _r in (_files["outliers"].get("rows") or []):
         if _r.get("key") and _r.get("date"):
             _where.setdefault(_r["key"], {})["outliers"] = _r["date"]
