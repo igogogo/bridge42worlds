@@ -69,8 +69,12 @@ def get(lat_list, lon_list, y0, y1, tries=3):
     for k in range(tries):
         try:
             with urllib.request.urlopen(urllib.request.Request(API + "?" + q, headers=UA), timeout=300) as r:
-                d = json.loads(r.read().decode("utf-8"))
-                return d if isinstance(d, list) else [d]
+                body = r.read().decode("utf-8")
+            try:
+                d = json.loads(body)
+            except ValueError as e:                              # обрезанный ответ — это осечка сети, а не квота: повторяем (19.09: 2024-й)
+                raise RuntimeError(f"truncated response ({len(body)} bytes): {str(e)[:60]}") from e
+            return d if isinstance(d, list) else [d]
         except Exception as e:                                   # noqa: BLE001
             last = e
             # 429 — исчерпана квота Open-Meteo на тяжёлые почасовые запросы (18.09: забор встал на
@@ -93,23 +97,33 @@ def daily_means(p):
 
 
 def fetch_year(year, end=None):
-    """Все точки всех регионов за год одним-двумя вызовами; пишет raw/vapour/<год>.json."""
+    """Все точки всех регионов за год; пишет raw/vapour/<год>.json.
+
+    ИНКРЕМЕНТ ДЛЯ ТЕКУЩЕГО ГОДА (владелец 19.09: «разве мы не инкрементально качаем?»): если
+    файл года уже есть, качаем только от его последней даты минус два дня (хвост ERA5 может
+    уточняться) и сливаем с тем, что на диске. Раньше отставший год перекачивался целиком с
+    1 января — 13 МБ ради недели."""
     RAW.mkdir(parents=True, exist_ok=True)
     f = RAW / f"{year}.json"
+    prev = json.loads(f.read_text(encoding="utf-8")) if f.exists() else None
     y0 = f"{year}-01-01"
+    if prev and prev.get("to"):
+        y0 = max(y0, (date.fromisoformat(prev["to"]) - timedelta(days=2)).isoformat())
     y1 = end or f"{year}-12-31"
     allpts = []
     for reg in REGIONS:
         for la, lo in points(reg):
             if (la, lo) not in allpts:
                 allpts.append((la, lo))
-    out = {"year": year, "to": y1, "points": {}}
+    out = {"year": year, "to": y1, "points": dict((prev or {}).get("points") or {})}
     # не больше 40 точек за вызов, чтобы ответ не переваливал за десяток мегабайт
     for i in range(0, len(allpts), 40):
         chunk = allpts[i:i + 40]
         res = get([p[0] for p in chunk], [p[1] for p in chunk], y0, y1)
         for (la, lo), p in zip(chunk, res):
-            out["points"][f"{la},{lo}"] = daily_means(p)
+            merged = dict(out["points"].get(f"{la},{lo}") or {})
+            merged.update(daily_means(p))                      # новые сутки поверх старых
+            out["points"][f"{la},{lo}"] = merged
         time.sleep(2)
     safeio.write_text(f, json.dumps(out, separators=(",", ":")))
     return out

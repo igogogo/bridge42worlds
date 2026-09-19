@@ -5868,12 +5868,15 @@
        который этот уровень дал, до следующего порога; её считает сам сборщик и кладёт полем
        strength. Где честного потолка нет, поля нет, и такой столбик стоит РОВНО на линии
        уровня с пунктирной крышкой: видно, что он не градуирован, и его не путаешь с тем,
-       кто честно стоит на своей отметке. Шкала поэтому до шести: пятёрка, прошедшая свою
-       ступень целиком, упирается в потолок поля. */
-    var maxL = 6;
+       кто честно стоит на своей отметке.
+       ПЕРЕДЕЛАНО 19.09 (владелец: «написано 3 на уровне 5, а вижу 4, и два риска выше 5»):
+       надстройка strength поверх уровня поднимала четвёрку до линии 5. Теперь высота столбика —
+       РОВНО уровень, а продвижение внутри уровня — светлая вставка в его верхней ступени, от
+       (уровень − 1) вверх на долю strength. Шкала до пяти. */
+    var maxL = 5;
     var Y = function (v) { return Tp + (maxL - v) / maxL * ph; };
     var nGraded = risks.filter(function (q) { return fin(q.strength); }).length;
-    var s2 = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText('The whole board: level, and how far past its own threshold each risk sits', W - Lp - Rp, 11) + '</text>';
+    var s2 = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText('The board: bar = level; lighter cap = how far past its own threshold', W - Lp - Rp, 11) + '</text>';
     for (var g = 1; g <= 5; g++) {
       s2 += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (W - Rp) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".7"/>';
       s2 += '<text x="' + (Lp - 6) + '" y="' + (Y(g) + 3).toFixed(1) + '" text-anchor="end">' + g + '</text>';
@@ -5881,18 +5884,19 @@
     risks.forEach(function (r, i) {
       var x = Lp + i * (bw + gap), lv = Math.max(1, Math.min(5, +r.level || 1)), on = i === cur;
       var st = fin(r.strength) ? Math.max(0, Math.min(1, r.strength)) : null;
-      var top = lv + (st == null ? 0 : st);
+      var top = lv;                                       // высота — уровень, и только он
       var pay = {
         name: r.title,
         def: 'Level ' + r.level + ' \u00b7 ' + esc(r.horizon || '') + '. ' +
           (st == null
             ? 'This rule is on or off: it has no measured distance past its own threshold, so the bar stands exactly on the line and its top is dashed.'
-            : 'It sits ' + Math.round(st * 100) + ' % of the way from the threshold that granted this level to the next one.') +
+            : 'The bar is its level; the lighter part inside the top step is how far it sits past the threshold that granted this level: ' + Math.round(st * 100) + ' % of the way to the next one.') +
           (on ? ' This is the risk open now.' : ' Click the bar to open it.')
       };
       s2 += '<rect data-risk="' + i + '" data-src="' + esc(JSON.stringify(pay)) + '" x="' + x.toFixed(1) + '" y="' + Y(top).toFixed(1) + '" width="' + bw.toFixed(1) +
         '" height="' + (Y(0) - Y(top)).toFixed(1) + '" rx="1.5" style="fill:var(--lv' + lv + ');cursor:pointer"' + (on ? '' : ' opacity=".55"') + '/>';
       // крышка: сплошная у градуированного, пунктирная у того, кто стоит на линии по правилу
+      if (st != null && st > 0) s2 += '<rect x="' + x.toFixed(1) + '" y="' + Y(lv - 1 + st).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + (Y(lv - 1) - Y(lv - 1 + st)).toFixed(1) + '" style="fill:rgba(255,255,255,.28)" pointer-events="none"/>';
       if (st == null) s2 += '<line x1="' + x.toFixed(1) + '" y1="' + Y(lv).toFixed(1) + '" x2="' + (x + bw).toFixed(1) + '" y2="' + Y(lv).toFixed(1) +
         '" style="stroke:var(--surface)" stroke-width="1.6" stroke-dasharray="2 2"/>';
       if (on) s2 += '<rect x="' + (x - 1.5).toFixed(1) + '" y="' + (Y(top) - 1.5).toFixed(1) + '" width="' + (bw + 3).toFixed(1) +
