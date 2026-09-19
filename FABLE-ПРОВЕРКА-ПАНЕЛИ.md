@@ -678,6 +678,17 @@ Niño 1+2 обрезанным был как раз тот год, где сто
   ступени (надстройка над уровнем читалась как уровень выше). История риска: «level since» и
   дата данных под ним. Правило M — только файлы одного разбора (fresh и planet новее по
   определению). Пар: текущий год докачивается хвостом, обрезанный ответ — повтор.
+  Итог 19.09: блок `shape` пишет каждый разбор (`refresh.py` → `monotony.summary(build(cur))`),
+  ряды журнала `n34_straight`, `n34_dip` (плашки с первого снимка, где есть блок), плитка
+  Overview «Shape of the rise»; обход 321 сцены — 0/0, реестр 94 ряда, 0 расхождений;
+  коммит 29253197c92, выложено.
+  ГДЕ ЧТО В МЕНЮ (новое за 18–19.09): Air & fuel → **Water vapour** (последняя кнопка, после
+  MEI · IOD · RONI; появляется только когда есть vapour.json с текущим годом); Weather →
+  **Rivers**; Dynamics → **Shape of the rise**; Satellite → **Named places**; Food → **Markets,
+  weekly**; Ops → **Processing versions**; Globe → слой **Named places (microwave)**; на
+  Overview — плитки «Water vapour over the tropics», «Rivers against their own past»,
+  «Shape of the rise»; на Fuel — кнопки «volume, every year», «temperature 0–300 m, every
+  year», «stored heat».
 
 **Открыто:** строки KPI `rivers_below`, `rivers_record_low`, `tcwv_tropics`, `tcwv_n34` и
 правила `rivers_record_low`, `vapour_record` встанут со следующим снимком и полным разбором;
