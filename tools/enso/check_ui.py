@@ -233,7 +233,7 @@ except Exception as e:                                           # noqa: BLE001
 # повторять одно и то же двумя голосами значит приучить не читать ни один.
 try:
     _files = {}
-    for _n in ("latest", "planet", "outliers", "fresh"):
+    for _n in ("latest", "planet", "outliers"):
         try:
             _files[_n] = json.loads((DATA / f"{_n}.json").read_text(encoding="utf-8"))
         except Exception:                                        # noqa: BLE001
@@ -247,8 +247,9 @@ try:
     for _r in (_files["outliers"].get("rows") or []):
         if _r.get("key") and _r.get("date"):
             _where.setdefault(_r["key"], {})["outliers"] = _r["date"]
-    for _k, _v in ((_files["fresh"].get("series") or {})).items():
-        _where.setdefault(_k, {})["fresh"] = _v.get("last_date")
+    # СВЕЖИЙ СЛОЙ СЮДА НЕ ВХОДИТ (19.09): между разборами он по определению новее разобранного —
+    # это его смысл, а не расхождение. Правило M сравнивает файлы ОДНОГО разбора; о том, что свежее
+    # ушло вперёд, говорит сам свежий слой своими триггерами.
     # какие ряды уже объявлены застрявшими правилом L — о них здесь молчим
     _stuck = set()
     try:
