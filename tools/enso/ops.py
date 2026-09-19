@@ -40,6 +40,7 @@ KIND_LABEL = {
     "radiance_places": "sixty-five named places on the microwave sounder, this year against 2018–2025",
     "rivers": "river discharge, GloFAS via Open-Meteo: fourteen rivers against their own climatology",
     "vapour": "column water vapour, ERA5 via Open-Meteo: tropics belt and the Niño boxes",
+    "monotony": "shape of the rise: how straight the last 60 days went, against the same days of past years",
     "records": "mooring records",
     "publish": "publish to the site",
     "publish-fresh": "publish the fresh layer only",

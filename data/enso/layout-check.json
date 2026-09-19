@@ -1,21 +1,21 @@
 {
- "built": "2026-09-18 22:30",
- "secs": 300,
+ "built": "2026-09-19 07:01",
+ "secs": 297,
  "base": "local files",
  "widths": [
   375,
   1024,
   1440
  ],
- "scenes_checked": 318,
+ "scenes_checked": 321,
  "status": "ok",
  "why": null,
  "n_findings": 0,
  "n_accepted": 0,
  "findings": [],
  "kpi": {
-  "registry": 92,
-  "shown": 79,
+  "registry": 94,
+  "shown": 81,
   "out_of_sync": [],
   "rounding": [
    {
@@ -38,7 +38,7 @@
        "Air & fuel / Fuel",
        "Air & fuel / Layers"
       ],
-      "n": 318
+      "n": 321
      }
     ],
     "rounding": true
@@ -61,7 +61,20 @@
   "not_in_registry": [],
   "note": "Реестр показателей — журнал значений. Здесь сведено то, что панель реально показала на всех обойдённых сценах: один ключ должен давать одно число везде."
  },
- "consist": [],
- "n_consist": 0,
+ "consist": [
+  {
+   "t": "cyr",
+   "p": "td",
+   "x": "Русская служба The Moscow Times",
+   "scene": "Mentions / Headlines (300)"
+  },
+  {
+   "t": "cyr",
+   "p": "td",
+   "x": "Новости Zakon.kz",
+   "scene": "Mentions / Headlines (300)"
+  }
+ ],
+ "n_consist": 2,
  "note": "Обход всех сцен панели в безоконном браузере на каждой ширине: где текст не помещается, где обрезан без многоточия, где налезает на соседа, где сцена отрисовалась пустой и где упал javascript. Признанные исключения перечислены в tools/enso/layout-accepted.json, каждое с причиной и потолком. Запуск: python tools/enso/check_layout.py"
 }

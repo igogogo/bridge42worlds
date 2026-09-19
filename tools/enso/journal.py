@@ -348,6 +348,13 @@ METRICS = {
     "heat_e22": dict(
         title="Stored heat of the upper 300 m, our estimate", unit="×10²² J", digits=2, src="our estimate on PMEL T300",
         val=lambda d: _g(d, "air", "fuel", "heat", "value"), date=lambda d: _g(d, "air", "fuel", "heat", "date")),
+    # характер роста (19.09): из блока shape разбора
+    "n34_straight": dict(
+        title="Niño 3.4 rise, straightness of 60 days", unit="|net|/path", digits=2, src="our count on the daily series",
+        val=lambda d: _g(d, "shape", "n34_daily", "straightness"), date=lambda d: _g(d, "shape", "n34_daily", "to")),
+    "n34_dip": dict(
+        title="Niño 3.4, deepest dip in 60 days", unit="°C", digits=2, src="our count on the daily series",
+        val=lambda d: _g(d, "shape", "n34_daily", "drawdown"), date=lambda d: _g(d, "shape", "n34_daily", "to")),
     # реки и пар (18.09): из блока hydro разбора
     "rivers_below": dict(
         title="Rivers below their lower quartile", unit="of 14", digits=0, src="GloFAS via Open-Meteo, our count",

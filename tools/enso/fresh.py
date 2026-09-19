@@ -70,6 +70,18 @@ def build(cur, assessed):
         out["series"]["wind"] = {"label": "Westerly wind anomaly, 130°E–180°, daily", "unit": "m/s",
                                  "last_date": er.get("last_date"), "last_value": (er.get("anom") or [None])[-1],
                                  "assessed_last_date": wl, "assessed_last_value": (aer.get("anom") or [None])[-1], "tail": wt}
+    # БОКСЫ OISST — ВСЕ ЧЕТЫРЕ (владелец 19.09: «только 3.4 fresh, а остальные — 3, 4, 1+2?»).
+    # Хвост после разобранной даты по каждому боксу: Niño 4, 3.4, 3, 1+2 — как у склейки выше.
+    ob0, aob = ((cur.get("oisst") or {}).get("boxes") or {}), ((A.get("oisst") or {}).get("boxes") or {})
+    for bk, lab in (("nino4", "Niño 4, our box"), ("nino34", "Niño 3.4, our box"), ("nino3", "Niño 3, our box"), ("nino12", "Niño 1+2, our box")):
+        b, ab = ob0.get(bk) or {}, aob.get(bk) or {}
+        if not b.get("dates"):
+            continue
+        bl = ab.get("last_date")
+        bt = [[d, v] for d, v in zip(b.get("dates") or [], b.get("anom") or []) if d and (not bl or d > bl) and v is not None]
+        out["series"]["box_" + bk] = {"label": lab, "unit": "°C", "last_date": b.get("last_date"), "last_value": b.get("last_anom"),
+                                      "assessed_last_date": bl, "assessed_last_value": ab.get("last_anom"),
+                                      "mean7": b.get("mean7"), "days_stale": b.get("days_stale"), "tail": bt}
     # коридор прогноза разобранного состояния: свежая точка вне p10…p90 — повод разобрать
     aw = (A.get("watch") or {}).get(BAND_KEY) or {}
     fc = aw.get("forecast14") or {}

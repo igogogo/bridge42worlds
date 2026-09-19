@@ -250,6 +250,12 @@ def main(fetch=True, llm=True, light=False):
     step("снимок и история")
     cur["prev"] = compact(prev)
     cur = clean(cur)
+    # характер роста — коротким блоком в разбор: журнал и полоса KPI читают его отсюда (19.09)
+    try:
+        import monotony
+        cur["shape"] = monotony.summary(monotony.build(cur))
+    except Exception as e:                                       # noqa: BLE001
+        cur["shape"] = {"error": str(e)[:160]}
     safeio.write_text(ROOT / "latest.json", json.dumps(cur, ensure_ascii=False, default=str, allow_nan=False))
     safeio.write_text(SNAP / (datetime.now().strftime("%Y%m%d_%H%M%S") + ".json"), json.dumps(cur, ensure_ascii=False, default=str))
     safeio.write_text(ROOT / "history.json", json.dumps(history(sorted(SNAP.glob("*.json"))), ensure_ascii=False))
@@ -289,7 +295,7 @@ def main(fetch=True, llm=True, light=False):
     # роняет разбор: он стоит строки в отчёте, а не работы.
     if not light:
         for mod, what in (("zones_flow", "переток между зонами"), ("phase", "фазовый сторож"),
-                          ("outliers", "кто выбивается"), ("stats_layer", "слой статистики"),
+                          ("outliers", "кто выбивается"), ("stats_layer", "слой статистики"), ("monotony", "характер роста"),
                           ("agent_state", "карта состояния панели")):
             step("производный слой: " + what)
             try:
