@@ -71,6 +71,12 @@
       'verdict/now': 'Today\'s verdict.', 'verdict/history': 'Every verdict that actually changed, in order.',
       'now/analogs': 'Daily Niño 3.4 this year against the four strongest past events on the same days.', 'now/map': 'The four Niño boxes on the map, this week against the same week of a past event.',
       'now/weekly': 'The four weekly indices over the last weeks, with the same weeks of past events beside them.', 'now/weekly_a': 'One weekly index against the strongest events on the same calendar.',
+      'air/vapour': 'Column water vapour over the tropics and the Niño boxes, ERA5 through Open-Meteo, daily since 1991.',
+      'food/markets': 'Exchange futures for the same goods as the monthly tables: weekly for two years, daily for three months.',
+      'ops/versions': 'Processing version of the satellite granules by instrument, from the radiance collector.',
+      'radiance/places': 'Sixty-five named places on the microwave sounder, each with the mechanism by which it could fail; this year against 2018–2025.',
+      'trend/shape': 'How straight the last 60 days of a daily series went, against the same days of past years.',
+      'weather/rivers': 'Modelled discharge of fourteen El Niño rivers against their own 2000–2020 climatology.',
       'ocean/surface': 'Daily box means from the NOAA grid, one day behind, with own climatologies.', 'ocean/hovmoller': 'How the heat moves: the subsurface anomaly along the equator month by month, this event beside a past one.', 'mentions/attention': 'How much the world talks about it: articles per day, Wikipedia views, share of world news.', 'mentions/articles': 'Latest headlines in nine languages, with the publisher.', 'mentions/official': 'The official word: when the next release from each centre is due, how long each has been quiet on El Niño, and what they last said.', 'ocean/moorings': 'Temperature by depth under the equator, mooring by mooring, every day.', 'ocean/section': 'The reanalysis section along the equator, monthly.',
       'models/cities': 'Seven-day weather forecasts for 50 cities, three models, seven parameters, against the fact when the day arrives: how far the models miss, by horizon and over time. A local watch of how stable the system is.',
       'models/plume': 'All models\' seasonal forecasts, the live-model centre, where we stand in the season.', 'models/stack': 'The last three issues, one under the other, against the same reality.', 'models/scoreboard': 'Each model against the official value it forecast.', 'models/breakdown': 'How many models fell below reality, issue by issue; the chronic ones.', 'models/revisions': 'How each model moved its peak between issues.',
@@ -8730,11 +8736,26 @@
           '<div class="kpi"><div class="kn">difference</div><div class="kv">' + fnum(N1.delta, 2) + '<small> K</small></div><div class="km">' + (fin(N1.z) ? fnum(N1.z, 1) + ' sigmas of the past years; ' : '') + 'nadir correction on this block ' + fnum(N1.raw_minus_adj_block, 2) + ' K (raw minus corrected), so the correction can be checked, not trusted</div>' + kmeta(null, 'our count on the collector\u2019s table', (N1.last || {}).date) + '</div>';
         body.appendChild(kq);
       }
+      /* ДВАДЦАТЬ ЛЕТ ФОНА ПО МЕСТУ (v16, 19.09): AIRS 2003–2022 по тем же местам — доля глубокой
+         конвекции в тот же сезон, год за годом. Другой прибор: не продолжение микроволнового ряда,
+         а то, каким это место было двадцать лет, — и панель их не смешивает. */
+      var IR = RP.infrared || {}, irp = (IR.places || {})[P1 ? P1.id : ''] || null;
+      if (irp && Object.keys(irp).length >= 5) {
+        var iys = Object.keys(irp).sort();
+        plot(body, function (w, h) {
+          return chartSeriesSimple({ title: P1.name + ': share of deep convection (BT900 < 235 K) in the same season, AIRS 2003\u20132022 \u2014 twenty years of background for this place', x: iys.map(Number), y: iys.map(function (y) { return fin(irp[y].frac) ? irp[y].frac * 100 : NaN; }), digits: 1, unit: ' %', bars: true, zero: true }, w, h);
+        });
+        var irv = iys.map(function (y) { return irp[y].frac; }).filter(fin), irm = irv.length ? irv.reduce(function (a, b) { return a + b; }, 0) / irv.length : null;
+        var ki = el('div', 'kpis');
+        ki.innerHTML = '<div class="kpi"><div class="kn">' + esc(P1.name) + ' \u00b7 twenty years, infrared</div><div class="kv">' + (fin(irm) ? fnum(irm * 100, 1, false) : '\u00b7') + '<small> % of footprints</small></div><div class="km">mean share of deep convection in the same season over ' + iys.length + ' years (' + iys[0] + '\u2013' + iys[iys.length - 1] + '), ' + IR.season_half_days + ' days either side of ' + esc(IR.season_around || '') + '; window brightness ' + fnum(irp[iys[iys.length - 1]].bt900, 1, false) + ' K in ' + iys[iys.length - 1] + '. A different instrument from the microwave block above, so a background, not a continuation</div>' + kmeta(null, 'AIRS on Aqua via the radiance collector', iys[iys.length - 1]) + '</div>';
+        body.appendChild(ki);
+      }
       var kc = el('div', 'kpis');
       var sm = SM[nodeP] || {};
       kc.innerHTML = '<div class="kpi"><div class="kn">collector alarms today</div><div class="kv">' + (CO.alerts_now || 0) + '</div><div class="km">' + esc(CO.thresholds || '') + '</div>' + kmeta(null, 'radiance collector', CO.date) + '</div>' +
         '<div class="kpi"><div class="kn">named places beyond 2\u03c3</div><div class="kv">' + (sm.hypothesis_n_above_2 || 0) + '<small> of ' + hyp.length + '</small></div><div class="km">median |z| ' + fnum(sm.hypothesis_median_abs_z, 1, false) + '; with 25 places and two-date seasons, one or two beyond 2\u03c3 is what chance gives</div>' + kmeta(null, 'our count', RP.block.last) + '</div>' +
         '<div class="kpi"><div class="kn">lattice points beyond 2\u03c3</div><div class="kv">' + (sm.lattice_n_above_2 || 0) + '<small> of ' + latt.length + '</small></div><div class="km">forty even points for coverage; no mechanism named, so no verdict of their own</div>' + kmeta(null, 'our count', RP.block.last) + '</div>' +
+        (RP.drift_verdict ? '<div class="kpi"><div class="kn">drift of the control group \u00b7 the collector\u2019s answer</div><div class="kv" style="font-size:17px">' + esc(RP.drift_verdict.answer || '\u00b7') + (RP.drift_verdict.all_views_agree ? '<small>all ' + RP.drift_verdict.n_views + ' views agree</small>' : '') + '</div><div class="km">' + esc(RP.drift_verdict.standing || '') + '. ' + esc(RP.drift_verdict.withdrawn || '') + '</div>' + kmeta(null, 'radiance collector, v16', RP.drift_verdict.as_of) + '</div>' : '') +
         '<div class="kpi"><div class="kn">how much is the level</div><div class="kv" style="font-size:17px">' + esc(((CO.level_share_verdict || {})[nodeP] === '\u0441\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u043d\u0430\u044f') ? 'structural' : String((CO.level_share_verdict || {})[nodeP] || '\u00b7')) + '</div><div class="km">median r\u00b2 of the contrast against the 88 GHz window level ' + fnum((CO.level_share_r2_median || {})[nodeP], 2, false) + ': the contrast is not just the level in disguise</div>' + kmeta(null, 'radiance collector, level share', CO.date) + '</div>';
       body.appendChild(kc);
       var toGlobe = el('div', 'cap', ''); var ga = el('a', 'go', 'See the sixty-five places on the 3D globe \u2192'); ga.href = '#globe'; ga.onclick = function (e) { e.preventDefault(); S.gl = S.gl || {}; S.gl.places = true; S.view = 'globe'; S.risk = null; render(); }; toGlobe.appendChild(ga); body.appendChild(toGlobe);

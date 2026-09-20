@@ -112,6 +112,64 @@ def load_places():
     return out, P.get("frozen"), P.get("changelog") or []
 
 
+SEASON_HALF = 30           # ± суток вокруг конца опорного отрезка: тот же сезон в каждом году AIRS
+
+
+def infrared(block_end):
+    """AIRS 2003–2022 по тем же 65 местам (irplaces_daily.csv сборщика, v16): по каждому месту и году —
+    среднее доли глубокой конвекции (BT900 < 235 K) и яркостной температуры окна за тот же сезон.
+    Другой прибор и другие годы — это ДВАДЦАТЬ ЛЕТ ФОНА для места, не продолжение микроволнового
+    ряда; кросс-калибровки сборщик не давал, и панель их не смешивает."""
+    p = CL / "irplaces_daily.csv" if (CL / "irplaces_daily.csv").exists() else INCOMING / "irplaces_daily.csv"
+    if not p.exists():
+        return None
+    try:
+        end = date.fromisoformat(block_end)
+    except Exception:                                            # noqa: BLE001
+        return None
+    doy0 = end.timetuple().tm_yday
+    acc = {}
+    n_rows = 0
+    for r in csv.DictReader(open(p, encoding="utf-8")):
+        if r.get("node") != "A":
+            continue
+        try:
+            d = date.fromisoformat(r["date"])
+        except Exception:                                        # noqa: BLE001
+            continue
+        dd = abs(d.timetuple().tm_yday - doy0)
+        if min(dd, 366 - dd) > SEASON_HALF:
+            continue
+        f, b = _f(r.get("frac_lt235")), _f(r.get("bt900_mean"))
+        for pid in (r.get("places") or "").split(";"):
+            pid = pid.strip()
+            if not pid:
+                continue
+            a = acc.setdefault(pid, {}).setdefault(str(d.year), [[], []])
+            if f is not None:
+                a[0].append(f)
+            if b is not None:
+                a[1].append(b)
+            n_rows += 1
+    out = {}
+    for pid, years in acc.items():
+        out[pid] = {y: {"frac": _r(_mean(v[0]), 3), "bt900": _r(_mean(v[1]), 1), "n": len(v[0])} for y, v in sorted(years.items())}
+    return {"file": p.name, "instrument": "AIRS on Aqua, infrared, 2003–2022", "season_half_days": SEASON_HALF,
+            "season_around": block_end[5:], "places": out, "rows_used": n_rows}
+
+
+def collector_verdict(PW):
+    """Вердикт сборщика о дрейфе контрольной группы — словами панели, не сборщика."""
+    v = (PW or {}).get("verdict") or {}
+    ans = str(v.get("answer") or "")
+    en = {"ДАННЫХ ПОКА НЕ ХВАТАЕТ": "not enough data yet"}.get(ans, ans)
+    return {"question": "does the control group drift in our own series the way the NOAA OLR field was said to?",
+            "answer": en, "all_views_agree": v.get("all_agree"), "n_views": v.get("n_views"),
+            "withdrawn": "the earlier claims were withdrawn one after another: 15 % in the deserts, then 2.0 % and 0.4 %, then 'established at two places'; none survived its check",
+            "standing": "an unreproduced move is established at none of the 65 places; the fraction of link losses across the bank 0.519 ± 0.053, the intercept of its line indistinguishable from zero, the residual 1.90 times quieter than the field (1.44 on the microwave)",
+            "as_of": (PW or {}).get("date")}
+
+
 def provenance():
     """Версия обработки по суткам и прибору (provenance_daily.csv сборщика): сколько суток, с какой
     по какую, какие версии и сколько суток на каждой, версия последних суток, сколько суток
@@ -213,6 +271,7 @@ def main():
                       "level_share_r2_median": {n: (ls.get("vc_10_13_" + n) or {}).get("r2_level_median") for n in ("A", "D")},
                       "complete_gate": "days with fewer than 236 of 241 granules are dropped: a missing granule is a piece of orbit and biases one way (0.41 K on a day with 179 granules)"},
         "groups": GROUP_WHY_EN, "summary": summary, "places": out_places, "provenance": provenance(),
+        "infrared": infrared(b1), "drift_verdict": collector_verdict(PW),
         "note": ("Sixty-five named places on the microwave sounder, each with the mechanism by which it can fail: the edge of convection, "
                  "a bistable axis, a far teleconnection, or a control that must not move. The number is the block mean of this year's "
                  "continuous run against the same season of 2018–2025, in K and in sigmas of those years. Not a threshold and not an alarm: "
