@@ -6281,7 +6281,7 @@
       var cur = HV.current || {}, lastRow = (cur[hm] || [])[(cur.months || []).length - 1] || [], mx = -Infinity, mj = -1;
       lastRow.forEach(function (v, j) { if (fin(v) && v > mx) { mx = v; mj = j; } });
       var kh = el('div', 'kpis');
-      if (mj >= 0) kh.innerHTML = '<div class="kpi"><div class="kn">' + (hm === 'anom100' ? 'warmest at ' + Math.round(cur.level) + ' m' : 'deepest thermocline anomaly') + ' · ' + esc(cur.months[cur.months.length - 1]) + '</div><div class="kv">' + fnum(mx, 1) + '<small>' + (hm === 'anom100' ? ' °C' : ' m') + ' at ' + esc(cur.labels[mj]) + '</small></div><div class="km">the eastern edge of the warm band is where the wave surfaces</div>' + kmeta(null, 'GODAS via PSL', cur.months[cur.months.length - 1]) + '</div>';
+      if (mj >= 0) kh.innerHTML = '<div class="kpi"><div class="kn">' + (hm === 'anom100' ? 'warmest at ' + Math.round(cur.level) + ' m' : 'deepest thermocline anomaly') + ' · ' + esc(cur.months[cur.months.length - 1]) + '</div><div class="kv">' + fnum(mx, 1) + '<small>' + (hm === 'anom100' ? ' °C' : ' m') + '</small></div><div class="km">at ' + esc(cur.labels[mj]) + '; the eastern edge of the warm band is where the wave surfaces</div>' + kmeta(null, 'GODAS via PSL', cur.months[cur.months.length - 1]) + '</div>';
       var an = ha ? (HV.analogs || {})[ha] : null, ymNow = (cur.months || [])[(cur.months || []).length - 1];
       if (an && hm === 'anom100' && ymNow && mj >= 0) {
         var offY = parseInt(ha, 10) - parseInt(ymNow.slice(0, 4), 10), keyA = (parseInt(ymNow.slice(0, 4), 10) + offY) + ymNow.slice(4);
