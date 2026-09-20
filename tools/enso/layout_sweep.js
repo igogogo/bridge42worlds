@@ -278,13 +278,27 @@
     audit(['#railL', '#railR', '.kstrip']).forEach(function (f) { f.scene = 'rails'; out.push(f); });
     consist(['#railL', '#railR', '.kstrip']).forEach(function (f) { f.scene = 'rails'; cons.push(f); });
 
-    var n = document.querySelectorAll('.tab').length;
+    /* ПУНКТЫ МЕНЮ: кнопки плюс пункты списка «service» (с 20.09 служебные разделы — в
+       выпадающем списке, кликом по нему сцену не откроешь: выбираем значение и шлём change). */
+    function entries() {
+      var list = [];
+      [].slice.call(document.querySelectorAll('.tab')).forEach(function (t) {
+        if (t.tagName === 'SELECT') {
+          [].slice.call(t.options).forEach(function (o) {
+            if (!o.value) return;
+            list.push({ name: (o.textContent || '').trim(), go: function () { t.value = o.value; t.dispatchEvent(new Event('change', { bubbles: true })); } });
+          });
+        } else list.push({ name: label(t), go: function () { t.click(); } });
+      });
+      return list;
+    }
+    var n = entries().length;
     for (var i = 0; i < n; i++) {
       // список вкладок пересобирается на каждый переход, а при смене ширины ещё и меняет длину
-      var tabs = document.querySelectorAll('.tab');
+      var tabs = entries();
       if (i >= tabs.length) break;
-      var name = label(tabs[i]);
-      tabs[i].click();
+      var name = tabs[i].name;
+      tabs[i].go();
       await settle(pause);
       var m = segs().length;
       if (!m) { take(name, ['.stage-body']); continue; }

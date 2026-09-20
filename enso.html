@@ -198,6 +198,12 @@
   .tab.svc{border-style:dashed;color:var(--soft)}
   .tab.svc:hover{color:var(--text)}
   .tab.svc.on{background:var(--soft);border-color:var(--soft);border-style:solid;color:var(--surface)}
+  /* служебные — одним списком у правого края (20.09) */
+  .tab.svc-sel{margin-inline-start:auto;border-style:dashed;color:var(--soft);appearance:none;-webkit-appearance:none;background:var(--surface);padding-inline-end:12px}
+  .tab.svc-sel:hover{color:var(--text)}
+  .tab.svc-sel.on{background:var(--soft);border-color:var(--soft);border-style:solid;color:var(--surface);font-weight:600}
+  .tab.svc-sel option{color:var(--text);background:var(--surface);font-weight:500}
+  @media (max-width:900px){ .tab.svc-sel{margin-inline-start:0} }
   /* Вердикт — не такая вкладка, как остальные: это ответ на вопрос «ну и что?», и он должен
      бросаться в глаза первым (владелец 04.09: «ссылку на вердикт отдельным пунктом и поярче,
      может инверсно»). Инверсия: заливка цветом события, текст на ней светлый. */
@@ -844,6 +850,17 @@
      без прокрутки — прокрутка была лишь у сцен с классом scroll и на телефоне (владелец 18.09:
      «если экрана не хватает — график видно, остальное нет, и это на всех сценах»). */
   .stage-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 12px 8px;gap:8px;overflow-y:auto;overflow-x:hidden}
+  /* ДВА В РЯД НА ШИРОКОЙ СЦЕНЕ (20.09): график — одна колонка, пара ему — второй график или
+     ряд карточек; остальное во всю ширину; график без пары — во всю ширину, но выше. */
+  .split-btn{display:none}
+  @media (min-width:1500px){ .split-btn{display:inline-block} }
+  .stage-body.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-auto-flow:row dense;gap:8px 12px;align-content:start}
+  .stage-body.split > *{grid-column:1 / -1;min-width:0}
+  .stage-body.split > .plot{grid-column:auto;height:440px;min-height:440px;flex:none}
+  .stage-body.split > .plot.solo{grid-column:1 / -1;height:480px;min-height:480px}
+  .stage-body.split > .plot.map-fit{grid-column:1 / -1;height:auto}
+  .stage-body.split > .kpis.beside{grid-column:auto;flex-wrap:wrap;overflow:visible;align-self:stretch;align-content:flex-start;-webkit-mask:none;mask:none}
+  .stage-body.split > .kpis.beside > *{flex:1 1 calc(50% - 7px);min-width:150px}
   .stage-body.scroll{overflow:auto}
   /* График — главный житель сцены: не меньше половины её высоты, что бы ни делали подписи. */
   .plot{flex:1 1 55%;min-height:170px;display:block;position:relative}
@@ -929,7 +946,11 @@
     font-weight:600;font-size:13px;display:grid;place-items:center}
   .risk .rt{font-size:12.5px;font-weight:600;line-height:1.3}
   .risk .rh{font-family:var(--mono);font-size:9.5px;color:var(--soft);margin-top:2px}
-  .risk .rs{margin-top:3px}
+  .risk .rs{margin-top:4px;display:flex;gap:8px;align-items:center}
+  .risk .rs svg{flex:0 0 auto}
+  .risk .rsv{font-family:var(--mono);font-size:9.5px;color:var(--soft);line-height:1.35;min-width:0}
+  .risk .rsv b{font-size:12.5px;color:var(--text);font-weight:600}
+  .risk .rsv i{display:block;font-style:normal}
 
   /* ── таблицы ─────────────────────────────────────────────────────────────── */
   table.e{border-collapse:collapse;width:100%;font-size:12px}
@@ -1451,7 +1472,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=bc9ad2b80c"></script>
+<script src="/js/enso.js?v=7cec3c621d"></script>
 <script src="/js/sitenav.js?v=6ab7008c58"></script>
 </body>
 </html>

@@ -2042,8 +2042,25 @@
     });
     s += poly(xs.map(function (i) { return [X(i), Y(vals[i])]; }), 'var(--nino)', 1.5);
     var li = xs[xs.length - 1];
-    s += '<circle cx="' + X(li).toFixed(1) + '" cy="' + Y(vals[li]).toFixed(1) + '" r="2" style="fill:var(--nino)"/>';
+    s += nowDot(X(li), Y(vals[li]), 'var(--nino)', 2.2);   // текущее значение мигает и в искре (20.09)
     return s + '</svg>';
+  }
+  /* ИСКРА УЖЕ И ВЫШЕ, РЯДОМ — ЧИСЛА (владелец 20.09: «справа графики очень вытянутые, а текста
+     мало — не видно вертикальной динамики»). Что сейчас, что было в этот же день у прошлых
+     событий (те же аналоги, что в самой искре), и размах ряда. */
+  function sparkNote(m) {
+    var vals = m.values || [], li = vals.length - 1;
+    while (li >= 0 && !fin(vals[li])) li--;
+    if (li < 0) return '';
+    var d = m.unit === '\u00b0C' ? 1 : 2, u = m.unit ? ' ' + esc(m.unit) : '';
+    var s = '<b>' + fnum(vals[li], d) + '</b>' + u + '<i>now</i>';
+    var AN = m.analogs || {}, ks = Object.keys(AN).sort(), parts = [];
+    ks.forEach(function (y) { var av = AN[y] || [], k = li - (vals.length - av.length); if (k >= 0 && k < av.length && fin(av[k])) parts.push('\u2019' + String(y).slice(2) + ' ' + fnum(av[k], d)); });
+    if (parts.length) s += '<i>same day: ' + parts.join(' \u00b7 ') + '</i>';
+    var lo = Infinity, hi = -Infinity;
+    vals.forEach(function (v) { if (fin(v)) { lo = Math.min(lo, v); hi = Math.max(hi, v); } });
+    if (fin(lo) && hi > lo) s += '<i>range ' + fnum(lo, d) + ' \u2026 ' + fnum(hi, d) + '</i>';
+    return s;
   }
 
   function miniBar(v, ref, w, h) {
@@ -2269,13 +2286,19 @@
     GROUPS.forEach(function (g, gi) { if (gi) list.push(['_gap' + gi, '']); g.forEach(function (k) { if (T.tabs[k]) list.push([k, T.tabs[k]]); }); });
     SVC_ORDER.forEach(function (k) { if (T.tabs[k]) list.push([k, T.tabs[k]]); });
     /* ДВА РЯДА (владелец 07.09: «меню разрослось; основные вверху влево, служебные ниже вправо»). */
-    var rowMain = el('div', 'trow'), rowSvc = el('div', 'trow svc');
+    var rowMain = el('div', 'trow');
+    /* СЛУЖЕБНЫЕ — ОДНИМ СПИСКОМ ВЫБОРА (владелец 20.09: «нам нужна высота, а у нас две строки;
+       служебные — списком, выигрываем строку»). Второй строки больше нет: метод, ссылки,
+       цепочка, ops, about лежат в одном выпадающем списке у правого края первой. */
+    var svcSel = document.createElement('select'); svcSel.className = 'tab svc-sel';
+    var o0 = document.createElement('option'); o0.value = ''; o0.textContent = 'service \u25BE'; svcSel.appendChild(o0);
     list.forEach(function (v) {
       /* Служебные вкладки (метод, цепочка, о панели) выглядят иначе: пунктирная рамка,
          приглушённый цвет; вердикт — контрастный чёрно-белый. У каждой — подсказка,
          что это (владелец 05.09). */
       if (v[0].indexOf('_gap') === 0) { rowMain.appendChild(el('span', 'tgap', '')); return; }
       var svc = SVC_ORDER.indexOf(v[0]) >= 0;
+      if (svc) { var o = document.createElement('option'); o.value = v[0]; o.textContent = v[1]; if (T.tabHelp[v[0]]) o.title = T.tabHelp[v[0]]; svcSel.appendChild(o); return; }
       /* Подсказка к пункту меню — на значке «i» справа от текста, а не на самой кнопке
          (владелец 05.09: «для меню неудобно тултипы — пусть будет небольшая иконка i»). */
       var b = el('button', 'tab' + (v[0] === 'verdict' ? ' verdict' : '') + (svc ? ' svc' : '') + (DATA_TABS.indexOf(v[0]) >= 0 ? ' data' : '') + (S.view === v[0] ? ' on' : ''),
@@ -2286,8 +2309,14 @@
          поднимает и подсказку, и переход, и карточка повисает над шапкой уже на новой сцене. */
       if (T.tabHelp[v[0]] && HOVER) b.setAttribute('data-src', JSON.stringify({ name: v[1], def: T.tabHelp[v[0]] }));
       b.onclick = function () { S.view = v[0]; S.risk = null; if (mob) S.navOpen = false; mScreen(v[0]); render(); };
-      (svc ? rowSvc : rowMain).appendChild(b);
+      rowMain.appendChild(b);
     });
+    var svcOn = SVC_ORDER.indexOf(S.view) >= 0;
+    svcSel.value = svcOn ? S.view : '';
+    if (svcOn) svcSel.className += ' on';
+    svcSel.title = 'research, method, references, data chain, ops, about the panel';
+    svcSel.onchange = function () { var k = svcSel.value; if (!k) return; S.view = k; S.risk = null; if (mob) S.navOpen = false; mScreen(k); render(); };
+    rowMain.appendChild(svcSel);
     if (mob) {
       var here = (list.filter(function (v) { return v[0] === S.view; })[0] || [])[1] || T.tabs[S.view] || 'menu';
       var tog = el('button', 'tab navtog' + (S.navOpen ? ' on' : ''),
@@ -2299,7 +2328,7 @@
       host.appendChild(rowTog);
       host.className = 'tabs mob' + (S.navOpen ? ' open' : ' closed');
     } else host.className = 'tabs';
-    host.appendChild(rowMain); host.appendChild(rowSvc);
+    host.appendChild(rowMain);
     var t = $('deltaBtn');
     if (t) {
       t.className = 'tab delta' + (S.delta ? ' on' : '');
@@ -2333,6 +2362,15 @@
     /* СВЕЖЕЕ, НЕ РАЗОБРАННОЕ (владелец 06.09): лёгкий прогон без модели; пунктирная точка дышит,
        пока данные не прошли разбор. Показывается только если слой считан против ЭТОГО разбора. */
     var F = S.F || {};
+    /* ДАТА РАЗБОРА — ОТДЕЛЬНО ОТ ДАТЫ ДАННЫХ (20.09). Лёгкий прогон обновляет все числа, а
+       текст модели остаётся от последнего разбора; здесь его дата и сколько триггеров правил
+       накопилось с тех пор. Это то, о чём владелец просил говорить: «анализ — когда что-то
+       серьёзное изменилось». */
+    if (D.assessed_stamp && String(D.assessed_stamp).slice(0, 10) !== String(D.stamp || '').slice(0, 10)) {
+      var nT2 = (F.stamp && F.assessed_stamp === D.assessed_stamp) ? (F.triggers || []).length : 0;
+      item('<b>assessed</b> ' + dt(String(D.assessed_stamp).slice(0, 10)) + (nT2 ? ' · ' + nT2 + ' trigger' + (nT2 > 1 ? 's' : '') + ' since' : ''),
+        { name: 'Last assessment by the model', def: 'The numbers on the panel are from the update of ' + D.stamp + '; the model’s reading of them (summary, verdict text) is from ' + D.assessed_stamp + '. A light run refreshes every series and rule without the model; the model is asked again when the rules flag a serious change or a new weekly release arrives.' + (nT2 ? ' ' + (F.summary || '') : ''), src: 'this panel', date: String(D.assessed_stamp).slice(0, 10) }, F.needs_assessment ? 'hot' : '');
+    }
     if (F.stamp && F.assessed_stamp === D.stamp && F.stamp !== D.stamp) {
       var latestF = Object.keys(F.series || {}).map(function (q) { return (F.series[q] || {}).last_date || ''; }).sort().pop() || '';
       var nT = (F.triggers || []).length;
@@ -3385,7 +3423,7 @@
       c.innerHTML = '<div class="rl" style="background:' + lvlColor(r.level) + '">' + r.level + '</div>' +
         '<div><div class="rt">' + mark(r.title) + (was == null && P ? ' <span class="new">new</span>' : '') + '</div>' +
         '<div class="rh">' + esc(r.horizon) + (wasJ ? ' · <span class="' + jsign(r.level - wasJ.v) + '">' + jarrow(r.level - wasJ.v) + ' was ' + wasJ.v + ' on ' + esc(wasJ.d) + '</span>' : '') + (r.metric ? ' · ' + esc(r.metric.name) : '') + '</div>' +
-        (r.metric ? '<div class="rs">' + spark(r.metric, 200, 24) + '</div>' : '') +
+        (r.metric ? '<div class="rs">' + spark(r.metric, 118, 44) + '<span class="rsv">' + sparkNote(r.metric) + '</span></div>' : '') +
         '<div class="rf">' + (linksHtml('risk:' + (r.id || '')) || '') + cnBtn('risk:' + (r.id || ''), 'graph') + (jr ? '<button type="button" class="jh" data-hist="risk:' + esc(r.id) + '">history</button>' : '') +
         dateBadge(null, (r.metric ? r.metric.name : 'this rule'), (r.metric && r.metric.dates ? qdate(r.metric.dates[r.metric.dates.length - 1]) : (je.length ? je[je.length - 1].d : '')), r.title) + '</div></div>';
       hlConcepts(c.querySelector('.rt'), 'risk:' + (r.id || ''));
@@ -3438,6 +3476,16 @@
       gb.title = S.globe ? 'back to the flat view' : 'the same on a globe (pilot)';
       gb.onclick = function () { S.globe = !S.globe; render(); };
       top.appendChild(gb);
+    }
+    /* ДВА В РЯД НА ШИРОКОМ ЭКРАНЕ (владелец 20.09: «график сильно вытянут; если есть место —
+       два графика в ряд, второй опциональный»). Кнопка есть только там, где место есть
+       (сцена от 1500 px окна); выбор помнится. Пары собирает applySplit после сборки сцены. */
+    if (S.split == null) { try { S.split = localStorage.getItem('b42_split') !== '0'; } catch (e) { S.split = true; } }
+    if (window.matchMedia('(min-width:1500px)').matches && !globeMode()) {
+      var sb = el('button', 'back-go bright split-btn' + (S.split ? ' on' : ''), S.split ? '\u29C9 two across' : '\u29C9 one column'); sb.type = 'button';
+      sb.title = S.split ? 'charts and cards two across; click for one column' : 'one column; click for charts and cards two across';
+      sb.onclick = function () { S.split = !S.split; try { localStorage.setItem('b42_split', S.split ? '1' : '0'); } catch (e) { } render(); };
+      top.appendChild(sb);
     }
     top.appendChild(fb);
     head.appendChild(top);
@@ -3496,11 +3544,16 @@
     /* Кнопка «i» в левом верхнем углу поля графика — напротив legend в правом (владелец 15.09). */
     var pb = plainBtn(S.view, S._subKey || '', null);
     if (pb) { var pw2 = el('span', 'plain-i-wrap'); pw2.innerHTML = pb; p.appendChild(pw2); }
-    S.plotEl = p; S.draw = draw; S.pw = 0; S.ph = 0;
+    /* НЕСКОЛЬКО ЖИВЫХ ГРАФИКОВ НА СЦЕНУ (20.09). Раньше plot() держал ровно один: каждый вызов
+       затирал предыдущий, и на Named places после v16 первый график (микроволновой контраст)
+       оставался пустой рамкой. Первый вызов на сцене — главный (легенда, выбор в ней живут на
+       нём), остальные — в списке S.plots и перерисовываются тем же ходом. */
+    if (!S.plotEl || !S.plotEl.isConnected) { S.plots = []; S.plotEl = p; S.draw = draw; S.pw = 0; S.ph = 0; }
+    S.plots.push({ el: p, draw: draw, pw: 0, ph: 0 });
     // дата данных — значок в правом нижнем углу поля графика
     var wrapB = el('span', 'dcal-wrap', dateBadge(jk || plotKey(draw)));
     p.appendChild(wrapB);
-    if (plotRO) { plotRO.disconnect(); plotRO.observe(p); }
+    if (plotRO) { if (S.plots.length === 1) plotRO.disconnect(); plotRO.observe(p); }
   }
   /* ЗАГОЛОВКИ ГРАФИКОВ НЕ ОБРЫВАЮТСЯ И НЕ ЛЕЗУТ ПОД КНОПКУ (владелец 07.09, дважды).
      Оценка «сколько знаков влезет» врала: у одного и того же кегля буквы разной ширины,
@@ -3613,23 +3666,37 @@
     var p = S.plotEl;
     if (!p || !S.draw || !p.isConnected) return;
     S._chartW = p.clientWidth || 0;
-    var badge = p.querySelector('.dcal-wrap');
     var w = Math.max(220, Math.round(p.clientWidth)), h = Math.max(150, Math.round(p.clientHeight));
-    if (w === S.pw && h === S.ph) return;
-    S.pw = w; S.ph = h;
-    /* ЗАГОЛОВОК ГРАФИКА РЕЖЕТСЯ ПО ШИРИНЕ — ОДНИМ МЕСТОМ НА ВСЕ ГРАФИКИ. Текст в SVG не
-       переносится и не обрезается сам: на телефоне подписи уезжали за правый край. Править
-       четырнадцать мест сборки строк — напрашиваться на опечатку (одну уже поймали), поэтому
-       чиним готовую картинку: у заголовка своя примета (class="tt" на строке y="13"), и
-       только он подрезается по числу знаков, которые влезают. */
-    S._legItems = null;
+    if (!(w === S.pw && h === S.ph)) {
+      S.pw = w; S.ph = h;
+      /* ЗАГОЛОВОК ГРАФИКА РЕЖЕТСЯ ПО ШИРИНЕ — ОДНИМ МЕСТОМ НА ВСЕ ГРАФИКИ. Текст в SVG не
+         переносится и не обрезается сам: на телефоне подписи уезжали за правый край. Править
+         четырнадцать мест сборки строк — напрашиваться на опечатку (одну уже поймали), поэтому
+         чиним готовую картинку: у заголовка своя примета (class="tt" на строке y="13"), и
+         только он подрезается по числу знаков, которые влезают. */
+      S._legItems = null;
+      drawInto(p, S.draw, w, h);
+      syncLegendBar();
+    }
+    /* Второй и дальше графики сцены — тем же ходом; легенда остаётся за главным. */
+    (S.plots || []).forEach(function (q, i) {
+      if (!i || !q.el.isConnected) return;
+      var w2 = Math.max(220, Math.round(q.el.clientWidth)), h2 = Math.max(150, Math.round(q.el.clientHeight));
+      if (w2 === q.pw && h2 === q.ph) return;
+      q.pw = w2; q.ph = h2;
+      var keepLeg = S._legItems;
+      drawInto(q.el, q.draw, w2, h2);
+      S._legItems = keepLeg;
+    });
+  }
+  function drawInto(p, draw, w, h) {
+    var badge = p.querySelector('.dcal-wrap');
     var keepI = p.querySelector('.plain-i-wrap');   // кнопка «о чём это» — тоже переживает (15.09)
-    p.innerHTML = String(S.draw(w, h));
+    p.innerHTML = String(draw(w, h));
     if (badge) p.appendChild(badge);           // значок даты данных переживает перерисовку
     if (keepI) p.appendChild(keepI);
     /* Значок возвращается ДО подгонки заголовка: именно по нему та решает, откуда начинать текст. */
     fitSvgTitles(p);                            // заголовок меряется по-настоящему, уже в документе
-    syncLegendBar();
   }
   function legSwatch(it) {
     var col = it[1] || 'var(--soft)';
@@ -5075,7 +5142,7 @@
         xi === 0 ? 'var(--nina)' : 'var(--nino)', 2, 1);
       var li = n - 1;
       while (li > 0 && !fin(x.series.values[li])) li--;
-      if (fin(x.series.values[li])) s += '<circle cx="' + X(li).toFixed(1) + '" cy="' + Y(x.series.values[li]).toFixed(1) + '" r="3" style="fill:' + (xi === 0 ? 'var(--nina)' : 'var(--nino)') + '"/>';
+      if (fin(x.series.values[li])) s += nowDot(X(li), Y(x.series.values[li]), xi === 0 ? 'var(--nina)' : 'var(--nino)', 3);
       // колонка подписей
       var lx = Lp + pw + 10, ly = Tp + 10;
       /* Колонка подписей справа рассчитана на широкое окно: на 375 пикселях её строки
@@ -5921,7 +5988,7 @@
     /* Два поля в ряд вместо одной широкой ленты: ряд риска слева, доска справа. Механизм тот
        же, что у сетки цен, — своя ячейка на график и общий пересчёт по наблюдателю размера;
        общий plot() держит ровно один график на сцену и для двух не годится. */
-    S.plotEl = null; S.draw = null;
+    S.plotEl = null; S.draw = null; S.plots = [];
     var grid = el('div', 'rgrid'), c1 = el('div', 'pcell'), c2 = el('div', 'pcell');
     if (r.metric) grid.appendChild(c1);
     grid.appendChild(c2);
@@ -6155,7 +6222,8 @@
     var n = M.pc1.length, from = Math.max(0, n - 30), pts = [];
     for (var i = from; i < n; i++) pts.push([cx + (-M.pc2[i]) * scale, cy - M.pc1[i] * scale]);
     s += poly(pts, 'var(--text)', 1.4, .8);
-    pts.forEach(function (p, k) { s += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="' + (k === pts.length - 1 ? 4.5 : 1.6) + '" style="fill:' + (k === pts.length - 1 ? 'var(--nino)' : 'var(--soft)') + '"/>'; });
+    pts.forEach(function (p, k) { s += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="1.6" style="fill:' + (k === pts.length - 1 ? 'var(--nino)' : 'var(--soft)') + '"/>'; });
+    if (pts.length) s += nowDot(pts[pts.length - 1][0], pts[pts.length - 1][1], 'var(--nino)', 4.5);
     s += '<text x="' + (cx + r + 6) + '" y="' + (cy - 2) + '" font-size="9">Maritime</text><text x="' + (cx + r + 6) + '" y="' + (cy + 9) + '" font-size="9">Continent</text>';
     s += '<text x="' + cx + '" y="' + (cy - r - 5) + '" text-anchor="middle" font-size="9">western Pacific</text>';
     s += '<text x="' + cx + '" y="' + (cy + r + 13) + '" text-anchor="middle" font-size="9">Indian Ocean</text>';
@@ -7288,6 +7356,7 @@
       pts.forEach(function (p) {
         var y = Y(p[1]), y0 = Y(0);
         s2 += '<rect x="' + (X(p[0]) - bw / 2).toFixed(1) + '" y="' + Math.min(y, y0).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + Math.abs(y0 - y).toFixed(1) + '" style="fill:' + (o.hiLast && p === pts[pts.length - 1] ? 'var(--ochre)' : (p[1] < 0 ? 'var(--nino)' : 'var(--nina)')) + '" opacity=".85"/>';
+        if (o.hiLast && p === pts[pts.length - 1]) s2 += nowDot(X(p[0]), y, 'var(--ochre)', 3);
       });
     } else {
       s2 += segs(pts.map(function (p) { return [X(p[0]), Y(p[1])]; }), 'var(--ochre)', 2, 1);
@@ -9261,7 +9330,7 @@
     var plot = body.querySelector('.plot');
     var box = el('div', 'globe-box'); box.innerHTML = '<div class="globe-wait">loading the globe…</div>';
     if (plot) body.replaceChild(box, plot); else body.insertBefore(box, body.firstChild ? body.firstChild.nextSibling : null);
-    S.plotEl = null; S.draw = null;
+    S.plotEl = null; S.draw = null; S.plots = [];
     Promise.all([globeLib(), globeData()]).then(function (r) {
       if (!box.isConnected) return;
       var G = r[1], W = Math.max(300, box.clientWidth), H = Math.max(300, box.clientHeight);
@@ -9714,7 +9783,7 @@
     var pane = el('div', 'info-pane stats full'); pane.innerHTML = statsHtml(st, S.sub.noteMode || 'plain');
     pane.addEventListener('click', function (e) { var b = e.target.closest('[data-notemode]'); if (b) { S.sub.noteMode = b.getAttribute('data-notemode'); render(); } });
     body.innerHTML = ''; body.classList.add('scroll'); body.appendChild(pane);
-    S.plotEl = null; S.draw = null;                                // графика на экране нет — ни кадру, ни наблюдателю рисовать нечего
+    S.plotEl = null; S.draw = null; S.plots = [];                                // графика на экране нет — ни кадру, ни наблюдателю рисовать нечего
   }
   function sceneInfoBar() {
     /* У карточки риска нет своей записи в SCENE_INFO, и раньше ей подставляли запись сцены
@@ -10285,7 +10354,7 @@
     L.classList.toggle('show', narrow && S.view === 'state');
     R.classList.toggle('show', narrow && (S.view === 'risks' || S.view === 'risk'));
     stage.classList.toggle('hide', narrow && (S.view === 'state' || S.view === 'risks'));
-    if (narrow && (S.view === 'state' || S.view === 'risks')) { S.draw = null; S.plotEl = null; return; }
+    if (narrow && (S.view === 'state' || S.view === 'risks')) { S.draw = null; S.plotEl = null; S.plots = []; return; }
     if (S.view === 'risk') viewRisk();
     else if (S.view === 'verdict') viewVerdict();
     else if (S.view === 'phase') viewPhase();
@@ -10318,9 +10387,28 @@
     markMenuLevels();                        // ярус подменю виден по рамке (10.09)
     markScrollStrips();                      // край ленты карточек гаснет, только если есть куда ехать
     if (S.globe && globeMode()) mountGlobe(globeMode());
+    applySplit();                            // два в ряд на широкой сцене (20.09)
     // Сцена собрана целиком — только теперь у рамки графика окончательная высота.
     redrawPlot();
     requestAnimationFrame(redrawPlot);
+  }
+  /* ПАРЫ ДЛЯ ШИРОКОЙ СЦЕНЫ. Каждый график занимает одну колонку; пара ему — следующий график
+     или ближайший ряд карточек (он ложится справа в две колонки). Всё остальное — во всю
+     ширину. График без пары — тоже во всю ширину, но выше, чтобы не был сплющен. */
+  function applySplit() {
+    var body = document.querySelector('#stage .stage-body'); if (!body) return;
+    var on = !!S.split && !S.full && !S.globe && window.matchMedia('(min-width:1500px)').matches;
+    body.classList.toggle('split', on);
+    if (!on) return;
+    var kids = [].slice.call(body.children), pend = null, since = 0;
+    kids.forEach(function (c) {
+      var cl = c.classList;
+      if (cl.contains('plot') && !cl.contains('map-fit')) { if (pend) pend = null; else pend = c; since = 0; return; }
+      since++;
+      if (pend && cl.contains('kpis') && c.children.length && since <= 3) { cl.add('beside'); pend = null; return; }
+      if (pend && since > 3) { pend.classList.add('solo'); pend = null; }
+    });
+    if (pend) pend.classList.add('solo');
   }
   window.B42EnsoRedraw = function () { redrawPlot(); };
   window.B42EnsoState = S;                 // наружу — только для отладки из консоли

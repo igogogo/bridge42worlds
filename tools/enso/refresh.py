@@ -217,22 +217,26 @@ def main(fetch=True, llm=True, light=False):
         stale = sorted({s["key"] for s in _OPS.sources_status(cur) if s.get("fresh") is False})
     except Exception:                                            # noqa: BLE001
         pass
+    # ЛЁГКИЙ ПРОГОН = ПОЛНЫЙ БЕЗ МОДЕЛИ (владелец 20.09: «лёгкий прогон — это обновление
+    # последних данных всех, а не некоторых; анализ делаем, когда что-то серьёзное изменилось»).
+    # Раньше --light писал только fresh.json, а сцены читают latest.json — и зоны Niño 3, 1+2
+    # на Against analogues стояли на дате последнего разбора. Теперь лёгкий прогон идёт до конца:
+    # latest, снимок, журнал, новости, производные слои; саммари модели переиспользуется с
+    # пометкой, а триггеры «нужен ли разбор» считаются против ПОСЛЕДНЕГО РАЗБОРА МОДЕЛЬЮ
+    # (assessed.json), а не против прошлого latest — иначе после первого же лёгкого прогона
+    # сравнивать было бы не с чем.
+    fr_light = None
     if light:
+        llm = False
         import fresh as FR
-        assessed = json.loads((ROOT / "latest.json").read_text(encoding="utf-8")) if (ROOT / "latest.json").exists() else {}
-        fr = FR.build(clean(cur), assessed)
-        safeio.write_text(ROOT / "fresh.json", json.dumps(fr, ensure_ascii=False, default=str, allow_nan=False))
-        OPSLOG.build(clean(cur), fr)
-        run.finish("ok", stamp=cur["stamp"], assessed_stamp=assessed.get("stamp"), risk_index=cur["risk_index"],
-                   n_risks=len(cur["risks"]), n_alerts=len(cur["alerts"]), shout=bool(cur["shout"]), stale=stale,
-                   triggers=len(fr["triggers"]), needs_assessment=fr["needs_assessment"])
-        step("готово", finish=True, failed=["источник не ответил: " + k for k in stale])
-        print("лёгкий прогон:", cur["stamp"], "| разобранное состояние", assessed.get("stamp"),
+        ap = ROOT / "assessed.json" if (ROOT / "assessed.json").exists() else ROOT / "latest.json"
+        assessed = json.loads(ap.read_text(encoding="utf-8")) if ap.exists() else {}
+        fr_light = FR.build(clean(cur), assessed)
+        print("лёгкий прогон:", cur["stamp"], "| последний разбор моделью", assessed.get("stamp"),
               "| индекс правил", cur["risk_index"], "| не ответили", len(stale), stale or "")
-        print("  ·", fr["summary"])
-        for t in fr["triggers"]:
+        print("  ·", fr_light["summary"])
+        for t in fr_light["triggers"]:
             print("  !", t["severity"], t["text"])
-        return cur
     step("саммари модели")
     import summary as SM
     if llm:
@@ -256,7 +260,14 @@ def main(fetch=True, llm=True, light=False):
         cur["shape"] = monotony.summary(monotony.build(cur))
     except Exception as e:                                       # noqa: BLE001
         cur["shape"] = {"error": str(e)[:160]}
+    # дата последнего разбора моделью едет с состоянием: панель пишет её рядом с «updated»
+    if llm and not (cur.get("summary") or {}).get("error"):
+        cur["assessed_stamp"] = cur["stamp"]
+    else:
+        cur["assessed_stamp"] = (prev or {}).get("assessed_stamp") or ((prev or {}).get("stamp") if prev and not (prev.get("summary") or {}).get("reused_from") else None)
     safeio.write_text(ROOT / "latest.json", json.dumps(cur, ensure_ascii=False, default=str, allow_nan=False))
+    if llm and not (cur.get("summary") or {}).get("error"):
+        safeio.write_text(ROOT / "assessed.json", json.dumps(cur, ensure_ascii=False, default=str, allow_nan=False))
     safeio.write_text(SNAP / (datetime.now().strftime("%Y%m%d_%H%M%S") + ".json"), json.dumps(cur, ensure_ascii=False, default=str))
     safeio.write_text(ROOT / "history.json", json.dumps(history(sorted(SNAP.glob("*.json"))), ensure_ascii=False))
     # ЖУРНАЛ ЗНАЧЕНИЙ — здесь же, а не отдельной командой. Панель показывает на каждом кирпиче
@@ -279,10 +290,11 @@ def main(fetch=True, llm=True, light=False):
     except Exception as e:                                       # noqa: BLE001
         print("  новости не собрались:", str(e)[:160])
         failed.append("лента новостей: " + str(e)[:90])
-    # свежий слой после полного прогона совпадает с разобранным: хвостов нет, триггеров нет
+    # свежий слой: после разбора моделью совпадает с разобранным (хвостов и триггеров нет);
+    # после лёгкого прогона несёт триггеры против последнего разбора моделью
     try:
         import fresh as FR
-        fr = FR.build(cur, cur)
+        fr = fr_light if fr_light is not None else FR.build(cur, cur)
         safeio.write_text(ROOT / "fresh.json", json.dumps(fr, ensure_ascii=False, default=str, allow_nan=False))
         OPSLOG.build(cur, fr)
     except Exception as e:                                       # noqa: BLE001
@@ -293,20 +305,24 @@ def main(fetch=True, llm=True, light=False):
     # состояния. Пока их запускала только ночная обёртка, полный разбор оставлял их вчерашними,
     # и на одной панели рядом стояли числа за разные дни (владелец 17.09). Сбой одного слоя не
     # роняет разбор: он стоит строки в отчёте, а не работы.
-    if not light:
+    if True:   # и в лёгком прогоне тоже (20.09): числа на одной панели — за один день
         for mod, what in (("zones_flow", "переток между зонами"), ("phase", "фазовый сторож"),
                           ("outliers", "кто выбивается"), ("stats_layer", "слой статистики"), ("monotony", "характер роста"),
                           ("agent_state", "карта состояния панели")):
             step("производный слой: " + what)
             try:
-                __import__(mod).build()
+                m_ = __import__(mod)
+                # у monotony вход main() (build(D) ждёт словарь), у agent_state — run() (build() не пишет) (20.09)
+                (m_.main if mod == "monotony" else (m_.run if mod == "agent_state" else m_.build))()
             except Exception as e:                               # noqa: BLE001
                 print("  %s не пересобрался: %s" % (what, str(e)[:140]))
                 failed.append(what + ": " + str(e)[:90])
     sm_ = cur.get("summary") or {}
     run.finish("ok" if not failed else "partial", stamp=cur["stamp"], risk_index=cur["risk_index"],
                n_risks=len(cur["risks"]), n_alerts=len(cur["alerts"]), shout=bool(cur["shout"]), stale=stale,
-               model=sm_.get("model"), model_error=sm_.get("error"), errors_list=failed)
+               model=sm_.get("model"), model_error=sm_.get("error"), errors_list=failed,
+               assessed_stamp=cur.get("assessed_stamp"),
+               triggers=len(fr_light["triggers"]) if fr_light else 0, needs_assessment=bool(fr_light and fr_light["needs_assessment"]))
     DONE[:] = list(PLAN)
     step("готово", finish=True, failed=failed + ["источник не ответил: " + k for k in stale])
     print("готово:", cur["stamp"], "| индекс риска", cur["risk_index"],

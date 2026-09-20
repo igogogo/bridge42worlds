@@ -177,12 +177,24 @@ def build():
     }
 
 
+def _body(st):
+    return json.dumps(st, ensure_ascii=False, separators=(",", ":"))
+
+
+def run():
+    """Собрать и записать — вход для refresh.py (20.09: раньше разбор звал build(), который
+    только считает и ничего не пишет, и карта состояния стояла на дате прошлого прогона руками)."""
+    st = build()
+    safeio.write_text(OUT, _body(st))
+    return st
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--plan", action="store_true", help="показать и не писать")
     a = ap.parse_args()
     st = build()
-    body = json.dumps(st, ensure_ascii=False, separators=(",", ":"))
+    body = _body(st)
     print(f"состояние панели: рисков {st['counts']['risks']}, тревог {st['counts']['alerts']}, "
           f"показателей {st['counts']['kpis']}, единиц статистики {st['counts']['stats']}; "
           f"{len(body) / 1024:.1f} КБ")
