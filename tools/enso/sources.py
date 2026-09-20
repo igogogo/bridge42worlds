@@ -326,7 +326,7 @@ def read_pink(path):
 def read_cr_json(path):
     """Ряды climatereanalyzer: {год: массив 366}, климатология 1991-2020, дата последнего дня."""
     d = json.loads(Path(path).read_text(encoding="utf-8"))
-    years, clim = {}, None
+    years, clim, prelim = {}, None, None
     for r in d:
         nm = r.get("name", "")
         arr = np.array([np.nan if v is None else v for v in r["data"]], float)
@@ -334,13 +334,32 @@ def read_cr_json(path):
             years[int(nm)] = arr
         elif nm == "1991-2020":
             clim = arr
+        elif nm.lower().startswith("prelim"):
+            prelim = arr
     y_last = max(years)
+    # ПРЕДВАРИТЕЛЬНЫЕ СУТКИ — В ТОТ ЖЕ ГОД (20.09). climatereanalyzer стал класть последние ~15
+    # суток (NRT) отдельным рядом «Preliminary», а год кончался там, где кончилось финальное.
+    # Панель читала только годы — и три недели считала, что источник встал (правило L, «застрял
+    # 18 дней»), хотя он отдавал каждый день. Склеиваем: пустые ячейки года берутся из
+    # предварительного ряда, и день, с которого пошло предварительное, помечается.
+    prelim_from = None
+    if prelim is not None and len(prelim) == len(years[y_last]):
+        cur = years[y_last]
+        take = np.isnan(cur) & np.isfinite(prelim)
+        if take.any():
+            idxs = np.where(take)[0]
+            cur[take] = prelim[take]
+            prelim_from = grid_index_to_date(y_last, int(idxs[0]))
     fin = np.where(np.isfinite(years[y_last]))[0]
     n = int(len(fin))
     last_idx = int(fin[-1]) if n else -1
     last_day = grid_index_to_date(y_last, last_idx) if n else None
-    return {"years": years, "clim": clim, "last_year": y_last,
-            "last_n": n, "last_idx": last_idx, "last_date": last_day}
+    out = {"years": years, "clim": clim, "last_year": y_last,
+           "last_n": n, "last_idx": last_idx, "last_date": last_day}
+    if prelim_from:
+        out["prelim_from"] = prelim_from.isoformat()
+        out["prelim_source"] = "climatereanalyzer, preliminary (NRT) days"
+    return out
 
 
 def grid_index_to_date(year, idx):

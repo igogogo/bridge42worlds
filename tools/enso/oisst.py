@@ -356,7 +356,8 @@ def splice(cr, box, our, check):
         cr["last_n"] = int(len(fin))
         from sources import grid_index_to_date
         cr["last_date"] = grid_index_to_date(y, cr["last_idx"])
-        cr["prelim_from"] = first.isoformat()
+        # источник уже мог пометить свои предварительные дни (20.09): предварительное начинается с раннего из двух
+        cr["prelim_from"] = min(cr.get("prelim_from") or first.isoformat(), first.isoformat())
         cr["splice_offset"] = round(off, 3)
     return first
 

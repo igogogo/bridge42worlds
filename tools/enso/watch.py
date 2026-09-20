@@ -1152,11 +1152,14 @@ def run(fetch=True):
     except Exception as e:                                       # noqa: BLE001
         OIS = {"error": str(e)[:200]}
     W = {k: series_watch(ds[k], S.LABELS[k], analog_years=ANALOGS if k == "sst_nino34" else None) for k in ds}
-    for k in ("sst_nino34", "sst_world"):
+    for k in ds:                                                 # предварительные сутки есть у всех рядов источника (20.09)
         if ds[k].get("prelim_from"):
             W[k]["prelim_from"] = ds[k]["prelim_from"]
-            W[k]["splice_offset"] = ds[k].get("splice_offset")
-            W[k]["tail_source"] = "NOAA OISST v2.1 NRT via ERDDAP, spliced"
+            if ds[k].get("splice_offset") is not None:
+                W[k]["splice_offset"] = ds[k].get("splice_offset")
+                W[k]["tail_source"] = "NOAA OISST v2.1 NRT via ERDDAP, spliced"
+            elif ds[k].get("prelim_source"):
+                W[k]["tail_source"] = ds[k]["prelim_source"]
     N34 = nino34_analogs(ds["sst_nino34"])
     # ЧТО БЫЛО У ПРОШЛЫХ СОБЫТИЙ ПОСЛЕ ЭТОГО ЖЕ ДНЯ — ряд на год вперёд для сцены «Динамика»
     # (владелец 04.09: «продли вправо, чтобы видно было развитие ещё на год»). Данных из
