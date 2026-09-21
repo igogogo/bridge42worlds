@@ -64,6 +64,10 @@ def _rows_from_watch(key, name, group, w, where=None, extra=None):
             "z": r2(z),
             "pct": l30.get("pct"), "date": (w or {}).get("last_date"),
             "stale_days": stale, "unit": "°C",
+            # последнее измерение — та же цифра, что на всех сценах (владелец 21.09: «везде одна
+            # цифра, среднее — отдельным переключателем»); среднее за 30 дней остаётся мерой ранга
+            "last": r2((w or {}).get("last_value")) if isinstance((w or {}).get("last_value"), (int, float)) else None,
+            "last_date": (w or {}).get("last_date"),
             "extra": extra or {}}
 
 
@@ -118,6 +122,7 @@ def collect():
         rows.append({"key": "zone_" + zk, "name": nm, "group": "the Pacific zones", "where": None,
                      "anom": v, "rank": 1 if v > hm[zk] else None, "of": None, "z": None, "pct": None,
                      "date": NW.get("date"), "stale_days": None, "unit": "°C",
+                     "last": v, "last_date": NW.get("date"), "weekly": True,
                      "extra": {"ceiling": hm[zk], "ceiling_date": hmd.get(zk),
                                "above_ceiling": bool(v > hm[zk])}})
     return rows, skipped

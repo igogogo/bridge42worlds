@@ -658,7 +658,7 @@
     if (yFor[2] - yFor[1] < 13) yFor[2] = yFor[1] + 13;
     // на узком подписываем только середину вилки: три числа в одном углу не разводятся ничем
     if (W >= 560) s += '<text x="' + (x1 + 4).toFixed(0) + '" y="' + (yFor[0] + 3).toFixed(0) + '">' + fnum(f.p90) + '</text>';
-    s += '<text x="' + (x1 + 4).toFixed(0) + '" y="' + (yFor[1] + 3).toFixed(0) + '" class="tt">' + fnum(f.p50) + '</text>';
+    s += '<text x="' + (x1 + 4).toFixed(0) + '" y="' + (yFor[1] + 3).toFixed(0) + '" class="tt">' + (W >= 560 ? 'in 14 d ' : '') + fnum(f.p50) + '</text>';   // это прогноз, не измерение (владелец 21.09: «на Dynamics 2.95 — что это»)
     if (W >= 560) s += '<text x="' + (x1 + 4).toFixed(0) + '" y="' + (yFor[2] + 3).toFixed(0) + '">' + fnum(f.p10) + '</text>';
     var legR = [['last 30 days', 'var(--nino)', 2.6, '', 'last30'], ['400 days', 'var(--text)', 1.8, '', 'all'], ['10–90 % of all years', 'var(--band)', 6, '', 'band'], ['forecast +14 d', 'var(--nino)', 1.6, '5 3', 'fc']];
     if (ft.length) legR.push(['fresh, not yet assessed', 'var(--ochre)', 1.6, '3 3', 'fresh']);
@@ -1050,7 +1050,7 @@
         /* Три отметки стоят в трёх соседних столбцах, и подписи ложатся в три разные строки:
            эта выше всех, у следующей строка над точкой, у третьей — справа от точки. */
         '<text x="' + (x - 3).toFixed(1) + '" y="' + (Y(p.todate) - 24).toFixed(1) + '" font-size="9" style="fill:var(--nino)">' +
-        fnum(p.todate) + '</text>' +
+        (tight ? '' : p.season + ' ') + fnum(p.todate) + (tight ? '' : ' so far') + '</text>' +
         '<title>' + esc(p.season + ': all three months counted, but ' + (rr.month ? monName(rr.month) + ' is measured on ' + rr.weeks + ' week' + (rr.weeks === 1 ? '' : 's') + ' so far' : 'the last one is still running')
           + ', so this is not the finished season mean yet.') + '</title>';
     }
@@ -1094,14 +1094,14 @@
        подписи ложились друг на друга (проверено на экране 15.09). */
     /* Подпись уходит влево от отметки, чтобы не лечь на соседний сезон, — но если слева уже
        шкала, разворачиваем вправо: цифра оси и цифра отметки рядом читаются как одно число. */
-    var toLeft = !isLast && (leftEdge == null || x - cap - 4 - 34 > leftEdge);
+    var toLeft = !isLast && (leftEdge == null || x - cap - 4 - (tight ? 34 : 80) > leftEdge);   // с именем сезона подпись длиннее (21.09)
     var lx = toLeft ? x - cap - 4 : x + cap + 4, anc = toLeft ? ' text-anchor="end"' : '';
     s += '<text x="' + lx.toFixed(1) + '" y="' + (Y(p.todate) + (upLab ? -7 : 3.5)).toFixed(1) + '"' + anc + ' font-size="9" style="fill:var(--nino)">' +
       /* ТОЛЬКО ЧИСЛО. Три отметки стоят в трёх соседних столбцах, и словами их подписи не
          умещаются ни на телефоне, ни на полном экране: «1/3 lived» наезжало то на соседнюю
          подпись, то на шкалу. Что это за число, сказано в подсказке отметки, в строке «our
          firmest reading» и в подписи под графиком. */
-      fnum(p.todate) + '</text>';
+      (tight ? '' : p.season + ' ') + fnum(p.todate) + (tight ? '' : ' so far') + '</text>';
     return s;
   }
 
@@ -4660,12 +4660,25 @@
   function standOutHead() {
     var O = S.OUT || {}, r = (O.rows || [])[0];
     if (!r) return 'What stands out today';
-    return 'Furthest from its own normal right now: ' + r.name + (r.of ? ', ' + r.rank + ' of its ' + r.of + ' years' : '');
+    return 'Furthest from its own normal (ranked over the last 30 days): ' + r.name + (r.of ? ', ' + r.rank + ' of its ' + r.of + ' years' : '');
   }
   function viewStandOut(body) {
     var O = S.OUT || {};
-    if (!O.rows || !O.rows.length) { body.appendChild(el('div', 'note warn', 'The outlier scan has not been built yet: run tools/enso/outliers.py.')); return; }
+    if (!O.rows || !O.rows.length) { body.appendChild(el('div', 'note warn', 'The outlier scan is not built yet; it comes with the next update.')); return; }
     var rows = O.rows, mx = Math.max.apply(null, rows.map(function (r) { return r.score || 0; })) || 1;
+    /* ОДНА ЦИФРА ВЕЗДЕ (владелец 21.09: «зачем у нас среднее и почему 30 дней — везде одна
+       цифра, если где-то среднее, то отдельный переключатель»). По умолчанию в строке стоит
+       последнее измерение, то же, что на остальных сценах; среднее за 30 дней — по кнопке.
+       Порядок строк при этом не меняется: ранг считается по 30 дням, иначе один шумный день
+       переставлял бы список каждое утро. */
+    var soMean = !!S.soMean;
+    var sg = el('div', 'seg sub');
+    [['last', 'latest reading'], ['mean', '30-day mean']].forEach(function (o) {
+      var b = el('button', (o[0] === 'mean') === soMean ? 'on' : '', o[1]); b.type = 'button';
+      b.onclick = function () { S.soMean = o[0] === 'mean'; render(); };
+      sg.appendChild(b);
+    });
+    body.appendChild(sg);
     var wrap = el('div', 'so-wrap');
     var GRP = {};
     rows.forEach(function (r) { (GRP[r.group] = GRP[r.group] || []).push(r); });
@@ -4684,7 +4697,7 @@
       return '<div class="so-r' + (r.stale ? ' stale' : '') + (i === 0 ? ' top' : '') + '" data-src="' + esc(JSON.stringify(pay)) + '">' +
         '<span class="so-n">' + esc(r.name) + '<small>' + esc(r.group) + '</small></span>' +
         '<span class="so-b"><i style="width:' + w + '%;background:' + (r.anom >= 0 ? 'var(--nino)' : 'var(--nina)') + '"></i></span>' +
-        '<span class="so-v">' + esc(trackNum(r.anom)) + '<small> \u00b0C</small></span>' +
+        '<span class="so-v">' + esc(trackNum(soMean || !fin(r.last) ? r.anom : r.last)) + '<small>' + (soMean || !fin(r.last) ? ' °C, 30 d' : (r.weekly ? ' °C, week' : ' °C')) + '</small></span>' +   // среднее за 30 дней, не последний день (владелец 21.09: «на Standing out +2.81, а уже +3.02»)
         '<span class="so-p">' + esc(place) + (r.z != null ? ' \u00b7 ' + fnum(Math.abs(r.z), 1, false) + '\u03c3' : '') + melt +
         (r.stale ? '<span class="so-x">' + r.stale_days + ' days behind</span>' : '') + '</span></div>';
     }).join('');
