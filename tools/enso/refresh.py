@@ -229,8 +229,22 @@ def main(fetch=True, llm=True, light=False):
     if light:
         llm = False
         import fresh as FR
-        ap = ROOT / "assessed.json" if (ROOT / "assessed.json").exists() else ROOT / "latest.json"
-        assessed = json.loads(ap.read_text(encoding="utf-8")) if ap.exists() else {}
+        # последний разбор моделью: assessed.json, а если его ещё нет — последний снимок, чьё саммари не
+        # переиспользовано (лёгкий прогон пишет latest, поэтому latest сам по себе больше не «разбор»)
+        assessed = {}
+        if (ROOT / "assessed.json").exists():
+            assessed = json.loads((ROOT / "assessed.json").read_text(encoding="utf-8"))
+        else:
+            for sp in reversed(snaps):
+                try:
+                    cand = json.loads(sp.read_text(encoding="utf-8"))
+                except Exception:                                # noqa: BLE001
+                    continue
+                if (cand.get("summary") or {}).get("model") and not (cand.get("summary") or {}).get("reused_from") and not (cand.get("summary") or {}).get("error"):
+                    assessed = cand
+                    break
+            if not assessed and (ROOT / "latest.json").exists():
+                assessed = json.loads((ROOT / "latest.json").read_text(encoding="utf-8"))
         fr_light = FR.build(clean(cur), assessed)
         print("лёгкий прогон:", cur["stamp"], "| последний разбор моделью", assessed.get("stamp"),
               "| индекс правил", cur["risk_index"], "| не ответили", len(stale), stale or "")
