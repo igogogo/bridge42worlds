@@ -2419,9 +2419,9 @@
   /* Суточные по зонам стоят рядом со своими недельными: неделя выходит по средам за прошлую
      неделю и во время роста всегда отстаёт, а сутки — вчерашние. Порядок зон с запада на восток,
      как везде на панели (17.09). */
-  var STRIP_KEYS = ['n34_daily', 'n4_weekly', 'n4_box', 'n34_weekly', 'n3_weekly', 'n3_box', 'n12_weekly', 'n12_box', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 't300', 'heat_e22', 'n34_straight', 'rivers_below', 'tcwv_tropics', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
+  var STRIP_KEYS = ['n34_daily', 'n4_weekly', 'n4_box', 'n34_weekly', 'n3_weekly', 'n3_box', 'n12_weekly', 'n12_box', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 't300', 'heat_e22', 'n34_straight', 'n34_amp', 'rivers_below', 'tcwv_tropics', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
   var STRIP_NAME = { n34_weekly: 'Niño 3.4 weekly', n34_daily: 'Niño 3.4 daily', n12_weekly: 'Niño 1+2 weekly', n3_weekly: 'Niño 3 weekly', n4_weekly: 'Niño 4 weekly',
-    n4_box: 'Niño 4 daily, our box', n3_box: 'Niño 3 daily, our box', n12_box: 'Niño 1+2 daily, our box', n34_box: 'Niño 3.4 daily, our box', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean, anom', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', t300: 'upper 300 m, temp', heat_e22: 'stored heat, est.', rivers_below: 'rivers below quartile', tcwv_tropics: 'vapour, tropics', n34_straight: 'rise, straightness', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
+    n4_box: 'Niño 4 daily, our box', n3_box: 'Niño 3 daily, our box', n12_box: 'Niño 1+2 daily, our box', n34_box: 'Niño 3.4 daily, our box', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean, anom', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', t300: 'upper 300 m, temp', heat_e22: 'stored heat, est.', rivers_below: 'rivers below quartile', tcwv_tropics: 'vapour, tropics', n34_straight: 'rise, straightness', n34_amp: 'swing amplitude', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
   /* РЕКОРДЫ ВПЕРЁД И РАМКОЙ. Владелец 10.09: «рекорды тоже как-то в ленте KPI отображать —
      мерцанием красной рамки или вперёд ставить». Панель уже знает про рекорды в четырёх
      местах, просто молчала об этом в полосе: ранг 1 у суточного Niño 3.4 и у поясов планеты,
@@ -2561,7 +2561,7 @@
        сцены задаёт KPI_PICK. */
     wwv: 'air/fuel', wwv_share: 'air/fuel', t300: 'air/fuel', heat_e22: 'air/fuel', wind_week: 'air/wind', mjo_amp: 'air/mjo', dmi: 'air/indices', roni: 'air/indices', soi: 'air/coupling', olr: 'air/coupling', u850_west: 'air/coupling', coupling_score: 'air/coupling', tlt_tropics: 'air/layers', tls_tropics: 'air/layers',
     ohc_2000: 'trend/background', kuwait_tmax30: 'regions/place/gulf_arabia', oni: 'now/weekly_a', risk_index: 'verdict/history', n_risks: 'verdict/history',
-    rivers_below: 'weather/rivers', rivers_record_low: 'weather/rivers', tcwv_tropics: 'air/vapour', tcwv_n34: 'air/vapour', n34_straight: 'trend/shape', n34_dip: 'trend/shape' };
+    rivers_below: 'weather/rivers', rivers_record_low: 'weather/rivers', tcwv_tropics: 'air/vapour', tcwv_n34: 'air/vapour', n34_straight: 'trend/shape', n34_dip: 'trend/shape', n34_amp: 'trend/shape' };
   var RS_STOP = { the: 1, and: 1, for: 1, with: 1, that: 1, this: 1, what: 1, why: 1, how: 1, does: 1, are: 1, is: 1, of: 1, to: 1, in: 1, on: 1, a: 1, an: 1, it: 1, its: 1, be: 1, will: 1, was: 1, were: 1, has: 1, have: 1, from: 1, about: 1, than: 1, now: 1, our: 1, we: 1, you: 1, can: 1, not: 1, which: 1, when: 1, where: 1, there: 1, into: 1, over: 1, any: 1, all: 1 };
   var RS_SYN = { nino: 'niño', 'el': '', nina: 'niña', temperature: 'temperature warm', warming: 'warm', rain: 'rain precipitation', rainfall: 'rain', drought: 'rain dry', prices: 'price food', food: 'food price', models: 'model forecast', forecast: 'forecast model', ocean: 'ocean sea', sea: 'sea ocean', wind: 'wind westerly', volume: 'volume fuel', fuel: 'fuel volume', peak: 'peak', strength: 'strong', strong: 'strong' };
   /* Ручка: явный адрес, иначе своя на сайте; на localhost ручки нет — демо. */
@@ -6881,6 +6881,13 @@
       Object.keys(MOn.analogs || {}).forEach(function (y) { var a = MOn.analogs[y]; if (a && a.values) lines.push({ name: y, key: y, color: 'var(--a' + y + ')', y: rel(a.values) }); });
       return chartSeriesSimple({ title: 'Ni\u00f1o 3.4, last 60 days from the window start, beside the strongest events', x: ds.map(function (d, i) { return i; }), xlab: ds, digits: 2, zero: true, lines: lines }, w, h);
     });
+    /* АМПЛИТУДА КАЧЕЛЕЙ НА ОБЗОРЕ (владелец 21.09): та же кривая, что на Shape of the rise → amplitude. */
+    var MOa = MOn && MOn.amplitude, MOc = MOa && MOa.curve;
+    if (MOc && MOc.this) add('Amplitude of the swings', 'Ni\u00f1o 3.4: size of the wiggles around the course, rms over 15 days; last 60 days ' + fnum(MOa.window_rms, 2, false) + ' \u00b0C' + (MOa.of ? ', ' + MOa.rank_low + ' of ' + MOa.of + ' years from the quietest' : '') + '.', ['trend', 'shape'], function (w, h) {
+      var ds = MOc.dates || [], lines = [{ name: 'this year', key: 'now', color: 'var(--text)', y: MOc.this.map(function (v) { return fin(v) ? v : NaN; }) }];
+      Object.keys(MOc.analogs || {}).sort().forEach(function (y) { lines.push({ name: y, key: y, color: 'var(--a' + y + ')', y: (MOc.analogs[y] || []).map(function (v) { return fin(v) ? v : NaN; }) }); });
+      return chartSeriesSimple({ title: 'Ni\u00f1o 3.4, amplitude of the swings, beside the strongest events', x: ds.map(function (d, i) { return i; }), xlab: ds, digits: 2, unit: ' \u00b0C', zero: true, lines: lines }, w, h);
+    });
     var RV1 = S.RV || {}, RVa = (RV1.items || []).filter(function (x) { return x.key === 'amazon'; })[0] || (RV1.items || [])[0];
     if (RV1.board && RVa) add('Rivers against their own past', RV1.board.below_p25 + ' of ' + RV1.board.n + ' El Ni\u00f1o rivers below their lower quartile; ' + RV1.board.record_low.length + ' at a record low for the date. Shown: ' + RVa.name + '.', ['weather', 'rivers'], function (w, h) {
       var ser = RVa.series || [], ds = ser.map(function (s) { return s[0]; });
@@ -8259,7 +8266,7 @@
     if (!MO.built) { body.appendChild(el('div', 'note', 'This layer has no data file yet: the daily run collects it, and the scene fills in on its own.')); return; }
     var items = MO.items || [], pk = S.sub.shapeKey || 'n34_daily', it = items.filter(function (x) { return x.key === pk; })[0] || items[0];
     var rowS = el('div', 'seg sub');
-    items.forEach(function (x) { var b = el('button', (x.key === it.key ? 'on' : ''), x.name.replace(/, daily anomaly|, our box/, '')); b.type = 'button'; b.title = x.name; b.onclick = function () { S.sub.shapeKey = x.key; S.pick = null; render(); }; rowS.appendChild(b); });
+    items.forEach(function (x) { var b = el('button', (x.key === it.key ? 'on' : ''), x.name.replace(', daily anomaly', '').replace(', our box', ' box')); b.type = 'button'; b.title = x.name; b.onclick = function () { S.sub.shapeKey = x.key; S.pick = null; render(); }; rowS.appendChild(b); });
     rowS.appendChild(el('span', 'seg-gap', ''));
     var vw = S.sub.shapeView || 'path';
     [['path', 'path from the window start'], ['amp', 'amplitude of the swings'], ['years', 'straightness, every year']].forEach(function (o) { if (o[0] === 'years' && !it.all_years) return; if (o[0] === 'amp' && !(it.amplitude && it.amplitude.curve)) return; var b = el('button', (vw === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.shapeView = o[0]; render(); }; rowS.appendChild(b); });

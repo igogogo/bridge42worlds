@@ -355,6 +355,10 @@ METRICS = {
     "n34_dip": dict(
         title="Niño 3.4, deepest dip in 60 days", unit="°C", digits=2, src="our count on the daily series",
         val=lambda d: _g(d, "shape", "n34_daily", "drawdown"), date=lambda d: _g(d, "shape", "n34_daily", "to")),
+    # амплитуда качелей (21.09): RMS остатка от 15-суточного среднего за 60 суток
+    "n34_amp": dict(
+        title="Niño 3.4, amplitude of the swings over 60 days", unit="°C rms", digits=3, src="our count on the daily series",
+        val=lambda d: _g(d, "shape", "n34_daily_amp", "rms"), date=lambda d: _g(d, "shape", "n34_daily", "to")),
     # реки и пар (18.09): из блока hydro разбора
     "rivers_below": dict(
         title="Rivers below their lower quartile", unit="of 14", digits=0, src="GloFAS via Open-Meteo, our count",
