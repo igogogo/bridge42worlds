@@ -66,6 +66,84 @@ def metrics(v):
             "up_share": r2(float(np.mean(d > 0)), 2), "turns": turns, "drawdown": r2(dd)}
 
 
+AMP_SMOOTH = 15            # суток: центрированное среднее, от которого считается остаток
+AMP_RMS = 15               # суток: окно скользящего RMS остатка — кривая амплитуды
+
+
+def _nanmean_centered(a, k):
+    """Центрированное скользящее среднее с пропусками (NaN не рвут ряд, а не считаются)."""
+    n = len(a)
+    out = np.full(n, np.nan)
+    h = k // 2
+    for i in range(n):
+        w = a[max(0, i - h):i + h + 1]
+        f = w[np.isfinite(w)]
+        if len(f) >= max(3, k // 2):
+            out[i] = f.mean()
+    return out
+
+
+def amplitude_curve(arr, open_end=False):
+    """АМПЛИТУДА КОЛЕБАНИЙ ВО ВРЕМЕНИ (21.09): остаток ряда от 15-суточного центрированного среднего
+    и его скользящий RMS за 15 суток. Это «размах качелей» вокруг хода, а не сам ход: ряд может
+    расти монотонно и качаться слабо — или расти и качаться сильно. Возвращает массив по тем же
+    индексам, что вход."""
+    a = np.array([np.nan if v is None else float(v) for v in arr], float)
+    if np.isfinite(a).sum() < AMP_SMOOTH:
+        return [None] * len(a)
+    res = a - _nanmean_centered(a, AMP_SMOOTH)
+    r2_ = res * res
+    rms = _nanmean_centered(r2_, AMP_RMS)
+    out = [None if not np.isfinite(x) else r2(float(np.sqrt(x)), 3) for x in rms]
+    # КРАЙ БЕЗ БУДУЩЕГО (21.09): на последних h сутках центрированное среднее одностороннее, остаток
+    # раздут, и кривая «взлетала» у правого края. Эти сутки не показываем — честнее, чем рисовать.
+    if open_end:
+        h = AMP_SMOOTH // 2
+        for i in range(max(0, len(out) - h), len(out)):
+            out[i] = None
+    return out
+
+
+def amplitude_window(full, lo, hi, open_end):
+    """RMS остатка за окно [lo..hi] ряда full: среднее считается с запасом по краям, где ряд есть;
+    у открытого конца (этот год) последние h суток окна не входят — там будущего нет."""
+    h = AMP_SMOOTH // 2
+    a = np.array([np.nan if v is None else float(v) for v in full[max(0, lo - h):hi + 1 + h]], float)
+    off = lo - max(0, lo - h)
+    res = (a - _nanmean_centered(a, AMP_SMOOTH))[off:off + (hi - lo + 1)]
+    if open_end:
+        res = res[:-h] if len(res) > h else res[:0]
+    f = res[np.isfinite(res)]
+    if len(f) < WIN * 0.4:
+        return None
+    return r2(float(np.sqrt(np.mean(f * f))), 3)
+
+
+def amplitude_block(this_full, past_full, this_dates, end_idx):
+    """Блок амплитуды: кривые этого года и аналогов по тем же индексам (0..end_idx), метрика окна
+    и ранг среди всех лет, у которых есть полное окно."""
+    this_curve = amplitude_curve(this_full[:end_idx + 1], open_end=True)
+    lo = max(0, end_idx - WIN + 1)
+    now = amplitude_window(this_full, lo, end_idx, True)
+    years = {}
+    curves = {}
+    for y, arr in past_full.items():
+        if len(arr) <= end_idx:
+            continue
+        v = amplitude_window(arr, lo, end_idx, False)
+        if v is not None:
+            years[str(y)] = v
+        if str(y) in ANALOGS:
+            curves[str(y)] = amplitude_curve(arr[:end_idx + 1])
+    pool = [v for v in years.values() if v is not None]
+    blk = {"window_rms": now, "smooth_days": AMP_SMOOTH, "rms_days": AMP_RMS, "edge_days_dropped": AMP_SMOOTH // 2,
+           "years": years, "of": len(pool) + 1 if pool else None,
+           "rank_low": (1 + sum(1 for x in pool if x < now)) if (now is not None and pool) else None,
+           "median": r2(float(np.median(pool)), 3) if pool else None,
+           "curve": {"dates": this_dates[:end_idx + 1], "this": this_curve, "analogs": curves}}
+    return blk
+
+
 def rank_desc(val, pool):
     """Место значения среди пула по убыванию (1 = самое большое)."""
     if val is None:
@@ -136,8 +214,11 @@ def build(D):
         d0 = date(cy, 1, 1) + timedelta(days=day - WIN + 1)
         dates = [(d0 + timedelta(days=i)).isoformat() for i in range(WIN)]
         wins = window_by_doy(past, day)
-        blocks.append(series_block("n34_daily", "Niño 3.4, daily anomaly", "°C", this, wins, dates, all_years=True,
-                                   why="the index of the event itself; the spliced daily series the panel runs on"))
+        blk = series_block("n34_daily", "Niño 3.4, daily anomaly", "°C", this, wins, dates, all_years=True,
+                           why="the index of the event itself; the spliced daily series the panel runs on")
+        y0 = date(cy, 1, 1)
+        blk["amplitude"] = amplitude_block(cur, past, [(y0 + timedelta(days=i)).isoformat() for i in range(day + 1)], day)
+        blocks.append(blk)
 
     # 2. Боксы OISST: 120 суток этого года и четыре аналога на тех же датах
     ob = ((D.get("oisst") or {}).get("boxes") or {})
@@ -153,8 +234,15 @@ def build(D):
         for y, arr in (b.get("analogs") or {}).items():
             if isinstance(arr, list) and len(arr) >= WIN:
                 wins[str(y)] = [None if v is None else r2(float(v), 3) for v in arr[-WIN:]]
-        blocks.append(series_block("box_" + k, names[k], "°C", this, wins, dates, all_years=False,
-                                   why="daily box mean on the NOAA grid, one day behind; analogues on the same calendar days"))
+        blk = series_block("box_" + k, names[k], "°C", this, wins, dates, all_years=False,
+                           why="daily box mean on the NOAA grid, one day behind; analogues on the same calendar days")
+        # аналоги боксов выровнены по концу: дополняем спереди до длины этого года
+        past_b = {}
+        for y, arr in (b.get("analogs") or {}).items():
+            if isinstance(arr, list) and len(arr) >= WIN:
+                past_b[str(y)] = [None] * max(0, len(an) - len(arr)) + list(arr[-len(an):])
+        blk["amplitude"] = amplitude_block(an, past_b, dts, len(an) - 1)
+        blocks.append(blk)
 
     # 3. Мировой океан: все годы из planet.json (абсолют минус климатология по дню года)
     try:
@@ -172,8 +260,12 @@ def build(D):
                 d0 = date(cy, 1, 1) + timedelta(days=last - WIN + 1)
                 dates = [(d0 + timedelta(days=i)).isoformat() for i in range(WIN)]
                 wins = window_by_doy({y: v for y, v in an_by.items() if y < cy}, last)
-                blocks.append(series_block("sst_world", "World ocean 60°S–60°N, daily anomaly", "°C", this, wins, dates, all_years=True,
-                                           why="the planet's sea surface; a smoother series, so its monotony is naturally higher"))
+                blk = series_block("sst_world", "World ocean 60°S–60°N, daily anomaly", "°C", this, wins, dates, all_years=True,
+                                   why="the planet's sea surface; a smoother series, so its monotony is naturally higher")
+                y0 = date(cy, 1, 1)
+                blk["amplitude"] = amplitude_block(an_by[cy], {str(y): v for y, v in an_by.items() if y < cy},
+                                                   [(y0 + timedelta(days=i)).isoformat() for i in range(last + 1)], last)
+                blocks.append(blk)
     except Exception as e:                                       # noqa: BLE001
         print("  world ocean skipped:", str(e)[:100])
 
@@ -193,6 +285,10 @@ def summary(doc):
     out = {"window_days": doc.get("window_days"), "built": doc.get("built")}
     for it in doc.get("items") or []:
         m, rk = (it.get("this_year") or {}).get("metrics") or {}, it.get("rank") or {}
+        am = it.get("amplitude") or {}
+        if am.get("window_rms") is not None:
+            out.setdefault(it["key"], {})   # блок ряда дописывается ниже; амплитуда — отдельными ключами
+            out[it["key"] + "_amp"] = {"rms": am["window_rms"], "rank_low": am.get("rank_low"), "of": am.get("of"), "median": am.get("median")}
         out[it["key"]] = {"straightness": m.get("monotony"), "drawdown": m.get("drawdown"), "turns": m.get("turns"),
                           "up_share": m.get("up_share"), "net": m.get("net"), "to": (it.get("dates") or [None])[-1],
                           "rank": rk.get("monotony"), "of": rk.get("of"), "median": rk.get("median_monotony")}
