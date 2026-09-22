@@ -861,6 +861,10 @@
   .stage-body.split > .plot.map-fit{grid-column:1 / -1;height:auto}
   .stage-body.split > .kpis.beside{grid-column:auto;flex-wrap:wrap;overflow:visible;align-self:stretch;align-content:flex-start;-webkit-mask:none;mask:none}
   .stage-body.split > .kpis.beside > *{flex:1 1 calc(50% - 7px);min-width:150px}
+  /* мозаика графиков (Layers, 22.09): 2×2, на телефоне столбцом */
+  .mosaic{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;flex:0 0 auto}
+  .mosaic .plot{height:250px;min-height:220px;flex:none}
+  @media (max-width:760px){ .mosaic{grid-template-columns:1fr} .mosaic .plot{height:200px;min-height:180px} }
   .stage-body.scroll{overflow:auto}
   /* График — главный житель сцены: не меньше половины её высоты, что бы ни делали подписи. */
   .plot{flex:1 1 55%;min-height:170px;display:block;position:relative}
@@ -1472,7 +1476,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=cbb260c53a"></script>
+<script src="/js/enso.js?v=91cd81109e"></script>
 <script src="/js/sitenav.js?v=6ab7008c58"></script>
 </body>
 </html>

@@ -3548,7 +3548,10 @@
        затирал предыдущий, и на Named places после v16 первый график (микроволновой контраст)
        оставался пустой рамкой. Первый вызов на сцене — главный (легенда, выбор в ней живут на
        нём), остальные — в списке S.plots и перерисовываются тем же ходом. */
-    if (!S.plotEl || !S.plotEl.isConnected) { S.plots = []; S.plotEl = p; S.draw = draw; S.pw = 0; S.ph = 0; }
+    /* Первый график ЭТОЙ отрисовки — главный. Признак «прежний главный отсоединён» не годился:
+       мозаика (22.09) добавляет графики в ещё не вставленный контейнер, и каждый следующий вызов
+       считал себя первым — рисовалась одна ячейка из четырёх. Считаем по номеру отрисовки. */
+    if (S._plotsRender !== S._renderN || !S.plots) { S._plotsRender = S._renderN; S.plots = []; S.plotEl = p; S.draw = draw; S.pw = 0; S.ph = 0; }
     S.plots.push({ el: p, draw: draw, pw: 0, ph: 0 });
     // дата данных — значок в правом нижнем углу поля графика
     var wrapB = el('span', 'dcal-wrap', dateBadge(jk || plotKey(draw)));
@@ -5120,11 +5123,14 @@
      четырёх узких панелях это каша. Теперь поле графика заканчивается там, где начинается
      колонка текста: этаж, сегодняшнее значение, задержка и уровни прошлых событий с их
      штрихами. Ось времени общая, под нижней панелью. */
-  function chartLayers(items, W, H) {
+  /* only — номер одного этажа: сцена рисует четыре ячейки мозаикой (22.09), шкала у всех общая,
+     чтобы этажи сравнивались глазом; без only — все этажи стопкой (плитка обзора). */
+  function chartLayers(items, W, H, only) {
     if (!items.length) return svgOpen(W, H) + '<text x="20" y="40">no satellite layers</text></svg>';
+    var draw = (only == null) ? items : [items[only]];
     // Правая колонка подписей в плитке пуста — она уехала в метку легенды: отдаём место графику.
     var RC = S._tight ? 6 : Math.max(120, Math.min(210, Math.round(W * .3)));
-    var B0 = 18, gap = 8, hh = (H - B0 - gap * (items.length - 1)) / items.length;
+    var B0 = 18, gap = 8, hh = (H - B0 - gap * (draw.length - 1)) / draw.length;
     var all = []; items.forEach(function (x) { all = all.concat(x.series.values.filter(fin)); });
     items.forEach(function (x) {
       Object.keys(x.after_events || {}).forEach(function (y) { if (fin(x.after_events[y])) all.push(x.after_events[y]); });
@@ -5132,8 +5138,8 @@
     var vmin = Math.min.apply(null, all) - .1, vmax = Math.max.apply(null, all) + .1;
     var LEGROWS = [];
     var s = svgOpen(W, H);
-    items.forEach(function (x, xi) {
-      var top = xi * (hh + gap), Lp = 46, Tp = top + 4, B = 4;
+    draw.forEach(function (x, di) {
+      var xi = items.indexOf(x), top = di * (hh + gap), Lp = 46, Tp = top + 4, B = 4;
       var pw = W - Lp - RC - 10, ph = hh - 8, n = x.series.values.length;
       var X = function (i) { return Lp + i / Math.max(1, n - 1) * pw; };
       var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
@@ -5340,7 +5346,11 @@
         (F.t300 ? '<div class="kpi"><div class="kn">' + term('t300', 'upper 300 m') + '</div><div class="kv">' + fnum(F.t300.value) + '<small>°C</small></div><div class="km">the same heat as a temperature, not a volume</div>' + kmeta('t300') + '</div>' : '');
       body.appendChild(kp);
     } else if (k === 'layers' && L) {
-      plot(body, function (w, h) { return chartLayers(L.items, w, h); });
+      /* МОЗАИКА 2×2 (владелец 22.09: «на Layers графики очень вытянуты — две колонки, два ряда»):
+         каждый этаж — своя ячейка-график с общей шкалой; на телефоне один столбец. */
+      var mz = el('div', 'mosaic');
+      body.appendChild(mz);
+      (L.items || []).forEach(function (p, i) { plot(mz, function (w, h) { return chartLayers(L.items, w, h, i); }); });
       /* Четыре этажа были только линиями на графике. Два из них журнал ведёт рядами
          (тропосфера и стратосфера тропиков), и до сегодня эти ряды не были названы нигде. */
       var kpl = el('div', 'kpis');
@@ -10354,6 +10364,7 @@
     });
   }
   function render() {
+    S._renderN = (S._renderN || 0) + 1;      // номер отрисовки: по нему plot() узнаёт первый график сцены
     animStop();
     writeHash();
     /* ВЫБОР В ЛЕГЕНДЕ ЖИВЁТ ТОЛЬКО НА СВОЕЙ СЦЕНЕ. Владелец 05.09: «походил, вернулся на
