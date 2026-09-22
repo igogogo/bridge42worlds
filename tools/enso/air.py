@@ -634,11 +634,14 @@ def risks(A, n34_now=None):
                 f"and in {CH.get('strong_falling_n')} of the {CH.get('strong_of')} strongest events (1982, 1997, 2015, 2023)"
                 + (f" (typical peak {abs(CH['typical_months_to_peak'])} months before this month)" if CH.get("typical_months_to_peak") is not None and CH["typical_months_to_peak"] < 0 else "")
                 + f"; this year's three-month rise ranks {CH['rate_rank']} of {CH['falling_of'] + 1} for this month.",
-                "The driver of the event is not only at a record level, it is still growing — at a point of the "
-                "calendar when the past events had already turned to spending their charge. That is the first "
-                "derivative, and it has not changed sign; whether the second derivative (the slowing of the rise) "
-                "brings it to zero is what the coming PMEL months will tell. The fuel leads the surface index by "
-                f"about {lead or 6} months, so what is being added now reaches the surface in the coming half-year.",
+                "The driver of the event is not only at a record level, it is still growing. The comparison is honest "
+                f"only with the count: by this month {CH.get('strong_falling_n')} of the {CH.get('strong_of')} strongest events had already "
+                f"turned to spending their charge (the strong ones peak in spring), while {CH['falling_of'] - CH['falling_n']} of the "
+                f"{CH['falling_of']} El Niño years since 1980 were still adding to it (the weaker ones peak in autumn). What sets this year "
+                "apart is the level at which the rise continues, not the rise itself. That is the first derivative, and it has not "
+                "changed sign; whether the second derivative (the slowing of the rise) brings it to zero is what the coming PMEL "
+                f"months will tell. The fuel leads the surface index by about {lead or 6} months, so what is being added now reaches "
+                "the surface in the coming half-year.",
                 "the next PMEL months: the three-month change turning negative is the sign that the charge is over",
                 _metric({"months": (F.get("series") or {}).get("months"),
                          "values": [None if v is None else round(v / 1e14, 2)
