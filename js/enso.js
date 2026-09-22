@@ -5460,6 +5460,12 @@
     }
     function rate3(p) { return (p || []).map(function (v, i) { return i >= 3 && fin(v) && fin(p[i - 3]) ? v - p[i - 3] : NaN; }); }
     var nowIdx = m0 - 1;
+    /* T300 — размер пузыря: ранг уровня среди тех же лет и сравнение запаса тепла с сильнейшими (22.09) */
+    var tVals = EV.map(function (e) { return ((e.at_month || {}).t300 || {}).value; }).filter(fin);
+    var tRank = 1 + tVals.filter(function (v) { return v > N0.t300; }).length;
+    var TR0 = ((S.D.air || {}).fuel || {}).t300_record || {};
+    var tHeatVs = EV.filter(function (e) { return e.strong && fin(((e.at_month || {}).t300 || {}).value); }).map(function (e) { return e.year + ' ' + fnum(e.at_month.t300.value * C.j_per_k_e22, 2, false); }).join(', ');
+    if (tHeatVs) tHeatVs = 'the strongest events in this month held ' + tHeatVs + ' ·10²² J';
     if (k === 'events') {
       var mz1 = el('div', 'mosaic tall'); body.appendChild(mz1);   // два графика в ряд с малым зазором (владелец 22.09)
       plot(mz1, function (w, h) { return chartSeriesSimple({ title: 'Warm water volume anomaly, 10¹⁴ m³: this event beside every El Niño year since 1980, January of the event year to December of the next (strong events in colour)', x: lab24.map(function (d, i) { return i; }), xlab: lab24, digits: 2, zero: true, lines: lines24('wwv') }, w, h); });
@@ -5469,7 +5475,8 @@
         '<div class="kpi"><div class="kn">level in ' + esc(chMon(C.month)) + '</div><div class="kv">' + fnum(N0.wwv, 2) + '<small> ·10¹⁴ m³</small></div><div class="km">' + (N0.share_of_record != null ? N0.share_of_record + ' % of the record of the series since 1980; ' : '') + 'rank ' + N0.level_rank + ' of ' + N0.level_of + ' El Niño years in this month</div>' + kmeta('wwv') + '</div>' +
         '<div class="kpi"><div class="kn">change over three months</div><div class="kv">' + fnum(W0.rate3, 2) + '<small> ·10¹⁴ m³</small></div><div class="km">' + (W0.rate3 > 0 ? 'still rising, ' + W0.rising_months + ' months in a row' : 'falling') + '; rank ' + W0.rate_rank + ' of ' + (W0.falling_of + 1) + ' for this month of the year</div>' + kmeta('wwv_rate3') + '</div>' +
         '<div class="kpi"><div class="kn">past events already falling by this month</div><div class="kv">' + W0.strong_falling_n + '<small> of ' + W0.strong_of + ' strongest</small></div><div class="km">and ' + W0.falling_n + ' of all ' + W0.falling_of + ' El Niño years; ' + (fin(W0.typical_months_to_peak) ? 'the typical peak of the volume came ' + Math.abs(W0.typical_months_to_peak) + ' months ' + (W0.typical_months_to_peak < 0 ? 'before' : 'after') + ' this month of the year' : '') + '; this year the latest month is itself the peak</div>' + kmeta(null, 'PMEL, our count over El Niño years since 1980', C.month) + '</div>' +
-        (T0 && fin(T0.rate3) ? '<div class="kpi"><div class="kn">upper 300 m temperature, three months</div><div class="kv">' + fnum(T0.rate3, 2) + '<small> °C</small></div><div class="km">' + T0.falling_n + ' of ' + T0.falling_of + ' past events were already cooling by this month; stored heat ' + fnum(N0.heat_e22, 2, false) + ' ·10²² J, our estimate</div>' + kmeta(null, 'NOAA PMEL T300, our three-month difference', C.t300_month || C.month) + '</div>' : '');
+        (T0 && fin(N0.t300) ? '<div class="kpi"><div class="kn">upper 300 m temperature, level</div><div class="kv">' + fnum(N0.t300, 2) + '<small> °C</small></div><div class="km">' + (TR0.is_record ? 'the record of the series; before this event the highest was ' + fnum(TR0.prev_value, 2) + ' in ' + esc(chMon(TR0.prev_date)) + '; ' : '') + 'rank ' + tRank + ' of ' + (T0.falling_of + 1) + ' El Niño years in this month' + (fin(T0.rate3) ? '; ' + fnum(T0.rate3, 2) + ' °C over three months, rank ' + T0.rate_rank + ' of ' + (T0.falling_of + 1) + ', ' + T0.falling_n + ' of ' + T0.falling_of + ' past events already cooling' : '') + '</div>' + kmeta('t300') + '</div>' : '') +
+        (fin(N0.heat_e22) ? '<div class="kpi"><div class="kn">stored heat · estimate</div><div class="kv">' + fnum(N0.heat_e22, 2, false) + '<small> ·10²² J</small></div><div class="km">the size of the bubble: ρ·cp × box volume × the 0–300 m anomaly (' + fnum(C.j_per_k_e22, 2, false) + ' ·10²² J per °C); same rank as the temperature, ' + tRank + ' of ' + (T0.falling_of + 1) + '; ' + tHeatVs + '</div>' + kmeta('heat_e22') + '</div>' : '');
       body.appendChild(kp);
       var wrap = el('div'); wrap.style.cssText = 'max-height:240px;overflow:auto';
       wrap.innerHTML = '<table class="e" style="min-width:640px"><thead><tr><th class="prose">El Niño year</th><th class="num">' + esc(MON3[m0 - 1]) + '</th><th class="num">3-mo change</th><th class="num">accel.</th><th class="prose">peak of the volume</th><th class="prose">state by this month</th></tr></thead><tbody>' +
@@ -5484,8 +5491,18 @@
       EV.forEach(function (e) { LR.push({ name: String(e.year), key: String(e.year), color: e.strong ? 'var(--a' + e.year + ')' : 'var(--soft)', w: e.strong ? 1.6 : 1, op: e.strong ? 1 : .45, dash: e.strong ? '' : '3 3', y: rate3(e.wwv).slice(0, 12) }); });
       var mz2 = el('div', 'mosaic tall'); body.appendChild(mz2);
       plot(mz2, function (w, h) { return chartSeriesSimple({ title: 'Warm water volume, change over three months (the first derivative), by calendar month of the event year: above zero the fuel is being added, below zero it is being spent', x: lab12.map(function (d, i) { return i; }), xlab: lab12, digits: 2, zero: true, lines: LR }, w, h); });
+      if (TH.t300) {
+        var LT = [{ name: String(y0), key: 'now', color: 'var(--text)', w: 2.6, y: rate3(TH.t300).slice(0, 12) }];
+        EV.forEach(function (e) { if (!e.t300) return; LT.push({ name: String(e.year), key: String(e.year), color: e.strong ? 'var(--a' + e.year + ')' : 'var(--soft)', w: e.strong ? 1.6 : 1, op: e.strong ? 1 : .45, dash: e.strong ? '' : '3 3', y: rate3(e.t300).slice(0, 12) }); });
+        plot(mz2, function (w, h) { return chartSeriesSimple({ title: 'Upper 300 m temperature, change over three months, °C — the power of the bubble: the same years on the same calendar', x: lab12.map(function (d, i) { return i; }), xlab: lab12, digits: 2, zero: true, lines: LT }, w, h); });
+      }
       var acc = rate3(TH.wwv).map(function (v, i, arr) { return i >= 3 && fin(v) && fin(arr[i - 3]) ? v - arr[i - 3] : NaN; });
-      plot(mz2, function (w, h) { return chartSeriesSimple({ title: 'This year: the change of the three-month change (the second derivative) — negative means the rise is fading, not that the fuel is falling', x: lab12.map(function (d, i) { return i; }), xlab: lab12, y: acc.slice(0, 12), digits: 2, bars: true, zero: true, hiLast: true }, w, h); });
+      var mz2b = el('div', 'mosaic'); body.appendChild(mz2b);
+      plot(mz2b, function (w, h) { return chartSeriesSimple({ title: 'Volume, this year: the change of the three-month change (the second derivative) — negative means the rise is fading, not that the fuel is falling', x: lab12.map(function (d, i) { return i; }), xlab: lab12, y: acc.slice(0, 12), digits: 2, bars: true, zero: true, hiLast: true }, w, h); });
+      if (TH.t300) {
+        var accT = rate3(TH.t300).map(function (v, i, arr) { return i >= 3 && fin(v) && fin(arr[i - 3]) ? v - arr[i - 3] : NaN; });
+        plot(mz2b, function (w, h) { return chartSeriesSimple({ title: 'Upper 300 m temperature, this year: the second derivative, °C', x: lab12.map(function (d, i) { return i; }), xlab: lab12, y: accT.slice(0, 12), digits: 2, bars: true, zero: true, hiLast: true }, w, h); });
+      }
       var kp2 = el('div', 'kpis');
       kp2.innerHTML =
         '<div class="kpi"><div class="kn">first derivative</div><div class="kv">' + fnum(W0.rate3, 2) + '<small> ·10¹⁴ m³ / 3 mo</small></div><div class="km">' + (W0.rate3 > 0 ? 'the fuel is still being added' : 'the fuel is being spent') + '; rank ' + W0.rate_rank + ' of ' + (W0.falling_of + 1) + ' El Niño years for ' + esc(MON3[m0 - 1]) + '</div>' + kmeta('wwv_rate3') + '</div>' +
@@ -5501,13 +5518,25 @@
       LP.push({ name: '10th percentile', key: 'p10', color: 'var(--soft)', w: 1, dash: '2 3', y: pre(TR.now, TR.p10) });
       LP.push({ name: '90th percentile', key: 'p90', color: 'var(--soft)', w: 1, dash: '2 3', y: pre(TR.now, TR.p90) });
       if (TR.momentum) LP.push({ name: 'momentum: today’s rise fading at today’s pace (estimate)', key: 'momentum', color: 'var(--ochre)', w: 2.2, y: pre(TR.now, TR.momentum.path) });
-      plot(body, function (w, h) { return chartSeriesSimple({ title: 'Warm water volume, 10¹⁴ m³, the year ahead: today’s level carried on by the shape of each past event (dashed), their median (heavy) and 10–90 % range, and by today’s momentum (ochre) — scenarios by our arithmetic, not a forecast', x: lab.map(function (d, i) { return i; }), xlab: lab, digits: 2, zero: true, lines: LP }, w, h); });
-      var M = TR.momentum || {}, LD = C.lead || {};
+      var mz3 = el('div', 'mosaic tall'); body.appendChild(mz3);
+      var TT = (C.trajectory || {}).t300 || null;
+      if (TT && TT.months) {
+        var LPT = [];
+        EV.forEach(function (e) { var p = (TT.analog || {})[String(e.year)]; if (!p) return; LPT.push({ name: 'shape of ' + e.year, key: String(e.year), color: e.strong ? 'var(--a' + e.year + ')' : 'var(--soft)', w: e.strong ? 1.4 : .9, op: e.strong ? .9 : .4, dash: '4 3', y: pre(TT.now, p) }); });
+        LPT.push({ name: 'median of the past events', key: 'median', color: 'var(--text)', w: 2.4, y: pre(TT.now, TT.median) });
+        LPT.push({ name: '10th percentile', key: 'p10', color: 'var(--soft)', w: 1, dash: '2 3', y: pre(TT.now, TT.p10) });
+        LPT.push({ name: '90th percentile', key: 'p90', color: 'var(--soft)', w: 1, dash: '2 3', y: pre(TT.now, TT.p90) });
+        if (TT.momentum) LPT.push({ name: 'momentum (estimate)', key: 'momentum', color: 'var(--ochre)', w: 2.2, y: pre(TT.now, TT.momentum.path) });
+      }
+      plot(mz3, function (w, h) { return chartSeriesSimple({ title: 'Warm water volume, 10¹⁴ m³, the year ahead: today’s level carried on by the shape of each past event (dashed), their median (heavy) and 10–90 % range, and by today’s momentum (ochre) — scenarios by our arithmetic, not a forecast', x: lab.map(function (d, i) { return i; }), xlab: lab, digits: 2, zero: true, lines: LP }, w, h); });
+      if (TT && TT.months) plot(mz3, function (w, h) { return chartSeriesSimple({ title: 'Upper 300 m temperature, °C, the year ahead — the power of the bubble: the same scenarios (shapes of past events, their median and range, today’s momentum)', x: lab.map(function (d, i) { return i; }), xlab: lab, digits: 2, zero: true, lines: LPT }, w, h); });
+      var M = TR.momentum || {}, LD = C.lead || {}, MT = (TT || {}).momentum || {};
       var m3 = (TR.median || [])[2], m6 = (TR.median || [])[5];
       var kp3 = el('div', 'kpis');
       kp3.innerHTML =
         '<div class="kpi"><div class="kn">by the shape of past events</div><div class="kv">' + fnum(m3, 2) + '<small> ·10¹⁴ m³ in 3 mo</small></div><div class="km">median of ' + Object.keys(TR.analog || {}).length + ' El Niño years, each started from today’s level; in 6 months ' + fnum(m6, 2) + ' (10–90 %: ' + fnum((TR.p10 || [])[5], 2) + ' … ' + fnum((TR.p90 || [])[5], 2) + '). Past events say: the volume turns down from here</div>' + kmeta(null, 'our arithmetic on PMEL, scenario', C.month) + '</div>' +
         (M.path ? '<div class="kpi"><div class="kn">by today’s momentum · estimate</div><div class="kv">' + (M.peak_in_months ? '+' + M.peak_in_months + '<small> months to the turn</small>' : 'no turn<small> within a year</small>') + '</div><div class="km">monthly rise ' + fnum(M.rate_per_month, 2) + ', its change ' + fnum(M.accel_per_month, 3) + ' per month; ' + esc(M.note || '') + (M.peak_value != null ? '; the volume would top out near ' + fnum(M.peak_value, 2) : '') + '. A parabola on the last six months, not physics</div>' + kmeta(null, 'our arithmetic on PMEL, estimate', C.month) + '</div>' : '') +
+        (TT && TT.median ? '<div class="kpi"><div class="kn">upper 300 m temperature, the year ahead</div><div class="kv">' + fnum((TT.median || [])[5], 2) + '<small> °C in 6 mo, median</small></div><div class="km">by the shape of past events (10–90 %: ' + fnum((TT.p10 || [])[5], 2) + ' … ' + fnum((TT.p90 || [])[5], 2) + '); by today’s momentum ' + (MT.peak_in_months ? 'the warming stops in ' + MT.peak_in_months + ' months near ' + fnum(MT.peak_value, 2) + ' °C' : 'no turn within a year: the three-month warming is not fading yet') + '. Stored heat follows this line times ' + fnum(C.j_per_k_e22, 2, false) + ' ·10²² J per °C — estimate</div>' + kmeta(null, 'our arithmetic on PMEL T300, scenario', C.t300_month || C.month) + '</div>' : '') +
         '<div class="kpi"><div class="kn">what it means for the surface</div><div class="kv">' + (fin(LD.lag) ? '+' + LD.lag + '<small> months</small>' : '·') + '</div><div class="km">on our own record the volume leads Niño 3.4 by ' + (fin(LD.lag) ? LD.lag + ' months (r ' + fnum(LD.r, 2, false) + ')' : 'about half a year') + ': the water being added now reaches the surface index around ' + (fin(LD.lag) ? esc(chMon(mo[Math.min(mo.length - 1, LD.lag - 1)] || '')) : 'spring') + '. The surface record is not the end of the story while this gauge rises</div>' + kmeta(null, 'our lead–lag fit on PMEL and OISST', C.month) + '</div>';
       body.appendChild(kp3);
     }
