@@ -247,6 +247,18 @@ def read_pmel(path):
             out[f"{f[0][:4]}-{f[0][4:]}"] = float(f[2])
         except ValueError:
             continue
+    # БРАК В ИСТОЧНИКЕ (22.09): у PMEL строка 198001 несёт 0.34E+19 при обычных ~1E+14 — в десять
+    # тысяч раз больше любого месяца. Она задирала ось «volume, every year» до 30k и делала
+    # «0 % of the record». Отбрасываем всё, что дальше 20 медианных модулей от нуля: у настоящего
+    # ряда таких значений нет, и правило не тронет рекорд (рекорд ≈ 3–4 медианы).
+    vals = sorted(abs(v) for v in out.values() if v)
+    if len(vals) >= 24:
+        med = vals[len(vals) // 2]
+        bad = [k for k, v in out.items() if med > 0 and abs(v) > 20 * med]
+        for k in bad:
+            del out[k]
+        if bad:
+            print(f"  pmel {path.name}: отброшено {len(bad)} неправдоподобных строк: {', '.join(bad[:3])}")
     return out
 
 
