@@ -322,12 +322,13 @@ def main(fetch=True, llm=True, light=False):
     if True:   # и в лёгком прогоне тоже (20.09): числа на одной панели — за один день
         for mod, what in (("zones_flow", "переток между зонами"), ("phase", "фазовый сторож"),
                           ("outliers", "кто выбивается"), ("stats_layer", "слой статистики"), ("monotony", "характер роста"),
+                          ("charge", "заряд топлива"),
                           ("agent_state", "карта состояния панели")):
             step("производный слой: " + what)
             try:
                 m_ = __import__(mod)
                 # у monotony вход main() (build(D) ждёт словарь), у agent_state — run() (build() не пишет) (20.09)
-                (m_.main if mod == "monotony" else (m_.run if mod == "agent_state" else m_.build))()
+                (m_.main if mod in ("monotony", "charge") else (m_.run if mod == "agent_state" else m_.build))()
             except Exception as e:                               # noqa: BLE001
                 print("  %s не пересобрался: %s" % (what, str(e)[:140]))
                 failed.append(what + ": " + str(e)[:90])

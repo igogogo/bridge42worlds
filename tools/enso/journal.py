@@ -342,6 +342,13 @@ METRICS = {
         title="Fuel, share of the record", unit="%", digits=0, src="NOAA PMEL / TAO",
         val=lambda d: _g(d, "air", "fuel", "share_of_record"), date=lambda d: _g(d, "air", "fuel", "date")),
     # та же вода температурой и теплом (владелец 18.09): в полосу, историю и реестр
+    # заряд топлива (22.09): ход за 3 месяца и его изменение
+    "wwv_rate3": dict(
+        title="Warm water volume, change over 3 months", unit="×10¹⁴ m³", digits=2, src="NOAA PMEL, our count",
+        val=lambda d: _g(d, "air", "fuel", "charge", "rate3"), date=lambda d: _g(d, "air", "fuel", "date")),
+    "wwv_accel": dict(
+        title="Warm water volume, change of the 3-month change", unit="×10¹⁴ m³", digits=2, src="NOAA PMEL, our count",
+        val=lambda d: _g(d, "air", "fuel", "charge", "accel"), date=lambda d: _g(d, "air", "fuel", "date")),
     "t300": dict(
         title="Upper 300 m temperature, equatorial Pacific", unit="°C", digits=2, src="NOAA PMEL / TAO",
         val=lambda d: _g(d, "air", "fuel", "t300", "value"), date=lambda d: _g(d, "air", "fuel", "t300", "date")),

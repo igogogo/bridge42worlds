@@ -197,6 +197,9 @@ def fuel(wwv, t300, n34_monthly):
             "series": _tail(wwv),
             # каждый год строкой и запасённое тепло (18.09); PMEL даёт месяц, ряд с 1980
             "years": _years(wwv, 1e14), "t300_years": _years(t300, 1.0, 3) if t300 else None,
+            # ход и ускорение против годов начала Эль-Ниньо в тот же месяц (22.09)
+            "charge": charge_stats(wwv, last_k, 1e14),
+            "t300_charge": charge_stats(t300, _last(t300)[0][0], 1.0) if t300 else None,
             "t300_levels": same_month_levels(t300, last_k) if t300 else None,
             "granularity": "monthly since 1980",
             "heat": stored_heat(t300),
@@ -429,7 +432,72 @@ def build(parsed, n34_monthly, onset=None):
 
 
 # ---------------------------------------------------------------- риски по этим данным
+
+
+# ГОДЫ НАЧАЛА ЭЛЬ-НИНЬО (NOAA CPC, ONI ≥ +0.5 пять сезонов подряд): для сравнения хода топлива
+EVENT_YEARS = (1982, 1986, 1991, 1994, 1997, 2002, 2004, 2006, 2009, 2015, 2018, 2023)
 ANALOG_YEARS = (1982, 1997, 2015, 2023)
+
+
+def _mk(y, m):
+    return f"{y:04d}-{m:02d}"
+
+
+def charge_stats(d, last_key, div=1.0):
+    """ХОД И УСКОРЕНИЕ (22.09): ход за 3 месяца (значение минус значение три месяца назад), ускорение
+    (ход за 3 месяца минус ход за предыдущие 3), сколько месяцев подряд растёт; и то же самое у
+    каждого года начала Эль-Ниньо в ТОТ ЖЕ календарный месяц — падал ли ряд уже тогда. Всё из
+    самого ряда, без сглаживания."""
+    if not d or not last_key or len(last_key) < 7:
+        return None
+    y0, m0 = int(last_key[:4]), int(last_key[5:7])
+
+    def at(y, m):
+        while m < 1:
+            m += 12
+            y -= 1
+        while m > 12:
+            m -= 12
+            y += 1
+        v = d.get(_mk(y, m))
+        return None if v is None else v / div
+
+    def rate(y, m):
+        a, b = at(y, m), at(y, m - 3)
+        return None if a is None or b is None else round(a - b, 3)
+
+    def accel(y, m):
+        a, b = rate(y, m), rate(y, m - 3)
+        return None if a is None or b is None else round(a - b, 3)
+
+    rising = 0
+    for k in range(0, 24):
+        a, b = at(y0, m0 - k), at(y0, m0 - k - 1)
+        if a is None or b is None or a <= b:
+            break
+        rising += 1
+    events = []
+    for y in EVENT_YEARS:
+        r = rate(y, m0)
+        if r is None:
+            continue
+        # пик объёма внутри года события (январь–декабрь): когда топливо повернуло
+        vals = [(m, at(y, m)) for m in range(1, 13)]
+        vals = [(m, v) for m, v in vals if v is not None]
+        pk = max(vals, key=lambda t: t[1]) if vals else (None, None)
+        events.append({"year": y, "value": at(y, m0), "rate3": r, "accel": accel(y, m0),
+                       "falling": r < 0, "peak_month": pk[0], "peak_value": None if pk[1] is None else round(pk[1], 3),
+                       "months_to_peak": None if pk[0] is None else pk[0] - m0})
+    falling = [e for e in events if e["falling"]]
+    strong = [e for e in events if e["year"] in ANALOG_YEARS]
+    strong_falling = [e for e in strong if e["falling"]]
+    now_rate, now_acc = rate(y0, m0), accel(y0, m0)
+    higher = [e for e in events if e["rate3"] is not None and now_rate is not None and e["rate3"] > now_rate]
+    return {"month": last_key, "rate3": now_rate, "accel": now_acc, "rising_months": rising,
+            "events": events, "falling_n": len(falling), "falling_of": len(events),
+            "strong_falling_n": len(strong_falling), "strong_of": len(strong),
+            "rate_rank": (len(higher) + 1) if now_rate is not None else None,
+            "typical_months_to_peak": (sorted(e["months_to_peak"] for e in events if e["months_to_peak"] is not None)[len(events) // 2] if events else None)}
 
 
 def same_month_levels(d, last_key):
@@ -549,6 +617,36 @@ def risks(A, n34_now=None):
                 # доля от собственного исторического максимума ряда: низ — порог правила 90 %,
                 # верх — естественные 100 %, то есть «равно максимуму ряда с 1980 года»
                 (share - 90) / 10.0))
+        # ТОПЛИВО ВСЁ ЕЩЁ ЗАРЯЖАЕТСЯ В СЕЗОН СПАДА (владелец 22.09): не только уровень — сам ход.
+        CH = F.get("charge") or {}
+        # срабатывает, если по этому месяцу спад уже шёл у половины годов Эль-Ниньо ИЛИ у трёх из
+        # четырёх сильнейших (у них пик топлива стоит весной, у слабых — осенью)
+        if share >= 90 and CH.get("rate3") is not None and CH["rate3"] > 0 and CH.get("falling_of") and (CH["falling_n"] * 2 >= CH["falling_of"] or CH.get("strong_falling_n", 0) * 4 >= CH.get("strong_of", 4) * 3):
+            months = str(F.get("date") or "")[5:7]
+            out.append((
+                "The fuel is still charging in the season when past events were already spending it", 5,
+                f"{lead or 6}–{(lead or 6) + 3} months",
+                f"Warm water volume rose {CH['rate3']:+.2f}·10¹⁴ m³ over the last three months to {F.get('date')}, "
+                f"{CH['rising_months']} months of rise in a row"
+                + (f"; the three-month change is itself slowing ({CH['accel']:+.2f} against the previous three months)" if CH.get("accel") is not None and CH["accel"] < 0 else
+                   (f"; the rise is not slowing ({CH['accel']:+.2f} against the previous three months)" if CH.get("accel") is not None else ""))
+                + f". In {CH['falling_n']} of {CH['falling_of']} El Niño years since 1980 the volume was already falling by this month of the year, "
+                f"and in {CH.get('strong_falling_n')} of the {CH.get('strong_of')} strongest events (1982, 1997, 2015, 2023)"
+                + (f" (typical peak {abs(CH['typical_months_to_peak'])} months before this month)" if CH.get("typical_months_to_peak") is not None and CH["typical_months_to_peak"] < 0 else "")
+                + f"; this year's three-month rise ranks {CH['rate_rank']} of {CH['falling_of'] + 1} for this month.",
+                "The driver of the event is not only at a record level, it is still growing — at a point of the "
+                "calendar when the past events had already turned to spending their charge. That is the first "
+                "derivative, and it has not changed sign; whether the second derivative (the slowing of the rise) "
+                "brings it to zero is what the coming PMEL months will tell. The fuel leads the surface index by "
+                f"about {lead or 6} months, so what is being added now reaches the surface in the coming half-year.",
+                "the next PMEL months: the three-month change turning negative is the sign that the charge is over",
+                _metric({"months": (F.get("series") or {}).get("months"),
+                         "values": [None if v is None else round(v / 1e14, 2)
+                                    for v in ((F.get("series") or {}).get("values") or [])]},
+                        "Warm water volume, monthly", unit="·10¹⁴ m³",
+                        extra={"levels": (F.get("levels") or {})}),
+                "climate", "fuel_still_charging",
+                min(1.0, max(0.0, CH["rate3"] / 0.6))))
         elif F.get("discharging"):
             out.append((
                 "The fuel is discharging: the peak is close", 4, f"{lead or 6} months",
