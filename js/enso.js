@@ -5461,8 +5461,9 @@
     function rate3(p) { return (p || []).map(function (v, i) { return i >= 3 && fin(v) && fin(p[i - 3]) ? v - p[i - 3] : NaN; }); }
     var nowIdx = m0 - 1;
     if (k === 'events') {
-      plot(body, function (w, h) { return chartSeriesSimple({ title: 'Warm water volume anomaly, 10¹⁴ m³: this event beside every El Niño year since 1980, January of the event year to December of the next (strong events in colour)', x: lab24.map(function (d, i) { return i; }), xlab: lab24, digits: 2, zero: true, lines: lines24('wwv') }, w, h); });
-      if (TH.t300) plot(body, function (w, h) { return chartSeriesSimple({ title: 'Upper 300 m temperature anomaly, °C: the same years on the same calendar', x: lab24.map(function (d, i) { return i; }), xlab: lab24, digits: 2, zero: true, lines: lines24('t300') }, w, h); });
+      var mz1 = el('div', 'mosaic tall'); body.appendChild(mz1);   // два графика в ряд с малым зазором (владелец 22.09)
+      plot(mz1, function (w, h) { return chartSeriesSimple({ title: 'Warm water volume anomaly, 10¹⁴ m³: this event beside every El Niño year since 1980, January of the event year to December of the next (strong events in colour)', x: lab24.map(function (d, i) { return i; }), xlab: lab24, digits: 2, zero: true, lines: lines24('wwv') }, w, h); });
+      if (TH.t300) plot(mz1, function (w, h) { return chartSeriesSimple({ title: 'Upper 300 m temperature anomaly, °C: the same years on the same calendar', x: lab24.map(function (d, i) { return i; }), xlab: lab24, digits: 2, zero: true, lines: lines24('t300') }, w, h); });
       var kp = el('div', 'kpis');
       kp.innerHTML =
         '<div class="kpi"><div class="kn">level in ' + esc(chMon(C.month)) + '</div><div class="kv">' + fnum(N0.wwv, 2) + '<small> ·10¹⁴ m³</small></div><div class="km">' + (N0.share_of_record != null ? N0.share_of_record + ' % of the record of the series since 1980; ' : '') + 'rank ' + N0.level_rank + ' of ' + N0.level_of + ' El Niño years in this month</div>' + kmeta('wwv') + '</div>' +
@@ -5481,9 +5482,10 @@
       var lab12 = MON3.slice();
       var LR = [{ name: String(y0), key: 'now', color: 'var(--text)', w: 2.6, y: rate3(TH.wwv).slice(0, 12) }];
       EV.forEach(function (e) { LR.push({ name: String(e.year), key: String(e.year), color: e.strong ? 'var(--a' + e.year + ')' : 'var(--soft)', w: e.strong ? 1.6 : 1, op: e.strong ? 1 : .45, dash: e.strong ? '' : '3 3', y: rate3(e.wwv).slice(0, 12) }); });
-      plot(body, function (w, h) { return chartSeriesSimple({ title: 'Warm water volume, change over three months (the first derivative), by calendar month of the event year: above zero the fuel is being added, below zero it is being spent', x: lab12.map(function (d, i) { return i; }), xlab: lab12, digits: 2, zero: true, lines: LR }, w, h); });
+      var mz2 = el('div', 'mosaic tall'); body.appendChild(mz2);
+      plot(mz2, function (w, h) { return chartSeriesSimple({ title: 'Warm water volume, change over three months (the first derivative), by calendar month of the event year: above zero the fuel is being added, below zero it is being spent', x: lab12.map(function (d, i) { return i; }), xlab: lab12, digits: 2, zero: true, lines: LR }, w, h); });
       var acc = rate3(TH.wwv).map(function (v, i, arr) { return i >= 3 && fin(v) && fin(arr[i - 3]) ? v - arr[i - 3] : NaN; });
-      plot(body, function (w, h) { return chartSeriesSimple({ title: 'This year: the change of the three-month change (the second derivative) — negative means the rise is fading, not that the fuel is falling', x: lab12.map(function (d, i) { return i; }), xlab: lab12, y: acc.slice(0, 12), digits: 2, bars: true, zero: true, hiLast: true }, w, h); });
+      plot(mz2, function (w, h) { return chartSeriesSimple({ title: 'This year: the change of the three-month change (the second derivative) — negative means the rise is fading, not that the fuel is falling', x: lab12.map(function (d, i) { return i; }), xlab: lab12, y: acc.slice(0, 12), digits: 2, bars: true, zero: true, hiLast: true }, w, h); });
       var kp2 = el('div', 'kpis');
       kp2.innerHTML =
         '<div class="kpi"><div class="kn">first derivative</div><div class="kv">' + fnum(W0.rate3, 2) + '<small> ·10¹⁴ m³ / 3 mo</small></div><div class="km">' + (W0.rate3 > 0 ? 'the fuel is still being added' : 'the fuel is being spent') + '; rank ' + W0.rate_rank + ' of ' + (W0.falling_of + 1) + ' El Niño years for ' + esc(MON3[m0 - 1]) + '</div>' + kmeta('wwv_rate3') + '</div>' +

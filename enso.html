@@ -349,7 +349,10 @@
   .ctl-nav{margin-left:auto;display:flex;gap:6px;align-items:center;flex-shrink:0}
   /* legend — в правом верхнем углу поля графика */
   /* Кнопка «i» — в левом верхнем углу поля графика, напротив legend в правом (15.09). */
-  .plain-i-wrap{position:absolute;top:0;left:0;width:0;height:0;z-index:5}
+  /* ЗНАЧОК «i» ВПЕРЕДИ И ОДНОГО РАЗМЕРА ВЕЗДЕ (владелец 22.09: «то закрыты чем-то, размер разный;
+     чтобы висели в левом верхнем углу чётко впереди»): z-index выше легенды и значка даты, 20 px
+     на графиках, в заголовках и на карточках. */
+  .plain-i-wrap{position:absolute;top:0;left:0;width:0;height:0;z-index:40}
   /* Кнопка «i» (владелец 15.09: «наезжает на текст над графиком — опусти ниже к графику,
      покрупнее и мерцающей»). Заголовок графика стоит на y≈13–15 внутри картинки, поэтому
      кнопка уходит под него, а не встаёт рядом. Мерцание тихое: это приглашение, а не тревога. */
@@ -357,10 +360,10 @@
      места нет совсем — с 17-й точки по высоте слева уже идут подписи оси, а строку
      заголовка держит сам заголовок. Заголовку оставлено место справа от значка
      (fitSvgTitles), поэтому они больше не сходятся. */
-  .plain-i{position:absolute;top:-8px;left:2px;width:24px;height:24px;border-radius:50%;
+  .plain-i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;z-index:40;
     display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;
     border:1.5px solid color-mix(in srgb, var(--cyan) 60%, var(--soft));background:var(--surface);color:var(--cyan);
-    font-family:var(--mono);font-size:13px;font-weight:600;line-height:1;text-align:center;padding:0;cursor:pointer;opacity:.95;
+    font-family:var(--mono);font-size:11px;font-weight:600;line-height:1;text-align:center;padding:0;cursor:pointer;opacity:1;
     /* БУКВА ВСЕГДА СТРОЧНАЯ. Значок ставится внутрь чужих подписей, а некоторые из них набраны
        прописными (.ks-n в ленте KPI, заголовки плашек), и наследуемый text-transform превращал
        «i» в «I» — в ленте это было видно, на сцене нет (владелец 17.09). Отменяем наследование
@@ -376,9 +379,9 @@
   /* Мелкий вид — только там, где значок стоит в строке подписи. Класс .tile носит и сама
      сцена (section.tile.stage), поэтому «.tile .plain-i» ловил и значок над графиком:
      он делался мелким, терял свой отступ сверху и ложился на заголовок картинки. */
-  .kpi .plain-i,.ov-tile .plain-i,.ks .plain-i,.tile > .th .plain-i{position:static;display:inline-flex;margin-inline-start:6px;width:16px;height:16px;
-    min-width:16px;flex:0 0 16px;font-size:10px;line-height:1;vertical-align:middle;animation:none}
-  .ov-kpi .plain-i{width:17px;min-width:17px;flex:0 0 17px;height:17px;font-size:10px;line-height:1}
+  .kpi .plain-i,.ov-tile .plain-i,.ks .plain-i,.tile > .th .plain-i{position:static;display:inline-flex;margin-inline-start:6px;width:20px;height:20px;
+    min-width:20px;flex:0 0 20px;font-size:11px;line-height:1;vertical-align:middle;animation:none}
+  .ov-kpi .plain-i{width:20px;min-width:20px;flex:0 0 20px;height:20px;font-size:11px;line-height:1}
   .ks-n{display:inline-flex;align-items:center}
   .plot .legbtn{position:absolute;top:2px;inset-inline-end:6px;z-index:5;font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;
     padding:2px 8px;border-radius:999px;border:1px solid var(--soft);background:var(--surface);color:var(--text);cursor:pointer;opacity:.92}
@@ -864,6 +867,7 @@
   /* мозаика графиков (Layers, 22.09): 2×2, на телефоне столбцом */
   .mosaic{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;flex:0 0 auto}
   .mosaic .plot{height:250px;min-height:220px;flex:none}
+  .mosaic.tall .plot{height:360px;min-height:300px}
   @media (max-width:760px){ .mosaic{grid-template-columns:1fr} .mosaic .plot{height:200px;min-height:180px} }
   .stage-body.scroll{overflow:auto}
   /* График — главный житель сцены: не меньше половины её высоты, что бы ни делали подписи. */
@@ -1476,7 +1480,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=4ea03feaa3"></script>
+<script src="/js/enso.js?v=429a41b640"></script>
 <script src="/js/sitenav.js?v=6ab7008c58"></script>
 </body>
 </html>
