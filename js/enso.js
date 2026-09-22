@@ -5129,7 +5129,11 @@
     if (!items.length) return svgOpen(W, H) + '<text x="20" y="40">no satellite layers</text></svg>';
     var draw = (only == null) ? items : [items[only]];
     // Правая колонка подписей в плитке пуста — она уехала в метку легенды: отдаём место графику.
-    var RC = S._tight ? 6 : Math.max(120, Math.min(210, Math.round(W * .3)));
+    var single = only != null;
+    /* В ячейке мозаики правой колонки нет (владелец 22.09: «очень много места между ними по
+       горизонтали и подписей нет»): имя этажа и «сейчас» — в заголовке ячейки, планки прошлых
+       событий подписаны у правого края поля, ось времени — в каждой ячейке. */
+    var RC = (S._tight || single) ? 6 : Math.max(120, Math.min(210, Math.round(W * .3)));
     var B0 = 18, gap = 8, hh = (H - B0 - gap * (draw.length - 1)) / draw.length;
     var all = []; items.forEach(function (x) { all = all.concat(x.series.values.filter(fin)); });
     items.forEach(function (x) {
@@ -5139,15 +5143,17 @@
     var LEGROWS = [];
     var s = svgOpen(W, H);
     draw.forEach(function (x, di) {
-      var xi = items.indexOf(x), top = di * (hh + gap), Lp = 46, Tp = top + 4, B = 4;
-      var pw = W - Lp - RC - 10, ph = hh - 8, n = x.series.values.length;
+      var xi = items.indexOf(x), top = di * (hh + gap), Lp = 46, Tp = top + (single ? 20 : 4), B = 4;
+      var pw = W - Lp - RC - 10, ph = hh - (single ? 24 : 8), n = x.series.values.length;
       var X = function (i) { return Lp + i / Math.max(1, n - 1) * pw; };
       var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
       s += '<rect x="' + Lp + '" y="' + Tp + '" width="' + pw + '" height="' + ph.toFixed(1) + '" rx="5" style="fill:var(--ink)" opacity=".03"/>';
       if (vmin < 0 && vmax > 0) s += '<line x1="' + Lp + '" y1="' + Y(0).toFixed(1) + '" x2="' + (Lp + pw) + '" y2="' + Y(0).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".6"/>';
       // шкала градусов: две подписи, верх и низ поля — чтобы читались значения, а не только форма
-      [vmax - .1, vmin + .1].forEach(function (g) {
-        s += '<text x="' + (Lp - 5) + '" y="' + (Y(g) + 3).toFixed(1) + '" text-anchor="end" font-size="9">' + fnum(g, 1) + '</text>';
+      [vmax - .1, vmin + .1].forEach(function (g, gi) {
+        var gy = Y(g) + 3;
+        if (single && gi === 0) gy = Math.max(gy, top + 36);   // в ячейке верхняя метка уходила под кнопку «i» (22.09)
+        s += '<text x="' + (Lp - 5) + '" y="' + gy.toFixed(1) + '" text-anchor="end" font-size="9">' + fnum(g, 1) + '</text>';
       });
       // планки прошлых событий — линиями по полю, но БЕЗ подписей: подписи справа
       var AE = x.after_events || {}, k = 0;
@@ -5162,12 +5168,24 @@
       var li = n - 1;
       while (li > 0 && !fin(x.series.values[li])) li--;
       if (fin(x.series.values[li])) s += nowDot(X(li), Y(x.series.values[li]), xi === 0 ? 'var(--nina)' : 'var(--nino)', 3);
+      if (single) {
+        s += '<text x="' + Lp + '" y="' + (top + 13) + '" class="tt">' + esc(x.title) + ': now ' + fnum(x.tropics) + ' °C over the tropics' +
+          (x.lag == null ? '' : ', lags the ocean by ' + x.lag + ' mo (r ' + fnum(x.r, 2, false) + ')') + '</text>';
+        /* Планки трёх событий часто лежат в двух-трёх десятых друг от друга, и подписи
+           слипались (проверено на телефоне 22.09): раскладываем сверху вниз с шагом 10 px. */
+        var labs = ['1997', '2015', '2023'].filter(function (y) { return fin(AE[y]); }).map(function (y) { return { y: y, py: Y(AE[y]) - 3 }; }).sort(function (a, b) { return a.py - b.py; });
+        labs.forEach(function (l, li) { if (li && l.py - labs[li - 1].py < 10) l.py = labs[li - 1].py + 10; });
+        labs.forEach(function (l) {
+          s += '<text x="' + (Lp + pw - 3) + '" y="' + l.py.toFixed(1) + '" text-anchor="end" font-size="9" style="fill:var(--a' + l.y + ')">after ' + l.y + ' ' + fnum(AE[l.y]) + '</text>';
+        });
+      }
       // колонка подписей
       var lx = Lp + pw + 10, ly = Tp + 10;
       /* Колонка подписей справа рассчитана на широкое окно: на 375 пикселях её строки
          («after 1997: +0.84») уходили за правый край и накладывались друг на друга. На узком
          экране, как и в плитке обзора, они уезжают в легенду под шапкой (владелец 09.09). */
-      if (S._tight || W < 560) { LEGROWS.push([x.title + ': ' + fnum(x.tropics) + ' °C' + (x.lag == null ? '' : ', lags ' + x.lag + ' mo, r ' + x.r), x.col || 'var(--text)', 'line']); return; }
+      if (single) { /* подписи уже в ячейке */ } else if (S._tight || W < 560) { LEGROWS.push([x.title + ': ' + fnum(x.tropics) + ' °C' + (x.lag == null ? '' : ', lags ' + x.lag + ' mo, r ' + x.r), x.col || 'var(--text)', 'line']); return; }
+      if (!single) {
       s += '<text x="' + lx + '" y="' + ly + '" class="tt" font-size="11">' + esc(x.title) + '</text>';
       s += '<text x="' + lx + '" y="' + (ly + 13) + '" font-size="10" style="fill:var(--text)">now ' + fnum(x.tropics) + ' \u00b0C</text>';
       s += '<text x="' + lx + '" y="' + (ly + 25) + '" font-size="9" style="fill:var(--soft)">' +
@@ -5182,10 +5200,12 @@
           '<text x="' + (lx + 21) + '" y="' + ry + '" font-size="9" style="fill:var(--soft)">after ' + y + ': ' + fnum(AE[y]) + '</text>';
         ry += 12;
       });
-      // общая ось времени под нижней панелью
-      if (xi === items.length - 1) {
+      }
+      // общая ось времени под нижней панелью (в ячейке мозаики — в каждой)
+      if (xi === items.length - 1 || single) {
         x.series.months.forEach(function (m, i) {
           if (m.slice(5) !== '01' && m.slice(5) !== '07') return;
+          if (single && X(i) > Lp + pw - 30) return;             // под значком даты в правом нижнем углу (22.09)
           s += '<line x1="' + X(i).toFixed(1) + '" y1="' + (Tp + ph) + '" x2="' + X(i).toFixed(1) + '" y2="' + (Tp + ph + 4) + '" style="stroke:var(--grid)"/>' +
             '<text x="' + X(i).toFixed(0) + '" y="' + (Tp + ph + 14) + '" text-anchor="middle" font-size="9">' +
             (m.slice(5) === '01' ? esc(m.slice(0, 4)) : 'Jul') + '</text>';
