@@ -649,7 +649,9 @@ def risks(A, n34_now=None):
                         "Warm water volume, monthly", unit="·10¹⁴ m³",
                         extra={"levels": (F.get("levels") or {})}),
                 "climate", "fuel_still_charging",
-                min(1.0, max(0.0, CH["rate3"] / 0.6))))
+                # шкала силы: 100 % = рост за 3 месяца не слабее самого быстрого августа среди годов
+                # Эль-Ниньо (владелец 22.09: «подними порог» — при пороге 0.6 шкала упиралась в 100 %)
+                min(1.0, max(0.0, CH["rate3"] / max([e["rate3"] for e in CH.get("events", []) if e.get("rate3") is not None] + [0.6])))))
         elif F.get("discharging"):
             out.append((
                 "The fuel is discharging: the peak is close", 4, f"{lead or 6} months",
