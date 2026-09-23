@@ -763,6 +763,9 @@
     min-width:0;flex:1 1 200px;padding-top:2px}   /* без text-wrap:balance: он снова разрешал перенос и ломал строку (07.09) */
   .seg{display:flex;gap:3px;flex-shrink:0;flex-wrap:wrap}
   .seg.sub{padding:0 0 2px}
+  /* переключатель годов сравнения (23.09) */
+  .seg.yrs-ctl{align-items:center;gap:4px}
+  .seg-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);margin-inline-end:2px}
   /* ЯРУС МЕНЮ ВИДЕН ПО ФОРМЕ РАМКИ (владелец 10.09). Верхнее меню — круглая пилюля, как
      было. Подменю сцены — скруглённый прямоугольник. Подменю подменю — почти квадрат в
      двойной рамке. Прочие переключатели сцены — квадрат в тройной. Вторая и третья линии
@@ -1480,7 +1483,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=429a41b640"></script>
+<script src="/js/enso.js?v=158122a1de"></script>
 <script src="/js/sitenav.js?v=6ab7008c58"></script>
 </body>
 </html>

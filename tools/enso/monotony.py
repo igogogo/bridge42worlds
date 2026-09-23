@@ -176,6 +176,8 @@ def series_block(key, name, unit, this_year, windows, dates, all_years, why):
     blk = {"key": key, "name": name, "unit": unit, "why": why, "window_days": WIN,
            "dates": dates, "this_year": {"values": [None if v is None else r2(float(v), 3) for v in this_year], "metrics": m_now},
            "analogs": {y: {"values": windows.get(y), "metrics": per_year.get(y)} for y in ANALOGS if y in windows},
+           # окна всех лет — для переключателя «все Эль-Ниньо / все годы» на сцене (23.09)
+           "years_values": {y: windows[y] for y in sorted(windows)} if all_years else None,
            "all_years": all_years}
     if m_now and per_year:
         blk["rank"] = {"of": len(per_year) + 1,

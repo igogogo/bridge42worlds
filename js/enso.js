@@ -768,6 +768,43 @@
     return { key: box, label: bx.title || box, year: last.slice(0, 4), analogs: analogs, current_series: cur, day: gridIndex(last), current_day: bx.last_anom,
       peak_estimate: { hist_ceiling: top, ceiling_label: 'highest of the four analogues' }, all_years_rank: null };
   }
+  /* ГОДЫ ДЛЯ СРАВНЕНИЯ (владелец 23.09): «4 сильнейших / все Эль-Ниньо / все годы» — одно
+     состояние на всю панель, помнится; кнопки встают в строку управления тех сцен, где есть
+     что показать (Against analogues, Fuel drive, Shape of the rise). Сильнейшие всегда в цвете и
+     толще, остальные годы — тонко и приглушённо, чтобы фон не спорил с событием. */
+  var YEARS_LBL = { strong: '4 strongest', elnino: 'all El Ni\u00f1o', all: 'all years' };
+  function yrsMode() { if (S.yrs == null) { try { S.yrs = localStorage.getItem('b42_years') || 'strong'; } catch (e) { S.yrs = 'strong'; } } return YEARS_LBL[S.yrs] ? S.yrs : 'strong'; }
+  function yrsLabel() { return { strong: 'the four strongest events', elnino: 'every El Ni\u00f1o year', all: 'every year of the record' }[yrsMode()]; }
+  function isStrong(y) { return ((S.YA || {}).strong || [1982, 1997, 2015, 2023]).indexOf(+y) >= 0; }
+  function yrColor(y) { return isStrong(y) ? 'var(--a' + y + ')' : 'var(--soft)'; }
+  /* какие годы из списка all показать: сильнейшие / годы Эль-Ниньо (по ONI, плюс сильнейшие) / все */
+  function yrsPick(all) {
+    var m = yrsMode(), YA = S.YA || {}, cy = String(new Date().getUTCFullYear());
+    var en = {}; (YA.elnino_years || []).forEach(function (y) { en[String(y)] = 1; }); (YA.strong || [1982, 1997, 2015, 2023]).forEach(function (y) { en[String(y)] = 1; });
+    return (all || []).map(String).filter(function (y) { return y !== cy && (m === 'all' || (m === 'elnino' ? en[y] : isStrong(y))); }).sort();
+  }
+  function yearsCtl() {
+    var head = document.querySelector('#stage .stage-ctl'); if (!head) return;
+    var seg = el('div', 'seg yrs-ctl'), m = yrsMode();
+    seg.appendChild(el('span', 'seg-lbl', 'compare with'));
+    ['strong', 'elnino', 'all'].forEach(function (k) {
+      var b = el('button', (m === k ? 'on' : '') + ' sq', YEARS_LBL[k]); b.type = 'button';
+      b.title = { strong: '1982, 1997, 2015, 2023: the highest peaks of the ONI', elnino: 'every El Ni\u00f1o year the series holds, by the NOAA CPC rule (ONI at or above +0.5 for five seasons)', all: 'every year the series holds, as a faint background' }[k];
+      b.onclick = function () { S.yrs = k; try { localStorage.setItem('b42_years', k); } catch (e) { } render(); };
+      seg.appendChild(b);
+    });
+    head.appendChild(seg);
+  }
+  /* Against analogues: к четырём аналогам разбора добавляются годы из years.json по режиму */
+  function withYears(N, key) {
+    var m = yrsMode(), D2 = ((S.YA || {}).daily || {})[key || 'sst_nino34'];
+    if (m === 'strong' || !D2) return N;
+    var out = {}; Object.keys(N).forEach(function (k) { out[k] = N[k]; });
+    var an = {}; Object.keys(N.analogs || {}).forEach(function (y) { an[y] = N.analogs[y]; });
+    yrsPick(Object.keys(D2)).forEach(function (y) { if (!an[y] && D2[y] && D2[y].series) an[y] = { series: D2[y].series, next: D2[y].next || [], peak: D2[y].peak }; });
+    out.analogs = an; out._yrs = m;
+    return out;
+  }
   function chartAnalogs(N, W, H) {
     var years = Object.keys(N.analogs).sort();
     var M20 = N.mean20 || null, M20Y = N.mean20_years || null;
@@ -782,19 +819,23 @@
     var vmin = Math.min.apply(null, all) - .1, vmax = Math.max.apply(null, all) + .9;
     var X = function (i) { return Lp + i / (n - 1) * pw; };
     var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
-    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + esc(N.label || 'Niño 3.4') + ' daily anomaly: ' + (N.year || '') + ' against the four strongest events</text>';
+    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + esc(N.label || 'Niño 3.4') + ' daily anomaly: ' + (N.year || '') + ' against ' + (N._yrs ? yrsLabel() : 'the four strongest events') + '</text>';
     s += gridY(vmin, vmax, .5, Y, Lp, R + 8, W, 1);
     for (var m = 0; m < 12; m++) if (W > 470 || m % 2 === 0) s += '<text x="' + X((ME[m] + ME[m + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + MONTHS[m] + '</text>';
     for (var m2 = 0; m2 < 4; m2++) if (W > 470) s += '<text x="' + X(366 + (ME[m2] + ME[m2 + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle" opacity=".85">' + MONTHS[m2] + '+1</text>';
     s += '<line x1="' + X(366).toFixed(0) + '" y1="' + Tp + '" x2="' + X(366).toFixed(0) + '" y2="' + (H - B) + '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="3 3"/>';
     var leg = [];
-    Object.keys(N.analogs).sort().forEach(function (y, yi) {
-      var a = N.analogs[y], ser = a.series.concat(a.next || []);
-      s += segs(ser.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + y + ')', 1.4, pickOp(y, .9), dashOf(yi + 1));
+    var nThin = 0, si = 0;
+    Object.keys(N.analogs).sort().forEach(function (y) {
+      var a = N.analogs[y], ser = a.series.concat(a.next || []), strong = isStrong(y) || !N._yrs;
+      if (!strong) { nThin++; s += segs(ser.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', .9, pickOp(y, N._yrs === 'all' ? .28 : .45), '3 3'); return; }
+      si++;
+      s += segs(ser.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + y + ')', 1.4, pickOp(y, .9), dashOf(si));
       // В узкой плитке легенда идёт строкой под заголовком: там помещается только год.
       // пик года — число, а не украшение: он остаётся в подписи на любой ширине (09.09)
-      leg.push([y + '→' + String(parseInt(y, 10) + 1).slice(2) + ': peak ' + fnum(a.peak), 'var(--a' + y + ')', 1.6, dashOf(yi + 1), y]);
+      leg.push([y + '→' + String(parseInt(y, 10) + 1).slice(2) + ': peak ' + fnum(a.peak), 'var(--a' + y + ')', 1.6, dashOf(si), y]);
     });
+    if (nThin) leg.push([nThin + ' more ' + (N._yrs === 'all' ? 'years' : 'El Ni\u00f1o years') + ', thin and dashed', 'var(--soft)', .9, '3 3']);
     /* ФОН ПОСЛЕДНИХ ДВАДЦАТИ ЛЕТ. Аналоги — верхний край того, что бывает, ноль — норма
        1991–2020; между ними не хватало обычного года наших дней (владелец 15.09). Линия идёт
        под аналогами, тонкая и приглушённая: это не событие, это уровень, от которого событие
@@ -4250,7 +4291,7 @@
         b.onclick = function () { S.sub.analogZone = o[0]; render(); }; rowZ.appendChild(b);
       });
       body.appendChild(rowZ);
-      if (az === 'nino34') plot(body, function (w, h) { return chartAnalogs(N, w, h); });
+      if (az === 'nino34') { yearsCtl(); plot(body, function (w, h) { return chartAnalogs(withYears(N, 'sst_nino34'), w, h); }); }
       else {
         var NZ = analogsFor(az);
         if (NZ) plot(body, function (w, h) { return chartAnalogs(NZ, w, h); });
@@ -5455,10 +5496,22 @@
     var lab24 = []; for (var q = 0; q < 24; q++) lab24.push(MON3[q % 12] + (q % 12 === 0 || q === 0 ? " ’" + String(y0 + (q >= 12 ? 1 : 0)).slice(2) : ''));
     function lines24(fld) {
       var L = [{ name: String(y0), key: 'now', color: 'var(--text)', w: 2.6, y: (TH[fld] || []).map(function (v) { return fin(v) ? v : NaN; }) }];
-      EV.forEach(function (e) { if (!e[fld]) return; L.push({ name: String(e.year), key: String(e.year), color: e.strong ? 'var(--a' + e.year + ')' : 'var(--soft)', w: e.strong ? 1.6 : 1, op: e.strong ? 1 : .45, dash: e.strong ? '' : '3 3', y: e[fld].map(function (v) { return fin(v) ? v : NaN; }) }); });
+      EVsel.forEach(function (e) { if (!e[fld]) return; L.push({ name: String(e.year), key: String(e.year), color: e.strong ? 'var(--a' + e.year + ')' : 'var(--soft)', w: e.strong ? 1.6 : (e.extra ? .8 : 1), op: e.strong ? 1 : (e.extra ? .3 : .45), dash: e.strong ? '' : '3 3', y: e[fld].map(function (v) { return fin(v) ? v : NaN; }) }); });
       return L;
     }
     function rate3(p) { return (p || []).map(function (v, i) { return i >= 3 && fin(v) && fin(p[i - 3]) ? v - p[i - 3] : NaN; }); }
+    yearsCtl();
+    /* НАБОР ЛЕТ ПО ПЕРЕКЛЮЧАТЕЛЮ (23.09): сильнейшие — из 12 событий слоя; все Эль-Ниньо — все 12;
+       все годы — плюс остальные годы из помесячных рядов топлива (24 месяца: год и следующий). */
+    var FY = ((S.D.air || {}).fuel || {}), EVsel;
+    function p24(yrs, y) { var a = (yrs || {})[String(y)] || [], b = (yrs || {})[String(+y + 1)] || []; if (!a.length) return null; var o = a.slice(0, 12); while (o.length < 12) o.push(null); return o.concat(b.slice(0, 12)).concat([null, null, null, null, null, null, null, null, null, null, null, null]).slice(0, 24); }
+    if (yrsMode() === 'strong') EVsel = EV.filter(function (e) { return e.strong; });
+    else if (yrsMode() === 'elnino') EVsel = EV.slice();
+    else {
+      EVsel = EV.slice();
+      var have = {}; EV.forEach(function (e) { have[String(e.year)] = 1; });
+      Object.keys(FY.years || {}).sort().forEach(function (y) { if (have[y] || +y >= y0) return; EVsel.push({ year: +y, strong: false, extra: true, wwv: p24(FY.years, y), t300: FY.t300_years ? p24(FY.t300_years, y) : null, at_month: {} }); });
+    }
     var nowIdx = m0 - 1;
     /* T300 — размер пузыря: ранг уровня среди тех же лет и сравнение запаса тепла с сильнейшими (22.09) */
     var tVals = EV.map(function (e) { return ((e.at_month || {}).t300 || {}).value; }).filter(fin);
@@ -5488,12 +5541,12 @@
     } else if (k === 'rate') {
       var lab12 = MON3.slice();
       var LR = [{ name: String(y0), key: 'now', color: 'var(--text)', w: 2.6, y: rate3(TH.wwv).slice(0, 12) }];
-      EV.forEach(function (e) { LR.push({ name: String(e.year), key: String(e.year), color: e.strong ? 'var(--a' + e.year + ')' : 'var(--soft)', w: e.strong ? 1.6 : 1, op: e.strong ? 1 : .45, dash: e.strong ? '' : '3 3', y: rate3(e.wwv).slice(0, 12) }); });
+      EVsel.forEach(function (e) { if (!e.wwv) return; LR.push({ name: String(e.year), key: String(e.year), color: e.strong ? 'var(--a' + e.year + ')' : 'var(--soft)', w: e.strong ? 1.6 : (e.extra ? .8 : 1), op: e.strong ? 1 : (e.extra ? .3 : .45), dash: e.strong ? '' : '3 3', y: rate3(e.wwv).slice(0, 12) }); });
       var mz2 = el('div', 'mosaic tall'); body.appendChild(mz2);
       plot(mz2, function (w, h) { return chartSeriesSimple({ title: 'Warm water volume, change over three months (the first derivative), by calendar month of the event year: above zero the fuel is being added, below zero it is being spent', x: lab12.map(function (d, i) { return i; }), xlab: lab12, digits: 2, zero: true, lines: LR }, w, h); });
       if (TH.t300) {
         var LT = [{ name: String(y0), key: 'now', color: 'var(--text)', w: 2.6, y: rate3(TH.t300).slice(0, 12) }];
-        EV.forEach(function (e) { if (!e.t300) return; LT.push({ name: String(e.year), key: String(e.year), color: e.strong ? 'var(--a' + e.year + ')' : 'var(--soft)', w: e.strong ? 1.6 : 1, op: e.strong ? 1 : .45, dash: e.strong ? '' : '3 3', y: rate3(e.t300).slice(0, 12) }); });
+        EVsel.forEach(function (e) { if (!e.t300) return; LT.push({ name: String(e.year), key: String(e.year), color: e.strong ? 'var(--a' + e.year + ')' : 'var(--soft)', w: e.strong ? 1.6 : (e.extra ? .8 : 1), op: e.strong ? 1 : (e.extra ? .3 : .45), dash: e.strong ? '' : '3 3', y: rate3(e.t300).slice(0, 12) }); });
         plot(mz2, function (w, h) { return chartSeriesSimple({ title: 'Upper 300 m temperature, change over three months, °C — the power of the bubble: the same years on the same calendar', x: lab12.map(function (d, i) { return i; }), xlab: lab12, digits: 2, zero: true, lines: LT }, w, h); });
       }
       var acc = rate3(TH.wwv).map(function (v, i, arr) { return i >= 3 && fin(v) && fin(arr[i - 3]) ? v - arr[i - 3] : NaN; });
@@ -5513,7 +5566,8 @@
       var TR = (C.trajectory || {}).wwv || {}, mo = TR.months || [], lab = ['now'].concat(mo.map(chMon));
       function pre(v0, arr) { return [v0].concat((arr || []).map(function (v) { return fin(v) ? v : NaN; })); }
       var LP = [];
-      EV.forEach(function (e) { var p = (TR.analog || {})[String(e.year)]; if (!p) return; LP.push({ name: 'shape of ' + e.year, key: String(e.year), color: e.strong ? 'var(--a' + e.year + ')' : 'var(--soft)', w: e.strong ? 1.4 : .9, op: e.strong ? .9 : .4, dash: '4 3', y: pre(TR.now, p) }); });
+      function shapeFrom(yrs, y, now) { var a = (yrs || {})[String(y)] || [], b = (yrs || {})[String(+y + 1)] || [], base = a[m0 - 1]; if (!fin(base)) return null; var seq = a.concat(b), o = []; for (var i2 = 1; i2 <= 12; i2++) { var v = seq[m0 - 1 + i2]; o.push(fin(v) ? now + (v - base) : null); } return o; }
+      EVsel.forEach(function (e) { var p = (TR.analog || {})[String(e.year)] || (e.extra ? shapeFrom(FY.years, e.year, TR.now) : null); if (!p) return; LP.push({ name: 'shape of ' + e.year, key: String(e.year), color: e.strong ? 'var(--a' + e.year + ')' : 'var(--soft)', w: e.strong ? 1.4 : (e.extra ? .7 : .9), op: e.strong ? .9 : (e.extra ? .25 : .4), dash: '4 3', y: pre(TR.now, p) }); });
       LP.push({ name: 'median of the past events', key: 'median', color: 'var(--text)', w: 2.4, y: pre(TR.now, TR.median) });
       LP.push({ name: '10th percentile', key: 'p10', color: 'var(--soft)', w: 1, dash: '2 3', y: pre(TR.now, TR.p10) });
       LP.push({ name: '90th percentile', key: 'p90', color: 'var(--soft)', w: 1, dash: '2 3', y: pre(TR.now, TR.p90) });
@@ -5522,7 +5576,7 @@
       var TT = (C.trajectory || {}).t300 || null;
       if (TT && TT.months) {
         var LPT = [];
-        EV.forEach(function (e) { var p = (TT.analog || {})[String(e.year)]; if (!p) return; LPT.push({ name: 'shape of ' + e.year, key: String(e.year), color: e.strong ? 'var(--a' + e.year + ')' : 'var(--soft)', w: e.strong ? 1.4 : .9, op: e.strong ? .9 : .4, dash: '4 3', y: pre(TT.now, p) }); });
+        EVsel.forEach(function (e) { var p = (TT.analog || {})[String(e.year)] || (e.extra && FY.t300_years ? shapeFrom(FY.t300_years, e.year, TT.now) : null); if (!p) return; LPT.push({ name: 'shape of ' + e.year, key: String(e.year), color: e.strong ? 'var(--a' + e.year + ')' : 'var(--soft)', w: e.strong ? 1.4 : .9, op: e.strong ? .9 : .4, dash: '4 3', y: pre(TT.now, p) }); });
         LPT.push({ name: 'median of the past events', key: 'median', color: 'var(--text)', w: 2.4, y: pre(TT.now, TT.median) });
         LPT.push({ name: '10th percentile', key: 'p10', color: 'var(--soft)', w: 1, dash: '2 3', y: pre(TT.now, TT.p10) });
         LPT.push({ name: '90th percentile', key: 'p90', color: 'var(--soft)', w: 1, dash: '2 3', y: pre(TT.now, TT.p90) });
@@ -8415,6 +8469,7 @@
     items.forEach(function (x) { var b = el('button', (x.key === it.key ? 'on' : ''), x.name.replace(', daily anomaly', '').replace(', our box', ' box')); b.type = 'button'; b.title = x.name; b.onclick = function () { S.sub.shapeKey = x.key; S.pick = null; render(); }; rowS.appendChild(b); });
     rowS.appendChild(el('span', 'seg-gap', ''));
     var vw = S.sub.shapeView || 'path';
+    if (it.years_values) yearsCtl();
     [['path', 'path from the window start'], ['amp', 'amplitude of the swings'], ['years', 'straightness, every year']].forEach(function (o) { if (o[0] === 'years' && !it.all_years) return; if (o[0] === 'amp' && !(it.amplitude && it.amplitude.curve)) return; var b = el('button', (vw === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.shapeView = o[0]; render(); }; rowS.appendChild(b); });
     body.appendChild(rowS);
     var m = it.this_year.metrics || {}, rk = it.rank || {}, dates = it.dates || [];
@@ -8433,8 +8488,9 @@
         return chartSeriesSimple({ title: it.name + ': straightness of the same 60 days in every year (|net| / path), this year in ochre', x: ys.map(Number).concat([+cy]), y: ys.map(function (y) { return rk.years_monotony[y]; }).concat([m.monotony]), digits: 2, bars: true, zero: true, hiLast: true }, w, h);
       });
     } else {
-      var lines = [{ name: String(new Date().getUTCFullYear()) + ' \u00b7 monotony ' + fnum(m.monotony, 2, false), key: 'now', color: 'var(--text)', y: rel(it.this_year.values) }];
+      var lines = [{ name: String(new Date().getUTCFullYear()) + ' \u00b7 monotony ' + fnum(m.monotony, 2, false), key: 'now', color: 'var(--text)', w: 2.4, y: rel(it.this_year.values) }];
       Object.keys(it.analogs || {}).forEach(function (y) { var a = it.analogs[y], mm = a.metrics || {}; if (a.values) lines.push({ name: y + ' \u00b7 ' + fnum(mm.monotony, 2, false), key: y, color: 'var(--a' + y + ')', y: rel(a.values) }); });
+      if (yrsMode() !== 'strong' && it.years_values) yrsPick(Object.keys(it.years_values)).forEach(function (y) { if (it.analogs && it.analogs[y]) return; lines.push({ name: y, key: y, color: 'var(--soft)', w: .8, op: yrsMode() === 'all' ? .28 : .45, dash: '3 3', y: rel(it.years_values[y]) }); });
       plot(body, function (w, h) { return chartSeriesSimple({ title: it.name + ': the last 60 days from the window start, this year beside the same days of the strongest events', x: dates.map(function (d, i) { return i; }), xlab: dates, digits: 2, zero: true, lines: lines }, w, h); });
     }
     var kp = el('div', 'kpis');
@@ -10864,11 +10920,12 @@
     get('/data/enso/rivers.json').catch(function () { return {}; }),
     get('/data/enso/vapour.json').catch(function () { return {}; }),
     get('/data/enso/monotony.json').catch(function () { return {}; }),
-    get('/data/enso/charge.json').catch(function () { return {}; })])
+    get('/data/enso/charge.json').catch(function () { return {}; }),
+    get('/data/enso/years.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
       fixRiskTitles(r[0]);                    // парные риски: «world ocean:» / «land+ocean:» читались как дубли (владелец 09.09)
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}; S.LY = r[30] || {}   /* история прогнозов, облака, «кто выбивается» (15.09), обход раскладки (16.09) */; S.FU = r[31] || {};   /* биржевые котировки (18.09) */ S.RP = r[32] || {};   /* 65 мест радианса (18.09) */ S.RV = r[33] || {}; S.VP = r[34] || {};   /* реки и водяной пар (18.09) */ S.MO = r[35] || {};   /* характер роста (19.09) */ S.CH = r[36] || {};   /* заряд топлива (22.09) */
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}; S.LY = r[30] || {}   /* история прогнозов, облака, «кто выбивается» (15.09), обход раскладки (16.09) */; S.FU = r[31] || {};   /* биржевые котировки (18.09) */ S.RP = r[32] || {};   /* 65 мест радианса (18.09) */ S.RV = r[33] || {}; S.VP = r[34] || {};   /* реки и водяной пар (18.09) */ S.MO = r[35] || {};   /* характер роста (19.09) */ S.CH = r[36] || {};   /* заряд топлива (22.09) */ S.YA = r[37] || {};   /* годы для сравнения (23.09) */
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');

@@ -67,6 +67,7 @@ Say "=== fires, reservoirs, snow and glaciers"
 & $py -u radiance_places.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u monotony.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u charge.py 2>&1 | Out-File $log -Append -Encoding utf8
+& $py -u years_all.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u ice_snow.py 2>&1 | Out-File $log -Append -Encoding utf8
 
 Say "=== between the zones (zones_flow.py)"
