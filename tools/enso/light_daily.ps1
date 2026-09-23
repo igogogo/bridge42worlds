@@ -20,6 +20,12 @@ $day = Get-Date -Format 'yyyy-MM-dd'
 $log = "$root\data\enso\light-$day.log"
 function Say($t) { "$(Get-Date -Format 'HH:mm:ss') $t" | Out-File $log -Append -Encoding utf8 }
 
+# РЕКИ И ПАР — ДО РАЗБОРА (23.09): блок hydro внутри refresh читает rivers.json/vapour.json, а они
+# обновлялись после него — и на панели стояли 40.8 (latest) против 40.9 (vapour.json), правило K ловило.
+Say "=== rivers and water vapour (before the run: hydro reads them)"
+& $py -u rivers.py 2>&1 | Out-File $log -Append -Encoding utf8
+& $py -u vapour.py 2>&1 | Out-File $log -Append -Encoding utf8
+
 Say "=== light run"
 & $py -u refresh.py --light 2>&1 | Out-File $log -Append -Encoding utf8
 if ($LASTEXITCODE -ne 0) { Say "light run failed, code $LASTEXITCODE"; exit 1 }
@@ -59,8 +65,6 @@ Say "=== fires, reservoirs, snow and glaciers"
 & $py -u water.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u futures.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u radiance_places.py 2>&1 | Out-File $log -Append -Encoding utf8
-& $py -u rivers.py 2>&1 | Out-File $log -Append -Encoding utf8
-& $py -u vapour.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u monotony.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u charge.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u ice_snow.py 2>&1 | Out-File $log -Append -Encoding utf8
