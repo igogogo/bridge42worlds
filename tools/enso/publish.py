@@ -64,7 +64,7 @@ FILES = ["data/enso/latest.json", "data/enso/history.json", "data/enso/glossary.
          # На сайт они попадали только полной пересборкой сайта, то есть когда придётся; свежее
          # продолжение аналогов в следующий год без этого осталось бы лежать на машине.
          "data/enso/oisst/clim_nino12.json", "data/enso/oisst/clim_nino3.json", "data/enso/oisst/clim_nino34.json",
-         "data/enso/oisst/clim_nino4.json", "data/enso/oisst/clim_gulf.json",
+         "data/enso/oisst/clim_nino4.json", "data/enso/oisst/clim_gulf.json", "data/enso/oisst/years_nino34.json", "data/enso/oisst/years_nino3.json", "data/enso/oisst/years_nino4.json", "data/enso/oisst/years_nino12.json", "data/enso/oisst/years_gulf.json",
          "data/enso/layout-check.json"]
 FRESH_FILES = [
     "data/enso/latest.json", "data/enso/history.json", "data/enso/journal.json", "data/enso/news.json",   # лёгкий прогон = полный без модели (20.09): latest тоже едет

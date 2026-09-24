@@ -717,6 +717,23 @@
       return null;
     }
     if (C.error || !C.doy || !C.analogs) return null;
+    /* ВСЕ ГОДЫ ПО БОКСАМ (24.09): oisst/years_<box>.json — абсолютная SST по дню года за 1982–2025
+       с PSL OPeNDAP (ERDDAP лежал), плюс 120 суток следующего года; подмешивается к четырём
+       аналогам по режиму переключателя, аномалия считается той же нормой. Файл берётся лениво. */
+    var extraYears = {}, extraNext = {}, usedExtra = false;
+    if (yrsMode() !== 'strong') {
+      S.YB = S.YB || {};
+      var YB = S.YB[box];
+      if (!YB) {
+        if (!S.YB[box + ':busy']) {
+          S.YB[box + ':busy'] = true;
+          fetch('/data/enso/oisst/years_' + box + '.json').then(function (r) { return r.json(); })
+            .then(function (d) { S.YB[box] = d; render(); }).catch(function () { S.YB[box] = { error: true }; });
+        }
+      } else if (!YB.error && YB.years) {
+        yrsPick(Object.keys(YB.years)).forEach(function (y) { if (!C.analogs[y]) { extraYears[y] = YB.years[y]; extraNext[y] = (YB.next || {})[y] || []; usedExtra = true; } });
+      }
+    }
     var gridIndex = function (iso) {                 // та же сетка, что у tools/enso/oisst.py:60
       var y = +iso.slice(0, 4), d = new Date(iso + 'T00:00:00Z');
       var doy = Math.round((d - Date.UTC(y, 0, 1)) / 864e5);
@@ -745,13 +762,14 @@
        у 3.4 пик события, у остальных максимум календарного года. Планка «record of the
        series» при этом берётся по всему нарисованному, чтобы она не оказалась ниже линии,
        которую читатель видит на картинке. */
-    var NX = C.analogs_next || {};
+    var NX = {}; Object.keys(C.analogs_next || {}).forEach(function (y) { NX[y] = C.analogs_next[y]; }); Object.keys(extraNext).forEach(function (y) { NX[y] = extraNext[y]; });
+    var ANS = {}; Object.keys(C.analogs).forEach(function (y) { ANS[y] = C.analogs[y]; }); Object.keys(extraYears).forEach(function (y) { ANS[y] = extraYears[y]; });
     var analogs = {}, top = -99;
-    Object.keys(C.analogs).forEach(function (y) {
+    Object.keys(ANS).forEach(function (y) {
       /* Год и продолжение склеиваем ДО заполнения дыр: иначе рвётся шов 31 декабря, а у
          редких лет рвётся и само продолжение. 1997 год в наборе идёт через день (176 суток
          из 366), и его 1998-й такой же: 50 значений на 120 клеток. */
-      var absAll = fillGaps(C.analogs[y].concat(NX[y] || []));
+      var absAll = fillGaps(ANS[y].concat(NX[y] || []));
       var serAll = absAll.map(function (v, i) {
         var c = C.doy[i < 366 ? i : i - 366];                            // продолжение — те же дни года
         return fin(v) && fin(c) ? v - c : NaN;
@@ -767,7 +785,8 @@
     (bx.dates || []).forEach(function (d, i) { var v = bx.anom[i]; if (fin(v)) cur[gridIndex(d)] = v; });
     var last = bx.dates[bx.dates.length - 1];
     return { key: box, label: bx.title || box, year: last.slice(0, 4), analogs: analogs, current_series: cur, day: gridIndex(last), current_day: bx.last_anom,
-      peak_estimate: { hist_ceiling: top, ceiling_label: 'highest of the four analogues' }, all_years_rank: null };
+      _yrs: usedExtra ? yrsMode() : null,
+      peak_estimate: { hist_ceiling: top, ceiling_label: usedExtra ? 'highest of the years shown' : 'highest of the four analogues' }, all_years_rank: null };
   }
   /* ГОДЫ ДЛЯ СРАВНЕНИЯ (владелец 23.09): «4 сильнейших / все Эль-Ниньо / все годы» — одно
      состояние на всю панель, помнится; кнопки встают в строку управления тех сцен, где есть
@@ -4357,7 +4376,7 @@
       if (az === 'nino34') { yearsCtl(); plot(body, function (w, h) { return chartAnalogs(withYears(N, 'sst_nino34'), w, h); }); }
       else {
         var NZ = analogsFor(az);
-        if (NZ) plot(body, function (w, h) { return chartAnalogs(NZ, w, h); });
+        if (NZ) { yearsCtl(); plot(body, function (w, h) { return chartAnalogs(NZ, w, h); }); }
         else plot(body, function (w, h) { return svgOpen(w, h) + '<text x="20" y="40">loading the climatology of this box…</text></svg>'; });
         var tail0 = (((S.D.oisst || {}).boxes || {})[az] || {}).dates || [];
         var bxZ = ((S.D.oisst || {}).boxes || {})[az] || {}, wkZ = { nino12: 'n12a', nino3: 'n3a', nino34: 'n34a', nino4: 'n4a' }[az];
