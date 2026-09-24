@@ -265,8 +265,8 @@ def alerts(iri, bd):
                 aid="the_share_of_models_below_reality_keeps_growing")
         if last["share"] >= 50:
             add("WATCH", f"In the {last['issue']} issue {last['below']} of {last['n']} models were below reality",
-                f"target season {last['season']}, observed ONI {last['observed']:+.2f}; "
-                f"the average model was {last['mean_err']:+.2f} °C off")
+                f"the latest issue whose target season is complete: target {last['season']}, observed ONI {last['observed']:+.2f}; "
+                f"the average model was {last['mean_err']:+.2f} °C off (later issues cannot be scored until their seasons end)")
     chronic = [c for c in (bd.get("chronic") or []) if c["of"] >= 3 and c["issues_low"] >= max(3, int(c["of"] * 0.6))]
     if chronic:
         add("WATCH", f"{len(chronic)} models have been below reality in most issues",
