@@ -938,8 +938,12 @@
     s += '<line x1="' + Lp + '" y1="' + Y(pe.hist_ceiling).toFixed(0) + '" x2="' + xEnd.toFixed(0) + '" y2="' + Y(pe.hist_ceiling).toFixed(0) + '" style="stroke:var(--nino)" stroke-width=".9" stroke-dasharray="6 4"/>';
     s += '<text x="' + (xEnd - 4).toFixed(0) + '" y="' + (Y(pe.hist_ceiling) - 4).toFixed(0) + '" text-anchor="end" style="fill:var(--nino)">' + esc(pe.ceiling_label || 'record of the series') + ' ' + fnum(pe.hist_ceiling) + '</text>';
     if (RC) {
-      var x0 = W - RC - 12, gap = 5, hh = (ph - gap * (years.length - 1)) / years.length;
-      years.forEach(function (y, yi) {
+      /* МИНИ-ПАНЕЛИ — ТОЛЬКО СИЛЬНЕЙШИЕ (владелец 24.09: «все года сливаются, ничего не видно»):
+         при «все Эль-Ниньо / все годы» тонкие линии остаются на большом графике, а колонка
+         справа по-прежнему четыре события. */
+      var pyears = N._yrs ? years.filter(isStrong) : years;
+      var x0 = W - RC - 12, gap = 5, hh = (ph - gap * (pyears.length - 1)) / pyears.length;
+      pyears.forEach(function (y, yi) {
         var a = N.analogs[y], top = Tp + yi * (hh + gap);
         var Ym = function (v) { return top + (vmax - v) / (vmax - vmin) * hh; };
         var Xm = function (i) { return x0 + 4 + i / (n - 1) * (RC - 8); };
