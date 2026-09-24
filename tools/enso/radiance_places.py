@@ -35,7 +35,7 @@ _sys.path.insert(0, str(Path(__file__).resolve().parent))
 import safeio   # noqa: E402
 
 CL = Path(r"C:\CL\radiance\data")
-INCOMING = ROOT / "data" / "enso" / "incoming" / "radiance-v15"
+INCOMING = ROOT / "data" / "enso" / "incoming" / "radiance-v16"   # v16 от 24.09: ИК по местам 2003–2026
 OUT = ROOT / "data" / "enso" / "radiance-places.json"
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
@@ -120,9 +120,13 @@ def infrared(block_end):
     среднее доли глубокой конвекции (BT900 < 235 K) и яркостной температуры окна за тот же сезон.
     Другой прибор и другие годы — это ДВАДЦАТЬ ЛЕТ ФОНА для места, не продолжение микроволнового
     ряда; кросс-калибровки сборщик не давал, и панель их не смешивает."""
-    p = CL / "irplaces_daily.csv" if (CL / "irplaces_daily.csv").exists() else INCOMING / "irplaces_daily.csv"
-    if not p.exists():
+    # v16 (24.09): файл irplaces_places_daily.csv — строка на место и сутки, столбцы place_id и src;
+    # берём только aqua_airs_ir (CrIS ещё собирается, и приборы не складываются в одну кривую).
+    cands = [CL / "irplaces_places_daily.csv", INCOMING / "irplaces_places_daily.csv", CL / "irplaces_daily.csv", INCOMING / "irplaces_daily.csv"]
+    p = next((c for c in cands if c.exists()), None)
+    if p is None:
         return None
+    CLOCK_SHIFT_MIN = {"2022": 7.8, "2023": 20.2, "2024": 41.2, "2025": 77.4, "2026": 119.2}   # сдвиг съёмки Aqua к 2003, из записки сборщика
     try:
         end = date.fromisoformat(block_end)
     except Exception:                                            # noqa: BLE001
@@ -140,22 +144,32 @@ def infrared(block_end):
         dd = abs(d.timetuple().tm_yday - doy0)
         if min(dd, 366 - dd) > SEASON_HALF:
             continue
-        f, b = _f(r.get("frac_lt235")), _f(r.get("bt900_mean"))
-        for pid in (r.get("places") or "").split(";"):
-            pid = pid.strip()
+        if r.get("src") and r["src"] != "aqua_airs_ir":
+            continue
+        f, b, lst = _f(r.get("frac_lt235")), _f(r.get("bt900_mean")), _f(r.get("lst_mean"))
+        pids = [r["place_id"].strip()] if r.get("place_id") else [x.strip() for x in (r.get("places") or "").split(";")]
+        for pid in pids:
             if not pid:
                 continue
-            a = acc.setdefault(pid, {}).setdefault(str(d.year), [[], []])
+            a = acc.setdefault(pid, {}).setdefault(str(d.year), [[], [], []])
             if f is not None:
                 a[0].append(f)
             if b is not None:
                 a[1].append(b)
+            if lst is not None:
+                a[2].append(lst)
             n_rows += 1
     out = {}
     for pid, years in acc.items():
-        out[pid] = {y: {"frac": _r(_mean(v[0]), 3), "bt900": _r(_mean(v[1]), 1), "n": len(v[0])} for y, v in sorted(years.items())}
-    return {"file": p.name, "instrument": "AIRS on Aqua, infrared, 2003–2022", "season_half_days": SEASON_HALF,
-            "season_around": block_end[5:], "places": out, "rows_used": n_rows}
+        out[pid] = {y: {"frac": _r(_mean(v[0]), 3), "bt900": _r(_mean(v[1]), 1), "n": len(v[0]),
+                        "lst": _r(_mean(v[2]), 2), "clock_drift": int(y) > 2022,
+                        "clock_shift_min": CLOCK_SHIFT_MIN.get(y)} for y, v in sorted(years.items())}
+    return {"file": p.name, "instrument": "AIRS on Aqua, infrared, 2003–2026", "season_half_days": SEASON_HALF,
+            "season_around": block_end[5:], "places": out, "rows_used": n_rows,
+            "background_to": 2022,
+            "warnings": {"clock": "Aqua’s clock stood still within 2003–2022 (+7.8 min over twenty years) and drifted after: +20 min in 2023, +41 in 2024, +77 in 2025, +119 in 2026. Years after 2022 are shown apart and are not compared with the twenty-year background without the local-time covariate.",
+                         "instruments": "AIRS and CrIS do not join into one curve: the difference between them depends on the scene (−7.70 K at 750 cm⁻¹ with a slope of −0.174 K per kelvin of the window), so no constant correction exists and none is applied.",
+                         "drift": "no statement about a drift of the reference field is made in either direction: on the infrared series the test found an unreproduced move at none of the 65 places."}}
 
 
 def collector_verdict(PW):

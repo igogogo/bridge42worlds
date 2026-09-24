@@ -65,6 +65,7 @@ Say "=== fires, reservoirs, snow and glaciers"
 & $py -u water.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u futures.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u radiance_places.py 2>&1 | Out-File $log -Append -Encoding utf8
+& $py -u radiance_events.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u monotony.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u charge.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u years_all.py 2>&1 | Out-File $log -Append -Encoding utf8
