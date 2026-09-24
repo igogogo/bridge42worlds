@@ -1,6 +1,6 @@
 {
- "built": "2026-09-23 06:16",
- "secs": 312,
+ "built": "2026-09-24 07:53",
+ "secs": 338,
  "base": "local files",
  "widths": [
   375,
@@ -15,23 +15,16 @@
  "findings": [],
  "kpi": {
   "registry": 102,
-  "shown": 89,
+  "shown": 88,
   "out_of_sync": [],
   "rounding": [
    {
     "key": "sst_world",
     "title": "World ocean, 60°S–60°N, anomaly",
-    "spread": 0.001,
+    "spread": 0.002,
     "values": [
      {
-      "v": 0.81,
-      "scenes": [
-       "Dynamics / Ocean"
-      ],
-      "n": 6
-     },
-     {
-      "v": 0.811,
+      "v": 0.818,
       "scenes": [
        "About",
        "Air & fuel / Coupling",
@@ -39,6 +32,13 @@
        "Air & fuel / Layers"
       ],
       "n": 330
+     },
+     {
+      "v": 0.82,
+      "scenes": [
+       "Dynamics / Ocean"
+      ],
+      "n": 6
      }
     ],
     "rounding": true
@@ -57,7 +57,20 @@
   "not_in_registry": [],
   "note": "Реестр показателей — журнал значений. Здесь сведено то, что панель реально показала на всех обойдённых сценах: один ключ должен давать одно число везде."
  },
- "consist": [],
- "n_consist": 0,
+ "consist": [
+  {
+   "t": "cyr",
+   "p": "td",
+   "x": "Вечерняя Казань",
+   "scene": "Mentions / Headlines (300)"
+  },
+  {
+   "t": "cyr",
+   "p": "td",
+   "x": "УНИАН",
+   "scene": "Mentions / Headlines (300)"
+  }
+ ],
+ "n_consist": 2,
  "note": "Обход всех сцен панели в безоконном браузере на каждой ширине: где текст не помещается, где обрезан без многоточия, где налезает на соседа, где сцена отрисовалась пустой и где упал javascript. Признанные исключения перечислены в tools/enso/layout-accepted.json, каждое с причиной и потолком. Запуск: python tools/enso/check_layout.py"
 }

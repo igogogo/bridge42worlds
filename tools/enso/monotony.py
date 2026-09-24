@@ -119,7 +119,7 @@ def amplitude_window(full, lo, hi, open_end):
     return r2(float(np.sqrt(np.mean(f * f))), 3)
 
 
-def amplitude_block(this_full, past_full, this_dates, end_idx):
+def amplitude_block(this_full, past_full, this_dates, end_idx, all_curves=False):
     """Блок амплитуды: кривые этого года и аналогов по тем же индексам (0..end_idx), метрика окна
     и ранг среди всех лет, у которых есть полное окно."""
     this_curve = amplitude_curve(this_full[:end_idx + 1], open_end=True)
@@ -133,7 +133,7 @@ def amplitude_block(this_full, past_full, this_dates, end_idx):
         v = amplitude_window(arr, lo, end_idx, False)
         if v is not None:
             years[str(y)] = v
-        if str(y) in ANALOGS:
+        if str(y) in ANALOGS or all_curves:                      # все годы — для переключателя (24.09)
             curves[str(y)] = amplitude_curve(arr[:end_idx + 1])
     pool = [v for v in years.values() if v is not None]
     blk = {"window_rms": now, "smooth_days": AMP_SMOOTH, "rms_days": AMP_RMS, "edge_days_dropped": AMP_SMOOTH // 2,
@@ -219,7 +219,7 @@ def build(D):
         blk = series_block("n34_daily", "Niño 3.4, daily anomaly", "°C", this, wins, dates, all_years=True,
                            why="the index of the event itself; the spliced daily series the panel runs on")
         y0 = date(cy, 1, 1)
-        blk["amplitude"] = amplitude_block(cur, past, [(y0 + timedelta(days=i)).isoformat() for i in range(day + 1)], day)
+        blk["amplitude"] = amplitude_block(cur, past, [(y0 + timedelta(days=i)).isoformat() for i in range(day + 1)], day, all_curves=True)
         blocks.append(blk)
 
     # 2. Боксы OISST: 120 суток этого года и четыре аналога на тех же датах
@@ -266,7 +266,7 @@ def build(D):
                                    why="the planet's sea surface; a smoother series, so its monotony is naturally higher")
                 y0 = date(cy, 1, 1)
                 blk["amplitude"] = amplitude_block(an_by[cy], {str(y): v for y, v in an_by.items() if y < cy},
-                                                   [(y0 + timedelta(days=i)).isoformat() for i in range(last + 1)], last)
+                                                   [(y0 + timedelta(days=i)).isoformat() for i in range(last + 1)], last, all_curves=True)
                 blocks.append(blk)
     except Exception as e:                                       # noqa: BLE001
         print("  world ocean skipped:", str(e)[:100])

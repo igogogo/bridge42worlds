@@ -9,6 +9,25 @@
 SEASON_MID = {"DJF": 1, "JFM": 2, "FMA": 3, "MAM": 4, "AMJ": 5, "MJJ": 6, "JJA": 7, "JAS": 8,
               "ASO": 9, "SON": 10, "OND": 11, "NDJ": 12}
 ANALOG_ONSET_YEARS = (1997, 2015, 2023)
+# ВСЕ СОБЫТИЯ С ПОКРЫТИЕМ FAO (индекс с 1990): годы начала по правилу CPC (24.09). 2014 — начало
+# события 2015–16 по ONI, 2015 оставлен как год его развития (так его зовут сильнейшим).
+EVENT_ONSET_YEARS = (1991, 1994, 1997, 2002, 2004, 2006, 2009, 2014, 2015, 2018, 2023)
+
+
+def _oni_by_year(path):
+    """{год: {сезон: ONI}} из oni.txt — чтобы месяц начала считался для любого события, а не только
+    для тех, что разбор кладёт в ONI['analogs']."""
+    out = {}
+    try:
+        import re as _re
+        import io as _io
+        for ln in _io.open(path, encoding="utf-8", errors="replace"):
+            p = ln.split()
+            if len(p) == 4 and _re.fullmatch(r"[A-Z]{3}", p[0]) and p[1].isdigit():
+                out.setdefault(int(p[1]), {})[p[0]] = float(p[3])
+    except Exception:                                            # noqa: BLE001
+        pass
+    return out
 
 
 def _onset_month(oni_year_rows, year):
@@ -66,10 +85,14 @@ def analyze(fao, oni_current, oni_analogs, cur_year):
              "year_ago": index[-13] if n > 12 else None}
     onset = _onset_month(oni_current, cur_year)
     overlay = {"onset": onset, "current": _rel(index, months, onset) if onset else None, "analogs": {}}
-    for y in ANALOG_ONSET_YEARS:
-        o = _onset_month((oni_analogs or {}).get(y) or (oni_analogs or {}).get(str(y)), y)
+    from pathlib import Path as _P
+    oni_all = _oni_by_year(_P(__file__).resolve().parents[2] / "data" / "enso" / "last_good" / "oni.txt")
+    for y in EVENT_ONSET_YEARS:
+        rows_y = (oni_analogs or {}).get(y) or (oni_analogs or {}).get(str(y)) or oni_all.get(y)
+        o = _onset_month(rows_y, y)
         r = _rel(index, months, o) if o else None
         if r:
+            r["strong"] = y in ANALOG_ONSET_YEARS
             overlay["analogs"][str(y)] = r
     return {
         "last_month": months[-1], "index": last, "mom": mom, "yoy_pct": yoy,

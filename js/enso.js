@@ -805,6 +805,16 @@
     out.analogs = an; out._yrs = m;
     return out;
   }
+  /* Weekly vs strongest: к четырём аналогам разбора — недели тех же дат других лет из years.json */
+  function withWeekly(NW) {
+    var m = yrsMode(), WK = (S.YA || {}).weekly;
+    if (m === 'strong' || !WK) return NW;
+    var out = {}; Object.keys(NW).forEach(function (k) { out[k] = NW[k]; });
+    var an = {}; Object.keys(NW.analog_series || {}).forEach(function (y) { an[y] = NW.analog_series[y]; });
+    yrsPick(Object.keys(WK)).forEach(function (y) { if (!an[y] && WK[y] && WK[y].length) an[y] = WK[y]; });
+    out.analog_series = an; out._yrs = m;
+    return out;
+  }
   function chartAnalogs(N, W, H) {
     var years = Object.keys(N.analogs).sort();
     var M20 = N.mean20 || null, M20Y = N.mean20_years || null;
@@ -1005,7 +1015,7 @@
     var vmin = Math.min.apply(null, all) - .2, vmax = Math.max.apply(null, all) + .3;
     var X = function (i) { return Lp + i / (n - 1) * pw; };
     var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
-    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText(NAMES[key] + ' weekly, last ' + n + ' weeks, against the strongest events on the same calendar', W, 12) + '</text>';
+    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText(NAMES[key] + ' weekly, last ' + n + ' weeks, against ' + (NW._yrs ? yrsLabel() : 'the strongest events') + ' on the same calendar', W, 12) + '</text>';
     s += gridY(vmin, vmax, .5, Y, Lp, R + 8, W, 1);
     /* То же правило, что и на недельном графике: расстояние до предыдущей подписи не
        меньше тридцати четырёх пикселей, иначе месяцы стоят вплотную и читаются как одно
@@ -1021,7 +1031,12 @@
       var lab = far ? (MONTHS[mi] || '').charAt(0) + (MONTHS[(mi + 1) % 12] || '').charAt(0) + (MONTHS[(mi + 2) % 12] || '').charAt(0) : MONTHS[mi];
       s += '<text x="' + xx.toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + lab + '</text>';
     });
-    ana.forEach(function (a, ai) {
+    var aStrong = ana.filter(function (a) { return isStrong(a.year) || !NW._yrs; }), aThin = ana.filter(function (a) { return NW._yrs && !isStrong(a.year); });
+    aThin.forEach(function (a) {
+      var off = n - a.values.length;
+      s += segs(a.values.map(function (v, i) { return [X(off + i), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', .9, pickOp(a.year, NW._yrs === 'all' ? .28 : .45), '3 3');
+    });
+    aStrong.forEach(function (a, ai) {
       var off = n - a.values.length;
       s += segs(a.values.map(function (v, i) { return [X(off + i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + a.year + ')', 1.4, pickOp(a.year, .9), dashOf(ai + 1));
     });
@@ -1029,10 +1044,14 @@
     var li = n - 1;
     s += nowDot(X(li), Y(ser[li][key]), 'var(--nino)', 4);
     var leg = [['now ' + fnum(ser[li][key], 1), 'var(--text)', 2.6, '', 'now']];
-    ana.forEach(function (a) {
+    aStrong.forEach(function (a) {
       var v = a.values[a.values.length - 1];
-      leg.push([a.year + ' ' + fnum(v, 1) + (fin(v) ? ' (' + fnum(ser[li][key] - v, 1) + ' now)' : ''), 'var(--a' + a.year + ')', 1.4, dashOf(ana.indexOf(a) + 1), a.year]);
+      leg.push([a.year + ' ' + fnum(v, 1) + (fin(v) ? ' (' + fnum(ser[li][key] - v, 1) + ' now)' : ''), 'var(--a' + a.year + ')', 1.4, dashOf(aStrong.indexOf(a) + 1), a.year]);
     });
+    if (aThin.length) {
+      var vals2 = aThin.map(function (a) { return a.values[a.values.length - 1]; }).filter(fin).sort(function (a, b) { return a - b; });
+      leg.push([aThin.length + ' more ' + (NW._yrs === 'all' ? 'years' : 'El Ni\u00f1o years') + ', thin' + (vals2.length ? ': ' + fnum(vals2[0], 1) + ' \u2026 ' + fnum(vals2[vals2.length - 1], 1) + ' at this week' : ''), 'var(--soft)', .9, '3 3']);
+    }
     s += legend(leg, W, H, R, Tp);
     return s + '</svg>';
   }
@@ -1865,7 +1884,9 @@
     opts = opts || {};
     var Lp = 44, R = legendW(W), Tp = topPad(W), B = 26, pw = W - Lp - R - 8, ph = H - Tp - B;
     var series = [['now (' + ov.onset + ')', ov.current, 'var(--text)', 2.6, 'now']];
-    Object.keys(ov.analogs).sort().forEach(function (y) { series.push([y + ' (' + ov.analogs[y].onset + ')', ov.analogs[y], 'var(--a' + y + ')', 1.5, y]); });
+    var okeys = Object.keys(ov.analogs).sort(), opick = yrsMode() === 'strong' ? okeys.filter(function (y) { return isStrong(y) || (ov.analogs[y] || {}).strong; }) : okeys;
+    if (!opick.length) opick = okeys;
+    opick.forEach(function (y) { var st2 = isStrong(y) || (ov.analogs[y] || {}).strong; series.push([y + ' (' + ov.analogs[y].onset + ')', ov.analogs[y], st2 ? 'var(--a' + y + ')' : 'var(--soft)', st2 ? 1.5 : .8, y]); });
     var all = []; series.forEach(function (r) { all = all.concat(r[1].values.filter(fin)); });
     var vmin = Math.min.apply(null, all) - 3, vmax = Math.max.apply(null, all) + 9;
     var n = ov.current.values.length, from = ov.current.from;
@@ -4279,7 +4300,7 @@
         row2.appendChild(b);
       });
       body.appendChild(row2);
-      plot(body, function (w, h) { return chartNoaa(NW, w, h, 'analog'); });
+      yearsCtl(); plot(body, function (w, h) { return chartNoaa(withWeekly(NW), w, h, 'analog'); });
     } else {
       /* ВЫБОР ЗОНЫ (владелец 10.09: «на эту же вкладку добавить переключалку зон»). Niño 3.4
          считает разбор целиком (полный год и продолжение аналогов); остальные зоны собираются
@@ -5200,11 +5221,12 @@
       });
       // планки прошлых событий — линиями по полю, но БЕЗ подписей: подписи справа
       var AE = x.after_events || {}, k = 0;
-      ['1997', '2015', '2023'].forEach(function (y) {
+      var aeKeys = Object.keys(AE).sort(), aeYears = yrsMode() === 'strong' ? aeKeys.filter(isStrong) : aeKeys;   // планки по режиму (24.09)
+      aeYears.forEach(function (y) {
         if (!fin(AE[y])) return;
         k++;
         s += '<line x1="' + Lp + '" y1="' + Y(AE[y]).toFixed(1) + '" x2="' + (Lp + pw) + '" y2="' + Y(AE[y]).toFixed(1) +
-          '" style="stroke:var(--a' + y + ')" stroke-width="1" stroke-dasharray="' + dashOf(k) + '" opacity=".8"/>';
+          '" style="stroke:' + yrColor(y) + '" stroke-width="' + (isStrong(y) ? 1 : .7) + '" stroke-dasharray="' + (isStrong(y) ? dashOf(k) : '2 3') + '" opacity="' + (isStrong(y) ? .8 : .45) + '"/>';
       });
       s += segs(x.series.values.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }),
         xi === 0 ? 'var(--nina)' : 'var(--nino)', 2, 1);
@@ -5216,10 +5238,11 @@
           (x.lag == null ? '' : ', lags the ocean by ' + x.lag + ' mo (r ' + fnum(x.r, 2, false) + ')') + '</text>';
         /* Планки трёх событий часто лежат в двух-трёх десятых друг от друга, и подписи
            слипались (проверено на телефоне 22.09): раскладываем сверху вниз с шагом 10 px. */
-        var labs = ['1997', '2015', '2023'].filter(function (y) { return fin(AE[y]); }).map(function (y) { return { y: y, py: Y(AE[y]) - 3 }; }).sort(function (a, b) { return a.py - b.py; });
+        var labs = aeYears.filter(function (y) { return fin(AE[y]); }).map(function (y) { return { y: y, py: Y(AE[y]) - 3 }; }).sort(function (a, b) { return a.py - b.py; });
         labs.forEach(function (l, li) { if (li && l.py - labs[li - 1].py < 10) l.py = labs[li - 1].py + 10; });
         labs.forEach(function (l) {
-          s += '<text x="' + (Lp + pw - 3) + '" y="' + l.py.toFixed(1) + '" text-anchor="end" font-size="9" style="fill:var(--a' + l.y + ')">after ' + l.y + ' ' + fnum(AE[l.y]) + '</text>';
+          if (!isStrong(l.y) && aeYears.length > 6) return;   // при всех событиях подписываем только сильнейшие, остальное — линии
+          s += '<text x="' + (Lp + pw - 3) + '" y="' + l.py.toFixed(1) + '" text-anchor="end" font-size="9" style="fill:' + yrColor(l.y) + '">after ' + l.y + ' ' + fnum(AE[l.y]) + '</text>';
         });
       }
       // колонка подписей
@@ -5234,7 +5257,7 @@
       s += '<text x="' + lx + '" y="' + (ly + 25) + '" font-size="9" style="fill:var(--soft)">' +
         (x.lag == null ? 'no measurable delay' : 'lags ' + x.lag + ' mo, r ' + x.r) + '</text>';
       var ry = ly + 38, kk = 0;
-      ['1997', '2015', '2023'].forEach(function (y) {
+      aeYears.filter(isStrong).forEach(function (y) {
         if (!fin(AE[y])) return;
         kk++;
         if (ry > top + hh - 2) return;
@@ -5409,6 +5432,7 @@
         (F.t300 ? '<div class="kpi"><div class="kn">' + term('t300', 'upper 300 m') + '</div><div class="kv">' + fnum(F.t300.value) + '<small>°C</small></div><div class="km">the same heat as a temperature, not a volume</div>' + kmeta('t300') + '</div>' : '');
       body.appendChild(kp);
     } else if (k === 'layers' && L) {
+      yearsCtl();
       /* МОЗАИКА 2×2 (владелец 22.09: «на Layers графики очень вытянуты — две колонки, два ряда»):
          каждый этаж — своя ячейка-график с общей шкалой; на телефоне один столбец. */
       var mz = el('div', 'mosaic');
@@ -5809,6 +5833,7 @@
         body.appendChild(el('div', 'cap', '<strong>' + esc(itC.name) + ':</strong> ' + fnum(itC.now_pct, 1) + ' % since the onset month (' + esc(itC.current.onset) + ' = 100, ' + itC.months_in + ' months in). At the same point after past onsets: ' +
           Object.keys(itC.at6 || {}).map(function (y) { return y + ' ' + fnum(itC.at6[y], 1) + ' % at +6 months, ' + fnum(itC.at12[y], 1) + ' % at +12'; }).join('; ') + '. ' + esc(itC.why) + ' ' + esc(OP.note || '')));
       } else {
+        yearsCtl();
         plot(body, function (w, h) { return chartOverlay(FO.overlay, w, h); });
         body.appendChild(el('div', 'cap', '<strong>Why the risks on this page rise while this line falls.</strong> The index as a percentage of its value in the onset month (' + esc(FO.overlay.onset) + ' = 100, the first three-month season with ONI ≥ +0.5). ' +
           'The thin lines are what the aggregate index actually did after the past onsets: it went DOWN in all three — 1997-98 by about 12 %, 2015-16 by 14 %, 2023-24 by 1 % — because 1998 was the Asian crisis and 2015 was cheap oil, not the weather. ' +
@@ -8479,7 +8504,8 @@
       /* АМПЛИТУДА ВО ВРЕМЕНИ (владелец 21.09): не выше/ниже, а размах качелей вокруг хода —
          скользящий RMS остатка от 15-суточного среднего, этот год против тех же дней важных лет. */
       var aLines = [{ name: String(new Date().getUTCFullYear()) + ' \u00b7 60-day rms ' + fnum(AM.window_rms, 2, false), key: 'now', color: 'var(--text)', y: AC.this.map(function (v) { return fin(v) ? v : NaN; }) }];
-      Object.keys(AC.analogs || {}).sort().forEach(function (y) { aLines.push({ name: y + (AM.years && fin(AM.years[y]) ? ' \u00b7 ' + fnum(AM.years[y], 2, false) : ''), key: y, color: 'var(--a' + y + ')', y: (AC.analogs[y] || []).map(function (v) { return fin(v) ? v : NaN; }) }); });
+      var aKeys = Object.keys(AC.analogs || {}), aPick = yrsMode() === 'strong' ? aKeys.filter(isStrong) : yrsPick(aKeys);
+      aPick.sort().forEach(function (y) { var st2 = isStrong(y); aLines.push({ name: y + (AM.years && fin(AM.years[y]) ? ' \u00b7 ' + fnum(AM.years[y], 2, false) : ''), key: y, color: st2 ? 'var(--a' + y + ')' : 'var(--soft)', w: st2 ? 1.6 : .8, op: st2 ? 1 : (yrsMode() === 'all' ? .28 : .45), dash: st2 ? '' : '3 3', y: (AC.analogs[y] || []).map(function (v) { return fin(v) ? v : NaN; }) }); });
       var aD = AC.dates || [];
       plot(body, function (w, h) { return chartSeriesSimple({ title: it.name + ': amplitude of the swings around the course (rms of the residual from a 15-day mean, over 15 days), this year beside the same days of the strongest events', x: aD.map(function (d, i) { return i; }), xlab: aD, digits: 2, unit: ' \u00b0C', zero: true, lines: aLines }, w, h); });
     } else if (vw === 'years' && it.all_years && rk.years_monotony) {

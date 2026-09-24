@@ -874,3 +874,17 @@ ONI даёт год начала 2014 для события 2015–16 — мно
 боксам Niño (у него есть epochs по годам — проверить, хватает ли для кривых по дню года), раньше
 2003 данных нет ни у кого; (6) Layers UAH с 1979 — after_events для 12 лет вместо трёх, наша
 сторона; (7) Food/Pink Sheet с 1960 — «все Эль-Ниньо» по 22 событиям, наша сторона.
+
+**24.09, план добора: пункты 2, 3, 6, 7 сделаны (Fable).** (2) `years.json` несёт `weekly` —
+недельные индексы NOAA по всем 45 годам (те же 20 недель до той же даты, что analog_series
+разбора; `weekly_to_doy`); Now → Weekly vs strongest получил переключатель (`withWeekly`),
+прочие годы тонко, легенда «N more years: min … max at this week». (3) `monotony.py`: кривые
+амплитуды всех лет (`amplitude_block(..., all_curves=True)` для Niño 3.4 и мирового океана;
+monotony.json ~250 КБ); Shape → amplitude по режиму. (6) `air.py` layers: `after_events` для
+12 годов начала Эль-Ниньо (EVENT_YEARS) вместо четырёх; на Layers планки по режиму, при более
+чем шести подписываются только сильнейшие. (7) `food.py`: наложение «since onset» по всем
+событиям с покрытием FAO (1991…2023, 11 лет; месяц начала для остальных — из oni.txt через
+`_oni_by_year`, флаг `strong`); Food → Since onset по режиму. Кнопки переключателя стоят на
+шести сценах: Against analogues, Weekly vs strongest, Fuel drive, Shape of the rise, Layers,
+Since onset. Осталось из плана: (1) боксы OISST по всем годам (ERDDAP), (4) GODAS 1980–2025,
+(5) радианс — просьба к сборщику.

@@ -237,7 +237,7 @@ def layers(uah, n34_monthly):
         # берём МАКСИМУМ этого слоя в году ПОСЛЕ его зимнего пика — именно тогда атмосфера
         # отвечает океану. Получается честная планка: столько же было тогда.
         after = {}
-        for ay in (1982, 1997, 2015, 2023):
+        for ay in EVENT_YEARS:                                   # 12 событий вместо четырёх (24.09)
             win = [trop[f"{ay + 1}-{m:02d}"] for m in range(1, 13) if f"{ay + 1}-{m:02d}" in trop]
             if win:
                 after[str(ay)] = round(max(win), 2)

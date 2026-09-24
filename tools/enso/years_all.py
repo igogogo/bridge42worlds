@@ -80,6 +80,22 @@ def daily_all(path):
     return out
 
 
+def weekly_all(path, doy):
+    """Недельные индексы NOAA: для каждого года — до 20 недель до той же даты года (как analog_series
+    у разбора, но по всем годам с 1981)."""
+    rows = S.read_noaa_weekly(path)
+    keys4 = ("n12a", "n3a", "n34a", "n4a")
+    out = {}
+    years = sorted(set(r["date"].year for r in rows))
+    for y in years:
+        same = [r for r in rows if r["date"].year in (y, y + 1)
+                and -140 <= (r["date"].timetuple().tm_yday - doy if r["date"].year == y
+                             else r["date"].timetuple().tm_yday + 365 - doy) <= 0]
+        if len(same) >= 10:
+            out[str(y)] = [dict({"date": r["date"].isoformat()}, **{k: r[k] for k in keys4}) for r in same[-20:]]
+    return out
+
+
 def build():
     t0 = time.time()
     ev = elnino_events(S.LAST / "oni.txt") if (S.LAST / "oni.txt").exists() else []
@@ -92,7 +108,17 @@ def build():
             except Exception as e:                               # noqa: BLE001
                 print("  ", key, "skipped:", str(e)[:120])
     cy = datetime.now().year
+    weekly, wk_doy = {}, None
+    try:
+        L = json.loads((DATA / "latest.json").read_text(encoding="utf-8"))
+        nd = ((L.get("noaa") or {}).get("date") or "")[:10]
+        if nd and (S.LAST / "noaa_weekly.txt").exists():
+            wk_doy = datetime.strptime(nd, "%Y-%m-%d").timetuple().tm_yday
+            weekly = weekly_all(S.LAST / "noaa_weekly.txt", wk_doy)
+    except Exception as e:                                       # noqa: BLE001
+        print("  weekly skipped:", str(e)[:120])
     doc = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "strong": list(STRONG),
+           "weekly": weekly, "weekly_to_doy": wk_doy,
            "elnino": ev, "elnino_years": [e["year"] for e in ev],
            "rule": "El Niño by the NOAA CPC rule: ONI at or above +0.5 for five overlapping seasons in a row; the year is the year of the first such season",
            "daily": daily, "current_year": cy,
@@ -101,7 +127,7 @@ def build():
                     "without a rebuild. Daily series are anomalies against the 1991–2020 normal, day of year plus "
                     "the first 120 days of the next year, from the same source copies the assessment reads.")}
     safeio.write_text(OUT, json.dumps(doc, ensure_ascii=False, allow_nan=False))
-    print(f"years.json: {len(ev)} El Niño events since 1950, daily years " +
+    print(f"years.json: {len(ev)} El Niño events since 1950, weekly years {len(weekly)}, daily years " +
           ", ".join(f"{k} {len(v)}" for k, v in daily.items()) + f"; {OUT.stat().st_size // 1024} KB, {time.time() - t0:.1f} s")
     return doc
 
