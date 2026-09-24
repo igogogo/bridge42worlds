@@ -2177,14 +2177,17 @@
     var vals = m.values || [], li = vals.length - 1;
     while (li >= 0 && !fin(vals[li])) li--;
     if (li < 0) return '';
-    var d = m.unit === '\u00b0C' ? 1 : 2, u = m.unit ? ' ' + esc(m.unit) : '';
-    var s = '<b>' + fnum(vals[li], d) + '</b>' + u + '<i>now</i>';
+    /* Знак — только у аномалий (°C, σ) или если ряд бывает отрицательным; сток реки и влага —
+       абсолютные величины (24.09). Крупные числа — с одним знаком после запятой. */
+    var neg = vals.some(function (v) { return fin(v) && v < 0; }), sg = neg || m.unit === '°C' || m.unit === 'σ';
+    var big = Math.abs(vals[li]) >= 100, d = m.unit === '°C' ? 1 : (big ? 1 : 2), u = m.unit ? ' ' + esc(m.unit) : '';
+    var s = '<b>' + fnum(vals[li], d, sg) + '</b>' + u + '<i>now</i>';
     var AN = m.analogs || {}, ks = Object.keys(AN).sort(), parts = [];
-    ks.forEach(function (y) { var av = AN[y] || [], k = li - (vals.length - av.length); if (k >= 0 && k < av.length && fin(av[k])) parts.push('\u2019' + String(y).slice(2) + ' ' + fnum(av[k], d)); });
+    ks.forEach(function (y) { var av = AN[y] || [], k = li - (vals.length - av.length); if (k >= 0 && k < av.length && fin(av[k])) parts.push('\u2019' + String(y).slice(2) + ' ' + fnum(av[k], d, sg)); });
     if (parts.length) s += '<i>same day: ' + parts.join(' \u00b7 ') + '</i>';
     var lo = Infinity, hi = -Infinity;
     vals.forEach(function (v) { if (fin(v)) { lo = Math.min(lo, v); hi = Math.max(hi, v); } });
-    if (fin(lo) && hi > lo) s += '<i>range ' + fnum(lo, d) + ' \u2026 ' + fnum(hi, d) + '</i>';
+    if (fin(lo) && hi > lo) s += '<i>range ' + fnum(lo, d, sg) + ' \u2026 ' + fnum(hi, d, sg) + '</i>';
     return s;
   }
 
