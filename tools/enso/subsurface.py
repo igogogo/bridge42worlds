@@ -357,8 +357,32 @@ def _godas_index(ds):
     return li, oi, lat[li], lon[oi], np.array(ds["level"][:GODAS_LEVELS], float)
 
 
+GODAS_CACHE = CACHE / "godas"      # годовые разрезы на диске (24.09): один раз с PSL, дальше без сети
+
+
 def _godas_year(y):
-    """Разрез по месяцам года: (месяцы, уровни, долготы) в °C — среднее по ±2° широты."""
+    """Разрез по месяцам года: (месяцы, уровни, долготы) в °C — среднее по ±2° широты.
+    КЭШ ПО ГОДАМ (24.09): прочитанный с PSL год ложится в subsurface/godas/<год>.json (~0,4 МБ),
+    и сборщики аналогов/Ховмёллера по 12 событиям больше не ходят в сеть за прошлым."""
+    cp = GODAS_CACHE / f"{y}.json"
+    if cp.exists():
+        d = json.loads(cp.read_text(encoding="utf-8"))
+        if len(d.get("months") or []) == 12 or int(y) >= datetime.now().year:
+            sec = np.array([[[np.nan if v is None else v for v in row] for row in mm] for mm in d["sec"]], float)
+            return d["months"], np.array(d["lev"], float), np.array(d["lon"], float), sec
+    months, lev, lon, sec = _godas_year_fetch(y)
+    try:
+        GODAS_CACHE.mkdir(parents=True, exist_ok=True)
+        safeio.write_text(cp, json.dumps({"year": int(y), "months": months, "lev": [float(x) for x in lev], "lon": [float(x) for x in lon],
+                                          "sec": [[[None if not np.isfinite(v) else round(float(v), 3) for v in row] for row in mm] for mm in sec],
+                                          "fetched": datetime.now().strftime("%Y-%m-%d %H:%M"), "src": GODAS.format(y=y)},
+                                         ensure_ascii=False))
+    except Exception as e:                                       # noqa: BLE001
+        print(f"  GODAS cache {y}: {str(e)[:80]}")
+    return months, lev, lon, sec
+
+
+def _godas_year_fetch(y):
     ds = _godas_open(y)
     try:
         li, oi, lat, lon, lev = _godas_index(ds)
@@ -407,6 +431,8 @@ def build_clim_godas(verbose=False):
 
 
 ANALOG_YEARS = (1982, 1997, 2015, 2023)
+# ВСЕ 12 ГОДОВ НАЧАЛА ЭЛЬ-НИНЬО с 1980 (24.09): тот же список, что у топлива (air.EVENT_YEARS)
+EVENT_YEARS = (1982, 1986, 1991, 1994, 1997, 2002, 2004, 2006, 2009, 2015, 2018, 2023)
 
 
 def build_analogs_godas(verbose=False):
@@ -420,7 +446,7 @@ def build_analogs_godas(verbose=False):
     lev = np.array(clim["levels"]); lon = np.array(clim["lons"])
     thick = np.diff(np.concatenate([[0.0], (lev[:-1] + lev[1:]) / 2, [lev[-1] + (lev[-1] - lev[-2]) / 2]]))
     band = (lon >= 180) & (lon <= 260)
-    for y in ANALOG_YEARS:
+    for y in EVENT_YEARS:
         if str(y) in cl:
             continue
         try:
@@ -498,7 +524,7 @@ def build_hov_analogs(verbose=False):
     if not clim_d.get("clim"):
         return cl
     C = np.array([[[np.nan if v is None else v for v in row] for row in mm] for mm in clim_d["clim"]], float)
-    for y in ANALOG_YEARS:
+    for y in EVENT_YEARS:
         sec_file = ROOT / f"sections-{y}.json"
         if str(y) in cl and sec_file.exists():
             continue
@@ -700,9 +726,45 @@ def risks(SUB):
     return out
 
 
+def backfill_godas(y0=1980, y1=None, verbose=True):
+    """Добор GODAS по годам в кэш (владелец 24.09: «GODAS 1980–2025»), затем сборка индекса тепла
+    и Ховмёллера по всем 12 событиям. Через OPeNDAP только полоса ±2° и 26 уровней: ~5 МБ на год."""
+    import time
+    y1 = y1 or (datetime.now().year - 1)
+    ok, bad = 0, []
+    for y in range(y0, y1 + 1):
+        cp = GODAS_CACHE / f"{y}.json"
+        if cp.exists():
+            ok += 1
+            continue
+        t0 = time.time()
+        try:
+            months, lev, lon, sec = _godas_year(y)
+            ok += 1
+            if verbose:
+                print(f"  GODAS {y}: {len(months)} мес, {sec.shape[1]}×{sec.shape[2]}, {time.time() - t0:.0f} с", flush=True)
+        except Exception as e:                                   # noqa: BLE001
+            bad.append(y)
+            print(f"  GODAS {y}: НЕ ВЗЯТ: {str(e)[:100]}", flush=True)
+    print(f"кэш GODAS: {ok} лет, не взяты {bad or 'нет'}", flush=True)
+    return ok, bad
+
+
 if __name__ == "__main__":
     import sys
-    if "--hov" in sys.argv:
+    if "--backfill" in sys.argv:
+        import ops as OPSLOG
+        run = OPSLOG.Run("godas_backfill")
+        ok, bad = backfill_godas()
+        print("индекс тепла по событиям")
+        build_analogs_godas(verbose=True)
+        print("Ховмёллер и разрезы по событиям")
+        build_hov_analogs(verbose=True)
+        print("текущее окно")
+        g = godas(verbose=True)
+        run.finish("ok" if not bad else "partial", years=ok, missing=bad)
+        print("готово")
+    elif "--hov" in sys.argv:
         import ops as OPSLOG
         run = OPSLOG.Run("hovmoller")
         print("Ховмёллер прошлых событий (кэш)")

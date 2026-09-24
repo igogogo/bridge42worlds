@@ -815,6 +815,8 @@
     out.analog_series = an; out._yrs = m;
     return out;
   }
+  /* Ховмёллер и разрезы: годы событий по переключателю (24.09: GODAS добран по всем 12) */
+  function hovYears(an) { var ks = Object.keys(an || {}).sort(); return yrsMode() === 'strong' ? ks.filter(isStrong) : ks; }
   function chartAnalogs(N, W, H) {
     var years = Object.keys(N.analogs).sort();
     var M20 = N.mean20 || null, M20Y = N.mean20_years || null;
@@ -6572,7 +6574,8 @@
       var row1 = el('div', 'seg sub');
       [['anom100', 'anomaly at 100 m'], ['d20_anom', 'thermocline depth']].forEach(function (o) { var b = el('button', (hm === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.onclick = function () { S.sub.hovMetric = o[0]; render(); }; row1.appendChild(b); });
       row1.appendChild(el('span', 'seg-gap', ''));
-      [['', 'this event alone']].concat(Object.keys(HV.analogs || {}).sort().map(function (y) { return [y, 'beside ' + y]; })).forEach(function (o) { var b = el('button', ha === o[0] ? 'on' : '', o[1]); b.type = 'button'; b.onclick = function () { S.sub.hovAnalog = o[0]; render(); }; row1.appendChild(b); });
+      yearsCtl();
+      [['', 'this event alone']].concat(hovYears(HV.analogs).map(function (y) { return [y, 'beside ' + y]; })).forEach(function (o) { var b = el('button', ha === o[0] ? 'on' : '', o[1]); b.type = 'button'; b.onclick = function () { S.sub.hovAnalog = o[0]; render(); }; row1.appendChild(b); });
       body.appendChild(row1);
       plot(body, function (w, h) { return chartHovmoller(HV, w, h, { metric: hm, analog: ha || null }); });
       var cur = HV.current || {}, lastRow = (cur[hm] || [])[(cur.months || []).length - 1] || [], mx = -Infinity, mj = -1;
@@ -8440,7 +8443,8 @@
     var lab = el('span', 'mono', SC.months[S.animI]); lab.style.cssText = 'align-self:center;font-size:12px;min-width:56px';
     rng.oninput = function () { animStop(); bPlay.textContent = '▶ play'; bPlay.className = ''; S.animI = +rng.value; lab.textContent = SC.months[S.animI]; S.pw = 0; redrawPlot(); };
     row.appendChild(rng); row.appendChild(lab); row.appendChild(el('span', 'seg-gap', ''));
-    [['', 'this event alone']].concat(Object.keys((S.HV || {}).analogs || {}).sort().map(function (y) { return [y, 'beside ' + y]; })).forEach(function (o) { var b = el('button', ha === o[0] ? 'on' : '', o[1]); b.type = 'button'; b.onclick = function () { animStop(); S.sub.animAnalog = o[0]; render(); }; row.appendChild(b); });
+    yearsCtl();
+    [['', 'this event alone']].concat(hovYears((S.HV || {}).analogs).map(function (y) { return [y, 'beside ' + y]; })).forEach(function (o) { var b = el('button', ha === o[0] ? 'on' : '', o[1]); b.type = 'button'; b.onclick = function () { animStop(); S.sub.animAnalog = o[0]; render(); }; row.appendChild(b); });
     body.appendChild(row);
     plot(body, function (w, h) {
       var i = S.animI, ym = SC.months[i], cur = { title: 'This event · ' + ym, cols: SC.labels, rows: SC.levels, get: function (a, b) { return SC.anom[i][b][a]; }, d20: SC.d20[i], d20clim: SC.d20_clim[i], legendNote: 'GODAS, monthly', vmax: 10 };

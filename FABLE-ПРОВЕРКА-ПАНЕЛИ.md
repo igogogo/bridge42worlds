@@ -888,3 +888,15 @@ monotony.json ~250 КБ); Shape → amplitude по режиму. (6) `air.py` la
 шести сценах: Against analogues, Weekly vs strongest, Fuel drive, Shape of the rise, Layers,
 Since onset. Осталось из плана: (1) боксы OISST по всем годам (ERDDAP), (4) GODAS 1980–2025,
 (5) радианс — просьба к сборщику.
+
+**24.09, GODAS 1980–2025 (Fable).** Пункт 4 плана: `subsurface.py --backfill` — годовые разрезы
+по экватору (±2°, 26 уровней, 130°E–80°W, 12 месяцев) кэшируются в `subsurface/godas/<год>.json`
+(~0,37 МБ/год; 46 лет за ~15 минут, по 15–23 с на год через OPeNDAP PSL, не взятых нет);
+`_godas_year` читает кэш, в сеть ходит только за отсутствующим. Индекс тепла 0–300 м, Ховмёллер и
+`sections-<год>.json` построены по всем 12 годам начала Эль-Ниньо (EVENT_YEARS в subsurface.py),
+hovmoller.json вырос до ~1 МБ; восемь новых sections-файлов добавлены в выкладку. На Ocean →
+Heat on the move и Reanalysis section/motion выбор события фильтруется переключателем годов
+(`hovYears`: сильнейшие — четыре, иначе все 12), кнопки «compare with» стоят и там. Проверено:
+«beside 2009» рисует Ховмёллер и подгружает разрезы. Осталось: боксы OISST по всем годам, когда
+оживёт coastwatch ERDDAP (сегодня лежит), и радианс — просьба к сборщику. Записка о годах
+сравнения — в памяти проекта (enso-years-compare).
