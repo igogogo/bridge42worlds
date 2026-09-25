@@ -17,7 +17,7 @@
 
   var T = {
     fresh: 'fresh', stale: 'stale',
-    tabs: { brief: 'Briefing', verdict: 'Verdict', phase: 'Phase change', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Now', ocean: 'Ocean', radiance: 'Satellite', models: 'Models', track: 'Track record', weather: 'Weather', globe: 'Globe', air: 'Air & fuel', charge: 'Fuel drive', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long term', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
+    tabs: { brief: 'Briefing', verdict: 'Verdict', phase: 'Phase change', overview: 'Overview', news: 'News', research: 'Research', mentions: 'Mentions', now: 'Now', ocean: 'Ocean', radiance: 'Satellite', models: 'Models', track: 'Track record', weather: 'Weather', globe: 'Globe', air: 'Air & fuel', charge: 'Fuel drive', regimes: 'Regimes', trend: 'Dynamics', regions: 'Regions', food: 'Food', planet: 'Long term', how: 'Method', refs: 'References', chain: 'Data chain', ops: 'Ops', about: 'About' },
     tabHelp: {
       brief: 'The entry point: what is happening, what the data show, what to expect and when, the risks already showing, regions and food, what to watch — in plain words, with a link to every number.',
       phase: 'The one question the rest of the panel does not ask: is this a very large swing of the system we know, or the system itself changing. '
@@ -36,6 +36,7 @@
       track: 'How the forecasts themselves have done since 2002: the error by lead time year by year, '
         + 'against what a forecast that just says \u201cnormal\u201d would score, the past El Ni\u00f1o events '
         + 'replayed as they were forecast at the time, and how this event is being called right now.',
+      regimes: 'Regimes: how stuck the northern-hemisphere circulation is — how many days a 500 hPa pattern lives, and where the flow is blocked — against the same days of every year since 1948.',
       weather: 'The weather side of the same data: cities against their forecasts, the land boxes, rain, '
         + 'mountain ice, fires and water \u2014 the things a person feels, gathered in one place.',
       globe: 'The sphere as a place to look: measured layers painted onto the planet \u2014 sea surface, deep '
@@ -83,6 +84,7 @@
       'models/plume': 'All models\' seasonal forecasts, the live-model centre, where we stand in the season.', 'models/stack': 'The last three issues, one under the other, against the same reality.', 'models/scoreboard': 'Each model against the official value it forecast.', 'models/breakdown': 'How many models fell below reality, issue by issue; the chronic ones.', 'models/revisions': 'How each model moved its peak between issues.',
       'charge/events': 'Every El Niño year since 1980 on the same 24-month calendar: the warm water volume and the upper 300 m temperature, this event heavy.', 'charge/rate': 'The first derivative (change over three months) by calendar month, this year against past events, and this year’s second derivative as bars.', 'charge/path': 'The year ahead as scenarios: today’s level carried on by the shape of each past event, their median and range, and by today’s momentum with its fading.',
       'radiance/events': 'Six El Ni\u00f1o years since 2003 on one infrared instrument, by day of the year, each against the background of the non-event years; common-days switch for comparing events with each other.',
+      'regimes/lifetime': 'How many days a 500 hPa pattern over the northern hemisphere lives before it has changed by half, day by day and against the same days of every year since 1948.', 'regimes/blocking': 'Where the flow is blocked, longitude by day for the last four months, and the share of blocked longitudes against past years.',
       'air/coupling': 'The three atmospheric signs that the ocean and the air are coupled.', 'air/fuel': 'The warm water volume under the equator: the fuel gauge and its lead.', 'air/layers': 'The four satellite floors of the atmosphere and their delay.', 'air/wind': 'Daily zonal wind over the western Pacific and the westerly bursts.', 'air/mjo': 'The Madden–Julian Oscillation: phase and amplitude.', 'air/indices': 'MEI, the Indian Ocean Dipole and RONI next to our coupling score.',
       'trend/sst_nino34': 'Niño 3.4 daily: 400 days, the band of all years, the 14-day forecast, where past events went from here.', 'trend/sst_world': 'The world ocean, daily.', 'trend/t2_world': 'Land and ocean, daily.', 'trend/index': 'Our risk index by update, and the comparable core against past events.', 'trend/months': 'Thirteen months of the three series with their ranks.', 'trend/background': 'Ocean heat content and the energy imbalance: the state of the whole system.',
       'regions/table': 'Every region by season and scenario, with food vulnerability and what to do.', 'regions/place': 'One region at a time; the Gulf with its own measurements.',
@@ -2408,7 +2410,7 @@
        рамкой, потом промежуток, потом чтение (брифинг, новости, упоминания, вердикт), ещё
        промежуток, потом последствия (еда, регионы). Research ушёл в служебную строку к методу
        и ссылкам. Порядок задан здесь явно, а не порядком ключей T.tabs. */
-    var GROUPS = [['overview', 'now', 'ocean', 'radiance', 'models', 'track', 'trend', 'air', 'charge', 'weather', 'globe', 'planet'], ['brief', 'news', 'mentions', 'verdict', 'phase'], ['food', 'regions']];
+    var GROUPS = [['overview', 'now', 'ocean', 'radiance', 'models', 'track', 'trend', 'air', 'charge', 'regimes', 'weather', 'globe', 'planet'], ['brief', 'news', 'mentions', 'verdict', 'phase'], ['food', 'regions']];
     var SVC_ORDER = ['research', 'how', 'refs', 'chain', 'ops', 'about'];
     var DATA_TABS = GROUPS[0];
     GROUPS.forEach(function (g, gi) { if (gi) list.push(['_gap' + gi, '']); g.forEach(function (k) { if (T.tabs[k]) list.push([k, T.tabs[k]]); }); });
@@ -5683,6 +5685,65 @@
       body.appendChild(kp3);
     }
     body.appendChild(el('div', 'cap', esc(C.note || '') + ' Built ' + esc(C.built || '') + ' on the assessment of ' + esc(C.assessed_stamp || '') + '.'));
+  }
+
+  /* РЕЖИМЫ ЦИРКУЛЯЦИИ (владелец 25.09: «упорядоченность системы по давлению: погода застывает
+     надолго, циклон завис, смена паттерна раз в неделю-две»). Данные — regimes.json
+     (tools/enso/regimes.py на кэше regimes_fetch.py): время жизни картины Z500 и блокинг. */
+  function regimesHead() {
+    var G = S.RG || {}, L = G.lifetime || {}, B = G.blocking || {};
+    if (!G.built || !L.now) return 'Regimes: how long a pressure pattern lives, and where the flow is blocked';
+    var nw = L.now || {};
+    return 'A 500 hPa pattern over the northern hemisphere now lives about ' + fnum(nw.tau_median, 1, false) + ' days (' + (L.rank_tau_desc ? 'rank ' + L.rank_tau_desc + (L.now_adjusted ? '–' + L.now_adjusted.rank_tau_desc : '') + ' of ' + L.of + ' years for these ' + G.window_days + ' days, median ' + fnum(L.median_years, 1, false) : '') + '); ' + Math.round((nw.block_share || 0) * 100) + ' % of longitudes blocked' + (B.rank_share_desc ? ', rank ' + B.rank_share_desc + ' of ' + B.of : '');
+  }
+  function viewRegimes() {
+    var G = S.RG || {}, k = S.sub.regimes || 'lifetime';
+    var body = stageShell(regimesHead(), [segBtn('regimes', 'lifetime', 'Pattern lifetime', 'lifetime'), segBtn('regimes', 'blocking', 'Blocking', 'lifetime')]);
+    if (!G.built) { body.appendChild(el('div', 'note', 'This layer is not built yet; it comes with the next update.')); return; }
+    yearsCtl();
+    var L = G.lifetime || {}, B = G.blocking || {}, cy = String(G.last || '').slice(0, 4);
+    var doyLab = []; for (var q = 0; q < 366; q++) { var dt2 = new Date(Date.UTC(2000, 0, 1) + q * 864e5); doyLab.push(MON3[dt2.getUTCMonth()] + (dt2.getUTCDate() === 1 ? '' : '')); }
+    function curveLines(C, digits) {
+      var lines = [{ name: cy, key: 'now', color: 'var(--text)', w: 2.6, y: (C[cy] || []).map(function (v) { return fin(v) ? v : NaN; }) }];
+      yrsPick(Object.keys(C)).forEach(function (y) { var st2 = isStrong(y); lines.push({ name: y, key: y, color: st2 ? 'var(--a' + y + ')' : 'var(--soft)', w: st2 ? 1.6 : .8, op: st2 ? 1 : (yrsMode() === 'all' ? .22 : .45), dash: st2 ? '' : '3 3', y: (C[y] || []).map(function (v) { return fin(v) ? v : NaN; }) }); });
+      return lines;
+    }
+    var xs = []; for (var i2 = 0; i2 < 366; i2++) xs.push(i2);
+    if (k === 'lifetime') {
+      var mz = el('div', 'mosaic tall'); body.appendChild(mz);
+      plot(mz, function (w, h) { return chartSeriesSimple({ title: 'Pattern lifetime, days (30-day mean): how many days until today’s 500 hPa anomaly map has changed by half — this year against ' + yrsLabel() + ' on the same days of the year', x: xs, xlab: doyLab, digits: 1, unit: ' d', zero: true, lines: curveLines(L.curves || {}) }, w, h); });
+      plot(mz, function (w, h) { return chartSeriesSimple({ title: 'The last ' + (L.dates || []).length + ' days: lifetime day by day (bars) — long bars are days when the pattern held, short ones when it broke', x: (L.dates || []).map(function (d, i) { return i; }), xlab: (L.dates || []).map(function (d) { return d.slice(5); }), y: (L.tau || []).map(function (v) { return fin(v) ? v : NaN; }), digits: 1, unit: ' d', bars: true, zero: true, hiLast: true }, w, h); });
+      var nw = L.now || {}, by = L.by_year || {};
+      var kp = el('div', 'kpis');
+      kp.innerHTML =
+        '<div class="kpi"><div class="kn">pattern lifetime, last ' + G.window_days + ' days</div><div class="kv">' + fnum(nw.tau_median, 1, false) + '<small> days, median</small></div><div class="km">days until the anomaly map correlates below ' + G.r_half + ' with itself; ' + (L.rank_tau_desc ? 'rank ' + L.rank_tau_desc + ' of ' + L.of + ' years from the longest-lived, median of the years ' + fnum(L.median_years, 1, false) + ' days' : '') + '; the slowest tenth of days ' + fnum(nw.tau_p90, 1, false) + ' days' + (L.now_adjusted ? '. These days are on GFS analyses; the seam check says the reanalysis would read about ' + fnum(L.now_adjusted.tau_median, 2, false) + ' days, rank ' + L.now_adjusted.rank_tau_desc + ' of ' + L.of : '') + '</div>' + kmeta(null, 'our count on NCEP/NCAR reanalysis and GFS analyses, 500 hPa, 30–80°N', G.last) + '</div>' +
+        '<div class="kpi"><div class="kn">the strongest events, same days</div><div class="kv" style="font-size:15px">' + (G.strong || []).map(function (y) { return y + ' ' + fnum(((by[String(y)] || {}).tau_median), 1, false); }).join(' · ') + '</div><div class="km">median lifetime in days over the same ' + G.window_days + ' days of those years; a longer life means the weather stood still longer</div>' + kmeta(null, 'our count on NCEP/NCAR reanalysis', G.last) + '</div>' +
+        '<div class="kpi"><div class="kn">what the number is</div><div class="kv">0.5<small> correlation</small></div><div class="km">every day the 500 hPa anomaly map (to the 1991–2020 normal of that calendar day) is correlated with itself 1, 2, … 20 days back, weighted by area; the lifetime is the first lag below 0.5. Capped at 20 days. A description of the flow, not a forecast</div>' + kmeta(null, 'method', G.built) + '</div>';
+      body.appendChild(kp);
+    } else {
+      var lons = B.lons || [], strip = B.strip || [], dts = B.dates || [];
+      plot(body, function (W, H) {
+        var Lp = 46, Rp = 14, Tp = topPad(W), Bt = 30, pw = W - Lp - Rp, ph = H - Tp - Bt, n = strip.length, m = lons.length;
+        var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText('Blocking, day by day: each row a day (latest at the bottom), each column a longitude; a dark cell is a blocked longitude by the Tibaldi–Moltemi index. Vertical stripes are blocks that stood still', W - Lp - Rp, 11) + '</text>';
+        var cw = pw / m, rh = ph / Math.max(1, n);
+        for (var r = 0; r < n; r++) { var row = strip[r]; for (var c = 0; c < m; c++) if (row.charAt(c) === '1') s += '<rect x="' + (Lp + c * cw).toFixed(1) + '" y="' + (Tp + r * rh).toFixed(1) + '" width="' + (cw + .3).toFixed(1) + '" height="' + (rh + .3).toFixed(1) + '" style="fill:var(--nino)" opacity=".85"/>'; }
+        for (var c2 = 0; c2 < m; c2 += 12) s += '<text x="' + (Lp + c2 * cw).toFixed(0) + '" y="' + (H - 10) + '" text-anchor="middle">' + (lons[c2] <= 180 ? lons[c2] + '°E' : (360 - lons[c2]) + '°W') + '</text>';
+        for (var r2 = 0; r2 < n; r2 += 30) s += '<text x="' + (Lp - 5) + '" y="' + (Tp + r2 * rh + 4).toFixed(0) + '" text-anchor="end" font-size="9">' + esc(dts[r2].slice(5)) + '</text>';
+        s += '<text x="' + (Lp - 5) + '" y="' + (Tp + (n - 1) * rh + 4).toFixed(0) + '" text-anchor="end" font-size="9" style="fill:var(--text)">' + esc((dts[n - 1] || '').slice(5)) + '</text>';
+        return s + '</svg>';
+      });
+      plot(body, function (w, h) { return chartSeriesSimple({ title: 'Share of longitudes blocked (30-day mean): this year against ' + yrsLabel() + ' on the same days of the year', x: xs, xlab: doyLab, digits: 2, zero: true, lines: curveLines(B.curves || {}).map(function (l) { l.y = l.y.map(function (v) { return fin(v) ? v * 100 : NaN; }); return l; }), unit: ' %' }, w, h); });
+      var nwb = (L.now || {}), eps = B.episodes || [];
+      var kp2 = el('div', 'kpis');
+      kp2.innerHTML =
+        '<div class="kpi"><div class="kn">blocked longitudes, last ' + G.window_days + ' days</div><div class="kv">' + Math.round((nwb.block_share || 0) * 100) + '<small> %</small></div><div class="km">' + (B.rank_share_desc ? 'rank ' + B.rank_share_desc + ' of ' + B.of + ' years from the most blocked, median of the years ' + Math.round((B.median_years || 0) * 100) + ' %' : '') + '; blocked = southern gradient of 500 hPa height positive and northern gradient steeper than −10 m per degree (Tibaldi–Moltemi, 40/60/80°N with ±5° variants)</div>' + kmeta(null, 'our count on NCEP/NCAR reanalysis and GFS analyses', G.last) + '</div>' +
+        '<div class="kpi"><div class="kn">blocks that stood ' + 5 + ' days or longer, last ' + (B.dates || []).length + ' days</div><div class="kv">' + eps.length + '</div><div class="km">' + (eps.length ? eps.slice(0, 6).map(function (e) { return esc(e.sector) + ' ' + e.days + ' d (' + esc(e.start.slice(5)) + '–' + esc(e.end.slice(5)) + ')'; }).join('; ') : 'none') + '</div>' + kmeta(null, 'our count', G.last) + '</div>';
+      body.appendChild(kp2);
+    }
+    var SC = G.seam_check;
+    body.appendChild(el('div', 'cap', esc(G.note || '') + ' Record ' + esc(G.first || '') + ' … ' + esc(G.last || '') + (G.sources && G.sources.seam ? '; ' + esc((G.warnings || {}).seam || '') : '') +
+      (SC && !SC.error ? ' Seam check on ' + SC.days + ' days where both sources exist: lifetime ' + fnum(SC.tau_gfs, 2, false) + ' d on GFS against ' + fnum(SC.tau_r1, 2, false) + ' d on the reanalysis (median difference ' + fnum(SC.tau_diff, 2) + ' d, correlation ' + fnum(SC.tau_corr, 2, false) + '); blocked share ' + Math.round(SC.block_gfs * 100) + ' % against ' + Math.round(SC.block_r1 * 100) + ' %.' : '') +
+      ' ' + esc((G.warnings || {}).resolution || '') + ' Built ' + esc(G.built || '') + '.'));
   }
 
   function viewTrend() {
@@ -9757,6 +9818,8 @@
      кнопки нет: пустая карточка хуже её отсутствия. */
   var PLAIN = {
     "air/coupling": {"title": "Is the air answering the ocean?", "what": "Five monthly readings of Pacific pressure, cloud and wind, put on one picture to show whether the atmosphere is behaving the way it does during an El Niño.", "see": "Five lines over the last five years: pressure across the Pacific, the cloud tower over the date line, and the trade wind in the western, central and eastern Pacific. Each is drawn not in its own units but in steps of its usual swing, so they share one scale; a dashed line sits at minus half a step, and below that line we count a sign as in place. The count in the heading is taken on three of the five — pressure, cloud and the western trade wind — and the cards below cover four of them, each with its latest value, its three-month average and whether it counts as in place.", "special": "The sea can be warm while the air ignores it, and this is where the panel keeps its own count of whether the air has answered. When these signs fade, the long-distance effects that carry the event to other people's weather and harvests fade with them.", "src": "NOAA PSL monthly series: the pressure index, the heat radiated to space at the date line, and the trade wind low down at 850 hPa; one new value a month"},
+    "regimes/lifetime": {"title": "How long a pattern lives", "what": "A measure of how stuck the weather is: the number of days until today’s pressure pattern over the northern hemisphere has changed by half.", "see": "The left chart is the 30-day mean lifetime through the year, this year heavy against the years chosen with the switch; the right chart is the last four months day by day, long bars for days when the pattern held, short ones when it broke. Cards give the median over the last 90 days with its rank among all years on the same days, the same number for the four strongest El Niño years, and the definition.", "special": "It is computed on the 500 hPa height field, not on temperature, because the height field is the circulation itself and temperature only follows it. A pattern that lives long is what a person feels as weather that has frozen — sunny for weeks, or the same cyclone sitting still. Capped at 20 days; a description, not a forecast.", "src": "NCEP/NCAR reanalysis 1 (2.5°, daily, since 1948) from PSL, GFS 00Z analyses from the NOAA open archive after the reanalysis file ends; our count"},
+    "regimes/blocking": {"title": "Where the flow is blocked", "what": "The classic blocking index: longitudes where the westerly flow at 500 hPa is interrupted by a standing high, day by day.", "see": "The strip shows the last four months as rows (latest at the bottom) and longitudes as columns; a dark cell is a blocked longitude, and a vertical stripe is a block that stood still for days or weeks. Below it, the share of blocked longitudes as a 30-day mean through the year against the chosen years. Cards give the share over the last 90 days with its rank, and the list of blocks that stood five days or longer with their sector and dates.", "special": "The rule is Tibaldi and Moltemi’s from 1990, with the three latitude variants they used, so the numbers can be set beside the literature. At 2.5° and one field a day the index sees only large, slow blocks, which is what the question is about.", "src": "NCEP/NCAR reanalysis 1 and GFS analyses, our count"},
     "charge/events": {"title": "Is the fuel still being added?", "what": "Every El Niño year since 1980 laid on the same calendar, so you can see whether the warm water under the equator was still growing or already shrinking at this month of the year — and where this event stands.", "see": "Two charts on the same 24-month calendar, January of the event year to December of the next: the warm water volume above, the upper 300 m temperature below. This event is the heavy line ending in a blinking dot; the four strongest events are in colour, the other El Niño years faint and dashed. Cards give the level and its rank for this month, the change over three months and its rank, how many past events were already falling by now, and the same for the temperature; the table lists every year with its value, three-month change, acceleration, the month its volume peaked and whether it was rising or falling by this month.", "special": "The point is not the level, which the Fuel scene already shows, but the direction: at this month of the calendar most past events had turned to spending their charge, and this one is still adding to it. That is a first derivative that has not changed sign, and the scene says so with the count of years rather than with an adjective.", "src": "NOAA PMEL warm water volume and T300, monthly since 1980; our count over the El Niño years of the NOAA CPC list"},
     "charge/rate": {"title": "Rate and acceleration", "what": "How fast the fuel is being added or spent, month by month, and whether that rate is itself slowing.", "see": "The upper chart is the change over three months by calendar month of the event year, this year heavy against every past El Niño year: above zero the fuel is being added, below zero it is being spent. The lower bars are this year’s change of that change — the second derivative — negative when the rise is fading. Cards give both numbers with the rank for this month, and the same rate for the upper 300 m temperature.", "special": "A negative second derivative is not a fall: the fuel can keep rising while the rise fades. The sign to watch is the first derivative crossing zero, which in past events came before the surface peak by about the lead measured on our own data.", "src": "NOAA PMEL, our differences on the monthly series"},
     "charge/path": {"title": "The year ahead as scenarios", "what": "Where the fuel goes from today’s level if it follows the shape of each past event, and if today’s monthly rise simply carries on while fading at its current pace.", "see": "From the point marked now, dashed lines carry today’s level along the shape of each past El Niño year (the four strongest in colour), the heavy line is their median and the thin dashed lines the 10–90 % range; the ochre line is the momentum scenario — today’s rise per month continued with today’s change of that rise, a parabola. Cards give the median level in three and six months, when the momentum scenario turns, and what the measured lead means for the surface index.", "special": "None of this is a model forecast: the shapes are past events added to today’s level, the momentum line is arithmetic on the last six months. It is here because the question — how long can the charge keep growing — is exactly what past shapes and today’s fading answer differently, and the reader should see both.", "src": "NOAA PMEL, our arithmetic; the lead from our own lag fit of the volume against Niño 3.4"},
@@ -10716,6 +10779,7 @@
     else if (S.view === 'about') viewAbout();
     else if (S.view === 'trend') viewTrend();
     else if (S.view === 'charge') viewCharge();
+    else if (S.view === 'regimes') viewRegimes();
     else if (S.view === 'food') viewFood();
     else if (S.view === 'how') viewHow();
     else if (S.view === 'research') viewResearch();
@@ -11027,11 +11091,12 @@
     get('/data/enso/monotony.json').catch(function () { return {}; }),
     get('/data/enso/charge.json').catch(function () { return {}; }),
     get('/data/enso/years.json').catch(function () { return {}; }),
-    get('/data/enso/radiance-events.json').catch(function () { return {}; })])
+    get('/data/enso/radiance-events.json').catch(function () { return {}; }),
+    get('/data/enso/regimes.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
       fixRiskTitles(r[0]);                    // парные риски: «world ocean:» / «land+ocean:» читались как дубли (владелец 09.09)
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}; S.LY = r[30] || {}   /* история прогнозов, облака, «кто выбивается» (15.09), обход раскладки (16.09) */; S.FU = r[31] || {};   /* биржевые котировки (18.09) */ S.RP = r[32] || {};   /* 65 мест радианса (18.09) */ S.RV = r[33] || {}; S.VP = r[34] || {};   /* реки и водяной пар (18.09) */ S.MO = r[35] || {};   /* характер роста (19.09) */ S.CH = r[36] || {};   /* заряд топлива (22.09) */ S.YA = r[37] || {};   /* годы для сравнения (23.09) */ S.RE = r[38] || {};   /* шесть событий по дню года, радианс (24.09) */
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}; S.LY = r[30] || {}   /* история прогнозов, облака, «кто выбивается» (15.09), обход раскладки (16.09) */; S.FU = r[31] || {};   /* биржевые котировки (18.09) */ S.RP = r[32] || {};   /* 65 мест радианса (18.09) */ S.RV = r[33] || {}; S.VP = r[34] || {};   /* реки и водяной пар (18.09) */ S.MO = r[35] || {};   /* характер роста (19.09) */ S.CH = r[36] || {};   /* заряд топлива (22.09) */ S.YA = r[37] || {};   /* годы для сравнения (23.09) */ S.RE = r[38] || {};   /* шесть событий по дню года, радианс (24.09) */ S.RG = r[39] || {};   /* режимы циркуляции (25.09) */
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');
