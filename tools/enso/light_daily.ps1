@@ -27,7 +27,7 @@ Say "=== rivers and water vapour (before the run: hydro reads them)"
 & $py -u vapour.py 2>&1 | Out-File $log -Append -Encoding utf8
 
 Say "=== light run"
-& $py -u refresh.py --light 2>&1 | Out-File $log -Append -Encoding utf8
+& $py -u refresh.py --light --chain 2>&1 | Out-File $log -Append -Encoding utf8
 if ($LASTEXITCODE -ne 0) { Say "light run failed, code $LASTEXITCODE"; exit 1 }
 
 Say "=== long record (planet.py)"

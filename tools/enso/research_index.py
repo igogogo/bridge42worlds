@@ -68,7 +68,10 @@ def js_dict(name, text):
     if i < 0:
         return {}
     i = text.find("{", i)
-    depth, j, instr, esc, quote = 0, i, False, False, ""
+    # КОММЕНТАРИИ ВЫРЕЗАЮТСЯ ЗДЕСЬ ЖЕ (28.09): 17.09 в KPI_PLAIN появился /* … */, и с тех пор разбор
+    # молча отдавал пустоту — вектор панели собирался без человеческих пояснений к показателям.
+    # Вне строки «/* … */» и «// …» до конца строки пропускаются; внутри строки (адреса https://) — нет.
+    depth, j, instr, esc, quote, keep = 0, i, False, False, "", []
     while j < len(text):
         c = text[j]
         if instr:
@@ -78,6 +81,14 @@ def js_dict(name, text):
                 esc = True
             elif c == quote:
                 instr = False
+        elif c == "/" and text[j + 1:j + 2] == "*":
+            k = text.find("*/", j + 2)
+            j = len(text) if k < 0 else k + 2
+            continue
+        elif c == "/" and text[j + 1:j + 2] == "/":
+            k = text.find("\n", j)
+            j = len(text) if k < 0 else k
+            continue
         elif c in "'\"":
             instr, quote = True, c
         elif c == "{":
@@ -85,9 +96,11 @@ def js_dict(name, text):
         elif c == "}":
             depth -= 1
             if depth == 0:
+                keep.append(c)
                 break
+        keep.append(c)
         j += 1
-    body = text[i:j + 1]
+    body = "".join(keep)
     try:
         import json5                                        # если вдруг стоит
         return json5.loads(body)

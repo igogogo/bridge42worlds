@@ -3,7 +3,8 @@
 
     python refresh.py            # с сетью
     python refresh.py --cached   # без сети, из последних удачных копий
-    python refresh.py --light    # лёгкий прогон: правила без модели → fresh.json (свежее, не разобранное)
+    python refresh.py --light --bare   # только разбор без модели → fresh.json; лёгкий прогон ЦЕЛИКОМ —
+                                       # tools/enso/light_daily.ps1 (она зовёт refresh.py --light --chain)
 
 Каждый прогон оставляет снимок в data/snapshots/<штамп>.json, и следующий прогон
 рассказывает, что изменилось: сколько прибавил Niño 3.4, появились ли новые дни,
@@ -492,6 +493,16 @@ def with_links():
 
 
 if __name__ == "__main__":
+    # ЛЁГКИЙ ПРОГОН — ЭТО ЦЕПОЧКА, А НЕ ЭТОТ ФАЙЛ (28.09). Владелец: «лёгкий прогон — это обновление
+    # последних данных всех». Голый refresh.py --light пересчитывает разбор и производные от latest, а
+    # Long term (planet.py), реки, пар, осадки, города, пожары, котировки, режимы остаются вчерашними:
+    # 22.09 так стояли котировки на 21.09, 28.09 — дневной океан на Long term на 24.09 при источнике на 26.09.
+    # Обёртка light_daily.ps1 зовёт с --chain; один разбор без цепочки — только осознанно, с --bare.
+    if "--light" in sys.argv and not ({"--chain", "--bare"} & set(sys.argv)):
+        print("refresh.py --light отдельно обновляет только разбор, а не все данные панели.\n"
+              "  лёгкий прогон целиком: powershell -NoProfile -ExecutionPolicy Bypass -File tools\\enso\\light_daily.ps1\n"
+              "  только разбор, без остальных слоёв: python refresh.py --light --bare")
+        sys.exit(2)
     if "--links" in sys.argv:
         with_links()
     else:

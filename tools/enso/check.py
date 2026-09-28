@@ -372,7 +372,7 @@ def check_independent(D):
         print(f"  fresh.json: прогон {F.get('stamp')} против разбора {F.get('assessed_stamp')} "
               f"({'совпадает' if same else 'УСТАРЕЛ'}); триггеров {len(F.get('triggers') or [])}; {F.get('summary', '')[:120]}")
         if not same:
-            flag("fresh.json", "свежий слой считан против другого разбора: повторить python refresh.py --light")
+            flag("fresh.json", "свежий слой считан против другого разбора: повторить лёгкий прогон: tools\\enso\\light_daily.ps1")
     O = load("ops.json", None)
     if isinstance(O, dict):
         runs = O.get("runs") or []

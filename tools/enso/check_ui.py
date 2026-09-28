@@ -89,12 +89,18 @@ DAILY_OUT = {
     "phase.py": "phase.json",
     "agent_state.py": "agent-state.json", "stats_layer.py": "stats.json",
     "check_layout.py": "layout-check.json",
+    # скрипт может писать НЕСКОЛЬКО файлов: planet.py кладёт ещё planet-regions.json (пояса ERA5), и до
+    # 28.09 выкладка его не везла — в таблице стоял только первый выход, правило молчало
+    "planet.py": ["planet.json", "planet-regions.json"], "mentions.py": "mentions.json",
+    "spectral.py": "spectral.json", "regions_daily.py": "regions-daily.json",
+    "globe_data.py": "globe.json", "radiance_take.py": "radiance.json",
 }
 fresh = set(PUB.FRESH_FILES)
 for scr in sorted(set(re.findall(r"-u (\w+\.py)", ps1))):
-    out = DAILY_OUT.get(scr)
-    if out and ("data/enso/" + out) not in fresh:
-        bad.append(f"D the daily wrapper rebuilds {out} but it is not in publish.FRESH_FILES")
+    outs = DAILY_OUT.get(scr) or []
+    for out in ([outs] if isinstance(outs, str) else outs):
+        if ("data/enso/" + out) not in fresh:
+            bad.append(f"D the daily wrapper rebuilds {out} but it is not in publish.FRESH_FILES")
 
 # J. ПРОИЗВОДНЫЙ СЛОЙ НЕ МОЖЕТ БЫТЬ СТАРШЕ РАЗБОРА, РЯДОМ С КОТОРЫМ ОН ПОКАЗАН (17.09).
 # Каждый из этих файлов читает latest.json и считает своё поверх. Собранный раньше разбора,
