@@ -25,7 +25,8 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 HERE = Path(__file__).resolve().parent
 DATA = HERE.parents[1] / "data" / "enso"
 CYR = re.compile(r"[Ѐ-ӿ]")
-NUM = re.compile(r"[-+−]?\d+(?:\.\d+)?")
+# знак — только когда перед ним не буква и не цифра: «Upper-300m», «3-month» — дефис, не минус (28.09)
+NUM = re.compile(r"(?:(?<![A-Za-z0-9])[-+−])?\d+(?:\.\d+)?")
 DASH = re.compile(r"[^ \n]—[^ \n]")          # длинное тире без пробелов
 SUSP = []
 
@@ -98,7 +99,8 @@ def check_verdict(D):
             j = json.loads(Path(f).read_text(encoding="utf-8"))
         except Exception:                                        # noqa: BLE001
             continue
-        if (j.get("facts") or {}).get("stamp") == D.get("stamp"):
+        # дайджест принадлежит разбору моделью (assessed_stamp); с 20.09 лёгкий прогон переписывает latest (28.09)
+        if (j.get("facts") or {}).get("stamp") in (D.get("assessed_stamp"), D.get("stamp")):
             facts = j["facts"]
             print(f"  дайджест: {Path(f).name} (штамп совпал)")
             break

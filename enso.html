@@ -728,6 +728,15 @@
   @media (max-width:760px){ .gl-s{display:none} .gl-a{width:64px;flex:0 0 64px} }
   .globe-box{flex:1 1 60%;min-height:340px;position:relative;overflow:hidden;border-radius:10px;background:radial-gradient(circle at 50% 50%, #151a24 0, #0f1219 70%)}
   .globe-wait{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--soft);font-family:var(--mono);font-size:12px}
+  /* срез под экватором на шаре (28.09): проигрыватель сверху слева, подпись цвета — над легендой */
+  .cur-ctl{position:absolute;top:10px;left:12px;z-index:6;display:flex;gap:8px;align-items:center;background:rgba(20,24,32,.78);padding:6px 10px;border-radius:10px;font-family:var(--mono);font-size:11.5px;color:#eee;max-width:calc(100% - 24px)}
+  .cur-ctl button{background:none;border:1px solid rgba(242,233,216,.5);color:#f2e9d8;border-radius:999px;width:26px;height:26px;cursor:pointer;font-size:11px;line-height:1;padding:0}
+  .cur-ctl button:hover{border-color:#e8c56c;color:#e8c56c}
+  .cur-ctl input[type=range]{width:150px;accent-color:#e8c56c}
+  .cur-ctl .cur-date{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cur-leg{position:absolute;left:10px;bottom:44px;z-index:6;font-size:11px;color:#eee;background:rgba(20,24,32,.75);padding:5px 9px;border-radius:8px;max-width:min(560px,calc(100% - 20px));line-height:1.45}
+  .cur-leg .cur-bar{display:inline-block;width:110px;height:8px;vertical-align:middle;margin:0 6px 0 0;border-radius:4px}
+  @media (max-width:760px){ .cur-ctl input[type=range]{width:90px} .cur-leg{bottom:52px;font-size:10px} }
   .globe-legend{position:absolute;left:10px;bottom:8px;font-size:11px;color:#eee;background:rgba(20,24,32,.75);padding:5px 9px;border-radius:8px;max-width:70%;line-height:1.4}
   .globe-legend .gl-bar{display:inline-block;width:70px;height:8px;vertical-align:middle;margin:0 6px;border-radius:4px;background:linear-gradient(90deg,#6e96d2,#2b3446 50%,#e08a5c)}
   .back-go.bright.on{background:var(--ochre);color:var(--surface)}
@@ -1483,7 +1492,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=935f250b4e"></script>
+<script src="/js/enso.js?v=17591e2431"></script>
 <script src="/js/sitenav.js?v=6ab7008c58"></script>
 </body>
 </html>

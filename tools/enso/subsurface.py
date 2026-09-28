@@ -104,6 +104,7 @@ OS_DAP = "https://dods.ndbc.noaa.gov/thredds/dodsC/oceansites/DATA/{st}/{f}"
 # Отбрасываются 4 (плохие) и 9 (нет данных).
 OS_GOOD = (0, 1, 2, 3)
 ERDDAP_LAG_OK = 2                   # на сколько суток суточный набор может отставать без второго канала
+DAILY_WIN = 60                      # суток в файле суточных профилей для среза на шаре (28.09)
 
 
 def _retry(fn, *a, tries=3, **k):
@@ -337,6 +338,7 @@ def tao(today=None, verbose=False):
     today = today or date.today()
     t0 = (today - timedelta(days=RECENT_DAYS)).isoformat()
     st_out, section = [], {"lons": [], "labels": [], "anom": [], "temp": []}
+    daily_store = []                                             # суточные аномалии по станциям (28.09)
     for name, lon in STATIONS:
         cl = _load(CACHE / f"clim_{name}.json", {})
         err = None
@@ -412,10 +414,40 @@ def tao(today=None, verbose=False):
             jw = int(np.nanargmax(np.where(np.isfinite(an), an, -99)))
             rec["warmest_anom"] = {"value": round(float(an[jw]), 2), "depth": DEPTHS[jw]}
         st_out.append(rec)
+        # СУТОЧНЫЕ ПРОФИЛИ ДЛЯ СРЕЗА НА ШАРЕ (владелец 28.09: «по буям в 3D — что мы собираем,
+        # красиво»): аномалия каждого дня по стандартным глубинам к норме этого же буя, в десятых
+        # долях градуса, и глубина изотермы 20 °C; последние DAILY_WIN суток.
+        if clim:
+            cd = np.array([[np.nan if v is None else v for v in row] for row in clim], float)
+            w0 = (date.fromisoformat(last) - timedelta(days=DAILY_WIN - 1)).isoformat()
+            dd = {}
+            for d in days:
+                if d < w0:
+                    continue
+                a = profs[d] - cd[_doy(date.fromisoformat(d))]
+                z20 = d20(profs[d])
+                dd[d] = {"anom": [None if not np.isfinite(v) else int(round(float(v) * 10)) for v in a],
+                         "d20": None if z20 is None else round(float(z20), 1)}
+            daily_store.append({"name": name, "label": lon_label(lon), "lon": lon, "days": dd,
+                                "channel": "oceansites" if (src_os or {}).get("days") else "erddap"})
         section["lons"].append(lon); section["labels"].append(lon_label(lon))
         section["anom"].append(rec["anom"]); section["temp"].append(rec["temp"])
         if verbose:
             print(f"  {name}: до {last}, D20 {d_now} м (было {d_back}), max anom {rec.get('warmest_anom')}")
+    if daily_store:
+        all_days = sorted({d for s in daily_store for d in s["days"]})
+        w0 = (date.fromisoformat(all_days[-1]) - timedelta(days=DAILY_WIN - 1)).isoformat()
+        dates = [d for d in all_days if d >= w0]
+        doc = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"), "depths": DEPTHS, "dates": dates,
+               "unit": "tenths of °C: anomaly against each mooring's own 1991–2020 norm for the day; d20 — depth of the 20 °C isotherm, m",
+               "stations": [{"name": s["name"], "label": s["label"], "lon": s["lon"], "channel": s["channel"],
+                             "anom": [(s["days"].get(d) or {}).get("anom") for d in dates],
+                             "d20": [(s["days"].get(d) or {}).get("d20") for d in dates]}
+                            for s in sorted(daily_store, key=lambda s: s["lon"])]}
+        try:
+            safeio.write_text(ROOT / "tao-daily.json", json.dumps(doc, ensure_ascii=False, separators=(",", ":")))
+        except Exception as e:                                   # noqa: BLE001
+            print("  tao-daily.json не записан:", str(e)[:100])
     good = [s for s in st_out if s.get("anom")]
     out = {"stations": st_out, "section": section, "depths": DEPTHS,
            "n_live": len([s for s in st_out if not s.get("error")]),

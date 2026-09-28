@@ -73,7 +73,10 @@ def diff_against(prev, cur):
     for k in sorted(cm.keys() - pm.keys()):
         out.append(f"New risk: {cm[k]}.")
     for k in sorted(pm.keys() - cm.keys()):
-        out.append(f"Risk cleared: {pm[k]}.")
+        # СНЯТЫЙ РИСК — ЯВНО «БОЛЬШЕ НЕ ВЕРНО» (28.09): заголовок бывает утверждением («The moorings did
+        # not answer…»), и строка «Risk cleared: <заголовок>» читалась моделью как факт сегодняшнего дня —
+        # вердикт 28.09 написал, что буи молчат, в прогоне, где они ответили.
+        out.append(f"Risk cleared (this statement no longer holds): \u201c{pm[k]}\u201d.")
     if len(out) == 0:
         out.append("Nothing changed.")
     return out
@@ -258,7 +261,17 @@ def main(fetch=True, llm=True, light=False):
     elif prev and prev.get("summary") and not prev["summary"].get("error"):
         # Прогон без модели (правка кода, офлайн): прежнее саммари модели ценнее сводки
         # правилами — оставляем его с пометкой, из какого снимка оно взято.
-        cur["summary"] = dict(prev["summary"], reused_from=prev.get("stamp"))
+        # ИЗ latest.json, А НЕ ИЗ СНИМКА (28.09): в latest лежат правки проверяющего и отметка проверки
+        # к этому же разбору; снимок их не знает, и первый же лёгкий прогон их стирал.
+        base = prev
+        try:
+            _L = json.loads((ROOT / "latest.json").read_text(encoding="utf-8"))
+            if (_L.get("summary") or {}).get("model") and not (_L.get("summary") or {}).get("error") \
+                    and (_L.get("assessed_stamp") or _L.get("stamp")) == (prev.get("assessed_stamp") or prev.get("stamp")):
+                base = _L
+        except Exception:                                        # noqa: BLE001
+            pass
+        cur["summary"] = dict(base["summary"], reused_from=prev.get("stamp"))
     else:
         # Без модели страница всё равно не пустая: сводка правилами с пометкой (ТЗ, п. 7).
         cur["summary"] = dict(SM.fallback_text(cur), error="run without the model", stamp=cur["stamp"])

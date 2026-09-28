@@ -4249,9 +4249,9 @@
        чтобы читатель понимал, что одна модель пишет, а другая сверяет (владелец 06.09). */
     var wPay = { name: CREW.writer + ' \u2014 writes', def: 'Writes this verdict from the numbers on this page: the rules extract the facts, the model puts them into words. It may choose what to talk about; it may not invent a number or change its meaning.', src: 'our pipeline', date: (S.D.stamp || '').slice(0, 10) };
     var st0 = reviewState();
-    var cPay = { name: CREW.supervisor + ' \u2014 checks', def: 'Reads every claim of the verdict against the same numbers, sharpens the wording where it is unclear, and writes nothing of its own. ' + (st0.done ? 'This verdict has been checked.' : 'This verdict has not been checked yet: ' + st0.why + '.'), src: 'our pipeline', date: st0.done ? (st0.rv.at || '').slice(0, 10) : (S.D.stamp || '').slice(0, 10) };
+    var cPay = { name: supervisorName() + ' \u2014 checks', def: 'Reads every claim of the verdict against the same numbers, sharpens the wording where it is unclear, and writes nothing of its own. ' + (st0.done ? 'This verdict has been checked.' : 'This verdict has not been checked yet: ' + st0.why + '.'), src: 'our pipeline', date: st0.done ? (st0.rv.at || '').slice(0, 10) : (S.D.stamp || '').slice(0, 10) };
     lead.innerHTML = '<b>' + (sm.error ? 'By rules, without the model'
-      : '<span data-src="' + esc(JSON.stringify(wPay)) + '">' + esc(sm.model || 'model') + '</span> writes, <span data-src="' + esc(JSON.stringify(cPay)) + '">' + esc(CREW.supervisor) + '</span> checks') + ':</b> ' + mark(sm.verdict || '');
+      : '<span data-src="' + esc(JSON.stringify(wPay)) + '">' + esc(sm.model || 'model') + '</span> writes, <span data-src="' + esc(JSON.stringify(cPay)) + '">' + esc(supervisorName()) + '</span> checks') + ':</b> ' + mark(sm.verdict || '');
     body.appendChild(lead);
 
     var rows = [
@@ -4277,13 +4277,13 @@
       '<div class="kpi"><div class="kn">verdicts stored</div><div class="kv" style="font-size:17px">' + ((J.verdicts || []).length) + '</div><div class="km">only the ones that actually changed</div>' + kmeta(null, 'our own record', (J.built || '').slice(0, 10)) + '</div>' +
       '<div class="kpi"><div class="kn">who wrote and who checked</div>' +
       '<div class="kv crew"><span class="cr-r">writes</span> ' + esc(sm.model || 'rules') + '<br>' +
-      '<span class="cr-r">checks</span> ' + esc(CREW.supervisor) + '</div>' +
+      '<span class="cr-r">checks</span> ' + esc(supervisorName()) + '</div>' +
       '<div class="km">' + (sm.error ? esc(sm.error)
         : 'The rules pull the facts, ' + esc(CREW.writer) + ' puts them into words and may not invent a number; ' +
-          esc(CREW.supervisor) + ' reads every claim against the same numbers and sharpens the wording. ' + reviewLine()) +
+          esc(supervisorName()) + ' reads every claim against the same numbers and sharpens the wording. ' + reviewLine()) +
       '</div>' + kmeta(null, 'our pipeline', (D.stamp || '').slice(0, 10)) + '</div>';
     body.appendChild(kp);
-    body.appendChild(el('div', 'cap', 'The verdict is an interpretation of our own numbers by a language model, not a source. Every claim in it can be checked on the scene it came from \u2014 the buttons above lead there. Two models work here and neither measures anything: ' + esc(CREW.writer) + ' writes the verdict from the numbers, ' + esc(CREW.supervisor) + ' checks it against the same numbers before it is published and says so above. When the writing model is unavailable, the same block is filled by rules and says so.'));
+    body.appendChild(el('div', 'cap', 'The verdict is an interpretation of our own numbers by a language model, not a source. Every claim in it can be checked on the scene it came from \u2014 the buttons above lead there. Two models work here and neither measures anything: ' + esc(CREW.writer) + ' writes the verdict from the numbers, ' + esc(supervisorName()) + ' checks it against the same numbers before it is published and says so above. When the writing model is unavailable, the same block is filled by rules and says so.'));
   }
 
   function viewNow() {
@@ -6392,7 +6392,15 @@
 
 
   // ---------------------------------------------------------------- Ocean (экспертиза 04.09)
-  var CREW = { writer: 'DeepSeek V4 Pro', supervisor: 'Fable (Claude)' };
+  var CREW = { writer: 'DeepSeek V4 Pro', supervisor: 'Claude' };
+  /* КТО ПРОВЕРИЛ — ИЗ ОТМЕТКИ, А НЕ ЗАШИТО (28.09): роль проверяющего зовётся Fable, а модели меняются;
+     подпись обязана называть ту, что действительно проверяла этот вердикт. */
+  function supervisorName() {
+    var m = ((((S.D || {}).summary || {}).review) || {}).model || '';
+    if (/opus[-_ ]?5[-_.]5/i.test(m)) return 'Claude Opus 5.5';
+    if (/fable/i.test(m)) return 'Claude Fable 5.1';
+    return m ? 'Claude' : 'Claude';
+  }
 
   /* Строка «свежее, не разобранное» на карточке состояния: что пришло после разбора и сколько
      триггеров пересечено. Только когда слой считан против текущего разбора и новее его. */
@@ -6416,7 +6424,8 @@
   function reviewState() {
     var D = S.D || {}, rv = ((D.summary || {}).review) || null;
     if (!rv || !rv.model) return { done: false, why: 'not checked yet' };
-    if (rv.stamp && D.stamp && rv.stamp !== D.stamp)
+    var vstamp = D.assessed_stamp || D.stamp;                // отметка — к разбору моделью, не к лёгкому прогону (28.09)
+    if (rv.stamp && vstamp && rv.stamp !== vstamp)
       return { done: false, stale: true, rv: rv, why: 'the verdict was rewritten after the last check (' + rv.at + ')' };
     return { done: true, rv: rv };
   }
@@ -8170,7 +8179,7 @@
      Кадры — полные разрезы GODAS из hovmoller.json (это событие) и sections-<год>.json (прошлые,
      грузятся по требованию). Таймер двигает кадр и перерисовывает график; уход со сцены
      останавливает таймер (render). */
-  function animStop() { if (S.animT) { clearInterval(S.animT); S.animT = null; } }
+  function animStop() { if (S.animT) { clearInterval(S.animT); S.animT = null; } if (S._curT) { clearInterval(S._curT); S._curT = null; } }
   function sectionFrames() { return ((S.HV || {}).sections) || null; }
   /* ══ МЕЖДУ ЗОНАМИ ═══════════════════════════════════════════════════════════════════
      Владелец 15.09: «хочу увидеть статистику по нашим выделенным годам: переток тепла между
@@ -9588,8 +9597,8 @@
       line: 'Niño zones, our land boxes and the satellite boxes',
       src: 'NOAA weekly indices, ERA5 land boxes, our satellite count' },
     { id: 'moorings', kind: 'over', name: 'Moorings on the equator', on: false, alpha: 1,
-      line: 'TAO buoys: the pillar is the warmest layer under each one',
-      src: 'TAO/TRITON array, five-day means' },
+      line: 'TAO buoys: the slice under the equator hanging from the equator like the moorings themselves — surface on top, 300 m below, coloured by the anomaly, the 20 °C isotherm in white, a bead for every sensor; ▶ plays the last 60 days',
+      src: 'TAO/TRITON array: PMEL daily set and the moorings’ real-time OceanSITES files, our daily means' },
     { id: 'places', kind: 'over', name: 'Named places (microwave)', on: false, alpha: 1,
       line: 'the sixty-five places of the radiance collector: the pillar is this year against 2018–2025 in sigmas, red above, blue below, grey for the lattice',
       src: 'ATMS on NOAA-20, 2.5° grid, via the radiance collector' },
@@ -9721,6 +9730,267 @@
     if (S._globeInst && S.GL) S._globeInst.globeImageUrl(globeTextureLayered(S.GL));
   }
 
+  /* ══ СРЕЗ ПОД ЭКВАТОРОМ НА ШАРЕ (владелец 28.09: «по буям на 3D-представлении что мы собираем
+     как-то красиво») ═══════════════════════════════════════════════════════════════════
+     Разрез вынут из океана и поставлен стеной на экватор, 160°E–92°W: верх стены — поверхность
+     моря, подножие — 300 м (глубина растянута: 300 м — это треть радиуса шара). Цвет — аномалия
+     температуры к норме каждого буя, между буями линейно; белая лента — изотерма 20 °C; тросы с
+     бусинами — сами буи и их датчики, бусина на каждую глубину, измеренную в этот день; поплавок
+     наверху — буй, золотой, если данные свежие. Кнопка проигрывает последние 60 суток: видно,
+     как тёплый язык идёт на восток к Южной Америке. Всё строится конструкторами three.js из
+     самого шара — globe.gl не выставляет THREE наружу, а вторая копия библиотеки не нужна. */
+  /* ГЕОМЕТРИЯ «ЮБКИ» (28.09): стена, поставленная «по высоте» на экватор, лежала в плоскости экватора
+     и выглядела кольцом Сатурна. Разрез свисает от экватора вдоль оси Земли — к югу, как трос буя:
+     верхняя кромка чуть над поверхностью (a0 радиуса), 300 м — на len радиусов ниже. */
+  var CUR = { lon0: 160, lon1: 268, dlon: 2, dz: 10, zmax: 300, a0: 0.02, len: 0.34 };
+  function curtainAlt(z) { return CUR.a0; }
+  var ANOM_STOPS = [[-6, [0.24, 0.45, 0.74]], [-2, [0.47, 0.63, 0.84]], [0, [0.40, 0.44, 0.52]], [2, [0.90, 0.69, 0.38]],
+                    [5, [0.89, 0.45, 0.26]], [8, [0.78, 0.22, 0.18]], [11, [1.0, 0.86, 0.52]]];
+  function anomRGB(v) {
+    if (!fin(v)) return null;
+    var A = ANOM_STOPS;
+    if (v <= A[0][0]) return A[0][1];
+    for (var i = 1; i < A.length; i++) if (v <= A[i][0]) {
+      var a = A[i - 1], b = A[i], f = (v - a[0]) / (b[0] - a[0]);
+      return [a[1][0] + (b[1][0] - a[1][0]) * f, a[1][1] + (b[1][1] - a[1][1]) * f, a[1][2] + (b[1][2] - a[1][2]) * f];
+    }
+    return A[A.length - 1][1];
+  }
+  /* three.js с r152 считает цвета вершин линейными: sRGB-значения палитры иначе выцветают (28.09) */
+  function lin(c) { return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
+  function anomGradientCss() {
+    var lo = ANOM_STOPS[0][0], hi = ANOM_STOPS[ANOM_STOPS.length - 1][0];
+    return 'linear-gradient(90deg,' + ANOM_STOPS.map(function (s) {
+      return 'rgb(' + s[1].map(function (c) { return Math.round(c * 255); }).join(',') + ') ' + Math.round((s[0] - lo) / (hi - lo) * 100) + '%';
+    }).join(',') + ')';
+  }
+  function taoDaily() {
+    if (S.TD) return Promise.resolve(S.TD);
+    return get('/data/enso/tao-daily.json').then(function (d) { S.TD = d; return d; });
+  }
+  /* Конструкторы three.js — у объектов самого шара: сфера даёт Mesh, SphereGeometry и через
+     прототип BufferGeometry, её вершины — BufferAttribute, материал — MeshBasicMaterial. */
+  function threeKit(g) {
+    var kit = {};
+    g.scene().traverse(function (o) {
+      if (o.isMesh) {
+        if (!kit.Mesh) kit.Mesh = o.constructor;
+        var geo = o.geometry;
+        if (geo && geo.type === 'SphereGeometry' && !kit.Sphere) kit.Sphere = geo.constructor;
+        if (geo && !kit.BufferGeometry) {
+          var pr = Object.getPrototypeOf(geo.constructor.prototype);
+          kit.BufferGeometry = geo.type === 'BufferGeometry' ? geo.constructor : (pr && pr.constructor);
+        }
+        if (geo && geo.attributes && geo.attributes.position && !kit.Attr) kit.Attr = geo.attributes.position.constructor;
+        var mt = o.material;
+        if (mt && mt.type === 'MeshBasicMaterial' && !kit.Basic) kit.Basic = mt.constructor;
+        if (mt && /^Mesh(Lambert|Phong|Standard)Material$/.test(mt.type) && !kit.Lit) kit.Lit = mt.constructor;
+      }
+    });
+    /* ГРУППУ НЕ БРАТЬ (28.09): первой «группой» в сцене оказывался сам объект шара globe.gl, и new от
+       его конструктора строил второй шар без текстуры на том же радиусе — чёрный, в полосу. Корень
+       среза — сама сетка стены, остальное висит на ней детьми. */
+    kit.Mat = kit.Basic || kit.Lit;
+    return (kit.Mesh && kit.BufferGeometry && kit.Attr && kit.Mat) ? kit : null;
+  }
+  function interpLon(xs, ys, L) {
+    var a = -1, b = -1;
+    for (var i = 0; i < xs.length; i++) {
+      if (!fin(ys[i])) continue;
+      if (xs[i] <= L) a = i;
+      if (xs[i] >= L && b < 0) b = i;
+    }
+    if (a >= 0 && b >= 0) return a === b ? ys[a] : ys[a] + (ys[b] - ys[a]) * (L - xs[a]) / (xs[b] - xs[a]);
+    if (a >= 0 && L - xs[a] <= 5) return ys[a];
+    if (b >= 0 && xs[b] - L <= 5) return ys[b];
+    return NaN;
+  }
+  function curtainField(TD, fi) {
+    var st = TD.stations || [], deps = TD.depths || [];
+    var nx = Math.round((CUR.lon1 - CUR.lon0) / CUR.dlon) + 1, nz = Math.round(CUR.zmax / CUR.dz) + 1;
+    var lons = st.map(function (s) { return s.lon; });
+    var prof = st.map(function (s) {
+      var a = (s.anom || [])[fi]; if (!a) return null;
+      var xs = [], ys = [];
+      deps.forEach(function (d, k) { if (a[k] != null) { xs.push(d); ys.push(a[k] / 10); } });
+      return xs.length ? { xs: xs, ys: ys } : null;
+    });
+    function atDepth(p, z) {
+      if (!p) return NaN;
+      var xs = p.xs, ys = p.ys;
+      if (z <= xs[0]) return z >= xs[0] - 15 ? ys[0] : NaN;
+      if (z >= xs[xs.length - 1]) return z - xs[xs.length - 1] <= 25 ? ys[ys.length - 1] : NaN;
+      for (var i = 1; i < xs.length; i++) if (z <= xs[i]) return ys[i - 1] + (ys[i] - ys[i - 1]) * (z - xs[i - 1]) / (xs[i] - xs[i - 1]);
+      return NaN;
+    }
+    var grid = [];
+    for (var iz = 0; iz < nz; iz++) {
+      var z = iz * CUR.dz, cv = prof.map(function (p) { return atDepth(p, z); }), row = [];
+      for (var ix = 0; ix < nx; ix++) row.push(interpLon(lons, cv, CUR.lon0 + ix * CUR.dlon));
+      grid.push(row);
+    }
+    var dv = st.map(function (s) { var v = (s.d20 || [])[fi]; return fin(v) ? v : NaN; }), d20 = [];
+    for (var j = 0; j < nx; j++) d20.push(interpLon(lons, dv, CUR.lon0 + j * CUR.dlon));
+    return { grid: grid, d20: d20, nx: nx, nz: nz };
+  }
+  function buildCurtain(g, kit, TD, fi) {
+    var nx = Math.round((CUR.lon1 - CUR.lon0) / CUR.dlon) + 1, nz = Math.round(CUR.zmax / CUR.dz) + 1;
+    var np = g.getCoords(90, 0, 0), nl = Math.sqrt(np.x * np.x + np.y * np.y + np.z * np.z) || 1;
+    var NV = { x: np.x / nl, y: np.y / nl, z: np.z / nl };            // ось Земли, к северу
+    /* точка разреза: долгота, глубина z (м; отрицательная — над водой), вынос off наружу (доли радиуса) */
+    function P(lon, z, off) {
+      var e = g.getCoords(0, lon > 180 ? lon - 360 : lon, CUR.a0 + (off || 0)), s = z / CUR.zmax * CUR.len * nl;
+      return [e.x - NV.x * s, e.y - NV.y * s, e.z - NV.z * s];
+    }
+    // стена: сетка долгота × глубина, цвет по вершинам (RGBA — нет данных = почти прозрачно)
+    var pos = new Float32Array(nx * nz * 3), idx = [];
+    for (var iz = 0; iz < nz; iz++) for (var ix = 0; ix < nx; ix++) {
+      var q = P(CUR.lon0 + ix * CUR.dlon, iz * CUR.dz); pos.set(q, (iz * nx + ix) * 3);
+    }
+    for (var a = 0; a < nz - 1; a++) for (var b = 0; b < nx - 1; b++) { var v0 = a * nx + b; idx.push(v0, v0 + nx, v0 + 1, v0 + 1, v0 + nx, v0 + nx + 1); }
+    var wg = new kit.BufferGeometry();
+    wg.setAttribute('position', new kit.Attr(pos, 3)); wg.setAttribute('color', new kit.Attr(new Float32Array(nx * nz * 4), 4)); wg.setIndex(idx);
+    var grp = new kit.Mesh(wg, new kit.Mat({ vertexColors: true, transparent: true, opacity: 0.94, side: 2, depthWrite: false }));   // корень среза
+    // белая лента — изотерма 20 °C
+    var didx = [];
+    for (var c = 0; c < nx - 1; c++) { var u = c * 2; didx.push(u, u + 1, u + 2, u + 2, u + 1, u + 3); }
+    var dg = new kit.BufferGeometry();
+    dg.setAttribute('position', new kit.Attr(new Float32Array(nx * 2 * 3), 3)); dg.setIndex(didx);
+    var d20m = new kit.Mesh(dg, new kit.Mat({ color: 0xf2e9d8, transparent: true, opacity: 0.95, side: 2, depthWrite: false }));
+    grp.add(d20m);
+    // тросы, поплавки, бусины-датчики
+    var st = TD.stations || [], deps = TD.depths || [], beads = [], floats = [];
+    var spos = new Float32Array(st.length * 4 * 3), sidx = [];
+    st.forEach(function (s, i) {
+      var w = 0.14, off = 0.0035;
+      [P(s.lon - w, CUR.zmax + 8, off), P(s.lon + w, CUR.zmax + 8, off),
+       P(s.lon - w, -14, off), P(s.lon + w, -14, off)].forEach(function (q2, m) { spos.set(q2, (i * 4 + m) * 3); });
+      var o = i * 4; sidx.push(o, o + 1, o + 2, o + 2, o + 1, o + 3);
+      if (!kit.Sphere) return;
+      var fl = new kit.Mesh(new kit.Sphere(0.8, 16, 12), new kit.Mat({ color: 0xe8c56c }));
+      var fp = P(s.lon, -18, off); fl.position.set(fp[0], fp[1], fp[2]); grp.add(fl); floats.push({ m: fl, i: i });
+      deps.forEach(function (d, k) {
+        if (d > CUR.zmax) return;
+        var bm = new kit.Mesh(new kit.Sphere(0.42, 12, 8), new kit.Mat({ color: 0xffffff }));
+        var bp = P(s.lon, d, off + 0.004); bm.position.set(bp[0], bp[1], bp[2]); grp.add(bm);
+        beads.push({ m: bm, i: i, k: k });
+      });
+    });
+    var sg = new kit.BufferGeometry(); sg.setAttribute('position', new kit.Attr(spos, 3)); sg.setIndex(sidx);
+    grp.add(new kit.Mesh(sg, new kit.Mat({ color: 0xd9d4c7, transparent: true, opacity: 0.8, side: 2 })));
+    var nd = (TD.dates || []).length;
+    function update(f) {
+      var F = curtainField(TD, f), ca = wg.getAttribute('color').array;
+      for (var iz2 = 0; iz2 < nz; iz2++) for (var ix2 = 0; ix2 < nx; ix2++) {
+        var rgb = anomRGB(F.grid[iz2][ix2]), k2 = (iz2 * nx + ix2) * 4;
+        if (rgb) { ca[k2] = lin(rgb[0]); ca[k2 + 1] = lin(rgb[1]); ca[k2 + 2] = lin(rgb[2]); ca[k2 + 3] = 0.95; }
+        else { ca[k2] = lin(0.3); ca[k2 + 1] = lin(0.33); ca[k2 + 2] = lin(0.38); ca[k2 + 3] = 0.15; }
+      }
+      wg.getAttribute('color').needsUpdate = true;
+      // изотерма: пропуск на краю закрывается ближайшим измеренным столбцом, вся пропала — лента прячется
+      var zz = F.d20.slice(), any = zz.some(fin);
+      d20m.visible = any;
+      if (any) {
+        for (var c3 = 0; c3 < nx; c3++) if (!fin(zz[c3])) { for (var r = 1; r < nx; r++) { if (fin(zz[c3 - r])) { zz[c3] = zz[c3 - r]; break; } if (fin(zz[c3 + r])) { zz[c3] = zz[c3 + r]; break; } } }
+        var da = dg.getAttribute('position').array;
+        for (var c2 = 0; c2 < nx; c2++) {
+          var L2 = CUR.lon0 + c2 * CUR.dlon;
+          da.set(P(L2, Math.max(0, zz[c2] - 3), 0.0015), c2 * 6); da.set(P(L2, Math.min(CUR.zmax, zz[c2] + 3), 0.0015), c2 * 6 + 3);
+        }
+        dg.getAttribute('position').needsUpdate = true; dg.computeBoundingSphere();
+      }
+      beads.forEach(function (bd) {
+        var a2 = ((st[bd.i].anom || [])[f] || [])[bd.k], rgb2 = anomRGB(a2 == null ? NaN : a2 / 10);
+        bd.m.visible = !!rgb2;
+        if (rgb2) bd.m.material.color.setRGB(lin(Math.min(1, rgb2[0] * 1.12)), lin(Math.min(1, rgb2[1] * 1.12)), lin(Math.min(1, rgb2[2] * 1.12)));
+      });
+      floats.forEach(function (fo) {                              // поплавок золотой, если в этот день буй передал профиль
+        var has = !!((st[fo.i].anom || [])[f]);
+        fo.m.material.color.setHex(has ? 0xe8c56c : 0x7d828c);
+      });
+      return F;
+    }
+    update(fi);
+    return { group: grp, update: update, n: nd };
+  }
+  function mountCurtain(g, box) {
+    if (S._curT) { clearInterval(S._curT); S._curT = null; }
+    /* globe.gl собирает сцену на следующем такте: из кэша файл приходит раньше, чем появится сфера,
+       и конструкторов ещё не у кого взять. Ждём готовности сцены, до трёх секунд. */
+    function whenKit(tries) {
+      return new Promise(function (ok) {
+        (function poll(k) { var kt = box.isConnected ? threeKit(g) : null; if (kt || k <= 0 || !box.isConnected) ok(kt); else setTimeout(function () { poll(k - 1); }, 150); })(tries);
+      });
+    }
+    Promise.all([taoDaily(), whenKit(20)]).then(function (rr) {
+      var TD = rr[0], kit = rr[1];
+      if (!box.isConnected || !TD || !(TD.dates || []).length || !kit) return;
+      var n = TD.dates.length, fi = n - 1;
+      var C = buildCurtain(g, kit, TD, fi);
+      g.customLayerData([{ id: 'curtain' }]).customThreeObject(function () { return C.group; });
+      if (typeof g.customLayerLabel === 'function') g.customLayerLabel(function () {
+        return '<div style="font:12px/1.4 system-ui;padding:5px 7px;background:rgba(20,24,32,.92);color:#eee;border-radius:6px;max-width:300px"><b>The slice under the equator</b><br>' +
+          'Top edge: the sea surface; bottom edge: 300 m, drawn stretched. Colour: temperature against each mooring’s own normal; white band: the 20 °C isotherm; beads: the sensors on each mooring line.<br><small>' + esc(TD.dates[fi]) + ', TAO/TRITON</small></div>';
+      });
+      /* столбики-«самый тёплый слой» стена заменяет — они втыкались в неё */
+      g.pointsData((g.pointsData() || []).filter(function (p) { return !p.mooring; }));
+      var solo = !!box.closest && !!box.closest('.stage') && S.view === 'ocean';   // сцена буёв: срез — главное, рамки зон мешают
+      if (solo) g.polygonsData([]);
+      var keepLabs = (g.labelsData() || []).filter(function (l) { return solo ? l.mooring : true; }).map(function (l) {
+        if (!l.mooring) return l;
+        var c = {}; for (var kk in l) c[kk] = l[kk]; c.lat = 3.6; return c;          // над поплавками
+      });
+      g.labelsData(keepLabs);
+      function labAt(z) {                                  // точка разреза на глубине z — в широту и высоту шара
+        var r0 = 1 + CUR.a0, s0 = z / CUR.zmax * CUR.len;
+        return { lat: -Math.atan2(s0, r0) * 180 / Math.PI, alt: Math.sqrt(r0 * r0 + s0 * s0) - 1 };
+      }
+      var l0 = labAt(0), l1 = labAt(CUR.zmax), l2 = labAt(150);
+      g.labelsData(keepLabs.concat([
+        { lat: l0.lat + 1.2, lng: 156, alt: l0.alt, sz: 0.8, text: 'surface' },
+        { lat: l2.lat, lng: 156, alt: l2.alt, sz: 0.8, text: '150 m' },
+        { lat: l1.lat, lng: 156, alt: l1.alt, sz: 0.8, text: '300 m' }]));
+      var small = box.clientHeight < 440;                           // окно шара в три колонки или на телефоне
+      g.pointOfView({ lat: 8, lng: -150, altitude: small ? 2.15 : 1.6 }, 1200);
+      g.controls().autoRotate = false;                            // срез не уезжает за шар; вращать — мышью
+      if (solo) {
+        var gl0 = box.querySelector('.globe-legend'), sd0 = ((S.GL || {}).sst || {}).date || '';
+        if (gl0) gl0.innerHTML = small ? '<b>sea</b><span class="gl-bar"></span>\u00b13 \u00b0C, ' + esc(sd0)
+          : '<b>sea surface</b><span class="gl-bar"></span>\u22123 \u2026 +3 \u00b0C \u00b7 OISST anomaly ' + esc(sd0) + ' against 1971\u20132000 \u00b7 drag to turn, wheel to zoom, point at the slice';
+      }
+      var ctl = el('div', 'cur-ctl');
+      ctl.innerHTML = '<button type="button" class="cur-play" title="play the last ' + n + ' days">\u25B6</button>' +
+        '<input type="range" min="0" max="' + (n - 1) + '" value="' + fi + '" title="day">' +
+        '<span class="cur-date"></span>';
+      var leg = el('div', 'cur-leg');
+      if (small) leg.innerHTML = '<b>slice under the equator, 0\u2013300 m</b><br><span class="cur-bar" style="background:' + anomGradientCss() + '"></span>' +
+        ANOM_STOPS[0][0] + ' \u2026 +' + ANOM_STOPS[ANOM_STOPS.length - 1][0] + ' \u00b0C \u00b7 white: 20 \u00b0C isotherm';
+      else leg.innerHTML = '<b>the slice under the equator, 0\u2013300 m</b>, hanging from the equator like the moorings themselves: surface on top, deeper downward<br>' +
+        '<span class="cur-bar" style="background:' + anomGradientCss() + '"></span>' + ANOM_STOPS[0][0] + ' \u2026 +' + ANOM_STOPS[ANOM_STOPS.length - 1][0] + ' \u00b0C against each mooring\u2019s own normal \u00b7 white band: 20 \u00b0C isotherm \u00b7 beads: sensors, one per depth measured that day \u00b7 gold float: the buoy reported';
+      box.appendChild(ctl); box.appendChild(leg);
+      var btn = ctl.querySelector('.cur-play'), rng = ctl.querySelector('input'), lab = ctl.querySelector('.cur-date');
+      function warmestText(F) {
+        var best = null;
+        (TD.stations || []).forEach(function (s) { var a = (s.anom || [])[fi]; if (!a) return; a.forEach(function (v, k) { if (v != null && (!best || v > best.v)) best = { v: v, s: s, d: TD.depths[k] }; }); });
+        return best ? ' \u00b7 warmest +' + (best.v / 10).toFixed(1) + ' \u00b0C at ' + best.d + ' m, ' + best.s.label : '';
+      }
+      function show(f) { fi = f; var F = C.update(f); rng.value = f; lab.textContent = TD.dates[f] + warmestText(F); }
+      show(fi);
+      rng.addEventListener('input', function () { stop(); show(+rng.value); });
+      function stop() { if (S._curT) { clearInterval(S._curT); S._curT = null; } btn.textContent = '\u25B6'; }
+      btn.onclick = function () {
+        if (S._curT) { stop(); return; }
+        if (fi >= n - 1) show(0);
+        btn.textContent = '\u275A\u275A';
+        S._curT = setInterval(function () {
+          if (!box.isConnected) { stop(); return; }
+          if (fi >= n - 1) { stop(); return; }
+          show(fi + 1);
+        }, 160);
+      };
+    }).catch(function () { /* нет файла — остаются столбики */ });
+  }
+
   function mountGlobe(mode) {
     var body = document.querySelector('.stage-body'); if (!body) return;
     var plot = body.querySelector('.plot');
@@ -9761,13 +10031,13 @@
         .polygonAltitude(0.008)
         .polygonLabel(function (d) { return '<div style="font:12px/1.4 system-ui;padding:4px 6px;background:rgba(20,24,32,.9);color:#eee;border-radius:6px"><b>' + esc(d.b.label) + '</b><br>' + esc(d.b.text || '') + (d.b.date ? '<br><small>' + esc(d.b.date) + '</small>' : '') + '</div>'; })
         .labelsData(polys.map(function (b) { var lc = (b.lon[0] + b.lon[1]) / 2; if (lc > 180) lc -= 360; return { lat: (b.lat[0] + b.lat[1]) / 2, lng: lc, sz: 1.1, text: gl(b.label.replace(/^Satellite: /, '') + (fin(val(b)) ? '  ' + (mode === 'rain' ? val(b) + ' %' : fnum(val(b), 1) + (mode === 'radiance' ? ' %' : ' C')) : '')) }; })
-          .concat(mode === 'moorings' ? (G.moorings || []).map(function (m) { return { lat: m.lat + 1.2, lng: m.lon, sz: 0.7, text: gl((m.label || m.id || '').replace(/^TAO /, '') + (fin(m.value) ? '  ' + fnum(m.value, 1) + ' C at ' + m.depth + ' m' : '')) }; }) : []))
-        .labelSize(function (d) { return d.sz; }).labelColor(function () { return '#f2e9d8'; }).labelDotRadius(0).labelAltitude(0.012);
+          .concat(mode === 'moorings' ? (G.moorings || []).map(function (m) { return { lat: m.lat + 1.2, lng: m.lon, sz: 0.7, mooring: true, text: gl((m.label || m.id || '').replace(/^TAO /, '') + (fin(m.value) ? '  ' + fnum(m.value, 1) + ' C at ' + m.depth + ' m' : '')) }; }) : []))
+        .labelSize(function (d) { return d.sz; }).labelColor(function () { return '#f2e9d8'; }).labelDotRadius(0).labelAltitude(function (d) { return d.alt != null ? d.alt : 0.012; });
       /* ТОЧКИ НА ШАРЕ — ОДИН НАБОР. Буи и 65 мест радианса (владелец 18.09: «а я их на глобусе
          могу увидеть?») идут в одном pointsData: у каждой точки свои высота, цвет и подсказка. */
       var gpts = [];
       if (mode === 'moorings' || (mode === 'scene' && glOn('moorings'))) {
-        (G.moorings || []).forEach(function (m) { gpts.push({ lat: m.lat, lon: m.lon, alt: fin(m.value) ? 0.02 + m.value / 60 : 0.02, col: fin(m.value) ? '#D4735C' : '#888', r: 0.6, label: m.label, text: m.text, date: m.date }); });
+        (G.moorings || []).forEach(function (m) { gpts.push({ lat: m.lat, lon: m.lon, alt: fin(m.value) ? 0.02 + m.value / 60 : 0.02, col: fin(m.value) ? '#D4735C' : '#888', r: 0.6, label: m.label, text: m.text, date: m.date, mooring: true }); });
       }
       if (mode === 'radiance' || (mode === 'scene' && glOn('places'))) {
         var RPg = S.RP || {}, nodeG = S.sub.rpNode || 'A';
@@ -9799,6 +10069,7 @@
         '<span class="gl-bar"></span>−3 … +3 °C · drag to turn, wheel to zoom, point at a box' + (mode === 'moorings' ? '; pillars: warmest layer under each mooring' : '') + (mode === 'radiance' || (mode === 'scene' && glOn('places')) ? '; pillars: the 65 named places, height = this year against 2018\u20132025 in \u03c3, red above, blue below, grey lattice' : '');
       box.appendChild(leg);
       S._globeInst = g; window.B42Globe = g;   // наружу — для отладки из консоли
+      if (mode === 'moorings' || (mode === 'scene' && glOn('moorings'))) mountCurtain(g, box);   // срез под экватором (28.09)
     }).catch(function (e) { box.innerHTML = '<div class="note warn">The globe did not load: ' + esc(String(e.message || e)) + '. The flat view is one click away.</div>'; });
   }
 
@@ -9945,7 +10216,7 @@
     phase: { source: 'Three long records of the index itself (PSL monthly Ni\u00f1o 3.4 since 1948, NOAA CPC ONI since 1950, NOAA CPC weekly since 1981), the sea-to-air relation fitted by the satellite radiance collector on twenty-odd years of CrIS and AIRS, the three coupling signs from our own daily series, and NOAA warm water volume. The arithmetic is ours.',
       plain: 'The rest of the panel measures how big this event is. This page asks whether the rules themselves are still holding. A record is a position on the curve; a change of regime is the curve giving way. The reading is a judgement, not a measurement, and the rule that produced it is printed next to it.',
       tech: 'Memory is the lag-1 autocorrelation of each record inside a sliding window, after removing the seasonal cycle by month-of-year means and a slow component by a Gaussian filter; the trend across windows is a Kendall tau, reported both over the whole record and over its last third, with the count of non-overlapping windows beside it because overlapping windows inflate significance. The link is the residual of this year against the fitted sea-to-air relation, in units of its prediction error, evaluated separately for the season and year-to-date windows. The level is set by a written rule, not a formula.' },
-    verdict: { source: 'The verdict is written by DeepSeek V4 Pro from the numbers on this panel and checked by Claude (Fable) against the same numbers; nothing in it is typed by hand. The numbers come from the daily and weekly rows below.',
+    verdict: { source: 'The verdict is written by DeepSeek V4 Pro from the numbers on this panel and checked by Claude against the same numbers; nothing in it is typed by hand. The numbers come from the daily and weekly rows below.',
       plain: 'This is the machine’s summary of where the event stands today, in plain words: what is happening, whether it has turned, what to watch next and what we are not sure about. A second machine checks every number in it before it goes out.',
       tech: 'The model receives a digest of the panel’s state (series, ranks, records, detectors, model plume) and returns verdict, turning point, outlook, watch list, confidence and caveats; a review pass compares each number with the digest and edits wording only. Corrections to earlier verdicts stay in the history.' },
     overview: { source: 'Every tile is the same chart as on its own scene, drawn small from the same files; the strip on top repeats the headline numbers.',
