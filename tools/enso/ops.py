@@ -248,7 +248,10 @@ def sources_status(cur):
     for s_ in tao.get("stations") or []:
         ds = ((s_.get("d20_series") or {}).get("dates") or [])
         rc = s_.get("record") or {}
-        push(f"tao_{s_.get('name')}", f"TAO mooring {s_.get('label')}, daily temperature by depth", by_id.get("s_tao"),
+        os_ = s_.get("oceansites") or {}
+        ch = (f" (ERDDAP daily set to {s_.get('erddap_last')}, OceanSITES real-time {os_.get('from')} … {os_.get('to')})"
+              if os_.get("days") else "")                        # два канала буёв (28.09)
+        push(f"tao_{s_.get('name')}", f"TAO mooring {s_.get('label')}, daily temperature by depth{ch}", by_id.get("s_tao"),
              (rc.get("from") or (ds[0] if ds else None)), s_.get("last_date"), len(ds), stamp, not s_.get("error"), s_.get("error") or "", "modules")
     gd = (cur.get("subsurface") or {}).get("godas") or {}
     if gd:

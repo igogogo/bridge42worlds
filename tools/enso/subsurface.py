@@ -93,6 +93,88 @@ def _tao_rows(lon, t0, t1=None, timeout=120):
     return by
 
 
+OS_CAT = "https://dods.ndbc.noaa.gov/thredds/catalog/oceansites/DATA/{st}/catalog.xml"
+OS_DAP = "https://dods.ndbc.noaa.gov/thredds/dodsC/oceansites/DATA/{st}/{f}"
+# ФЛАГИ КАЧЕСТВА КАК У PMEL (28.09). Автоматический контроль реального времени ставит 3 («плохие, но
+# исправимые») на весь тёплый верхний слой восточных буёв: проверка по климатическому диапазону
+# срабатывает на само рекордное событие (125°W, 0–100 м: 28,4–29,3 °C, аномалия +11). Сверка на
+# общих днях 10.08–01.09: суточные средние OceanSITES с флагами 0–3 совпадают с суточным набором
+# PMEL на всех 2 700 общих значениях до сотой градуса (расхождение 0,00) — PMEL публикует их же;
+# с флагами 0–2 на 140°W, 125°W, 110°W, 95°W терялось 70–90 % значений, ровно тёплый слой.
+# Отбрасываются 4 (плохие) и 9 (нет данных).
+OS_GOOD = (0, 1, 2, 3)
+ERDDAP_LAG_OK = 2                   # на сколько суток суточный набор может отставать без второго канала
+
+
+def _retry(fn, *a, tries=3, **k):
+    """Повтор сетевого запроса (28.09): одна осечка сети (разрыв соединения, сбой DNS) выбила буй
+    95°W из разбора целиком, и «самая тёплая точка» переехала на соседний буй."""
+    import time as _t
+    last = None
+    for i in range(tries):
+        try:
+            return fn(*a, **k)
+        except Exception as e:                                   # noqa: BLE001
+            last = e
+            if i < tries - 1:
+                _t.sleep(5 + 10 * i)
+    raise last
+
+
+def _os_rows(name, t0, timeout=90):
+    """ВТОРОЙ КАНАЛ (28.09): реальные 10-минутные данные буя из OceanSITES (NDBC DODS) → суточные
+    средние по глубине с t0. Формат ответа тот же, что у _tao_rows: {дата: {глубина: °C}}; плюс имя
+    файла. Берётся последний по дате постановки файл *_R_TEMP_* станции."""
+    import re
+    import netCDF4
+    st = "T" + name.upper()
+    req = urllib.request.Request(OS_CAT.format(st=st), headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        cat = r.read().decode("utf-8", "replace")
+    names = [n for n in re.findall(r'name="([^"]+)"', cat) if "_R_TEMP_" in n and n.endswith(".nc")]
+    if not names:
+        return {}, None
+
+    def dep_date(n):
+        m = re.search(r"-(\d{8})_", n)
+        return m.group(1) if m else ""
+    f = max(names, key=lambda n: (dep_date(n), "10min" in n))
+    ds = netCDF4.Dataset(OS_DAP.format(st=st, f=f))
+    try:
+        tm = ds["TIME"]
+        tt = np.array(tm[:], float)
+        base = datetime(1950, 1, 1)
+        d0 = (datetime.fromisoformat(t0) - base).total_seconds() / 86400.0
+        idx = np.where(tt >= d0)[0]
+        if not len(idx):
+            return {}, f
+        i0 = int(idx[0])
+        depth = np.array(ds["DEPTH"][:], float)
+        temp = np.ma.filled(np.ma.masked_invalid(ds["TEMP"][i0:, :]), np.nan).astype(float)
+        qc = np.array(ds["TEMP_QC"][i0:, :]).astype(int) if "TEMP_QC" in ds.variables else np.zeros(temp.shape, int)
+        tsub = tt[i0:]
+    finally:
+        ds.close()
+    good = np.isin(qc, OS_GOOD) & np.isfinite(temp)
+    step = float(np.median(np.diff(tsub))) if len(tsub) > 1 else 1.0 / 144
+    n_min = max(1, int(0.5 / step))                 # не меньше половины суточных отсчётов
+    days = np.floor(tsub).astype(int)
+    by = {}
+    for dday in np.unique(days):
+        sel = days == dday
+        dstr = (base + timedelta(days=int(dday))).date().isoformat()
+        prof = {}
+        for j, dep in enumerate(depth):
+            if dep > 320:
+                continue
+            g = good[sel, j]
+            if g.sum() >= n_min:
+                prof[float(dep)] = float(temp[sel, j][g].mean())
+        if prof:
+            by[dstr] = prof
+    return by, f
+
+
 def _profile(prof):
     """Профиль на стандартных глубинах: линейная интерполяция только внутри измеренного."""
     ds = sorted(prof)
@@ -257,10 +339,28 @@ def tao(today=None, verbose=False):
     st_out, section = [], {"lons": [], "labels": [], "anom": [], "temp": []}
     for name, lon in STATIONS:
         cl = _load(CACHE / f"clim_{name}.json", {})
+        err = None
         try:
-            rows = _tao_rows(lon, t0)
+            rows = _retry(_tao_rows, lon, t0)
         except Exception as e:                                   # noqa: BLE001
-            st_out.append({"name": name, "lon": lon, "label": lon_label(lon), "error": str(e)[:120]})
+            rows, err = {}, str(e)[:120]
+        # ВТОРОЙ КАНАЛ (28.09): суточный набор ERDDAP встал 03.09, буи — нет. Где он отстаёт больше
+        # чем на ERDDAP_LAG_OK суток или не ответил, дни добираются из OceanSITES.
+        last_erd = max(rows) if rows else None
+        src_os = None
+        if not last_erd or (today - date.fromisoformat(last_erd)).days > ERDDAP_LAG_OK:
+            try:
+                os_rows, os_file = _retry(_os_rows, name, (date.fromisoformat(last_erd) + timedelta(days=1)).isoformat() if last_erd else t0)
+                added = sorted(d for d in os_rows if d not in rows and d >= t0)
+                for d in added:
+                    rows[d] = os_rows[d]
+                if added:
+                    src_os = {"file": os_file, "from": added[0], "to": added[-1], "days": len(added)}
+            except Exception as e2:                              # noqa: BLE001
+                src_os = {"error": str(e2)[:120]}
+        if not rows:
+            st_out.append({"name": name, "lon": lon, "label": lon_label(lon), "error": err or "no rows in the window",
+                           "oceansites": src_os})
             continue
         days = sorted(rows)
         profs = {d: _profile(rows[d]) for d in days}
@@ -296,6 +396,7 @@ def tao(today=None, verbose=False):
             if any(v is not None for v in vals):
                 d20_an[y] = vals
         rec = {"name": name, "lon": lon, "label": lon_label(lon), "last_date": last,
+               "erddap_last": last_erd, "oceansites": src_os,
                "days_stale": (today - date.fromisoformat(last)).days,
                "depths": DEPTHS,
                "temp": [None if not np.isfinite(v) else round(float(v), 2) for v in pr],
@@ -318,7 +419,11 @@ def tao(today=None, verbose=False):
     good = [s for s in st_out if s.get("anom")]
     out = {"stations": st_out, "section": section, "depths": DEPTHS,
            "n_live": len([s for s in st_out if not s.get("error")]),
-           "source": "TAO/TRITON moorings (NOAA PMEL) via CoastWatch ERDDAP, daily temperature by depth",
+           "source": ("TAO/TRITON moorings (NOAA PMEL): daily temperature by depth via ERDDAP; where that daily set lags, "
+                      "our daily means of the moorings' real-time 10-minute OceanSITES files (NDBC), quality flags 0–3 as in PMEL's own daily set"),
+           "channels": {"erddap_last": max([s.get("erddap_last") for s in st_out if s.get("erddap_last")] or [None]),
+                        "oceansites_stations": len([s for s in st_out if (s.get("oceansites") or {}).get("days")]),
+                        "oceansites_to": max([(s.get("oceansites") or {}).get("to") for s in st_out if (s.get("oceansites") or {}).get("to")] or [None])},
            "clim": f"own {CLIM_YEARS[0]}–{CLIM_YEARS[1]} climatology per mooring, by day of year and depth, 31-day smoothing",
            "note": ("Each mooring reports temperature at a dozen depths every day. The anomaly is against "
                     "that mooring's own thirty-year record for the same days of the year, so gaps in the "

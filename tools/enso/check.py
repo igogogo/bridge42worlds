@@ -364,7 +364,9 @@ def check_independent(D):
     # служебный слой: свежее против разобранного, журнал прогонов
     F = load("fresh.json", None)
     if isinstance(F, dict) and F.get("stamp"):
-        same = F.get("assessed_stamp") == D.get("stamp")
+        # с 20.09 лёгкий прогон пишет latest.json, а свежий слой сверяется с ПОСЛЕДНИМ РАЗБОРОМ МОДЕЛЬЮ
+        # (assessed_stamp в latest); сравнение со штампом latest давало ложное «устарел» (28.09)
+        same = F.get("assessed_stamp") == (D.get("assessed_stamp") or D.get("stamp"))
         print(f"  fresh.json: прогон {F.get('stamp')} против разбора {F.get('assessed_stamp')} "
               f"({'совпадает' if same else 'УСТАРЕЛ'}); триггеров {len(F.get('triggers') or [])}; {F.get('summary', '')[:120]}")
         if not same:
