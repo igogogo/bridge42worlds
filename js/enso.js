@@ -3349,9 +3349,48 @@
   function briefSpark(id, label, w) {
     var r = briefRisk(id); if (!r || !r.metric || !(r.metric.values || []).length) return '';
     var m = r.metric, v = m.values.filter(fin), last = v[v.length - 1];
-    return '<a class="br-sp" href="#risk/' + esc(id) + '"><span class="br-spl">' + esc(m.name || label) + '</span>' + spark(m, w || 210, 34) + '<span class="br-spv">' + fnum(last, m.unit === '°C' ? 1 : 2) + (m.unit ? ' ' + esc(m.unit) : '') + '</span></a>';
+    return '<a class="br-sp" href="#risk/' + esc(id) + '"><span class="br-spl">' + esc(m.name || label) + '</span>' + spark(m, w || 210, 34) + '<span class="br-spv">' + (m.unit === 'm' ? String(Math.round(last)) : fnum(last, m.unit === '°C' ? 1 : 2)) + (m.unit ? ' ' + esc(m.unit) : '') + '</span></a>';
   }
   function briefTiles(keys) { return '<div class="br-kpis">' + keys.map(function (k) { return jrec(k) ? rsKpiTile(k) : ''; }).join('') + '</div>'; }
+  /* ПРОВЕРКА FABLE 28.09: три фразы Briefing были зашиты в текст и разошлись с данными — «It is early
+     September» (на 28 сентября), «land and ocean … warmest for the date too» (серия рекордов 0, 16 из 30
+     дней), «every week warmer than …» (27.05 равенство с 2015). Теперь все три считаются из данных. */
+  function briefNow(D) {
+    var d = String(D.generated || D.stamp || '').slice(0, 10), y = +d.slice(0, 4), m = +d.slice(5, 7), day = +d.slice(8, 10);
+    var MON = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    if (!m || !day) return 'The peak, by every past example, comes in winter';
+    var when = 'It is ' + (day <= 10 ? 'early ' : day <= 20 ? 'mid-' : 'late ') + MON[m - 1];
+    var now = Date.UTC(y, m - 1, day), MONTH = 30.44 * 86400000;
+    var lo = Date.UTC(y, 10, 15), hiThis = Date.UTC(y, 1, 5), hiNext = Date.UTC(y + 1, 1, 5);
+    if (now >= lo || now <= hiThis) return when + ', inside the window where every past event of this strength peaked';
+    var ml = Math.round((lo - now) / MONTH), mh = Math.round((hiNext - now) / MONTH);
+    return when + ', so the past events leave ' + ml + ' to ' + mh + ' more months of growth as the normal course, not a surprise';
+  }
+  function briefLandOcean(W) {
+    var r = ((W || {}).t2_world || {}).records || {};
+    if (r.streak > 0) return 'land and ocean together are at their warmest for the date too.';
+    if (r.last30 > 0) return 'land and ocean together set records on ' + r.last30 + ' of the last 30 days, though not on the latest day.';
+    return 'land and ocean together are warm but not at a record for the date.';
+  }
+  function briefWeeks(NW, since) {
+    var ser = (NW || {}).series || [], an = (NW || {}).analog_series || {}, yrs = ['1997', '2015', '2023'];
+    if (!/^\d{4}-\d{2}-\d{2}/.test(String(since || ''))) since = null;
+    function doy(s) { var p = String(s).slice(5, 10).split('-'); return (+p[0]) * 31 + (+p[1]); }
+    var n = 0, below = 0;
+    ser.forEach(function (r) {
+      if ((since && r.date < since) || !fin(r.n34a)) return;
+      n++;
+      var d = doy(r.date), lost = yrs.some(function (yr) {
+        var best = null;
+        (an[yr] || []).forEach(function (x) { var dd = Math.abs(doy(x.date) - d); if (dd <= 3 && (best === null || dd < best.dd)) best = { dd: dd, v: x.n34a }; });
+        return !!(best && fin(best.v) && best.v > r.n34a);
+      });
+      if (lost) below++;
+    });
+    if (!n) return 'Since then it has stayed above the same weeks of 1997, 2015 and 2023.';
+    if (!below) return 'Since then every week has come in at or above the same week of 1997, 2015 and 2023.';
+    return 'Since then all but ' + below + ' of ' + n + ' weeks have come in above the same week of 1997, 2015 and 2023.';
+  }
   function viewBrief() {
     var D = S.D, N = D.nino34, NW = D.noaa, ONI = D.oni, sm = D.summary || {}, ls = ONI.last_season;
     var body = stageShell('Briefing: what is happening, what to watch, what comes next', []);
@@ -3360,6 +3399,7 @@
     var n34 = NW.latest.n34a, rank = N.all_years_rank, idx = D.risk_index, oni = ONI.current[ls];
     var W = D.watch || {}, sw = W.sst_world || {}, streak = (sw.records || {}).streak;
     var fuel = (D.air || {}).fuel || {}, IRI = D.iri || {}, bd = IRI.breakdown || {}, lastI = (bd.by_issue || [])[(bd.by_issue || []).length - 1] || {};
+    var ao = IRI.against_observed || {};                       // текущий выпуск против уже измеренной недели
     var brk = briefKpi(briefStat('break_sst_nino34'), 'most likely break'), shift = briefKpi(briefStat('break_sst_nino34'), 'shift of the mean');
     var pk = briefStat('peak_bayes'), near = briefKpi(briefStat('clusters_nino34'), 'nearest years'), ext = briefKpi(briefStat('extremes_nino34'), 'return period of this height as a yearly peak');
     var fc = (W.sst_nino34 || {}).forecast14 || {}, ar = briefKpi(briefStat('ar1_sst_nino34'), 'persistence forecast, +14 d');
@@ -3374,15 +3414,15 @@
       '<div class="br-links">' + briefLink('#now/analogs', 'this year against the strongest events') + briefLink('#verdict', 'the verdict of the day') + briefLink('#now/map', 'the map of the Pacific') + '</div></div><div class=\"br-side\">' + briefTiles(['n34_daily', 'n34_weekly', 'oni', 'risk_index', 'wwv_share', 'iri_share_below', 'food_index']) + '</div></div></section>';
     // ── 2. что мы видим в данных
     s += '<section class="br-s"><h3>What the data show</h3><div class="br-two"><div>' +
-      '<p><b>The surface.</b> Niño 3.4 crossed into a new regime on <b>' + esc(brk ? brk.value : 'spring') + '</b>: our change-point test finds the level jumped ' + (shift ? esc(shift.value) + ' °C' : 'by two degrees') + ' and that the jump is not noise. Since then every week has come in warmer than the same week of 1997, 2015 and 2023. The world ocean as a whole ' + (streak ? 'has set a daily record for <b>' + streak + ' days running</b>' : 'is at record warmth') + '; land and ocean together are at their warmest for the date too.</p>' +
+      '<p><b>The surface.</b> Niño 3.4 crossed into a new regime on <b>' + esc(brk ? brk.value : 'spring') + '</b>: our change-point test finds the level jumped ' + (shift ? esc(shift.value) + ' °C' : 'by two degrees') + ' and that the jump is not noise. ' + briefWeeks(NW, brk ? brk.value : null) + ' The world ocean as a whole ' + (streak ? 'has set a daily record for <b>' + streak + ' days running</b>' : 'is at record warmth') + '; ' + briefLandOcean(W) + '</p>' +
       '<p><b>Below the surface.</b> The fuel gauge — warm water stored above 300 m along the equator — reads <b>' + (fuel.share_of_record != null ? fuel.share_of_record + ' % of its record' : 'at its record') + '</b>' + (fuel.discharging === false ? ' and has not started to drain' : '') + '. The buoys see a layer more than ten degrees above normal at a hundred metres off the coast of South America. What surfaces in the coming months is already in the water.</p>' +
       '<p><b>The air and the clouds.</b> Two satellites, one NOAA and one NASA, agree that the tall storm clouds jumped east over the central Pacific this summer, to 7–9 % of the sky where the past three years had almost none, and that the east–west contrast which drives the trade winds has collapsed. The pressure seesaw, the winds and the cloud have all joined the ocean: the event is coupled.</p>' +
-      '<p><b>The models.</b> <b>' + (lastI.share != null ? lastI.share + ' %' : 'Half') + ' of the forecast models are below reality</b> — the ocean moved faster than the centres expected, and they keep revising upward issue after issue. The statistics agree with the hand-picked analogues: sorting all years since 1950 by the shape of January–August, this year lands next to <b>' + esc(near ? near.value : '1997, 2015, 2023') + '</b>.</p>' +
+      '<p><b>The models.</b> <b>' + (lastI.share != null ? lastI.share + ' % of the forecast models were below reality in the last issue that can be scored</b>' + (lastI.issue ? ' (' + esc(lastI.issue) + ', target ' + esc(lastI.season || '') + ')' : '') : 'Half of the forecast models have been below reality</b>') + (ao.n ? '; in the current issue ' + (ao.below || []).length + ' of ' + ao.n + ' sit below the latest weekly reading' : '') + ' — the ocean moved faster than the centres expected, and they keep revising upward issue after issue. The statistics agree with the hand-picked analogues: sorting all years since 1950 by the shape of January–August, this year lands next to <b>' + esc(near ? near.value : '1997, 2015, 2023') + '</b>.</p>' +
       '</div><div class="br-sparks">' + briefSpark('event_strength', 'Niño 3.4, NOAA weekly') + briefSpark('fuel_charged', 'fuel: warm water volume') + briefSpark('subsurface_warm', 'warmest layer under the moorings') + briefSpark('world_ocean_record_streak', 'world ocean, daily') + briefSpark('models_below_reality', 'models below reality') + '</div></div>' +
       '<div class="br-links">' + briefLink('#trend/sst_nino34', 'the trend and the break') + briefLink('#air', 'the fuel gauge') + briefLink('#ocean/moorings', 'the moorings') + briefLink('#radiance/cross', 'two satellites') + briefLink('#models/breakdown', 'how the models break') + '</div></section>';
     // ── 3. чего ждать и когда
     s += '<section class="br-s"><h3>What to expect, and when</h3><div class="br-two"><div>' +
-      '<p><b>The peak comes in winter.</b> Every past event of this strength peaked between mid-November and early February. It is early September, so two or three more months of growth are the normal course, not a surprise. ' +
+      '<p><b>The peak comes in winter.</b> Every past event of this strength peaked between mid-November and early February. ' + briefNow(D) + '. ' +
       (pk ? 'Scaling this summer by how past events grew, the likely winter peak is <b>around ' + esc(briefKpi(pk, 'implied winter peak').value) + ' °C</b>, with <b>' + esc(briefKpi(pk, 'chance to top 1997').value) + ' %</b> odds of beating 1997–98 and ' + esc(briefKpi(pk, 'chance to top 2015').value) + ' % of beating 2015–16; the stored fuel is not in that sum, so the odds may be conservative. ' : '') +
       (ext && ext.value !== '·' ? 'Even the summer level alone is a once-in-' + esc(ext.value) + '-years height for a yearly peak. ' : '') + '</p>' +
       '<p><b>The next two weeks.</b> The analogue years point to Niño 3.4 near <b>' + (fc.p50 != null ? fnum(fc.p50) : (fc.value != null ? fnum(fc.value) : '\u00b7')) + ' °C</b> in a fortnight' + (ar ? '; pure persistence would give ' + esc(ar.value) + ' °C, which is the floor, not the forecast' : '') + '. The forecast centres expect a combined peak of <b>' + fnum((IRI.revisions || {}).combined_peak_cur != null ? IRI.revisions.combined_peak_cur : IRI.combined_peak) + ' °C</b>; their next issue is due around the 19th.</p>' +
