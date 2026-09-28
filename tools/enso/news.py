@@ -218,18 +218,21 @@ def build(verbose=False):
     day = (D.get("generated") or "")[:10]
     changed_r = False
     for rid, s in SEEN.items():
-        if rid in risks_by_id or s.get("quiet") or s.get("gone"):
+        if rid in risks_by_id or s.get("quiet"):
             continue
-        if (s.get("last") or "") >= since.isoformat():
+        if not s.get("gone"):
             # День снятия — первый разбор ПОСЛЕ последнего дня, когда риск ещё стоял; не «сегодня»:
-            # риск, снятый три дня назад, иначе получил бы сегодняшнюю дату.
+            # риск, снятый три дня назад, иначе получил бы сегодняшнюю дату. Запоминается один раз.
             gone_day = min([p.stem[:8] for p in _all_snaps if p.stem[:8] > (s.get("last") or "").replace("-", "")] or [day.replace("-", "")])
-            gone_day = gone_day[:4] + "-" + gone_day[4:6] + "-" + gone_day[6:8] if len(gone_day) == 8 else day
+            s["gone"] = gone_day[:4] + "-" + gone_day[4:6] + "-" + gone_day[6:8] if len(gone_day) == 8 else day
+            changed_r = True
+        # СТРОКА О СНЯТИИ ЖИВЁТ СТОЛЬКО ЖЕ, СКОЛЬКО «NEW RISK» (28.09): печатается при каждой
+        # пересборке, пока дата снятия внутри окна; раньше — один раз, и следующая пересборка
+        # оставляла в ленте «New risk» без конца истории.
+        if s["gone"] >= since.isoformat():                     # дата снятия точная (по снимкам) — её одной достаточно
             title = s.get("title") or ((J.get("metrics") or {}).get("risk:" + rid) or {}).get("title") or rid
-            items.append({"date": gone_day, "kind": "risk", "title": "Risk cleared: " + title,
-                          "detail": "the rule no longer fires on the " + gone_day + " assessment", "why": "", "go": ["verdict", None]})
-        s["gone"] = day
-        changed_r = True
+            items.append({"date": s["gone"], "kind": "risk", "title": "Risk cleared: " + title,
+                          "detail": "the rule no longer fires on the " + s["gone"] + " assessment", "why": "", "go": ["verdict", None]})
     if changed_r:
         safeio.write_text(SEEN_FILE, json.dumps(SEEN, ensure_ascii=False, indent=1))
 
@@ -240,17 +243,18 @@ def build(verbose=False):
         if s.get("first") and s["first"] >= since.isoformat() and not s.get("quiet"):
             items.append({"date": s["first"], "kind": "alert", "title": (a.get("level") or "") + ": " + (a.get("title") or ""),
                           "detail": (a.get("detail") or "")[:240], "why": "", "go": ["now", "analogs"]})
-    # Снята — значит вчера была, сегодня нет. Печатаем один раз: пометка gone остаётся в
-    # списке, иначе строка «снята» висела бы всю неделю после исчезновения.
+    # Снята — значит вчера была, сегодня нет. Дата снятия (пометка gone) ставится один раз и не
+    # меняется, поэтому строка может жить всё окно, как и «New alert», не переезжая на «сегодня».
     changed = False
     for aid, s in ASEEN.items():
-        if aid in ALERTS_NOW or s.get("quiet") or s.get("gone"):
+        if aid in ALERTS_NOW or s.get("quiet"):
             continue
-        if (s.get("last") or "") >= since.isoformat():
-            items.append({"date": day, "kind": "alert", "title": "Alert cleared: " + (s.get("title") or aid),
+        if not s.get("gone"):
+            s["gone"] = day                                       # дата снятия — один раз, дальше неизменна
+            changed = True
+        if s["gone"] >= since.isoformat() and (s.get("last") or "") >= since.isoformat():
+            items.append({"date": s["gone"], "kind": "alert", "title": "Alert cleared: " + (s.get("title") or aid),
                           "detail": "", "why": "", "go": ["now", "analogs"]})
-        s["gone"] = day
-        changed = True
     if changed:
         safeio.write_text(ALERT_FILE, json.dumps(ASEEN, ensure_ascii=False, indent=1))
 
