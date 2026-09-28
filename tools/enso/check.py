@@ -83,6 +83,10 @@ def _aslist(v):
     return v if isinstance(v, list) else ([v] if v else [])
 
 
+COUNT_WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8,
+               "nine": 9, "ten": 10}
+
+
 def text_nums(text):
     t = re.sub(r"\d{4}-\d{2}(?:-\d{2})?", " ", str(text or ""))       # даты — не числа
     return [x.replace("−", "-").lstrip("+") for x in NUM.findall(t)]
@@ -142,9 +146,18 @@ def check_verdict(D):
                 flag(f"summary.{where}", why)
         if DASH.search(t):
             flag(f"summary.{where}", "длинное тире без пробелов")
+        # СЧЁТ СЛОВАМИ (28.09): «five level-5 risks» при четырёх — цифры в тексте нет, и сверка чисел
+        # выше такое не видит. «N level-L risk(s)» сверяется с самими рисками панели.
+        for m in re.finditer(r"\b(one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+level[- ]?(\d)\s+risks?\b", low):
+            n = int(m.group(1)) if m.group(1).isdigit() else COUNT_WORDS[m.group(1)]
+            real = sum(1 for r in D.get("risks") or [] if r.get("level") == int(m.group(2)))
+            if n != real:
+                flag(f"summary.{where}", f"«{m.group(0)}»: рисков уровня {m.group(2)} на самом деле {real}")
     rv = sm.get("review")
     if rv:
-        st = "совпадает" if rv.get("stamp") == D.get("stamp") else "НЕ СОВПАДАЕТ: данные пересчитаны после проверки"
+        # отметка относится к разбору моделью: с 20.09 лёгкий прогон переписывает штамп latest (28.09)
+        st = "совпадает" if rv.get("stamp") == (D.get("assessed_stamp") or D.get("stamp")) \
+            else "НЕ СОВПАДАЕТ: вердикт переписан после проверки"
         print(f"  отметка проверки: {rv.get('model')} {rv.get('at')}, штамп {st}, blocking={rv.get('blocking')}")
     else:
         print("  отметки проверки нет")

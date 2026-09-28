@@ -119,6 +119,9 @@ def facts_from(cur):
                 "analogue_peaks": O["analog_event_peak"]},
         "risks": [{"level": r["level"], "risk": r["title"], "horizon": r["horizon"],
                    "plain": r.get("plain")} for r in cur["risks"]],
+        # СЧЁТ ГОТОВЫЙ (28.09): модель написала «five level-5 risks» при четырёх в списке — считать ей не даём
+        "risks_count_by_level": {str(k): sum(1 for r in cur["risks"] if r["level"] == k)
+                                 for k in sorted({r["level"] for r in cur["risks"]}, reverse=True)},
         "what_changed": cur.get("diff", []),
         "IRI_forecast_models": _iri_facts(cur.get("iri")),
         # Атмосфера, топливо и цены поимённо: без них модель писала сводку по одному океану
