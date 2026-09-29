@@ -169,51 +169,107 @@ def update_tail(box, today=None, verbose=False):
     return store
 
 
-def build_clim(box, verbose=False):
-    """Климатология 1991–2020 и аналоги по календарю — один раз, из окончательного набора."""
+def _full_year(y, arr):
+    """Год считается полным, когда в нём есть каждый день (366 в високосный, 365 в обычный)."""
+    return int(np.isfinite(arr).sum()) >= (366 if calendar.isleap(y) else 365)
+
+
+def _years_file(box):
+    """Полные годы бокса из years_<бокс>.json (years_all.py, PSL NCSS): та же сетка 366 слотов."""
+    try:
+        return json.loads((CACHE / f"years_{box}.json").read_text(encoding="utf-8")).get("years") or {}
+    except Exception:                                            # noqa: BLE001
+        return {}
+
+
+def clim_coverage(box):
+    """Сколько лет вошло в каждый слот нормы: (мин, макс, слотов с недобором, слотов с перебором)."""
+    cl = _load(CACHE / f"clim_{box}.json", {})
+    n = [int(x) for i, x in enumerate(cl.get("n") or []) if i != 59]
+    want = CLIM_YEARS[1] - CLIM_YEARS[0] + 1
+    if not n:
+        return None
+    return min(n), max(n), sum(1 for x in n if x < want), sum(1 for x in n if x > want), cl.get("built")
+
+
+def build_clim(box, verbose=False, force=False, save=True):
+    """Климатология 1991–2020 и аналоги по календарю — один раз, из окончательного набора.
+
+    ПОЛНОТА ЛЕТ ОБЯЗАТЕЛЬНА (29.09). Норма, собранная 10.09, вобрала по дням года от 7 до 32 лет вместо
+    30: годы с ERDDAP приходили обрывками, а даты соседних лет задваивали слоты. Норма вышла кривой по
+    сезону (против нормы CPC: март −0,17, июль +0,26 °C), и наш бокс Niño 3.4 показывал +2,94 там, где
+    NOAA и climatereanalyzer давали +3,07. Теперь годы берутся из years_<бокс>.json (PSL, полные),
+    недостающие докачиваются с проверкой, чужие даты отбрасываются, и норма НЕ пишется, пока в каждом
+    слоте (кроме 29 февраля) не ровно 30 лет. Окно сглаживания центрированное: прежнее брало 15 дней ДО
+    дня и запаздывало на неделю. Пересборка — только `python oisst.py --clim` (по слову владельца:
+    меняются уровни аномалий боксов на панели).
+    """
     p = CACHE / f"clim_{box}.json"
     cl = _load(p, {})
-    if cl.get("doy") and cl.get("analogs") and all(str(y) in cl["analogs"] for y in ANALOG_YEARS):
+    if not force and cl.get("complete") and cl.get("doy") and cl.get("analogs") \
+            and all(str(y) in cl["analogs"] for y in ANALOG_YEARS):
         return cl
     b = BOXES[box]
-    sums, cnts = np.zeros(366), np.zeros(366)
-    analogs = cl.get("analogs") or {}
     years = list(range(CLIM_YEARS[0], CLIM_YEARS[1] + 1))
-    need = years + [y for y in ANALOG_YEARS if str(y) not in analogs]
-    for y in need:
-        t0 = time.time()
-        try:
-            m = box_means(FINAL, box, f"{y}-01-01", f"{y}-12-31")
-        except Exception as e:                                   # noqa: BLE001
-            if verbose:
-                print(f"  {box} {y}: {str(e)[:100]}")
+    analogs = dict(cl.get("analogs") or {})
+    have = _years_file(box)
+    got = {}
+    for y in years + [y for y in ANALOG_YEARS if y not in years]:
+        arr = have.get(str(y))
+        if arr and len(arr) == 366:
+            a = np.array([np.nan if v is None else float(v) for v in arr])
+            if _full_year(y, a):
+                got[y] = a
+                continue
+        for attempt in range(3):
+            t0 = time.time()
+            try:
+                m = box_means(FINAL, box, f"{y}-01-01", f"{y}-12-31")
+                a = np.full(366, np.nan)
+                for dt, v in m.items():
+                    if dt[:4] == str(y):                         # только свой год: чужие даты задваивали слоты
+                        a[grid_index(date.fromisoformat(dt))] = v
+                if _full_year(y, a):
+                    got[y] = a
+                    if verbose:
+                        print(f"  {box} {y}: {int(np.isfinite(a).sum())} дней, {time.time() - t0:.0f} с")
+                    break
+                if verbose:
+                    print(f"  {box} {y}: неполный год ({int(np.isfinite(a).sum())} дней), попытка {attempt + 1}")
+            except Exception as e:                               # noqa: BLE001
+                if verbose:
+                    print(f"  {box} {y}: {str(e)[:100]}")
+            time.sleep(3)
+    sums, cnts = np.zeros(366), np.zeros(366)
+    for y in years:
+        a = got.get(y)
+        if a is None:
             continue
-        arr = np.full(366, np.nan)
-        for dt, v in m.items():
-            arr[grid_index(date.fromisoformat(dt))] = v
-        if y in years:
-            ok = np.isfinite(arr)
-            sums[ok] += arr[ok]
-            cnts[ok] += 1
-        if y in ANALOG_YEARS:
-            analogs[str(y)] = [None if not np.isfinite(v) else round(float(v), 3) for v in arr]
-        if verbose:
-            print(f"  {box} {y}: {len(m)} дней, {time.time() - t0:.0f} с")
-    if cnts.max() == 0:
+        ok = np.isfinite(a)
+        sums[ok] += a[ok]
+        cnts[ok] += 1
+    for y in ANALOG_YEARS:
+        if y in got:
+            analogs[str(y)] = [None if not np.isfinite(v) else round(float(v), 3) for v in got[y]]
+    complete = all(int(cnts[i]) == len(years) for i in range(366) if i != 59)
+    if not complete:
+        missing = [y for y in years if y not in got]
+        print(f"  {box}: норма НЕ записана — не хватает лет {missing or '(слоты с недобором)'}; прежний файл оставлен")
         return cl
-    mean = np.where(cnts > 0, sums / np.maximum(cnts, 1), np.nan)
+    mean = sums / np.maximum(cnts, 1)
     # 29 февраля видно раз в четыре года: заполняем соседями до сглаживания
-    if not np.isfinite(mean[59]) or cnts[59] < 5:
+    if cnts[59] < 5:
         mean[59] = np.nanmean([mean[58], mean[60]])
-    # 15-дневное круговое сглаживание — как у большинства суточных климатологий
-    k = 15
-    ext = np.concatenate([mean[-k:], mean, mean[:k]])
+    # 15-дневное круговое сглаживание, центрированное (±7 дней) — как у суточных климатологий
+    k, h = 15, 7
+    ext = np.concatenate([mean[-h:], mean, mean[:h]])
     sm = np.array([np.nanmean(ext[i:i + k]) for i in range(len(mean))])
     cl = {"doy": [round(float(v), 4) for v in sm], "n": [int(c) for c in cnts],
-          "years": list(CLIM_YEARS), "stride": b["stride"], "smooth_days": k,
+          "years": list(CLIM_YEARS), "stride": b["stride"], "smooth_days": k, "complete": True,
           "analogs": analogs, "built": datetime.now().strftime("%Y-%m-%d %H:%M"),
-          "source": f"NOAA OISST v2.1 final ({FINAL}) via CoastWatch ERDDAP"}
-    _save(p, cl)
+          "source": f"NOAA OISST v2.1 final ({FINAL}) via CoastWatch ERDDAP; full years from years_{box}.json (PSL NCSS) where present"}
+    if save:
+        _save(p, cl)
     return cl
 
 
@@ -415,12 +471,20 @@ def build(today=None, cr_nino34=None, cr_world=None, verbose=False):
 
 if __name__ == "__main__":
     import sys
+    if "--check-clim" in sys.argv:
+        # покрытие норм без записи: сколько лет в слоте (29.09: было 7…32 вместо 30)
+        for bx, bb in BOXES.items():
+            if bb.get("tail_only"):
+                continue
+            c = clim_coverage(bx)
+            print(f"{bx:8s}", "нормы нет" if c is None else f"лет в слоте {c[0]}…{c[1]}, недобор {c[2]}, перебор {c[3]}, сборка {c[4]}")
+        raise SystemExit(0)
     if "--clim" in sys.argv:
         for bx, bb in BOXES.items():
             if bb.get("tail_only"):
                 continue
             print("климатология", bx)
-            build_clim(bx, verbose=True)
+            build_clim(bx, verbose=True, force="--force" in sys.argv)
             build_analog_next(bx, verbose=True)          # продолжение аналогов в следующий год
             build_last_year(bx, date.today().year - 1, verbose=True)
         print("готово")
