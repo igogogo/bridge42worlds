@@ -49,6 +49,13 @@ BOXES = {
     "nino34": {"lat": (-5, 5), "lon": [(-170, -120)], "stride": 4, "title": "Niño 3.4"},
     "nino4": {"lat": (-5, 5), "lon": [(160, 179.875), (-179.875, -150)], "stride": 4, "title": "Niño 4"},
     "gulf": {"lat": (24, 30), "lon": [(48, 56)], "stride": 1, "title": "Persian Gulf"},
+    # ОБЛАСТИ ПОВЕРХ ЗОН (владелец 29.09): моря, где El Niño отзывается погодой и хозяйством. Годы и
+    # норма — из плашек PSL (oisst_years.py), как у зон; суточный хвост — с ERDDAP, как у всех.
+    "eaus": {"lat": (-38, -25), "lon": [(150, 160)], "stride": 2, "title": "East Australia coast"},
+    "med": {"lat": (30, 46), "lon": [(0, 36)], "stride": 4, "title": "Mediterranean"},
+    "panama": {"lat": (5, 9), "lon": [(-82, -77)], "stride": 1, "title": "Gulf of Panama"},
+    "barents": {"lat": (70, 78), "lon": [(20, 55)], "stride": 4, "title": "Barents Sea"},
+    "bengal": {"lat": (8, 20), "lon": [(82, 94)], "stride": 4, "title": "Bay of Bengal"},
     # Мировой океан 60°S–60°N нужен только как хвост к ряду climatereanalyzer: климатология и
     # аналоги у него берутся оттуда, поэтому climatology для него не строим (см. build()).
     "world": {"lat": (-59.875, 59.875), "lon": [(-179.875, 179.875)], "stride": 8, "title": "World ocean 60°S–60°N",

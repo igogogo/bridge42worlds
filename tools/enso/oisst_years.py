@@ -28,11 +28,25 @@ from oisst import BOXES, grid_index, NEXT_DAYS   # noqa: E402
 
 CACHE = ROOT / "data" / "enso" / "oisst"
 NCSS = ("https://psl.noaa.gov/thredds/ncss/grid/Datasets/noaa.oisst.v2.highres/sst.day.mean.{y}.nc"
-        "?var=sst&north=5&south=-10&west=160&east=280&horizStride={stride}"
+        "?var=sst&north={north}&south={south}&west={west}&east={east}&horizStride={stride}"
         "&time_start={t0}T00:00:00Z&time_end={t1}T23:59:59Z&accept=netcdf")
 STRIDE = 4
+# ПЛАШКИ (29.09): четыре зоны Niño режутся одной плашкой Пацифики, каждый бокс вне её — своей, по
+# границам бокса (так же получил годы Залив, у которого ERDDAP отдавал годы с дырами).
+PACIFIC = ("nino4", "nino34", "nino3", "nino12")
+
+
+def slabs():
+    out = {"pacific": {"north": 5, "south": -10, "west": 160, "east": 280, "stride": STRIDE, "boxes": list(PACIFIC)}}
+    for k, b in BOXES.items():
+        if b.get("tail_only") or k in PACIFIC:
+            continue
+        lo, hi = b["lon"][0]
+        out[k] = {"north": b["lat"][1], "south": b["lat"][0], "west": (lo + 360) % 360, "east": (hi + 360) % 360 or 360,
+                  "stride": b.get("stride", STRIDE), "boxes": [k]}
+    return out
 YEARS = range(1982, datetime.now().year)
-BOX_KEYS = ("nino4", "nino34", "nino3", "nino12")
+BOX_KEYS = tuple(k for k, b in BOXES.items() if not b.get("tail_only"))
 QUARTERS = ((1, 1, 3, 31), (4, 1, 6, 30), (7, 1, 9, 30), (10, 1, 12, 31))
 UA = "Mozilla/5.0 (bridge42worlds El Nino panel)"
 
@@ -44,9 +58,10 @@ def _lon360(x):
     return x + 360.0 if x < 0 else x
 
 
-def _fetch(y, t0, t1, tries=3):
+def _fetch(y, t0, t1, tries=3, slab=None):
     import netCDF4
-    url = NCSS.format(y=y, stride=STRIDE, t0=t0, t1=t1)
+    sl = slab or slabs()["pacific"]
+    url = NCSS.format(y=y, stride=sl["stride"], t0=t0, t1=t1, north=sl["north"], south=sl["south"], west=sl["west"], east=sl["east"])
     last = None
     for k in range(tries):
         try:
@@ -82,19 +97,22 @@ def _box_mask(box, lat, lon):
     return m_lat, m_lon
 
 
-def year_means(y, verbose=True, until=None):
-    """{бокс: {дата: SST}} за год — четыре запроса по кварталам, из каждого все боксы.
+def year_means(y, verbose=True, until=None, slab=None, keys=None):
+    """{бокс: {дата: SST}} за год — четыре запроса по кварталам, из каждого все боксы плашки.
     until — последняя дата (текущий год: до вчера), кварталы позже неё не запрашиваются."""
-    out = {b: {} for b in BOX_KEYS}
-    for (m0, d0, m1, d1) in QUARTERS:
+    keys = keys or BOX_KEYS
+    out = {b: {} for b in keys}
+    # плашка Пацифики велика — по кварталам; плашка одного бокса мала — одним запросом на год (29.09)
+    parts = QUARTERS   # целый год одним запросом PSL отдаёт 502 (проверено 29.09), поэтому всегда кварталы
+    for (m0, d0, m1, d1) in parts:
         t = time.time()
         q0, q1 = date(y, m0, d0), date(y, m1, d1)
         if until is not None:
             if q0 > until:
                 break
             q1 = min(q1, until)
-        days, lat, lon, sst = _fetch(y, q0.isoformat(), q1.isoformat())
-        for b in BOX_KEYS:
+        days, lat, lon, sst = _fetch(y, q0.isoformat(), q1.isoformat(), slab=slab)
+        for b in keys:
             ml, mo = _box_mask(b, lat, lon)
             sub = sst[:, ml][:, :, mo]
             with np.errstate(all="ignore"):
@@ -103,7 +121,7 @@ def year_means(y, verbose=True, until=None):
                 if np.isfinite(v):
                     out[b][d] = float(v)
         if verbose:
-            print(f"    {y} Q{QUARTERS.index((m0, d0, m1, d1)) + 1}: {len(days)} дней, {time.time() - t:.0f} с", flush=True)
+            print(f"    {y} {'Q' + str(QUARTERS.index((m0, d0, m1, d1)) + 1) if (m0, d0, m1, d1) in QUARTERS else 'year'}: {len(days)} дней, {time.time() - t:.0f} с", flush=True)
     return out
 
 
@@ -114,12 +132,12 @@ def _load(box):
 
 def _save(box, doc):
     doc["built"] = datetime.now().strftime("%Y-%m-%d %H:%M")
-    doc["source"] = "NOAA OISST v2.1 daily 0.25°, PSL THREDDS NetCDF subset, one slab 10°S–5°N × 160°E–80°W, stride 4"
+    doc["source"] = "NOAA OISST v2.1 daily 0.25°, PSL THREDDS NetCDF subset: one slab 10°S–5°N × 160°E–80°W for the Niño zones, a slab per box elsewhere"
     doc["stride"] = STRIDE; doc["title"] = BOXES[box]["title"]; doc["next_days"] = NEXT_DAYS
     safeio.write_text(CACHE / f"years_{box}.json", json.dumps(doc, ensure_ascii=False))
 
 
-def build(years=YEARS, verbose=True, current=False):
+def build(years=YEARS, verbose=True, current=False, only=None):
     """current=True — только текущий год до вчера: частичный, перезаписывается при каждом вызове
     (29.09: линия этого года у зон кроме Niño 3.4 была 120-дневным хвостом бокса)."""
     t0 = time.time()
@@ -127,15 +145,19 @@ def build(years=YEARS, verbose=True, current=False):
     cy = datetime.now().year
     if current:
         years = [cy]
-    for y in years:
-        if y != cy and all(str(y) in docs[b]["years"] for b in BOX_KEYS):
+    for sname, sl in slabs().items():
+      if only and sname not in only:
+          continue
+      keys = [k for k in sl["boxes"] if k in BOX_KEYS]
+      for y in years:
+        if y != cy and all(str(y) in docs[b]["years"] for b in keys):
             continue
         try:
-            means = year_means(y, verbose, until=(date.today() - timedelta(days=1)) if y == cy else None)
+            means = year_means(y, verbose, until=(date.today() - timedelta(days=1)) if y == cy else None, slab=sl, keys=keys)
         except Exception as e:                                   # noqa: BLE001
-            print(f"  {y}: НЕ ВЗЯТ: {str(e)[:120]}", flush=True)
+            print(f"  {sname} {y}: НЕ ВЗЯТ: {str(e)[:120]}", flush=True)
             continue
-        for b in BOX_KEYS:
+        for b in keys:
             arr = [None] * 366
             for d, v in means[b].items():
                 arr[grid_index(date.fromisoformat(d))] = round(v, 3)
@@ -145,14 +167,18 @@ def build(years=YEARS, verbose=True, current=False):
             if prev in docs[b]["years"] and prev not in docs[b]["next"]:
                 docs[b]["next"][prev] = arr[:NEXT_DAYS]
             _save(b, docs[b])
-        print(f"  {y}: готов, {sum(v is not None for v in docs['nino34']['years'][str(y)])} дней у Niño 3.4; всего {time.time() - t0:.0f} с", flush=True)
+        print(f"  {sname} {y}: готов, {sum(v is not None for v in docs[keys[0]]['years'][str(y)])} дней у {keys[0]}; всего {time.time() - t0:.0f} с", flush=True)
     for b in BOX_KEYS:
         print(f"{b}: годов {len(docs[b]['years'])}, продолжений {len(docs[b]['next'])}")
     print(f"готово, {time.time() - t0:.0f} с")
 
 
 def main():
-    build(current="--current" in sys.argv)
+    only = [a.split("=", 1)[1] for a in sys.argv if a.startswith("--slab=")]
+    # --clim-years: сначала годы нормы 1991–2020 и четыре аналога (около 190 с на год плашки, 29.09),
+    # остальные годы — потом обычным запуском
+    yrs = (list(range(1991, 2021)) + [1982, 1997, 2015, 2023]) if "--clim-years" in sys.argv else YEARS
+    build(years=sorted(set(yrs)), current="--current" in sys.argv, only=only or None)
     return 0
 
 

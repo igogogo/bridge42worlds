@@ -6486,7 +6486,7 @@
       '</span>' + (rv.blocking ? ' <span class="rv-no">blocking issues open</span>' : '');
   }
   // запад → восток; Залив и мировой океан не зоны Niño и стоят после четвёрки
-  var BOX_ORDER = [['nino4', 'Niño 4'], ['nino34', 'Niño 3.4'], ['nino3', 'Niño 3'], ['nino12', 'Niño 1+2'], ['gulf', 'Gulf'], ['world', 'World ocean']];
+  var BOX_ORDER = [['nino4', 'Niño 4'], ['nino34', 'Niño 3.4'], ['nino3', 'Niño 3'], ['nino12', 'Niño 1+2'], ['gulf', 'Gulf'], ['panama', 'Panama'], ['eaus', 'E. Australia'], ['bengal', 'Bengal'], ['med', 'Mediterranean'], ['barents', 'Barents'], ['world', 'World ocean']];
 
   /* Тепловая карта разреза: столбцы — долготы, строки — глубины; цвет — знак и величина
      аномалии на переменных темы (не «синий-красный» из палитры Matplotlib, а наши --nino и
