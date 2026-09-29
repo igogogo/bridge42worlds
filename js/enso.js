@@ -79,7 +79,7 @@
       'radiance/places': 'Sixty-five named places on the microwave sounder, each with the mechanism by which it could fail; this year against 2018–2025.',
       'trend/shape': 'How straight the last 60 days of a daily series went, against the same days of past years.',
       'weather/rivers': 'Modelled discharge of fourteen El Niño rivers against their own 2000–2020 climatology.',
-      'ocean/surface': 'Daily box means from the NOAA grid, one day behind, with own climatologies.', 'ocean/hovmoller': 'How the heat moves: the subsurface anomaly along the equator month by month, this event beside a past one.', 'mentions/attention': 'How much the world talks about it: articles per day, Wikipedia views, share of world news.', 'mentions/articles': 'Latest headlines in nine languages, with the publisher.', 'mentions/official': 'The official word: when the next release from each centre is due, how long each has been quiet on El Niño, and what they last said.', 'ocean/moorings': 'Temperature by depth under the equator, mooring by mooring, every day.', 'ocean/section': 'The reanalysis section along the equator, monthly.',
+      'ocean/surface': 'Daily box means from the NOAA grid, one day behind, with own climatologies.', 'ocean/threshold': 'The four zones in plain degrees by day of year, past years beside this one, with the 27.5–28 °C band where storm clouds can start.', 'ocean/hovmoller': 'How the heat moves: the subsurface anomaly along the equator month by month, this event beside a past one.', 'mentions/attention': 'How much the world talks about it: articles per day, Wikipedia views, share of world news.', 'mentions/articles': 'Latest headlines in nine languages, with the publisher.', 'mentions/official': 'The official word: when the next release from each centre is due, how long each has been quiet on El Niño, and what they last said.', 'ocean/moorings': 'Temperature by depth under the equator, mooring by mooring, every day.', 'ocean/section': 'The reanalysis section along the equator, monthly.',
       'models/cities': 'Seven-day weather forecasts for 50 cities, three models, seven parameters, against the fact when the day arrives: how far the models miss, by horizon and over time. A local watch of how stable the system is.',
       'models/plume': 'All models\' seasonal forecasts, the live-model centre, where we stand in the season.', 'models/stack': 'The last three issues, one under the other, against the same reality.', 'models/scoreboard': 'Each model against the official value it forecast.', 'models/breakdown': 'How many models fell below reality, issue by issue; the chronic ones.', 'models/revisions': 'How each model moved its peak between issues.',
       'charge/events': 'Every El Niño year since 1980 on the same 24-month calendar: the warm water volume and the upper 300 m temperature, this event heavy.', 'charge/rate': 'The first derivative (change over three months) by calendar month, this year against past events, and this year’s second derivative as bars.', 'charge/path': 'The year ahead as scenarios: today’s level carried on by the shape of each past event, their median and range, and by today’s momentum with its fading.',
@@ -723,16 +723,19 @@
        с PSL OPeNDAP (ERDDAP лежал), плюс 120 суток следующего года; подмешивается к четырём
        аналогам по режиму переключателя, аномалия считается той же нормой. Файл берётся лениво. */
     var extraYears = {}, extraNext = {}, usedExtra = false;
+    /* ФАЙЛ ГОДОВ НУЖЕН ВСЕГДА (29.09): в нём лежит и ТЕКУЩИЙ год целиком (oisst_years.py --current),
+       иначе линия этого года у зон кроме Niño 3.4 — только 120-дневный хвост бокса (владелец). */
+    S.YB = S.YB || {};
+    var YB = S.YB[box];
+    if (!YB) {
+      if (!S.YB[box + ':busy']) {
+        S.YB[box + ':busy'] = true;
+        fetch('/data/enso/oisst/years_' + box + '.json').then(function (r) { return r.json(); })
+          .then(function (d) { S.YB[box] = d; render(); }).catch(function () { S.YB[box] = { error: true }; render(); });
+      }
+    }
     if (yrsMode() !== 'strong') {
-      S.YB = S.YB || {};
-      var YB = S.YB[box];
-      if (!YB) {
-        if (!S.YB[box + ':busy']) {
-          S.YB[box + ':busy'] = true;
-          fetch('/data/enso/oisst/years_' + box + '.json').then(function (r) { return r.json(); })
-            .then(function (d) { S.YB[box] = d; render(); }).catch(function () { S.YB[box] = { error: true }; });
-        }
-      } else if (!YB.error && YB.years) {
+      if (YB && !YB.error && YB.years) {
         yrsPick(Object.keys(YB.years)).forEach(function (y) { if (!C.analogs[y]) { extraYears[y] = YB.years[y]; extraNext[y] = (YB.next || {})[y] || []; usedExtra = true; } });
       }
     }
@@ -784,7 +787,9 @@
       analogs[y] = { series: ser, next: nx, peak: pk };
     });
     var cur = []; for (var k = 0; k < 366; k++) cur.push(NaN);
-    (bx.dates || []).forEach(function (d, i) { var v = bx.anom[i]; if (fin(v)) cur[gridIndex(d)] = v; });
+    var cyA = (YB && !YB.error && YB.years) ? YB.years[String(new Date().getUTCFullYear())] : null;
+    if (cyA) cyA.forEach(function (v, i) { var c = C.doy[i]; if (fin(v) && fin(c)) cur[i] = v - c; });   // год целиком из файла годов
+    (bx.dates || []).forEach(function (d, i) { var v = bx.anom[i]; if (fin(v)) cur[gridIndex(d)] = v; });   // хвост бокса сверху: он свежее
     var last = bx.dates[bx.dates.length - 1];
     return { key: box, label: bx.title || box, year: last.slice(0, 4), analogs: analogs, current_series: cur, day: gridIndex(last), current_day: bx.last_anom,
       _yrs: usedExtra ? yrsMode() : null,
@@ -3419,7 +3424,7 @@
       '<p><b>The air and the clouds.</b> Two satellites, one NOAA and one NASA, agree that the tall storm clouds jumped east over the central Pacific this summer, to 7–9 % of the sky where the past three years had almost none, and that the east–west contrast which drives the trade winds has collapsed. The pressure seesaw, the winds and the cloud have all joined the ocean: the event is coupled.</p>' +
       '<p><b>The models.</b> <b>' + (lastI.share != null ? lastI.share + ' % of the forecast models were below reality in the last issue that can be scored</b>' + (lastI.issue ? ' (' + esc(lastI.issue) + ', target ' + esc(lastI.season || '') + ')' : '') : 'Half of the forecast models have been below reality</b>') + (ao.n ? '; in the current issue ' + (ao.below || []).length + ' of ' + ao.n + ' sit below the latest weekly reading' : '') + ' — the ocean moved faster than the centres expected, and they keep revising upward issue after issue. The statistics agree with the hand-picked analogues: sorting all years since 1950 by the shape of January–August, this year lands next to <b>' + esc(near ? near.value : '1997, 2015, 2023') + '</b>.</p>' +
       '</div><div class="br-sparks">' + briefSpark('event_strength', 'Niño 3.4, NOAA weekly') + briefSpark('fuel_charged', 'fuel: warm water volume') + briefSpark('subsurface_warm', 'warmest layer under the moorings') + briefSpark('world_ocean_record_streak', 'world ocean, daily') + briefSpark('models_below_reality', 'models below reality') + '</div></div>' +
-      '<div class="br-links">' + briefLink('#trend/sst_nino34', 'the trend and the break') + briefLink('#air', 'the fuel gauge') + briefLink('#ocean/moorings', 'the moorings') + briefLink('#radiance/cross', 'two satellites') + briefLink('#models/breakdown', 'how the models break') + '</div></section>';
+      '<div class="br-links">' + briefLink('#trend/sst_nino34', 'the trend and the break') + briefLink('#air', 'the fuel gauge') + briefLink('#ocean/moorings', 'the moorings') + briefLink('#ocean/threshold', 'the storm threshold') + briefLink('#radiance/cross', 'two satellites') + briefLink('#models/breakdown', 'how the models break') + '</div></section>';
     // ── 3. чего ждать и когда
     s += '<section class="br-s"><h3>What to expect, and when</h3><div class="br-two"><div>' +
       '<p><b>The peak comes in winter.</b> Every past event of this strength peaked between mid-November and early February. ' + briefNow(D) + '. ' +
@@ -6716,6 +6721,102 @@
       dates: b.dates, values: absolute ? b.sst : b.anom, analogs: out };
   }
 
+  /* Файлы зоны для сцены порога: норма и аналоги (clim_<box>) и все годы (years_<box>), лениво. */
+  var THR_LO = 27.5, THR_HI = 28, THR_Y = [18, 31.5];
+  function thrSlot(iso) {
+    var y = +iso.slice(0, 4), d = new Date(iso + 'T00:00:00Z');
+    var doy = Math.round((d - Date.UTC(y, 0, 1)) / 864e5), leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+    return (leap || doy < 59) ? doy : doy + 1;
+  }
+  function thrFiles(box) {
+    S.CLM = S.CLM || {}; S.YB = S.YB || {};
+    var C = S.CLM[box];
+    if (!C) {
+      if (!S.CLM[box + ':busy']) {
+        S.CLM[box + ':busy'] = true;
+        fetch('/data/enso/oisst/clim_' + box + '.json').then(function (r) { return r.json(); })
+          .then(function (c) { S.CLM[box] = c; render(); }).catch(function () { S.CLM[box] = { error: true }; render(); });
+      }
+      return null;
+    }
+    if (C.error || !C.doy) return null;
+    var YB = S.YB[box];
+    if (yrsMode() !== 'strong' && !YB) {
+      if (!S.YB[box + ':busy']) {
+        S.YB[box + ':busy'] = true;
+        fetch('/data/enso/oisst/years_' + box + '.json').then(function (r) { return r.json(); })
+          .then(function (d) { S.YB[box] = d; render(); }).catch(function () { S.YB[box] = { error: true }; render(); });
+      }
+      return null;
+    }
+    return { C: C, YB: (YB && !YB.error) ? YB : null };
+  }
+  function thrYears(F) {
+    // выбранные годы → {год: массив 366 абсолютов}; сильные — из clim.analogs, остальные — из years_<box>
+    var out = {}, an = F.C.analogs || {};
+    var pool = Object.keys(an);
+    if (F.YB && F.YB.years) pool = pool.concat(Object.keys(F.YB.years));
+    yrsPick(pool).forEach(function (y) { var a = an[y] || (F.YB && F.YB.years ? F.YB.years[y] : null); if (a && a.length === 366) out[y] = a; });
+    return out;
+  }
+  function thrNow(box) {
+    var bx = ((S.D.oisst || {}).boxes || {})[box] || {}, by = {}, YB = (S.YB || {})[box];
+    var cy = String(new Date().getUTCFullYear()), cyA = (YB && !YB.error && YB.years) ? YB.years[cy] : null;
+    if (cyA) cyA.forEach(function (v, i) { if (fin(v)) by[i] = [i, v, cy + '-' + thrSlotDate(i)]; });   // год целиком из файла годов
+    (bx.dates || []).forEach(function (d, i) { var v = (bx.sst || [])[i]; if (fin(v)) by[thrSlot(d)] = [thrSlot(d), v, d]; });
+    return Object.keys(by).map(Number).sort(function (a, b) { return a - b; }).map(function (i) { return by[i]; });
+  }
+  function thrSlotDate(i) {   // слот 366-дневной сетки → MM-DD (високосная раскладка)
+    var d = new Date(Date.UTC(2024, 0, 1) + i * 864e5); return d.toISOString().slice(5, 10);
+  }
+  function chartThreshold(box, F, W, H) {
+    var bx = ((S.D.oisst || {}).boxes || {})[box] || {}, title = (bx.title || box) + ' \u00b7 sea surface, \u00b0C';
+    var Lp = 46, R = 40, Tp = topPad(W), B = 26, pw = W - Lp - R, ph = H - Tp - B, vmin = THR_Y[0], vmax = THR_Y[1];
+    var X = function (i) { return Lp + i / 365 * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
+    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText(esc(title), W - Lp - R, 12) + '</text>';
+    // ось: абсолютные градусы, без знака (gridY подписывает как аномалии)
+    for (var g = 20; g < vmax; g += 2) s += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(0) + '" x2="' + (W - R) + '" y2="' + Y(g).toFixed(0) + '" style="stroke:var(--grid)" stroke-width="0.6"/><text x="' + (Lp - 5) + '" y="' + (Y(g) + 4).toFixed(0) + '" text-anchor="end">' + g + '</text>';
+    // полоса порога гроз
+    s += '<rect x="' + Lp + '" y="' + Y(THR_HI).toFixed(1) + '" width="' + pw + '" height="' + (Y(THR_LO) - Y(THR_HI)).toFixed(1) + '" style="fill:var(--nino);opacity:.16"/>' +
+      '<text x="' + (W - R + 3) + '" y="' + (Y(THR_HI) + 4).toFixed(1) + '" font-size="9" style="fill:var(--nino)">28 \u00b0C</text>' +
+      '<text x="' + (W - R + 3) + '" y="' + (Y(THR_LO) + 4).toFixed(1) + '" font-size="9" style="fill:var(--nino)">27.5</text>';
+    var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    MON.forEach(function (m, i) { var d0 = Math.round((Date.UTC(2024, i, 1) - Date.UTC(2024, 0, 1)) / 864e5); if (W >= 420 || i % 2 === 0) s += '<text x="' + X(d0).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="start">' + m + '</text>'; });
+    var path = function (arr, style) {
+      var d = '', on = false;
+      for (var i = 0; i < 366; i++) { var v = arr[i]; if (!fin(v)) { on = false; continue; } d += (on ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1); on = true; }
+      return d ? '<path d="' + d + '" fill="none" style="' + style + '"/>' : '';
+    };
+    // прошлые годы: тонко, сильные — своим цветом с подписью, остальные — мягко
+    var YRS = thrYears(F), names = Object.keys(YRS).sort();
+    names.forEach(function (y) {
+      var strong = isStrong(y);
+      s += path(YRS[y], 'stroke:' + yrColor(y) + ';stroke-width:' + (strong ? 1.3 : .8) + ';opacity:' + (strong ? .95 : .45));
+    });
+    // норма
+    s += path(F.C.doy, 'stroke:var(--soft);stroke-width:1.2;stroke-dasharray:4 3;opacity:.9');
+    // этот год: суточный хвост бокса
+    var now = thrNow(box);
+    if (now.length > 1) {
+      var d = ''; now.forEach(function (p, i) { d += (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1); });
+      s += '<path d="' + d + '" fill="none" style="stroke:var(--text);stroke-width:2.2"/>';
+      var last = now[now.length - 1];
+      s += nowDot(X(last[0]), Y(last[1]), 'var(--text)', 3.2) + '<text x="' + Math.min(X(last[0]) + 6, W - R - 30).toFixed(1) + '" y="' + (Y(last[1]) - 6).toFixed(1) + '" font-size="10" style="fill:var(--text)">' + fnum(last[1], 1, false) + ' \u00b7 ' + esc(last[2].slice(5)) + '</text>';
+    }
+    // подписи сильных лет справа, у их последнего значения
+    names.filter(isStrong).forEach(function (y) { var a = YRS[y], i = 365; while (i > 0 && !fin(a[i])) i--; if (fin(a[i])) s += '<text x="' + (W - R + 3) + '" y="' + (Y(a[i]) + 3).toFixed(1) + '" font-size="9" style="fill:' + yrColor(y) + '">' + y + '</text>'; });
+    return s + '</svg>';
+  }
+  function thrKpi(box, F) {
+    var bx = ((S.D.oisst || {}).boxes || {})[box] || {}, now = thrNow(box); if (!now.length) return '';
+    var last = now[now.length - 1], slot = last[0], YRS = thrYears(F), ys = Object.keys(YRS), above = 0, cnt = 0;
+    ys.forEach(function (y) { var v = YRS[y][slot]; if (fin(v)) { cnt++; if (v >= THR_HI) above++; } });
+    var norm = F.C.doy[slot], d28 = last[1] - THR_HI;
+    return '<div class="kpi"><div class="kn">' + esc(bx.title || box) + ' \u00b7 ' + esc(last[2]) + '</div><div class="kv">' + fnum(last[1], 1, false) + '<small>\u00b0C</small></div>' +
+      '<div class="km">' + (d28 >= 0 ? fnum(d28, 1) + ' \u00b0C above the 28 \u00b0C storm line' : fnum(-d28, 1, false) + ' \u00b0C below the 28 \u00b0C storm line') + (fin(norm) ? '; normal for the date ' + fnum(norm, 1, false) : '') +
+      (cnt ? '; above 28 \u00b0C on this date in ' + above + ' of ' + cnt + ' compared years' : '') + '</div></div>';
+  }
+
   function viewOcean() {
     var D = S.D, O = D.oisst || {}, SB = D.subsurface || {}, k = sub('ocean', 'surface');
     var boxes = O.boxes || {}, T34 = boxes.nino34 || {}, TAO = SB.tao || {}, GD = SB.godas || {};
@@ -6734,9 +6835,15 @@
     else if (k === 'moorings') head = TAO.warmest ? 'Water ' + fnum(TAO.warmest.value, 1) + ' °C above normal is sitting at ' + TAO.warmest.depth + ' m under ' + TAO.warmest.station : 'Below the surface: the moorings';
     else head = GD.max_anom ? 'Reanalysis, ' + esc(GD.month) + ': up to ' + fnum(GD.max_anom.value, 1) + ' °C above normal at ' + GD.max_anom.depth + ' m, ' + esc(GD.max_anom.label) : 'Reanalysis section along the equator';
     if (k === 'hovmoller') head = 'How the heat moves: month by month, beside a past event';
+    if (k === 'threshold') {
+      // заголовок: сколько зон стоит выше 28 °C сегодня, самая восточная из них
+      var abv = ['nino4', 'nino34', 'nino3', 'nino12'].filter(function (z) { var b = boxes[z] || {}; return fin(b.last_sst) && b.last_sst >= 28; });
+      var east = abv.length ? (boxes[abv[abv.length - 1]] || {}) : null;
+      head = east ? 'Water warm enough for storms reaches ' + (east.title || '') + ': ' + fnum(east.last_sst, 1, false) + ' \u00b0C on ' + (east.last_date || '') : 'The storm threshold: the four zones in plain degrees';
+    }
     if (k === 'motion') head = 'The section month by month';
     if (k === 'zones') head = zonesHead();
-    var body = stageShell(head, [segBtn('ocean', 'surface', 'Surface, daily', 'surface'), segBtn('ocean', 'moorings', 'Below the surface', 'surface'), segBtn('ocean', 'section', 'Reanalysis section', 'surface'), segBtn('ocean', 'hovmoller', 'Heat on the move', 'surface'), segBtn('ocean', 'motion', 'Month by month', 'surface'),
+    var body = stageShell(head, [segBtn('ocean', 'surface', 'Surface, daily', 'surface'), segBtn('ocean', 'threshold', 'Storm threshold', 'surface'), segBtn('ocean', 'moorings', 'Below the surface', 'surface'), segBtn('ocean', 'section', 'Reanalysis section', 'surface'), segBtn('ocean', 'hovmoller', 'Heat on the move', 'surface'), segBtn('ocean', 'motion', 'Month by month', 'surface'),
       segBtn('ocean', 'zones', 'Between the zones', 'surface')]);
     if (O.error) { body.appendChild(el('div', 'note warn', 'The direct OISST block did not load: ' + esc(O.error))); }
     if (k === 'motion') { viewOceanMotion(body); return; }
@@ -6765,6 +6872,23 @@
       }
       body.appendChild(kh);
       body.appendChild(el('div', 'cap', esc(HV.note || '') + (ha ? ' How to read the pair: the band is the warm water of a Kelvin wave; compare where it stands on the same calendar month (further east means closer to surfacing off Peru), how strong it is, and whether it arrived earlier or later than in ' + esc(ha) + '. The extra year on the right shows what followed then, not what will follow now.' : '') + ' Built ' + esc(HV.built || '') + '. ' + vLink('the reanalysis section for the last month', 'ocean', 'section') + ' ' + vLink('the moorings, daily', 'ocean', 'moorings')));
+      return;
+    }
+
+    if (k === 'threshold') {
+      /* ПОРОГ ГРОЗ В АБСОЛЮТНЫХ ГРАДУСАХ (владелец 29.09). Атмосферу раскачивают грозовые облака, а им
+         нужна вода теплее примерно 27,5–28 °C; аномалия этого не показывает. Здесь каждая зона — сама
+         температура по дню года: этот год, прошлые годы по переключателю, норма и полоса порога. */
+      yearsCtl();
+      var mzT = el('div', 'mosaic tall'); body.appendChild(mzT);
+      var ZT = ['nino4', 'nino34', 'nino3', 'nino12'], kpT = [];
+      ZT.forEach(function (bz) {
+        var F = thrFiles(bz);
+        plot(mzT, function (w, h) { return F ? chartThreshold(bz, F, w, h) : svgOpen(w, h) + '<text x="20" y="40">loading the years of ' + esc((boxes[bz] || {}).title || bz) + '\u2026</text></svg>'; });
+        if (F) kpT.push(thrKpi(bz, F));
+      });
+      var kpw = el('div', 'kpis'); kpw.innerHTML = kpT.join(''); body.appendChild(kpw);
+      body.appendChild(el('div', 'cap', 'Sea surface temperature itself, not the anomaly, by day of year for the four Niño zones on one scale, west to east. The shaded band, 27.5–28 °C, is where deep convection can start: over cooler water the tall storm clouds that lift heat and moisture to 15 km and rearrange the winds do not grow (Graham and Barnett 1987; the exact threshold rises with the tropical mean). Heavy line: this year, our own box on the NOAA grid; dashed grey: the 1991–2020 normal; thin lines: the years chosen above, from the same grid. Cards: how far each zone sits from 28 °C today and how many of the compared years were above it on this date.'));
       return;
     }
 
@@ -10159,6 +10283,7 @@
     "ocean/moorings": {"title": "Temperature by depth, from the buoys", "what": "How much warmer or colder than usual the water is at each depth under the equator, measured by a line of anchored buoys strung across the Pacific.", "see": "The picture is a grid of coloured cells: columns are the buoys from west to east, rows are depths going down the page, red where the water is warmer than that buoy's own normal for the date, blue with hatching where it is colder, grey where the buoy sent nothing. A solid line drawn across the cells is the depth at which the water is 20 °C — the floor of the warm surface layer — normally shallow in the east and deep in the west. Cards below name the warmest layer found, with its depth and buoy, and how deep that 20 °C line lies at each end of the ocean.", "special": "This is the only subsurface view that is an actual measurement — instruments sitting in the water rather than a model filling gaps — and it shows the same water about a month earlier than the reanalysis section does.", "src": "TAO/TRITON moorings via ERDDAP, daily, each cell a five-day average; the normal is our own 1991–2020 climatology of that same buoy and depth"},
     "ocean/motion": {"title": "The slice played month by month", "what": "The under-water slice along the equator run as a film, one frame for each month.", "see": "A play button, a slider and the month label sit above; each frame is the full picture of depth against longitude — red warmer than normal, blue hatched colder, a solid line where the water is 20 °C now and a dashed line where it normally sits. Buttons put a past event's matching calendar month on the right half, shifted by whole years, so the two run side by side. Cards below give the warmest spot in the frame you are on and how many months the film covers.", "special": "The neighbouring diagram flattens depth away and the single section shows one month only; this is the one view that keeps depth and time together, so you can watch the warm water slide east and rise along the sloping boundary.", "src": "the same GODAS monthly frames via NOAA PSL; a past event's frames are fetched from its own stored file when you pick the year"},
     "ocean/section": {"title": "A slice under the equator, monthly", "what": "The same cut down through the water along the equator, but filled in everywhere by a model that blends buoys, drifting floats and satellites into one continuous picture.", "see": "Longitude runs across, depth runs down, red is warmer than normal for the month and blue with hatching is colder - continuous from the western Pacific to South America instead of a dozen buoy columns, with the colour key down the right-hand side. A solid line marks where the water is 20 °C now and a dashed line where it normally sits that month, so the gap between them is the change. Cards below give the warmest spot with its depth and longitude, the average temperature of the top 300 m across the middle and east of the ocean against normal with last month's figure beside it, and a reminder that this picture runs about six weeks behind.", "special": "It fills the water between the buoys, so you see the whole warm mass and where it stops rather than a dozen samples of it. It is also the only still picture that draws the normal depth of the 20 °C boundary beside today's, so how far that boundary has moved can be read straight off the chart.", "src": "NCEP GODAS reanalysis via NOAA PSL, one new month per month, about six weeks behind; compared with our own 1991–2020 normal on the same grid"},
+    "ocean/threshold": {"title": "The storm threshold, zone by zone", "what": "The temperature of the sea itself, not the anomaly, in the four Niño zones through the year, against the water temperature that tall storm clouds need.", "see": "Four panels on one scale, west to east: Niño 4, 3.4, 3 and 1+2. The heavy line is this year, our own box on the NOAA grid; the dashed grey line is the 1991–2020 normal; the thin lines are the years chosen with the switch above, the strongest events in their own colours. The shaded band between 27.5 and 28 °C marks where deep convection can start. Cards give today's reading, its distance from 28 °C, the normal for the date and how many of the compared years were above the line on this date.", "special": "It answers why the atmosphere reacts to Niño 3.4 more than to the bigger anomalies in the east: the east is normally too cool for storms, and the event's strength is how far east the water above the line has spread this year.", "src": "NOAA OISST v2.1: the daily tail from the NRT grid, the years from the final grid via PSL, the normal our own 1991–2020 climatology of the box; the threshold after Graham and Barnett, Science 1987"},
     "ocean/surface": {"title": "The ocean's surface, day by day", "what": "The daily temperature of one patch of sea, shown either in degrees or as how far it sits from normal for the date.", "see": "Buttons choose the patch - the four Niño zones, the Gulf, or the whole world ocean - and switch between plain degrees and the distance from normal. The heavy dark line is the recent daily stretch of that patch, its first and last dates printed at the ends of the axis and its newest value written beside a blinking dot; thinner coloured dashed lines are the same days of 1982, 1997, 2015, 2023 and last year on the same patch, each with its year at the end of its line. A row of cards underneath gives every patch at once: latest value, its date, the change over thirty days and the average of the last seven.", "special": "It is the one place where the Gulf and the whole world ocean stand on the same footing as a Niño zone, so the same question can be put to a small sea and to the entire ocean at once. The caption also states how our own count of the grid compares with climatereanalyzer on the days both cover, and says that the newest stretch carries that offset.", "src": "NOAA OISST near-real-time grid via ERDDAP, box means our own, one new day per day, a day behind; the normal is our own 1991-2020 climatology of the same box, except the world ocean, which rides on climatereanalyzer's series and normal"},
     "overview": {"title": "Every chart at once, small", "what": "One screen with a row of headline readings along the top and small copies of the panel's other charts below them.", "see": "The top row holds a dozen or so readings, most with a small picture beside the number: a line of that series' recent history, a ring, a filled bar, or two bars one above the other, with a short line under it giving the date of the data or a note on what it means. Below sits a grid of up to forty-eight tiles, each the same chart as on its own scene but drawn small, with the axis labels thinned and the legend, where a chart has one, folded into a small \"legend\" tag beside the tile's name; point at a tile to read what it means, click to open the scene it came from. Several of the readings are our own arithmetic rather than a provider's number, the core index against 1997 and the spectral watch among them, and the small calendar mark on each names what it was computed from; the closing line gives the count of tiles, how many did not fit, and the date of the data.", "special": "It is the only scene that puts most of the panel in view at once, so a chart can be found by looking rather than by guessing a menu name, and unrelated series can be set against each other. That comparison is by eye only: each tile keeps its own scale and its own span of time.", "src": "the same files every scene reads, redrawn whenever the panel updates"},
     "planet/gases": {"title": "Greenhouse gases since measurement began", "what": "How much carbon dioxide, methane and nitrous oxide the air holds, month after month, since each one was first measured.", "see": "Four panels stacked on one shared timeline of years: carbon dioxide at Mauna Loa, whose yearly saw-tooth is the northern growing season breathing in and out, with a dashed line that takes the season out; then the yearly growth of carbon dioxide as bars; then methane and nitrous oxide, each with its own dashed trend. Warm dashed verticals mark the years the strongest El Ninos began. The cards below give each gas's latest value, its change over a year, and where that month ranks among the same month in every year of the record.", "special": "This is the slow background the event runs on, not the event itself - but it is also the one place where an El Nino shows up in the planet's chemistry, in the growth bars for 1998 and 2016, because a hot dry tropical year lets forests and soils release carbon.", "src": "NOAA Global Monitoring Laboratory, monthly, rebuilt with the daily run"},

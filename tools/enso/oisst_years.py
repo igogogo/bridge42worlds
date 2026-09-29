@@ -16,7 +16,7 @@ import json
 import sys
 import time
 import urllib.request
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 import numpy as np
@@ -82,12 +82,18 @@ def _box_mask(box, lat, lon):
     return m_lat, m_lon
 
 
-def year_means(y, verbose=True):
-    """{бокс: {дата: SST}} за год — четыре запроса по кварталам, из каждого все боксы."""
+def year_means(y, verbose=True, until=None):
+    """{бокс: {дата: SST}} за год — четыре запроса по кварталам, из каждого все боксы.
+    until — последняя дата (текущий год: до вчера), кварталы позже неё не запрашиваются."""
     out = {b: {} for b in BOX_KEYS}
     for (m0, d0, m1, d1) in QUARTERS:
         t = time.time()
-        days, lat, lon, sst = _fetch(y, f"{y}-{m0:02d}-{d0:02d}", f"{y}-{m1:02d}-{d1:02d}")
+        q0, q1 = date(y, m0, d0), date(y, m1, d1)
+        if until is not None:
+            if q0 > until:
+                break
+            q1 = min(q1, until)
+        days, lat, lon, sst = _fetch(y, q0.isoformat(), q1.isoformat())
         for b in BOX_KEYS:
             ml, mo = _box_mask(b, lat, lon)
             sub = sst[:, ml][:, :, mo]
@@ -113,14 +119,19 @@ def _save(box, doc):
     safeio.write_text(CACHE / f"years_{box}.json", json.dumps(doc, ensure_ascii=False))
 
 
-def build(years=YEARS, verbose=True):
+def build(years=YEARS, verbose=True, current=False):
+    """current=True — только текущий год до вчера: частичный, перезаписывается при каждом вызове
+    (29.09: линия этого года у зон кроме Niño 3.4 была 120-дневным хвостом бокса)."""
     t0 = time.time()
     docs = {b: _load(b) for b in BOX_KEYS}
+    cy = datetime.now().year
+    if current:
+        years = [cy]
     for y in years:
-        if all(str(y) in docs[b]["years"] for b in BOX_KEYS):
+        if y != cy and all(str(y) in docs[b]["years"] for b in BOX_KEYS):
             continue
         try:
-            means = year_means(y, verbose)
+            means = year_means(y, verbose, until=(date.today() - timedelta(days=1)) if y == cy else None)
         except Exception as e:                                   # noqa: BLE001
             print(f"  {y}: НЕ ВЗЯТ: {str(e)[:120]}", flush=True)
             continue
@@ -141,7 +152,7 @@ def build(years=YEARS, verbose=True):
 
 
 def main():
-    build()
+    build(current="--current" in sys.argv)
     return 0
 
 
