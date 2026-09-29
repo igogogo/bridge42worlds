@@ -59,6 +59,9 @@ for f in loads:
     if not (DATA / f).exists():
         bad.append(f"C loaded by the panel but missing on disk: {f}")
 for f in PUB.FILES:
+    if f.startswith(getattr(PUB, "OPTIONAL_PREFIX", "\0")) and not (ROOT / f).exists():
+        warn.append(f"C box file not built yet (the sea is still being filled): {f}")
+        continue
     if not (ROOT / f).exists():
         bad.append(f"C in publish.FILES but missing on disk: {f}")
 for f in PUB.FRESH_FILES:
@@ -93,7 +96,7 @@ DAILY_OUT = {
     # 28.09 выкладка его не везла — в таблице стоял только первый выход, правило молчало
     "planet.py": ["planet.json", "planet-regions.json"], "mentions.py": "mentions.json",
     "spectral.py": "spectral.json", "regions_daily.py": "regions-daily.json",
-    "globe_data.py": "globe.json", "radiance_take.py": "radiance.json",
+    "globe_data.py": "globe.json", "radiance_take.py": "radiance.json", "tides.py": "tides.json",
 }
 fresh = set(PUB.FRESH_FILES)
 for scr in sorted(set(re.findall(r"-u (\w+\.py)", ps1))):

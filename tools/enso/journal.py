@@ -367,6 +367,10 @@ METRICS = {
         title="Niño 3.4, amplitude of the swings over 60 days", unit="°C rms", digits=3, src="our count on the daily series",
         val=lambda d: _g(d, "shape", "n34_daily_amp", "rms"), date=lambda d: _g(d, "shape", "n34_daily", "to")),
     # реки и пар (18.09): из блока hydro разбора
+    # БЕРЕГ (29.09): приливомеры Калифорнии, 30 суток над нормой станции с вынутым трендом
+    "coast_ca": dict(
+        title="California coast, sea level above normal", unit="cm", digits=1, src="UHSLC and NOAA CO-OPS tide gauges, our count",
+        val=lambda d: _g(d, "hydro", "coast", "california", "mean30"), date=lambda d: _g(d, "hydro", "coast", "california", "last_date")),
     "rivers_below": dict(
         title="Rivers below their lower quartile", unit="of 14", digits=0, src="GloFAS via Open-Meteo, our count",
         val=lambda d: _g(d, "hydro", "rivers", "below_p25"), date=lambda d: _g(d, "hydro", "rivers", "as_of")),

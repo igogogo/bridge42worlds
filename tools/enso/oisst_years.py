@@ -34,12 +34,23 @@ STRIDE = 4
 # ПЛАШКИ (29.09): четыре зоны Niño режутся одной плашкой Пацифики, каждый бокс вне её — своей, по
 # границам бокса (так же получил годы Залив, у которого ERDDAP отдавал годы с дырами).
 PACIFIC = ("nino4", "nino34", "nino3", "nino12")
+# боксы у Калифорнии — одной плашкой на три (запросов втрое меньше: сервер тратит минуту на любой запрос)
+GROUPS = {"calif": ("baja", "socal", "ncal")}
 
 
 def slabs():
     out = {"pacific": {"north": 5, "south": -10, "west": 160, "east": 280, "stride": STRIDE, "boxes": list(PACIFIC)}}
+    grouped = set()
+    for g, keys in GROUPS.items():
+        ks = [k for k in keys if k in BOXES]
+        if not ks:
+            continue
+        grouped |= set(ks)
+        out[g] = {"north": max(BOXES[k]["lat"][1] for k in ks), "south": min(BOXES[k]["lat"][0] for k in ks),
+                  "west": min((BOXES[k]["lon"][0][0] + 360) % 360 for k in ks), "east": max((BOXES[k]["lon"][0][1] + 360) % 360 for k in ks),
+                  "stride": min(BOXES[k].get("stride", STRIDE) for k in ks), "boxes": ks}
     for k, b in BOXES.items():
-        if b.get("tail_only") or k in PACIFIC:
+        if b.get("tail_only") or k in PACIFIC or k in grouped:
             continue
         lo, hi = b["lon"][0]
         out[k] = {"north": b["lat"][1], "south": b["lat"][0], "west": (lo + 360) % 360, "east": (hi + 360) % 360 or 360,
@@ -91,6 +102,7 @@ def _box_mask(box, lat, lon):
     b = BOXES[box]
     m_lat = (lat >= b["lat"][0] - 1e-6) & (lat <= b["lat"][1] + 1e-6)
     m_lon = np.zeros(len(lon), bool)
+    lon = np.mod(lon, 360.0)      # PSL отдаёт 360–397 для запроса от нуля градусов (Средиземное, 29.09)
     for lo, hi in b["lon"]:
         lo3, hi3 = _lon360(lo), _lon360(hi)
         m_lon |= (lon >= lo3 - 1e-6) & (lon <= hi3 + 1e-6)
@@ -149,6 +161,17 @@ def build(years=YEARS, verbose=True, current=False, only=None):
       if only and sname not in only:
           continue
       keys = [k for k in sl["boxes"] if k in BOX_KEYS]
+      if current and not only:
+          # ТЕКУЩИЙ ГОД — ТОЛЬКО БОКСАМ С НОРМОЙ (29.09): новые моря ещё докачивают годы нормы, и ежедневный
+          # прогон не должен занимать для них сервер PSL (он пускает три запроса и тратит минуту на каждый)
+          def _has_norm(b):
+              try:
+                  return bool(json.loads((CACHE / f"clim_{b}.json").read_text(encoding="utf-8")).get("complete"))
+              except Exception:                                  # noqa: BLE001
+                  return False
+          if not all(_has_norm(b) for b in keys):
+              print(f"  {sname}: норма ещё не собрана — текущий год не берём", flush=True)
+              continue
       for y in years:
         if y != cy and all(str(y) in docs[b]["years"] for b in keys):
             continue
@@ -178,6 +201,9 @@ def main():
     # --clim-years: сначала годы нормы 1991–2020 и четыре аналога (около 190 с на год плашки, 29.09),
     # остальные годы — потом обычным запуском
     yrs = (list(range(1991, 2021)) + [1982, 1997, 2015, 2023]) if "--clim-years" in sys.argv else YEARS
+    lst = [a.split("=", 1)[1] for a in sys.argv if a.startswith("--years=")]
+    if lst:                                   # явный список лет: --years=1982,1983,1997
+        yrs = [int(x) for x in lst[0].split(",") if x.strip()]
     build(years=sorted(set(yrs)), current="--current" in sys.argv, only=only or None)
     return 0
 

@@ -62,8 +62,41 @@ def _vapour_metric(VP, key="tropics"):
             "note": "ERA5 column water vapour, daily, 120 days; the past events on the same days of their year"}
 
 
+def _coast_metric(TD):
+    """РЯД ДЛЯ КАРТОЧКИ РИСКА БЕРЕГА (29.09): среднее по приливомерам Калифорнии, скользящее за 7 суток, см;
+    1997 и 2015 — те же календарные дни тех же станций."""
+    ca = [s for s in (TD.get("stations") or []) if s.get("key") in ("lajolla", "vandenberg", "sanfrancisco", "crescent") and s.get("dates")]
+    if not ca:
+        return None
+    dates = ca[0]["dates"]
+
+    def avg(rows):
+        out = []
+        for i in range(len(dates)):
+            v = [r[i] for r in rows if i < len(r) and r[i] is not None]
+            out.append(sum(v) / len(v) if v else None)
+        sm = []
+        for i in range(len(out)):
+            w = [x for x in out[max(0, i - 6):i + 1] if x is not None]
+            sm.append(round(sum(w) / len(w), 1) if len(w) >= 4 else None)
+        return sm
+
+    vals = avg([s["anom"] for s in ca])
+    an = {}
+    for y in ("1997", "2015"):
+        rows = [s["analogs"][y] for s in ca if y in (s.get("analogs") or {})]
+        if rows:
+            an[y] = avg(rows)
+    last = max((i for i, v in enumerate(vals) if v is not None), default=None)
+    if last is None:
+        return None
+    return {"name": "California tide gauges, sea level above normal", "unit": "cm", "step": "day",
+            "dates": dates[:last + 1], "values": vals[:last + 1], "analogs": {y: a[:last + 1] for y, a in an.items()},
+            "note": "7-day mean of La Jolla, Vandenberg, San Francisco and Crescent City against each gauge's 1991–2020 normal with its trend taken out"}
+
+
 def block():
-    RV, VP = _load("rivers.json"), _load("vapour.json")
+    RV, VP, TD = _load("rivers.json"), _load("vapour.json"), _load("tides.json")
     out = {}
     if RV and RV.get("board"):
         b = RV["board"]
@@ -79,6 +112,12 @@ def block():
             regs[it["key"]] = {"date": (it.get("last") or {}).get("date"), "mean30": m.get("value"), "anom30": m.get("anom"),
                                "rank": m.get("rank"), "of": m.get("of"), "clim_complete": it.get("clim_complete")}
         out["vapour"] = {"regions": regs, "built": VP.get("built"), "c3s": VP.get("c3s"), "metric": _vapour_metric(VP)}
+    # БЕРЕГ (29.09): приливомеры вдоль пути прибрежной волны Кельвина; для правил — Калифорния и сезонные приливы
+    if TD and TD.get("stations"):
+        out["coast"] = {"built": TD.get("built"), "california": TD.get("california"), "king_tides": TD.get("king_tides") or {},
+                        "stations": [{k: s.get(k) for k in ("key", "name", "country", "lat", "last_date", "mean7", "mean30", "analog_mean30")}
+                                     for s in TD["stations"] if s.get("dates")],
+                        "metric": _coast_metric(TD)}
     return out or None
 
 
@@ -101,6 +140,26 @@ def risks(H):
                 "States turn wet, as they should in El Niño",
                 R.get("metric"), "impact", "rivers_record_low",
                 min(1.0, (n_rec - 3) / 5.0)))
+    # БЕРЕГ КАЛИФОРНИИ (29.09): уровень моря на приливомерах выше нормы — прибрежная волна Кельвина.
+    # Пороги — предложение ведущей сессии, уровни — решение владельца: +8 см за 30 суток — 3, +15 — 4.
+    C = ((H or {}).get("coast") or {})
+    CA = C.get("california") or {}
+    if CA.get("mean30") is not None and CA["mean30"] >= 8:
+        am = CA.get("analog_mean30") or {}
+        kt = (C.get("king_tides") or {}).get("lajolla") or []
+        kts = ", ".join(f"{p['t'][5:10]} (+{p['cm']} cm)" for p in kt[:4])
+        cmp_ = "; the same days of " + ", ".join(f"{y}: {v:+.1f} cm" for y, v in sorted(am.items()) if v is not None) if am else ""
+        out.append((
+            "The sea stands high along the California coast", 4 if CA["mean30"] >= 15 else 3, "now – 3 months",
+            f"Tide gauges {', '.join(CA.get('stations') or [])}, 30 days to {CA.get('last_date')}: {CA['mean30']:+.1f} cm above "
+            f"each gauge's own 1991–2020 level with its trend taken out{cmp_}."
+            + (f" The highest predicted tides of the autumn at La Jolla: {kts} above mean higher high water (NOAA)." if kts else ""),
+            "A Kelvin wave that reached South America along the equator turns north along the coast and lifts the whole sea by "
+            "several centimetres for weeks to months. On its own it floods nothing; storms that arrive on the highest tides of "
+            "November and December push water further inland than they would in a normal year.",
+            "the gauges day by day on the Coast scene, the band moving north from Peru; the days around the highest tides; the "
+            "next equatorial wave, sent by the September wind burst, reaching the coast in November–December",
+            C.get("metric"), "impact", "coast_high_water", min(1.0, (CA["mean30"] - 8) / 12.0)))
     V = ((H or {}).get("vapour") or {}).get("regions") or {}
     T = V.get("tropics") or {}
     if T.get("rank") and T.get("of", 0) >= 10:

@@ -56,6 +56,11 @@ BOXES = {
     "panama": {"lat": (5, 9), "lon": [(-82, -77)], "stride": 1, "title": "Gulf of Panama"},
     "barents": {"lat": (70, 78), "lon": [(20, 55)], "stride": 4, "title": "Barents Sea"},
     "bengal": {"lat": (8, 20), "lon": [(82, 94)], "stride": 4, "title": "Bay of Bengal"},
+    # ПУТЬ ПРИБРЕЖНОЙ ВОЛНЫ КЕЛЬВИНА (владелец 29.09, статья Guardian о волне у Калифорнии): три бокса у
+    # берега; норма — суточная норма PSL 1991–2020 («clim»: «ltm»), годы — одной плашкой на три бокса.
+    "baja": {"lat": (24, 31), "lon": [(-118, -113)], "stride": 2, "title": "Baja California coast", "clim": "ltm"},
+    "socal": {"lat": (32, 35), "lon": [(-121, -117)], "stride": 1, "title": "Southern California Bight", "clim": "ltm"},
+    "ncal": {"lat": (36, 42), "lon": [(-127, -122)], "stride": 2, "title": "Northern California coast", "clim": "ltm"},
     # Мировой океан 60°S–60°N нужен только как хвост к ряду climatereanalyzer: климатология и
     # аналоги у него берутся оттуда, поэтому climatology для него не строим (см. build()).
     "world": {"lat": (-59.875, 59.875), "lon": [(-179.875, 179.875)], "stride": 8, "title": "World ocean 60°S–60°N",
@@ -199,6 +204,71 @@ def clim_coverage(box):
     return min(n), max(n), sum(1 for x in n if x < want), sum(1 for x in n if x > want), cl.get("built")
 
 
+LTM_URL = "https://psl.noaa.gov/thredds/dodsC/Datasets/noaa.oisst.v2.highres/sst.day.mean.ltm.1991-2020.nc"
+
+
+def ltm_box_means(boxes, verbose=False):
+    """Суточная норма PSL 1991–2020 (365 дней) — среднее по каждому боксу. Читается по OPeNDAP сплошными
+    блоками по 92 дня (прореженный срез сервер не отдаёт, полный запрос NCSS упирается в минуту прокси)."""
+    import netCDF4
+    ds = netCDF4.Dataset(LTM_URL)
+    try:
+        lat = np.array(ds["lat"][:], float)
+        lon = np.mod(np.array(ds["lon"][:], float), 360.0)
+        out = {}
+        for bx in boxes:
+            b = BOXES[bx]
+            li = np.where((lat >= b["lat"][0] - 1e-6) & (lat <= b["lat"][1] + 1e-6))[0]
+            lo_m = np.zeros(len(lon), bool)
+            for lo, hi in b["lon"]:
+                lo_m |= (lon >= (lo % 360.0) - 1e-6) & (lon <= (hi % 360.0) + 1e-6)
+            lj = np.where(lo_m)[0]
+            parts = []
+            for k0 in range(0, 365, 92):
+                t0 = time.time()
+                blk = ds["sst"][k0:min(k0 + 92, 365), li[0]:li[-1] + 1, lj[0]:lj[-1] + 1]
+                a = np.ma.filled(np.ma.masked_invalid(blk.astype(float)), np.nan)
+                with np.errstate(all="ignore"):
+                    parts.append(np.nanmean(np.nanmean(a, axis=2), axis=1))
+                if verbose:
+                    print(f"  {bx}: норма PSL, дни {k0}…{min(k0 + 92, 365) - 1}, {time.time() - t0:.0f} с")
+            out[bx] = np.concatenate(parts)
+        return out
+    finally:
+        ds.close()
+
+
+def build_clim_ltm(box, verbose=False, save=True):
+    """Норма бокса из суточной нормы PSL 1991–2020 — там, где 30 лет суточных данных качать долго (боксы у
+    Калифорнии, 29.09). Сверено на Niño 3.4 с нашей нормой из 30 полных лет: −0,015 ± 0,012 °C."""
+    p = CACHE / f"clim_{box}.json"
+    b = BOXES[box]
+    m = ltm_box_means([box], verbose)[box]
+    a = np.concatenate([m[:59], [np.nan], m[59:]])       # 365 дней → сетка 366, 29 февраля — среднее соседей
+    a[59] = np.nanmean([a[58], a[60]])
+    k, h = 15, 7
+    ext = np.concatenate([a[-h:], a, a[:h]])
+    sm = np.array([np.nanmean(ext[i:i + k]) for i in range(366)])
+    have = _years_file(box)
+    yrs = have if isinstance(have, dict) else {}
+    try:
+        nxt = json.loads((CACHE / f"years_{box}.json").read_text(encoding="utf-8")).get("next") or {}
+    except Exception:                                            # noqa: BLE001
+        nxt = {}
+    ly = str(date.today().year - 1)
+    cl = {"doy": [round(float(v), 4) for v in sm], "n": [30] * 366,
+          "years": list(CLIM_YEARS), "stride": b["stride"], "smooth_days": k, "complete": True, "from_ltm": True,
+          "analogs": {str(y): yrs[str(y)] for y in ANALOG_YEARS if str(y) in yrs},
+          "analogs_next": {str(y): nxt[str(y)] for y in ANALOG_YEARS if str(y) in nxt},
+          "last_years": {ly: yrs[ly]} if ly in yrs else {},
+          "built": datetime.now().strftime("%Y-%m-%d %H:%M"),
+          "source": "NOAA OISST v2.1 daily long-term mean 1991–2020 from PSL (sst.day.mean.ltm.1991-2020.nc), box mean, "
+                    "15-day centred smoothing; past years from the final grid via PSL"}
+    if save:
+        _save(p, cl)
+    return cl
+
+
 def build_clim(box, verbose=False, force=False, save=True):
     """Климатология 1991–2020 и аналоги по календарю — один раз, из окончательного набора.
 
@@ -211,6 +281,8 @@ def build_clim(box, verbose=False, force=False, save=True):
     дня и запаздывало на неделю. Пересборка — только `python oisst.py --clim` (по слову владельца:
     меняются уровни аномалий боксов на панели).
     """
+    if BOXES[box].get("clim") == "ltm":
+        return build_clim_ltm(box, verbose, save)
     p = CACHE / f"clim_{box}.json"
     cl = _load(p, {})
     if not force and cl.get("complete") and cl.get("doy") and cl.get("analogs") \

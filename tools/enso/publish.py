@@ -66,6 +66,7 @@ FILES = ["data/enso/latest.json", "data/enso/history.json", "data/enso/glossary.
          "data/enso/oisst/clim_nino12.json", "data/enso/oisst/clim_nino3.json", "data/enso/oisst/clim_nino34.json",
          "data/enso/oisst/clim_nino4.json", "data/enso/oisst/clim_gulf.json", "data/enso/oisst/years_nino34.json", "data/enso/oisst/years_nino3.json", "data/enso/oisst/years_nino4.json", "data/enso/oisst/years_nino12.json",
          "data/enso/oisst/clim_eaus.json", "data/enso/oisst/clim_med.json", "data/enso/oisst/clim_panama.json", "data/enso/oisst/clim_barents.json", "data/enso/oisst/clim_bengal.json",
+         "data/enso/tides.json", "data/enso/oisst/clim_baja.json", "data/enso/oisst/clim_socal.json", "data/enso/oisst/clim_ncal.json", "data/enso/oisst/years_baja.json", "data/enso/oisst/years_socal.json", "data/enso/oisst/years_ncal.json",
          "data/enso/oisst/years_gulf.json", "data/enso/oisst/years_eaus.json", "data/enso/oisst/years_med.json", "data/enso/oisst/years_panama.json", "data/enso/oisst/years_barents.json", "data/enso/oisst/years_bengal.json",
          "data/enso/layout-check.json"]
 FRESH_FILES = [
@@ -73,7 +74,7 @@ FRESH_FILES = [
     # planet.py пишет ДВА файла: planet.json и planet-regions.json (пояса ERA5: полушария, тропики, Арктика,
     # Антарктика). Второй ежедневная выкладка не везла, и на сайте он менялся только с полным прогоном
     # (найдено 28.09 — та же болезнь, что 06.09, 10.09 и 15.09; правило D check_ui теперь знает оба выхода).
-    "data/enso/fresh.json", "data/enso/ops.json", "data/enso/runs.json", "data/enso/planet.json", "data/enso/planet-regions.json", "data/enso/cities.json", "data/enso/fires.json", "data/enso/water.json", "data/enso/futures.json", "data/enso/radiance-places.json", "data/enso/radiance-events.json", "data/enso/rivers.json", "data/enso/vapour.json", "data/enso/monotony.json", "data/enso/charge.json", "data/enso/years.json", "data/enso/regimes.json", "data/enso/oisst/years_nino34.json", "data/enso/oisst/years_nino3.json", "data/enso/oisst/years_nino4.json", "data/enso/oisst/years_nino12.json", "data/enso/ice-snow.json", "data/enso/glaciers.json",
+    "data/enso/fresh.json", "data/enso/ops.json", "data/enso/runs.json", "data/enso/planet.json", "data/enso/planet-regions.json", "data/enso/tides.json", "data/enso/cities.json", "data/enso/fires.json", "data/enso/water.json", "data/enso/futures.json", "data/enso/radiance-places.json", "data/enso/radiance-events.json", "data/enso/rivers.json", "data/enso/vapour.json", "data/enso/monotony.json", "data/enso/charge.json", "data/enso/years.json", "data/enso/regimes.json", "data/enso/oisst/years_nino34.json", "data/enso/oisst/years_nino3.json", "data/enso/oisst/years_nino4.json", "data/enso/oisst/years_nino12.json", "data/enso/ice-snow.json", "data/enso/glaciers.json",
                "data/enso/mentions.json", "data/enso/hovmoller.json", "data/enso/tao-daily.json", "data/enso/spectral.json", "data/enso/regions-daily.json", "data/enso/precip.json", "data/enso/radiance.json", "data/enso/globe.json", "data/enso/sections-1982.json", "data/enso/sections-1986.json", "data/enso/sections-1991.json", "data/enso/sections-1994.json", "data/enso/sections-1997.json", "data/enso/sections-2002.json", "data/enso/sections-2004.json", "data/enso/sections-2006.json", "data/enso/sections-2009.json", "data/enso/sections-2015.json", "data/enso/sections-2018.json", "data/enso/sections-2023.json",
                # ЭТИХ ЧЕТЫРЁХ ЗДЕСЬ НЕ БЫЛО (найдено 15.09, та же болезнь, что 06.09 и 10.09):
                # ночная обёртка пересобирает их каждый день, а ежедневная выкладка не отправляла,
@@ -147,9 +148,21 @@ def push_index(no_index, why):
           "починить: python tools/enso/concepts_link.py --run")
 
 
+OPTIONAL_PREFIX = "data/enso/oisst/"     # нормы и годы боксов: у новых морей появляются по мере докачки (29.09)
+
+
+def present(files):
+    """Отсутствующие файлы боксов не выкладываются (море ещё докачивается), остальные обязаны быть."""
+    miss = [f for f in files if f.startswith(OPTIONAL_PREFIX) and not (ROOT / f).exists()]
+    if miss:
+        print(f"ещё не собраны, пропущены: {', '.join(m.rsplit('/', 1)[-1] for m in miss)}")
+    return [f for f in files if f not in miss]
+
+
 def deploy(files, env, run):
     """Выкладчик отдельным процессом; его вывод — на консоль как прежде, а при отказе ещё
     и в журнал прогона: код возврата без слов на вкладке Ops ничего не объясняет (17.09)."""
+    files = present(files)
     p = subprocess.run([sys.executable, "cloudflare/deploy_r2.py", "--only", *files], cwd=str(ROOT), env=env,
                        capture_output=True, text=True, encoding="utf-8", errors="replace")
     if p.stdout:

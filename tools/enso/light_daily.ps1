@@ -25,6 +25,7 @@ function Say($t) { "$(Get-Date -Format 'HH:mm:ss') $t" | Out-File $log -Append -
 Say "=== rivers and water vapour (before the run: hydro reads them)"
 & $py -u rivers.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u vapour.py 2>&1 | Out-File $log -Append -Encoding utf8
+& $py -u tides.py 2>&1 | Out-File $log -Append -Encoding utf8
 
 Say "=== light run"
 & $py -u refresh.py --light --chain 2>&1 | Out-File $log -Append -Encoding utf8

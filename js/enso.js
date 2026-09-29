@@ -79,7 +79,7 @@
       'radiance/places': 'Sixty-five named places on the microwave sounder, each with the mechanism by which it could fail; this year against 2018–2025.',
       'trend/shape': 'How straight the last 60 days of a daily series went, against the same days of past years.',
       'weather/rivers': 'Modelled discharge of fourteen El Niño rivers against their own 2000–2020 climatology.',
-      'ocean/surface': 'Daily box means from the NOAA grid, one day behind, with own climatologies.', 'ocean/threshold': 'The four zones in plain degrees by day of year, past years beside this one, with the 27.5–28 °C band where storm clouds can start.', 'ocean/hovmoller': 'How the heat moves: the subsurface anomaly along the equator month by month, this event beside a past one.', 'mentions/attention': 'How much the world talks about it: articles per day, Wikipedia views, share of world news.', 'mentions/articles': 'Latest headlines in nine languages, with the publisher.', 'mentions/official': 'The official word: when the next release from each centre is due, how long each has been quiet on El Niño, and what they last said.', 'ocean/moorings': 'Temperature by depth under the equator, mooring by mooring, every day.', 'ocean/section': 'The reanalysis section along the equator, monthly.',
+      'ocean/surface': 'Daily box means from the NOAA grid, one day behind, with own climatologies.', 'ocean/threshold': 'The four zones in plain degrees by day of year, past years beside this one, with the 27.5–28 °C band where storm clouds can start.', 'ocean/coast': 'Tide gauges from Peru to Washington: the sea level above normal day by day, where the Kelvin wave runs north along the coast.', 'ocean/hovmoller': 'How the heat moves: the subsurface anomaly along the equator month by month, this event beside a past one.', 'mentions/attention': 'How much the world talks about it: articles per day, Wikipedia views, share of world news.', 'mentions/articles': 'Latest headlines in nine languages, with the publisher.', 'mentions/official': 'The official word: when the next release from each centre is due, how long each has been quiet on El Niño, and what they last said.', 'ocean/moorings': 'Temperature by depth under the equator, mooring by mooring, every day.', 'ocean/section': 'The reanalysis section along the equator, monthly.',
       'models/cities': 'Seven-day weather forecasts for 50 cities, three models, seven parameters, against the fact when the day arrives: how far the models miss, by horizon and over time. A local watch of how stable the system is.',
       'models/plume': 'All models\' seasonal forecasts, the live-model centre, where we stand in the season.', 'models/stack': 'The last three issues, one under the other, against the same reality.', 'models/scoreboard': 'Each model against the official value it forecast.', 'models/breakdown': 'How many models fell below reality, issue by issue; the chronic ones.', 'models/revisions': 'How each model moved its peak between issues.',
       'charge/events': 'Every El Niño year since 1980 on the same 24-month calendar: the warm water volume and the upper 300 m temperature, this event heavy.', 'charge/rate': 'The first derivative (change over three months) by calendar month, this year against past events, and this year’s second derivative as bars.', 'charge/path': 'The year ahead as scenarios: today’s level carried on by the shape of each past event, their median and range, and by today’s momentum with its fading.',
@@ -2554,9 +2554,9 @@
   /* Суточные по зонам стоят рядом со своими недельными: неделя выходит по средам за прошлую
      неделю и во время роста всегда отстаёт, а сутки — вчерашние. Порядок зон с запада на восток,
      как везде на панели (17.09). */
-  var STRIP_KEYS = ['n34_daily', 'n4_weekly', 'n4_box', 'n34_weekly', 'n3_weekly', 'n3_box', 'n12_weekly', 'n12_box', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 'wwv_rate3', 't300', 'heat_e22', 'n34_straight', 'n34_amp', 'rivers_below', 'tcwv_tropics', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
+  var STRIP_KEYS = ['n34_daily', 'n4_weekly', 'n4_box', 'n34_weekly', 'n3_weekly', 'n3_box', 'n12_weekly', 'n12_box', 'oni', 'risk_index', 'sst_world', 'n_alerts', 'models_broke', 'iri_share_below', 'food_index', 'wwv', 'wwv_rate3', 't300', 'heat_e22', 'n34_straight', 'n34_amp', 'coast_ca', 'rivers_below', 'tcwv_tropics', 'subsurface_warmest', 'wind_week', 'gulf_sst', 'mjo_amp'];
   var STRIP_NAME = { wwv_rate3: 'fuel, 3-month change', n34_weekly: 'Niño 3.4 weekly', n34_daily: 'Niño 3.4 daily', n12_weekly: 'Niño 1+2 weekly', n3_weekly: 'Niño 3 weekly', n4_weekly: 'Niño 4 weekly',
-    n4_box: 'Niño 4 daily, our box', n3_box: 'Niño 3 daily, our box', n12_box: 'Niño 1+2 daily, our box', n34_box: 'Niño 3.4 daily, our box', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean, anom', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', t300: 'upper 300 m, temp', heat_e22: 'stored heat, est.', rivers_below: 'rivers below quartile', tcwv_tropics: 'vapour, tropics', n34_straight: 'rise, straightness', n34_amp: 'swing amplitude', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
+    n4_box: 'Niño 4 daily, our box', n3_box: 'Niño 3 daily, our box', n12_box: 'Niño 1+2 daily, our box', n34_box: 'Niño 3.4 daily, our box', oni: 'ONI', risk_index: 'risk index', sst_world: 'world ocean, anom', n_alerts: 'alerts', models_broke: 'models broken', iri_share_below: 'models below reality', food_index: 'food index', wwv: 'warm water volume', t300: 'upper 300 m, temp', heat_e22: 'stored heat, est.', coast_ca: 'California sea level', rivers_below: 'rivers below quartile', tcwv_tropics: 'vapour, tropics', n34_straight: 'rise, straightness', n34_amp: 'swing amplitude', subsurface_warmest: 'warmest layer', wind_week: 'westerly, week', gulf_sst: 'Gulf SST', mjo_amp: 'MJO amplitude' };
   /* РЕКОРДЫ ВПЕРЁД И РАМКОЙ. Владелец 10.09: «рекорды тоже как-то в ленте KPI отображать —
      мерцанием красной рамки или вперёд ставить». Панель уже знает про рекорды в четырёх
      местах, просто молчала об этом в полосе: ранг 1 у суточного Niño 3.4 и у поясов планеты,
@@ -2696,7 +2696,7 @@
        сцены задаёт KPI_PICK. */
     wwv: 'air/fuel', wwv_share: 'air/fuel', t300: 'air/fuel', heat_e22: 'air/fuel', wind_week: 'air/wind', mjo_amp: 'air/mjo', dmi: 'air/indices', roni: 'air/indices', soi: 'air/coupling', olr: 'air/coupling', u850_west: 'air/coupling', coupling_score: 'air/coupling', tlt_tropics: 'air/layers', tls_tropics: 'air/layers',
     ohc_2000: 'trend/background', kuwait_tmax30: 'regions/place/gulf_arabia', oni: 'now/weekly_a', risk_index: 'verdict/history', n_risks: 'verdict/history',
-    rivers_below: 'weather/rivers', rivers_record_low: 'weather/rivers', tcwv_tropics: 'air/vapour', tcwv_n34: 'air/vapour', n34_straight: 'trend/shape', n34_dip: 'trend/shape', n34_amp: 'trend/shape', wwv_rate3: 'charge/rate', wwv_accel: 'charge/rate' };
+    coast_ca: 'ocean/coast', rivers_below: 'weather/rivers', rivers_record_low: 'weather/rivers', tcwv_tropics: 'air/vapour', tcwv_n34: 'air/vapour', n34_straight: 'trend/shape', n34_dip: 'trend/shape', n34_amp: 'trend/shape', wwv_rate3: 'charge/rate', wwv_accel: 'charge/rate' };
   var RS_STOP = { the: 1, and: 1, for: 1, with: 1, that: 1, this: 1, what: 1, why: 1, how: 1, does: 1, are: 1, is: 1, of: 1, to: 1, in: 1, on: 1, a: 1, an: 1, it: 1, its: 1, be: 1, will: 1, was: 1, were: 1, has: 1, have: 1, from: 1, about: 1, than: 1, now: 1, our: 1, we: 1, you: 1, can: 1, not: 1, which: 1, when: 1, where: 1, there: 1, into: 1, over: 1, any: 1, all: 1 };
   var RS_SYN = { nino: 'niño', 'el': '', nina: 'niña', temperature: 'temperature warm', warming: 'warm', rain: 'rain precipitation', rainfall: 'rain', drought: 'rain dry', prices: 'price food', food: 'food price', models: 'model forecast', forecast: 'forecast model', ocean: 'ocean sea', sea: 'sea ocean', wind: 'wind westerly', volume: 'volume fuel', fuel: 'fuel volume', peak: 'peak', strength: 'strong', strong: 'strong' };
   /* Ручка: явный адрес, иначе своя на сайте; на localhost ручки нет — демо. */
@@ -6486,7 +6486,7 @@
       '</span>' + (rv.blocking ? ' <span class="rv-no">blocking issues open</span>' : '');
   }
   // запад → восток; Залив и мировой океан не зоны Niño и стоят после четвёрки
-  var BOX_ORDER = [['nino4', 'Niño 4'], ['nino34', 'Niño 3.4'], ['nino3', 'Niño 3'], ['nino12', 'Niño 1+2'], ['gulf', 'Gulf'], ['panama', 'Panama'], ['eaus', 'E. Australia'], ['bengal', 'Bengal'], ['med', 'Mediterranean'], ['barents', 'Barents'], ['world', 'World ocean']];
+  var BOX_ORDER = [['nino4', 'Niño 4'], ['nino34', 'Niño 3.4'], ['nino3', 'Niño 3'], ['nino12', 'Niño 1+2'], ['gulf', 'Gulf'], ['panama', 'Panama'], ['baja', 'Baja'], ['socal', 'S. California'], ['ncal', 'N. California'], ['eaus', 'E. Australia'], ['bengal', 'Bengal'], ['med', 'Mediterranean'], ['barents', 'Barents'], ['world', 'World ocean']];
 
   /* Тепловая карта разреза: столбцы — долготы, строки — глубины; цвет — знак и величина
      аномалии на переменных темы (не «синий-красный» из палитры Matplotlib, а наши --nino и
@@ -6721,6 +6721,60 @@
       dates: b.dates, values: absolute ? b.sst : b.anom, analogs: out };
   }
 
+  /* Цвет уровня моря, см: синий ниже нормы, серый у нормы, оранжевый и красный выше. */
+  var COAST_STOPS = [[-20, [0.24, 0.45, 0.74]], [-5, [0.47, 0.63, 0.84]], [0, [0.40, 0.44, 0.52]], [8, [0.90, 0.69, 0.38]], [18, [0.89, 0.45, 0.26]], [30, [0.78, 0.22, 0.18]], [45, [1.0, 0.86, 0.52]]];
+  function coastRGB(v) {
+    var S0 = COAST_STOPS, i = 0; if (v <= S0[0][0]) return S0[0][1]; if (v >= S0[S0.length - 1][0]) return S0[S0.length - 1][1];
+    while (i < S0.length - 2 && v > S0[i + 1][0]) i++;
+    var a = S0[i], b = S0[i + 1], f = (v - a[0]) / (b[0] - a[0]);
+    return [a[1][0] + (b[1][0] - a[1][0]) * f, a[1][1] + (b[1][1] - a[1][1]) * f, a[1][2] + (b[1][2] - a[1][2]) * f];
+  }
+  function coastCss(v) { var c = coastRGB(v); return 'rgb(' + Math.round(c[0] * 255) + ',' + Math.round(c[1] * 255) + ',' + Math.round(c[2] * 255) + ')'; }
+  function chartCoast(TD, W, H) {
+    var STS = (TD.stations || []).filter(function (s) { return s.dates && s.anom && s.anom.some(fin); }).sort(function (a, b) { return a.lat - b.lat; });
+    var n = STS[0].dates.length, small = W < 520;
+    var Lp = small ? 92 : 150, R = 12, Tp = topPad(W), B = 40, pw = W - Lp - R, ph = H - Tp - B, rh = ph / STS.length, cw = pw / n;
+    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText('Sea level above each gauge\u2019s own normal, cm \u2014 south at the bottom, north at the top', W - Lp - R, 12) + '</text>';
+    var firstLive = n;
+    STS.forEach(function (st, r) {
+      var y = Tp + (STS.length - 1 - r) * rh;
+      for (var i = 0; i < n; i++) {
+        var v = st.anom[i], x = Lp + i * cw;
+        if (!fin(v)) continue;
+        s += '<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + (cw + 0.4).toFixed(2) + '" height="' + (rh - 1).toFixed(1) + '" style="fill:' + coastCss(v) + '"/>';
+        if ((st.src || '')[i] === 'l' && i < firstLive) firstLive = i;
+      }
+      var nm0 = st.name.split(',').pop().trim(), nm = small ? nm0.slice(0, 12) : nm0 + ', ' + fnum(st.lat, 1, false) + '\u00b0';
+      s += '<text x="' + (Lp - 5) + '" y="' + (y + rh / 2 + 4).toFixed(1) + '" text-anchor="end" font-size="' + (small ? 9 : 10.5) + '">' + esc(nm) + '</text>';
+    });
+    // месяцы по оси
+    STS[0].dates.forEach(function (d, i) { if (d.slice(8) === '01') s += '<text x="' + (Lp + i * cw).toFixed(0) + '" y="' + (Tp + ph + 13) + '" text-anchor="start">' + esc(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][+d.slice(5, 7) - 1]) + '</text>'; });
+    if (firstLive < n) s += '<line x1="' + (Lp + firstLive * cw).toFixed(1) + '" y1="' + Tp + '" x2="' + (Lp + firstLive * cw).toFixed(1) + '" y2="' + (Tp + ph) + '" style="stroke:var(--text)" stroke-width="1" stroke-dasharray="3 3" opacity=".6"/>' +
+      '<text x="' + (Lp + firstLive * cw + 3).toFixed(1) + '" y="' + (Tp + 10) + '" font-size="9">live gauges from here</text>';
+    // шкала цвета
+    var lw = Math.min(220, pw * .5), lx = W - R - lw, ly = H - 12;
+    for (var q = 0; q < 40; q++) { var vv = -20 + q * 65 / 40; s += '<rect x="' + (lx + q * lw / 40).toFixed(1) + '" y="' + (ly - 8) + '" width="' + (lw / 40 + .5).toFixed(1) + '" height="7" style="fill:' + coastCss(vv) + '"/>'; }
+    s += '<text x="' + (lx - 4) + '" y="' + (ly - 1) + '" text-anchor="end" font-size="9">\u221220</text><text x="' + (lx + lw + 2) + '" y="' + (ly - 1) + '" font-size="9">+45 cm</text>';
+    return s + '</svg>';
+  }
+  function coastSmooth(a) {
+    return (a || []).map(function (v, i) { var w = (a || []).slice(Math.max(0, i - 6), i + 1).filter(fin); return w.length >= 4 ? w.reduce(function (p, c) { return p + c; }, 0) / w.length : NaN; });
+  }
+  function coastLines(s) {
+    var xs = s.dates.map(function (d, i) { return i; }), L = [{ y: coastSmooth(s.anom), name: '2026', key: 'now', color: 'var(--text)', w: 2.2 }];
+    ['1997', '2015'].forEach(function (y) { if ((s.analogs || {})[y]) L.push({ y: coastSmooth(s.analogs[y]), name: y, color: 'var(--a' + y + ')', dash: '4 3', w: 1.4 }); });
+    return { x: xs, xlab: s.dates, lines: L, zero: true, digits: 0, title: s.name + ', ' + s.country + ' \u00b7 sea level above normal, cm, 7-day mean' };
+  }
+  function coastKingTides(TD) {
+    var K = TD.king_tides || {}, NM = { lajolla: 'La Jolla', sanfrancisco: 'San Francisco' }, out = '';
+    Object.keys(K).forEach(function (k) {
+      var L = K[k] || []; if (!L.length) return;
+      out += '<div class="kpi"><div class="kn">highest tides this autumn, ' + esc(NM[k] || k) + '</div><div class="kv">' + L.length + '<small>days</small></div><div class="km">' +
+        L.map(function (p) { return esc(p.t.slice(5, 16).replace(' ', ' at ')) + ' UTC, +' + p.cm + ' cm'; }).join('; ') + ' \u2014 above mean higher high water, NOAA prediction. A storm on these days meets the sea already raised by the wave.</div></div>';
+    });
+    return out;
+  }
+
   /* Файлы зоны для сцены порога: норма и аналоги (clim_<box>) и все годы (years_<box>), лениво. */
   var THR_LO = 27.5, THR_HI = 28, THR_Y = [18, 31.5];
   function thrSlot(iso) {
@@ -6835,6 +6889,12 @@
     else if (k === 'moorings') head = TAO.warmest ? 'Water ' + fnum(TAO.warmest.value, 1) + ' °C above normal is sitting at ' + TAO.warmest.depth + ' m under ' + TAO.warmest.station : 'Below the surface: the moorings';
     else head = GD.max_anom ? 'Reanalysis, ' + esc(GD.month) + ': up to ' + fnum(GD.max_anom.value, 1) + ' °C above normal at ' + GD.max_anom.depth + ' m, ' + esc(GD.max_anom.label) : 'Reanalysis section along the equator';
     if (k === 'hovmoller') head = 'How the heat moves: month by month, beside a past event';
+    if (k === 'coast') {
+      var TDh = S.TD || {}, sth = (TDh.stations || []).filter(function (s) { return fin(s.mean30); });
+      var tophh = sth.slice().sort(function (a, b) { return b.mean30 - a.mean30; })[0], CAh = TDh.california;
+      head = tophh ? 'The sea along the American coast: ' + fnum(tophh.mean30, 1) + ' cm above normal at ' + tophh.name + (CAh && fin(CAh.mean30) ? ', ' + fnum(CAh.mean30, 1) + ' cm in California' : '') + ', 30 days'
+        : 'Sea level along the American coast';
+    }
     if (k === 'threshold') {
       // заголовок: сколько зон стоит выше 28 °C сегодня, самая восточная из них
       var abv = ['nino4', 'nino34', 'nino3', 'nino12'].filter(function (z) { var b = boxes[z] || {}; return fin(b.last_sst) && b.last_sst >= 28; });
@@ -6843,7 +6903,7 @@
     }
     if (k === 'motion') head = 'The section month by month';
     if (k === 'zones') head = zonesHead();
-    var body = stageShell(head, [segBtn('ocean', 'surface', 'Surface, daily', 'surface'), segBtn('ocean', 'threshold', 'Storm threshold', 'surface'), segBtn('ocean', 'moorings', 'Below the surface', 'surface'), segBtn('ocean', 'section', 'Reanalysis section', 'surface'), segBtn('ocean', 'hovmoller', 'Heat on the move', 'surface'), segBtn('ocean', 'motion', 'Month by month', 'surface'),
+    var body = stageShell(head, [segBtn('ocean', 'surface', 'Surface, daily', 'surface'), segBtn('ocean', 'threshold', 'Storm threshold', 'surface'), segBtn('ocean', 'coast', 'Coast, sea level', 'surface'), segBtn('ocean', 'moorings', 'Below the surface', 'surface'), segBtn('ocean', 'section', 'Reanalysis section', 'surface'), segBtn('ocean', 'hovmoller', 'Heat on the move', 'surface'), segBtn('ocean', 'motion', 'Month by month', 'surface'),
       segBtn('ocean', 'zones', 'Between the zones', 'surface')]);
     if (O.error) { body.appendChild(el('div', 'note warn', 'The direct OISST block did not load: ' + esc(O.error))); }
     if (k === 'motion') { viewOceanMotion(body); return; }
@@ -6872,6 +6932,30 @@
       }
       body.appendChild(kh);
       body.appendChild(el('div', 'cap', esc(HV.note || '') + (ha ? ' How to read the pair: the band is the warm water of a Kelvin wave; compare where it stands on the same calendar month (further east means closer to surfacing off Peru), how strong it is, and whether it arrived earlier or later than in ' + esc(ha) + '. The extra year on the right shows what followed then, not what will follow now.' : '') + ' Built ' + esc(HV.built || '') + '. ' + vLink('the reanalysis section for the last month', 'ocean', 'section') + ' ' + vLink('the moorings, daily', 'ocean', 'moorings')));
+      return;
+    }
+
+    if (k === 'coast') {
+      /* БЕРЕГ: ПРИЛИВОМЕРЫ ПО ПУТИ ПРИБРЕЖНОЙ ВОЛНЫ КЕЛЬВИНА (владелец 29.09, статья Guardian о волне у
+         Калифорнии). Волна, дошедшая по экватору до Южной Америки, идёт вдоль берега на север и поднимает
+         уровень моря на недели и месяцы; на картинке «широта против времени» она — полоса, ползущая вверх. */
+      var TD = S.TD || {}, STS = (TD.stations || []).filter(function (s) { return s.dates && s.anom && s.anom.some(fin); });
+      if (!STS.length) { body.appendChild(el('div', 'note warn', 'The tide gauge file has not been built yet: run tools/enso/tides.py.')); return; }
+      plot(body, function (w, h) { return chartCoast(TD, w, h); });
+      var mzC = el('div', 'mosaic'); body.appendChild(mzC);
+      ['lalibertad', 'acajutla', 'lajolla', 'sanfrancisco'].forEach(function (kk) {
+        var s = STS.filter(function (x) { return x.key === kk; })[0]; if (!s) return;
+        plot(mzC, function (w, h) { return chartSeriesSimple(coastLines(s), w, h); });
+      });
+      var kpC = el('div', 'kpis');
+      kpC.innerHTML = STS.slice().sort(function (a, b) { return a.lat - b.lat; }).map(function (s) {
+        var am = s.analog_mean30 || {}, lv = s.live || {};
+        return '<div class="kpi"><div class="kn">' + esc(s.name) + ', ' + esc(s.country) + '</div><div class="kv">' + (fin(s.mean30) ? fnum(s.mean30, 1) : '\u00b7') + '<small>cm, 30 days</small></div>' +
+          '<div class="km">' + (fin(s.mean7) ? 'last 7 days ' + fnum(s.mean7, 1) + ' cm; ' : '') + (fin(am['1997']) ? 'same days of 1997 ' + fnum(am['1997'], 1) + ', ' : '') + (fin(am['2015']) ? '2015 ' + fnum(am['2015'], 1) : '') +
+          '; data to ' + esc(s.last_date || '\u2014') + (lv.source && !lv.rejected ? ', latest days ' + esc(lv.source) : (lv.rejected ? ', Hawaii series only' : '')) + (s.short_base ? '; normal from the gauge\u2019s own years ' + esc(s.short_base) + ', not 1991\u20132020' : '') + '</div></div>';
+      }).join('') + coastKingTides(TD);
+      body.appendChild(kpC);
+      body.appendChild(el('div', 'cap', esc(TD.note || '') + ' ' + esc(TD.method || '') + ' Galápagos sits on the equator itself, where the wave arrives from the west; every other gauge is on the coast, south at the bottom, north at the top. Sources: ' + esc((TD.sources || []).join('; ')) + '. Built ' + esc(TD.built || '') + '.'));
       return;
     }
 
@@ -10283,6 +10367,7 @@
     "ocean/moorings": {"title": "Temperature by depth, from the buoys", "what": "How much warmer or colder than usual the water is at each depth under the equator, measured by a line of anchored buoys strung across the Pacific.", "see": "The picture is a grid of coloured cells: columns are the buoys from west to east, rows are depths going down the page, red where the water is warmer than that buoy's own normal for the date, blue with hatching where it is colder, grey where the buoy sent nothing. A solid line drawn across the cells is the depth at which the water is 20 °C — the floor of the warm surface layer — normally shallow in the east and deep in the west. Cards below name the warmest layer found, with its depth and buoy, and how deep that 20 °C line lies at each end of the ocean.", "special": "This is the only subsurface view that is an actual measurement — instruments sitting in the water rather than a model filling gaps — and it shows the same water about a month earlier than the reanalysis section does.", "src": "TAO/TRITON moorings via ERDDAP, daily, each cell a five-day average; the normal is our own 1991–2020 climatology of that same buoy and depth"},
     "ocean/motion": {"title": "The slice played month by month", "what": "The under-water slice along the equator run as a film, one frame for each month.", "see": "A play button, a slider and the month label sit above; each frame is the full picture of depth against longitude — red warmer than normal, blue hatched colder, a solid line where the water is 20 °C now and a dashed line where it normally sits. Buttons put a past event's matching calendar month on the right half, shifted by whole years, so the two run side by side. Cards below give the warmest spot in the frame you are on and how many months the film covers.", "special": "The neighbouring diagram flattens depth away and the single section shows one month only; this is the one view that keeps depth and time together, so you can watch the warm water slide east and rise along the sloping boundary.", "src": "the same GODAS monthly frames via NOAA PSL; a past event's frames are fetched from its own stored file when you pick the year"},
     "ocean/section": {"title": "A slice under the equator, monthly", "what": "The same cut down through the water along the equator, but filled in everywhere by a model that blends buoys, drifting floats and satellites into one continuous picture.", "see": "Longitude runs across, depth runs down, red is warmer than normal for the month and blue with hatching is colder - continuous from the western Pacific to South America instead of a dozen buoy columns, with the colour key down the right-hand side. A solid line marks where the water is 20 °C now and a dashed line where it normally sits that month, so the gap between them is the change. Cards below give the warmest spot with its depth and longitude, the average temperature of the top 300 m across the middle and east of the ocean against normal with last month's figure beside it, and a reminder that this picture runs about six weeks behind.", "special": "It fills the water between the buoys, so you see the whole warm mass and where it stops rather than a dozen samples of it. It is also the only still picture that draws the normal depth of the 20 °C boundary beside today's, so how far that boundary has moved can be read straight off the chart.", "src": "NCEP GODAS reanalysis via NOAA PSL, one new month per month, about six weeks behind; compared with our own 1991–2020 normal on the same grid"},
+    "ocean/coast": {"title": "Sea level along the American coast", "what": "How high the sea stands above its normal at tide gauges from Peru to Washington, day by day since May, where a Kelvin wave that reached South America along the equator turns and runs north along the coast.", "see": "The big picture has one row per gauge, south at the bottom and north at the top, and one column per day; colour is how far the daily sea level sits above or below that gauge's own normal, in centimetres. A wave running north shows as a warm band leaning to the right as it climbs. A dashed line marks where the live gauges take over from the Hawaii archive. Four smaller panels follow single gauges with the same days of 1997 and 2015 dashed beside them; cards give every gauge's last 30 and 7 days and the highest tides of the autumn in California.", "special": "It is the only place on the panel where the event is measured on the American coast itself, where people meet it: the wave lifts the whole sea for weeks, and storms on the highest tides reach further.", "src": "University of Hawaii Sea Level Center daily series for the history and each gauge's 1991–2020 normal with its trend; NOAA CO-OPS and the IOC Sea Level Station Monitoring Facility for the latest days, de-tided with a Godin filter and aligned on the common days; NOAA tide predictions for the highest tides"},
     "ocean/threshold": {"title": "The storm threshold, zone by zone", "what": "The temperature of the sea itself, not the anomaly, in the four Niño zones through the year, against the water temperature that tall storm clouds need.", "see": "Four panels on one scale, west to east: Niño 4, 3.4, 3 and 1+2. The heavy line is this year, our own box on the NOAA grid; the dashed grey line is the 1991–2020 normal; the thin lines are the years chosen with the switch above, the strongest events in their own colours. The shaded band between 27.5 and 28 °C marks where deep convection can start. Cards give today's reading, its distance from 28 °C, the normal for the date and how many of the compared years were above the line on this date.", "special": "It answers why the atmosphere reacts to Niño 3.4 more than to the bigger anomalies in the east: the east is normally too cool for storms, and the event's strength is how far east the water above the line has spread this year.", "src": "NOAA OISST v2.1: the daily tail from the NRT grid, the years from the final grid via PSL, the normal our own 1991–2020 climatology of the box; the threshold after Graham and Barnett, Science 1987"},
     "ocean/surface": {"title": "The ocean's surface, day by day", "what": "The daily temperature of one patch of sea, shown either in degrees or as how far it sits from normal for the date.", "see": "Buttons choose the patch - the four Niño zones, the Gulf, or the whole world ocean - and switch between plain degrees and the distance from normal. The heavy dark line is the recent daily stretch of that patch, its first and last dates printed at the ends of the axis and its newest value written beside a blinking dot; thinner coloured dashed lines are the same days of 1982, 1997, 2015, 2023 and last year on the same patch, each with its year at the end of its line. A row of cards underneath gives every patch at once: latest value, its date, the change over thirty days and the average of the last seven.", "special": "It is the one place where the Gulf and the whole world ocean stand on the same footing as a Niño zone, so the same question can be put to a small sea and to the entire ocean at once. The caption also states how our own count of the grid compares with climatereanalyzer on the days both cover, and says that the newest stretch carries that offset.", "src": "NOAA OISST near-real-time grid via ERDDAP, box means our own, one new day per day, a day behind; the normal is our own 1991-2020 climatology of the same box, except the world ocean, which rides on climatereanalyzer's series and normal"},
     "overview": {"title": "Every chart at once, small", "what": "One screen with a row of headline readings along the top and small copies of the panel's other charts below them.", "see": "The top row holds a dozen or so readings, most with a small picture beside the number: a line of that series' recent history, a ring, a filled bar, or two bars one above the other, with a short line under it giving the date of the data or a note on what it means. Below sits a grid of up to forty-eight tiles, each the same chart as on its own scene but drawn small, with the axis labels thinned and the legend, where a chart has one, folded into a small \"legend\" tag beside the tile's name; point at a tile to read what it means, click to open the scene it came from. Several of the readings are our own arithmetic rather than a provider's number, the core index against 1997 and the spectral watch among them, and the small calendar mark on each names what it was computed from; the closing line gives the count of tiles, how many did not fit, and the date of the data.", "special": "It is the only scene that puts most of the panel in view at once, so a chart can be found by looking rather than by guessing a menu name, and unrelated series can be set against each other. That comparison is by eye only: each tile keeps its own scale and its own span of time.", "src": "the same files every scene reads, redrawn whenever the panel updates"},
@@ -11528,11 +11613,12 @@
     get('/data/enso/charge.json').catch(function () { return {}; }),
     get('/data/enso/years.json').catch(function () { return {}; }),
     get('/data/enso/radiance-events.json').catch(function () { return {}; }),
-    get('/data/enso/regimes.json').catch(function () { return {}; })])
+    get('/data/enso/regimes.json').catch(function () { return {}; }),
+    get('/data/enso/tides.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
       fixRiskTitles(r[0]);                    // парные риски: «world ocean:» / «land+ocean:» читались как дубли (владелец 09.09)
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}; S.LY = r[30] || {}   /* история прогнозов, облака, «кто выбивается» (15.09), обход раскладки (16.09) */; S.FU = r[31] || {};   /* биржевые котировки (18.09) */ S.RP = r[32] || {};   /* 65 мест радианса (18.09) */ S.RV = r[33] || {}; S.VP = r[34] || {};   /* реки и водяной пар (18.09) */ S.MO = r[35] || {};   /* характер роста (19.09) */ S.CH = r[36] || {};   /* заряд топлива (22.09) */ S.YA = r[37] || {};   /* годы для сравнения (23.09) */ S.RE = r[38] || {};   /* шесть событий по дню года, радианс (24.09) */ S.RG = r[39] || {};   /* режимы циркуляции (25.09) */
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}; S.LY = r[30] || {}   /* история прогнозов, облака, «кто выбивается» (15.09), обход раскладки (16.09) */; S.FU = r[31] || {};   /* биржевые котировки (18.09) */ S.RP = r[32] || {};   /* 65 мест радианса (18.09) */ S.RV = r[33] || {}; S.VP = r[34] || {};   /* реки и водяной пар (18.09) */ S.MO = r[35] || {};   /* характер роста (19.09) */ S.CH = r[36] || {};   /* заряд топлива (22.09) */ S.YA = r[37] || {};   /* годы для сравнения (23.09) */ S.RE = r[38] || {};   /* шесть событий по дню года, радианс (24.09) */ S.RG = r[39] || {};   /* режимы циркуляции (25.09) */ S.TD = r[40] || {};   /* приливомеры вдоль берега (29.09) */
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');
