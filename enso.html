@@ -728,6 +728,21 @@
   @media (max-width:760px){ .gl-s{display:none} .gl-a{width:64px;flex:0 0 64px} }
   .globe-box{flex:1 1 60%;min-height:340px;position:relative;overflow:hidden;border-radius:10px;background:radial-gradient(circle at 50% 50%, #151a24 0, #0f1219 70%)}
   .globe-wait{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--soft);font-family:var(--mono);font-size:12px}
+  /* дайджест новостей по дням (01.10) */
+  .dg{display:flex;flex-direction:column;gap:14px}
+  .dg-day{border:1px solid var(--line, var(--hair));border-radius:10px;padding:12px 14px;background:var(--tag-bg, transparent)}
+  .dg-date{font-family:var(--mono);font-size:12px;color:var(--soft);display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+  .dg-date b{color:var(--text);font-weight:600}
+  .dg-n{margin-inline-start:auto}
+  .dg-part{color:var(--ochre)}
+  .dg-head{font-size:15px;margin:6px 0 4px;line-height:1.45}
+  .dg-day h4{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--soft);margin:10px 0 4px;font-weight:600}
+  .dg-ul{margin:0;padding-inline-start:18px;line-height:1.5}
+  .dg-ul li{margin:3px 0}
+  .dg-refs{white-space:nowrap}
+  .dg-ref{display:inline-block;min-width:16px;padding:0 4px;margin-inline-start:3px;border:1px solid var(--line, var(--hair));border-radius:8px;font-size:10px;line-height:15px;text-align:center;text-decoration:none;color:var(--soft)}
+  .dg-ref:hover{color:var(--ochre);border-color:var(--ochre)}
+  .dg-kind{font-family:var(--mono);font-size:10px;color:var(--ochre);text-transform:uppercase;letter-spacing:.04em}
   /* срез под экватором на шаре (28.09): проигрыватель сверху слева, подпись цвета — над легендой */
   .cur-ctl{position:absolute;top:10px;left:12px;z-index:6;display:flex;gap:8px;align-items:center;background:rgba(20,24,32,.78);padding:6px 10px;border-radius:10px;font-family:var(--mono);font-size:11.5px;color:#eee;max-width:calc(100% - 24px)}
   .cur-ctl button{background:none;border:1px solid rgba(242,233,216,.5);color:#f2e9d8;border-radius:999px;width:26px;height:26px;cursor:pointer;font-size:11px;line-height:1;padding:0}
@@ -1492,7 +1507,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=e19962c96c"></script>
+<script src="/js/enso.js?v=36530a2533"></script>
 <script src="/js/sitenav.js?v=6ab7008c58"></script>
 </body>
 </html>

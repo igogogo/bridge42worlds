@@ -36,6 +36,7 @@ Say "=== long record (planet.py)"
 
 Say "=== mentions feed (mentions.py)"
 & $py -u mentions.py 2>&1 | Out-File $log -Append -Encoding utf8
+& $py -u news_digest.py 2>&1 | Out-File $log -Append -Encoding utf8
 
 Say "=== spectral watch (spectral.py)"
 & $py -u spectral.py 2>&1 | Out-File $log -Append -Encoding utf8
