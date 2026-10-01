@@ -4790,7 +4790,98 @@
      Dynamics и Regions. Переехала только точка входа, потому что для читателя это одна тема,
      а не три. Старые адреса продолжают работать — weatherRedirect() переводит их сюда. */
   var WEATHER_SUB = [['cities', 'Cities, 7 days'], ['land', 'Land regions'], ['rain', 'Rain'], ['rivers', 'Rivers'],
-                     ['mountains', 'Mountain ice'], ['fires', 'Fires'], ['water', 'Water held']];
+                     ['mountains', 'Mountain ice'], ['fires', 'Fires'], ['water', 'Water held'], ['cyclones', 'Tropical cyclones']];
+  /* ══ ТРОПИЧЕСКИЕ ЦИКЛОНЫ (владелец 01.10) ══════════════════════════════════════════════════
+     Треки года и энергия сезона по бассейнам: Эль-Ниньо гасит Атлантику (сдвиг ветра над ней) и раскачивает
+     восточную Пацифику (тёплая вода и слабые пассаты); здесь это видно числом, а не пересказом. IBTrACS. */
+  var CYC_COL = ['#8E949F', '#4E9DC4', '#E0C44A', '#E0A44A', '#D97B4A', '#D4645F', '#C275AE'];
+  var CYC_CAT = ['below storm', 'tropical storm', 'category 1', 'category 2', 'category 3', 'category 4', 'category 5'];
+  function cycCat(w) { return w == null ? 0 : w < 34 ? 0 : w < 64 ? 1 : w < 83 ? 2 : w < 96 ? 3 : w < 113 ? 4 : w < 137 ? 5 : 6; }
+  function cycPct(v) { var b = v || {}, n = (b.normal_to_date || {}).ace; return fin(n) && n > 0 ? Math.round(100 * b.to_date.ace / n) : null; }
+  function cycHead() {
+    var B = (S.CY || {}).basins || {};
+    if (!B.NA) return 'Tropical cyclones';
+    return 'Tropical cyclones: the Atlantic at ' + cycPct(B.NA) + ' % of its normal energy for the date, the eastern Pacific at ' + cycPct(B.EP) + ' %, the western Pacific at ' + cycPct(B.WP) + ' %';
+  }
+  function chartCyclones(C, year, W, H) {
+    var CW = S.CW || {}, T = (C.tracks || {})[year] || [];
+    var Lp = 8, R = 8, Tp = topPad(W) + 4, B = 34, pw = W - Lp - R, ph = H - Tp - B;
+    var L0 = 90, L1 = 360, A0 = -40, A1 = 60, sc = Math.min(pw / (L1 - L0), ph / (A1 - A0));
+    var mw = (L1 - L0) * sc, mh = (A1 - A0) * sc, ox = Lp + (pw - mw) / 2, oy = Tp + (ph - mh) / 2;
+    var X = function (lo) { return ox + (lo - L0) * sc; }, Y = function (la) { return oy + (A1 - la) * sc; };
+    var title = 'Tropical cyclone tracks, ' + year + (String(year) === String(C.year) ? ', 1 January to ' + String(C.last_time || '').slice(0, 10) : ', the whole year') + ' \u2014 colour is strength';
+    var s = svgOpen(W, H) + '<defs><clipPath id="cyclip"><rect x="' + ox.toFixed(1) + '" y="' + oy.toFixed(1) + '" width="' + mw.toFixed(1) + '" height="' + mh.toFixed(1) + '"/></clipPath></defs>' +
+      '<text class="tt" x="' + Lp + '" y="13">' + fitText(esc(title), W - Lp - R, 12) + '</text>' +
+      '<rect x="' + ox.toFixed(1) + '" y="' + oy.toFixed(1) + '" width="' + mw.toFixed(1) + '" height="' + mh.toFixed(1) + '" style="fill:none;stroke:var(--grid)" stroke-width=".6"/><g clip-path="url(#cyclip)">';
+    [0, 23.4, -23.4, 30].forEach(function (la) { s += '<line x1="' + ox.toFixed(1) + '" y1="' + Y(la).toFixed(1) + '" x2="' + (ox + mw).toFixed(1) + '" y2="' + Y(la).toFixed(1) + '" style="stroke:var(--grid)" stroke-width="' + (la === 0 ? .9 : .5) + '"' + (la === 0 ? '' : ' stroke-dasharray="3 4"') + '/>'; });
+    (CW.lines || []).forEach(function (ln) {
+      var d = ''; ln.forEach(function (p, i) { d += (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1); });
+      s += '<path d="' + d + '" fill="none" style="stroke:var(--soft)" stroke-width=".7" opacity=".75"/>';
+    });
+    T.forEach(function (st) {
+      var P = st.pts || [];
+      for (var i = 1; i < P.length; i++) {
+        var a = P[i - 1], b = P[i]; if (Math.abs(b[1] - a[1]) > 40) continue;
+        var c = cycCat(Math.max(a[2] || 0, b[2] || 0));
+        s += '<line x1="' + X(a[1]).toFixed(1) + '" y1="' + Y(a[0]).toFixed(1) + '" x2="' + X(b[1]).toFixed(1) + '" y2="' + Y(b[0]).toFixed(1) + '" style="stroke:' + CYC_COL[c] + '" stroke-width="' + (c >= 3 ? 1.9 : 1.2) + '" stroke-linecap="round"/>';
+      }
+    });
+    if (String(year) === String(C.year)) {
+      // подписи соседних штормов разводятся по высоте: у Мексики их бывает три в одном градусе (01.10)
+      var placed = [];
+      (C.active || []).slice().sort(function (a, b) { return a.lat - b.lat; }).forEach(function (a) {
+        var x = X(a.lon >= 45 ? a.lon : a.lon + 360), y = Y(a.lat), ly = y - 6;
+        while (placed.some(function (q) { return Math.abs(q[0] - x) < 80 && Math.abs(q[1] - ly) < 12; })) ly -= 12;
+        placed.push([x, ly]);
+        s += nowDot(x, y, CYC_COL[cycCat(a.kt)], 3.2) + (Math.abs(ly - y) > 8 ? '<line x1="' + x.toFixed(1) + '" y1="' + y.toFixed(1) + '" x2="' + (x + 5).toFixed(1) + '" y2="' + (ly + 2).toFixed(1) + '" style="stroke:var(--soft)" stroke-width=".6"/>' : '') +
+          '<text x="' + (x + 6).toFixed(1) + '" y="' + ly.toFixed(1) + '" font-size="10" style="fill:var(--text)">' + esc(a.name) + ' ' + (a.kt != null ? a.kt + ' kt' : '') + '</text>';
+      });
+    }
+    s += '</g>';
+    var lx = ox, ly2 = H - 12, SH = ['storm', 'cat 1', 'cat 2', 'cat 3', 'cat 4', 'cat 5'], step = Math.max(52, Math.min(80, mw / 6));
+    SH.forEach(function (nm, i) { var cx = lx + i * step; s += '<line x1="' + cx.toFixed(1) + '" y1="' + (ly2 - 3) + '" x2="' + (cx + 14).toFixed(1) + '" y2="' + (ly2 - 3) + '" style="stroke:' + CYC_COL[i + 1] + '" stroke-width="2.4"/><text x="' + (cx + 18).toFixed(1) + '" y="' + ly2 + '" font-size="9.5">' + esc(nm) + '</text>'; });
+    return s + '</svg>';
+  }
+  function cycCurve(b, nm) {
+    var C = (S.CY || {}).basins || {}, v = C[b]; if (!v) return { x: [], lines: [], title: nm };
+    var cv = v.curve || {}, n = (cv.mean || []).length, xs = [], xl = [];
+    for (var i = 0; i < n; i++) { xs.push(i); var d = new Date(Date.UTC(2026, 0, 1) + i * 864e5); xl.push(d.toISOString().slice(0, 10)); }
+    var L = [{ y: cv.mean, name: 'normal 1991\u20132020', color: 'var(--soft)', dash: '5 4', w: 1.3 },
+      { y: cv.p90, name: 'busy year (p90)', color: 'var(--soft)', dash: '1 3', w: 1, op: .7 },
+      { y: cv.p10, name: 'quiet year (p10)', color: 'var(--soft)', dash: '1 3', w: 1, op: .7 }];
+    ((S.CY || {}).events || []).forEach(function (y) { if (cv[y]) L.push({ y: cv[y], name: String(y), color: 'var(--a' + y + ')', w: 1.1, op: .85 }); });
+    L.push({ y: cv.now, name: String((S.CY || {}).year || 'now'), key: 'now', color: 'var(--text)', w: 2.4 });
+    return { x: xs, xlab: xl, lines: L, digits: 0, zero: true, title: nm + ' \u00b7 cyclone energy (ACE) accumulated through the year' };
+  }
+  function viewCyclones(body) {
+    var C = S.CY || {};
+    if (!C.basins) { body.appendChild(el('div', 'note warn', 'The cyclone file has not been built yet: run tools/enso/cyclones.py.')); return; }
+    if (!S.CW) {
+      if (!S.CW_busy) { S.CW_busy = true; fetch('/data/enso/coast-world.json').then(function (r) { return r.json(); }).then(function (d) { S.CW = d; render(); }).catch(function () { S.CW = {}; render(); }); }
+    }
+    var years = [String(C.year)].concat((C.events || []).slice().reverse().map(String)), yr = S.sub.cycYear || years[0];
+    var row = el('div', 'seg sub');
+    years.forEach(function (y) { var b = el('button', (yr === y ? 'on' : '') + ' sq', y); b.type = 'button'; b.onclick = function () { S.sub.cycYear = y; render(); }; row.appendChild(b); });
+    body.appendChild(row);
+    body.classList.add('scroll');
+    plot(body, function (w, h) { return chartCyclones(C, yr, w, h); });
+    var mp = body.lastElementChild;                  // карте нужна высота: в гибком поле она сжималась до полоски
+    if (mp && mp.classList.contains('plot')) { mp.style.flex = 'none'; mp.style.height = (window.innerWidth < 760 ? 280 : 460) + 'px'; }
+    var mz = el('div', 'mosaic'); body.appendChild(mz);
+    [['NA', 'North Atlantic'], ['EP', 'Eastern North Pacific'], ['WP', 'Western North Pacific']].forEach(function (o) { plot(mz, function (w, h) { return chartSeriesSimple(cycCurve(o[0], o[1]), w, h); }); });
+    var kp = el('div', 'kpis');
+    kp.innerHTML = ['NA', 'EP', 'WP'].map(function (b) {
+      var v = C.basins[b]; if (!v) return '';
+      var t = v.to_date, n = v.normal_to_date, e = v.events_to_date || {}, es = v.events_season || {};
+      return '<div class="kpi"><div class="kn">' + esc(v.name) + ', to ' + esc(String(C.last_time || '').slice(0, 10)) + '</div><div class="kv">' + Math.round(t.ace) + '<small>ACE, ' + cycPct(v) + ' % of normal for the date</small></div>' +
+        '<div class="km">' + t.named + ' named storms (normal ' + n.named + '), ' + t.hur + ' hurricanes or typhoons (' + n.hur + '), ' + t.major + ' major (' + n.major + '); energy rank ' + v.rank_ace + ' of ' + v.of + ' years since ' + v.years_from +
+        '. Same date in ' + Object.keys(e).map(function (y) { return y + ': ' + Math.round(e[y].ace); }).join(', ') + '; whole season in those years: ' + Object.keys(es).map(function (y) { return y + ' ' + Math.round(es[y].ace); }).join(', ') + ' (normal season ' + Math.round(v.normal_season.ace) + ').</div></div>';
+    }).join('') + ((C.active || []).length ? '<div class="kpi"><div class="kn">active on ' + esc(String(C.last_time || '').slice(0, 16)) + ' UTC</div><div class="kv">' + C.active.length + '<small>storms</small></div><div class="km">' +
+      C.active.map(function (a) { return esc(a.name) + ' (' + esc(a.basin) + ', ' + (a.kt != null ? a.kt + ' kt, ' + CYC_CAT[cycCat(a.kt)] : 'wind not given') + ')'; }).join('; ') + '</div></div>' : '');
+    body.appendChild(kp);
+    body.appendChild(el('div', 'cap', esc(C.note || '') + ' ' + esc(C.source || '') + '. The thin coloured lines in the energy charts are the four strongest El Ni\u00f1o years on the same calendar; dotted grey lines bracket the busiest and quietest tenth of 1991\u20132020. Built ' + esc(C.built || '') + '.'));
+  }
+
   function viewWeather() {
     var k = sub('weather', 'cities');
     var RD = (S.RD || {}).series || {}, RDK = Object.keys(RD);
@@ -4798,7 +4889,7 @@
       : k === 'land' ? 'Air over the land regions, day by day against their own record'
       : k === 'rain' ? rainHead()
       : k === 'mountains' ? 'Mountain ice: how far the air above the glaciers is from its normal'
-      : k === 'fires' ? 'Fires' : (k === 'rivers' ? ((S.RV || {}).board ? S.RV.board.below_p25 + ' of ' + S.RV.board.n + ' rivers below their lower quartile, ' + S.RV.board.record_low.length + ' at a record low for the date' : 'Rivers') : 'Water held');
+      : k === 'cyclones' ? cycHead() : k === 'fires' ? 'Fires' : (k === 'rivers' ? ((S.RV || {}).board ? S.RV.board.below_p25 + ' of ' + S.RV.board.n + ' rivers below their lower quartile, ' + S.RV.board.record_low.length + ' at a record low for the date' : 'Rivers') : 'Water held');
     var body = stageShell(head, WEATHER_SUB.map(function (o) { return segBtn('weather', o[0], o[1], 'cities'); }));
     if (k === 'cities') { viewCities(body); return; }
     if (k === 'rain') { viewRain(body); return; }
@@ -4806,6 +4897,7 @@
     if (k === 'rivers') { viewRivers(body); return; }
     if (k === 'fires') { viewFires(body); return; }
     if (k === 'water') { viewWater(body); return; }
+    if (k === 'cyclones') { viewCyclones(body); return; }
     // шесть боксов суши: тот же вид, что на Dynamics, только выбор бокса живёт здесь
     var pick = S.sub.weatherLand || RDK[0];
     if (!RDK.length) { body.appendChild(el('div', 'note warn', 'The land regions have not been built yet.')); return; }
@@ -10425,6 +10517,7 @@
     "phase/edge": {"title": "How far past our own calibration we are", "what": "Every tool on this panel was fitted on a range of the past. This table says, for each of them, what that range was and where today sits against it.", "see": "One row per instrument: the value it was fitted up to, today's value, and the distance between them.", "special": "This is not a statement about nature, it is honesty about us. Beyond the fitted range a model's output is an extrapolation, not a measurement, and its record of past errors says nothing about the case in hand. The forecast models' entire error record was collected below the highest ONI ever recorded. The weekly ceilings were set before this event began. We are past both, and that alone is a reason to hold every forecast on this panel more loosely than usual.", "src": "our own arithmetic over the model archive since 2002 and the NOAA weekly record since 1981"},
     "ocean/zones": {"title": "Between the four patches", "what": "The four Ni\u00f1o patches are four pieces of the same strip of the equator, laid out west to east: Ni\u00f1o 4, then 3.4, then 3, then 1+2 on the coast of Peru. This scene asks which of them warms first, how far an event leans east or centre, what followed in past weeks that looked like today, and where the warm water sits below the surface.", "see": "Four buttons. 'Who warms first' puts one past event on each row and marks the week each patch reached its own highest value, measured from the week Ni\u00f1o 3.4 peaked; the event now running is drawn hollow because it has no peak yet. 'East or centre' draws the gap between the coastal strip and the middle of the Pacific for every week since 1981, with a dot on each past peak. 'What followed' takes every past week that looked like this one and shows what each patch did over the next four to twenty-six weeks, as a middle case with the middle half. 'Under the surface' follows the centre of the warm water along the equator month by month, with the four patches marked in their real places across the top.", "special": "The thing most people expect to see here is not there. At weekly resolution the patches do not hand warmth to each other in a queue: Ni\u00f1o 4, 3.4 and 3 reach their highest within a week or two of each other, and the only patch with a clear timing of its own is the coastal strip, which in most events peaks about ten weeks BEFORE the middle of the Pacific rather than after it. What does travel is below the surface, and that panel shows it in degrees of longitude a month. Two cautions the scene repeats on screen: these are surface temperatures, not a measured flow of energy, so no arrow of heat between patches is claimed; and Ni\u00f1o 3.4 and Ni\u00f1o 3 overlap between 150\u00b0W and 120\u00b0W, so part of what they share is the same water counted twice.", "src": "NOAA CPC weekly Ni\u00f1o indices since September 1981 against the 1991\u20132020 base, and NOAA GODAS reanalysis for the depth of the 20 \u00b0C isotherm; the arithmetic is ours, in tools/enso/zones_flow.py"},
     "weather/cities": {"title": "Seven-day forecasts against what came", "what": "A running score of how far three weather models miss the temperature, rain, wind, humidity, cloud or pressure they promised for fifty cities, once the day itself has arrived.", "see": "Pick a parameter along the top row and a view below it. The default chart puts the forecast horizon along the bottom, one day ahead to seven, and the average miss up the side, one coloured line per model (ECMWF IFS, GFS, ICON); 'by month' redraws that miss month by month for 1, 3, 5 and 7 days ahead with a dashed line at each January; 'by city' is a table sorted worst first, with the miss at one day and at five and the number of pairs behind each. The cards above count the forecast-and-fact pairs gathered so far and name the model with the smallest miss at five days for the chosen parameter.", "special": "The forecast scoreboards elsewhere on the panel test seasonal forecasts of the Pacific; this is the only place where the check is made at the scale of one city and one week. Read a city against its own history rather than against another city — a coastal city and a continental one miss by different amounts on an ordinary day.", "src": "Open-Meteo forecasts taken each morning against the ERA5 archive about two days later, in the daily run"},
+    "weather/cyclones": {"title": "Tropical cyclones, tracks and season energy", "what": "Where this year's tropical storms, hurricanes and typhoons have gone, and how much energy each northern basin has spent so far against its normal and against the strongest El Niño years.", "see": "The map shows the tracks of the chosen year from the western Pacific to the Atlantic, each segment coloured by strength from tropical storm to category 5, with this year's active storms as blinking dots and their wind. Buttons switch the map to 1997, 2015, 2023 and 1982. Three charts follow the accumulated cyclone energy through the year in the North Atlantic, the eastern and the western North Pacific: the heavy line is this year, the dashed grey line the 1991–2020 normal with the busiest and quietest tenth dotted around it, thin coloured lines the El Niño years. Cards give the counts and the energy to date against the normal and the same date of those years.", "special": "El Niño is known to quiet the Atlantic, through stronger wind shear over it, and to feed the eastern Pacific; here the effect is a measured number for this season, not a rule of thumb.", "src": "IBTrACS v04r01 from NOAA NCEI; this season's tracks are provisional; wind from the US agencies (NHC, JTWC), 1-minute; normal 1991–2020 our own count from the same archive"},
     "weather/fires": {"title": "Active fires, region by region", "what": "Satellite detections of burning from the last 24 hours, counted by region and followed day by day since we began keeping the record.", "see": "Three buttons choose the instrument: VIIRS on Suomi NPP, VIIRS on NOAA-20, or MODIS on Aqua and Terra. The cards give the latest day's number of hotspots, how many of them were putting out more than 100 megawatts, the total heat all of them were giving off, and the three busiest regions with the day before's count beside each once the record holds more than one day. 'Regions today' is the full table of twelve regions with their count, that heat and the previous day's figure; 'day by day' draws one region's daily count as a single line from the first day of our record to the last.", "special": "It is the shortest-fused thing here: the file holds the last 24 hours of detections, while the ocean indices move over weeks. A detection is a hotspot, not an area burnt, nothing on this chart ties any fire to El Niño, and cloud and gaps between satellite passes make single days jumpy — so compare a region with its own course: savannah burning in Africa is a yearly practice, not a disaster.", "src": "NASA FIRMS open 24-hour global files from three instruments, in the daily run"},
     "weather/land": {"title": "Air over six land regions, daily", "what": "The daily temperature of the air over six patches of land where people live, given as the distance from what that calendar day is normally, so that a hot day in July can be set beside a hot day in January.", "see": "Buttons choose the patch: northern Gulf, central Europe, the Peru coast, Java, east Africa, northern India. The chart runs about 400 days left to right — a dark line for the whole stretch, a red line for the last thirty days — behind two shaded bands holding what every year since 1981 did on those same calendar days: the stronger band the middle 10 to 90 per cent, the faint one the full spread from coldest to warmest. On the right a shaded wedge with a dashed centre carries today's value forward fourteen days by adding what every past year did over the same two weeks of the calendar, and the cards below give the last day, that outlook with its low and high, and the record days — how many of the last thirty were the warmest of their calendar day, and how many are running in a row now.", "special": "This is the treatment the Pacific boxes get, applied over land: it answers how far the air where people live has moved against its own record, in a form directly comparable with the ocean series. Unlike the Niño 3.4 chart, no past-event lines run forward here — those data do not exist for these boxes.", "src": "ERA5 box means of a 3×3 grid via Open-Meteo, rebuilt in the daily run"},
     "weather/mountains": {"title": "Mountain ice and the melt season", "what": "Thirteen high points where there is ice, read for how warm the air above them has been and how much melting energy this year has already delivered.", "see": "'All points' is a table of the thirteen, ordered by how this year's melt energy ranks against past years: grid height, how far the air has run from normal over 30 days, melt energy so far this year against the normal to the same date, how much that energy has grown per decade, and the count of days above freezing. Choose a single point and the table gives way to that point's daily line over the last 400 days with the band of every year since 1981 behind it, plus cards for melt energy, the air over the ice, days above freezing and, where the data allow, the share of wet days that fell as snow. When a point does not answer on a run, a line at the top says how many of the thirteen came back, because a missing point is missing data, not missing ice.", "special": "Ice keeps the score of a whole season rather than a single day, and melt energy — our own sum of daily temperatures above freezing since 1 January — is the number that carries it; counting days above zero saturates in summer and hides a hot year. These are grid values 9 km wide, indices of the pressure on the ice, not a measurement of the ice itself.", "src": "ERA5-Land 2 m air via Open-Meteo, one pinned dataset back to 1981"},
@@ -11657,11 +11750,12 @@
     get('/data/enso/radiance-events.json').catch(function () { return {}; }),
     get('/data/enso/regimes.json').catch(function () { return {}; }),
     get('/data/enso/tides.json').catch(function () { return {}; }),
-    get('/data/enso/digest.json').catch(function () { return {}; })])
+    get('/data/enso/digest.json').catch(function () { return {}; }),
+    get('/data/enso/cyclones.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
       fixRiskTitles(r[0]);                    // парные риски: «world ocean:» / «land+ocean:» читались как дубли (владелец 09.09)
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}; S.LY = r[30] || {}   /* история прогнозов, облака, «кто выбивается» (15.09), обход раскладки (16.09) */; S.FU = r[31] || {};   /* биржевые котировки (18.09) */ S.RP = r[32] || {};   /* 65 мест радианса (18.09) */ S.RV = r[33] || {}; S.VP = r[34] || {};   /* реки и водяной пар (18.09) */ S.MO = r[35] || {};   /* характер роста (19.09) */ S.CH = r[36] || {};   /* заряд топлива (22.09) */ S.YA = r[37] || {};   /* годы для сравнения (23.09) */ S.RE = r[38] || {};   /* шесть событий по дню года, радианс (24.09) */ S.RG = r[39] || {};   /* режимы циркуляции (25.09) */ S.TD = r[40] || {};   /* приливомеры вдоль берега (29.09) */ S.DG = r[41] || {};   /* дайджест новостей по дням (01.10) */
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}; S.LY = r[30] || {}   /* история прогнозов, облака, «кто выбивается» (15.09), обход раскладки (16.09) */; S.FU = r[31] || {};   /* биржевые котировки (18.09) */ S.RP = r[32] || {};   /* 65 мест радианса (18.09) */ S.RV = r[33] || {}; S.VP = r[34] || {};   /* реки и водяной пар (18.09) */ S.MO = r[35] || {};   /* характер роста (19.09) */ S.CH = r[36] || {};   /* заряд топлива (22.09) */ S.YA = r[37] || {};   /* годы для сравнения (23.09) */ S.RE = r[38] || {};   /* шесть событий по дню года, радианс (24.09) */ S.RG = r[39] || {};   /* режимы циркуляции (25.09) */ S.TD = r[40] || {};   /* приливомеры вдоль берега (29.09) */ S.DG = r[41] || {};   /* дайджест новостей по дням (01.10) */ S.CY = r[42] || {};   /* тропические циклоны (01.10) */
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');

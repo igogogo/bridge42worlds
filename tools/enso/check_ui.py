@@ -96,7 +96,7 @@ DAILY_OUT = {
     # 28.09 выкладка его не везла — в таблице стоял только первый выход, правило молчало
     "planet.py": ["planet.json", "planet-regions.json"], "mentions.py": "mentions.json",
     "spectral.py": "spectral.json", "regions_daily.py": "regions-daily.json",
-    "globe_data.py": "globe.json", "radiance_take.py": "radiance.json", "tides.py": "tides.json", "news_digest.py": "digest.json",
+    "globe_data.py": "globe.json", "radiance_take.py": "radiance.json", "tides.py": "tides.json", "news_digest.py": "digest.json", "cyclones.py": "cyclones.json",
 }
 fresh = set(PUB.FRESH_FILES)
 for scr in sorted(set(re.findall(r"-u (\w+\.py)", ps1))):

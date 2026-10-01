@@ -57,7 +57,9 @@ PANEL_HAS = ("daily and weekly Niño 1+2, 3, 3.4 and 4 sea surface indices; ONI 
              "Brazil and California; forecasts against fact in 50 cities; tide gauges from Peru to Washington that "
              "follow the coastal Kelvin wave, with the highest tides of the season; sea surface boxes for the Persian "
              "Gulf, Mediterranean, Bay of Bengal, Barents Sea, Gulf of Panama, east Australia and three off California; "
-             "rain over land boxes; northern-hemisphere circulation regimes and blocking; global temperature, sea ice, "
+             "rain over land boxes; tropical cyclone tracks and season energy (ACE) in the North Atlantic, eastern and "
+             "western North Pacific against the normal and El Niño years; northern-hemisphere circulation regimes and "
+             "blocking; global temperature, sea ice, "
              "CO2 and sea level")
 
 SYSTEM = ("You write a short daily digest of news headlines about El Niño for a public scientific dashboard. Write in "
