@@ -109,9 +109,10 @@ def _box_mask(box, lat, lon):
     return m_lat, m_lon
 
 
-def year_means(y, verbose=True, until=None, slab=None, keys=None):
+def year_means(y, verbose=True, until=None, slab=None, keys=None, since=None):
     """{бокс: {дата: SST}} за год — четыре запроса по кварталам, из каждого все боксы плашки.
-    until — последняя дата (текущий год: до вчера), кварталы позже неё не запрашиваются."""
+    until — последняя дата (текущий год: до вчера), кварталы позже неё не запрашиваются;
+    since — первая нужная дата (ежедневный хвост), кварталы раньше неё не запрашиваются."""
     keys = keys or BOX_KEYS
     out = {b: {} for b in keys}
     # плашка Пацифики велика — по кварталам; плашка одного бокса мала — одним запросом на год (29.09)
@@ -123,6 +124,10 @@ def year_means(y, verbose=True, until=None, slab=None, keys=None):
             if q0 > until:
                 break
             q1 = min(q1, until)
+        if since is not None:
+            if q1 < since:
+                continue
+            q0 = max(q0, since)
         days, lat, lon, sst = _fetch(y, q0.isoformat(), q1.isoformat(), slab=slab)
         for b in keys:
             ml, mo = _box_mask(b, lat, lon)
@@ -176,12 +181,16 @@ def build(years=YEARS, verbose=True, current=False, only=None):
         if y != cy and all(str(y) in docs[b]["years"] for b in keys):
             continue
         try:
-            means = year_means(y, verbose, until=(date.today() - timedelta(days=1)) if y == cy else None, slab=sl, keys=keys)
+            # ХВОСТ ВМЕСТО ГОДА (01.10): если текущий год уже лежит у всех боксов плашки, берём только
+            # последние 45 дней (переход предварительных данных в окончательные) и вливаем в лежащий массив
+            tail = current and y == cy and all(str(y) in docs[b]["years"] for b in keys)
+            means = year_means(y, verbose, until=(date.today() - timedelta(days=1)) if y == cy else None, slab=sl, keys=keys,
+                               since=(date.today() - timedelta(days=45)) if tail else None)
         except Exception as e:                                   # noqa: BLE001
             print(f"  {sname} {y}: НЕ ВЗЯТ: {str(e)[:120]}", flush=True)
             continue
         for b in keys:
-            arr = [None] * 366
+            arr = list(docs[b]["years"][str(y)]) if (tail and len(docs[b]["years"].get(str(y)) or []) == 366) else [None] * 366
             for d, v in means[b].items():
                 arr[grid_index(date.fromisoformat(d))] = round(v, 3)
             docs[b]["years"][str(y)] = arr

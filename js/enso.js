@@ -6278,12 +6278,16 @@
         uah_tlt: 'tlt_tropics', uah_tls: 'tls_tropics', wb_pink: 'price_palm_oil' };
       var t = el('table', 'e');
       t.style.minWidth = '560px';
-      t.innerHTML = '<thead><tr><th>series</th><th class="prose">what it is</th><th>the source answered</th><th>the data last changed</th></tr></thead><tbody>' +
+      /* ОШИБКА ИСТОЧНИКА КОРОТКО (01.10): полный текст ответа сервера («HTTP Error 503: NOAA PMEL has
+         Maintenance in Progress, Please Wait.») распирал столбец, и заголовок соседнего сжимался в столбик —
+         обход вёрстки остановил выкладку. В ячейке код или первые слова, полный текст — в подсказке. */
+      var errShort = function (e) { var s = String(e || ''), m = s.match(/HTTP Error (\d{3})/); return m ? 'HTTP ' + m[1] : (s.length > 34 ? s.slice(0, 32) + '\u2026' : s); };
+      t.innerHTML = '<thead><tr><th>series</th><th class="prose">what it is</th><th>the source answered</th><th style="white-space:nowrap">the data last changed</th></tr></thead><tbody>' +
         Object.keys(D.sources).map(function (key) {
           var v = D.sources[key], jr = jrec(SRCJ[key]), e = jr ? (jr.entries || []) : [];
           var last = e[e.length - 1], prev = e[e.length - 2];
           var cell = last ? esc(last.d) + (prev ? ' <span class="' + jsign(last.v - prev.v) + '">' + jarrow(last.v - prev.v) + '</span>' : '') : '—';
-          return '<tr><td>' + esc(key) + '</td><td>' + esc(v.label) + '</td><td' + (v.fresh ? '' : ' class="top"') + '>' + (v.fresh ? T.fresh : T.stale + ': ' + esc(v.error)) + '</td><td class="num">' + cell + '</td></tr>';
+          return '<tr><td>' + esc(key) + '</td><td>' + esc(v.label) + '</td><td' + (v.fresh ? '' : ' class="top" title="' + esc(v.error || '') + '"') + '>' + (v.fresh ? T.fresh : T.stale + ': ' + esc(errShort(v.error))) + '</td><td class="num" style="white-space:nowrap">' + cell + '</td></tr>';
         }).join('') + '</tbody>';
       body.appendChild(t);
       body.appendChild(el('div', 'cap', 'The full register — every source with its date, whether it answered and what it feeds — is on the References tab (Data sources) and the Ops tab (Sources); the Data chain tab draws the wiring. The raw data of every update is stored verbatim with its date.'));
