@@ -714,68 +714,33 @@ SEASON_MONTHS = {"DJF": (12, 1, 2), "JFM": (1, 2, 3), "FMA": (2, 3, 4), "MAM": (
                  "ASO": (8, 9, 10), "SON": (9, 10, 11), "OND": (10, 11, 12), "NDJ": (11, 12, 1)}
 
 
-def season_todate(NW, label, year):
-    """Среднее ТЕХ месяцев сезона, что уже измерены: {value, months_done, complete, parts}.
+def season_lived(BM, label, year):
+    """Прожитая часть сезона по НАШЕМУ ДНЕВНОМУ OISST: {value, months_done, months_over, complete, parts}.
 
-    ДВЕ РАЗНЫЕ ВЕЩИ: месяц ПОСЧИТАН и месяц ПРОЖИТ. В счёт он идёт, когда в нём есть хотя бы
-    две недели: по одной неделе среднее врёт сильнее, чем помогает. А прожитым становится
-    только когда кончился, то есть когда недельный ряд ушёл в следующий месяц.
+    ДВЕ РАЗНЫЕ ВЕЩИ: месяц ПОСЧИТАН и месяц ЗАКРЫТ. В счёт он идёт с двух недель измерений: по
+    нескольким дням среднее врёт сильнее, чем помогает (15.09: JAS стоял «прожитым целиком» по
+    двум неделям сентября). Закрыт — когда измерены все его дни.
 
-    Раньше этой разницы не было, и сезон объявлялся прожитым целиком в его же последнем месяце:
-    15 сентября JAS стоял на панели как «прожит целиком, 2.49» — зелёной точкой, чертой через
-    весь плюм и словами «последний сезон, прожитый полностью», — хотя сентябрь был измерен на
-    две недели из четырёх. При растущем событии две первые недели месяца ниже целого месяца,
-    так что число было ещё и занижено (владелец 15.09: «для ASO это странно, проверь всё»).
-    """
-    months = SEASON_MONTHS.get(label)
-    if not months:
-        return None
-    monthly, weeks = NW.get("monthly") or {}, NW.get("monthly_weeks") or {}
-    last = str(NW.get("date") or "")
-    ly, lm = (int(last[:4]), int(last[5:7])) if len(last) >= 7 else (None, None)
-    vals, parts, y = [], [], year
-    prev = None
-    for m in months:
-        if prev is not None and m < prev:          # сезон переваливает через новый год
-            y += 1
-        prev = m
-        key = f"{y}-{m:02d}"
-        if key in monthly and weeks.get(key, 0) >= 2:
-            # месяц кончился, если последняя неделя ряда лежит уже в следующем месяце
-            over = bool(ly is not None and (y, m) < (ly, lm))
-            vals.append(monthly[key])
-            parts.append({"month": key, "value": monthly[key], "weeks": weeks.get(key, 0), "over": over})
-    if not vals:
+    ПО ДНЕВНОМУ РЯДУ, А НЕ ПО НЕДЕЛЬНОМУ CPC (02.10). Недельный ряд отстаёт: его последняя неделя
+    (центр 23.09) не закрывает сентябрь, и 2 октября JAS стоял на панели «прожитым на две трети»,
+    хотя сентябрь измерен до последнего дня (владелец: «по сути закончился JAS и начался ASO»).
+    Год сезона — по соглашению ONI: DJF 2027 = декабрь 2026, январь–февраль 2027."""
+    import models as _MD
+    parts = []
+    for y, m in _MD._season_year_months(label, year):
+        r = (BM or {}).get(f"{y}-{m:02d}")
+        if r and r["days"] >= 14:
+            parts.append({"month": f"{y}-{m:02d}", "value": r["value"], "days": r["days"],
+                          "over": r["days"] >= r["ndays"]})
+    if not parts:
         return None
     run = [p for p in parts if not p["over"]]
-    return {"season": label, "value": round(sum(vals) / len(vals), 2), "months_done": len(vals),
-            "months_over": sum(1 for p in parts if p["over"]),
-            # прожит целиком — это три КОНЧИВШИХСЯ месяца, и ничто другое
+    return {"season": label, "year": year, "value": round(sum(p["value"] for p in parts) / len(parts), 2),
+            "months_done": len(parts), "months_over": sum(1 for p in parts if p["over"]),
+            # закрыт — это три ЗАКРЫТЫХ месяца, и ничто другое
             "complete": sum(1 for p in parts if p["over"]) >= 3,
-            "running": (run[0] if run else None),
-            "months": 3, "parts": parts}
-
-
-def models_vs_todate(IRI, td):
-    """Кто из моделей уже ниже прожитой части сезона — то есть уже не может быть прав."""
-    if not IRI or "error" in IRI or not td:
-        return None
-    seasons = IRI.get("seasons") or []
-    if td["season"] not in seasons:
-        return None
-    i = seasons.index(td["season"])
-    vals = [(nm, m["values"][i]) for nm, m in (IRI.get("models") or {}).items()
-            if m.get("section") in ("dyn", "stat") and m.get("values") and m["values"][i] is not None]
-    if not vals:
-        return None
-    below = sorted(nm for nm, v in vals if v < td["value"])
-    return {"season": td["season"], "observed_todate": td["value"], "months_done": td["months_done"],
-            # чтобы подпись под графиком говорила то же, что отметки на нём
-            "months_over": td.get("months_over"), "running": td.get("running"),
-            "n": len(vals), "below": below, "share_below": round(100 * len(below) / len(vals)),
-            "note": ("the models forecast a three-month mean; this compares them with the part of that season "
-                     "already measured, so a model below this number would need the rest of the season to be "
-                     "colder than the part already lived")}
+            "running": (run[0] if run else None), "months": 3, "parts": parts,
+            "src": "OISST daily, our Niño 3.4 box, anomaly to 1991–2020"}
 
 
 def _slug(title):
@@ -1203,19 +1168,29 @@ def run(fetch=True):
         IRI = IP.watch(observed_weekly=NW["latest"]["n34a"], observed_monthly=psl_last)
     except Exception as e:                                       # noqa: BLE001
         IRI = {"error": str(e)[:200]}
-    # Классы моделей по завершённым сезонам (ТЗ 5.4): считаются из сохранённых выпусков без сети.
+    # Классы моделей по ЗАКРЫТЫМ сезонам (ТЗ 5.4; переделка 02.10): считаются из сохранённых выпусков
+    # без сети. Эталон — официальный ONI, а у закрытого сезона без ONI — коридор по нашему дневному
+    # OISST (models.reference). Сравнений с неделей на только что начавшемся сезоне здесь больше нет.
+    BM, ISS, REF = {}, [], {}
     if IRI and "error" not in IRI:
         try:
             import models as MD
-            _td_now = season_todate(NW, (IRI.get("against_observed") or {}).get("season") or "",
-                                    int(NW["date"][:4]))
-            cl = MD.classify(IRI, ONI, NW["latest"]["n34a"],
-                             observed_todate=(_td_now or {}).get("value"))
+            BM = MD.box_months()
+            ISS = MD._issues()
+            REF = MD.reference(ONI, BM)
+            cl = MD.classify(IRI, ONI, REF, ISS)
             IRI["classes"] = cl["classes"]; IRI["class_tally"] = cl["tally"]
             IRI["class_targets"] = cl["targets"]; IRI["class_issues"] = cl["issues"]
+            IRI["class_rule"] = cl["rule"]
             # Как ломаются модели во времени: доля ниже реальности по выпускам и постоянные
             # отстающие (владелец 03.09: «часть моделей постоянно отваливается»).
-            IRI["breakdown"] = MD.breakdown(cl, IRI, ONI)
+            IRI["breakdown"] = MD.breakdown(cl, IRI, ONI, REF, ISS)
+            IRI["scored"] = MD.scored(IRI["breakdown"])
+            # Погоня и ошибка по лидам (владелец 02.10: «посмотри, что корректируется и как»)
+            IRI["chase"] = MD.chase(ISS, REF, BM)
+            IRI["lead_profile"] = MD.lead_profile(ISS, REF, IRI)
+            ks = sorted(REF, key=lambda k: (k[1], MD.SEASON_MID[k[0]]))[-8:]
+            IRI["reference"] = [dict(season=f"{k[0]} {k[1]}", **REF[k]) for k in ks]
             # Три последних выпуска ЦЕЛИКОМ (все модели, а не только сводное): панель кладёт
             # их друг под другом, и видно, как прогноз догоняет событие от месяца к месяцу
             # (владелец 03.09: «три сета графиком, вверху самый свежий, и точка где мы сейчас»).
@@ -1223,48 +1198,47 @@ def run(fetch=True):
                              "models": {nm: {"section": m["section"], "values": m["values"]}
                                         for nm, m in i["models"].items()
                                         if m.get("values") and m["section"] in ("dyn", "stat", "avg")}}
-                            for i in MD._issues()[-3:]][::-1]
+                            for i in ISS[-3:]][::-1]
         except Exception as e:                                   # noqa: BLE001
             IRI["classes_error"] = str(e)[:200]
-    # Сезон на сегодня и последний прожитый целиком — честная опора для сравнения с плюмом.
+    # Где мы: последний закрытый сезон (точкой) и идущие (полосой) — по дневному OISST.
     if IRI and "error" not in IRI:
-        ao = IRI.get("against_observed") or {}
-        yr = int(NW["date"][:4])
-        td = season_todate(NW, ao.get("season") or "", yr)
-        IRI["todate"] = models_vs_todate(IRI, td) if td else None
-        for lab in ("JJA", "JAS", "ASO", "SON"):
-            full = season_todate(NW, lab, yr)
-            if full and full.get("complete"):
-                IRI["last_full_season"] = full
-        if IRI.get("todate"):
-            IRI["todate"]["parts"] = td["parts"]
-        # ГДЕ МЫ СТОИМ НА ШКАЛЕ ПЛЮМА, честно по каждому сезону. Точка на прожитом целиком,
-        # полоса — на прожитом наполовину: остаток сезона неизвестен, и его границы берём
-        # из разброса живых моделей (владелец 04.09). Плюс сводное по живым: сломанные
-        # модели в среднее не входят вовсе.
         try:
             import models as MD3
             IRI["live"] = MD3.live(IRI, IRI.get("classes") or {})
-            # ГОД СЕЗОНА, А НЕ ТРИ БУКВЫ. Подписи в плюме повторяются каждый год, и первая
-            # версия радостно нашла «прожитый целиком» JFM — январь-март ЭТОГО года, тогда
-            # как столбец JFM в августовском выпуске означает следующий. Берём настоящий год
-            # каждого столбца (та же функция, что чинила сравнение моделей) и оставляем
-            # только сезоны, которые уже НАЧАЛИСЬ в этом году.
-            # ПРОЖИТЫЕ СЕЗОНЫ, А НЕ ТОЛЬКО ТЕ, ЧТО РИСУЮТ МОДЕЛИ. Владелец 04.09: «нужно ещё
-            # назад периоды показать, JJA и JAS; на JAS мы сейчас в большей степени, а не на
-            # ASO». Плюм августовского выпуска начинает прогноз с ASO, где прожит ОДИН месяц
-            # из трёх, — а JAS прожит на два из трёх, и это куда более твёрдая опора. JJA
-            # прожит целиком и вовсе не является столбцом плюма. Поэтому кандидатов берём
-            # не из плюма, а из календаря: три последних сезона, которые уже начались.
-            mnow = int(NW["date"][5:7])
-            tds = []
-            for lab, mons in SEASON_MONTHS.items():
-                if not mons or mons[0] > mnow or mons[0] < mnow - 2:
-                    continue
-                t = season_todate(NW, lab, yr)
-                if t:
-                    tds.append(t)
-            tds.sort(key=lambda t: SEASON_MONTHS[t["season"]][0])
+            last = (BM or {}).get("_last")
+            ly, lm = (int(last[:4]), int(last[5:7])) if last else (int(NW["date"][:4]), int(NW["date"][5:7]))
+            cands = []
+            for y in (ly - 1, ly, ly + 1):
+                for lab in MD3.SEASONS:
+                    t_ = season_lived(BM, lab, y)
+                    if t_:
+                        cands.append(t_)
+
+            def _first(t_):
+                return MD3._season_year_months(t_["season"], t_["year"])[0]
+
+            def _endm(t_):
+                return MD3._season_year_months(t_["season"], t_["year"])[-1]
+
+            done = [t_ for t_ in cands if t_["complete"]]
+            last_full = max(done, key=_first) if done else None
+            # идущие: сезон кончается не раньше месяца последних данных и в нём есть посчитанный месяц
+            going = sorted([t_ for t_ in cands if not t_["complete"] and _endm(t_) >= (ly, lm)], key=_first)
+            if last_full:
+                r = REF.get((last_full["season"], last_full["year"])) or {}
+                last_full = dict(last_full, oni=r.get("value") if r.get("official") else None,
+                                 corridor=[r["lo"], r["hi"]] if r and not r.get("official") else None)
+            IRI["last_full_season"] = last_full
+            # Прожитая часть первого сезона, который модели публикуют: только для подписи на графике.
+            # Сколько моделей «ниже прожитого» — больше не считаем: сезон не кончился, это не оценка.
+            ao = IRI.get("against_observed") or {}
+            td_ao = next((t_ for t_ in going if t_["season"] == ao.get("season")), None)
+            IRI["todate"] = ({"season": td_ao["season"], "observed_todate": td_ao["value"],
+                              "months_done": td_ao["months_done"], "months_over": td_ao["months_over"],
+                              "running": td_ao["running"], "parts": td_ao["parts"], "src": td_ao["src"]}
+                             if td_ao else None)
+            tds = ([last_full] if last_full else []) + going
             # Коридор для неизмеренных месяцев: с ближайшего сезона, который модели дают.
             ss = IRI.get("seasons") or []
             fi = next((i for i, lab in enumerate(ss)
@@ -1272,14 +1246,14 @@ def run(fetch=True):
                                                       for m in (IRI.get("models") or {}).values()
                                                       if m.get("section") in ("dyn", "stat") and m.get("values")
                                                       and len(m["values"]) > i])), None)
-            td_fi = next((t for t in tds if fi is not None and t["season"] == ss[fi]), None)
+            td_fi = next((t_ for t_ in going if fi is not None and t_["season"] == ss[fi]), None)
             mrange = MD3._monthly_range(td_fi, IRI["live"], fi)
-            IRI["position"] = MD3.position(IRI, tds, IRI["live"], mrange)
-            IRI["position_note"] = ("Where we stand is read off the seasons we have actually lived, "
-                                    "not off the first season the models publish: the plume starts at "
-                                    + (ss[fi] if fi is not None else "?") + ", but by then only "
-                                    + str((td_fi or {}).get("months_done", "?")) + " of its 3 months are measured. "
-                                    "For seasons the models do not publish (JJA, JAS) the spread of the unmeasured "
+            IRI["position"] = MD3.position(IRI, tds, IRI["live"], mrange, REF)
+            IRI["position_note"] = ("Where we stand is read off our daily OISST: the last closed season is a point, "
+                                    "the seasons under way are a band. The plume starts at "
+                                    + (ss[fi] if fi is not None else "?") + ", of which "
+                                    + str((td_fi or {}).get("months_done", "?")) + " of 3 months are measured. "
+                                    "For seasons the models do not publish the spread of the unmeasured "
                                     "months is BORROWED from the nearest forecast season — an assumption, not a measurement.")
         except Exception as e:                                   # noqa: BLE001
             IRI["live_error"] = str(e)[:200]

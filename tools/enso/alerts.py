@@ -94,17 +94,10 @@ def detect(cur, prev=None):
                      f"{pl['n34a']:+.1f} ({prev['noaa']['date']}) → {lat['n34a']:+.1f} ({NW['date']})")
 
     # ---- 2б. модели прогноза против реальности (IRI)
+    # Сравнение НЕДЕЛИ с трёхмесячным прогнозом сезона, который только начался, убрано (02.10, владелец:
+    # «оценку моделей — только по истекшим периодам»). «Реальность выше всех моделей» и «выше на разброс»
+    # теперь считает models.alerts на последнем ЗАКРЫТОМ сезоне.
     iri = cur.get("iri") or {}
-    ao = iri.get("against_observed") if isinstance(iri, dict) else None
-    if ao:
-        if ao["reality_above_all"]:
-            _lvl(A, SHOUT, "Reality has overtaken every forecast model",
-                 f"weekly Niño 3.4 {ao['observed_weekly']:+.1f} °C is above the maximum of all {ao['n']} IRI models "
-                 f"for {ao['season']} ({ao['max']:+.2f}); issue {iri.get('issued')}")
-        elif ao["reality_above_mean_sd"]:
-            _lvl(A, WATCH, "Reality is more than one spread above the model mean",
-                 f"{ao['observed_weekly']:+.1f} °C against a mean of {ao['mean']:+.2f} ± {ao['sd']:.2f} over {ao['n']} models "
-                 f"for {ao['season']}; {ao['share_below']} % of models are already below reality")
     if prev and isinstance(iri, dict) and iri.get("issued") and isinstance(prev.get("iri"), dict) \
             and prev["iri"].get("issued") and prev["iri"]["issued"] != iri["issued"]:
         rv = iri.get("revisions") or {}

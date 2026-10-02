@@ -163,10 +163,11 @@
     :root:not([data-theme="light"]) .lvl,
     :root:not([data-theme="light"]) .cls.ok,
     :root:not([data-theme="light"]) .cls.lag,
+    :root:not([data-theme="light"]) .cls.caught,
     :root:not([data-theme="light"]) .br-l{color:#151a22}
   }
   [data-theme="dark"] .risk .rl,[data-theme="dark"] .lvl,
-  [data-theme="dark"] .cls.ok,[data-theme="dark"] .cls.lag,[data-theme="dark"] .br-l{color:#151a22}
+  [data-theme="dark"] .cls.ok,[data-theme="dark"] .cls.lag,[data-theme="dark"] .cls.caught,[data-theme="dark"] .br-l{color:#151a22}
   .g-side b .dsub{display:block;font-family:var(--mono);font-size:9.5px;font-weight:500;color:var(--soft);letter-spacing:.04em;margin-top:1px}
   /* рекорд в ленте KPI: красная рамка, мягко дышит, и метка (владелец 10.09) */
   .ks.rec{border-color:var(--lv5);position:relative;animation:b42-recpulse 2.6s ease-in-out infinite}
@@ -1038,7 +1039,7 @@
   table.e td.top{color:var(--nino);font-weight:600}
   table.e td sup{color:var(--ochre);font-family:var(--mono);font-size:9px;margin-inline-start:2px}
   .cls{font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;padding:2px 6px;border-radius:4px;color:#fff;white-space:nowrap}
-  .cls.ok{background:var(--ok)} .cls.lag{background:var(--lv3)} .cls.broke{background:var(--lv5)} .cls.na{background:var(--lv2)}
+  .cls.ok{background:var(--ok)} .cls.lag{background:var(--lv3)} .cls.broke{background:var(--lv5)} .cls.na{background:var(--lv2)} .cls.caught{background:var(--ok)} .cls.hot{background:var(--lv4)}
   .src{font-family:var(--mono);font-size:10px;color:var(--soft)}
   .mini svg{width:74px;height:14px;display:block}
   .tally{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
@@ -1507,7 +1508,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=9550bf69d2"></script>
+<script src="/js/enso.js?v=bd61f00246"></script>
 <script src="/js/sitenav.js?v=6ab7008c58"></script>
 </body>
 </html>

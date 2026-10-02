@@ -119,7 +119,9 @@ def history(snaps):
             "sst_world": (W.get("sst_world") or {}).get("last_value"),
             "t2_world": (W.get("t2_world") or {}).get("last_value"),
             "iri_issued": iri.get("issued"), "combined_peak": max(comb) if comb else None,
-            "n_below": len(ao.get("below") or []), "n_models": ao.get("n"),
+            # на последнем ЗАКРЫТОМ сезоне (02.10); у старых снимков этого поля нет — пусто, а не другой смысл
+            "n_below": (((iri.get("scored") or {}).get("latest")) or {}).get("below"),
+            "n_models": (((iri.get("scored") or {}).get("latest")) or {}).get("n"),
             # Уровни рисков и ключевые числа — чтобы панель могла сказать «было неделю назад»,
             # а не только «было в прошлый прогон» (владелец 03.09).
             # КЛЮЧ — ИМЯ РИСКА, не заголовок: заголовок несёт число, которое меняется с данными
@@ -460,7 +462,8 @@ def compact(d):
         "oni": (d.get("oni") or {}).get("current"),
         "oni_season": (d.get("oni") or {}).get("last_season"),
         "iri_issued": iri.get("issued"),
-        "iri_below": len(ao.get("below") or []), "iri_n": ao.get("n"),
+        "iri_below": (((iri or {}).get("scored") or {}).get("latest") or {}).get("below"),
+        "iri_n": (((iri or {}).get("scored") or {}).get("latest") or {}).get("n"),
         "iri_mean": ao.get("mean"), "iri_max": ao.get("max"), "iri_season": ao.get("season"),
         "iri_peak": max([v for v in ((iri.get("summary") or {}).get("combined") or []) if v is not None] or [None])
         if (iri.get("summary") or {}).get("combined") else None,

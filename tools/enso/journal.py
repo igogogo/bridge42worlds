@@ -212,9 +212,11 @@ METRICS = {
     "iri_peak": dict(
         title="Model peak, combined", unit="°C", digits=2, src="IRI plume",
         val=_peak, date=lambda d: _g(d, "iri", "issued")),
+    # НА ЗАКРЫТОМ СЕЗОНЕ (02.10): прежде — модели ниже НЕДЕЛИ на сезоне, который только начался.
+    # Старые снимки этих полей не держат, и ряд начинается заново: смешивать два смысла нельзя.
     "iri_share_below": dict(
-        title="Models below reality", unit="%", digits=0, src="IRI plume vs NOAA",
-        val=lambda d: _g(d, "iri", "against_observed", "share_below"),
+        title="Models below the last closed season", unit="%", digits=0, src="IRI plume vs ONI / our OISST",
+        val=lambda d: _g(d, "iri", "scored", "latest", "share"),
         date=lambda d: _g(d, "iri", "issued")),
     "models_broke": dict(
         title="Models that broke", unit="", digits=0, src="IRI plume, our verification",
@@ -283,12 +285,12 @@ METRICS = {
         title="Models counted as live", unit="", digits=0, src="IRI plume, our verification",
         val=lambda d: _g(d, "iri", "live", "n_live"), date=lambda d: _g(d, "iri", "issued")),
     "models_above": dict(
-        title="Models above reality", unit="", digits=0, src="IRI plume vs NOAA",
-        val=lambda d: len(_g(d, "iri", "against_observed", "above", default=[]) or []),
+        title="Models above the last closed season", unit="", digits=0, src="IRI plume vs ONI / our OISST",
+        val=lambda d: _g(d, "iri", "scored", "latest", "above"),
         date=lambda d: _g(d, "iri", "issued")),
     "models_below_n": dict(
-        title="Models below reality", unit="", digits=0, src="IRI plume vs NOAA",
-        val=lambda d: len(_g(d, "iri", "against_observed", "below", default=[]) or []),
+        title="Models below the last closed season", unit="", digits=0, src="IRI plume vs ONI / our OISST",
+        val=lambda d: _g(d, "iri", "scored", "latest", "below"),
         date=lambda d: _g(d, "iri", "issued")),
     "models_lag": dict(
         title="Models lagging", unit="", digits=0, src="IRI plume, our verification",

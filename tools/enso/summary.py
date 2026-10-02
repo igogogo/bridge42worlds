@@ -58,9 +58,13 @@ Rules, no exceptions:
    daily series is the record of single days: never compare a 30-day or 7-day mean with it. Say the
    14-day acceleration in °C in words ("0.11 °C more than in the previous 14 days"). A forecast range
    "stays above" a value only if its low path does; otherwise say where its middle path is.
-7. The digest has a section on the IRI forecast models: how many are already below reality and how
-   they revised the peak from issue to issue. Say what that means: if models are rewriting the forecast
-   upward and some have already fallen behind, their winter numbers should be read as a lower bound.
+7. The digest has a section on the IRI forecast models. Judge them only on CLOSED seasons: the last
+   closed season (its official ONI, or a corridor while the ONI is not out yet; then say it is
+   provisional) and the model classes. Never compare a three-month forecast with a weekly value or
+   with a season that has only begun. The lead error says how far below the models came at each lead
+   on this year's closed seasons, and the revisions how they rewrote the peak. Say what that means: if
+   models are rewriting the forecast upward and have been below reality at every lead, their winter
+   numbers should be read as a lower bound.
 7a. Prices: the commodity list carries a food-security weight from 1 to 5. Talk about staples (weight 4–5)
    before niche crops, and say whether a monthly jump is unusual for the season (month_unusual_z of 2 or
    more) or within the usual swing. A move since the event began is a coincidence in time, not a cause.
@@ -212,19 +216,51 @@ def _air_facts(A):
 def _iri_facts(iri):
     if not iri or "error" in iri:
         return {"no_data": (iri or {}).get("error", "IRI not loaded")}
-    ao = iri.get("against_observed") or {}
     rv = iri.get("revisions") or {}
     seasons = iri["seasons"]
     comb = iri["summary"].get("combined") or []
+    sc = iri.get("scored") or {}
+
+    def _check(r):
+        """Проверка выпуска на ЗАКРЫТОМ сезоне (02.10: не неделя против начавшегося сезона)."""
+        if not r:
+            return None
+        out = {"season": r["season"], "checked_issue": r["issue"], "lead_months": r["lead"],
+               "models": r["n"], "below": r["below"], "within": r["within"], "above": r["above"],
+               "mean_forecast": r["mean_forecast"]}
+        if r.get("official"):
+            out.update({"official_oni": r["observed"], "mean_error": r["mean_err"]})
+        else:
+            out.update({"provisional": True, "official_oni_not_out_yet": True,
+                        "corridor_our_oisst_and_oisst_less_this_years_gap": r["ref"],
+                        "mean_error_range": r["mean_err_range"]})
+        return out
+
+    cls = iri.get("classes") or {}
+    by = {}
+    for nm, c in cls.items():
+        by.setdefault(c.get("cls") or "unchecked", []).append(nm)
+    under_way = [{"season": p["season"], "months_measured": p["months_done"], "mean_so_far": p["todate"]}
+                 for p in (iri.get("position") or []) if not p.get("complete")]
+    lf = iri.get("last_full_season") or {}
     return {
         "issue": iri["issued"], "models": iri["n_models"],
         "combined_forecast_by_season": {s: v for s, v in zip(seasons, comb) if v is not None},
         "spread_by_season": [{k: t[k] for k in ("season", "mean", "min", "max", "sd")} for t in iri["summary"]["seasons"]],
-        "reality_vs_models": {"season": ao.get("season"), "reality_weekly": ao.get("observed_weekly"),
-                              "models_below_reality": len(ao.get("below", [])), "of": ao.get("n"),
-                              "which_below": ao.get("below"), "model_mean": ao.get("mean"),
-                              "model_max": ao.get("max"),
-                              "reality_above_all": ao.get("reality_above_all")},
+        "last_closed_season_check": _check(sc.get("latest")),
+        "latest_check_on_an_official_oni": _check(sc.get("latest_official")),
+        "model_classes": {"rule": "decided by the last three issues, each checked on the nearest closed season "
+                                  "(lead 2): broken = all three 0.5 °C or more below; lagging = the last one and one "
+                                  "more 0.3 °C below; running_high = the same above; caught_up = was broken, last "
+                                  "one within 0.3 °C",
+                          "broken": sorted(by.get("broke", [])), "lagging": sorted(by.get("lag", [])),
+                          "running_high": sorted(by.get("hot", [])), "caught_up": sorted(by.get("caught", [])),
+                          "keeping_up": len(by.get("ok", [])), "unchecked": len(by.get("unchecked", []))},
+        "lead_error_this_year": [{"lead_months": r["lead"], "mean_error": r["mean_err"],
+                                  "share_0_5_or_more_below_pct": r["share_low"]} for r in (iri.get("lead_profile") or [])],
+        "last_closed_season_our_daily_oisst": {"season": lf.get("season"), "value": lf.get("value"),
+                                               "official_oni": lf.get("oni")},
+        "seasons_under_way_not_scored": under_way,
         "revision_since_last_issue": {"previous_issue": rv.get("prev_issued"),
                                       "combined_peak_was": rv.get("combined_peak_prev"),
                                       "combined_peak_now": rv.get("combined_peak_cur"),
