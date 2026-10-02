@@ -340,12 +340,35 @@ def check_independent(D):
         lvl = "SHOUT five-year high" if last >= hi60 else ("WATCH twelve-month high" if last >= hi12 else "no price-high alert")
         print(f"  FAO {m[-1]}: {last}; max 60 мес {hi60}, max 12 мес {hi12}, выше в последний раз "
               f"{above[-1] if above else 'никогда'}; ожидается: {lvl}")
-        for a in D.get("alerts") or []:
-            t = a.get("title") or ""
-            if "food prices" in t.lower():
+        # КАЖДАЯ ТРЕВОГА ФАО — СВОИМ ПРАВИЛОМ (02.10): пересчёт знал одну («максимум за 12 месяцев») и
+        # помечал «три месяца роста подряд» и «против начала события» как несогласные с ним
+        tl = [(a.get("id"), a.get("title") or "", a.get("detail") or "") for a in D.get("alerts") or []
+              if "food prices" in (a.get("title") or "").lower()]
+        ov = (D.get("food") or {}).get("overlay") or {}
+        cv = (ov.get("current") or {}).get("values") or []
+        k = max((j for j, v in enumerate(cv) if v is not None), default=None)
+        for aid, t, det in tl:
+            low = t.lower()
+            if "high" in low or "five years" in low:
                 want = "five years" if last >= hi60 else ("twelve-month" if last >= hi12 else None)
                 if want and want not in t:
-                    flag(f"alert {a.get('id')}", f"«{t}» не согласуется с пересчётом ({lvl})")
+                    flag(f"alert {aid}", f"«{t}» не согласуется с пересчётом ({lvl})")
+                if not want:
+                    flag(f"alert {aid}", f"«{t}»: по пересчёту ценового максимума нет")
+            elif "in a row" in low:
+                rise = all(i[-n] > i[-n - 1] for n in range(1, 4))
+                if not rise:
+                    flag(f"alert {aid}", f"«{t}»: по пересчёту три месяца роста подряд не выходит ({i[-4:]})")
+            elif "onset of the event" in low and k is not None:
+                # аналоги — на том же расстоянии от начала, что и нынешнее событие (поймано 02.10)
+                want = {y: round(a["values"][k] - 100, 1) for y, a in (ov.get("analogs") or {}).items()
+                        if k < len(a.get("values") or []) and a["values"][k] is not None}
+                got = {y: float(v) for y, v in re.findall(r"(\d{4}) ([+-]\d+\.\d) %", det)}
+                bad = [f"{y}: {got[y]:+.1f} против {want.get(y)}" for y in got if want.get(y) != got[y]]
+                if bad:
+                    flag(f"alert {aid}", "аналоги не на том же расстоянии от начала: " + "; ".join(bad[:4]))
+        if last >= hi12 and not any(("high" in t.lower() or "five years" in t.lower()) for _, t, _d in tl):
+            flag("alerts", f"FAO {last} — максимум за 12 месяцев, а тревоги о нём нет")
     except Exception as e:                                       # noqa: BLE001
         print(f"  FAO: пересчёт не удался ({str(e)[:80]})")
     # тревога по глубине: SHOUT только выше рекорда буя до события (subsurface.build_record_tao)

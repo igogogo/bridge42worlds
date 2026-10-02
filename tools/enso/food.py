@@ -153,12 +153,18 @@ def alerts(F):
     ov = F.get("overlay") or {}
     cur = ov.get("current")
     if cur and cur.get("values"):
-        vals = [v for v in cur["values"] if v is not None]
-        if vals:
-            delta = vals[-1] - 100
+        # ТА ЖЕ ДИСТАНЦИЯ ОТ НАЧАЛА (02.10): аналоги брались по индексу len(values) - 1, а ряд всегда
+        # длиной 31 (от −6 до +24 месяцев) — в подписи стояли цены через 24 месяца после начала
+        # (1997 −23,7 %, 2006 +54,1 %), а не через столько, сколько прошло у нынешнего события
+        k = max((i for i, v in enumerate(cur["values"]) if v is not None), default=None)
+        if k is not None:
+            delta = cur["values"][k] - 100
             if abs(delta) >= 3:
+                gone = k + (cur.get("from") or -6)
                 add("WATCH", f"Food prices are {delta:+.1f} % against the onset of the event",
-                    f"onset month {ov.get('onset')} = 100; analogues at the same distance from onset: "
-                    + ", ".join(f"{y} {(a['values'][len(cur['values']) - 1] or 100) - 100:+.1f} %"
-                                for y, a in (ov.get("analogs") or {}).items()))
+                    f"onset month {ov.get('onset')} = 100, {gone} months on; analogues {gone} months after "
+                    "their own onset: "
+                    + ", ".join(f"{y} {a['values'][k] - 100:+.1f} %"
+                                for y, a in (ov.get("analogs") or {}).items()
+                                if k < len(a.get("values") or []) and a["values"][k] is not None))
     return A

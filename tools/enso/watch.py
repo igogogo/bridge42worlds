@@ -116,7 +116,10 @@ def series_watch(ds, label, analog_years=None):
         if np.isfinite(w).sum() >= 24:
             same.append(np.nanmean(w) - (sl * y + ic))
     lvl_det = lvl - trend_now
-    out["level30"] = {"anom": round(lvl, 3), "det": round(lvl_det, 3),
+    # ЧЕТЫРЕ ЗНАКА, А НЕ ТРИ (02.10): 30-дневное среднее 2,9749 хранилось как 2,975 и при показе двух знаков
+    # округлялось второй раз вверх, до 2,98, а блок аналогов округлял сразу и давал 2,97 — вердикт написал
+    # обе цифры про одну величину. Четыре знака снимают двойное округление на практике.
+    out["level30"] = {"anom": round(lvl, 4), "det": round(lvl_det, 4),
                       "pct": round(_pct_rank(lvl_det, same), 1),
                       "z": round(float((lvl_det - np.mean(same)) / np.std(same, ddof=1)), 2),
                       "rank_raw": 1 + sum(1 for y in hist

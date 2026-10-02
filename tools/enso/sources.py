@@ -25,6 +25,26 @@ ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"   # данные д
 RAW = ROOT / "raw"
 LAST = ROOT / "last_good"
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+FAO_PAGE = "https://www.fao.org/worldfoodsituation/foodpricesindex/en/"
+FAO_CSV = ("https://www.fao.org/media/docs/worldfoodsituationlibraries/wfs-library/"
+           "food_price_indices_data.csv?download=true")
+
+
+def _fao_url():
+    """АДРЕС ФАЙЛА ФАО — СО СТРАНИЦЫ ИНДЕКСА (02.10). FAO перенёс файл из default-document-library в
+    wfs-library, и прежний адрес отдал 404 ровно в день выпуска сентябрьского индекса. Ссылка на CSV
+    берётся со страницы; не вышло — запасной новый путь."""
+    try:
+        req = urllib.request.Request(FAO_PAGE, headers={"User-Agent": UA})
+        with urllib.request.urlopen(req, timeout=40) as r:
+            html = r.read().decode("utf-8", "replace")
+        m = re.search(r'href="([^"]*food_price_indices_data\.csv[^"]*)"', html)
+        if m:
+            u = m.group(1).replace("&amp;", "&")
+            return u if u.startswith("http") else "https://www.fao.org" + u
+    except Exception:                                            # noqa: BLE001
+        pass
+    return FAO_CSV
 
 
 def kuwait_url():
@@ -54,8 +74,7 @@ SOURCES = {
     "psl_nino34_monthly": ("https://psl.noaa.gov/data/correlation/nina34.anom.data", "psl_monthly"),
     # Продовольствие: единственный живой ряд без регистрации (ИСТОЧНИКИ.md, §4). CSV с шапкой
     # в четыре строки: Date, Food Price Index, Meat, Dairy, Cereals, Oils, Sugar; 2014-16 = 100.
-    "fao_fpi": ("https://www.fao.org/media/docs/worldfoodsituationlibraries/default-document-library/"
-                "food_price_indices_data.csv?download=true", "fao_csv"),
+    "fao_fpi": (_fao_url, "fao_csv"),
 
     # ── АТМОСФЕРА. До 4 сентября дашборд мерил только океан, а Эль-Ниньо — это связка океана
     # и воздуха: без атмосферы нельзя сказать, сцеплено событие или вода греется в одиночку,

@@ -51,6 +51,13 @@ Rules, no exceptions:
    measure; CUSUM is a gauge that accumulates excess; IRI is a digest of two dozen forecast models. No
    "percentile", "z-score", "detrended" without a plain-language translation in the same sentence.
    Short sentences. Join thoughts with words, not dashes.
+6a. Never write the name of a data field in the text (discharging, share_of_record, slope14, flag): say
+   what it means in plain words. A temperature anomaly is a temperature in °C, not "heat"; outside the
+   Niño indices write it as "+X °C above normal" (water at 100 m, a sea box). A forecast
+   issue that is already published is never revised: say "the next issue" instead. The record of the
+   daily series is the record of single days: never compare a 30-day or 7-day mean with it. Say the
+   14-day acceleration in °C in words ("0.11 °C more than in the previous 14 days"). A forecast range
+   "stays above" a value only if its low path does; otherwise say where its middle path is.
 7. The digest has a section on the IRI forecast models: how many are already below reality and how
    they revised the peak from issue to issue. Say what that means: if models are rewriting the forecast
    upward and some have already fallen behind, their winter numbers should be read as a lower bound.
@@ -100,7 +107,9 @@ def facts_from(cur):
         "units": {"change_over_last_14_days_c": "°C, total change over the last 14 days (NOT per day)",
                   "acceleration_c_per_14_days": "°C, this 14-day change minus the previous 14-day change",
                   "cusum": "dimensionless gauge in units of the series' spread",
-                  "anomalies": "°C against the 1991–2020 norm for the same day of year, never absolute temperature"},
+                  "anomalies": "°C against the 1991–2020 norm for the same day of year, never absolute temperature",
+                  "daily_record_before_this_year": "°C, the warmest single day of all earlier years; compare only with "
+                                                   "single days, never with a 30-day or 7-day mean"},
         "risk_index_0_100": cur["risk_index"],
         "detector_alerts": cur.get("alerts", []),
         "series": {"Niño 3.4": card("sst_nino34"), "world ocean": card("sst_world"), "land+ocean": card("t2_world")},
@@ -108,7 +117,9 @@ def facts_from(cur):
             "same_30_days": {"now": N["current30"], **{str(y): a["same30"] for y, a in N["analogs"].items()}},
             "rank_among_analogues": N["rank_same30"], "rank_among_all_years_since_1982": N["all_years_rank"],
             "analogue_peaks": {str(y): {"peak": a["peak"], "date": a["peak_date"]} for y, a in N["analogs"].items()},
-            "record_of_series": pe["hist_ceiling"],
+            # РЕКОРД ОДНОГО ДНЯ (02.10): ключ record_of_series лежал рядом с 30-дневными средними, и модель
+            # написала, что 30-дневное +2,97 «уже выше прежнего рекорда +3,02» — это рекорд суток
+            "daily_record_before_this_year": pe["hist_ceiling"],
             "peak_estimate": {"additive": [pe["additive_low"], pe["additive_high"]], "note": pe["note"]}},
         "NOAA_weekly": {"week": NW["date"], "anomalies": NW["latest"], "change_4_weeks": NW.get("chg4w"),
                         "change_8_weeks": NW.get("chg8w"), "type": NW["type"],

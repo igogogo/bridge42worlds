@@ -128,7 +128,14 @@ def year_means(y, verbose=True, until=None, slab=None, keys=None, since=None):
             if q1 < since:
                 continue
             q0 = max(q0, since)
-        days, lat, lon, sst = _fetch(y, q0.isoformat(), q1.isoformat(), slab=slab)
+        try:
+            days, lat, lon, sst = _fetch(y, q0.isoformat(), q1.isoformat(), slab=slab)
+        except RuntimeError as e:
+            # ФАЙЛ ГОДА ОТСТАЁТ (02.10): PSL выкладывает текущий год с задержкой в пару дней, и запрос
+            # квартала, начинающегося за его концом, даёт 400 — это «ещё нет данных», а не сбой года
+            if until is not None and "400" in str(e) and (until - q0).days <= 5:
+                break
+            raise
         for b in keys:
             ml, mo = _box_mask(b, lat, lon)
             sub = sst[:, ml][:, :, mo]
