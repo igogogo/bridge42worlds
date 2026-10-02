@@ -7,10 +7,17 @@
 Три сценария по силе события:
   base    — сводный прогноз моделей (p50 плюма) на ближайший пик;
   strong  — верх разброса моделей (≈p90);
-  record  — реальность выше всех моделей, сегодняшний случай: недельный уровень уже выше
-            максимума плюма.
+  record  — реальность выше всех моделей.
 Надбавка сценария: base +0 · strong +0.5 · record +1.0; если сводный пик ниже «сильного»
-(1.5 °C), всё на балл ниже. Какой сценарий идёт сейчас — решают данные (against_observed).
+(1.5 °C), всё на балл ниже.
+
+КАКОЙ СЦЕНАРИЙ ИДЁТ СЕЙЧАС — ПО ЗАКРЫТОМУ СЕЗОНУ (02.10, владелец: «переведи регионы на закрытый
+сезон»). Прежде решал недельный Niño 3.4 против трёхмесячного прогноза сезона, который только начался
+(against_observed): неделя против среднего, да ещё по сезону, где прожит месяц из трёх. Теперь —
+последний закончившийся сезон против моделей выпуска, который его прогнозировал (iri.scored, та же
+проверка, что у классов моделей): record — сезон лёг выше всех моделей, strong — выше их среднего на
+один разброс, иначе base. Пока официальный ONI сезона не вышел, берётся НИЖНИЙ край коридора: сценарий
+не поднимается на догадке.
 
 Уровень региона (1–5) на ближайшие три сезона:
   impact  = max по сезонам силы связи с воздействием: robust 4 · likely 3 · weak 1.5 · none 0
@@ -38,7 +45,30 @@ def _round_half_up(x):
     return int(x + 0.5)
 
 
-def scenario_support(iri, observed_weekly, record):
+NOISE = 0.05            # точность разбора плюма с рисунка, как в models.py
+
+
+def closed_season(iri):
+    """Последний закрытый сезон против моделей выпуска, который его прогнозировал: что решает сценарий."""
+    sc = ((iri or {}).get("scored") or {}).get("latest") or None
+    if not sc or not sc.get("n"):
+        return None
+    official = bool(sc.get("official"))
+    value = sc["observed"] if official else sc["ref"][0]
+    out = {"season": sc["season"], "issue": sc["issue"], "lead": sc.get("lead"), "official": official,
+           "value": value, "corridor": None if official else sc["ref"], "n": sc["n"],
+           "mean_forecast": sc.get("mean_forecast"), "sd_forecast": sc.get("sd_forecast"),
+           "max_forecast": sc.get("max_forecast")}
+    if sc.get("max_forecast") is not None and value > sc["max_forecast"] + NOISE:
+        out["scenario"] = "record"
+    elif sc["n"] > 1 and sc.get("sd_forecast") is not None and value > sc["mean_forecast"] + sc["sd_forecast"]:
+        out["scenario"] = "strong"
+    else:
+        out["scenario"] = "base"
+    return out
+
+
+def scenario_support(iri, closed, record):
     """Насколько каждый сценарий поддержан моделями (владелец 03.09: «надо как-то оценить
     вероятность base / strong / record»).
 
@@ -90,15 +120,21 @@ def scenario_support(iri, observed_weekly, record):
         at = sum(1 for p in peaks if p >= t - 1e-9)
         out[k] = {"threshold": round(float(t), 2), "models_at_or_above": at, "of": n,
                   "share": round(100 * at / n), "what": words[k]}
-    below_now = len([p for p in peaks if observed_weekly is not None and p < observed_weekly])
+    # «РЕАЛЬНОСТЬ УЖЕ ВЫШЕ ЧАСТИ ПИКОВ» — по закрытому сезону (трёхмесячное против трёхмесячного),
+    # а не по неделе против пиков-средних (02.10); у коридора — нижний край
+    cv = (closed or {}).get("value")
+    below_now = len([p for p in peaks if cv is not None and p < cv])
+    where = (f"the last closed season, {closed['season']} at {cv:+.2f} °C"
+             + ("" if closed.get("official") else ", the low end of its range as its official ONI is not out"))         if cv is not None else None
     out["_note"] = (f"Share of the {n} IRI models whose peak reaches the threshold"
                     + (" — counting only the models that kept up with reality; the ones that broke are "
-                       "left out, because a forecast already below the lived part of the season cannot "
+                       "left out, because a model that kept falling below the seasons that have ended cannot "
                        "set the scale for the ones ahead" if used == "live" else
                        " — counting every model, because too few passed verification this month")
                     + f". Not a probability: these are {n} different models, not draws from one. "
-                    + (f"Reality is already above {below_now} of them, so every share here is a lower bound."
-                       if below_now else "Reality is not yet above any of these peaks."))
+                    + (f"{where[0].upper() + where[1:]}, is already above the peak of {below_now} of them, "
+                       "so every share here is a lower bound." if below_now and where else
+                       (f"No model peak is below {where}." if where else "")))
     out["_median_peak"] = round(float(p50), 2)
     out["_p90_peak"] = round(float(p90), 2)
     out["_models_used"] = used
@@ -117,10 +153,10 @@ def build(iri, noaa_latest_n34, record_weekly=None):
     peak_max = max((t["mean"] + t["sd"] for t in seasons_tbl), default=None) if seasons_tbl else None
     peak_max = round(peak_max, 2) if peak_max is not None else None
     factors = _scenario_bonus(peak_p50, peak_max, noaa_latest_n34)
-    support = scenario_support(iri, noaa_latest_n34, record_weekly)
-    # какой сценарий идёт сейчас: реальность выше всех моделей → record
-    ao = (iri or {}).get("against_observed") or {}
-    current = "record" if ao.get("reality_above_all") else ("strong" if ao.get("reality_above_mean_sd") else "base")
+    closed = closed_season(iri)
+    support = scenario_support(iri, closed, record_weekly)
+    # какой сценарий идёт сейчас — по последнему ЗАКРЫТОМУ сезону (02.10); без проверки — base
+    current = (closed or {}).get("scenario") or "base"
 
     items = []
     for r in ref["regions"]:
@@ -154,8 +190,9 @@ def build(iri, noaa_latest_n34, record_weekly=None):
         "as_of": ref["as_of"], "seasons": ref["seasons"], "current_scenario": current,
         "season_notes": ref.get("season_notes") or {}, "scenario_support": support,
         "factors": factors, "peak_p50": peak_p50, "peak_max": peak_max, "observed_weekly": noaa_latest_n34,
+        "closed_season": closed,
         "items": items,
-        "method": "level = round(0.6 × impact + 0.4 × vulnerability + scenario), clipped to 1–5; impact: robust 4, likely 3, weak 1.5, none 0; scenario: base +0 (the event as in the combined forecast), strong +0.5 (top of the model spread), record +1 (reality above every model); one point lower everywhere if the combined peak is below 1.5 °C.",
+        "method": "level = round(0.6 × impact + 0.4 × vulnerability + scenario), clipped to 1–5; impact: robust 4, likely 3, weak 1.5, none 0; scenario: base +0 (the event as in the combined forecast), strong +0.5 (top of the model spread), record +1 (reality above every model); one point lower everywhere if the combined peak is below 1.5 °C. The scenario in force is chosen on the last season that has ENDED, against the models of the issue that forecast it: record if it came in above all of them, strong if above their mean by one spread, base otherwise; while its official ONI is not out, the low end of the range it can take is used.",
         "sources": {(k if len(_flat(v)) == 1 else f"{k}/{i + 1}"): x
                     for k, v in ref["sources"].items() for i, x in enumerate(_flat(v))},
     }
