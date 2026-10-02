@@ -277,7 +277,9 @@ def main():
     json_guard(FILES)
     rc = deploy(FILES, env, run)
     run.finish("ok" if rc == 0 else "failed", stamp=cur.get("stamp"), files=len(FILES),
-               reviewed=bool((s.get("review") or {}).get("stamp") == cur.get("stamp")))
+               # отметка — к РАЗБОРУ (assessed_stamp), как в review.py и на панели (28.09); по штампу
+               # данных любой лёгкий прогон писал в журнал выкладок «не проверено» (найдено 02.10)
+               reviewed=bool((s.get("review") or {}).get("stamp") == (cur.get("assessed_stamp") or cur.get("stamp"))))
     print("выкладка:", "ок" if rc == 0 else f"код {rc}")
     if rc == 0:
         push_index(a.no_index, "полная выкладка")
