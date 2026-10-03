@@ -225,7 +225,8 @@ def _iri_facts(iri):
         """Проверка выпуска на ЗАКРЫТОМ сезоне (02.10: не неделя против начавшегося сезона)."""
         if not r:
             return None
-        out = {"season": r["season"], "checked_issue": r["issue"], "lead_months": r["lead"],
+        # месяцев от выпуска до начала сезона: первый сезон выпуска с числами начинается в его же месяц (03.10)
+        out = {"season": r["season"], "checked_issue": r["issue"], "months_from_issue_to_season_start": r["lead"] - 2,
                "models": r["n"], "below": r["below"], "within": r["within"], "above": r["above"],
                "mean_forecast": r["mean_forecast"]}
         if r.get("official"):
@@ -250,13 +251,13 @@ def _iri_facts(iri):
         "last_closed_season_check": _check(sc.get("latest")),
         "latest_check_on_an_official_oni": _check(sc.get("latest_official")),
         "model_classes": {"rule": "decided by the last three issues, each checked on the nearest closed season "
-                                  "(lead 2): broken = all three 0.5 °C or more below; lagging = the last one and one "
+                                  "(the season that begins in the issue month): broken = all three 0.5 °C or more below; lagging = the last one and one "
                                   "more 0.3 °C below; running_high = the same above; caught_up = was broken, last "
                                   "one within 0.3 °C",
                           "broken": sorted(by.get("broke", [])), "lagging": sorted(by.get("lag", [])),
                           "running_high": sorted(by.get("hot", [])), "caught_up": sorted(by.get("caught", [])),
                           "keeping_up": len(by.get("ok", [])), "unchecked": len(by.get("unchecked", []))},
-        "lead_error_this_year": [{"lead_months": r["lead"], "mean_error": r["mean_err"],
+        "lead_error_this_year": [{"months_from_issue_to_season_start": r["lead"] - 2, "mean_error": r["mean_err"],
                                   "share_0_5_or_more_below_pct": r["share_low"]} for r in (iri.get("lead_profile") or [])],
         "last_closed_season_our_daily_oisst": {"season": lf.get("season"), "value": lf.get("value"),
                                                "official_oni": lf.get("oni")},

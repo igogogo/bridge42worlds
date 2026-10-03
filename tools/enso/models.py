@@ -369,7 +369,8 @@ def classify(iri, oni, ref=None, issues=None):
             "targets": sorted({c["season"] for v in per_model.values() for c in v}),
             "issues": [i["issued"] for i in issues], "n_models": len(names),
             "rule": {"good": GOOD, "low": LOW, "recent": RECENT},
-            "note": ("one check per issue: the nearest closed season the model gave a number for (lead 2); "
+            "note": ("one check per issue: the nearest season the model gave a number for, which is the season "
+                     "that begins in the issue month; "
                      "error = forecast minus the official ONI, or a corridor while the ONI is not out; "
                      "the class is decided by the last three checks; plume read from a figure, ±0.05 °C")}
 
@@ -417,7 +418,7 @@ def breakdown(classes_result, iri, oni, ref=None, issues=None):
                         "correction": (c.get("correction") or {}).get("share")})
     chronic.sort(key=lambda r: (-(r["issues_low"] or 0), r["mean_err"] if r["mean_err"] is not None else 0))
     return {"by_issue": by_issue, "chronic": chronic[:14], "n_models": len(classes),
-            "note": ("Per issue: the models' forecast for the nearest season that is now closed (lead 2), "
+            "note": ("Per issue: the models' forecast for the season that began in the issue month, now closed, "
                      "against the official ONI, or against a corridor while the ONI is not out")}
 
 
@@ -465,21 +466,171 @@ def chase(issues, ref, bm=None, back=4, ahead=2):
                                  "mean": round(sum(vals) / len(vals), 2),
                                  "p10": round(_pct(vals, 10), 2), "p90": round(_pct(vals, 90), 2),
                                  "min": vals[0], "max": vals[-1], "combined": comb})
-        r = ref.get((lab, y))
-        fact = None
-        if r and r["official"]:
-            fact = {"kind": "official", "value": r["value"], "oisst": r.get("oisst")}
-        elif r:
-            fact = {"kind": "corridor", "lo": r["lo"], "hi": r["hi"], "oisst": r["oisst"],
-                    "gap": r.get("gap"), "gap_from": r.get("gap_from")}
-        else:
-            lived = [bm.get(f"{yy}-{mm:02d}") for yy, mm in _season_year_months(lab, y)]
-            done = [x for x in lived if x and x["days"] >= x["ndays"]]
-            if done:
-                fact = {"kind": "lived", "value": round(sum(x["value"] for x in done) / len(done), 2),
-                        "months_done": len(done)}
+        fact = _fact(lab, y, ref, bm)
         if rows:
             out.append({"season": f"{lab} {y}", "rows": rows, "fact": fact})
+    return out
+
+
+def _fact(lab, y, ref, bm):
+    """Факт сезона: официальный ONI, коридор закрытого сезона без ONI или прожитые месяцы идущего."""
+    r = ref.get((lab, y))
+    if r and r["official"]:
+        return {"kind": "official", "value": r["value"], "oisst": r.get("oisst")}
+    if r:
+        return {"kind": "corridor", "lo": r["lo"], "hi": r["hi"], "oisst": r["oisst"],
+                "gap": r.get("gap"), "gap_from": r.get("gap_from")}
+    lived = [bm.get(f"{yy}-{mm:02d}") for yy, mm in _season_year_months(lab, y)]
+    done = [x for x in lived if x and x["days"] >= x["ndays"]]
+    if done:
+        return {"kind": "lived", "value": round(sum(x["value"] for x in done) / len(done), 2),
+                "months_done": len(done)}
+    return None
+
+
+def hindcast(issues, iri, ref, classes, bm=None, back=4):
+    """ПОСЛЕДНЕЕ СЛОВО МОДЕЛЕЙ О СЕЗОНАХ, КОТОРЫЕ УЖЕ ПРОШЛИ ИЛИ ИДУТ (владелец 03.10: «почему на plume нет
+    графиков моделей до SON — рисуй последние значения, что были, и отступи на шаг-два назад, до MJJ, чтобы
+    видели реальность против моделей»). Нынешний выпуск начинает числа с SON; для четырёх сезонов перед ним
+    берётся самый свежий выпуск, давший на сезон числа (на деле лид 2), — у всех моделей из одного выпуска,
+    чтобы сезон был одним срезом, — и рядом факт сезона."""
+    bm = bm if bm is not None else box_months()
+    if not issues:
+        return None
+    cur = issues[-1]
+    cur_models = {nm: m for nm, m in ((iri or {}).get("models") or {}).items()
+                  if m.get("section") in ("dyn", "stat") and m.get("values")}
+
+    def has_numbers(issue, k):
+        return any(k < len(m["values"]) and m["values"][k] is not None
+                   for m in issue["models"].values() if m["section"] in ("dyn", "stat") and m["values"])
+
+    first = next(((lab, y) for k, lab, y, lead in _dated_seasons(cur) if has_numbers(cur, k)), None)
+    if not first:
+        return None
+    seq = []
+    j, y = SEASONS.index(first[0]), first[1]
+    for _ in range(back):
+        j -= 1
+        if j < 0:
+            j, y = 11, y - 1
+        seq.insert(0, (SEASONS[j], y))
+    where = [{(lab, yy): (k, lead) for k, lab, yy, lead in _dated_seasons(i)} for i in issues]
+    vals = {nm: [] for nm in cur_models}
+    frm, comb = [], []
+    for lab, yy in seq:
+        src = None
+        for ii in range(len(issues) - 1, -1, -1):
+            kl = where[ii].get((lab, yy))
+            if kl and has_numbers(issues[ii], kl[0]):
+                src = (ii, kl[0], kl[1])
+                break
+        if not src:
+            frm.append(None); comb.append(None)
+            for nm in vals:
+                vals[nm].append(None)
+            continue
+        iss, k = issues[src[0]], src[1]
+        frm.append({"issue": iss["issued"], "lead": src[2]})
+        comb.append(next((m["values"][k] for nm, m in iss["models"].items()
+                          if "COMBINED" in nm and m["values"] and k < len(m["values"])), None))
+        for nm in vals:
+            m = iss["models"].get(nm)
+            vals[nm].append(m["values"][k] if m and m["section"] in ("dyn", "stat") and m["values"]
+                            and k < len(m["values"]) else None)
+    # живое среднее и среднеквадратичное на тех же сезонах — те же веса, что у live()
+    lm, lr = [], []
+    for si in range(len(seq)):
+        vv = [(vals[nm][si], _weight(classes.get(nm) or {})) for nm in vals if vals[nm][si] is not None]
+        vv = [(v, w) for v, w in vv if w > 0]
+        if not vv:
+            lm.append(None); lr.append(None)
+            continue
+        ws = sum(w for _, w in vv)
+        mean = sum(v * w for v, w in vv) / ws
+        sq = (sum(v * v * w for v, w in vv) / ws) ** .5
+        lm.append(round(mean, 2)); lr.append(round(sq if mean >= 0 else -sq, 2))
+    return {"seasons": [lab for lab, _ in seq], "years": [yy for _, yy in seq], "from": frm,
+            "models": vals, "combined": comb, "live_mean": lm, "live_rms": lr,
+            "fact": [_fact(lab, yy, ref, bm) for lab, yy in seq],
+            "note": ("For the seasons before the first one the newest issue forecasts, each model's line carries its "
+                     "last forecast for that season, all from the newest issue that gave numbers for it, beside "
+                     "what the season actually did.")}
+
+
+def _skey(lab, y):
+    return (y, SEASON_MID[lab])
+
+
+def axis_start(oni, back=2):
+    """Начало оси «год события»: за два сезона до начала нынешнего хода с ONI от +0,5 подряд (AMJ 2026 →
+    FMA 2026, как назвал владелец). Нет хода — тот же сезон прошлого года от последнего ONI."""
+    seq = []
+    cur_year = oni.get("year")
+    for y, row in sorted((oni.get("by_year") or {}).items(), key=lambda kv: int(kv[0])):
+        for s in SEASONS:
+            v = (row or {}).get(s)
+            if v is not None:
+                seq.append((s, int(y), v))
+    for s in SEASONS:
+        v = (oni.get("current") or {}).get(s)
+        if v is not None and cur_year and (s, int(cur_year), v) not in seq:
+            seq.append((s, int(cur_year), v))
+    seq.sort(key=lambda t: _skey(t[0], t[1]))
+    if not seq:
+        return None
+    k = len(seq) - 1
+    if seq[k][2] >= 0.5:
+        while k > 0 and seq[k - 1][2] >= 0.5:
+            k -= 1
+    lab, y = seq[k][0], seq[k][1]
+    j = SEASONS.index(lab)
+    for _ in range(back):
+        j -= 1
+        if j < 0:
+            j, y = 11, y - 1
+    return (SEASONS[j], y)
+
+
+def issues_since(issues, start):
+    """Все выпуски, чьи прогнозы доходят до начала оси, — каждый на ОБЩЕЙ календарной оси (сезон с годом):
+    {issued, seasons: ['FMA 2026', …], models: {модель: [числа]}, combined: [...]}. Лид 1 (сезон, начавшийся
+    до месяца выпуска) не берётся — в плюме он пустой."""
+    out = []
+    smin = _skey(*start)
+    for i in issues:
+        dated = [(k, lab, y) for k, lab, y, lead in _dated_seasons(i) if lead >= 2 and _skey(lab, y) >= smin]
+        if not dated:
+            continue
+        models = {}
+        comb = None
+        for nm, m in i["models"].items():
+            if not m["values"]:
+                continue
+            vals = [m["values"][k] if k < len(m["values"]) else None for k, _, _ in dated]
+            if "COMBINED" in nm:
+                comb = vals
+            elif m["section"] in ("dyn", "stat") and any(v is not None for v in vals):
+                models[nm] = vals
+        out.append({"issued": i["issued"], "seasons": [f"{lab} {y}" for _, lab, y in dated],
+                    "models": models, "combined": comb})
+    return out
+
+
+def facts_axis(start, end, ref, bm=None):
+    """Факт по каждому сезону оси от начала события до последнего сезона, где хоть что-то измерено."""
+    bm = bm if bm is not None else box_months()
+    out = []
+    lab, y = start
+    j = SEASONS.index(lab)
+    while _skey(lab, y) <= _skey(*end):
+        f = _fact(lab, y, ref, bm)
+        if f:
+            out.append(dict(season=f"{lab} {y}", **f))
+        j += 1
+        if j == 12:
+            j, y = 0, y + 1
+        lab = SEASONS[j]
     return out
 
 
@@ -564,7 +715,7 @@ def alerts(iri, bd):
         elif last["n"] > 1 and lo > last["mean_forecast"] + last["sd_forecast"]:
             add("WATCH", f"{last['season']} came in more than one spread above the models",
                 f"{what} {lo:+.2f} °C against {last['mean_forecast']:+.2f} ± {last['sd_forecast']:.2f} "
-                f"over {last['n']} models of the {last['issue']} issue (lead {last['lead']})",
+                f"over {last['n']} models of the {last['issue']} issue, made as the season began",
                 aid="reality_is_above_the_model_spread")
     chronic = [c for c in (bd.get("chronic") or []) if c["of"] >= 3 and c["issues_low"] >= max(3, int(c["of"] * 0.6))]
     if chronic:
@@ -599,6 +750,12 @@ def _pct(sorted_vals, p):
     return sorted_vals[lo] + (sorted_vals[hi] - sorted_vals[lo]) * (i - lo)
 
 
+def _weight(cr):
+    """Вес модели в живом среднем. СКОЛЬКО ЗА КЛАССОМ ПРОВЕРОК: «keeping up» без минимума выборки даётся
+    и по одной сверке, поэтому голос растёт с числом проверок и добирает полный вес к третьей (15.09)."""
+    return WEIGHTS.get(cr.get("cls") or "none", 0.6) * min(1.0, max(1, cr.get("n_checked") or 0) / 3.0)
+
+
 def live(iri, classes):
     """Сводное и разброс ПО ЖИВЫМ моделям, по каждому сезону выпуска."""
     seasons = iri.get("seasons") or []
@@ -608,10 +765,7 @@ def live(iri, classes):
             continue
         cr = classes.get(nm) or {}
         cls = cr.get("cls") or "none"
-        # СКОЛЬКО ЗА КЛАССОМ ПРОВЕРОК. «Keeping up» без минимума выборки даётся и по одной
-        # сверке. Голос растёт с числом проверок и добирает полный вес к третьей (15.09).
-        w = WEIGHTS.get(cls, 0.6) * min(1.0, max(1, cr.get("n_checked") or 0) / 3.0)
-        rows.append((nm, cls, round(w, 3), m["values"]))
+        rows.append((nm, cls, round(_weight(cr), 3), m["values"]))
     mean, rms, lo, hi, n = [], [], [], [], []
     for i in range(len(seasons)):
         vals = [(r[3][i], r[2]) for r in rows

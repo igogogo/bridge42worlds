@@ -1220,6 +1220,16 @@ def run(fetch=True):
         try:
             import models as MD3
             IRI["live"] = MD3.live(IRI, IRI.get("classes") or {})
+            # последнее слово моделей о сезонах до первого столбца выпуска — для плюма (владелец 03.10)
+            if ISS and REF:
+                IRI["hindcast"] = MD3.hindcast(ISS, IRI, REF, IRI.get("classes") or {}, BM)
+                # все выпуски с начала события на общей оси и факт по ней — виды «по выпускам» и «одна модель»
+                ax0 = MD3.axis_start(ONI)
+                if ax0:
+                    IRI["axis_from"] = f"{ax0[0]} {ax0[1]}"
+                    IRI["issues"] = MD3.issues_since(ISS, ax0)
+                    last_s = (IRI["issues"][-1]["seasons"][-1] if IRI["issues"] else f"{ax0[0]} {ax0[1]}").split()
+                    IRI["facts"] = MD3.facts_axis(ax0, (last_s[0], int(last_s[1])), REF, BM)
             last = (BM or {}).get("_last")
             ly, lm = (int(last[:4]), int(last[5:7])) if last else (int(NW["date"][:4]), int(NW["date"][5:7]))
             cands = []

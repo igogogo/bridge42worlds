@@ -207,7 +207,7 @@
     var kind = (S.M.kinds || {})[((iri.models || {})[nm] || {}).section] || '';
     var perf = [];
     if (c.cls) perf.push('Our class for it: ' + ({ ok: T.okC, caught: T.caughtC, lag: T.lagC, hot: T.hotC, broke: T.brokeC }[c.cls] || T.naC) + (c.since ? ', since the ' + c.since + ' issue' : '') + '.');
-    if (fin(c.mean_err)) perf.push('Mean error on its last three checks (each issue against its nearest season that has ended, two months ahead): ' + fnum(c.mean_err) + ' °C.');
+    if (fin(c.mean_err)) perf.push('Mean error on its last three checks (each issue against the season that began in its month, once that season has ended): ' + fnum(c.mean_err) + ' °C.');
     if (c.correction && fin(c.correction.share)) perf.push('From one issue to the next it closes ' + Math.round(c.correction.share * 100) + ' % of its own error on the same season (' + c.correction.n + ' steps).');
     if (row.of) perf.push('Below reality in ' + row.issues_low + ' of ' + row.of + ' verified issues.');
     if (c.last2 && c.last2.length) perf.push('Last checked issues: ' + c.last2.map(function (e) { return e.issue + ' ' + fnum(e.err) + ' °C'; }).join(', ') + (c.trend ? ' — ' + c.trend : '') + '.');
@@ -1216,58 +1216,60 @@
   }
 
   function chartPlume(IRI, obs, W, H) {
-    var seasons = IRI.seasons, models = IRI.models;
+    var seasons = IRI.seasons, models = IRI.models, HC = IRI.hindcast && (IRI.hindcast.seasons || []).length ? IRI.hindcast : null;
     var fc = []; seasons.forEach(function (sn, i) { if (sn.indexOf('OBS') < 0) fc.push(i); });
     var ao = IRI.against_observed || {};
     var i0 = seasons.indexOf(ao.season) >= 0 ? seasons.indexOf(ao.season) : (fc[0] || 2);
-    /* ОСЬ НАЧИНАЕТСЯ С ПРОЖИТОГО, А НЕ С ПЕРВОГО СТОЛБЦА МОДЕЛЕЙ. Владелец 04.09: «нужно ещё
-       назад периоды показать, JJA и JAS; на JAS мы сейчас в большей степени, а не на ASO».
-       Плюм начинает прогноз с ASO, где прожит один месяц из трёх. JAS прожит на два из трёх,
-       а JJA целиком — и его в плюме нет вовсе. Поэтому колонки собираем сами: сначала наши
-       прожитые сезоны (даже те, которых модели не публикуют), потом прогнозные. Модельные
-       линии рисуются только там, где у моделей есть числа, и обрыв слева честен: они туда
-       и не заглядывают. */
     var POS = IRI.position || [];
+    var posOf = function (lab) { return POS.filter(function (p) { return p.season === lab; })[0] || null; };
+    /* ОСЬ — ШАГ-ДВА НАЗАД, ДО MJJ (владелец 03.10: «почему нет графиков моделей до SON — рисуй последние
+       значения, что были, чтобы всё вместе было видно, и отступи до MJJ, чтобы видели реальность против
+       моделей»). Нынешний выпуск даёт числа с SON; на сезонах перед ним у каждой модели стоит её последний
+       прогноз (самый свежий выпуск, давший на сезон числа, — лид 2), а рядом факт: официальный ONI и наш OISST.
+       Без hindcast — прежняя ось: прожитые сезоны и столбцы плюма. */
     var cols = [];
-    POS.forEach(function (p) { if (p.i == null) cols.push({ label: p.season, i: null, pos: p }); });
-    var startI = Math.min.apply(null, POS.filter(function (p) { return p.i != null; })
-      .map(function (p) { return p.i; }).concat([i0]));
-    seasons.forEach(function (sn, i) {
-      if (i < startI || sn.indexOf('OBS') >= 0) return;
-      cols.push({ label: sn, i: i, pos: POS.filter(function (p) { return p.i === i; })[0] || null });
-    });
+    if (HC) {
+      HC.seasons.forEach(function (lab, h) { cols.push({ label: lab, i: null, h: h, pos: posOf(lab), fact: (HC.fact || [])[h], from: (HC.from || [])[h] }); });
+      seasons.forEach(function (sn, i) { if (i >= i0 && sn.indexOf('OBS') < 0 && HC.seasons.indexOf(sn) < 0) cols.push({ label: sn, i: i, h: null, pos: posOf(sn) }); });
+    } else {
+      POS.forEach(function (p) { if (p.i == null) cols.push({ label: p.season, i: null, h: null, pos: p }); });
+      var startI = Math.min.apply(null, POS.filter(function (p) { return p.i != null; }).map(function (p) { return p.i; }).concat([i0]));
+      seasons.forEach(function (sn, i) { if (i >= startI && sn.indexOf('OBS') < 0) cols.push({ label: sn, i: i, h: null, pos: posOf(sn) }); });
+    }
+    var nH = cols.filter(function (c) { return c.h != null; }).length;
     var Lp = 46, R = legendW(W), Tp = topPad(W), B = 26, pw = W - Lp - R - 8, ph = H - Tp - B;
-    var all = [obs];
-    Object.keys(models).forEach(function (k) { (models[k].values || []).forEach(function (v) { if (fin(v)) all.push(v); }); });
+    var valOf = function (name, c) {
+      if (c.h != null) { var hv = ((HC.models || {})[name] || [])[c.h]; return fin(hv) ? hv : NaN; }
+      var m = models[name]; return c.i != null && m && m.values && fin(m.values[c.i]) ? m.values[c.i] : NaN;
+    };
+    var all = [];
+    Object.keys(models).forEach(function (k) { cols.forEach(function (c) { var v = valOf(k, c); if (fin(v)) all.push(v); }); });
     POS.forEach(function (p) { [p.lo, p.hi, p.todate].forEach(function (v) { if (fin(v)) all.push(v); }); });
+    cols.forEach(function (c) { var f = c.fact || {}; [f.value, f.oisst, f.lo, f.hi].forEach(function (v) { if (fin(v)) all.push(v); }); });
+    if (!all.length) all.push(obs);
     var vmin = Math.min.apply(null, all) - .3, vmax = Math.max.apply(null, all) + .5;
-    var colOf = {}; cols.forEach(function (c, k) { if (c.i != null) colOf[c.i] = k; });
     var XK = function (k) { return Lp + k / Math.max(1, cols.length - 1) * pw; };
-    var X = function (i) { return XK(colOf[i] != null ? colOf[i] : 0); };
     var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
-    /* ЧЕРТА — ПОСЛЕДНИЙ ЗАКРЫТЫЙ СЕЗОН (02.10, владелец: «оценку моделей — только по истекшим
-       периодам»). Прежде здесь стояла прожитая часть сезона, который только начался (SON: один
-       месяц из трёх), и под чертой считались «отставшие» — модели судили по неоконченному сезону. */
-    var LF0 = IRI.last_full_season;
-    var ref = LF0 ? LF0.value : obs;
-    /* Самый прожитый из начатых сезонов — наша твёрдая опора: у него больше всего измеренных
-       месяцев. Именно про него владелец сказал «на JAS мы сейчас в большей степени». */
-    var best = (IRI.position || []).filter(function (p) { return !p.complete; })
-      .sort(function (a, b) { return b.months_done - a.months_done; })[0] || null;
+    var best = POS.filter(function (p) { return !p.complete; }).sort(function (a, b) { return b.months_done - a.months_done; })[0] || null;
     var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + fitText('IRI model plume, ' + esc(IRI.issued) + ' issue: Niño 3.4 by season — the dot is a three-month mean, not today', W - Lp - 10, 12) + '</text>';
     s += gridY(vmin, vmax, .5, Y, Lp, R + 8, W, 1);
+    // граница: слева — последнее слово прежних выпусков и факт, справа — нынешний выпуск
+    if (nH && nH < cols.length) {
+      var xb = (XK(nH - 1) + XK(nH)) / 2;
+      s += '<rect x="' + Lp + '" y="' + Tp + '" width="' + Math.max(0, xb - Lp).toFixed(1) + '" height="' + ph.toFixed(1) + '" style="fill:var(--ink)" opacity=".035"/>';
+      s += '<line x1="' + xb.toFixed(1) + '" y1="' + Tp + '" x2="' + xb.toFixed(1) + '" y2="' + (H - B) + '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="2 3" opacity=".8"/>';
+      if (W >= 560) s += '<text x="' + (xb - 5).toFixed(1) + '" y="' + (Tp + 11) + '" text-anchor="end" font-size="9" style="fill:var(--soft)">\u2190 their last forecast and the fact</text>' +
+        '<text x="' + (xb + 5).toFixed(1) + '" y="' + (Tp + 11) + '" font-size="9" style="fill:var(--soft)">' + esc(IRI.issued) + ' issue \u2192</text>';
+    }
     cols.forEach(function (c, k) {
       if (W <= 470 && k % 2 !== 0) return;
       var lived = c.pos && c.pos.months_done;
-      // крайняя подпись прижимается к краю поля, иначе уезжает за картинку
       var xk = XK(k), edge = W - R - 6;
       var anc = xk > edge - 10 ? 'end' : 'middle';
-      s += '<text x="' + Math.min(xk, edge).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="' + anc + '"' + (lived ? ' style="fill:var(--nino)"' : '') + '>' + esc(c.label) + '</text>';
+      s += '<text x="' + Math.min(xk, edge).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="' + anc + '"' + (lived ? ' style="fill:var(--nino)"' : (c.fact ? ' style="fill:var(--ok)"' : '')) + '>' + esc(c.label) + '</text>';
     });
     var cls = IRI.classes || {};
-    /* САМАЯ СИЛЬНАЯ МОДЕЛЬ — ОТДЕЛЬНОЙ ЛИНИЕЙ. Владелец 04.09: «самую сильную модель выдели».
-       Сильная здесь — та, что даёт самый высокий пик среди ЖИВЫХ: именно она говорит, куда
-       событие может уйти, если правы окажутся не середина, а край. */
+    /* САМАЯ СИЛЬНАЯ МОДЕЛЬ — ОТДЕЛЬНОЙ ЛИНИЕЙ (владелец 04.09): та, что даёт самый высокий пик среди ЖИВЫХ. */
     var strongest = null, strongestPeak = -99;
     Object.keys(models).forEach(function (name) {
       var m = models[name];
@@ -1285,79 +1287,72 @@
       var wid = hot ? 2.6 : (picked ? 1.8 : (name === strongest ? 2 : 1));
       var op = dim ? .12 : (hot || picked ? 1 : (name === strongest ? .95 : (c === 'broke' ? .45 : .38)));
       if (name === strongest && !S.pick && !S.model) col = 'var(--lv4)';
-      s += segs(fc.map(function (i) { return [X(i), fin(m.values[i]) ? Y(m.values[i]) : NaN]; }), col, wid, op);
+      s += segs(cols.map(function (cc, k) { var v = valOf(name, cc); return [XK(k), fin(v) ? Y(v) : NaN]; }), col, wid, op);
     });
     var hist = IRI.history || [];
     if (hist.length > 1 && hist[1].combined) {
       var pv = hist[1], idx = {}; pv.seasons.forEach(function (sn, k) { idx[sn] = k; });
-      s += segs(fc.map(function (i) { var k = idx[seasons[i]]; return [X(i), (k != null && fin(pv.combined[k])) ? Y(pv.combined[k]) : NaN]; }), 'var(--soft)', 1.6, pickOp('prev'), '5 4');
+      s += segs(cols.map(function (cc, k) { var kk = cc.i != null ? idx[seasons[cc.i]] : null; return [XK(k), (kk != null && fin(pv.combined[kk])) ? Y(pv.combined[kk]) : NaN]; }), 'var(--soft)', 1.6, pickOp('prev'), '5 4');
     }
+    // опубликованное сводное по ВСЕМ моделям — тонкой бледной линией (владелец 04.09); слева — из тех же выпусков
     var comb = (IRI.summary || {}).combined;
-    // опубликованное сводное по ВСЕМ моделям остаётся для сверки, но тонкой бледной линией:
-    // владелец 04.09 — «толстая тёмная линия среднее по всем моделям нас мало интересует»
-    if (comb) s += segs(cols.map(function (c) { return [XK(cols.indexOf(c)), (c.i != null && fin(comb[c.i])) ? Y(comb[c.i]) : NaN]; }), 'var(--soft)', 1.1, pickOp('pub', .75), '3 3');
-    /* СРЕДНЕЕ ПО ЖИВЫМ. Опубликованное сводное считает все модели поровну, включая
-       одиннадцать сломанных, и оттого лежит ниже. Владелец 04.09: «нам нужны модели,
-       которые шли с нами вместе, по ним и рисуем среднее». */
+    s += segs(cols.map(function (cc, k) { var v = cc.h != null ? (HC.combined || [])[cc.h] : (comb && cc.i != null ? comb[cc.i] : null); return [XK(k), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', 1.1, pickOp('pub', .75), '3 3');
+    /* СРЕДНЕЕ ПО ЖИВЫМ (владелец 04.09): «нам нужны модели, которые шли с нами вместе, по ним и рисуем
+       среднее». Слева — те же веса на последних прогнозах. */
     var LV = IRI.live;
     if (LV && (LV.rms || LV.mean)) {
-      var main = LV.rms || LV.mean;
-      s += segs(fc.map(function (i) { return [X(i), fin(main[i]) ? Y(main[i]) : NaN]; }), 'var(--ochre)', 3.2, pickOp('rms'));
-      if (LV.rms && LV.mean) s += segs(fc.map(function (i) { return [X(i), fin(LV.mean[i]) ? Y(LV.mean[i]) : NaN]; }), 'var(--ochre)', 1, pickOp('mean', .5), '2 3');
+      var main = LV.rms || LV.mean, mainH = HC ? (LV.rms ? HC.live_rms : HC.live_mean) : null;
+      s += segs(cols.map(function (cc, k) { var v = cc.h != null ? (mainH || [])[cc.h] : (cc.i != null ? main[cc.i] : null); return [XK(k), fin(v) ? Y(v) : NaN]; }), 'var(--ochre)', 3.2, pickOp('rms'));
+      if (LV.rms && LV.mean) s += segs(cols.map(function (cc, k) { var v = cc.h != null ? (HC.live_mean || [])[cc.h] : (cc.i != null ? LV.mean[cc.i] : null); return [XK(k), fin(v) ? Y(v) : NaN]; }), 'var(--ochre)', 1, pickOp('mean', .5), '2 3');
     }
-    /* ЧЕРТА УЖЕ ДОСТИГНУТОГО УРОВНЯ через весь график. Без неё глаз сравнивал всю кривую
-       с одной точкой и спрашивал: почему линии выше 2.6, если модели «ломаются»? Линии идут
-       в будущее, событие ещё растёт — сравнивать можно только на первом прогнозном сезоне,
-       и вот он, отмечен вертикалью, а под чертой видно, кто уже отстал. */
-    // черта закрытого сезона рисуется ниже, вместе с его отметкой (LF)
-    /* РОССЫПИ ТОЧЕК БОЛЬШЕ НЕТ. Владелец 04.09: «на plume сегодняшний уровень убери точки,
-       оставь только текущую, и так видно пересечение, иначе сливается». Две дюжины кружков
-       на одной вертикали читались как клякса; пересечение линий с чертой прожитого уровня
-       видно и без них, а счёт «сколько ниже» стоит фишкой под графиком. */
-    /* ГДЕ МЫ СТОИМ — ПОЛОСА, А НЕ ТОЧКА. Владелец 04.09: «ASO — это среднее, а сейчас
-       начало сентября; сравнивать надо с прожитым сезоном, и не точкой, а диапазоном,
-       шире — по разбросу моделей». Прожитая часть сезона это факт (засечка), остаток
-       неизвестен, и его границы взяты из разброса живых моделей на тот же сезон. */
+    /* ФАКТ ПРОТИВ МОДЕЛЕЙ на прошедших сезонах: официальный ONI — зелёная линия и точки (по нему модели и
+       проверяются), наш дневной OISST — пунктир и полые кружки: в 2026-м ONI ниже OISST на 0,1–0,3. */
+    var oniPts = [], oisPts = [];
+    cols.forEach(function (cc, k) {
+      var f = cc.fact; if (!f) return;
+      if (f.kind === 'official') { oniPts.push([XK(k), Y(f.value)]); if (fin(f.oisst)) oisPts.push([XK(k), Y(f.oisst)]); }
+      else if (f.kind === 'corridor' && fin(f.oisst)) oisPts.push([XK(k), Y(f.oisst)]);
+    });
+    if (oisPts.length > 1) s += poly(oisPts, 'var(--ok)', 1.2, .85, '3 3');
+    if (oniPts.length > 1) s += poly(oniPts, 'var(--ok)', 2.4);
+    cols.forEach(function (cc, k) {
+      var f = cc.fact; if (!f || cc.pos || f.kind !== 'official') return;      // отметки прожитого рисуются ниже
+      var x = XK(k), fromTxt = cc.from ? '; the models\u2019 last forecast for it came from the ' + cc.from.issue + ' issue, ' + aheadTxt(cc.from.lead) : '';
+      if (fin(f.oisst)) s += '<circle cx="' + x.toFixed(1) + '" cy="' + Y(f.oisst).toFixed(1) + '" r="3.4" style="fill:var(--surface);stroke:var(--ok)" stroke-width="1.4"><title>' + esc(cc.label + ': our daily OISST ' + fnum(f.oisst)) + '</title></circle>';
+      s += '<circle cx="' + x.toFixed(1) + '" cy="' + Y(f.value).toFixed(1) + '" r="4.4" style="fill:var(--ok)"><title>' + esc(cc.label + ': official ONI ' + fnum(f.value) + fromTxt) + '</title></circle>';
+      s += '<text x="' + x.toFixed(1) + '" y="' + (Y(f.value) + 16).toFixed(1) + '" text-anchor="middle" font-size="9.5" style="fill:var(--ok)">' + (W < 620 ? fnum(f.value) : 'ONI ' + fnum(f.value)) + '</text>';
+    });
+    /* ГДЕ МЫ СТОИМ — ПОЛОСА, А НЕ ТОЧКА (владелец 04.09). Закрытый сезон — точка с коридором ONI, идущие —
+       отрезок «прожито / где может кончиться среднее». */
     cols.forEach(function (c, k) {
       var p = c.pos;
       if (!p) return;
-      if (p.complete) {                                   // сезон закрыт — точка, рядом его официальный ONI
+      if (p.complete) {
         var wc = Math.max(14, pw / Math.max(5, cols.length) * .62), xc = XK(k);
         s += livedMark(xc, wc, p, Y, W < 620) +
           '<text x="' + xc.toFixed(0) + '" y="' + (Y(p.todate) - 9).toFixed(0) + '" text-anchor="middle" font-size="10" style="fill:var(--ok)">' + esc(p.season) + ' ' + fnum(p.todate) + '</text>';
-        /* С ЧЕМ ПРОВЕРЯЮТ МОДЕЛИ. Точка — наш дневной OISST; модели проверяются по официальному ONI
-           (ERSST), а он в 2026-м ниже OISST на 0,1–0,3. Пока ONI сезона не вышел — коридор рядом. */
+        /* С ЧЕМ ПРОВЕРЯЮТ МОДЕЛИ: точка — наш дневной OISST, а модели проверяются по ONI. Пока ONI сезона
+           не вышел — коридор рядом. */
         if (p.corridor) s += '<line x1="' + (xc + 8).toFixed(1) + '" y1="' + Y(p.corridor[1]).toFixed(1) + '" x2="' + (xc + 8).toFixed(1) + '" y2="' + Y(p.corridor[0]).toFixed(1) + '" style="stroke:var(--ok)" stroke-width="2.6" opacity=".6"><title>' + esc(p.season + ': its official ONI is not out yet; this year the ONI has run up to ' + fnum(p.todate - p.corridor[0]) + ' °C below our OISST, so it should land within ' + fnum(p.corridor[0]) + ' … ' + fnum(p.corridor[1])) + '</title></line>';
         else if (fin(p.oni)) s += '<line x1="' + (xc + 3).toFixed(1) + '" y1="' + Y(p.oni).toFixed(1) + '" x2="' + (xc + 12).toFixed(1) + '" y2="' + Y(p.oni).toFixed(1) + '" style="stroke:var(--ok)" stroke-width="2"><title>' + esc(p.season + ': official ONI ' + fnum(p.oni)) + '</title></line>';
         return;
       }
       var x = XK(k), w2 = Math.max(14, pw / Math.max(5, cols.length) * .62);
-      // у не-последней отметки подпись уходит ВЛЕВО от неё: справа стоит соседний сезон
       s += livedMark(x, w2, p, Y, W < 620, k === cols.length - 1 || !cols.slice(k + 1).some(function (q) { return q.pos; }), Lp);
       if (best && p.season === best.season && W >= 560)
         s += '<text x="' + (x + w2 / 2 + 5).toFixed(0) + '" y="' + (Y(p.hi) - 6).toFixed(0) + '" class="tt">' +
           esc(p.season) + ' ' + fnum(p.lo) + ' … ' + fnum(p.hi) + '</text>';
-      // вторая строка ушла в подпись под графиком: на самом графике она налезала на счёт моделей
     });
     var LF = IRI.last_full_season;
-    if (LF) {
-      s += '<line x1="' + Lp + '" y1="' + Y(LF.value).toFixed(1) + '" x2="' + (W - R - 8) +
-        '" y2="' + Y(LF.value).toFixed(1) + '" style="stroke:var(--ok)" stroke-width="1" stroke-dasharray="2 4" opacity=".8"/>';
-      // подпись не дублируем: столбец JJA теперь на графике и подписан сам
-    }
+    if (LF) s += '<line x1="' + Lp + '" y1="' + Y(LF.value).toFixed(1) + '" x2="' + (W - R - 8) + '" y2="' + Y(LF.value).toFixed(1) + '" style="stroke:var(--ok)" stroke-width="1" stroke-dasharray="2 4" opacity=".8"/>';
     if (best) {
-      /* На узком экране эта строка (полсотни знаков, привязка к правому краю) уезжала за
-         левый край поля и ложилась на подписи шкалы — там она короткая (владелец 09.09). */
       s += W < 560
-        ? '<text x="' + Lp + '" y="' + (Tp + 11) + '" class="tt" font-size="10" style="fill:var(--nino)">firmest: ' + esc(best.season) + ' ' + fnum(best.todate) + ', ' + (best.months_over == null ? best.months_done : best.months_over) + '/3</text>'
-        : '<text x="' + (W - R - 10) + '" y="' + (Tp + 12) + '" text-anchor="end" class="tt" style="fill:var(--nino)">our firmest reading: ' +
+        ? '<text x="' + Lp + '" y="' + (Tp + 24) + '" class="tt" font-size="10" style="fill:var(--nino)">firmest: ' + esc(best.season) + ' ' + fnum(best.todate) + ', ' + (best.months_over == null ? best.months_done : best.months_over) + '/3</text>'
+        : '<text x="' + (W - R - 10) + '" y="' + (Tp + 24) + '" text-anchor="end" class="tt" style="fill:var(--nino)">our firmest reading: ' +
         esc(best.season) + ' ' + fnum(best.todate) + ', ' + (best.months_over == null ? best.months_done : best.months_over) + ' of 3 months finished' +
         ((best.running || {}).month ? ' and ' + best.running.days + ' day' + (best.running.days === 1 ? '' : 's') + ' of ' + monName(best.running.month) : '') + '</text>';
     }
-    // счёт «сколько ниже прожитого» ушёл в фишки под графиком: на графике он налезал на полосу
     var LVn = IRI.live || {}, tally2 = IRI.class_tally || {};
-    /* Сначала то, что нажимается и выделяет ряды; пустая строка; потом справочные строки
-       без действия (владелец 05.09). По умолчанию выделены «keeping up». */
     var leg = [['keeping up ' + (tally2.ok || 0), 'var(--nina)', 1.4, null, 'ok'],
       ['caught up ' + (tally2.caught || 0), 'var(--ok)', 1.4, null, 'caught'],
       ['lagging ' + (tally2.lag || 0), 'var(--lv3)', 1.4, null, 'lag'],
@@ -1369,8 +1364,9 @@
       ['published, all ' + (LVn.n_all || '—'), 'var(--soft)', 1.1, '3 3', 'pub'],
       ['previous issue' + (hist.length > 1 ? ' (' + hist[1].issued + ')' : ''), 'var(--soft)', 1.6, '5 4', 'prev'],
       ['']];
-    if (IRI.last_full_season) leg.push([esc(IRI.last_full_season.season) + ' closed ' + fnum(IRI.last_full_season.value) + ', our OISST', 'var(--ok)', 1, '2 4']);
-    if (IRI.last_full_season && IRI.last_full_season.corridor) leg.push(['its ONI, not out yet', 'var(--ok)', 2.6]);
+    if (HC) { leg.push(['official ONI, the fact', 'var(--ok)', 2.4]); leg.push(['our daily OISST', 'var(--ok)', 1.2, '3 3']); }
+    if (LF) leg.push([esc(LF.season) + ' closed ' + fnum(LF.value) + ', our OISST', 'var(--ok)', 1, '2 4']);
+    if (LF && LF.corridor) leg.push(['its ONI, not out yet', 'var(--ok)', 2.6]);
     leg.push(['lived part of a season: dot', 'var(--nino)', 'dot']);
     leg.push(['where its mean can end: bar', 'var(--nino)', 4]);
     if (S.model) leg.unshift([S.model, 'var(--ochre)', 2.6, '', S.model]);
@@ -1635,6 +1631,14 @@
      менялись от выпуска к выпуску по мере приближения сезона — и где лёг факт: официальный ONI
      (сплошная зелёная), коридор закрытого сезона без ONI (зелёная полоса) или прожитые месяцы
      идущего (красный пунктир — это не итог). Последний квадрат — средняя ошибка по лидам. */
+  /* СКОЛЬКО ДО НАЧАЛА СЕЗОНА (03.10). Первый прогнозный сезон выпуска с числами — тот, что начинается в
+     месяц выпуска (июльский выпуск → JAS); в нашем счёте это «лид 2». Подписи прежде говорили «за два месяца
+     вперёд» — неверно: к выходу выпуска (~19-го) полмесяца этого сезона уже прошло. */
+  function aheadTxt(lead) {
+    var a = (lead == null ? 2 : lead) - 2;
+    return a <= 0 ? 'made as the season began' : a + ' month' + (a === 1 ? '' : 's') + ' before the season began';
+  }
+
   function chartChase(IRI, W, H) {
     var CH = IRI.chase || [], LP = IRI.lead_profile || [];
     if (!CH.length) return svgOpen(W, H) + '<text x="20" y="' + (H / 2) + '">No season to follow yet.</text></svg>';
@@ -1683,7 +1687,7 @@
       var every = Math.max(1, Math.ceil(n / Math.max(1, Math.floor(pw / 24))));
       c.rows.forEach(function (r, i) {
         s += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(r.mean).toFixed(1) + '" r="2.4" style="fill:var(--text)"><title>' +
-          esc(r.issue + ' issue, ' + r.lead + ' months ahead: mean ' + fnum(r.mean) + ', p10 … p90 ' + fnum(r.p10) + ' … ' + fnum(r.p90) + ', ' + r.n + ' models') + '</title></circle>';
+          esc(r.issue + ' issue, ' + aheadTxt(r.lead) + ': mean ' + fnum(r.mean) + ', p10 … p90 ' + fnum(r.p10) + ' … ' + fnum(r.p90) + ', ' + r.n + ' models') + '</title></circle>';
         if (i % every === 0 || i === n - 1) s += '<text x="' + X(i).toFixed(1) + '" y="' + (y0 + ch - 5).toFixed(1) + '" text-anchor="middle" font-size="8.5">' + esc(r.issue.slice(0, 3)) + '</text>';
       });
       var lr = c.rows[n - 1];
@@ -1696,14 +1700,14 @@
       var Y3 = function (v) { return Tp2 + (0.05 - v) / (0.05 - emn) * ph2; };
       var bw = Math.max(5, pw2 / LP.length * .6);
       s += '<rect x="' + x0.toFixed(1) + '" y="' + y0.toFixed(1) + '" width="' + cw.toFixed(1) + '" height="' + ch.toFixed(1) + '" rx="6" style="fill:var(--ink);stroke:var(--grid)" fill-opacity=".04"/>';
-      s += '<text x="' + (x0 + 8) + '" y="' + (y0 + 13) + '" font-size="10.5" style="fill:var(--text);font-weight:700">' + fitText('Error by months ahead', cw - 16, 10.5) + '</text>';
-      s += '<text x="' + (x0 + 8) + '" y="' + (y0 + 24) + '" font-size="9" style="fill:var(--soft)">' + fitText('this year\u2019s ended seasons, °C', cw - 16, 9) + '</text>';
+      s += '<text x="' + (x0 + 8) + '" y="' + (y0 + 13) + '" font-size="10.5" style="fill:var(--text);font-weight:700">' + fitText('Error by how early the forecast was', cw - 16, 10.5) + '</text>';
+      s += '<text x="' + (x0 + 8) + '" y="' + (y0 + 24) + '" font-size="9" style="fill:var(--soft)">' + fitText('months from the issue to the season start; °C', cw - 16, 9) + '</text>';
       s += '<line x1="' + Lp2 + '" y1="' + Y3(0).toFixed(1) + '" x2="' + Rr2 + '" y2="' + Y3(0).toFixed(1) + '" style="stroke:var(--grid)"/>';
       LP.forEach(function (r, i) {
         var xx = Lp2 + (LP.length < 2 ? pw2 / 2 : i / (LP.length - 1) * (pw2 - bw)) + (LP.length < 2 ? 0 : bw / 2);
         s += '<rect x="' + (xx - bw / 2).toFixed(1) + '" y="' + Y3(0).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + Math.max(1, Y3(r.mean_err) - Y3(0)).toFixed(1) + '" style="fill:var(--nino)" opacity=".6"><title>' +
-          esc(r.lead + ' months ahead: mean error ' + fnum(r.mean_err) + ' °C over ' + r.n + ' forecasts; ' + r.share_low + ' % were 0.5 °C or more below') + '</title></rect>';
-        s += '<text x="' + xx.toFixed(1) + '" y="' + (y0 + ch - 5).toFixed(1) + '" text-anchor="middle" font-size="8.5">' + r.lead + '</text>';
+          esc(cap1(aheadTxt(r.lead)) + ': mean error ' + fnum(r.mean_err) + ' °C over ' + r.n + ' forecasts; ' + r.share_low + ' % were 0.5 °C or more below') + '</title></rect>';
+        s += '<text x="' + xx.toFixed(1) + '" y="' + (y0 + ch - 5).toFixed(1) + '" text-anchor="middle" font-size="8.5">' + (r.lead - 2) + '</text>';
         if (bw >= 14) s += '<text x="' + xx.toFixed(1) + '" y="' + (Y3(r.mean_err) + 10).toFixed(1) + '" text-anchor="middle" font-size="8" style="fill:var(--text)">' + fnum(r.mean_err, 1) + '</text>';
       });
     }
@@ -5208,6 +5212,7 @@
         + (LF ? 'The green dot and the green dashed line are the last season that has ended, ' + esc(LF.season) + ' ' + fnum(LF.value) + ' by our daily OISST' +
           (LF.corridor ? ': its official ONI is not out yet, and this year the ONI has run up to ' + fnum(LF.value - LF.corridor[0]) + ' °C below OISST, so it should land within ' + fnum(LF.corridor[0]) + ' … ' + fnum(LF.corridor[1]) + ' (the green bar beside the dot). '
             : (fin(LF.oni) ? '; its official ONI is ' + fnum(LF.oni) + ' (the green tick). ' : '. ')) : '')
+        + (IRI.hindcast ? 'Left of the dotted divider are the seasons the newest issue no longer forecasts: there each line is that model\u2019s last forecast for the season, from the newest issue that gave one, made as the season began, and the solid green line with dots is what the season actually did by the official ONI (our daily OISST dashed beside it). ' : '')
         + '<strong>The red marks are the seasons still under way, and they are not a score.</strong> Each one is the part of that season already measured, so they stand at different heights while the water has one temperature; the bar is where the models put that season\u2019s three-month mean.' +
         ((IRI.position || []).filter(function (q) { return !q.complete; }).map(function (q) {
           return ' ' + q.season + ' has ' + q.months_done + ' month' + (q.months_done > 1 ? 's' : '') + ' of 3 measured (' + fnum(q.todate) + '), and its mean can end ' + fnum(q.lo) + ' … ' + fnum(q.hi) + '.';
@@ -5222,12 +5227,12 @@
     } else if (k === 'chase') {
       plot(body, function (w, h) { return chartChase(IRI, w, h); });
       var CHc = IRI.chase || [], LPc = IRI.lead_profile || [];
-      body.appendChild(el('div', 'cap', 'Each square is one season of this event. Left to right are the monthly issues as the season drew near, from many months ahead to two; the line is the models\u2019 mean and the band their middle eighty per cent. '
+      body.appendChild(el('div', 'cap', 'Each square is one season of this event. Left to right are the monthly issues as the season drew near, from many months before it began to the issue made as it began; the line is the models\u2019 mean and the band their middle eighty per cent. '
         + CHc.filter(function (c) { return c.fact && c.fact.kind === 'official' && c.rows.length > 1; }).map(function (c) {
           var r0 = c.rows[0], r1 = c.rows[c.rows.length - 1];
           return esc(c.season) + ': ' + fnum(r0.mean) + ' at ' + r0.lead + ' months → ' + fnum(r1.mean) + ' at ' + r1.lead + ', ONI ' + fnum(c.fact.value);
         }).join('; ') + '. '
-        + (LPc.length ? 'Over this year\u2019s ended seasons the models came in, on average, ' + LPc.map(function (r) { return fnum(r.mean_err) + ' at ' + r.lead; }).join(', ') + ' months ahead: the further out, the lower. ' : '')
+        + (LPc.length ? 'Over this year\u2019s ended seasons the models came in, on average, ' + LPc.map(function (r) { return fnum(r.mean_err) + ' at ' + (r.lead - 2); }).join(', ') + ' months between the issue and the start of the season: the earlier the forecast, the lower. ' : '')
         + 'The official ONI is computed from ERSST; our dot is the daily OISST, and this year the ONI has run 0.1–0.3 °C below it (the thin dashed green line where both exist). A season under way shows only its measured months — it is not a score.'));
     } else if (k === 'breakdown') {
       plot(body, function (w, h) { return chartBreakdown(bd, w, h); });
@@ -5251,7 +5256,7 @@
         + '<div class="kpi"><div class="kn">broken</div><div class="kv">' + (tally.broke || 0) + '<small>models</small></div>'
           + '<div class="km">0.5 °C or more below on each of the last three checks</div>' + kmeta('models_broke') + '</div>' : '')
         + (SC ? '<div class="kpi"><div class="kn">below ' + esc(SC.season) + '</div><div class="kv">' + SC.below + '<small>of ' + SC.n + '</small></div>'
-          + '<div class="km">the ' + esc(SC.issue) + ' issue, ' + SC.lead + ' months ahead' + (SC.official ? ', against the ONI ' + fnum(SC.observed) : '; the ONI is not out yet, so below even ' + fnum(SC.ref[0])) + '</div>' + kmeta('models_below_n') + '</div>'
+          + '<div class="km">the ' + esc(SC.issue) + ' issue, ' + aheadTxt(SC.lead) + (SC.official ? ', against the ONI ' + fnum(SC.observed) : '; the ONI is not out yet, so below even ' + fnum(SC.ref[0])) + '</div>' + kmeta('models_below_n') + '</div>'
           + '<div class="kpi"><div class="kn">above ' + esc(SC.season) + '</div><div class="kv">' + SC.above + '<small>of ' + SC.n + '</small></div>'
           + '<div class="km">' + (SC.official ? 'the rest' : (SC.within + ' more fall inside ' + fnum(SC.ref[0]) + ' … ' + fnum(SC.ref[1]))) + '</div>' + kmeta('models_above') + '</div>' : '')
         + '<div class="kpi"><div class="kn">live models</div><div class="kv">' + (((IRI.live || {}).n_live) != null ? IRI.live.n_live : '·') + '<small>of ' + (((IRI.live || {}).n_all) != null ? IRI.live.n_all : '·') + '</small></div>'
@@ -5259,7 +5264,7 @@
         + '<div class="kpi"><div class="kn">mean over the live models</div><div class="kv">' + fnum(liveNow(IRI, 'mean')) + '<small>\u00b0C</small></div>'
           + '<div class="km">weighted by how well each has been keeping up</div>' + kmeta('live_mean') + '</div>';
       body.appendChild(kpm);
-      body.appendChild(el('div', 'cap', 'For every stored issue we take its nearest season that has now ENDED, two months ahead, and count the models that came in below it: against the official ONI, or, for a season that has ended but whose ONI is not out yet, below even the low end of the range it can take (outlined bar). '
+      body.appendChild(el('div', 'cap', 'For every stored issue we take the season that began in its month, once that season has ENDED, and count the models that came in below it: against the official ONI, or, for a season that has ended but whose ONI is not out yet, below even the low end of the range it can take (outlined bar). '
         + (rowsO.length ? 'From ' + esc(rowsO[0].issue) + ' (' + rowsO[0].share + ' %) to ' + esc(rowsO[rowsO.length - 1].issue) + ' (' + rowsO[rowsO.length - 1].share + ' %). ' : '')
         + 'A class is decided by the last three checks, so a model that fell behind and then caught up is no longer counted broken. "Fixes" is the share of its own error a model closes from one issue to the next on the same season: the good ones close a quarter to a half each month, the broken ones almost nothing.'));
     } else if (k === 'revision') {
@@ -5357,7 +5362,7 @@
         S.sub.models = 'plume'; render();
       });
       body.appendChild(wrap);
-      body.appendChild(el('div', 'cap', 'Click a row to light that model in the plume. The class and the last check come from seasons that have ENDED: each issue is scored on its nearest ended season, two months ahead, against the official ONI, or against the range it can take while it is not out (marked *). "Fixes" is the share of its own error a model closes from one issue to the next on the same season. The ' + esc(ao.season) + ' column is the forecast of the newest issue, shown and not judged: that season has only begun.'));
+      body.appendChild(el('div', 'cap', 'Click a row to light that model in the plume. The class and the last check come from seasons that have ENDED: each issue is scored on the season that began in its month, once it has ended, against the official ONI, or against the range it can take while it is not out (marked *). "Fixes" is the share of its own error a model closes from one issue to the next on the same season. The ' + esc(ao.season) + ' column is the forecast of the newest issue, shown and not judged: that season has only begun.'));
     }
     var tl = el('div', 'tally');
     /* ФИШКИ — ТОЛЬКО КЛАССЫ (02.10). Счёт «ниже прожитой части начавшегося сезона» убран: сезон не
@@ -10532,11 +10537,11 @@
     "food/onset": {"title": "Prices counted from the event's start", "what": "The food index, or one traded good, drawn as a percentage of its own price in the month this El Nino began, beside what happened after earlier ones.", "see": "The bottom axis counts months from the start of the event, which is the dashed vertical line at zero, and the picture begins six months before it; the heavier gridline at 100 is the price in that starting month. The thick line is this event and the thin dashed ones are the paths after past starts, each named with its year in the legend - the row of buttons above switches from the whole index to a single good, and the two do not carry the same set of years. Only on the index does the drawing continue past today: a red vertical marks today, bold dotted lines carry each past path forward from today's level, and a pale band stretches those paths to how strong this event looks - that band is our arithmetic, not a forecast.", "special": "It puts events decades apart on the same clock, which is the only way to ask whether prices are moving earlier or later this time. The caption states the awkward part plainly: the overall index fell after every past start drawn here, for reasons outside the weather, which is why the single goods are worth switching to.", "src": "FAO index and World Bank Pink Sheet prices, monthly; starting months from the seasonal Pacific temperature record"},
     "food/prices": {"title": "World food prices, month by month", "what": "One number for what food costs on world markets, set to 100 for the 2014-2016 average, with the five groups that make it up.", "see": "The heavy dark line is the whole index over the last three years; five thinner dashed lines are the groups - cereals, oils, meat, dairy and sugar - and any of them can run far above or far below the heavy line. Each group is named with its latest value in the legend, which opens from the small legend button in the top right corner of the chart; a dot marks the newest month at the right end. There are no number cards on this tab: the heading above the chart carries the index and its change over a year, and the line of text under the chart adds the change over a month and the year's change for every group.", "special": "It is the only chart here that draws the index at its own level with the five groups beside it, so you can see which group is doing the moving. The neighbouring tabs count the same food as percentages from the month the event began, or go commodity by commodity; neither shows the groups.", "src": "FAO Food Price Index, monthly, published on the first Friday for the previous month"},
     "models/board": {"title": "Every model as a table row", "what": "A plain table of all the models and how they have done, instead of lines on a chart.", "see": "One row per model, broken first: its type, the class we gave it and since when, the last season it could be checked on and its error there (a range with an asterisk while that season's official value is not out), the share of its own error it closes from one monthly issue to the next, its forecast for the first season of the newest issue, its highest value anywhere in the forecast, and how much it moved that peak since the previous issue. Click a row and that model lights up on the plume.", "special": "Every judgement in it is made on seasons that have ended: a model is never scored against a single week or against a season that has only begun. The class, the error and the share fixed are our arithmetic on the issues we store.", "src": "Our stored IRI/CPC plume issues against NOAA's official ONI and, until it is out for the latest season, our daily OISST."},
-    "models/breakdown": {"title": "How often the models fall short", "what": "A count, issue by issue, of how many models forecast less warmth than the season actually delivered.", "see": "Each red bar is one stored issue, its height the share of models that came in below the season it is scored on, read on the left scale in per cent; the line with dots is the average error of all the models of that issue in degrees, on the right scale. Every issue is scored on its nearest season that has ended, about two months ahead. The last bar is only outlined when that season has ended but its official value is not out yet: then a model counts as below only if it sits below even the low end of the range that value can take, and the error is drawn as a range. Under the chart is a table of the models with at least three scored issues: how many came in low, the mean of their last three misses and their worst, how much of their own error they fix from one issue to the next, and since when.", "special": "The plume shows today's disagreement; this scene keeps the score of issues already past, matching each to a season that has ended, which is what lets a model be called broken on its record instead of on today's gap. A class is decided by the last three checks, so a model that fell behind and then caught up is no longer counted broken. The Track record tab does the same over the whole archive since 2002.", "src": "Our stored IRI/CPC plume issues, each matched to its nearest ended season: NOAA's official ONI, or our daily OISST with this year's gap to the ONI while it is not out."},
+    "models/breakdown": {"title": "How often the models fall short", "what": "A count, issue by issue, of how many models forecast less warmth than the season actually delivered.", "see": "Each red bar is one stored issue, its height the share of models that came in below the season it is scored on, read on the left scale in per cent; the line with dots is the average error of all the models of that issue in degrees, on the right scale. Every issue is scored on the season that began in its own month, once that season has ended. The last bar is only outlined when that season has ended but its official value is not out yet: then a model counts as below only if it sits below even the low end of the range that value can take, and the error is drawn as a range. Under the chart is a table of the models with at least three scored issues: how many came in low, the mean of their last three misses and their worst, how much of their own error they fix from one issue to the next, and since when.", "special": "The plume shows today's disagreement; this scene keeps the score of issues already past, matching each to a season that has ended, which is what lets a model be called broken on its record instead of on today's gap. A class is decided by the last three checks, so a model that fell behind and then caught up is no longer counted broken. The Track record tab does the same over the whole archive since 2002.", "src": "Our stored IRI/CPC plume issues, each matched to its nearest ended season: NOAA's official ONI, or our daily OISST with this year's gap to the ONI while it is not out."},
     "models/plume": {"title": "Every model's forecast, one chart", "what": "Our redrawing of the figure that IRI, a forecast centre at Columbia University, publishes each month to put two dozen centres side by side: every model's line says how far above or below normal the water of one patch of the Pacific should sit, season by season.", "see": "Each thin line is one model, coloured by the class we give it on seasons that have ended: red broken, amber lagging, orange running high, blue or green for the rest, with the highest of the ones we do not count broken drawn a shade heavier. The thick ochre line is ours, not the centres': a combination of the models we do not count broken, weighted so the big forecasts pull it up, and the thin dashed ochre beside it is their plain average; the two pale dashed lines are the published average of all models and last month's issue. The green dot and the green dashed line across the picture are the last season that has ended, from our daily readings, with a small green bar beside it for where its official value can land while it is not out; the red marks stand in the columns of the seasons still under way.", "special": "Every point here is a three-month average, so it cannot be set against a single day's reading, and a season that has only begun cannot score anyone: the models are judged only on seasons that have ended. The red marks show how much of each season under way has been measured and where its average can still end; they are our arithmetic, with the months not yet measured borrowed from the spread of the models, not something the centres publish.", "src": "The IRI/CPC plume figure, a new issue about the 19th of each month; the seasons measured from our daily OISST of the same patch of ocean; NOAA's official ONI."},
     "models/revision": {"title": "How each model moved its peak", "what": "Where each model puts the highest point of the coming winter, and how it has shifted across the last three monthly issues.", "see": "Each model has its own vertical path, named down the bottom edge: a small dot where it put the peak in the oldest of the three issues, then a line with an arrowhead for every move to the next one. The colour is the model's class, and the models that raised their peak most stand to the left. Clicking a class in the legend leaves only those models lit.", "special": "One revision can be chance; two arrows the same way is behaviour, and this is the only view that draws a model's whole path rather than one position or a single step. It is about the coming winter, not about what is broken today.", "src": "The last three IRI/CPC plume issues we have stored, redrawn when the new monthly issue is parsed."},
     "models/stack": {"title": "The last three issues, model by model", "what": "The same forecasts as the plume, laid out so you can see how each model moved across the last three monthly issues.", "see": "By default it is a mosaic: one small square per model, sorted broken first and keeping up last, with the newest issue drawn thick in the class colour and the two issues before it thin and grey, every square on the same scale. Inside a square the dashed line is the last season that has ended, and an orange dot with a bar is where we stand in a season still under way and where its average can still end. The second button stacks the three issues as full-width charts instead, newest on top, each scored on its nearest season that has ended - a green tick for the official value, a green bar for the range it can take while it is not out - or marked not scored yet when that season is still under way.", "special": "One plume says what the models expect; three issues side by side say whether they saw it coming. In the stacked view each issue is judged on its own nearest ended season, so the green mark stands in a different column in each row.", "src": "The last three IRI/CPC plume issues we have stored, redrawn when the new monthly issue is parsed; the seasons measured from our daily OISST; NOAA's official ONI."},
-    "models/chase": {"title": "How the forecasts chased each season", "what": "For each season of this event, how the models' forecast for it changed from one monthly issue to the next as the season came closer, and where the season actually landed.", "see": "One small square per season. Left to right are the monthly issues, from many months ahead to two months ahead; the line is the models' average and the band holds the middle eighty per cent of them. The solid green line is the official value once it is out, with our own daily reading dashed beside it; a green band is the range the official value can take for a season that has ended but is not out yet; a red dashed line marks the months measured so far in a season still under way. The last square shows how far below the models came on average, by how many months ahead they were forecasting.", "special": "This is where the panel answers what the models correct and how: the same season seen from many months out, from five months out and from two. Through 2026 the bundle climbed every month and still ended below what came, and the further ahead the forecast, the lower it sat.", "src": "Our stored IRI/CPC plume issues; NOAA's official ONI; our daily OISST for the seasons whose official value is not out yet."},
+    "models/chase": {"title": "How the forecasts chased each season", "what": "For each season of this event, how the models' forecast for it changed from one monthly issue to the next as the season came closer, and where the season actually landed.", "see": "One small square per season. Left to right are the monthly issues, from many months before the season began to the issue made as it began; the line is the models' average and the band holds the middle eighty per cent of them. The solid green line is the official value once it is out, with our own daily reading dashed beside it; a green band is the range the official value can take for a season that has ended but is not out yet; a red dashed line marks the months measured so far in a season still under way. The last square shows how far below the models came on average, by how many months before the season began they were forecasting.", "special": "This is where the panel answers what the models correct and how: the same season seen from many months out, from five months out and from two. Through 2026 the bundle climbed every month and still ended below what came, and the further ahead the forecast, the lower it sat.", "src": "Our stored IRI/CPC plume issues; NOAA's official ONI; our daily OISST for the seasons whose official value is not out yet."},
     "now/analogs": {"title": "This year beside the four strongest", "what": "How far above or below normal the sea in the central Pacific has run each day this year, drawn on the same calendar as the four strongest El Niño events ever measured.", "see": "The heavy dark line is this year, ending in a blinking dot with today's number written just above it - or just below when the line across the top would collide; four thinner coloured dashed lines are 1982, 1997, 2015 and 2023, each carried past a vertical dashed line at the year's end into the following 120 days. The flat zero is the 1991-2020 average for that day of the year, which is what \"above normal\" means on this chart, while the faint long-dashed line is the plain average of the last twenty years, the ordinary level of our own decades. A dashed line runs straight across with its label at the right end - for Niño 3.4 it marks the highest daily reading any earlier year reached - and on a wide screen a column of small panels repeats each past event on the same vertical scale, its peak marked, with this year laid over it as a faint dotted line.", "special": "It is the only chart that carries the past events forward past the turn of the year, so it answers not just how high we are but what happened next from this same point of the calendar. The zone buttons ask the same question of the other Niño boxes and of the Gulf; there the past-event lines are assembled here in the browser from readings four days apart, the line across the top becomes the highest of the four past events instead of the record of the whole series, and the peak estimate below is hidden because that arithmetic is done for Niño 3.4 only.", "src": "climatereanalyzer's daily OISST Niño 3.4 against a 1991-2020 normal, with our own reading of the NOAA grid spliced onto the newest days; one new day per day, about a day behind (the other zones are our own box on the grid)"},
     "now/map": {"title": "The Pacific, week by week", "what": "A map of the tropical Pacific with the four stretches of ocean forecasters watch, each coloured by how far this week sat from normal.", "see": "The coastline is real and labelled, the equator runs dashed across the middle, and the four rectangles carry a large white number - this week's departure from normal - with a smaller number under it for the same week of the comparison year, and the difference between the two when the screen is wide enough. Buttons above choose which past event to compare with and which zone to bring forward, the others dimming almost to nothing; a play button and a slider step through the recent weeks one frame at a time, the date of the frame beside them and the comparison year moving alongside. Point at a rectangle to read what peak that past event finally reached.", "special": "Its neighbours draw the same four indices as lines through time; this one puts them where they are, so you can see whether the warmth sits against South America or out in the middle of the ocean - the difference that decides which parts of the world feel it. It is also the only place where a past event is set beside today's numbers box by box, in place rather than on a time axis.", "src": "NOAA CPC weekly Niño indices, one new week each Wednesday for the week before; coastline from Natural Earth"},
     "now/weekly": {"title": "The four Niño zones, weekly", "what": "The four official weekly readings of the tropical Pacific, all on one picture over the recent weeks.", "see": "Four lines run together, in the order the patches lie on the equator from west to east - Niño 4 in the west, Niño 3.4 the thickest of them, Niño 3, then Niño 1+2 on the coast of South America - each with its own dash pattern and each labelled in the legend with its latest value, on a grid of half-degree steps with months along the bottom. On a wide screen a right-hand column adds a small panel per past event, the same four lines on the same vertical scale, each headed with what Niño 3.4 and Niño 1+2 read at the end of that stretch. Watch the spacing between the four lines, not just their height.", "special": "Only here are all four zones side by side over time, and that spread is what tells an event pressed against South America from one centred in the middle of the ocean. The caption below adds the change over four and eight weeks and the record of the weekly Niño 3.4.", "src": "NOAA CPC weekly Niño indices, one new week each Wednesday for the week before"},
