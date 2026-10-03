@@ -688,17 +688,39 @@
      дню года, шаг 4 дня, между — пусто), в аномалию через ту же климатологию; наша линия —
      из суточного хвоста бокса. Файл подтягивается лениво один раз. */
   S.CLM = S.CLM || {};
+  /* ЛЕНИВАЯ ЗАГРУЗКА С ПОВТОРОМ (03.10, владелец: «на Against analogues на некоторых зонах висит "loading the
+     climatology of this box…"»). Прежде один неудачный запрос — сеть, телефон, выкладка в ту же минуту, ответ
+     не JSON — запоминался ошибкой навсегда, а вид путал ошибку с загрузкой и писал «loading…» до перезагрузки
+     страницы. Теперь ответ проверяется (r.ok), до трёх попыток с паузами 1,5 и 3 с, потом честный отказ с
+     кнопкой «try again». Хранилище общее у сцен, которые берут те же файлы (аналоги, порог грозы). */
+  function lazyJson(store, key, url) {
+    var st = store[key + ':st'] || (store[key + ':st'] = { tries: 0, busy: false });
+    var got = store[key];
+    if (got && !got.error) return got;
+    if (st.busy) return null;
+    if (got && got.error && st.tries >= 3) return got;
+    st.busy = true; st.tries++;
+    fetch(url, { cache: st.tries > 1 ? 'reload' : 'default' })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (d) { store[key] = d; st.busy = false; render(); })
+      .catch(function (e) {
+        store[key] = { error: String((e && e.message) || e).slice(0, 80) }; st.busy = false;
+        setTimeout(render, st.tries < 3 ? 1500 * st.tries : 0);
+      });
+    return null;
+  }
+  function lazyReset(store, key) { if (store) { delete store[key]; delete store[key + ':st']; } }
+  /* Отказ загрузки — словами и кнопкой, а не вечным «loading…». */
+  function lazyFailed(body, msg, onRetry) {
+    plot(body, function (w, h) { return svgOpen(w, h) + '<text x="20" y="40">' + esc(msg) + '</text></svg>'; });
+    var rb = el('button', 'sq', 'try again'); rb.type = 'button'; rb.onclick = onRetry; body.appendChild(rb);
+  }
   function analogsFor(box) {
-    var bx = ((S.D.oisst || {}).boxes || {})[box]; if (!bx) return null;
-    var C = S.CLM[box];
-    if (!C) {
-      if (S.CLM[box + ':busy']) return null;
-      S.CLM[box + ':busy'] = true;
-      fetch('/data/enso/oisst/clim_' + box + '.json').then(function (r) { return r.json(); })
-        .then(function (c) { S.CLM[box] = c; render(); }).catch(function () { S.CLM[box] = { error: true }; render(); });
-      return null;
-    }
-    if (C.error || !C.doy || !C.analogs) return null;
+    var bx = ((S.D.oisst || {}).boxes || {})[box]; if (!bx) return { failed: 'this box has no daily series in today\u2019s data' };
+    var C = lazyJson(S.CLM, box, '/data/enso/oisst/clim_' + box + '.json');
+    if (!C) return null;
+    if (C.error) return { failed: 'the climatology of this box did not load (' + C.error + ')' };
+    if (!C.doy || !C.analogs) return { failed: 'the climatology file of this box has no analogue years' };
     /* ВСЕ ГОДЫ ПО БОКСАМ (24.09): oisst/years_<box>.json — абсолютная SST по дню года за 1982–2025
        с PSL OPeNDAP (ERDDAP лежал), плюс 120 суток следующего года; подмешивается к четырём
        аналогам по режиму переключателя, аномалия считается той же нормой. Файл берётся лениво. */
@@ -706,14 +728,7 @@
     /* ФАЙЛ ГОДОВ НУЖЕН ВСЕГДА (29.09): в нём лежит и ТЕКУЩИЙ год целиком (oisst_years.py --current),
        иначе линия этого года у зон кроме Niño 3.4 — только 120-дневный хвост бокса (владелец). */
     S.YB = S.YB || {};
-    var YB = S.YB[box];
-    if (!YB) {
-      if (!S.YB[box + ':busy']) {
-        S.YB[box + ':busy'] = true;
-        fetch('/data/enso/oisst/years_' + box + '.json').then(function (r) { return r.json(); })
-          .then(function (d) { S.YB[box] = d; render(); }).catch(function () { S.YB[box] = { error: true }; render(); });
-      }
-    }
+    var YB = lazyJson(S.YB, box, '/data/enso/oisst/years_' + box + '.json');
     if (yrsMode() !== 'strong') {
       if (YB && !YB.error && YB.years) {
         yrsPick(Object.keys(YB.years)).forEach(function (y) { if (!C.analogs[y]) { extraYears[y] = YB.years[y]; extraNext[y] = (YB.next || {})[y] || []; usedExtra = true; } });
@@ -4073,7 +4088,8 @@
       var hasLeg = !!svg.querySelector('[data-legtoggle], .leg-i') || !!(svg.parentNode && svg.parentNode.querySelector && svg.parentNode.querySelector('.legbtn'));
       /* Слева у поля может стоять значок «о чём этот график» — тогда заголовок начинается за
          ним, а не у самого края (владелец 15.09: «кнопка i наезжает на текст над графиком»). */
-      var L0 = (svg.parentNode && svg.parentNode.querySelector && svg.parentNode.querySelector('.plain-i')) ? 36 : 8;
+      /* значок «i» висит на углу рамки снаружи (03.10) — заголовку хватает отступа от его хвоста */
+      var L0 = (svg.parentNode && svg.parentNode.querySelector && svg.parentNode.querySelector('.plain-i')) ? 16 : 8;
       /* Сосед справа мешает только если он на ТОЙ ЖЕ строке: у разреза и недельных индексов
          подписи мини-панелей тоже помечены как заголовки, но лежат ниже (07.09). */
       var pos = tts.map(function (t) { return { t: t, x: parseFloat(t.getAttribute('x')) || 0, y: parseFloat(t.getAttribute('y')) || 0 }; });
@@ -4688,7 +4704,8 @@
       if (az === 'nino34') { yearsCtl(); plot(body, function (w, h) { return chartAnalogs(withYears(N, 'sst_nino34'), w, h); }); }
       else {
         var NZ = analogsFor(az);
-        if (NZ) { yearsCtl(); plot(body, function (w, h) { return chartAnalogs(NZ, w, h); }); }
+        if (NZ && !NZ.failed) { yearsCtl(); plot(body, function (w, h) { return chartAnalogs(NZ, w, h); }); }
+        else if (NZ) lazyFailed(body, NZ.failed, function () { lazyReset(S.CLM, az); lazyReset(S.YB, az); render(); });
         else plot(body, function (w, h) { return svgOpen(w, h) + '<text x="20" y="40">loading the climatology of this box…</text></svg>'; });
         var tail0 = (((S.D.oisst || {}).boxes || {})[az] || {}).dates || [];
         var bxZ = ((S.D.oisst || {}).boxes || {})[az] || {}, wkZ = { nino12: 'n12a', nino3: 'n3a', nino34: 'n34a', nino4: 'n4a' }[az];
@@ -7193,24 +7210,13 @@
   }
   function thrFiles(box) {
     S.CLM = S.CLM || {}; S.YB = S.YB || {};
-    var C = S.CLM[box];
-    if (!C) {
-      if (!S.CLM[box + ':busy']) {
-        S.CLM[box + ':busy'] = true;
-        fetch('/data/enso/oisst/clim_' + box + '.json').then(function (r) { return r.json(); })
-          .then(function (c) { S.CLM[box] = c; render(); }).catch(function () { S.CLM[box] = { error: true }; render(); });
-      }
-      return null;
-    }
-    if (C.error || !C.doy) return null;
-    var YB = S.YB[box];
-    if (yrsMode() !== 'strong' && !YB) {
-      if (!S.YB[box + ':busy']) {
-        S.YB[box + ':busy'] = true;
-        fetch('/data/enso/oisst/years_' + box + '.json').then(function (r) { return r.json(); })
-          .then(function (d) { S.YB[box] = d; render(); }).catch(function () { S.YB[box] = { error: true }; render(); });
-      }
-      return null;
+    var C = lazyJson(S.CLM, box, '/data/enso/oisst/clim_' + box + '.json');      // повтор и отказ — как у аналогов (03.10)
+    if (!C) return null;
+    if (C.error || !C.doy) return { failed: 'the climatology of this box did not load' + (C.error ? ' (' + C.error + ')' : '') };
+    var YB = null;
+    if (yrsMode() !== 'strong') {
+      YB = lazyJson(S.YB, box, '/data/enso/oisst/years_' + box + '.json');
+      if (!YB) return null;
     }
     return { C: C, YB: (YB && !YB.error) ? YB : null };
   }
@@ -7336,7 +7342,7 @@
         var ia = (an.months || []).indexOf(keyA), thenM = ia >= 0 ? rowMax(an.anom100[ia], cur.labels) : null;
         // пик того события за весь его ряд: до какой высоты доходило и когда
         var pk = null; (an.months || []).forEach(function (m, i) { var r = rowMax(an.anom100[i], cur.labels); if (r && (!pk || r.value > pk.value)) { pk = r; pk.month = m; } });
-        kh.innerHTML += '<div class="kpi"><div class="kn">same month in ' + esc(ha) + ' · ' + esc(keyA) + '</div><div class="kv">' + (thenM ? fnum(thenM.value, 1) + '<small> °C at ' + esc(thenM.label) + '</small>' : '<small>no frame</small>') + '</div>'
+        kh.innerHTML += '<div class="kpi"><div class="kn">same month in ' + esc(ha) + ' · ' + esc(keyA) + (thenM ? ', at ' + esc(thenM.label) : '') + '</div><div class="kv">' + (thenM ? fnum(thenM.value, 1) + '<small> °C</small>' : '<small>no frame</small>') + '</div>'
           + '<div class="km">' + (thenM ? 'this event is ' + thenNow({ value: mx, label: cur.labels[mj] }, thenM, ha, '°C') : '') + (pk ? '; that event peaked at ' + fnum(pk.value, 1) + ' °C in ' + esc(pk.month) : '') + '</div>' + kmeta(null, 'GODAS, our climatology', keyA) + '</div>';
       }
       body.appendChild(kh);
@@ -7377,6 +7383,7 @@
       var ZT = ['nino4', 'nino34', 'nino3', 'nino12'], kpT = [];
       ZT.forEach(function (bz) {
         var F = thrFiles(bz);
+        if (F && F.failed) { lazyFailed(mzT, (boxes[bz] || {}).title + ': ' + F.failed, function () { lazyReset(S.CLM, bz); lazyReset(S.YB, bz); render(); }); return; }
         plot(mzT, function (w, h) { return F ? chartThreshold(bz, F, w, h) : svgOpen(w, h) + '<text x="20" y="40">loading the years of ' + esc((boxes[bz] || {}).title || bz) + '\u2026</text></svg>'; });
         if (F) kpT.push(thrKpi(bz, F));
       });
