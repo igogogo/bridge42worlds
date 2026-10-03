@@ -27,6 +27,8 @@ Say "=== rivers and water vapour (before the run: hydro reads them)"
 & $py -u vapour.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u tides.py 2>&1 | Out-File $log -Append -Encoding utf8
 & $py -u cyclones.py 2>&1 | Out-File $log -Append -Encoding utf8
+# CFSv2 по дням старта (03.10): ансамбли CPC за последние 30 дней — как «план едет» внутри месяца
+& $py -u cfs.py 2>&1 | Out-File $log -Append -Encoding utf8
 
 Say "=== light run"
 & $py -u refresh.py --light --chain 2>&1 | Out-File $log -Append -Encoding utf8
