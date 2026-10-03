@@ -492,6 +492,20 @@ def oni_watch(oni, psl):
     # ONI по годам — нужен оценке моделей: сезон плюма (ASO, DJF…) надо сверять с ONI ТОГО
     # ЖЕ календарного сезона, а не текущего года. Держим четыре последних года, это мелочь.
     out["by_year"] = {y: {s: by[y].get(s) for s in seasons} for y in sorted(by)[-4:]}
+    # РЕКОРД ONI ДО ЭТОГО СОБЫТИЯ (03.10): порог сценария «record» в долях регионов. Пики моделей —
+    # трёхмесячные средние, и мерить их рекордом НЕДЕЛЬНОГО ряда значило сравнивать неделю с сезоном.
+    # Нынешний тёплый ход (ONI от +0,5 подряд до последнего сезона) в рекорд не входит, иначе, перевалив
+    # в 2027-й, событие стало бы порогом самому себе.
+    seq = list(oni)
+    start = len(seq)
+    if seq and seq[-1][2] >= 0.5:
+        start = len(seq) - 1
+        while start > 0 and seq[start - 1][2] >= 0.5:
+            start -= 1
+    rec = max(((v, s, y) for s, y, v in seq[:start]), default=None)
+    out["record_before"] = ({"value": rec[0], "season": rec[1], "year": rec[2],
+                             "event_from": (f"{seq[start][0]} {seq[start][1]}" if start < len(seq) else None)}
+                            if rec else None)
     # Что было ПОСЛЕ пика каждого аналога: следующий год и год за ним. Владелец 03.09:
     # «в рисках это нарушение не только текущего года, но и последующие проблемы на 27 год,
     # здесь есть аналогия с прошлыми глобальными событиями». Без этих двух лет сказать
@@ -1269,7 +1283,7 @@ def run(fetch=True):
         FOOD = {"error": str(e)[:200]}
     try:
         REG = RG.build(IRI if IRI and "error" not in IRI else None, NW["latest"]["n34a"],
-                       record_weekly=(NW.get("hist_max") or {}).get("n34a"))
+                       record_oni=ONI.get("record_before"))
     except Exception as e:                                       # noqa: BLE001
         REG = {"error": str(e)[:200]}
     # Блок «воздух»: атмосфера, топливо, слои и цены поимённо (владелец 04.09). Любая беда

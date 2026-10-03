@@ -6346,7 +6346,7 @@
            Молчать об этом нечестно: читатель видит «record 69 %» рядом со «strong 15 %»
            и думает, что мы ошиблись. Говорим прямо — и только когда это действительно так. */
         + (fin((sup.record || {}).threshold) && fin((sup.base || {}).threshold) && sup.record.threshold < sup.base.threshold
-          ? ' These are not a ladder: the record threshold (' + fnum(sup.record.threshold) + ') sits below the median model peak (' + fnum(sup.base.threshold) + '), so most models already put this event above the strongest week ever measured.' : '');
+          ? ' These are not a ladder: the record threshold (' + fnum(sup.record.threshold) + ') sits below the median model peak (' + fnum(sup.base.threshold) + '), so most models already put this event above the strongest three-month season measured before it, the ONI record.' : '');
       lead.addEventListener('click', function (e) {
         var t = e.target.closest && e.target.closest('[data-scen]');
         if (t) { S.scenario = t.getAttribute('data-scen'); render(); }

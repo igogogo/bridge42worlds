@@ -74,8 +74,8 @@ def scenario_support(iri, closed, record):
 
     Честно это НЕ вероятность: у нас 26 прогнозов, а не ансамбль розыгрышей одной модели.
     Считаем долю моделей, чей пик не ниже порога сценария, и говорим об этом словами.
-    Пороги: base — медиана пиков моделей, strong — 90-й процентиль, record — рекорд
-    недельного ряда NOAA. Оговорка обязательна: реальность уже выше части плюма, значит
+    Пороги: base — медиана пиков моделей, strong — 90-й процентиль, record — рекорд ONI до этого
+    события (03.10: прежде — рекорд НЕДЕЛЬНОГО ряда NOAA, а пики моделей трёхмесячные). Оговорка обязательна: реальность уже выше части плюма, значит
     доли занижены — это нижняя граница, а не оценка сверху."""
     # СЛОМАННЫЕ МОДЕЛИ НЕ ЗАДАЮТ СЦЕНАРИИ. Владелец 04.09 сказал это про среднее на графиках,
     # но болезнь та же и здесь, а последствия хуже: пороги сценариев — это медиана и 90-й
@@ -108,12 +108,15 @@ def scenario_support(iri, closed, record):
     n = len(peaks)
     p50 = peaks[n // 2]
     p90 = peaks[min(n - 1, int(round(0.9 * (n - 1))))]
+    rv = (record or {}).get("value")
     th = {"base": p50, "strong": p90,
-          "record": record if record is not None else peaks[-1]}
+          "record": rv if rv is not None else peaks[-1]}
     words = {
         "base": "the event peaks near the middle of the plume, counting only the models that kept up",
         "strong": "the event peaks at the top of the spread of the models that kept up",
-        "record": "the peak goes above the record of the weekly NOAA series",
+        "record": (f"the peak goes above the ONI record, {rv:+.2f} in {record['season']} {record['year']}, the "
+                   "strongest three-month season measured before this event" if rv is not None else
+                   "the peak goes above the highest model peak"),
     }
     out = {}
     for k, t in th.items():
@@ -142,7 +145,7 @@ def scenario_support(iri, closed, record):
     return out
 
 
-def build(iri, noaa_latest_n34, record_weekly=None):
+def build(iri, noaa_latest_n34, record_oni=None):
     ref = json.loads((ROOT / "regions-ref.json").read_text(encoding="utf-8"))
     summ = (iri or {}).get("summary") or {}
     comb = [v for v in (summ.get("combined") or []) if v is not None]
@@ -154,7 +157,7 @@ def build(iri, noaa_latest_n34, record_weekly=None):
     peak_max = round(peak_max, 2) if peak_max is not None else None
     factors = _scenario_bonus(peak_p50, peak_max, noaa_latest_n34)
     closed = closed_season(iri)
-    support = scenario_support(iri, closed, record_weekly)
+    support = scenario_support(iri, closed, record_oni)
     # какой сценарий идёт сейчас — по последнему ЗАКРЫТОМУ сезону (02.10); без проверки — base
     current = (closed or {}).get("scenario") or "base"
 
@@ -190,7 +193,7 @@ def build(iri, noaa_latest_n34, record_weekly=None):
         "as_of": ref["as_of"], "seasons": ref["seasons"], "current_scenario": current,
         "season_notes": ref.get("season_notes") or {}, "scenario_support": support,
         "factors": factors, "peak_p50": peak_p50, "peak_max": peak_max, "observed_weekly": noaa_latest_n34,
-        "closed_season": closed,
+        "closed_season": closed, "record_oni": record_oni,
         "items": items,
         "method": "level = round(0.6 × impact + 0.4 × vulnerability + scenario), clipped to 1–5; impact: robust 4, likely 3, weak 1.5, none 0; scenario: base +0 (the event as in the combined forecast), strong +0.5 (top of the model spread), record +1 (reality above every model); one point lower everywhere if the combined peak is below 1.5 °C. The scenario in force is chosen on the last season that has ENDED, against the models of the issue that forecast it: record if it came in above all of them, strong if above their mean by one spread, base otherwise; while its official ONI is not out, the low end of the range it can take is used.",
         "sources": {(k if len(_flat(v)) == 1 else f"{k}/{i + 1}"): x
