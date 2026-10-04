@@ -462,6 +462,94 @@ def _series(store, cl, today):
     return out
 
 
+# ------------------------------------------------------------------ рекорды суточных боксов
+# РЕКОРДЫ БОКСОВ (04.10, владелец: «у зоны 1+2 дневной супер-рекорд, а этого нигде нет — ни в KPI, ни в
+# обзоре; как ты следишь за рекордами?»). Правила рекордов были у недельных индексов NOAA, у суточного
+# Niño 3.4 (climatereanalyzer), у мирового океана, у буёв и у тёплого объёма — а у наших суточных боксов
+# не было никакого, хотя все годы с 1982 лежат в years_<бокс>.json с 24.09. Потолок — всё, что бокс видел
+# в прошлые календарные годы (продолжения next не берём: это начало следующего года, а последнее из них —
+# уже этот год). Три меры: суточная аномалия, среднее за 7 суток до дня, сама температура воды.
+BR_FILE = ROOT / "box-records.json"
+
+
+def _gdate(y, i):
+    """клетка 366-дневной сетки → дата года y (у невисокосного клетка 59 пуста, дальше сдвиг на день)"""
+    leap = calendar.isleap(y)
+    if not leap and i >= 59:
+        i -= 1
+    return (date(y, 1, 1) + timedelta(days=i)).isoformat()
+
+
+def _trail7(a):
+    out, win = [], []
+    for v in a:
+        win = (win + [v])[-7:]
+        f = [x for x in win if x is not None]
+        out.append(sum(f) / len(f) if v is not None and len(f) >= 4 else None)
+    return out
+
+
+def box_record(box, s, cl):
+    if not s or not cl.get("doy"):
+        return None
+    p = CACHE / f"years_{box}.json"
+    if not p.exists():
+        return None
+    Y = json.loads(p.read_text(encoding="utf-8")).get("years") or {}
+    doy = cl["doy"]
+    cy = int(s["last_date"][:4])
+    best = {"day": None, "week": None, "abs": None}
+
+    def up(k, v, y, i):
+        if v is not None and (best[k] is None or v > best[k][0]):
+            best[k] = (v, _gdate(y, i))
+    years = sorted(int(y) for y in Y if int(y) < cy)
+    for y in years:
+        arr = Y[str(y)] or []
+        an = [None if v is None or i >= len(doy) or doy[i] is None else v - doy[i] for i, v in enumerate(arr)]
+        for i, v in enumerate(an):
+            up("day", v, y, i)
+            up("abs", arr[i], y, i)
+        for i, v in enumerate(_trail7(an)):
+            up("week", v, y, i)
+    if not best["day"]:
+        return None
+    # этот год: файл годов (окончательный ряд) и сверху хвост бокса (NRT, свежее)
+    cur = list(Y.get(str(cy)) or [None] * 366) + [None] * max(0, 366 - len(Y.get(str(cy)) or []))
+    for d, v in zip(s["dates"], s["sst"]):
+        dd = date.fromisoformat(d)
+        if dd.year == cy and v is not None:
+            cur[grid_index(dd)] = v
+    an = [None if v is None or doy[i] is None else v - doy[i] for i, v in enumerate(cur[:366])]
+    w7 = _trail7(an)
+    out = {"since": years[0] if years else None, "until": years[-1] if years else None,
+           "date": s["last_date"], "preliminary_days": REFETCH_DAYS}
+    for k, ser, now in (("day", an, s.get("last_anom")), ("week", w7, s.get("mean7")), ("abs", cur, s.get("last_sst"))):
+        pv, pd = best[k]
+        mx, mi = None, None
+        above = [i for i, v in enumerate(ser) if v is not None and v > pv]
+        for i, v in enumerate(ser):
+            if v is not None and (mx is None or v > mx):
+                mx, mi = v, i
+        out[k] = {"prior": round(pv, 2), "prior_date": pd, "now": None if now is None else round(now, 2),
+                  "above": bool(now is not None and now > pv),
+                  "max_this_year": None if mx is None else round(mx, 2), "max_date": None if mi is None else _gdate(cy, mi),
+                  "days_above": len(above), "first_above": _gdate(cy, above[0]) if above else None}
+    return out
+
+
+def write_box_records(boxes):
+    """Сжатый файл для панели: лента KPI, обзор и сцена берут его сразу, без годовых файлов."""
+    doc = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"),
+           "note": ("Each daily box against everything it measured in earlier calendar years since 1982: the daily "
+                    "anomaly, the mean of the 7 days up to the day, and the water temperature itself. The last "
+                    f"{REFETCH_DAYS} days are NOAA's preliminary values and can move by a few hundredths."),
+           "boxes": {b: {"title": r.get("title"), "last_date": r.get("last_date"), "record": r.get("record")}
+                     for b, r in boxes.items() if r.get("record")}}
+    safeio.write_text(BR_FILE, json.dumps(doc, ensure_ascii=False))
+    return doc
+
+
 def _check_against_cr(our, cr):
     """Смещение нашего ряда против climatereanalyzer на перекрытии: цена прореживания и NRT."""
     if not our or not cr:
@@ -533,6 +621,10 @@ def build(today=None, cr_nino34=None, cr_world=None, verbose=False):
                "fetched": store.get("fetched"), "has_clim": bool(cl.get("doy"))}
         if s:
             rec.update(s)
+            try:
+                rec["record"] = box_record(box, s, cl)          # рекорды бокса против всех прошлых лет (04.10)
+            except Exception as e:                               # noqa: BLE001
+                rec["record_error"] = str(e)[:120]
         if box == "gulf" and s:
             # порог стресса для опреснения и рыболовства — по абсолютной температуре
             hot = [v for v in s["sst"] if v is not None and v >= 35.0]
@@ -563,6 +655,10 @@ def build(today=None, cr_nino34=None, cr_world=None, verbose=False):
             w["last_anom"] = w["anom"][-1]
             w["has_clim"] = True
     out["check"] = checks
+    try:
+        write_box_records(out["boxes"])
+    except Exception as e:                                       # noqa: BLE001
+        out["records_error"] = str(e)[:120]
     return out
 
 
@@ -575,6 +671,27 @@ if __name__ == "__main__":
                 continue
             c = clim_coverage(bx)
             print(f"{bx:8s}", "нормы нет" if c is None else f"лет в слоте {c[0]}…{c[1]}, недобор {c[2]}, перебор {c[3]}, сборка {c[4]}")
+        raise SystemExit(0)
+    if "--records" in sys.argv:
+        # рекорды боксов без сети: склад хвостов и годовые файлы с диска (04.10)
+        tdy, bxs = date.today(), {}
+        for bx, bb in BOXES.items():
+            if bb.get("tail_only"):
+                continue
+            cl0 = _load(CACHE / f"clim_{bx}.json", {})
+            s0 = _series(_load(CACHE / f"{bx}.json", {}), cl0, tdy)
+            if not s0:
+                continue
+            r0 = {"title": bb["title"]}; r0.update(s0)
+            r0["record"] = box_record(bx, s0, cl0)
+            bxs[bx] = r0
+        doc = write_box_records(bxs)
+        for bx, r0 in doc["boxes"].items():
+            rc = r0["record"]
+            print(f"{bx:8s} день {rc['day']['now']:+.2f} против {rc['day']['prior']:+.2f} ({rc['day']['prior_date']})"
+                  f"{' РЕКОРД' if rc['day']['above'] else ''} · 7 дн {rc['week']['now']:+.2f} против {rc['week']['prior']:+.2f}"
+                  f" · вода {rc['abs']['now']:.2f} против {rc['abs']['prior']:.2f}{' РЕКОРД' if rc['abs']['above'] else ''}"
+                  f" · дней выше суточного рекорда {rc['day']['days_above']}")
         raise SystemExit(0)
     if "--clim" in sys.argv:
         for bx, bb in BOXES.items():

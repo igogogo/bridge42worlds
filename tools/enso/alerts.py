@@ -36,10 +36,33 @@ def detect(cur, prev=None):
         _lvl(A, SHOUT, "Niño 3.4 is above anything measured since 1981",
              f"weekly index {lat['n34a']:+.1f} °C against {_vs('n34a')}")
     # запад → восток (3.4 разобрана выше отдельно, со своей формулировкой)
-    for k, name in (("n4a", "Niño 4"), ("n3a", "Niño 3"), ("n12a", "Niño 1+2")):
+    # СУТОЧНЫЕ БОКСЫ (04.10, владелец: «у зоны 1+2 дневной супер-рекорд, а этого нигде нет»): потолок — всё,
+    # что наш бокс OISST видел в прошлые календарные годы с 1982 (oisst.box_record). Если недельный индекс
+    # тоже выше своего — одна тревога с обоими числами; если выше только бокс — своя тревога.
+    BX = (cur.get("oisst") or {}).get("boxes") or {}
+
+    def _box_day(box):
+        r = (BX.get(box) or {}).get("record") or {}
+        d = r.get("day") or {}
+        if not d.get("above"):
+            return ""
+        return (f"our daily OISST box {d['now']:+.2f} °C on {r.get('date')} against {d['prior']:+.2f} °C on "
+                f"{d['prior_date']}, the warmest day of {r.get('since')}–{r.get('until')}; above it on "
+                f"{d['days_above']} days this year, first on {d['first_above']}")
+    for k, box, name in (("n4a", "nino4", "Niño 4"), ("n3a", "nino3", "Niño 3"), ("n12a", "nino12", "Niño 1+2")):
+        bt = _box_day(box)
         if hm.get(k) is not None and lat[k] > hm[k]:
             _lvl(A, SHOUT, f"{name} is above anything measured",
-                 f"{lat[k]:+.1f} °C against {_vs(k)}")
+                 f"weekly {lat[k]:+.1f} °C against {_vs(k)}" + (f"; {bt}" if bt else ""))
+        elif bt:
+            _lvl(A, SHOUT, f"{name} daily box is above anything measured since 1982", bt)
+    # сама вода — теплее, чем в любой день ряда бокса (у Niño 3.4 тоже: аномалию его покрывает ряд выше)
+    for box, name in (("nino4", "Niño 4"), ("nino34", "Niño 3.4"), ("nino3", "Niño 3"), ("nino12", "Niño 1+2")):
+        r = (BX.get(box) or {}).get("record") or {}
+        w = r.get("abs") or {}
+        if w.get("above"):
+            _lvl(A, SHOUT, f"{name}: the water is warmer than on any day measured since 1982",
+                 f"{w['now']:.2f} °C on {r.get('date')} in our daily OISST box, against {w['prior']:.2f} °C on {w['prior_date']}")
     pe = N["peak_estimate"]
     if N["current_day"] > pe["hist_ceiling"]:
         _lvl(A, SHOUT, "Daily Niño 3.4 broke the record of the series",

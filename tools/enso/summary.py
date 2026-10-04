@@ -116,7 +116,11 @@ def facts_from(cur):
                   "cusum": "dimensionless gauge in units of the series' spread",
                   "anomalies": "°C against the 1991–2020 norm for the same day of year, never absolute temperature",
                   "daily_record_before_this_year": "°C, the warmest single day of all earlier years; compare only with "
-                                                   "single days, never with a 30-day or 7-day mean"},
+                                                   "single days, never with a 30-day or 7-day mean",
+                  "daily_boxes_against_their_records": "our daily OISST boxes against everything each box measured in earlier "
+                                                       "calendar years since 1982: day_* and mean7_* are °C anomalies against the "
+                                                       "box's own 1991–2020 normal, water_* are absolute °C; compare a day with a "
+                                                       "day and a 7-day mean with a 7-day mean"},
         "risk_index_0_100": cur["risk_index"],
         "detector_alerts": cur.get("alerts", []),
         "series": {"Niño 3.4": card("sst_nino34"), "world ocean": card("sst_world"), "land+ocean": card("t2_world")},
@@ -128,6 +132,8 @@ def facts_from(cur):
             # написала, что 30-дневное +2,97 «уже выше прежнего рекорда +3,02» — это рекорд суток
             "daily_record_before_this_year": pe["hist_ceiling"],
             "peak_estimate": {"additive": [pe["additive_low"], pe["additive_high"]], "note": pe["note"]}},
+        # РЕКОРДЫ СУТОЧНЫХ БОКСОВ (04.10): у каждой зоны — потолок всех прошлых лет по дню, неделе и самой воде
+        "daily_boxes_against_their_records": _box_records(cur),
         "NOAA_weekly": {"week": NW["date"], "anomalies": NW["latest"], "change_4_weeks": NW.get("chg4w"),
                         "change_8_weeks": NW.get("chg8w"), "type": NW["type"],
                         "Nino34_percentile_of_season": NW["n34_rank_pct"],
@@ -213,6 +219,21 @@ def _air_facts(A):
          "yoy_percentile_since_1960": c.get("yoy_rank"), "month_pct": c.get("mom_pct"),
          "month_unusual_z": c.get("mom_z"), "since_onset_pct": c.get("since_onset_pct")}
         for c in cm if (c.get("weight") or 1) >= 3 or abs(c.get("mom_z") or 0) >= 2 or abs(c.get("since_onset_pct") or 0) >= 15]
+    return out
+
+
+def _box_records(cur):
+    out = {}
+    for k, b in ((cur.get("oisst") or {}).get("boxes") or {}).items():
+        r = b.get("record") or {}
+        if k not in ("nino12", "nino3", "nino34", "nino4") or not r:
+            continue
+        d, w, a = r.get("day") or {}, r.get("week") or {}, r.get("abs") or {}
+        out[b.get("title") or k] = {
+            "date": r.get("date"), "day_now": d.get("now"), "day_record_before_this_year": d.get("prior"), "day_record_date": d.get("prior_date"),
+            "days_above_that_record_this_year": d.get("days_above"), "first_day_above": d.get("first_above"),
+            "mean7_now": w.get("now"), "mean7_record_before_this_year": w.get("prior"), "mean7_record_date": w.get("prior_date"),
+            "water_now_c": a.get("now"), "warmest_water_before_this_year_c": a.get("prior"), "warmest_water_date": a.get("prior_date")}
     return out
 
 

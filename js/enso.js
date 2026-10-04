@@ -3499,6 +3499,24 @@
      местах, просто молчала об этом в полосе: ранг 1 у суточного Niño 3.4 и у поясов планеты,
      доля 100 % у топлива, серия рекордных суток у сторожевых рядов, уровень 5 у риска
      «подповерхностное тепло». Здесь всё это сведено к одной таблице «ключ → почему рекорд». */
+  /* РЕКОРДЫ СУТОЧНЫХ БОКСОВ (04.10, владелец: «у зоны 1+2 дневной супер-рекорд, а этого нигде нет — ни в
+     KPI, ни в обзоре; как ты следишь за рекордами?»). Правила были у недельных индексов, у суточного
+     Niño 3.4, у мирового океана, у буёв и у тёплого объёма, а у наших боксов — никакого. Потолок — всё,
+     что бокс видел в прошлые календарные годы с 1982 (tools/enso/oisst.py, box_record): box-records.json
+     пишет каждый прогон, тот же блок лежит в разборе (oisst.boxes[…].record); берём, что свежее. */
+  function boxRec(box) {
+    var a = (((S.BR || {}).boxes || {})[box]) || {}, b = ((((S.D || {}).oisst || {}).boxes || {})[box]) || {};
+    if (a.record && (!b.record || String(a.last_date || '') >= String(b.last_date || ''))) return a.record;
+    return b.record || null;
+  }
+  function boxRecWhy(box) {
+    var r = boxRec(box); if (!r) return '';
+    var d = r.day || {}, w = r.week || {}, a = r.abs || {}, yrs = r.since + '–' + r.until, out = [];
+    if (d.above) out.push('the daily anomaly ' + fnum(d.now) + ' °C is above the warmest day of ' + yrs + ', ' + fnum(d.prior) + ' °C on ' + d.prior_date + (d.days_above > 1 ? '; above it on ' + d.days_above + ' days this year, first on ' + d.first_above : ''));
+    else if (w.above) out.push('the 7-day mean ' + fnum(w.now) + ' °C is above any week of ' + yrs + ', ' + fnum(w.prior) + ' °C on ' + w.prior_date);
+    if (a.above) out.push('the water itself, ' + fnum(a.now, 2, false) + ' °C, is warmer than on any day of ' + yrs + ' (' + fnum(a.prior, 2, false) + ' °C on ' + a.prior_date + ')');
+    return out.join('; ');
+  }
   function stripRecords() {
     var D = S.D || {}, W = D.watch || {}, PL = (S.PL || {}).temperature || {}, out = {};
     function put(k, why) { if (k && why && !out[k]) out[k] = why; }
@@ -3529,10 +3547,11 @@
       put(z[1], 'above the highest weekly value before this event began, ' + fnum(nwM[z[0]], 1) + ' °C'
         + (nwD[z[0]] ? ' (' + nwD[z[0]] + ')' : ''));
     });
+    [['nino34', 'n34_box'], ['nino12', 'n12_box'], ['nino3', 'n3_box'], ['nino4', 'n4_box'], ['gulf', 'gulf_sst']].forEach(function (z) { var why = boxRecWhy(z[0]); if (why) put(z[1], why); });
     (D.alerts || []).forEach(function (a) {
       if ((a.level || '') !== 'SHOUT') return;
       var t = (a.title || '').toLowerCase();
-      if (/1\+2/.test(t)) put('n12_weekly', a.title);
+      if (/1\+2/.test(t) && !/daily box|the water/.test(t)) put('n12_weekly', a.title);   // тревоги боксов — не про недельный ряд
       if (/world ocean|ocean/.test(t)) put('sst_world', a.title);
     });
     return out;
@@ -8135,7 +8154,7 @@
         var b = boxes[o[0]]; if (!b || b.error && !b.dates) return '';
         var jk = { nino34: 'n34_box', nino12: 'n12_box', nino3: 'n3_box', nino4: 'n4_box', gulf: 'gulf_sst' }[o[0]];
         var absOnly = o[0] === 'gulf';                      // у Залива журнал держит абсолютную
-        return '<div class="kpi"><div class="kn">' + (ZONES[o[0]] ? zone(o[0]) : esc(o[1])) + '</div><div class="kv">' + ((fin(b.last_anom) && !absOnly) ? fnum(Math.abs(b.last_anom) < 0.005 ? 0 : b.last_anom) : fnum(b.last_sst, 2, false)) + '<small>' + ((fin(b.last_anom) && !absOnly) ? '°C anom' : '°C abs') + '</small></div><div class="km">' + esc(b.last_date) + (fin(b.chg30) ? '; 30-day change ' + fnum(b.chg30) : '') + (fin(b.mean7) ? '; 7 d mean ' + fnum(b.mean7) : '') + (b.error ? '; NRT did not answer, showing the last good tail' : '') + '</div>' + (jk ? kmeta(jk) : kmeta(null, 'NOAA OISST NRT via ERDDAP', b.last_date)) + '</div>';
+        return '<div class="kpi"><div class="kn">' + (ZONES[o[0]] ? zone(o[0]) : esc(o[1])) + '</div><div class="kv">' + ((fin(b.last_anom) && !absOnly) ? fnum(Math.abs(b.last_anom) < 0.005 ? 0 : b.last_anom) : fnum(b.last_sst, 2, false)) + '<small>' + ((fin(b.last_anom) && !absOnly) ? '°C anom' : '°C abs') + '</small></div><div class="km">' + esc(b.last_date) + (fin(b.chg30) ? '; 30-day change ' + fnum(b.chg30) : '') + (fin(b.mean7) ? '; 7 d mean ' + fnum(b.mean7) : '') + (b.error ? '; NRT did not answer, showing the last good tail' : '') + '</div>' + (boxRecWhy(o[0]) ? '<div class="chgline rec-line">record: ' + esc(boxRecWhy(o[0])) + '</div>' : '') + (jk ? kmeta(jk) : kmeta(null, 'NOAA OISST NRT via ERDDAP', b.last_date)) + '</div>';
       }).join('');
       body.appendChild(kp);
       return;
@@ -8433,6 +8452,14 @@
      в своём маленьком окне, с подсказкой сжатого смысла; щелчок ведёт в его раздел.
      Открывается на весь экран. Графики — те же функции, что и на своих сценах: одна правда. */
   function plainText(h) { return String(h == null ? '' : h).replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim(); }
+  /* знак рекорда на плитке обзора — тот же, что в ленте KPI (04.10) */
+  function ovRec(tile, why) {
+    if (!why && why !== '') return tile;
+    tile.classList.add('rec');
+    tile.insertAdjacentHTML('afterbegin', '<span class="ks-rec">record</span>');
+    if (why) { try { var pay = JSON.parse(tile.getAttribute('data-src') || '{}'); pay.def = 'A record: ' + why + '. ' + (pay.def || ''); tile.setAttribute('data-src', JSON.stringify(pay)); } catch (e) { } }
+    return tile;
+  }
   function ovKpi(kn, big, small, vis, go, pay, jk) {
     var d = el('div', 'ov-kpi');
     /* Подсказка — чистым текстом: имя показателя приходит с плашкой зоны, а подсказка
@@ -8652,8 +8679,19 @@
        Во-вторых, разбор шкалы 0–90/90–100, добавленный 10.09, — это три строки текста, и в
        сетке одинаковых плиток он тянул вверх ВЕСЬ ряд: соседи стояли полупустые под свой
        же рост. Число индекса и так в заголовке сцены, а разбор живёт там, где ему место. */
-    strip.appendChild(ovKpi(zone('nino34') + ' weekly', fnum(NW.latest.n34a, 1) + '<small>°C</small>', '4 weeks ' + arrow(c4, 1) + ' · ' + esc(NW.date), spark({ values: NW.series.slice(-26).map(function (r) { return r.n34a; }) }, 60, 26), ['now', 'weekly'], null, 'n34_weekly'));
-    if (fin(b34.last_anom)) strip.appendChild(ovKpi(zone('nino34') + ' daily box', fnum(b34.last_anom) + '<small>°C</small>', '30 days ' + arrow(b34.chg30, 2) + ' · ' + esc(b34.last_date), spark({ values: b34.anom }, 60, 26), ['ocean', 'surface'], null, 'n34_box'));
+    strip.appendChild(ovRec(ovKpi(zone('nino34') + ' weekly', fnum(NW.latest.n34a, 1) + '<small>°C</small>', '4 weeks ' + arrow(c4, 1) + ' · ' + esc(NW.date), spark({ values: NW.series.slice(-26).map(function (r) { return r.n34a; }) }, 60, 26), ['now', 'weekly'], null, 'n34_weekly'), stripRecords().n34_weekly));
+    /* РЕКОРДЫ — ПЕРВОЙ ПЛИТКОЙ (04.10, владелец: «рекорда 1+2 нет ни в KPI, ни в обзоре»): все ряды, что
+       сейчас выше своего потолка, — тем же правилом, что лента; плитки зон с рекордом помечены */
+    var RECS = stripRecords(), recKeys = Object.keys(RECS);
+    var recName = function (k) { return STRIP_NAME[k] || (jrec(k) || {}).title || k; };
+    if (recKeys.length) strip.insertBefore(ovRec(ovKpi('records now', recKeys.length + '<small>series above their record</small>', recKeys.map(function (k) { return esc(recName(k)); }).slice(0, 6).join(' · ') + (recKeys.length > 6 ? ' …' : ''), '', ['now', 'rise'],
+      { name: 'Records now', def: recKeys.map(function (k) { return recName(k) + ': ' + RECS[k]; }).join('. ') + '.', why: 'Each series against its own highest value before this year or before this event; click for the zones against their records.' }), ''), strip.firstChild);   // первой плиткой
+    if (fin(b34.last_anom)) strip.appendChild(ovRec(ovKpi(zone('nino34') + ' daily box', fnum(b34.last_anom) + '<small>°C</small>', '30 days ' + arrow(b34.chg30, 2) + ' · ' + esc(b34.last_date), spark({ values: b34.anom }, 60, 26), ['ocean', 'surface'], null, 'n34_box'), RECS.n34_box));
+    [['nino12', 'n12_box'], ['nino3', 'n3_box']].forEach(function (z) {
+      var bz = (O.boxes || {})[z[0]] || {}; if (!fin(bz.last_anom)) return;
+      var rz = boxRec(z[0]) || {}, dz = rz.day || {};
+      strip.appendChild(ovRec(ovKpi(zone(z[0]) + ' daily box', fnum(bz.last_anom) + '<small>°C</small>', (dz.prior != null ? 'record before this year ' + fnum(dz.prior) + ' · ' : '') + esc(bz.last_date), spark({ values: bz.anom }, 60, 26), ['ocean', 'surface'], null, z[1]), RECS[z[1]]));
+    });
     strip.appendChild(ovKpi(term('oni', 'ONI') + ' · ' + term('roni', 'RONI'), fnum(ONI.current[ONI.last_season]) + '<small>' + esc(ONI.last_season) + '</small>', 'RONI ' + fnum((ONI.roni || {}).last) + ' — the gap is the warm background', twoBars(ONI.current[ONI.last_season] || 0, (ONI.roni || {}).last || 0, 'ONI', 'RONI', 'var(--nino)'), ['now', 'analogs'], null, 'oni'));
     if (IRI) strip.appendChild(ovKpi('models', (tally.broke || 0) + '<small>broken of ' + ((tally.ok || 0) + (tally.lag || 0) + (tally.broke || 0)) + '</small>', 'live RMS ' + fnum(liveNow(IRI, 'rms')) + ' · published ' + fnum((IRI.against_observed || {}).mean), donut([[tally.ok || 0, 'var(--nina)'], [tally.lag || 0, 'var(--lv3)'], [tally.broke || 0, 'var(--lv5)']]), ['models', 'plume'], null, 'models_broke'));
     if (A.fuel) strip.appendChild(ovKpi(term('wwv', 'fuel'), A.fuel.share_of_record + '<small>% of record</small>', (A.fuel.discharging ? 'being spent' : 'not spent yet') + ' · leads by ' + (A.fuel.lead || {}).lag + ' mo', barFill(A.fuel.share_of_record, 'var(--ochre)'), ['air', 'fuel'],
@@ -12783,11 +12821,12 @@
     get('/data/enso/tides.json').catch(function () { return {}; }),
     get('/data/enso/digest.json').catch(function () { return {}; }),
     get('/data/enso/cyclones.json').catch(function () { return {}; }),
-    get('/data/enso/cfs.json').catch(function () { return {}; })])
+    get('/data/enso/cfs.json').catch(function () { return {}; }),
+    get('/data/enso/box-records.json').catch(function () { return {}; })])
     .then(function (r) {
       S.D = r[0]; S.G = (r[1] && r[1].en) || {}; S.H = r[2] || []; S.P = r[0].prev || null;
       fixRiskTitles(r[0]);                    // парные риски: «world ocean:» / «land+ocean:» читались как дубли (владелец 09.09)
-      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}; S.LY = r[30] || {}   /* история прогнозов, облака, «кто выбивается» (15.09), обход раскладки (16.09) */; S.FU = r[31] || {};   /* биржевые котировки (18.09) */ S.RP = r[32] || {};   /* 65 мест радианса (18.09) */ S.RV = r[33] || {}; S.VP = r[34] || {};   /* реки и водяной пар (18.09) */ S.MO = r[35] || {};   /* характер роста (19.09) */ S.CH = r[36] || {};   /* заряд топлива (22.09) */ S.YA = r[37] || {};   /* годы для сравнения (23.09) */ S.RE = r[38] || {};   /* шесть событий по дню года, радианс (24.09) */ S.RG = r[39] || {};   /* режимы циркуляции (25.09) */ S.TD = r[40] || {};   /* приливомеры вдоль берега (29.09) */ S.DG = r[41] || {};   /* дайджест новостей по дням (01.10) */ S.CY = r[42] || {};   /* тропические циклоны (01.10) */ S.CF = r[43] || {};   /* CFSv2 по дням старта (03.10) */
+      S.M = r[3] || {}; S.L = r[4] || {}; S.J = r[5] || {}; S.C = r[6] || {}; S.N = r[7] || {}; S.F = r[8] || {}; S.O = r[9] || {}; S.PL = r[10] || {}; S.HV = r[11] || {}; S.MN = r[12] || {}; S.SP = r[13] || {}; S.RD = r[14] || {}; S.PR = r[15] || {}; S.RA = r[16] || {}; S.NB = r[17] || {}; S.CN = r[18] || {}; S.ST = r[19] || {}; S.CT = r[20] || {}; S.FR = r[21] || {}; S.WA = r[22] || {}; S.IS = r[23] || {}; S.IC = r[24] || {}; S.MH = r[25] || {}; S.OLR = r[26] || {}; S.OUT = r[27] || {}; S.ZF = r[28] || {}; S.PH = r[29] || {}; S.LY = r[30] || {}   /* история прогнозов, облака, «кто выбивается» (15.09), обход раскладки (16.09) */; S.FU = r[31] || {};   /* биржевые котировки (18.09) */ S.RP = r[32] || {};   /* 65 мест радианса (18.09) */ S.RV = r[33] || {}; S.VP = r[34] || {};   /* реки и водяной пар (18.09) */ S.MO = r[35] || {};   /* характер роста (19.09) */ S.CH = r[36] || {};   /* заряд топлива (22.09) */ S.YA = r[37] || {};   /* годы для сравнения (23.09) */ S.RE = r[38] || {};   /* шесть событий по дню года, радианс (24.09) */ S.RG = r[39] || {};   /* режимы циркуляции (25.09) */ S.TD = r[40] || {};   /* приливомеры вдоль берега (29.09) */ S.DG = r[41] || {};   /* дайджест новостей по дням (01.10) */ S.CY = r[42] || {};   /* тропические циклоны (01.10) */ S.CF = r[43] || {};   /* CFSv2 по дням старта (03.10) */ S.BR = r[44] || {};   /* рекорды суточных боксов (04.10) */
       var db = $('deltaBtn');
       if (db) db.onclick = function () {
         S.delta = S.delta === '' ? 'update' : (S.delta === 'update' ? 'week' : '');
