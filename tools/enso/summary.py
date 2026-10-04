@@ -32,7 +32,7 @@ Rules, no exceptions:
 1. Use ONLY numbers from the digest. Not one number from outside, from memory, or "roughly".
 2. If the digest contains alerts of level SHOUT, the verdict starts with the word ALERT and the first
    sentence names what exactly happened.
-3. Forecast only for a 2–3 week horizon and only from the p10/p50/p90 forecast and the analogues in the
+3. Forecast only for the next two weeks (say "two weeks") and only from the 14-day p10/p50/p90 forecast and the analogues in the
    digest. Do not put a number on the peak of the event if the digest says the analogues lead beyond the
    record of the series; then talk about "when the growth stops".
 4. Distinguish "above all analogues" from "above anything measured": these are different claims.
@@ -57,7 +57,10 @@ Rules, no exceptions:
    issue that is already published is never revised: say "the next issue" instead. The record of the
    daily series is the record of single days: never compare a 30-day or 7-day mean with it. Say the
    14-day acceleration in °C in words ("0.11 °C more than in the previous 14 days"). A forecast range
-   "stays above" a value only if its low path does; otherwise say where its middle path is.
+   "stays above" a value only if its low path does; otherwise say where its middle path is. The +2.0
+   "very strong" threshold belongs to the three-month ONI: never set a daily or weekly value or a forecast
+   path against it. Say how early a model forecast was as "issued as the season began" or "N months
+   before the season began" (months_from_issue_to_season_start), never "no lead".
 7. The digest has a section on the IRI forecast models. Judge them only on CLOSED seasons: the last
    closed season (its official ONI, or a corridor while the ONI is not out yet; then say it is
    provisional) and the model classes. Never compare a three-month forecast with a weekly value or

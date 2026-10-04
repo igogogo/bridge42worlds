@@ -37,6 +37,7 @@ ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
 import sys as _sys
 _sys.path.insert(0, str(Path(__file__).resolve().parent))
 import safeio   # noqa: E402
+import netguard  # noqa: E402  — отсечка хоста, не ответившего в этом прогоне (04.10)
 CACHE = ROOT / "oisst"
 E = "https://coastwatch.pfeg.noaa.gov/erddap/griddap/"
 NRT = "ncdcOisst21NrtAgg_LonPM180"
@@ -98,8 +99,13 @@ def _grid(dataset, t0, t1, lat, lon, stride):
     q = (f"{E}{dataset}.nc?sst[({tt0}):1:({tt1})][(0.0)]"
          f"[({lat[0]}):{stride}:({lat[1]})][({lon[0]}):{stride}:({lon[1]})]")
     req = urllib.request.Request(q, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=300) as r:
-        data = r.read()
+    netguard.guard(q)                                   # хост уже не ответил в этом прогоне — не ждём (04.10)
+    try:
+        with urllib.request.urlopen(req, timeout=300) as r:
+            data = r.read()
+    except Exception as e:                              # noqa: BLE001
+        netguard.mark(q, e)
+        raise
     ds = netCDF4.Dataset("inmem.nc", memory=data)
     try:
         t = ds["time"]
@@ -111,11 +117,16 @@ def _grid(dataset, t0, t1, lat, lon, stride):
     return times, lats, sst
 
 
-def last_time(dataset):
+def last_time(dataset, timeout=60):
     q = f"{E}{dataset}.json?time[(last)]"
     req = urllib.request.Request(q, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        d = json.loads(r.read().decode("utf-8"))
+    netguard.guard(q)
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            d = json.loads(r.read().decode("utf-8"))
+    except Exception as e:                              # noqa: BLE001
+        netguard.mark(q, e)
+        raise
     return d["table"]["rows"][0][0][:10]
 
 
@@ -507,6 +518,13 @@ def build(today=None, cr_nino34=None, cr_world=None, verbose=False):
            "note": ("Direct from the NOAA grid, a day or two behind. The preliminary (NRT) values of the last "
                     "two weeks are revised by NOAA later, so the last days can move by a few hundredths. "
                     "The Niño 3.4 box is checked every day against climatereanalyzer on the days both have.")}
+    # ПРОБА СЕРВЕРА ПЕРЕД ЧЕТЫРНАДЦАТЬЮ БОКСАМИ (04.10): один короткий запрос; не ответил — хвосты берутся
+    # из кэша с пометкой, вместо 14 × 300 секунд ожидания
+    try:
+        last_time(NRT, timeout=30)
+    except Exception as e:                                       # noqa: BLE001
+        if verbose:
+            print(f"  ERDDAP не ответил на пробу ({str(e)[:80]}): хвосты боксов — из кэша")
     for box, b in BOXES.items():
         store = update_tail(box, today, verbose)
         cl = {} if b.get("tail_only") else _load(CACHE / f"clim_{box}.json", {})

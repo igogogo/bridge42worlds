@@ -167,18 +167,29 @@ def main(fetch=True, llm=True, light=False):
     SNAP.mkdir(parents=True, exist_ok=True)
     snaps = sorted(SNAP.glob("*.json"))
     prev = json.loads(snaps[-1].read_text(encoding="utf-8")) if snaps else None
+    # ПОЛНЫЙ РАЗБОР СРАВНИВАЕТ С ПРОШЛЫМ РАЗБОРОМ, А НЕ С ПОСЛЕДНИМ СНИМКОМ (04.10). Последним снимком бывает
+    # лёгкий прогон без модели: 04.10 он первым увидел переход ONI через +2,0, тревога «по фронту» зажглась в
+    # нём, и полный разбор в 07:50 ни этой тревоги, ни перемен с прошлого вердикта не увидел («новых дней
+    # нет»). Для разбора моделью «что изменилось» и пороговые тревоги считаются от assessed.json; «было в
+    # прошлый раз» на числах панели (cur["prev"]) — по-прежнему от последнего снимка.
+    base = prev
+    if llm and not light and (ROOT / "assessed.json").exists():
+        try:
+            base = json.loads((ROOT / "assessed.json").read_text(encoding="utf-8"))
+        except Exception:                                        # noqa: BLE001
+            base = prev
 
     step("источники")
     cur = watch.run(fetch=fetch)
     step("ряды и риски")
     cur["stamp"] = datetime.now().strftime("%Y-%m-%d %H:%M")
-    diff = diff_against(prev, cur)
+    diff = diff_against(base, cur)
     cur["diff"] = diff
 
     # детектор перелома — правила; потом саммари моделью по фактам, включая срабатывания
     step("тревоги")
     import alerts as A
-    cur["alerts"], cur["shout"] = A.detect(cur, prev)
+    cur["alerts"], cur["shout"] = A.detect(cur, base)
     # Тревоги по ценам и по поломке моделей встают в тот же список: панель показывает их
     # слева карточками, а вид (kind) решает, в какую группу карточка попадёт.
     try:

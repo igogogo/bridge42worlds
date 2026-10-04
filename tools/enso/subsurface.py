@@ -32,6 +32,7 @@ ROOT = Path(__file__).resolve().parents[2] / "data" / "enso"
 import sys as _sys
 _sys.path.insert(0, str(Path(__file__).resolve().parent))
 import safeio   # noqa: E402
+import netguard  # noqa: E402  — отсечка хоста, не ответившего в этом прогоне (04.10)
 CACHE = ROOT / "subsurface"
 E = "https://coastwatch.pfeg.noaa.gov/erddap/tabledap/pmelTaoDyT.csv"
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
@@ -76,8 +77,13 @@ def _tao_rows(lon, t0, t1=None, timeout=120):
     # Tomcat за ERDDAP отвергает сырые «>» и «<» в строке запроса (400 без текста): кодируем.
     q = (f"{E}?time,depth,T_20&longitude={lon}&latitude=0&time%3E%3D{t0}" + (f"&time%3C%3D{t1}" if t1 else ""))
     req = urllib.request.Request(q, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        txt = r.read().decode("utf-8", "replace")
+    netguard.guard(q)                                   # хост уже не ответил в этом прогоне (04.10)
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            txt = r.read().decode("utf-8", "replace")
+    except Exception as e:                              # noqa: BLE001
+        netguard.mark(q, e)
+        raise
     by = {}
     for ln in txt.splitlines()[2:]:
         p = ln.split(",")
