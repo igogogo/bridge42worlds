@@ -200,7 +200,9 @@ def check_alerts(D):
         if re.search(r"\d", aid):
             flag(f"alert {aid}", "id с цифрой: лента объявит «новую» при смене числа")
         d = (a.get("detail") or "")
-        if lvl == "SHOUT" and not re.search(r"record|maximum|anything measured|threshold|every model|since", d + t, re.I):
+        # «crossed +2.0» — тоже порог (04.10: ONI перешёл +2,0, «очень сильное» событие, правило этого не знало)
+        if lvl == "SHOUT" and not re.search(r"record|maximum|anything measured|threshold|every model|since|crossed",
+                                            d + t, re.I):
             flag(f"alert {aid}", "SHOUT без слов о рекорде или пороге в тексте: чем оправдан уровень?")
         for s in (t, d):
             if DASH.search(s):
