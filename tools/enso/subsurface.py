@@ -503,17 +503,49 @@ def _godas_index(ds):
 GODAS_CACHE = CACHE / "godas"      # годовые разрезы на диске (24.09): один раз с PSL, дальше без сети
 
 
-def _godas_year(y):
+GODAS_FRESH_H = 20                  # кэш текущего года живёт сутки: новый месяц GODAS выходит раз в месяц
+
+
+def _godas_cached(d):
+    sec = np.array([[[np.nan if v is None else v for v in row] for row in mm] for mm in d["sec"]], float)
+    return d["months"], np.array(d["lev"], float), np.array(d["lon"], float), sec
+
+
+def _godas_year(y, offline=False):
     """Разрез по месяцам года: (месяцы, уровни, долготы) в °C — среднее по ±2° широты.
     КЭШ ПО ГОДАМ (24.09): прочитанный с PSL год ложится в subsurface/godas/<год>.json (~0,4 МБ),
-    и сборщики аналогов/Ховмёллера по 12 событиям больше не ходят в сеть за прошлым."""
+    и сборщики аналогов/Ховмёллера по 12 событиям больше не ходят в сеть за прошлым.
+    ТЕКУЩИЙ ГОД — НЕ НАВСЕГДА (04.10): условие «год не раньше нынешнего — из кэша» делало кэш текущего
+    года вечным: файл 2026.json, взятый 24.09 с январём–августом, больше не обновлялся бы, и сентябрь
+    GODAS на панель не пришёл бы никогда. Теперь прошлый полный год — из кэша навсегда, текущий — если
+    взят меньше суток назад; иначе снова с PSL, а если сеть не ответила — прежний кэш, не пустота.
+    offline=True — только кэш (сборка без сети вне прогона)."""
     cp = GODAS_CACHE / f"{y}.json"
+    d = None
     if cp.exists():
-        d = json.loads(cp.read_text(encoding="utf-8"))
-        if len(d.get("months") or []) == 12 or int(y) >= datetime.now().year:
-            sec = np.array([[[np.nan if v is None else v for v in row] for row in mm] for mm in d["sec"]], float)
-            return d["months"], np.array(d["lev"], float), np.array(d["lon"], float), sec
-    months, lev, lon, sec = _godas_year_fetch(y)
+        try:
+            d = json.loads(cp.read_text(encoding="utf-8"))
+        except Exception:                                        # noqa: BLE001
+            d = None
+    if d is not None:
+        cur_year = int(y) >= datetime.now().year
+        try:
+            fresh = (datetime.now() - datetime.strptime(d.get("fetched") or "", "%Y-%m-%d %H:%M")).total_seconds() < GODAS_FRESH_H * 3600
+        except ValueError:
+            fresh = False
+        if offline or (not cur_year and len(d.get("months") or []) == 12) or (cur_year and fresh):
+            return _godas_cached(d)
+    try:
+        months, lev, lon, sec = _godas_year_fetch(y)
+    except Exception:                                            # noqa: BLE001
+        if d is not None:
+            print(f"  GODAS {y}: PSL не ответил — беру кэш от {d.get('fetched')}")
+            return _godas_cached(d)
+        raise
+    if d is not None and len(months) < len(d.get("months") or []):
+        # худшее не переписывает лучшее: PSL отдал меньше месяцев, чем уже лежит в кэше
+        print(f"  GODAS {y}: с PSL пришло {len(months)} мес., в кэше {len(d['months'])} — оставляю кэш")
+        return _godas_cached(d)
     try:
         GODAS_CACHE.mkdir(parents=True, exist_ok=True)
         safeio.write_text(cp, json.dumps({"year": int(y), "months": months, "lev": [float(x) for x in lev], "lon": [float(x) for x in lon],
@@ -611,6 +643,104 @@ def build_analogs_godas(verbose=False):
             print(f"  GODAS {y}: {len(hc)} мес")
     _save(p, cl)
     return cl
+
+
+# ТЕПЛО ПО СЛОЯМ (владелец 04.10: «добавь объём запасённого тепла — всего и по слоям, всё в одном месте»).
+# Полоса индекса теплосодержания — 2°S–2°N, 180–100°W, верхние 300 м — разбита на пять слоёв. Тепло слоя —
+# ρ·cp·ΣT′·dz по полосе, в зеттаджоулях (10²¹ Дж): в отличие от °C слои складываются в целое, и столбик
+# месяца — это весь запас полосы, разложенный по глубине. Нижний уровень GODAS (303 м, его клетка до
+# 323,5 м) обрезан на 300 м, чтобы «0–300» было правдой. Поэтому среднее по столбу выше индекса 0–300 м
+# (heat_content): у того вес — полная толщина до 323,5 м с холодным низом (в 08.2026: 3,06 против 2,87 °C). Аналоги — те же три года (y−1, y, y+1), что у
+# Ховмёллера, из кэша по годам, без сети.
+HL_LAYERS = ((0, 50), (50, 100), (100, 150), (150, 200), (200, 300))
+HL_LON = (180, 260)                      # 180°–100°W, как у индекса теплосодержания
+RHO_CP = 1025.0 * 3990.0                 # Дж/(м³·К), морская вода
+HL_FILE = ROOT / "heat-layers.json"
+
+
+def _hl_geometry(lev, lon):
+    lev = np.asarray(lev, float); lon = np.asarray(lon, float)
+    edges = np.concatenate([[0.0], (lev[:-1] + lev[1:]) / 2, [lev[-1] + (lev[-1] - lev[-2]) / 2]])
+    top, bot = edges[:-1], edges[1:]
+    over = np.array([[max(0.0, min(b, hi) - max(t, lo)) for t, b in zip(top, bot)] for lo, hi in HL_LAYERS])  # слой × уровень, м
+    band = (lon >= HL_LON[0]) & (lon <= HL_LON[1])
+    area = (2 * GODAS_LAT * 111_320.0) * ((HL_LON[1] - HL_LON[0]) * 111_320.0)    # м²; у экватора cos(широты) ≈ 1
+    return over, band, area
+
+
+def _hl_month(a, over, band, area):
+    """Аномалия разреза (уровни × долготы) → (ЗДж по слоям, °C по слоям)."""
+    with np.errstate(all="ignore"):
+        prof = np.nanmean(a[:, band], axis=1)                   # средняя аномалия полосы на каждом уровне
+    ok = np.isfinite(prof)
+    zj, dc = [], []
+    for w in over:
+        ww = np.where(ok, w, 0.0)
+        s = float(np.sum(np.where(ok, prof, 0.0) * ww))
+        zj.append(round(RHO_CP * area * s / 1e21, 3))
+        dc.append(round(s / ww.sum(), 2) if ww.sum() > 0 else None)
+    return zj, dc
+
+
+def _hl_series(months_ym, secs, clim, lev, lon):
+    over, band, area = _hl_geometry(lev, lon)
+    out = {"months": list(months_ym), "zj": [], "degc": [], "total": []}
+    for ym, sec in zip(months_ym, secs):
+        zj, dc = _hl_month(sec - clim[int(ym[5:7]) - 1], over, band, area)
+        out["zj"].append(zj); out["degc"].append(dc); out["total"].append(round(sum(zj), 2))
+    return out, area
+
+
+def heat_layers_analogs(clim, verbose=False):
+    """Тепло по слоям для двенадцати лет начала Эль-Ниньо: три года на событие, один раз в кэш."""
+    p = CACHE / "heat_layers_analogs.json"
+    cl = _load(p, {})
+    if all(str(y) in cl for y in EVENT_YEARS):
+        return cl
+    for y in EVENT_YEARS:
+        if str(y) in cl:
+            continue
+        months_ym, secs, lev, lon = [], [], None, None
+        for yy in (y - 1, y, y + 1):
+            try:
+                months, lev, lon, sec = _godas_year(yy, offline=True)
+            except Exception as e:                               # noqa: BLE001
+                if verbose:
+                    print(f"  GODAS {yy}: {str(e)[:80]}")
+                continue
+            for k, m in enumerate(months):
+                months_ym.append(f"{yy}-{m:02d}"); secs.append(sec[k])
+        if secs:
+            cl[str(y)], _ = _hl_series(months_ym, secs, clim, lev, lon)
+            if verbose:
+                print(f"  тепло по слоям {y}: {len(months_ym)} мес")
+    _save(p, cl)
+    return cl
+
+
+def write_heat_layers(months_ym, secs, clim, lev, lon, verbose=False):
+    """data/enso/heat-layers.json: этот ход по месяцам и аналоги. Окно, кончающееся раньше
+    сохранённого, не пишется (как у Ховмёллера: неудача сбора не должна выглядеть как новость)."""
+    cur, area = _hl_series(months_ym, secs, clim, lev, lon)
+    prev = _load(HL_FILE, {})
+    pm = ((prev.get("this") or {}).get("months") or [])
+    if pm and cur["months"] and cur["months"][-1] < pm[-1]:
+        print(f"  тепло по слоям НЕ переписано: собралось до {cur['months'][-1]}, в файле до {pm[-1]}")
+        return prev
+    doc = {"built": datetime.now().strftime("%Y-%m-%d %H:%M"),
+           "strip": "2°S–2°N, 180°–100°W", "depth": "0–300 m", "area_m2": round(area, -9), "rho_cp": RHO_CP,
+           "unit": "ZJ (10^21 J)", "layers": [f"{lo}–{hi} m" for lo, hi in HL_LAYERS],
+           "this": cur, "events": heat_layers_analogs(clim, verbose=verbose),
+           "source": "GODAS ocean reanalysis (NCEP) via NOAA PSL, monthly potential temperature averaged over 2°S–2°N; "
+                     f"anomaly against our {CLIM_YEARS[0]}–{CLIM_YEARS[1]} monthly climatology",
+           "note": ("Heat stored in the upper 300 m of the strip where the CPC reads its upper-ocean heat index, "
+                    "split into five layers: ρ·cp × the anomaly × the layer's thickness × the strip's area. The layers add "
+                    "up to the whole column, so the height of a bar is the whole store and its parts say at what depth "
+                    "the extra heat sits. A reanalysis, not a measurement: it lags about six weeks and smooths the extremes.")}
+    safeio.write_text(HL_FILE, json.dumps(doc, ensure_ascii=False))
+    if verbose:
+        print(f"  тепло по слоям: {cur['months'][0]}…{cur['months'][-1]}, последнее {cur['total'][-1]} ЗДж")
+    return doc
 
 
 HOV_FILE = ROOT / "hovmoller.json"
@@ -788,6 +918,12 @@ def godas(today=None, verbose=False):
             out["hovmoller_file"] = "data/enso/hovmoller.json"
         except Exception as e:                                   # noqa: BLE001
             out["hovmoller_error"] = str(e)[:120]
+        # тепло по слоям — отдельным файлом, как Ховмёллер: лёгкий прогон обновляет и его (04.10)
+        try:
+            write_heat_layers([f"{y}-{m:02d}" for y, m in zip(years, months_all)], secs, clim, lev, lon, verbose=verbose)
+            out["heat_layers_file"] = "data/enso/heat-layers.json"
+        except Exception as e:                                   # noqa: BLE001
+            out["heat_layers_error"] = str(e)[:120]
         an = _load(CACHE / "analogs_godas.json", {})
         mm_last = f"{months_all[-1]:02d}"
         out["heat_content"] = {"months": [f"{y}-{m:02d}" for y, m in zip(years, months_all)], "values": hc,
@@ -906,6 +1042,19 @@ if __name__ == "__main__":
         print("текущее окно")
         g = godas(verbose=True)
         run.finish("ok" if not bad else "partial", years=ok, missing=bad)
+        print("готово")
+    elif "--heat" in sys.argv:
+        # тепло по слоям из кэша по годам, без сети и без перезаписи остального (04.10): то же окно, что у
+        # прогона (прошлый и текущий год), та же норма — файл совпадает с разобранным месяцем GODAS
+        cl = _load(CACHE / "clim_godas.json", {})
+        C = np.array([[[np.nan if v is None else v for v in row] for row in mm] for mm in cl["clim"]], float)
+        Y = datetime.now().year
+        months_ym, secs, lev, lon = [], [], None, None
+        for yy in (Y - 1, Y):
+            months, lev, lon, sec = _godas_year(yy, offline=True)
+            for k, m in enumerate(months):
+                months_ym.append(f"{yy}-{m:02d}"); secs.append(sec[k])
+        write_heat_layers(months_ym, secs, C, np.array(lev), np.array(lon), verbose=True)
         print("готово")
     elif "--hov" in sys.argv:
         import ops as OPSLOG

@@ -338,6 +338,14 @@
         await settle(pause);
         take('Now / Against analogues / rate of rise', ['.stage-body']);
         var db = innerBtn('daily'); if (db) { db.click(); await settle(pause); }
+        var ab = innerBtn('absolute °C');
+        if (ab) {
+          ab.click();
+          await until(function () { return plotTitle().indexOf('storm line') >= 0; });
+          await settle(pause);
+          take('Now / Against analogues / absolute °C', ['.stage-body']);
+          var ab2 = innerBtn('absolute °C'); if (ab2) { ab2.click(); await settle(pause); }
+        }
       }
     }
     return { version: VERSION, width: window.innerWidth, scenes: scenes, findings: out, kpis: kpis, consist: cons };
