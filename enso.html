@@ -624,6 +624,16 @@
   .stab-k{display:flex;flex-wrap:wrap;gap:3px 8px;margin:4px 0 2px;font-family:var(--mono);font-size:9.5px;color:var(--soft)}
   .stab-k span{border:1px solid var(--hair);border-radius:999px;padding:0 6px;text-decoration:none;cursor:default} .stab-k span b{color:var(--text)}
   .stab-k span.on{border-color:var(--nino);color:var(--nino)} .stab-k span.on b{color:var(--nino)}
+  /* отдельный риск «рост такого класса» (04.10): рамка как у карточки устойчивости, стрелка вместо уровня;
+     на сцене три графика друг под другом, каждый своей высоты, тело сцены прокручивается */
+  .risk.rise .rl{font-size:15px}
+  .stage-body .plot.an-min{min-height:330px}
+  .rise-box{display:flex;flex-direction:column;gap:10px;flex:0 0 auto}
+  .rise-box .plot{flex:none;height:330px;min-height:280px}
+  .rise-box .plot.rb{height:250px;min-height:220px}
+  .rise-box .plot.rc{height:300px;min-height:240px}
+  .stage.full .rise-box .plot{min-height:280px}
+  @media (max-width:760px){ .rise-box .plot{height:400px} .rise-box .plot.rb{height:440px} .rise-box .plot.rc{height:260px} }
   /* окно графа поверх панели */
   .cn-modal{position:fixed;inset:0;z-index:300;background:rgba(8,10,14,.55);display:flex;align-items:center;justify-content:center;padding:16px}
   .cn-modal-box{width:min(880px,96vw);max-height:92vh;overflow:auto;background:var(--surface);border:1px solid var(--hair);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.45);padding:10px 12px 8px}
@@ -1518,7 +1528,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=95abcc2065"></script>
+<script src="/js/enso.js?v=19b88ba192"></script>
 <script src="/js/sitenav.js?v=6ab7008c58"></script>
 </body>
 </html>

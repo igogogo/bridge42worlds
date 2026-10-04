@@ -33,7 +33,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 1;
+  var VERSION = 2;   // 2 (04.10): обход заходит и в сцены вне вкладок — риск «рост такого класса», скорость роста
   /* Сцена успевает встать не сразу: цепочка данных меряет свою ширину по requestAnimationFrame
      и повторяет через 250 мс, графики перерисовываются наблюдателем размера. Меряя раньше,
      проверка ловит промежуточную раскладку и выдаёт десятки замечаний на здоровой странице. */
@@ -309,6 +309,35 @@
         ss[j].click();
         await settle(pause);
         take(name + ' / ' + sub, ['.stage-body']);
+      }
+    }
+
+    /* СЦЕНЫ, КОТОРЫХ НЕТ СРЕДИ ВКЛАДОК (04.10): отдельный риск «рост такого класса» открывается
+       карточкой из колонки рисков, а скорость роста — кнопкой внутри Against analogues. Обход по
+       вкладкам и подвкладкам их не видит; заходим сами и ждём, пока догрузятся файлы боксов. */
+    async function until(test, capMs) { var end = Date.now() + (capMs || 15000); while (Date.now() < end && !test()) await wait(300); }
+    function innerBtn(txt) { return [].slice.call(document.querySelectorAll('.stage-body .seg.sub button')).filter(function (b) { return label(b) === txt; })[0]; }
+    function plotTitle() { var t = document.querySelector('.stage-body .plot svg .tt'); return t ? (t.getAttribute('title') || t.textContent || '') : ''; }
+    var rc = document.querySelector('.risk.rise');
+    if (rc) {
+      rc.click();
+      await until(function () { return document.querySelector('.stage-body .rise-box .plot'); });
+      await settle(pause);
+      take('Risks / a rise of this class', ['.stage-body']);
+    }
+    var nowTab = entries().filter(function (e) { return e.name === 'Now'; })[0];
+    if (nowTab) {
+      nowTab.go(); await settle(pause);
+      var sa = segs().filter(function (b) { return label(b) === 'Against analogues'; })[0];
+      if (sa) { sa.click(); await settle(pause); }
+      var z3 = innerBtn('Niño 3'); if (z3) { z3.click(); await settle(pause); }
+      var rb = innerBtn('rate of rise');
+      if (rb) {
+        rb.click();
+        await until(function () { return plotTitle().indexOf('rate of rise') >= 0; });
+        await settle(pause);
+        take('Now / Against analogues / rate of rise', ['.stage-body']);
+        var db = innerBtn('daily'); if (db) { db.click(); await settle(pause); }
       }
     }
     return { version: VERSION, width: window.innerWidth, scenes: scenes, findings: out, kpis: kpis, consist: cons };

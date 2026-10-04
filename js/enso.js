@@ -71,7 +71,7 @@
         + 'how unusual are the last thirty days for THIS series on THESE calendar days. Ranked by its own '
         + 'spread, not by degrees, so cold counts as much as warm.',
       'verdict/now': 'Today\'s verdict.', 'verdict/history': 'Every verdict that actually changed, in order.',
-      'now/analogs': 'Daily Niño 3.4 this year against the four strongest past events on the same days.', 'now/map': 'The four Niño boxes on the map, this week against the same week of a past event.',
+      'now/analogs': 'This year against the four strongest past events on the same days, zone by zone: daily, as a 7- or 30-day mean, or as the rate of rise over the last one to four months.', 'now/map': 'The four Niño boxes on the map, this week against the same week of a past event.',
       'now/weekly': 'The four weekly indices over the last weeks, with the same weeks of past events beside them.', 'now/weekly_a': 'One weekly index against the strongest events on the same calendar.',
       'air/vapour': 'Column water vapour over the tropics and the Niño boxes, ERA5 through Open-Meteo, daily since 1991.',
       'food/markets': 'Exchange futures for the same goods as the monthly tables: weekly for two years, daily for three months.',
@@ -874,6 +874,448 @@
     body.appendChild(kp);
     body.appendChild(el('div', 'cap', esc(RE.note || '') + ' Source: ' + esc(RE.src || '') + '. Built ' + esc(RE.built || '') + '.'));
   }
+  /* ══ СГЛАЖИВАНИЕ И СКОРОСТЬ РОСТА (владелец 04.10) ══════════════════════════════════════
+     «Ты пишешь по 82 за месяц, но если посмотреть за два — там колебания и нет такого ускорения.
+     Усредни понедельно, сгладь и потом анализируй; сглаженные варианты как опцию в Now; и сделай,
+     чтобы анализировать именно скорость роста, где чётко видно отличия, переключатель 1–2–3–4 месяца».
+     Сглаживание — среднее за 7 или 30 суток ДО этого дня, а не вокруг него: у нашего года будущих
+     дней нет, и центрированное окно на краю сравнивало бы короткое среднее этого года с полным у
+     аналогов. Сдвиг на полокна у всех линий один, сравнение на одну дату честное.
+     Скорость — наклон прямой МНК по суточным значениям за последние N месяцев, °C в месяц (30,44
+     суток): прямая сама гасит шум дня, окно в три-четыре месяца — и 20–40-дневные волны экватора.
+     Месячное окно их ещё несёт: «быстрый месяц» 1982 года в сентябре наполовину такая волна. */
+  var RATE_MO = 30.44;
+  var AN_MODES = [['day', 'daily', 'one day at a time, as measured'],
+    ['w7', '7-day mean', 'each point is the mean of the seven days up to it, for this year and the past years alike'],
+    ['m30', '30-day mean', 'each point is the mean of the thirty days up to it: the 20–40-day waves of the equator are smoothed away'],
+    ['rate', 'rate of rise', 'how many degrees a month each year was gaining over the last one to four months']];
+  var AN_SMOOTH = { w7: 7, m30: 30 };
+  function anMode() { var m = S.sub.anMode; return (m === 'w7' || m === 'm30' || m === 'rate') ? m : 'day'; }
+  function anWin() { var w = +S.sub.anWin; return (w >= 1 && w <= 4) ? w : 3; }
+  function winWords(m) { return m === 1 ? 'month' : m + ' months'; }
+  function slotLabel(i) { var d = new Date(Date.UTC(2024, 0, 1) + (i % 366) * 864e5); return MON3[d.getUTCMonth()] + ' ' + d.getUTCDate(); }
+  function svgT(x, y, txt, st, anchor) {
+    return '<text x="' + (+x).toFixed(1) + '" y="' + (+y).toFixed(1) + '"' + (anchor ? ' text-anchor="' + anchor + '"' : '') + (st ? ' style="' + st + '"' : '') + '>' + txt + '</text>';
+  }
+  function gapFill(arr) {                    // дыры между опорами — линейно, как fillGaps в analogsFor
+    var out = arr.slice(), i;
+    for (i = 0; i < out.length; i++) {
+      if (fin(out[i])) continue;
+      var a = i - 1; while (a >= 0 && !fin(out[a])) a--;
+      var b = i + 1; while (b < out.length && !fin(out[b])) b++;
+      out[i] = (a >= 0 && b < out.length) ? out[a] + (out[b] - out[a]) * (i - a) / (b - a) : NaN;
+    }
+    return out;
+  }
+  // среднее за w суток до дня включительно; только на измеренный день, иначе хвост года тянулся бы вперёд
+  function trailMean(a, w, need) {
+    var out = [], s = 0, n = 0;
+    for (var i = 0; i < a.length; i++) {
+      if (fin(a[i])) { s += a[i]; n++; }
+      if (i >= w && fin(a[i - w])) { s -= a[i - w]; n--; }
+      out.push(fin(a[i]) && n >= need ? s / n : NaN);
+    }
+    return out;
+  }
+  // наклон МНК за L суток, кончая днём i, °C в месяц; окно годно, если измерен его последний день и 80 % дней
+  function rateSeries(a, L) {
+    var n = a.length, out = [], c = [[0, 0, 0, 0, 0]], i;
+    for (i = 0; i < n; i++) {
+      var p = c[i], ok = fin(a[i]), v = ok ? a[i] : 0;
+      c.push([p[0] + (ok ? 1 : 0), p[1] + (ok ? i : 0), p[2] + v, p[3] + (ok ? i * i : 0), p[4] + (ok ? i * v : 0)]);
+    }
+    for (i = 0; i < n; i++) {
+      var j = i - L + 1;
+      if (j < 0 || !fin(a[i])) { out.push(NaN); continue; }
+      var e = c[i + 1], b = c[j], m = e[0] - b[0];
+      if (m < L * 0.8) { out.push(NaN); continue; }
+      var sx = e[1] - b[1], sy = e[2] - b[2], sxx = e[3] - b[3], sxy = e[4] - b[4], den = m * sxx - sx * sx;
+      out.push(den > 0 ? (m * sxy - sx * sy) / den * RATE_MO : NaN);
+    }
+    return out;
+  }
+  function lineFit(a, end, L) {
+    var xs = [], ys = [], i, k;
+    if (!fin(a[end])) return null;
+    for (i = Math.max(0, end - L + 1); i <= end; i++) if (fin(a[i])) { xs.push(i); ys.push(a[i]); }
+    if (xs.length < L * 0.8) return null;
+    var n = xs.length, mx = 0, my = 0;
+    for (k = 0; k < n; k++) { mx += xs[k]; my += ys[k]; }
+    mx /= n; my /= n;
+    var sxx = 0, sxy = 0, syy = 0;
+    for (k = 0; k < n; k++) { var dx = xs[k] - mx, dy = ys[k] - my; sxx += dx * dx; sxy += dx * dy; syy += dy * dy; }
+    if (!(sxx > 0)) return null;
+    var b = sxy / sxx;
+    return { rate: b * RATE_MO, rise: b * (L - 1), r2: syy > 0 ? sxy * sxy / (sxx * syy) : 0 };
+  }
+  function rateMax(r, from, to) {
+    var best = null;
+    for (var i = Math.max(0, from); i <= Math.min(to, r.length - 1); i++) if (fin(r[i]) && (!best || r[i] > best.v)) best = { v: r[i], i: i };
+    return best;
+  }
+  /* Тот же набор линий Against analogues, только сглаженный: chartAnalogs рисует его без правок,
+     пики, черта сверху и число у точки берутся уже со сглаженных линий. */
+  function smoothN(N, w) {
+    if (!w) return N;
+    var need = w <= 7 ? 4 : 20, out = {}, an = {}, top = -99, sm = w + '-day mean';
+    Object.keys(N).forEach(function (k) { out[k] = N[k]; });
+    Object.keys(N.analogs || {}).forEach(function (y) {
+      var a = N.analogs[y], all = trailMean((a.series || []).concat(a.next || []), w, need), o = {};
+      Object.keys(a).forEach(function (k) { o[k] = a[k]; });
+      o.series = all.slice(0, 366); o.next = all.slice(366);
+      var win = all.slice(244, 426).filter(fin), seen = all.filter(fin);
+      o.peak = win.length ? Math.max.apply(null, win) : NaN;
+      if (seen.length) top = Math.max(top, Math.max.apply(null, seen));
+      an[y] = o;
+    });
+    out.analogs = an;
+    out.current_series = trailMean(N.current_series || [], w, need);
+    out.current_day = out.current_series[N.day];
+    if (N.mean20 && N.mean20.length) out.mean20 = trailMean(N.mean20.slice(-w).concat(N.mean20), w, need).slice(w);
+    out._smLabel = sm;
+    out.peak_estimate = { hist_ceiling: top > -99 ? top : (N.peak_estimate || {}).hist_ceiling,
+      ceiling_label: (N._yrs ? 'highest of the years shown' : 'highest of the four analogues') + ', ' + sm };
+    return out;
+  }
+  function chartRate(N, months, W, H) {
+    var L = Math.round(months * RATE_MO), n = 366 + 120, day = N.day, years = Object.keys(N.analogs || {}).sort();
+    var RS = {}; years.forEach(function (y) { var a = N.analogs[y]; RS[y] = rateSeries((a.series || []).concat(a.next || []), L); });
+    var cur = rateSeries(N.current_series || [], L), now = cur[day];
+    var all = cur.filter(fin); years.forEach(function (y) { all = all.concat(RS[y].filter(fin)); });
+    if (!all.length) return svgOpen(W, H) + '<text x="20" y="40">not enough days yet for a window of ' + winWords(months) + '</text></svg>';
+    var Lp = 46, R = 12, Tp = topPad(W), B = 26, pw = W - Lp - R - 8, ph = H - Tp - B;
+    var vmin = Math.min(-0.2, Math.min.apply(null, all)) - .05, vmax = Math.max(0.3, Math.max.apply(null, all)) + .35;
+    var X = function (i) { return Lp + i / (n - 1) * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
+    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + esc(N.label || 'Niño 3.4') + ': rate of rise over the last ' + winWords(months) + ', °C a month, ' + esc(N.year || '') + ' against ' + (N._yrs ? yrsLabel() : 'the four strongest events') + '</text>';
+    s += gridY(vmin, vmax, .25, Y, Lp, R + 8, W, 2);
+    for (var m = 0; m < 12; m++) if (W > 470 || m % 2 === 0) s += '<text x="' + X((ME[m] + ME[m + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + MONTHS[m] + '</text>';
+    for (var m2 = 0; m2 < 4; m2++) if (W > 470) s += '<text x="' + X(366 + (ME[m2] + ME[m2 + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle" opacity=".85">' + MONTHS[m2] + '+1</text>';
+    s += '<line x1="' + X(366).toFixed(0) + '" y1="' + Tp + '" x2="' + X(366).toFixed(0) + '" y2="' + (H - B) + '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="3 3"/>';
+    s += '<line x1="' + X(day).toFixed(1) + '" y1="' + Tp + '" x2="' + X(day).toFixed(1) + '" y2="' + (H - B) + '" style="stroke:var(--nino)" stroke-width=".9" stroke-dasharray="1 3" opacity=".8"/>';
+    var leg = [], nThin = 0, si = 0;
+    years.forEach(function (y) {
+      var strong = isStrong(y) || !N._yrs, pts = RS[y].map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; });
+      if (!strong) { nThin++; s += segs(pts, 'var(--soft)', .9, pickOp(y, N._yrs === 'all' ? .28 : .45), '3 3'); return; }
+      si++;
+      s += segs(pts, 'var(--a' + y + ')', 1.4, pickOp(y, .9), dashOf(si));
+      var v0 = RS[y][day];
+      if (fin(v0)) s += '<circle cx="' + X(day).toFixed(1) + '" cy="' + Y(v0).toFixed(1) + '" r="3" style="fill:var(--a' + y + ')" opacity="' + pickOp(y, 1) + '"/>';
+      leg.push([y + '→' + String(parseInt(y, 10) + 1).slice(2) + ': ' + fnum(v0) + ' on these days', 'var(--a' + y + ')', 1.6, dashOf(si), y]);
+    });
+    if (nThin) leg.push([nThin + ' more ' + (N._yrs === 'all' ? 'years' : 'El Niño years') + ', thin and dashed', 'var(--soft)', .9, '3 3']);
+    s += segs(cur.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.6, pickOp('now'));
+    if (fin(now)) {
+      s += nowDot(X(day), Y(now), 'var(--nino)', 4.5);
+      s += svgT(X(day), Y(now) - 11, fnum(now), 'font-size:13px;font-weight:700;fill:var(--text);paint-order:stroke;stroke:var(--surface);stroke-width:3.2;stroke-linejoin:round', 'middle');
+    }
+    var legItems = [[(N.year || 'now') + ' — now: ' + fnum(now) + ' °C a month', 'var(--text)', 2.6, '', 'now']].concat(leg);
+    legItems.push(['dotted: today, ' + slotLabel(day), 'var(--nino)', .9, '1 3']);
+    s += legend(legItems, W, H, 0, Tp);
+    return s + '</svg>';
+  }
+  function rateKpis(N, months) {
+    var L = Math.round(months * RATE_MO), day = N.day, f = lineFit(N.current_series || [], day, L);
+    if (!f) return '';
+    var km = kmeta(null, 'our arithmetic on the daily series of this chart', (N.year || '') + '-' + thrSlotDate(day));   // число с датой и источником, как у всех плашек
+    var cur = rateSeries(N.current_series || [], L), ys = Object.keys(N.analogs || {}).sort(), rs = {};
+    ys.forEach(function (y) { var a = N.analogs[y]; rs[y] = rateSeries((a.series || []).concat(a.next || []), L); });
+    var same = ys.map(function (y) { return rs[y][day]; }).filter(fin);
+    var place = 1 + same.filter(function (v) { return v > f.rate; }).length, of = same.length + 1, wl = winWords(months), own = rateMax(cur, L - 1, day);
+    var shape = f.r2 >= .9 ? 'close to a straight line' : (f.r2 >= .7 ? 'a rise with swings' : 'mostly swings, not a trend');
+    var out = '<div class="kpi"><div class="kn">' + esc(N.label || 'Niño 3.4') + ' · ' + esc(N.year || '') + ' · last ' + wl + ' to ' + esc(slotLabel(day)) + '</div><div class="kv">' + fnum(f.rate) + '<small> °C/month</small></div>' +
+      '<div class="km">' + fnum(f.rise) + ' °C along a line that explains ' + Math.round(f.r2 * 100) + ' % of the path (' + shape + ') · ' + (place === 1 ? 'fastest' : ord(place)) + ' of ' + of + ' years on these days' +
+      (own ? (own.i === day ? ' · its fastest this year' : ' · its fastest this year ' + fnum(own.v) + ', to ' + esc(slotLabel(own.i))) : '') + '</div>' + km + '</div>';
+    ys.filter(function (y) { return isStrong(y); }).forEach(function (y) {
+      var v = rs[y][day], b = rateMax(rs[y], 90 + L, 365);
+      out += '<div class="kpi"><div class="kn">' + esc(y) + ' · the same days</div><div class="kv">' + fnum(v) + '<small> °C/month</small></div>' +
+        '<div class="km">' + (fin(v) ? 'this year ' + (f.rate >= v ? 'faster by ' + fnum(f.rate - v, 2, false) : 'slower by ' + fnum(v - f.rate, 2, false)) : 'no window on these days') +
+        (b ? ' · its fastest over ' + wl + ', April to December: ' + fnum(b.v) + ', to ' + esc(slotLabel(b.i)) : '') + '</div>' + km + '</div>';
+    });
+    return out;
+  }
+
+  /* ══ ОТДЕЛЬНЫЙ РИСК: РОСТ ТАКОГО КЛАССА (владелец 04.10) ════════════════════════════════
+     «Обозначь риски отдельно: что значит в общем климатическом смысле рост такого класса в зонах
+     3, 3.4, 1+2, и про грозовой барьер — в одно место всё собери, нарисуй и объясни в рисках».
+     Не правило индекса и без уровня (уровни рисков — решение владельца): карточка вверху колонки
+     рисков и своя сцена. Всё считается здесь из тех же файлов, что у Against analogues и Storm
+     threshold (clim_/years_<box>.json и суточный хвост бокса), поэтому числа совпадают с теми
+     сценами. Утверждения о прошлом, зависящие от чисел, собираются из чисел и пропадают, если
+     перестают быть правдой; о том, что принесли 1982–83 и 1997–98, — обычное знание, без чисел. */
+  var RISE_Z = ['nino4', 'nino34', 'nino3', 'nino12'];       // запад → восток, как везде на панели
+  var RISE_LVL = { nino12: 3.5, nino3: 3.0, nino34: 2.5 };   // «уже так тепло»: с какого 7-дневного уровня сравнивать темп
+  function riseData(box) {
+    var bx = ((S.D.oisst || {}).boxes || {})[box];
+    if (!bx || !(bx.dates || []).length || !bx.last_date) return { failed: 'no daily series for this box in today’s data' };
+    S.CLM = S.CLM || {}; S.YB = S.YB || {};
+    var C = lazyJson(S.CLM, box, '/data/enso/oisst/clim_' + box + '.json'), YB = lazyJson(S.YB, box, '/data/enso/oisst/years_' + box + '.json');
+    if ((C && C.error) || (YB && YB.error)) return { failed: 'the files of this box did not load (' + ((C && C.error) || (YB && YB.error)) + ')' };
+    if (!C || !YB) return null;
+    if (!C.doy || !YB.years) return { failed: 'the files of this box carry no years' };
+    var cy = bx.last_date.slice(0, 4), doy = C.doy, an = {}, ab = {}, k;
+    Object.keys(YB.years).forEach(function (y) {
+      if (y === cy || !(YB.years[y] || []).length) return;
+      var own = (C.analogs || {})[y], src = own || YB.years[y], nx = own ? ((C.analogs_next || {})[y] || []) : ((YB.next || {})[y] || []);
+      var a = gapFill(src.concat(nx));
+      ab[y] = a;
+      an[y] = a.map(function (v, i) { var c = doy[i % 366]; return fin(v) && fin(c) ? v - c : NaN; });
+    });
+    var curA = [], cur = [];
+    for (k = 0; k < 366; k++) { curA.push(NaN); cur.push(NaN); }
+    (YB.years[cy] || []).forEach(function (v, i) { if (fin(v) && i < 366) curA[i] = v; });
+    bx.dates.forEach(function (d, i) { var v = (bx.sst || [])[i]; if (fin(v)) curA[thrSlot(d)] = v; });
+    curA.forEach(function (v, i) { var c = doy[i]; if (fin(v) && fin(c)) cur[i] = v - c; });
+    bx.dates.forEach(function (d, i) { var v = (bx.anom || [])[i]; if (fin(v)) cur[thrSlot(d)] = v; });   // хвост бокса — своей аномалией, как в analogsFor
+    return { box: box, title: bx.title || box, year: cy, day: thrSlot(bx.last_date), date: bx.last_date, stale: bx.days_stale,
+      years: an, abs: ab, cur: cur, curAbs: curA, doy: doy };
+  }
+  function riseStats(R, months) {
+    var L = Math.round(months * RATE_MO), d = R.day, thr = RISE_LVL[R.box];
+    var z = { box: R.box, title: R.title, year: R.year, day: d, date: R.date, stale: R.stale, months: months, L: L,
+      level7: trailMean(R.cur, 7, 4)[d], fit: lineFit(R.cur, d, L), own: rateMax(rateSeries(R.cur, L), L - 1, d),
+      rank: 1, of: 1, same: {}, best: {}, rec7: null, absRec: null, atLvl: null };
+    Object.keys(R.years).forEach(function (y) {
+      var s = R.years[y], r = rateSeries(s, L), v = r[d], m7 = trailMean(s, 7, 4);
+      if (fin(v)) { z.of++; if (z.fit && v > z.fit.rate) z.rank++; }
+      if (isStrong(y)) { z.same[y] = v; z.best[y] = rateMax(r, 90 + L, 365); }
+      m7.forEach(function (x, i) {
+        if (!fin(x)) return;
+        var yr = +y + (i >= 366 ? 1 : 0);
+        if (!z.rec7 || x > z.rec7.v) z.rec7 = { v: x, y: yr, i: i };
+        if (thr != null && x >= thr && fin(r[i]) && (!z.atLvl || r[i] > z.atLvl.v)) z.atLvl = { v: r[i], y: yr, i: i, lvl: x };
+      });
+      (R.abs[y] || []).forEach(function (x, i) { if (fin(x) && (!z.absRec || x > z.absRec.v)) z.absRec = { v: x, y: +y + (i >= 366 ? 1 : 0), i: i }; });
+    });
+    z.abs = R.curAbs[d]; z.normal = R.doy[d];
+    var nmax = null, nmin = null;
+    R.doy.forEach(function (v, i) { if (!fin(v)) return; if (!nmax || v > nmax.v) nmax = { v: v, i: i }; if (!nmin || v < nmin.v) nmin = { v: v, i: i }; });
+    z.normalMax = nmax; z.normalMin = nmin;
+    return z;
+  }
+  /* Карточка в колонке рисков: те же цифры с хвоста бокса, что есть в данных дня без догрузки —
+     7-дневное среднее и темп за три месяца у трёх восточных зон. */
+  function riseCard() {
+    var B = ((S.D || {}).oisst || {}).boxes || {}, chips = [];
+    ['nino12', 'nino3', 'nino34'].forEach(function (z) {
+      var b = B[z]; if (!b || !(b.anom || []).length) return;
+      var f = lineFit(b.anom, b.anom.length - 1, Math.round(3 * RATE_MO));
+      chips.push('<span>' + esc(b.title || z) + ' <b>' + fnum(b.mean7) + '</b>' + (f ? ' · ' + fnum(f.rate) + '/mo' : '') + '</span>');
+    });
+    if (!chips.length) return null;
+    var c = el('div', 'risk stab rise' + (S.risk === 'rise' ? ' on' : ''));
+    c.innerHTML = '<div class="rl" style="background:var(--nino)">↗</div><div><div class="rt">A rise of this class: what it means</div>' +
+      '<div class="rh">the east of the Pacific · 7-day mean and the rate over 3 months · context, not scored</div>' +
+      '<div class="stab-k">' + chips.join('') + '</div>' +
+      '<div class="rf"><span class="cgo">rate, record, storm line →</span></div></div>';
+    c.onclick = function () { S.risk = S.risk === 'rise' ? null : 'rise'; S.view = S.risk ? 'risk' : 'now'; mScreen('risk/rise'); render(); };
+    return c;
+  }
+  function chartRiseRates(zs, months, W, H) {
+    var YRS = ['1982', '1997', '2015', '2023'], cols = 2, nR = Math.ceil(zs.length / cols);
+    var Tp = 24, gx = W >= 520 ? 26 : 12, gy = 12, pw = (W - 8 - gx * (cols - 1)) / cols, ph = (H - Tp - 4 - gy * (nR - 1)) / nR;
+    var vals = [];
+    zs.forEach(function (z) {
+      if (z.fit) vals.push(z.fit.rate); if (z.own) vals.push(z.own.v);
+      YRS.forEach(function (y) { if (fin(z.same[y])) vals.push(z.same[y]); if (z.best[y]) vals.push(z.best[y].v); });
+    });
+    if (!vals.length) return svgOpen(W, H) + '<text x="20" y="40">not enough days yet for a window of ' + winWords(months) + '</text></svg>';
+    var lo = Math.min(0, Math.min.apply(null, vals)), hi = Math.max(.1, Math.max.apply(null, vals)), span = hi - lo;
+    var s = svgOpen(W, H) + '<text class="tt" x="8" y="13">How fast: the rate of rise over the last ' + winWords(months) + ' to ' + esc(slotLabel(zs[0].day)) + ', °C a month, against the same days of the four strongest events</text>';
+    zs.forEach(function (z, k) {
+      var x0 = 4 + (k % cols) * (pw + gx), y0 = Tp + Math.floor(k / cols) * (ph + gy);
+      var lab = 34, val = 42, bw = Math.max(30, pw - lab - val - 4);
+      var X = function (v) { return x0 + lab + (v - lo) / span * bw; };
+      var rows = [{ n: z.year, v: z.fit ? z.fit.rate : NaN, b: z.own, col: 'var(--text)', now: 1 }];
+      YRS.forEach(function (y) { rows.push({ n: y, v: z.same[y], b: z.best[y], col: 'var(--a' + y + ')' }); });
+      var rh = (ph - 18) / rows.length, hb = Math.max(4, Math.min(12, rh * .56)), yb = y0 + 17;
+      s += svgT(x0, y0 + 11, esc(z.title), 'font-size:11.5px;font-weight:700;fill:var(--text)');
+      // на телефоне панель в 150 px: место в ряду короче, иначе ложится на название зоны
+      if (z.fit) s += svgT(x0 + pw, y0 + 11, (z.rank === 1 ? 'fastest' : ord(z.rank) + (pw < 260 ? '' : ' fastest')) + ' of ' + z.of + (pw < 260 ? '' : ' years'), 'font-size:9.5px;fill:' + (z.rank === 1 ? 'var(--nino)' : 'var(--soft)'), 'end');
+      s += '<line x1="' + X(0).toFixed(1) + '" y1="' + (yb - 2) + '" x2="' + X(0).toFixed(1) + '" y2="' + (yb + rh * rows.length).toFixed(1) + '" style="stroke:var(--soft)" stroke-width=".8"/>';
+      rows.forEach(function (r, i) {
+        var yy = yb + i * rh + (rh - hb) / 2, ty = yy + hb / 2 + 3.5;
+        s += svgT(x0, ty, esc(String(r.n)), r.now ? 'font-size:10px;font-weight:700;fill:var(--text)' : 'font-size:10px;fill:var(--soft)');
+        if (r.b && fin(r.b.v)) {
+          var ba = X(Math.min(0, r.b.v)), bb = X(Math.max(0, r.b.v));
+          s += '<rect x="' + ba.toFixed(1) + '" y="' + (yy - 1.5).toFixed(1) + '" width="' + Math.max(1, bb - ba).toFixed(1) + '" height="' + (hb + 3).toFixed(1) + '" rx="2" style="fill:none;stroke:' + r.col + '" stroke-width=".9" stroke-dasharray="2 2" opacity=".85"/>';
+        }
+        if (fin(r.v)) {
+          var xa = X(Math.min(0, r.v)), xb = X(Math.max(0, r.v));
+          s += '<rect x="' + xa.toFixed(1) + '" y="' + yy.toFixed(1) + '" width="' + Math.max(1, xb - xa).toFixed(1) + '" height="' + hb.toFixed(1) + '" rx="2" style="fill:' + r.col + '" opacity="' + (r.now ? .95 : .8) + '"/>';
+          s += svgT(x0 + pw, ty, fnum(r.v), 'font-size:10px;fill:var(--text)' + (r.now ? ';font-weight:700' : ''), 'end');
+        }
+      });
+    });
+    return s + '</svg>';
+  }
+  function chartRiseStand(zs, W, H) {
+    var side = W >= 600, Tp = 22, gap = side ? 28 : 16, n = zs.length;
+    var pw = side ? (W - 8 - gap) / 2 : W - 8, ph = side ? H - Tp - 4 : (H - Tp - gap - 4) / 2;
+    var p1 = { x: 4, y: Tp }, p2 = side ? { x: 4 + pw + gap, y: Tp } : { x: 4, y: Tp + ph + gap }, lab = 62, val = 46;
+    var rowAt = function (p, i) { var rh = (ph - 34) / n; return { y: p.y + 18 + i * rh, rh: rh }; };
+    var s = svgOpen(W, H) + '<text class="tt" x="8" y="13">Where each zone stands on ' + esc(slotLabel(zs[0].day)) + ': against the warmest week of the record, and against the storm line</text>';
+    // 1) аномалия: среднее за 7 суток против самой тёплой недели всех прошлых лет
+    var hiA = .5; zs.forEach(function (z) { if (fin(z.level7)) hiA = Math.max(hiA, z.level7); if (z.rec7) hiA = Math.max(hiA, z.rec7.v); });
+    hiA = Math.ceil(hiA + .2);
+    var XA = function (v) { return p1.x + lab + Math.max(0, v) / hiA * (pw - lab - val); };
+    s += svgT(p1.x, p1.y + 8, '7-day mean anomaly, °C', 'font-size:9.5px;fill:var(--soft)');
+    for (var g = 0; g <= hiA; g++) s += '<line x1="' + XA(g).toFixed(1) + '" y1="' + (p1.y + 14) + '" x2="' + XA(g).toFixed(1) + '" y2="' + (p1.y + ph - 13).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".6"/>' + svgT(XA(g), p1.y + ph - 2, String(g), 'font-size:9px;fill:var(--soft)', 'middle');
+    zs.forEach(function (z, i) {
+      var r = rowAt(p1, i), hb = Math.max(6, Math.min(14, r.rh * .42)), yy = r.y + (r.rh - hb) / 2 + 4;
+      s += svgT(p1.x, yy + hb / 2 + 3.5, esc(z.title), 'font-size:10.5px;fill:var(--text)');
+      if (fin(z.level7)) s += '<rect x="' + XA(0).toFixed(1) + '" y="' + yy.toFixed(1) + '" width="' + Math.max(1, XA(z.level7) - XA(0)).toFixed(1) + '" height="' + hb.toFixed(1) + '" rx="2" style="fill:var(--text)" opacity=".85"/>' +
+        svgT(p1.x + pw, yy + hb / 2 + 3.5, fnum(z.level7), 'font-size:10.5px;font-weight:700;fill:var(--text)', 'end');
+      if (z.rec7) {
+        var xr = XA(z.rec7.v);
+        s += '<line x1="' + xr.toFixed(1) + '" y1="' + (yy - 4).toFixed(1) + '" x2="' + xr.toFixed(1) + '" y2="' + (yy + hb + 4).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="2.4"/>' +
+          svgT(xr, yy - 6, '’' + String(z.rec7.y).slice(2) + ' ' + fnum(z.rec7.v), 'font-size:9px;fill:var(--nino)', 'middle');
+      }
+    });
+    // 2) сама вода: против полосы гроз, с нормой на дату и самым тёплым днём ряда
+    var aLo = 99, aHi = THR_HI + .5;
+    zs.forEach(function (z) { [z.abs, z.normal, z.absRec ? z.absRec.v : NaN].forEach(function (v) { if (fin(v)) { aLo = Math.min(aLo, v); aHi = Math.max(aHi, v); } }); });
+    aLo = Math.floor(aLo - .4); aHi = Math.ceil(aHi + .2);
+    var XB = function (v) { return p2.x + lab + (v - aLo) / (aHi - aLo) * (pw - lab - 14); };
+    s += svgT(p2.x, p2.y + 8, 'sea surface, °C · band: storm line 27.5–28', 'font-size:9.5px;fill:var(--soft)');
+    s += '<rect x="' + XB(THR_LO).toFixed(1) + '" y="' + (p2.y + 14) + '" width="' + (XB(THR_HI) - XB(THR_LO)).toFixed(1) + '" height="' + (ph - 27).toFixed(1) + '" style="fill:var(--nino);opacity:.16"/>';
+    var st2 = aHi - aLo > 8 ? 2 : 1;
+    for (var g2 = aLo; g2 <= aHi; g2 += st2) s += '<line x1="' + XB(g2).toFixed(1) + '" y1="' + (p2.y + 14) + '" x2="' + XB(g2).toFixed(1) + '" y2="' + (p2.y + ph - 13).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".6"/>' + svgT(XB(g2), p2.y + ph - 2, String(g2), 'font-size:9px;fill:var(--soft)', 'middle');
+    zs.forEach(function (z, i) {
+      var r = rowAt(p2, i), yc = r.y + r.rh / 2 + 2;
+      s += svgT(p2.x, yc + 3.5, esc(z.title), 'font-size:10.5px;fill:var(--text)');
+      if (fin(z.normal) && fin(z.abs)) s += '<line x1="' + XB(z.normal).toFixed(1) + '" y1="' + yc.toFixed(1) + '" x2="' + XB(z.abs).toFixed(1) + '" y2="' + yc.toFixed(1) + '" style="stroke:var(--text)" stroke-width="1.6" opacity=".55"/>';
+      if (fin(z.normal)) s += '<line x1="' + XB(z.normal).toFixed(1) + '" y1="' + (yc - 6).toFixed(1) + '" x2="' + XB(z.normal).toFixed(1) + '" y2="' + (yc + 6).toFixed(1) + '" style="stroke:var(--soft)" stroke-width="2.4"/>';
+      if (z.absRec) {
+        var xr2 = XB(z.absRec.v);
+        s += '<line x1="' + xr2.toFixed(1) + '" y1="' + (yc - 7).toFixed(1) + '" x2="' + xr2.toFixed(1) + '" y2="' + (yc + 7).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="2.2"/>' +
+          svgT(xr2, yc + 17, '’' + String(z.absRec.y).slice(2) + ' ' + fnum(z.absRec.v, 2, false), 'font-size:9px;fill:var(--nino)', 'middle');
+      }
+      if (fin(z.abs)) s += '<circle cx="' + XB(z.abs).toFixed(1) + '" cy="' + yc.toFixed(1) + '" r="5" style="fill:var(--text)"/>' +
+        svgT(XB(z.abs), yc - 9, fnum(z.abs, 2, false), 'font-size:10.5px;font-weight:700;fill:var(--text);paint-order:stroke;stroke:var(--surface);stroke-width:3;stroke-linejoin:round', 'middle');
+    });
+    return s + '</svg>';
+  }
+  function chartRiseCoast(R, z, W, H) {
+    var i0 = 213, i1 = 485, YRS = ['1982', '1997', '2015', '2023'], Lp = 40, Rr = 40, Tp = topPad(W), B = 22, pw = W - Lp - Rr, ph = H - Tp - B, i;
+    var norm = []; for (i = i0; i <= i1; i++) norm.push(R.doy[i % 366]);
+    var vals = norm.filter(fin);
+    YRS.forEach(function (y) { (R.abs[y] || []).slice(i0, i1 + 1).forEach(function (v) { if (fin(v)) vals.push(v); }); });
+    R.curAbs.slice(i0).forEach(function (v) { if (fin(v)) vals.push(v); });
+    if (!vals.length) return svgOpen(W, H) + '<text x="20" y="40">no years for this box</text></svg>';
+    var vmin = Math.floor(Math.min.apply(null, vals) - .3), vmax = Math.max(THR_HI + 1, Math.max.apply(null, vals) + .5);
+    var X = function (k) { return Lp + (k - i0) / (i1 - i0) * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
+    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + esc(z.title) + ' into the rainy season of the coast: sea surface °C, ' + esc(R.year) + ' against the four strongest events</text>';
+    for (var g = Math.ceil(vmin); g < vmax; g += (vmax - vmin > 7 ? 2 : 1)) s += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (Lp + pw).toFixed(1) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".6"/>' + svgT(Lp - 5, Y(g) + 4, String(g), '', 'end');
+    s += '<rect x="' + Lp + '" y="' + Y(THR_HI).toFixed(1) + '" width="' + pw.toFixed(1) + '" height="' + (Y(THR_LO) - Y(THR_HI)).toFixed(1) + '" style="fill:var(--nino);opacity:.16"/>' +
+      svgT(Lp + 4, Y(THR_HI) - 3, 'storm line 27.5–28 °C', 'font-size:9px;fill:var(--nino)');
+    [[213, 'Aug'], [244, 'Sep'], [274, 'Oct'], [305, 'Nov'], [335, 'Dec'], [366, 'Jan'], [397, 'Feb'], [426, 'Mar'], [457, 'Apr']].forEach(function (m, k) {
+      if (W > 420 || k % 2 === 0) s += svgT(X(m[0] + 15), H - 7, m[1], '', 'middle');
+    });
+    s += '<line x1="' + X(366).toFixed(1) + '" y1="' + Tp + '" x2="' + X(366).toFixed(1) + '" y2="' + (H - B) + '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="3 3"/>';
+    s += segs(norm.map(function (v, k) { return [X(i0 + k), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', 1.3, .9, '5 3');
+    var ends = [];
+    YRS.forEach(function (y) {
+      var a = R.abs[y] || [];
+      s += segs(a.slice(i0, i1 + 1).map(function (v, k) { return [X(i0 + k), fin(v) ? Y(v) : NaN]; }), 'var(--a' + y + ')', 1.4, pickOp(y, .9), yearDash(y));
+      var j = Math.min(i1, a.length - 1); while (j > i0 && !fin(a[j])) j--;
+      if (fin(a[j])) ends.push({ y: Y(a[j]), t: '’' + String(+y + 1).slice(2), c: 'var(--a' + y + ')' });
+    });
+    var nl = norm[norm.length - 1]; if (fin(nl)) ends.push({ y: Y(nl), t: 'normal', c: 'var(--soft)' });
+    ends.sort(function (a, b) { return a.y - b.y; });
+    for (var e = 1; e < ends.length; e++) if (ends[e].y - ends[e - 1].y < 10) ends[e].y = ends[e - 1].y + 10;
+    ends.forEach(function (o) { s += svgT(Lp + pw + 4, o.y + 3, o.t, 'font-size:9px;fill:' + o.c); });
+    var cur = R.curAbs;
+    s += segs(cur.slice(i0).map(function (v, k) { return [X(i0 + k), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.6, pickOp('now'));
+    if (fin(cur[R.day])) {
+      s += nowDot(X(R.day), Y(cur[R.day]), 'var(--nino)', 4.5);
+      s += svgT(X(R.day), Y(cur[R.day]) - 11, fnum(cur[R.day], 2, false), 'font-size:13px;font-weight:700;fill:var(--text);paint-order:stroke;stroke:var(--surface);stroke-width:3.2;stroke-linejoin:round', 'middle');
+    }
+    return s + '</svg>';
+  }
+  function riseText(ZS, ZD, months) {
+    var n3 = ZS.nino3, n12 = ZS.nino12, n34 = ZS.nino34, n4 = ZS.nino4, wl = winWords(months), date = slotLabel(n3.day);
+    var rank = function (z) { return (z.rank === 1 ? 'the fastest' : ord(z.rank) + ' fastest') + ' of ' + z.of + ' years on these days'; };
+    var rec = function (z) {
+      if (!z.rec7 || !fin(z.level7)) return '';
+      var d = z.level7 - z.rec7.v;
+      return z.title + ' ' + fnum(z.level7) + ' °C, ' + (d >= 0 ? fnum(d, 2, false) + ' above it' : fnum(-d, 2, false) + ' below it') + ' (' + fnum(z.rec7.v) + ', ' + slotLabel(z.rec7.i) + ' ' + z.rec7.y + ')';
+    };
+    var txt = el('div', 'risk-text');
+    var parts = [[n3, ''], [n12, ''], [n34, '']].filter(function (p) { return p[0] && p[0].fit; }).map(function (p) { return fnum(p[0].fit.rate) + ' °C a month in ' + esc(p[0].title) + ' (' + rank(p[0]) + ')'; });
+    var lead = '<b>How fast, not only how warm.</b> Over the last ' + wl + ' to ' + esc(date) + ' the sea was warming at ' + parts.join(', ') + '.';
+    if (n3.fit && n3.fit.r2 >= .9 && months >= 3) lead += ' In ' + esc(n3.title) + ' the rise is close to a straight line: one line through the days explains ' + Math.round(n3.fit.r2 * 100) + ' % of them.';
+    var lv = [n3, n12, n34].filter(function (z) { return z.atLvl && z.fit && z.fit.rate > z.atLvl.v; }).map(function (z) {
+      return esc(z.title) + ': once its 7-day mean was above ' + fnum(RISE_LVL[z.box], 1) + ' °C, no earlier year rose faster than ' + fnum(z.atLvl.v) + ' °C a month over ' + wl + ' (to ' + slotLabel(z.atLvl.i) + ' ' + z.atLvl.y + '); this one is rising ' + fnum(z.fit.rate) + ' from ' + fnum(z.level7);
+    });
+    if (lv.length) lead += ' ' + lv.join('. ') + '.';
+    lead += ' Against the warmest week each zone had before this year: ' + [n12, n3, n34].map(rec).filter(Boolean).map(esc).join('; ') + '. All of this is measured, not forecast.';
+    txt.appendChild(el('div', 'lead', lead));
+    var absBit = function (z) {
+      if (!z || !fin(z.abs)) return '';
+      var t = esc(z.title) + ' ' + fnum(z.abs, 2, false) + ' °C';
+      if (z.absRec) {
+        var d = z.abs - z.absRec.v, when = fnum(z.absRec.v, 2, false) + ', ' + slotLabel(z.absRec.i) + ' ' + z.absRec.y;
+        if (d > 0) t += ', above the warmest day it had before this year (' + when + ')';
+        else if (d > -.3) t += ', ' + fnum(-d, 2, false) + ' short of its warmest day (' + when + ')';
+      }
+      return t;
+    };
+    var band = [n4, n34, n3].filter(Boolean), above = band.filter(function (z) { return fin(z.abs) && z.abs >= THR_HI; });
+    txt.appendChild(el('div', 'note', '<strong>The storm line has moved east.</strong> Tall storm clouds grow only over water warmer than about 27.5–28 °C (Graham and Barnett 1987). On ' + esc(date) + ' ' +
+      (above.length === 3 ? 'the water above that line reached from 160°E to 90°W' : above.length ? above.map(function (z) { return esc(z.title); }).join(', ') + ' stood above it' : 'none of the three zones stood above it') + ': ' +
+      band.map(absBit).filter(Boolean).join('; ') + '. Where the storm clouds stand, the rising air, the rain and the winds high above stand with them; when they move east over a normally cold ocean, the rain belts and the jet streams of both hemispheres shift, and this is how an El Niño reaches harvests and water on other continents. The events in which the storms reached the eastern Pacific, 1982–83 and 1997–98, are the ones climate science calls extreme El Niño (Cai and colleagues, Nature Climate Change 2014).'));
+    var seasons = [];
+    if (ZD.nino12) Object.keys(ZD.nino12.abs).sort().forEach(function (y) {
+      var a = ZD.nino12.abs[y], c = 0; for (var i = 0; i < 366; i++) if (fin(a[i]) && a[i] >= THR_HI) c++;
+      if (c > 7) seasons.push(y + ' (' + c + ' days)');
+    });
+    var nm = n12.normalMax, cool = n12.normalMin && fin(n12.normal) && n12.normal - n12.normalMin.v < .5;
+    txt.appendChild(el('div', 'note', '<strong>The coast of Peru and Ecuador.</strong> ' + esc(n12.title) + ' is ' + fnum(n12.abs, 2, false) + ' °C, ' + fnum(n12.abs - n12.normal) + ' against its normal for the date' + (cool ? ', at the coolest time of its year' : '') +
+      (nm ? '; its normal climbs to ' + fnum(nm.v, 1, false) + ' °C by ' + slotLabel(nm.i) : '') + '. ' +
+      (seasons.length ? 'From 1982 to ' + (+n12.year - 1) + ' the box stayed above 28 °C for more than a week only in ' + seasons.join(', ') + '. ' : '') +
+      'The rainy seasons of 1983, 1998, 2017 and 2023 brought heavy rain, floods and mudslides to the desert coast of northern Peru and Ecuador: the first two with the extreme events, the other two with a warming of the coast alone. The last chart follows the box into that season beside the four strongest events.'));
+    var r1 = ZD.nino3 ? lineFit(ZD.nino3.cur, n3.day, Math.round(RATE_MO)) : null, r4 = ZD.nino3 ? lineFit(ZD.nino3.cur, n3.day, Math.round(4 * RATE_MO)) : null;
+    var bend = r1 && r4 ? (r1.rate >= r4.rate - .15
+      ? 'In ' + esc(n3.title) + ' the line has not bent yet: the last month ' + fnum(r1.rate) + ' °C a month against ' + fnum(r4.rate) + ' over four.'
+      : 'In ' + esc(n3.title) + ' the last month, ' + fnum(r1.rate) + ' °C a month, is already slower than the last four, ' + fnum(r4.rate) + ': the first sign of a bend.') : '';
+    txt.appendChild(el('div', 'note', '<strong>Why the pace matters.</strong> An El Niño grows by a loop between the ocean and the air: warmer water in the east weakens the trade winds, and weaker trade winds let more warm water slide east and rise. A rise that stays straight for months says the loop is still running; past events slowed down in the east as they neared their peaks. ' + bend +
+      ' A bend shows first in the one-month rate falling below the longer ones: the switch above, and the same switch on Now, where every zone and every past year has its own rate line.'));
+    txt.appendChild(el('div', 'note', '<strong>What the two eastern events brought.</strong> 1982–83 and 1997–98 are the two events of the satellite era that pushed the warm water and the storm clouds against the South American coast. Both brought floods to the coast of Peru and Ecuador and to south-eastern South America, a collapse of the Peruvian anchovy catch, drought and forest fires in Indonesia, and mass coral bleaching (1998 was the first bleaching recorded across all tropical oceans); 1998 became the warmest year measured up to then. None of this is a forecast: it is what the two closest precedents brought, and this event is warmer in the east than either of them was on this date.'));
+    txt.appendChild(el('div', 'note warn', '<strong>Watch.</strong> The one-month rate of ' + esc(n3.title) + ' and ' + esc(n12.title) + ' against the longer ones: a bend shows there first. ' + esc(n12.title) + ' coming up to 27.5 °C ahead of the coastal rains. New westerly wind bursts and the warm water below the surface, which have kept the rise going.'));
+    var rk = ['east_pacific', 'peak_ahead', 'subsurface_warm', 'warmer_next_year'].map(function (id) { return ((S.D || {}).risks || []).filter(function (r) { return r.id === id; })[0]; }).filter(Boolean);
+    txt.appendChild(el('div', 'links-box', vLink('every zone and year: the rate of rise', 'now', 'analogs', 'anMode', 'rate') + ' ' + vLink('the storm line by day of the year', 'ocean', 'threshold') + ' ' + vLink('regions and what to do', 'regions', 'table') + ' ' +
+      rk.map(function (r) { return '<button type="button" class="vgo" data-risk="' + esc(r.id) + '">' + esc(r.title) + ' →</button>'; }).join(' ')));
+    return txt;
+  }
+  function viewRise() {
+    sub('risk', 'rise');                           // ключ для кнопки «i» у графиков сцены
+    var months = anWin(), ZD = {}, ZS = {}, wait = [], bad = [];
+    RISE_Z.forEach(function (z) {
+      var R = riseData(z);
+      if (!R) wait.push(z); else if (R.failed) bad.push(z + ': ' + R.failed); else { ZD[z] = R; ZS[z] = riseStats(R, months); }
+    });
+    var n3 = ZS.nino3;
+    var head = n3 && n3.fit ? 'A rise of this class: ' + esc(n3.title) + ' ' + fnum(n3.level7) + ' °C and still rising ' + fnum(n3.fit.rate) + ' °C a month' : 'A rise of this class: what it means';
+    var body = stageShell(head, []);
+    body.classList.add('scroll');
+    var row = el('div', 'seg sub');
+    row.appendChild(el('span', 'seg-lbl', 'rate over the last'));
+    [1, 2, 3, 4].forEach(function (m) { var b = el('button', (months === m ? 'on' : '') + ' sq', m === 1 ? '1 month' : winWords(m)); b.type = 'button'; b.onclick = function () { S.sub.anWin = m; render(); }; row.appendChild(b); });
+    body.appendChild(row);
+    if (bad.length) body.appendChild(el('div', 'note warn', esc(bad.join('; '))));
+    if (!ZS.nino3 || !ZS.nino12 || !ZS.nino34) {
+      if (wait.length) body.appendChild(el('div', 'note', 'Loading the daily years of the Niño boxes…'));
+      return;
+    }
+    var zs = RISE_Z.map(function (z) { return ZS[z]; }).filter(Boolean);
+    var box = el('div', 'rise-box'); body.appendChild(box);
+    plot(box, function (w, h) { return chartRiseRates(zs, months, w, h); });
+    plot(box, function (w, h) { return chartRiseStand(zs, w, h); }); box.lastElementChild.classList.add('rb');
+    plot(box, function (w, h) { return chartRiseCoast(ZD.nino12, ZS.nino12, w, h); }); box.lastElementChild.classList.add('rc');
+    body.appendChild(el('div', 'cap', 'How fast: the slope of a straight line through the daily anomaly of the last ' + winWords(months) + ', in °C a month; solid bars are the same calendar days, dashed frames the fastest that year rose over a window this long between April and December (for this year: so far); the rank counts every year since 1982. Where each zone stands: the mean of the last 7 days against the warmest 7-day mean of every earlier year (red); the sea in plain degrees with the normal for the date (grey), the warmest single day of every earlier year (red) and the storm band. Our own daily boxes on the NOAA OISST grid against our 1991–2020 normal of each box, data to ' + esc(slotLabel(n3.day)) + (n3.stale > 1 ? ' (' + n3.stale + ' days behind today)' : '') + '.'));
+    body.appendChild(riseText(ZS, ZD, months));
+  }
+
   function chartAnalogs(N, W, H) {
     var years = Object.keys(N.analogs).sort();
     var M20 = N.mean20 || null, M20Y = N.mean20_years || null;
@@ -888,7 +1330,7 @@
     var vmin = Math.min.apply(null, all) - .1, vmax = Math.max.apply(null, all) + .9;
     var X = function (i) { return Lp + i / (n - 1) * pw; };
     var Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
-    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + esc(N.label || 'Niño 3.4') + ' daily anomaly: ' + (N.year || '') + ' against ' + (N._yrs ? yrsLabel() : 'the four strongest events') + '</text>';
+    var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + esc(N.label || 'Niño 3.4') + ' ' + (N._smLabel || 'daily') + ' anomaly: ' + (N.year || '') + ' against ' + (N._yrs ? yrsLabel() : 'the four strongest events') + '</text>';
     s += gridY(vmin, vmax, .5, Y, Lp, R + 8, W, 1);
     for (var m = 0; m < 12; m++) if (W > 470 || m % 2 === 0) s += '<text x="' + X((ME[m] + ME[m + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + MONTHS[m] + '</text>';
     for (var m2 = 0; m2 < 4; m2++) if (W > 470) s += '<text x="' + X(366 + (ME[m2] + ME[m2 + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle" opacity=".85">' + MONTHS[m2] + '+1</text>';
@@ -918,7 +1360,7 @@
     /* ЧИСЛО У МИГАЮЩЕЙ ТОЧКИ. Владелец 09.09: «на телефоне цифры не видны — на now against
        analogs нет текущей у мигающей точки». Её и не было ни на какой ширине: точка стояла
        молча. Ставим слева от точки, потому что вправо от неё уходит свежий хвост. */
-    var ftA = N.key && N.key !== 'nino34' ? [] : freshTail('sst_nino34');
+    var ftA = (N.key && N.key !== 'nino34') || N._smLabel ? [] : freshTail('sst_nino34');   // сглаженный вид — без суточного хвоста
     if (ftA.length && fin(N.current_day)) {
       var tpA = [[X(N.day), Y(N.current_day)]].concat(ftA.map(function (p) { return [X(N.day + p[0]), Y(p[1])]; }));
       s += poly(tpA, 'var(--ochre)', 1.6, 1, '3 3');
@@ -3863,6 +4305,7 @@
     var t = tile('Risks', risks.length + ' · index ' + D.risk_index + (P ? ' ' + chg(D.risk_index, P.risk_index, 0) : '') + cnBtn(risks.map(function (r) { return 'risk:' + (r.id || ''); }), 'graph') + railFullBtn('R'), 'grow');
     t._b.classList.add('flush');
     var box = el('div'); box.style.padding = '0 10px 8px';
+    var rcd = riseCard(); if (rcd) box.appendChild(rcd);      // отдельный риск «рост такого класса»: сверху и без уровня (04.10)
     risks.forEach(function (r, i) {
       /* Стрелка на карточке риска — из журнала, по имени риска, а не по заголовку: заголовок
          может смениться, уровень должен идти подряд (владелец 04.09). */
@@ -4701,10 +5144,30 @@
         b.onclick = function () { S.sub.analogZone = o[0]; render(); }; rowZ.appendChild(b);
       });
       body.appendChild(rowZ);
-      if (az === 'nino34') { yearsCtl(); plot(body, function (w, h) { return chartAnalogs(withYears(N, 'sst_nino34'), w, h); }); }
+      /* ВИД (владелец 04.10): по дням · среднее за 7 или 30 суток · скорость роста с окном 1–4 месяца */
+      var am = anMode(), rowM = el('div', 'seg sub');
+      AN_MODES.forEach(function (o) {
+        var b = el('button', (am === o[0] ? 'on' : '') + ' sq', o[1]); b.type = 'button'; b.title = o[2];
+        b.onclick = function () { S.sub.anMode = o[0]; render(); }; rowM.appendChild(b);
+      });
+      if (am === 'rate') {
+        rowM.appendChild(el('span', 'seg-gap', ''));
+        rowM.appendChild(el('span', 'seg-lbl', 'over the last'));
+        [1, 2, 3, 4].forEach(function (m) { var b = el('button', (anWin() === m ? 'on' : '') + ' sq', m === 1 ? '1 month' : winWords(m)); b.type = 'button'; b.onclick = function () { S.sub.anWin = m; render(); }; rowM.appendChild(b); });
+      }
+      body.appendChild(rowM);
+      var anDraw = function (NN) { return function (w, h) { return am === 'rate' ? chartRate(NN, anWin(), w, h) : chartAnalogs(smoothN(NN, AN_SMOOTH[am] || 0), w, h); }; };
+      var anMore = function (NN) {
+        var pl = body.lastElementChild;                 // сглаженный и скоростной вид: график не ужимается под карточки
+        if (am !== 'day' && pl && pl.classList.contains('plot')) pl.classList.add('an-min');
+        if (am === 'rate') { var kr = el('div', 'kpis'); kr.innerHTML = rateKpis(NN, anWin()); body.appendChild(kr); }
+        if (am === 'rate') body.appendChild(el('div', 'cap', 'Rate of rise: for every day, the slope of a straight line through the daily anomaly of the ' + winWords(anWin()) + ' before it, in \u00b0C a month; this year against the same days of past events, the dotted line marks today. A window of one month still carries the 20\u201340-day waves of the equator, so a single fast month of a past event can be one such wave; three and four months show the trend. <button type="button" class="vgo" data-risk="rise">what a rise of this class means \u2192</button>'));
+        else if (am !== 'day') body.appendChild(el('div', 'cap', 'Each point is the mean of the ' + AN_SMOOTH[am] + ' days up to that day, for this year and for the past years alike, so on any date the comparison is fair; the curves sit half a window later than the daily ones. Peaks and the line across the top are read from the smoothed curves; the fresh, not yet assessed days show on the daily view only.'));
+      };
+      if (az === 'nino34') { yearsCtl(); var N34 = withYears(N, 'sst_nino34'); if (!N34.year) N34 = Object.assign({}, N34, { year: String(((n34 || {}).last_date || '').slice(0, 4) || new Date().getUTCFullYear()) }); /* у разбора года нет — заголовок читался «anomaly:  against» */ plot(body, anDraw(N34)); anMore(N34); }
       else {
         var NZ = analogsFor(az);
-        if (NZ && !NZ.failed) { yearsCtl(); plot(body, function (w, h) { return chartAnalogs(NZ, w, h); }); }
+        if (NZ && !NZ.failed) { yearsCtl(); plot(body, anDraw(NZ)); anMore(NZ); }
         else if (NZ) lazyFailed(body, NZ.failed, function () { lazyReset(S.CLM, az); lazyReset(S.YB, az); render(); });
         else plot(body, function (w, h) { return svgOpen(w, h) + '<text x="20" y="40">loading the climatology of this box…</text></svg>'; });
         var tail0 = (((S.D.oisst || {}).boxes || {})[az] || {}).dates || [];
@@ -6807,6 +7270,7 @@
     return s2 + '</svg>';
   }
   function viewRisk() {
+    if (S.risk === 'rise') { viewRise(); return; }
     var D = S.D, r = (D.risks || [])[S.risk];
     if (!r) { S.view = 'now'; return viewNow(); }
     var body = stageShell(esc(r.title), []);   // общая кнопка back в шапке; своя дублировала её (владелец 08.09)
@@ -8197,7 +8661,7 @@
     ['What is measured here that is not measured elsewhere', 'The daily Niño boxes straight from the NOAA grid, one day behind, with our own climatologies; the water under the equator by mooring, every day, against each mooring\u2019s own record; the westerly wind bursts from daily reanalysis wind; the live-model centre and where we stand inside the season; the comparable core of the risk index for past events, and the same by RONI; the Gulf and Kuwait measured, not quoted.'],
     ['What we do not claim', 'We have no model of our own and forecast nothing. A “broken” model is one below the official value in most verified issues, not a bad model. The risk index is a construction of this page, comparable only with itself; the core and RONI are the fair comparisons across decades. Analogue paths of prices are what happened then, not what will happen. Regional impacts are typical, never guaranteed; the teleconnections for Europe and Russia are weak and the page says so on the row.'],
     ['Reading the charts', 'Every chart with more than one series distinguishes them by dash pattern, not by colour alone; the legend is clickable and lights one series. Past events are drawn on the same days of the year, dashed, in the same order everywhere: 1982, 1997, 2015, 2023, then last year in grey. Negative values on heat maps are hatched. The vertical mark on the plume shows the lived part of the season as a point and the rest as a range.'],
-    ['Changelog', '2026-09-03 — first version: daily series, weekly indices, ONI, the plume, food, regions, risks, the verdict. 2026-09-04 — the value journal, the atmosphere and fuel, satellite layers, commodities by name, models by class, the live centre, the comparable core, contextual links to parsed papers. 2026-09-04, evening, after the first expert review — OISST direct with own climatologies, the moorings and the reanalysis section, daily wind and bursts, the MJO, RONI and the second scale, MEI and the Indian Ocean Dipole, the ocean heat content, the release calendar, the Regions tab with the Gulf measured, commodity paths since onset, dashed series and clickable legends everywhere, this chain and this page.']
+    ['Changelog', '2026-09-03 — first version: daily series, weekly indices, ONI, the plume, food, regions, risks, the verdict. 2026-09-04 — the value journal, the atmosphere and fuel, satellite layers, commodities by name, models by class, the live centre, the comparable core, contextual links to parsed papers. 2026-09-04, evening, after the first expert review — OISST direct with own climatologies, the moorings and the reanalysis section, daily wind and bursts, the MJO, RONI and the second scale, MEI and the Indian Ocean Dipole, the ocean heat content, the release calendar, the Regions tab with the Gulf measured, commodity paths since onset, dashed series and clickable legends everywhere, this chain and this page. 2026-10-04 — every Niño zone on the Now scene can be read as a 7-day or 30-day mean or as its rate of rise over one to four months against the same days of past years, and a separate card on the risk column, not scored, gathers what a rise of this class in the east means: the pace, the records and the storm line.']
   ];
   /* РАЗДЕЛ ИСТОРИИ ИЗМЕРЕНИЙ (владелец 06.09): фон, на котором идёт событие, не само событие.
      Данные planet.json (tools/enso/planet.py): газы, лёд, температура, уровень моря. Без модели. */
@@ -10752,6 +11216,7 @@
      Ключ — адрес сцены «вид/подвид»; есть и ключ «вид» для сцены целиком. Нет текста —
      кнопки нет: пустая карточка хуже её отсутствия. */
   var PLAIN = {
+    "risk/rise": {"title": "A rise of this class", "what": "What the pace of this event in the east of the Pacific means: how fast the Niño zones are warming against the same days of the four strongest events, how far past the warmest week of the record they stand, and where the water sits against the temperature tall storm clouds need.", "see": "Four small panels, one per zone from west to east, with bars for the rate of rise over the chosen window: this year on top, then 1982, 1997, 2015 and 2023 on the same calendar days; dashed frames show the fastest each of those years rose over a window that long. Then each zone's mean of the last 7 days against the warmest week of the record, and the sea itself against the 27.5–28 °C storm band with the normal for the date and the warmest day on record. The last chart follows Niño 1+2 from August into the rainy season of the coast beside the four events.", "special": "It is not a rule of the risk index and has no level: it gathers in one place what the panel measures about the pace and the reach of the warm water, and says in words what events of this kind brought before. Every number is computed in the browser from the same daily box files the other scenes use, and a sentence that depends on a number disappears when the number stops supporting it.", "src": "NOAA OISST v2.1 daily boxes against our own 1991–2020 normal of each box; the storm threshold after Graham and Barnett, Science 1987; extreme El Niño after Cai and colleagues, Nature Climate Change 2014"},
     "air/coupling": {"title": "Is the air answering the ocean?", "what": "Five monthly readings of Pacific pressure, cloud and wind, put on one picture to show whether the atmosphere is behaving the way it does during an El Niño.", "see": "Five lines over the last five years: pressure across the Pacific, the cloud tower over the date line, and the trade wind in the western, central and eastern Pacific. Each is drawn not in its own units but in steps of its usual swing, so they share one scale; a dashed line sits at minus half a step, and below that line we count a sign as in place. The count in the heading is taken on three of the five — pressure, cloud and the western trade wind — and the cards below cover four of them, each with its latest value, its three-month average and whether it counts as in place.", "special": "The sea can be warm while the air ignores it, and this is where the panel keeps its own count of whether the air has answered. When these signs fade, the long-distance effects that carry the event to other people's weather and harvests fade with them.", "src": "NOAA PSL monthly series: the pressure index, the heat radiated to space at the date line, and the trade wind low down at 850 hPa; one new value a month"},
     "regimes/lifetime": {"title": "How long a pattern lives", "what": "A measure of how stuck the weather is: the number of days until today’s pressure pattern over the northern hemisphere has changed by half.", "see": "The left chart is the 30-day mean lifetime through the year, this year heavy against the years chosen with the switch; the right chart is the last four months day by day, long bars for days when the pattern held, short ones when it broke. Cards give the median over the last 90 days with its rank among all years on the same days, the same number for the four strongest El Niño years, and the definition.", "special": "It is computed on the 500 hPa height field, not on temperature, because the height field is the circulation itself and temperature only follows it. A pattern that lives long is what a person feels as weather that has frozen — sunny for weeks, or the same cyclone sitting still. Capped at 20 days; a description, not a forecast.", "src": "NCEP/NCAR reanalysis 1 (2.5°, daily, since 1948) from PSL, GFS 00Z analyses from the NOAA open archive after the reanalysis file ends; our count"},
     "regimes/blocking": {"title": "Where the flow is blocked", "what": "The classic blocking index: longitudes where the westerly flow at 500 hPa is interrupted by a standing high, day by day.", "see": "The strip shows the last four months as rows (latest at the bottom) and longitudes as columns; a dark cell is a blocked longitude, and a vertical stripe is a block that stood still for days or weeks. Below it, the share of blocked longitudes as a 30-day mean through the year against the chosen years. Cards give the share over the last 90 days with its rank, and the list of blocks that stood five days or longer with their sector and dates.", "special": "The rule is Tibaldi and Moltemi’s from 1990, with the three latitude variants they used, so the numbers can be set beside the literature. At 2.5° and one field a day the index sees only large, slow blocks, which is what the question is about.", "src": "NCEP/NCAR reanalysis 1 and GFS analyses, our count"},
@@ -10778,7 +11243,7 @@
     "models/issues": {"title": "Every issue on one calendar", "what": "All the stored monthly issues of the model plume, each as its own strip, drawn on the same calendar of the event year.", "see": "One strip per issue, the newest on top. Inside a strip each model's line sits at the seasons that issue forecast, so from strip to strip the whole bundle slides right and climbs; a dotted line marks the season that began in the month of the issue. The fact runs through every strip: the official value as a green line with dots, our own daily reading dashed with hollow rings, a green bar for a season that has ended but has no official value yet, a red diamond for the measured part of a season still under way. The list above lets you pick one model and follow it in ochre through all the strips.", "special": "The plume shows one month; this shows the whole run of months at once on a fixed calendar, so you see at a glance how late the models were to the event and how their plans moved.", "src": "Our stored IRI/CPC plume issues; NOAA's official ONI; our daily OISST."},
     "models/model": {"title": "One model, every issue", "what": "One forecast model at a time: its forecast from every stored monthly issue on one chart, against what the season did.", "see": "One line per monthly issue, coloured from blue for the oldest to red for the newest, each ending with the month of its issue; the fact in green as in the other scenes. For NCEP CFSv2 there is more: the model runs four times a day, so dashed blue lines show the means of its runs over the last three ten-day spans, and a strip below follows its forecast for the next seasons start day by start day.", "special": "It answers how one model rewrote its plan for the same seasons from month to month, and, for CFSv2, from day to day between the monthly issues.", "src": "Our stored IRI/CPC plume issues; NOAA CPC CFSv2 daily runs; NOAA's official ONI; our daily OISST."},
     "models/chase": {"title": "How the forecasts chased each season", "what": "For each season of this event, how the models' forecast for it changed from one monthly issue to the next as the season came closer, and where the season actually landed.", "see": "One small square per season. Left to right are the monthly issues, from many months before the season began to the issue made as it began; the line is the models' average and the band holds the middle eighty per cent of them. The solid green line is the official value once it is out, with our own daily reading dashed beside it; a green band is the range the official value can take for a season that has ended but is not out yet; a red dashed line marks the months measured so far in a season still under way. The last square shows how far below the models came on average, by how many months before the season began they were forecasting.", "special": "This is where the panel answers what the models correct and how: the same season seen from many months out, from five months out and from two. Through 2026 the bundle climbed every month and still ended below what came, and the further ahead the forecast, the lower it sat.", "src": "Our stored IRI/CPC plume issues; NOAA's official ONI; our daily OISST for the seasons whose official value is not out yet."},
-    "now/analogs": {"title": "This year beside the four strongest", "what": "How far above or below normal the sea in the central Pacific has run each day this year, drawn on the same calendar as the four strongest El Niño events ever measured.", "see": "The heavy dark line is this year, ending in a blinking dot with today's number written just above it - or just below when the line across the top would collide; four thinner coloured dashed lines are 1982, 1997, 2015 and 2023, each carried past a vertical dashed line at the year's end into the following 120 days. The flat zero is the 1991-2020 average for that day of the year, which is what \"above normal\" means on this chart, while the faint long-dashed line is the plain average of the last twenty years, the ordinary level of our own decades. A dashed line runs straight across with its label at the right end - for Niño 3.4 it marks the highest daily reading any earlier year reached - and on a wide screen a column of small panels repeats each past event on the same vertical scale, its peak marked, with this year laid over it as a faint dotted line.", "special": "It is the only chart that carries the past events forward past the turn of the year, so it answers not just how high we are but what happened next from this same point of the calendar. The zone buttons ask the same question of the other Niño boxes and of the Gulf; there the past-event lines are assembled here in the browser from readings four days apart, the line across the top becomes the highest of the four past events instead of the record of the whole series, and the peak estimate below is hidden because that arithmetic is done for Niño 3.4 only.", "src": "climatereanalyzer's daily OISST Niño 3.4 against a 1991-2020 normal, with our own reading of the NOAA grid spliced onto the newest days; one new day per day, about a day behind (the other zones are our own box on the grid)"},
+    "now/analogs": {"title": "This year beside the four strongest", "what": "How far above or below normal the sea in the central Pacific has run each day this year, drawn on the same calendar as the four strongest El Niño events ever measured. A second row of buttons redraws the same lines as a 7-day or 30-day mean, or as the rate of rise: how many degrees a month each year was gaining over the last one to four months, with cards that compare this year with the same days of each event.", "see": "The heavy dark line is this year, ending in a blinking dot with today's number written just above it - or just below when the line across the top would collide; four thinner coloured dashed lines are 1982, 1997, 2015 and 2023, each carried past a vertical dashed line at the year's end into the following 120 days. The flat zero is the 1991-2020 average for that day of the year, which is what \"above normal\" means on this chart, while the faint long-dashed line is the plain average of the last twenty years, the ordinary level of our own decades. A dashed line runs straight across with its label at the right end - for Niño 3.4 it marks the highest daily reading any earlier year reached - and on a wide screen a column of small panels repeats each past event on the same vertical scale, its peak marked, with this year laid over it as a faint dotted line.", "special": "It is the only chart that carries the past events forward past the turn of the year, so it answers not just how high we are but what happened next from this same point of the calendar. The zone buttons ask the same question of the other Niño boxes and of the Gulf; there the past-event lines are assembled here in the browser from the daily readings of our own box, the line across the top becomes the highest of the four past events instead of the record of the whole series, and the peak estimate below is hidden because that arithmetic is done for Niño 3.4 only.", "src": "climatereanalyzer's daily OISST Niño 3.4 against a 1991-2020 normal, with our own reading of the NOAA grid spliced onto the newest days; one new day per day, about a day behind (the other zones are our own box on the grid)"},
     "now/map": {"title": "The Pacific, week by week", "what": "A map of the tropical Pacific with the four stretches of ocean forecasters watch, each coloured by how far this week sat from normal.", "see": "The coastline is real and labelled, the equator runs dashed across the middle, and the four rectangles carry a large white number - this week's departure from normal - with a smaller number under it for the same week of the comparison year, and the difference between the two when the screen is wide enough. Buttons above choose which past event to compare with and which zone to bring forward, the others dimming almost to nothing; a play button and a slider step through the recent weeks one frame at a time, the date of the frame beside them and the comparison year moving alongside. Point at a rectangle to read what peak that past event finally reached.", "special": "Its neighbours draw the same four indices as lines through time; this one puts them where they are, so you can see whether the warmth sits against South America or out in the middle of the ocean - the difference that decides which parts of the world feel it. It is also the only place where a past event is set beside today's numbers box by box, in place rather than on a time axis.", "src": "NOAA CPC weekly Niño indices, one new week each Wednesday for the week before; coastline from Natural Earth"},
     "now/weekly": {"title": "The four Niño zones, weekly", "what": "The four official weekly readings of the tropical Pacific, all on one picture over the recent weeks.", "see": "Four lines run together, in the order the patches lie on the equator from west to east - Niño 4 in the west, Niño 3.4 the thickest of them, Niño 3, then Niño 1+2 on the coast of South America - each with its own dash pattern and each labelled in the legend with its latest value, on a grid of half-degree steps with months along the bottom. On a wide screen a right-hand column adds a small panel per past event, the same four lines on the same vertical scale, each headed with what Niño 3.4 and Niño 1+2 read at the end of that stretch. Watch the spacing between the four lines, not just their height.", "special": "Only here are all four zones side by side over time, and that spread is what tells an event pressed against South America from one centred in the middle of the ocean. The caption below adds the change over four and eight weeks and the record of the weekly Niño 3.4.", "src": "NOAA CPC weekly Niño indices, one new week each Wednesday for the week before"},
     "now/weekly_a": {"title": "One zone against the strongest events", "what": "One chosen weekly reading of the Pacific, laid against the same weeks of the four strongest past events.", "see": "Buttons above pick the zone; the heavy dark line is this event, ending in a blinking dot at the newest week, and four coloured dashed lines are 1982, 1997, 2015 and 2023 aligned so that each week matches the same week of their year. The numbers live in the legend, which opens from the \"legend\" button on the chart and stays closed until you ask for it: each past event's value at that point and, in brackets, how far above or below it we stand right now.", "special": "This is the strict like-for-like: the same index the forecast centres publish, one zone at a time, on the same calendar. Its daily neighbour reads the same water from the daily satellite grid rather than from the weekly index, so the two can differ by a few tenths.", "src": "NOAA CPC weekly Niño indices, one new week each Wednesday for the week before"},
@@ -11654,6 +12119,7 @@
     }
     // Погодные виды переехали на свою вкладку (15.09): старые адреса ведут туда же.
     if (parts[1] && weatherRedirect(parts[0], parts[1])) return;
+    if (parts[0] === 'risk' && parts[1] === 'rise') { S.view = 'risk'; S.risk = 'rise'; return; }
     if (parts[0] === 'risk' && parts[1] && S.D) {          // #risk/<id> — сцена риска по имени правила (08.09)
       var ri = -1; (S.D.risks || []).forEach(function (r, i) { if (ri < 0 && r.id === parts[1]) ri = i; });
       if (ri >= 0) { S.view = 'risk'; S.risk = ri; return; }
@@ -11824,6 +12290,7 @@
     if (!b) return;
     e.stopPropagation();
     var rid = b.getAttribute('data-risk');
+    if (rid === 'rise') { S.risk = 'rise'; S.view = 'risk'; mScreen('risk/rise'); render(); return; }
     if (rid) {
       var idx = (S.D.risks || []).map(function (r) { return r.id; }).indexOf(rid);
       if (idx >= 0) { S.risk = idx; S.view = 'risk'; mScreen('risk'); render(); return; }
