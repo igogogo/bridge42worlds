@@ -308,6 +308,8 @@
         var sub = label(ss[j]);
         ss[j].click();
         await settle(pause);
+        // Rise and fuel догружает файлы восьми боксов и тепла — ждём, пока встанут все четыре графика
+        if (sub === 'Rise and fuel') { await until(function () { return document.querySelectorAll('.stage-body .rise-box .plot svg[role="img"]').length >= 4; }); await settle(pause); }
         take(name + ' / ' + sub, ['.stage-body']);
       }
     }
@@ -318,13 +320,6 @@
     async function until(test, capMs) { var end = Date.now() + (capMs || 15000); while (Date.now() < end && !test()) await wait(300); }
     function innerBtn(txt) { return [].slice.call(document.querySelectorAll('.stage-body .seg.sub button')).filter(function (b) { return label(b) === txt; })[0]; }
     function plotTitle() { var t = document.querySelector('.stage-body .plot svg .tt'); return t ? (t.getAttribute('title') || t.textContent || '') : ''; }
-    var rc = document.querySelector('.risk.rise');
-    if (rc) {
-      rc.click();
-      await until(function () { return document.querySelector('.stage-body .rise-box .plot'); });
-      await settle(pause);
-      take('Risks / a rise of this class', ['.stage-body']);
-    }
     var nowTab = entries().filter(function (e) { return e.name === 'Now'; })[0];
     if (nowTab) {
       nowTab.go(); await settle(pause);

@@ -71,7 +71,7 @@
         + 'how unusual are the last thirty days for THIS series on THESE calendar days. Ranked by its own '
         + 'spread, not by degrees, so cold counts as much as warm.',
       'verdict/now': 'Today\'s verdict.', 'verdict/history': 'Every verdict that actually changed, in order.',
-      'now/analogs': 'This year against the four strongest past events on the same days, zone by zone: daily, as a 7- or 30-day mean, or as the rate of rise over the last one to four months.', 'now/map': 'The four Niño boxes on the map, this week against the same week of a past event.',
+      'now/analogs': 'This year against the four strongest past events on the same days, zone by zone: daily, as a 7- or 30-day mean, or as the rate of rise over the last one to four months.', 'now/rise': 'The rise in one place: how fast each zone warms against the same days of the strongest events, how far past the records it stands, the sea against the storm line, and the heat stored below, total and by layer.', 'now/map': 'The four Niño boxes on the map, this week against the same week of a past event.',
       'now/weekly': 'The four weekly indices over the last weeks, with the same weeks of past events beside them.', 'now/weekly_a': 'One weekly index against the strongest events on the same calendar.',
       'air/vapour': 'Column water vapour over the tropics and the Niño boxes, ERA5 through Open-Meteo, daily since 1991.',
       'food/markets': 'Exchange futures for the same goods as the monthly tables: weekly for two years, daily for three months.',
@@ -786,7 +786,7 @@
     if (cyA) cyA.forEach(function (v, i) { var c = C.doy[i]; if (fin(v) && fin(c)) cur[i] = v - c; });   // год целиком из файла годов
     (bx.dates || []).forEach(function (d, i) { var v = bx.anom[i]; if (fin(v)) cur[gridIndex(d)] = v; });   // хвост бокса сверху: он свежее
     var last = bx.dates[bx.dates.length - 1];
-    return { key: box, label: bx.title || box, year: last.slice(0, 4), analogs: analogs, current_series: cur, day: gridIndex(last), current_day: bx.last_anom,
+    return { key: box, normal: C.doy, label: bx.title || box, year: last.slice(0, 4), analogs: analogs, current_series: cur, day: gridIndex(last), current_day: bx.last_anom,
       _yrs: usedExtra ? yrsMode() : null,
       peak_estimate: { hist_ceiling: top, ceiling_label: usedExtra ? 'highest of the years shown' : 'highest of the four analogues' }, all_years_rank: null };
   }
@@ -1102,12 +1102,12 @@
       chips.push('<span>' + esc(b.title || z) + ' <b>' + fnum(b.mean7) + '</b>' + (f ? ' · ' + fnum(f.rate) + '/mo' : '') + '</span>');
     });
     if (!chips.length) return null;
-    var c = el('div', 'risk stab rise' + (S.risk === 'rise' ? ' on' : ''));
+    var c = el('div', 'risk stab rise' + (S.view === 'now' && S.sub.now === 'rise' ? ' on' : ''));
     c.innerHTML = '<div class="rl" style="background:var(--nino)">↗</div><div><div class="rt">A rise of this class: what it means</div>' +
       '<div class="rh">the east of the Pacific · 7-day mean and the rate over 3 months · context, not scored</div>' +
       '<div class="stab-k">' + chips.join('') + '</div>' +
       '<div class="rf"><span class="cgo">rate, record, storm line →</span></div></div>';
-    c.onclick = function () { S.risk = S.risk === 'rise' ? null : 'rise'; S.view = S.risk ? 'risk' : 'now'; mScreen('risk/rise'); render(); };
+    c.onclick = function () { S.risk = null; S.view = 'now'; S.sub.now = S.sub.now === 'rise' ? 'analogs' : 'rise'; mScreen('now/' + S.sub.now); render(); };
     return c;
   }
   function chartRiseRates(zs, months, W, H) {
@@ -1466,16 +1466,24 @@
     return el('div', 'note', t);
   }
 
-  function viewRise() {
-    sub('risk', 'rise');                           // ключ для кнопки «i» у графиков сцены
+  /* ОДНО МЕСТО — NOW (владелец 04.10: «я хотел, чтобы это было на Now, всё в одном месте»). Сцена живёт
+     подвкладкой Now «Rise and fuel»; карточка в колонке рисков, адрес #risk/rise и кнопки data-risk="rise"
+     ведут туда же. */
+  function riseCollect() {
     var months = anWin(), ZD = {}, ZS = {}, wait = [], bad = [];
     RISE_Z.forEach(function (z) {
       var R = riseData(z);
       if (!R) wait.push(z); else if (R.failed) bad.push(z + ': ' + R.failed); else { ZD[z] = R; ZS[z] = riseStats(R, months); }
     });
-    var n3 = ZS.nino3;
-    var head = n3 && n3.fit ? 'A rise of this class: ' + esc(n3.title) + ' ' + fnum(n3.level7) + ' °C and still rising ' + fnum(n3.fit.rate) + ' °C a month' : 'A rise of this class: what it means';
-    var body = stageShell(head, []);
+    return { months: months, ZD: ZD, ZS: ZS, wait: wait, bad: bad };
+  }
+  function riseHead(RC) {
+    var n3 = RC.ZS.nino3;
+    return n3 && n3.fit ? 'A rise of this class: ' + esc(n3.title) + ' ' + fnum(n3.level7) + ' °C and still rising ' + fnum(n3.fit.rate) + ' °C a month' : 'A rise of this class: what it means';
+  }
+  function viewRise() { S.risk = null; S.view = 'now'; S.sub.now = 'rise'; viewNow(); }   // старый путь сцены риска
+  function riseBody(body, RC) {
+    var months = RC.months, ZD = RC.ZD, ZS = RC.ZS, wait = RC.wait, bad = RC.bad, n3 = ZS.nino3;
     body.classList.add('scroll');
     var row = el('div', 'seg sub');
     row.appendChild(el('span', 'seg-lbl', 'rate over the last'));
@@ -1528,6 +1536,23 @@
     for (var m = 0; m < 12; m++) if (W > 470 || m % 2 === 0) s += '<text x="' + X((ME[m] + ME[m + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + MONTHS[m] + '</text>';
     for (var m2 = 0; m2 < 4; m2++) if (W > 470) s += '<text x="' + X(366 + (ME[m2] + ME[m2 + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle" opacity=".85">' + MONTHS[m2] + '+1</text>';
     s += '<line x1="' + X(366).toFixed(0) + '" y1="' + Tp + '" x2="' + X(366).toFixed(0) + '" y2="' + (H - B) + '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="3 3"/>';
+    /* ГРОЗОВАЯ ЛИНИЯ В АНОМАЛИИ (владелец 04.10: «на тех же графиках нарисуй уровни, где грозообразование»):
+       27,5–28 °C минус норма дня — на сколько вода этой зоны должна быть теплее нормы, чтобы дойти до порога
+       гроз. Полоса ходит с сезоном (у Niño 1+2 осенью она около +7, весной около +1,5); что за полем — обрезано. */
+    if (N.normal && N.normal.length && !N._abs && N.key !== 'gulf' && !S._tight) {
+      var sLo = [], sHi = [], ib;
+      for (ib = 0; ib < n; ib++) { var cb = N.normal[ib % 366]; sLo.push(fin(cb) ? THR_LO - cb : NaN); sHi.push(fin(cb) ? THR_HI - cb : NaN); }
+      var cid = 'stc' + (S._clipN = (S._clipN || 0) + 1), pg = [];
+      for (ib = 0; ib < n; ib++) if (fin(sHi[ib])) pg.push(X(ib).toFixed(1) + ',' + Y(sHi[ib]).toFixed(1));
+      for (ib = n - 1; ib >= 0; ib--) if (fin(sLo[ib])) pg.push(X(ib).toFixed(1) + ',' + Y(sLo[ib]).toFixed(1));
+      s += '<defs><clipPath id="' + cid + '"><rect x="' + Lp + '" y="' + Tp + '" width="' + pw.toFixed(1) + '" height="' + ph.toFixed(1) + '"/></clipPath></defs>' +
+        '<g clip-path="url(#' + cid + ')"><polygon points="' + pg.join(' ') + '" style="fill:var(--nino);opacity:.12"/>' +
+        segs(sHi.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--nino)', .9, .75, '2 3') + '</g>';
+      for (ib = 10; ib < n; ib += 5) {                 // подпись — в первом дне, где верх полосы виден в поле
+        var yb = fin(sHi[ib]) ? Y(sHi[ib]) : NaN;
+        if (yb > Tp + 14 && yb < Tp + ph - 6) { s += svgT(X(ib), yb - 4, 'storm line: water at 27.5–28 °C', 'font-size:9px;fill:var(--nino)'); break; }
+      }
+    }
     var leg = [];
     var nThin = 0, si = 0;
     Object.keys(N.analogs).sort().forEach(function (y) {
@@ -5249,15 +5274,17 @@
     var D = S.D, N = D.nino34, NW = D.noaa, ONI = D.oni, n34 = D.watch.sst_nino34, P = S.P;
     var k = sub('now', 'analogs');
     var above = Object.keys(N.analogs).every(function (y) { return N.analogs[y].same30 < N.current30; });
-    var segs2 = [segBtn('now', 'analogs', 'Against analogues', 'analogs'), segBtn('now', 'map', 'Pacific map', 'analogs'),
+    var segs2 = [segBtn('now', 'analogs', 'Against analogues', 'analogs'), segBtn('now', 'rise', 'Rise and fuel', 'analogs'), segBtn('now', 'map', 'Pacific map', 'analogs'),
       segBtn('now', 'weekly', 'Weekly indices', 'analogs'), segBtn('now', 'weekly_a', 'Weekly vs strongest', 'analogs'),
       segBtn('now', 'standout', 'Standing out', 'analogs')];
     /* Полный экран у карты — как у обзора и цепочки данных. Владелец 06.09: «на мобильной
        тем более каша, надо предусмотреть полноэкранный режим: люди хотят увидеть на карте
        мира, где это находится». */
-    var body = stageShell(k === 'standout' ? standOutHead() : above ? 'Warmer today than any of the four strongest events were at this time of year'
+    var RC = k === 'rise' ? riseCollect() : null;
+    var body = stageShell(k === 'rise' ? riseHead(RC) : k === 'standout' ? standOutHead() : above ? 'Warmer today than any of the four strongest events were at this time of year'
       : 'The event follows the strongest ones: rank ' + N.rank_same30 + ' among the analogues', segs2);
     if (k === 'standout') { viewStandOut(body); return; }
+    if (k === 'rise') { riseBody(body, RC); return; }
     if (k === 'map') {
       // выбор года сравнения — прямо на сцене
       var years = Object.keys(NW.analog_week || {}).sort();
@@ -5360,13 +5387,14 @@
       var anDraw = function (NN) { return function (w, h) { if (am === 'rate') return chartRate(NN, anWin(), w, h); var NS = smoothN(NN, AN_SMOOTH[am] || 0); return NN._abs ? chartAnalogsAbs(NS, w, h) : chartAnalogs(NS, w, h); }; };
       var anMore = function (NN) {
         var pl = body.lastElementChild;                 // сглаженный и скоростной вид: график не ужимается под карточки
+        if (am !== 'rate' && !NN._abs && NN.normal && NN.key !== 'gulf') body.appendChild(el('div', 'cap', 'The shaded band is the storm line seen as an anomaly: how far above its normal for that day the water of this zone has to be to reach 27.5–28 °C, where tall storm clouds can start (Graham and Barnett 1987). It moves with the season; the absolute °C switch shows the same in plain degrees.'));
         if (am !== 'day' && pl && pl.classList.contains('plot')) pl.classList.add('an-min');
         if (am === 'rate') { var kr = el('div', 'kpis'); kr.innerHTML = rateKpis(NN, anWin()); body.appendChild(kr); }
         if (am === 'rate') body.appendChild(el('div', 'cap', 'Rate of rise: for every day, the slope of a straight line through the daily anomaly of the ' + winWords(anWin()) + ' before it, in \u00b0C a month; this year against the same days of past events, the dotted line marks today. A window of one month still carries the 20\u201340-day waves of the equator, so a single fast month of a past event can be one such wave; three and four months show the trend. <button type="button" class="vgo" data-risk="rise">what a rise of this class means \u2192</button>'));
         else if (am !== 'day') body.appendChild(el('div', 'cap', 'Each point is the mean of the ' + AN_SMOOTH[am] + ' days up to that day, for this year and for the past years alike, so on any date the comparison is fair; the curves sit half a window later than the daily ones. Peaks and the line across the top are read from the smoothed curves; the fresh, not yet assessed days show on the daily view only.'));
         if (NN._abs) body.appendChild(el('div', 'cap', 'Sea surface in plain degrees: our own box on the NOAA grid plus our 1991–2020 normal of the same day (the dashed grey line). The shaded band, 27.5–28 °C, is where tall storm clouds can start (Graham and Barnett 1987); the legend counts the days at 28 °C or more, from January of the event year to April of the next. For the Gulf the line is its own, 35 °C, where desalination and fisheries start to suffer. For Niño 3.4 this view reads our box, not the climatereanalyzer series of the anomaly views, so the two differ by a few hundredths. <button type="button" class="vgo" data-risk="rise">what a rise of this class means →</button>'));
       };
-      if (az === 'nino34' && !useAbs) { yearsCtl(); var N34 = withYears(N, 'sst_nino34'); if (!N34.year) N34 = Object.assign({}, N34, { year: String(((n34 || {}).last_date || '').slice(0, 4) || new Date().getUTCFullYear()) }); /* у разбора года нет — заголовок читался «anomaly:  against» */ plot(body, anDraw(N34)); anMore(N34); }
+      if (az === 'nino34' && !useAbs) { yearsCtl(); var N34 = withYears(N, 'sst_nino34'); if (!N34.year) N34 = Object.assign({}, N34, { year: String(((n34 || {}).last_date || '').slice(0, 4) || new Date().getUTCFullYear()) }); /* у разбора года нет — заголовок читался «anomaly:  against» */ S.CLM = S.CLM || {}; var C34 = lazyJson(S.CLM, 'nino34', '/data/enso/oisst/clim_nino34.json'); if (C34 && C34.doy) N34 = Object.assign({}, N34, { normal: C34.doy }); /* норма нашего бокса — для грозовой полосы */ plot(body, anDraw(N34)); anMore(N34); }
       else {
         var NZ = analogsFor(az);
         if (NZ && !NZ.failed) { yearsCtl(); var NA = useAbs ? absN(NZ, (((S.CLM || {})[az]) || {}).doy || []) : NZ; plot(body, anDraw(NA)); anMore(NA); }
@@ -5413,6 +5441,16 @@
       '<div class="kpi"><div class="kn">' + term('type', 'event type') + '</div><div class="kv" style="font-size:15px;line-height:1.25">' + esc(NW.type) + '</div><div class="km">' + zone('nino12') + ' ' + fnum(NW.latest.n12a, 1) + ' · ' + zone('nino4') + ' ' + fnum(NW.latest.n4a, 1) + ' · east−centre ' + fnum(NW.east_minus_central, 1) + '</div>' +
       (aw.n34a != null ? '<div class="chgline">' + (S.sub.cmp || '1997') + ' on this week: Niño 3.4 ' + fnum(aw.n34a, 1) + ', 1+2 ' + fnum(aw.n12a, 1) + '</div>' : '') + kmeta('n12_weekly') + '</div>';
     body.appendChild(kp);
+    /* ЗАПАС ТЕПЛА ПОД ПОВЕРХНОСТЬЮ — здесь же, рядом с поверхностью (владелец 04.10: «всё в одном месте») */
+    S.HLY = S.HLY || {};
+    var HLn = lazyJson(S.HLY, 'v', '/data/enso/heat-layers.json');
+    if (HLn && !HLn.error && ((HLn.this || {}).months || []).length) {
+      var hT = HLn.this, hI = hT.months.length - 1, hD = hI ? hT.total[hI] - hT.total[hI - 1] : NaN, dv = el('div', 'kpi');
+      dv.innerHTML = '<div class="kn">heat stored below · upper 300 m</div><div class="kv">' + fnum(hT.total[hI], 1, false) + '<small> ZJ</small></div>' +
+        '<div class="km">' + esc(monWord(hT.months[hI])) + ', ' + esc(HLn.strip || '') + (fin(hD) ? '; ' + fnum(hD, 1) + ' ZJ in a month' : '') + ' <span class="cgo" data-go="now" data-gosub="rise">by layer →</span></div>' +
+        kmeta(null, 'GODAS reanalysis via NOAA PSL; our arithmetic', hT.months[hI]);
+      kp.appendChild(dv);
+    }
   }
 
 
@@ -8863,7 +8901,7 @@
     ['What is measured here that is not measured elsewhere', 'The daily Niño boxes straight from the NOAA grid, one day behind, with our own climatologies; the water under the equator by mooring, every day, against each mooring\u2019s own record; the westerly wind bursts from daily reanalysis wind; the live-model centre and where we stand inside the season; the comparable core of the risk index for past events, and the same by RONI; the Gulf and Kuwait measured, not quoted.'],
     ['What we do not claim', 'We have no model of our own and forecast nothing. A “broken” model is one below the official value in most verified issues, not a bad model. The risk index is a construction of this page, comparable only with itself; the core and RONI are the fair comparisons across decades. Analogue paths of prices are what happened then, not what will happen. Regional impacts are typical, never guaranteed; the teleconnections for Europe and Russia are weak and the page says so on the row.'],
     ['Reading the charts', 'Every chart with more than one series distinguishes them by dash pattern, not by colour alone; the legend is clickable and lights one series. Past events are drawn on the same days of the year, dashed, in the same order everywhere: 1982, 1997, 2015, 2023, then last year in grey. Negative values on heat maps are hatched. The vertical mark on the plume shows the lived part of the season as a point and the rest as a range.'],
-    ['Changelog', '2026-09-03 — first version: daily series, weekly indices, ONI, the plume, food, regions, risks, the verdict. 2026-09-04 — the value journal, the atmosphere and fuel, satellite layers, commodities by name, models by class, the live centre, the comparable core, contextual links to parsed papers. 2026-09-04, evening, after the first expert review — OISST direct with own climatologies, the moorings and the reanalysis section, daily wind and bursts, the MJO, RONI and the second scale, MEI and the Indian Ocean Dipole, the ocean heat content, the release calendar, the Regions tab with the Gulf measured, commodity paths since onset, dashed series and clickable legends everywhere, this chain and this page. 2026-10-04 — every Niño zone on the Now scene can be read as a 7-day or 30-day mean or as its rate of rise over one to four months against the same days of past years, and a separate card on the risk column, not scored, gathers what a rise of this class in the east means: the pace, the records, the storm line and the heat stored below, total and by layer; the same scene shows every zone in plain degrees against the storm line, as does an absolute switch on Now.']
+    ['Changelog', '2026-09-03 — first version: daily series, weekly indices, ONI, the plume, food, regions, risks, the verdict. 2026-09-04 — the value journal, the atmosphere and fuel, satellite layers, commodities by name, models by class, the live centre, the comparable core, contextual links to parsed papers. 2026-09-04, evening, after the first expert review — OISST direct with own climatologies, the moorings and the reanalysis section, daily wind and bursts, the MJO, RONI and the second scale, MEI and the Indian Ocean Dipole, the ocean heat content, the release calendar, the Regions tab with the Gulf measured, commodity paths since onset, dashed series and clickable legends everywhere, this chain and this page. 2026-10-04 — every Niño zone on the Now scene can be read as a 7-day or 30-day mean or as its rate of rise over one to four months against the same days of past years, and a new Now scene, Rise and fuel, with a card on the risk column, not scored, gathers what a rise of this class in the east means: the pace, the records, the storm line and the heat stored below, total and by layer; the same scene shows every zone in plain degrees against the storm line, as does an absolute switch on Now.']
   ];
   /* РАЗДЕЛ ИСТОРИИ ИЗМЕРЕНИЙ (владелец 06.09): фон, на котором идёт событие, не само событие.
      Данные planet.json (tools/enso/planet.py): газы, лёд, температура, уровень моря. Без модели. */
@@ -11514,6 +11552,7 @@
     "weather/rain": {"title": "Rain against normal, region and planet", "what": "How much rain has actually fallen — over each land region and over the whole planet — set against what is normal for the same time of year.", "see": "The first button is the planet, the rest are the six land regions, and a chart-or-table switch sits at the end of the row. The planet view is one bar per month of rain in millimetres a day with a dashed line for the 1991–2020 normal; a region view is the last twenty-four months in millimetres per month, the bars red and hatched where the month came in below that normal and plain blue where it came above, the final bar faded because that month is not finished. The cards read the last 30 and 90 days as a percentage of normal and list what the same 30 days gave in past events; the table view lays every region on one sheet, marked red under 60 per cent of normal and amber over 160.", "special": "No temperature chart can say whether it rained, and this is the one place that puts a region's water and the whole planet's side by side. Read the percentages rather than the millimetres: the regional rain is not measured at a gauge but reconstructed by a weather model over the past, and that reconstruction runs wet or dry in the tropics.", "src": "ERA5 box sums via Open-Meteo since 1981 and monthly GPCP satellite-and-gauge rain, in the daily run"},
     "weather/water": {"title": "What the reservoirs are holding", "what": "How much water is being held behind the dams in Brazil, measured as the electricity that water could generate, and in California, measured as volume.", "see": "The first switch picks Brazil or California. Brazil gives one card per grid subsystem — North, Northeast, South, and Southeast with Centre-West counted together — as a percentage of that subsystem's maximum, then the chosen subsystem's percentage day by day, and below it a table of the ten emptiest Brazilian reservoirs on the date printed in its header. California gives the ten largest reservoirs together and then singly, Shasta, Oroville, Trinity and the rest, as a percentage of capacity with the same daily line; both records begin in January 2025, so read a day against the same day of the other year, never against summer.", "special": "Rain charts say what fell; this says what is still being held, which is the memory of the past months and what power stations and irrigation draw on through a dry one. It is the only scene here where the measurement is water in store rather than weather.", "src": "ONS Brazil daily stored energy and California CDEC daily storage, in the daily run"}
   };
+  PLAIN['now/rise'] = PLAIN['risk/rise'];          // сцена переехала на Now (04.10), карточка «i» та же
   function plainCard(view, subk) {
     var e = PLAIN[view + '/' + subk] || PLAIN[view];
     if (!e) {
@@ -12321,7 +12360,7 @@
     }
     // Погодные виды переехали на свою вкладку (15.09): старые адреса ведут туда же.
     if (parts[1] && weatherRedirect(parts[0], parts[1])) return;
-    if (parts[0] === 'risk' && parts[1] === 'rise') { S.view = 'risk'; S.risk = 'rise'; return; }
+    if (parts[0] === 'risk' && parts[1] === 'rise') { S.view = 'now'; S.sub.now = 'rise'; S.risk = null; return; }   // сцена переехала на Now
     if (parts[0] === 'risk' && parts[1] && S.D) {          // #risk/<id> — сцена риска по имени правила (08.09)
       var ri = -1; (S.D.risks || []).forEach(function (r, i) { if (ri < 0 && r.id === parts[1]) ri = i; });
       if (ri >= 0) { S.view = 'risk'; S.risk = ri; return; }
@@ -12492,7 +12531,7 @@
     if (!b) return;
     e.stopPropagation();
     var rid = b.getAttribute('data-risk');
-    if (rid === 'rise') { S.risk = 'rise'; S.view = 'risk'; mScreen('risk/rise'); render(); return; }
+    if (rid === 'rise') { S.risk = null; S.view = 'now'; S.sub.now = 'rise'; mScreen('now/rise'); render(); return; }
     if (rid) {
       var idx = (S.D.risks || []).map(function (r) { return r.id; }).indexOf(rid);
       if (idx >= 0) { S.risk = idx; S.view = 'risk'; mScreen('risk'); render(); return; }
