@@ -9,11 +9,27 @@
   SHOUT — случилось то, чего в данных не было никогда, или ход события развернулся
   WATCH — сильный сдвиг, который через неделю может стать переломом
 """
+import re
+
 SHOUT, WATCH = "SHOUT", "WATCH"
 
+# РАЗОВЫЕ ТРЕВОГИ (04.10). «ONI crossed +2.0» — событие, а не состояние: оно срабатывает один раз, в
+# прогоне, где порог перейдён, и следующий прогон его не повторяет. Свежий слой и лента новостей
+# объявляли тогда «Alert cleared: ONI crossed +2.0», будто «очень сильное» событие кончилось, — а ONI
+# стоял на +2,16. Такие тревоги помечены edge и при уходе снятыми не объявляются. Для разборов, где
+# пометки ещё нет, — по id (alert_id в refresh.py отбрасывает цифры и знаки).
+EDGE_IDS = re.compile(r"crossed|forecast_issue_is_out|moved_by|run_of_daily_records_has_ended")
 
-def _lvl(alerts, level, title, detail, kind="climate"):
-    alerts.append({"level": level, "title": title, "detail": detail, "kind": kind})
+
+def is_edge(a):
+    return bool((a or {}).get("edge")) or bool(EDGE_IDS.search(str((a or {}).get("id") or "")))
+
+
+def _lvl(alerts, level, title, detail, kind="climate", edge=False):
+    a = {"level": level, "title": title, "detail": detail, "kind": kind}
+    if edge:
+        a["edge"] = True
+    alerts.append(a)
 
 
 def detect(cur, prev=None):
@@ -107,14 +123,14 @@ def detect(cur, prev=None):
             ps, cs = pW[k]["records"]["streak"], W[k]["records"]["streak"]
             if ps >= 20 and cs == 0:
                 _lvl(A, WATCH, f"{name}: the run of daily records has ended",
-                     f"was {ps} days, now 0: the first day below the historical maximum")
+                     f"was {ps} days, now 0: the first day below the historical maximum", edge=True)
         pl = prev["noaa"]["latest"]
         if NW["date"] != prev["noaa"]["date"]:
             j = lat["n34a"] - pl["n34a"]
             if abs(j) >= 0.4:
                 _lvl(A, WATCH if j > 0 else SHOUT,
                      f"Niño 3.4 moved by {j:+.1f} °C in one update",
-                     f"{pl['n34a']:+.1f} ({prev['noaa']['date']}) → {lat['n34a']:+.1f} ({NW['date']})")
+                     f"{pl['n34a']:+.1f} ({prev['noaa']['date']}) → {lat['n34a']:+.1f} ({NW['date']})", edge=True)
 
     # ---- 2б. модели прогноза против реальности (IRI)
     # Сравнение НЕДЕЛИ с трёхмесячным прогнозом сезона, который только начался, убрано (02.10, владелец:
@@ -126,7 +142,7 @@ def detect(cur, prev=None):
         rv = iri.get("revisions") or {}
         _lvl(A, WATCH, f"A new IRI forecast issue is out: {iri['issued']}",
              f"combined peak {rv.get('combined_peak_prev')} → {rv.get('combined_peak_cur')} °C; "
-             f"{rv.get('n_up')} of {rv.get('n')} models raised their peak, {rv.get('n_down')} lowered it")
+             f"{rv.get('n_up')} of {rv.get('n')} models raised their peak, {rv.get('n_down')} lowered it", edge=True)
 
     # ---- 3. официальный порог
     oni = cur["oni"]; ls = oni["last_season"]; v = oni["current"].get(ls)
@@ -136,7 +152,7 @@ def detect(cur, prev=None):
             prev_v = prev["oni"]["current"].get(prev["oni"]["last_season"])
         if prev_v is None or prev_v < 2.0:
             _lvl(A, SHOUT, "ONI crossed +2.0: officially a “very strong” event",
-                 f"{ls} {v:+.2f}")
+                 f"{ls} {v:+.2f}", edge=True)
 
     # ---- 4. данные молчат
     for w in (n34, sw, tw):

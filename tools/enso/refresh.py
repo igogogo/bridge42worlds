@@ -223,6 +223,18 @@ def main(fetch=True, llm=True, light=False):
     for a in cur["alerts"]:
         a.setdefault("id", alert_id(a.get("title") or ""))
     cur["shout"] = any(a["level"] == "SHOUT" for a in cur["alerts"])
+    # НОВЫЕ И УШЕДШИЕ ТРЕВОГИ — В «ЧТО ИЗМЕНИЛОСЬ» (проверка Fable 04.10): список diff знал только ряды, и
+    # вердикт 21:36 в «what changed» не назвал новую тревогу SHOUT о воде Niño 3.4 теплее любого дня с
+    # 1982 — главную перемену с прошлого разбора. Разовые тревоги (edge) ушедшими не считаются.
+    if base:
+        _was = {a.get("id"): a for a in (base.get("alerts") or []) if a.get("id")}
+        _now = {a.get("id"): a for a in cur["alerts"] if a.get("id")}
+        for _k, _a in _now.items():
+            if _k not in _was:
+                cur["diff"].append(f"New {_a.get('level')} alert: {_a.get('title')}.")
+        for _k, _a in _was.items():
+            if _k not in _now and not A.is_edge(_a):
+                cur["diff"].append(f"Alert gone: {_a.get('title')}.")
     # СЧЁТ МОЛЧАЩИХ — ПО ВСЕЙ КАРТИНЕ, А НЕ ПО ЧАСТИ. Поймано 13.09: NOAA лёг целиком, и строка
     # итога сказала «не ответили 8» — это только квартальные файлы NCEI. На вкладке Ops в тот
     # же момент стояло 16: туда попадают ещё шесть суточных боксов OISST и восемь буёв, а они

@@ -246,8 +246,12 @@ def build(verbose=False):
     # Снята — значит вчера была, сегодня нет. Дата снятия (пометка gone) ставится один раз и не
     # меняется, поэтому строка может жить всё окно, как и «New alert», не переезжая на «сегодня».
     changed = False
+    import alerts as _AL
     for aid, s in ASEEN.items():
         if aid in ALERTS_NOW or s.get("quiet"):
+            continue
+        # разовая тревога («ONI crossed +2.0») прошла, а не снята: «Alert cleared» о ней — неправда (04.10)
+        if _AL.is_edge({"id": aid}):
             continue
         if not s.get("gone"):
             s["gone"] = day                                       # дата снятия — один раз, дальше неизменна

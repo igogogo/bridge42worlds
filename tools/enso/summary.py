@@ -38,7 +38,9 @@ Rules, no exceptions:
 4. Distinguish "above all analogues" from "above anything measured": these are different claims.
 3a. "Turning point" means the course of the event REVERSED: a rise became a fall, a run of records
    ended, CUSUM turned down. A new record or a SHOUT alert is NOT a turning point; while the 14-day
-   change is positive and the record run is intact, answer false.
+   change is positive and the record run is intact, answer false. The record run is the run of days above
+   the historical maximum for that calendar day; it ends on a day below that day's maximum, not when the
+   value falls back below the record of the whole series.
 4a. Units are in the "units" section of the digest. The 14-day change is a TOTAL over the last 14 days;
    never write "per day". Quote alert titles as they are; do not stretch "highest since <date>" into
    "highest in N years" or the reverse.
@@ -117,6 +119,12 @@ def facts_from(cur):
                   "anomalies": "°C against the 1991–2020 norm for the same day of year, never absolute temperature",
                   "daily_record_before_this_year": "°C, the warmest single day of all earlier years; compare only with "
                                                    "single days, never with a 30-day or 7-day mean",
+                  "months_from_issue_to_season_start": "months between a forecast issue and the start of the season it was checked on; "
+                                                       "0 means the issue was made as the season began: say it that way, never "
+                                                       "\"no lead\" or \"lead 0\"",
+                  "record_run_days": "consecutive days on which the series was above the historical maximum for THAT calendar "
+                                     "day; it is a different test from being above the record of the whole series, and falling "
+                                     "below the all-time record does not end it",
                   "daily_boxes_against_their_records": "our daily OISST boxes against everything each box measured in earlier "
                                                        "calendar years since 1982: day_* and mean7_* are °C anomalies against the "
                                                        "box's own 1991–2020 normal, water_* are absolute °C; compare a day with a "

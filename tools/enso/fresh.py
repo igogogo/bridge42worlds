@@ -130,8 +130,12 @@ def build(cur, assessed):
                          "text": f"Alert level {was_al[k].get('level')} → {a.get('level')}: {a.get('title')}"})
     # то же правило для тревог: молчащий источник приостанавливает, а не снимает
     now_r_ids = {r.get("id") for r in cur.get("risks") or []}
+    import alerts as _AL
     for k, a in was_al.items():
         if k in now_al:
+            continue
+        # разовая тревога («ONI crossed +2.0») прошла, а не снята: событие было, состояние держится (04.10)
+        if _AL.is_edge(a):
             continue
         held = any(k in deps and g in now_r_ids for g, deps in SUSPENDS_AL.items())
         trig.append({"kind": "alert", "severity": "mid",
