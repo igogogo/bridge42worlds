@@ -638,6 +638,35 @@
   .rise-box .plot.rc{height:300px;min-height:240px}
   .rise-box .plot.rh{height:330px;min-height:260px}
   .stage.full .rise-box .plot{min-height:280px}
+  /* Узкая сцена на широком экране (колонки по бокам): график «где стоит зона» уже ставит две панели друг под
+     другом (ширина меньше 600), а высота оставалась настольной, 250 px, и подписи строк наезжали (06.10).
+     Высоту решает ширина самой сцены, а не окна. */
+  .rise-box{container-type:inline-size}
+  @container (max-width:599px){ .rise-box .plot.rb{height:440px;min-height:400px} }
+  /* РАСШИФРОВКА ПОД КАЖДЫМ ГРАФИКОМ (владелец 06.10: «нигде нет легенд, что значат цвета и линии»): строка
+     знаков с подписями, всегда на виду, и фразы «как читать». Пункт с годом или слоем нажимается. */
+  .rkey{display:flex;flex-direction:column;gap:5px;margin:-3px 2px 6px;padding:0 2px}
+  .rk-g{display:flex;flex-wrap:wrap;align-items:center;gap:4px 16px;font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.45}
+  .rk-h{color:var(--text);font-weight:600}
+  .rk{display:inline-flex;align-items:center;gap:6px;min-width:0;border-radius:4px;padding:1px 4px;margin:0 -4px}
+  .rk svg{flex:none}
+  .rk.pick{cursor:pointer} .rk.pick:hover{color:var(--text)}
+  .rk.pick:focus-visible{outline:1px solid var(--ochre);outline-offset:1px}
+  .rk.pick.on{color:var(--text);font-weight:600;background:color-mix(in srgb, var(--ochre) 16%, transparent)}
+  .rk-how{font-size:12px;color:var(--text);opacity:.85;line-height:1.55}
+  /* ПОДСКАЗКА ПРИ НАВЕДЕНИИ НА ГРАФИК (владелец 06.10: «где-то подпись легенды, где-то значение; без
+     фанатизма, но оживить графики»). Маленькая и сразу: имя ряда, место, число; линия под курсором толще,
+     на ней точка. Мышь сквозь подсказку проходит. */
+  .c-hint{position:fixed;z-index:85;pointer-events:none;max-width:300px;padding:6px 10px 7px;border:1px solid var(--hair);
+    border-radius:9px;background:var(--surface);box-shadow:0 8px 22px rgba(0,0,0,.28);font-family:var(--mono);font-size:11.5px;
+    line-height:1.45;color:var(--muted);opacity:0;transform:translateY(3px);transition:opacity .12s,transform .12s}
+  .c-hint.on{opacity:1;transform:none}
+  .c-hint b{color:var(--text);font-weight:700}
+  .c-hint .hv{font-size:12.5px}
+  svg .hv-dot{pointer-events:none;stroke:var(--surface);stroke-width:1.6px}
+  svg .hv-on{filter:brightness(1.3)}
+  svg .hv-row.hv-on{fill:var(--text) !important;fill-opacity:.07;filter:none}
+  @media (prefers-reduced-motion:reduce){ .c-hint{transition:none} }
   @media (max-width:760px){ .rise-box .plot{height:400px} .rise-box .plot.rb{height:440px} .rise-box .plot.rc{height:260px} .rise-box .plot.rh{height:320px} }
   /* окно графа поверх панели */
   .cn-modal{position:fixed;inset:0;z-index:300;background:rgba(8,10,14,.55);display:flex;align-items:center;justify-content:center;padding:16px}
@@ -1533,7 +1562,7 @@
     window.B42_LANG = ['ru','en','es','ar','fr'].indexOf(L)>=0 ? L : 'en';
   })();
 </script>
-<script src="/js/enso.js?v=0ea81250e4"></script>
+<script src="/js/enso.js?v=43dcd6a5f1"></script>
 <script src="/js/sitenav.js?v=6ab7008c58"></script>
 </body>
 </html>

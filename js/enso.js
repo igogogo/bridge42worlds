@@ -310,10 +310,13 @@
     return text.slice(0, 399) + '…';
   }
   function svgOpen(w, h) { return '<svg viewBox="0 0 ' + w + ' ' + h + '" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img">'; }
-  function poly(pts, color, w, op, dash) {
+  function poly(pts, color, w, op, dash, hk) {
     var s = pts.filter(function (p) { return fin(p[0]) && fin(p[1]); }).map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
-    return '<polyline points="' + s + '" fill="none" style="stroke:' + color + '" stroke-width="' + (w || 1.2) + '" opacity="' + (op == null ? 1 : op) + '"' + (dash ? ' stroke-dasharray="' + dash + '"' : '') + ' stroke-linejoin="round"/>';
+    return '<polyline points="' + s + '" fill="none" style="stroke:' + color + '" stroke-width="' + (w || 1.2) + '" opacity="' + (op == null ? 1 : op) + '"' + (dash ? ' stroke-dasharray="' + dash + '"' : '') + hkAttr(hk) + ' stroke-linejoin="round"/>';
   }
+  /* Метка линии для подсказки при наведении: строка — ключ ряда (тот же, что у выбора в легенде),
+     объект { h: текст } — готовый текст подсказки. */
+  function hkAttr(hk) { return hk == null ? '' : (typeof hk === 'object' ? ' data-h="' + esc(hk.h || '') + '"' : ' data-k="' + esc(String(hk)) + '"'); }
   /* ЛИНИЯ УЗНАЁТСЯ ПО ШТРИХУ, А НЕ ПО ЦВЕТУ. Владелец 04.09: «линии я не понимаю, цвета
      мне нужны пунктиры лучше везде, где можно». Цвет остаётся, но различать ряды можно и
      без него: у каждого ряда свой рисунок штриха, и он одинаков на всех графиках панели —
@@ -410,12 +413,27 @@
     return '<defs><pattern id="hneg" patternUnits="userSpaceOnUse" width="6" height="6"><path d="M0 6 L6 0" style="stroke:var(--ink)" stroke-width="1" opacity=".55"/></pattern></defs>';
   }
 
-  function segs(pts, color, w, op, dash) {
+  function segs(pts, color, w, op, dash, hk) {
     var out = [], cur = [];
-    pts.forEach(function (p) { if (fin(p[0]) && fin(p[1])) cur.push(p); else { if (cur.length > 1) out.push(poly(cur, color, w, op, dash)); cur = []; } });
-    if (cur.length > 1) out.push(poly(cur, color, w, op, dash));
+    pts.forEach(function (p) { if (fin(p[0]) && fin(p[1])) cur.push(p); else { if (cur.length > 1) out.push(poly(cur, color, w, op, dash, hk)); cur = []; } });
+    if (cur.length > 1) out.push(poly(cur, color, w, op, dash, hk));
     return out.join('');
   }
+  /* ══ ПОДСКАЗКА ПРИ НАВЕДЕНИИ (владелец 06.10: «при наведении показывать где-то подпись легенды, где-то
+     значение; без фанатизма, но оживить графики») ═════════════════════════════════════════════════════════
+     Слой один на все графики сцен (hoverLayer): ближайшая к курсору линия становится толще, на ней точка, у
+     курсора — имя ряда. Имя берётся из легенды графика (по ключу выбора или по цвету и штриху), а число и
+     дату даёт только тот ряд, который график оставил вызовом hline() во время рисования: значения там
+     настоящие, из данных, а не обратным счётом из пикселей. Фигуры с готовым текстом (data-h, бывшие
+     <title>) показывают его. drawInto кладёт оставленное рядом с готовой картинкой (HREG). */
+  var HREG = typeof WeakMap === 'function' ? new WeakMap() : null;
+  function hreg() { return S._hv || (S._hv = { ser: [], leg: null }); }
+  // { k: ключ, n: имя, v: значения по индексу, X(i), Y(v) — те же функции, что рисовали линию,
+  //   pl(i) — подпись места, f(v) — число с единицей, box: [верх, низ] — где линия видна }
+  function hline(o) { o.k = o.k == null ? '' : String(o.k); hreg().ser.push(o); }
+  function doyPlace(y) { return function (i) { var d = slotLabel(i % 366); return y ? d + ' ' + yy2(+y + (i >= 366 ? 1 : 0)) : d; }; }
+  var fAn = function (v) { return fnum(v) + ' °C'; }, fAbs = function (v) { return fnum(v, 2, false) + ' °C'; };
+  var STORM_H = 'Storm line, 27.5–28 °C\ntall storm clouds grow only over water warmer than this (Graham and Barnett 1987)';
   /* ПРЕДОХРАНИТЕЛЬ НА СЕТКЕ. Ряд карточки риска может быть в каких угодно единицах — у
      тёплого объёма воды это кубометры, то есть числа порядка 10¹⁵. Шаг сетки подбирался
      под градусы (0.25…1), и цикл честно пытался нарисовать несколько триллионов линий:
@@ -515,6 +533,7 @@
   }
 
   function legend(items, w, h, R, top) {
+    hreg().leg = items;                       // имена линий для подсказки при наведении (06.10)
     if (S._tight) return legIcon(items, w);
     var s = '', i;
     if (R > 0) {
@@ -597,19 +616,23 @@
         kf++;
         var seq = AF[y] || [];
         s += segs(seq.map(function (v, i2) { return [X(n - 1 + i2), fin(v) ? Y(v) : NaN]; }),
-          'var(--a' + y + ')', 1.1, pickOp(y, .85), dashOf(kf));
+          'var(--a' + y + ')', 1.1, pickOp(y, .85), dashOf(kf), y);
+        // подсказка: дата — в календаре того события (06.10)
+        hline({ k: y, n: evSpan(y) + ', from this same day on', v: seq, X: function (i3) { return X(n - 1 + i3); }, Y: Y, f: fAn,
+          pl: function (i3) { var d = addDays(w.last_date, i3); return MON3[+d.slice(5, 7) - 1] + ' ' + (+d.slice(8, 10)) + ' ' + yy2(+d.slice(0, 4) - +w.last_date.slice(0, 4) + +y); } });
       });
       s += '<line x1="' + X(n - 1).toFixed(1) + '" y1="' + Tp + '" x2="' + X(n - 1).toFixed(1) + '" y2="' + (H - B) +
         '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="2 3" opacity=".7"/>';
     }
     s += gridY(vmin, vmax, vmax - vmin < 2 ? .25 : .5, Y, Lp, R + 46, W);
-    function band(lo, hi, op) {
+    function band(lo, hi, op, h) {
       var up = [], dn = [];
       for (var i = 0; i < n; i++) if (fin(hi[i])) up.push(X(i).toFixed(1) + ',' + Y(hi[i]).toFixed(1));
       for (var j = n - 1; j >= 0; j--) if (fin(lo[j])) dn.push(X(j).toFixed(1) + ',' + Y(lo[j]).toFixed(1));
-      return '<polygon points="' + up.join(' ') + ' ' + dn.join(' ') + '" style="fill:var(--band)" opacity="' + op + '"/>';
+      return '<polygon points="' + up.join(' ') + ' ' + dn.join(' ') + '" style="fill:var(--band)" opacity="' + op + '" data-h="' + esc(h) + '"/>';
     }
-    s += band(bmin, bmax, pickOp('band', .22)) + band(p10, p90, pickOp('band', .38));
+    s += band(bmin, bmax, pickOp('band', .22), 'All years of the record on these days\nthe pale band runs from the coldest to the warmest') +
+      band(p10, p90, pickOp('band', .38), 'Eight years in ten on these days\nthe darker band: the 10th to the 90th percentile of all years of the record');
     for (var i2 = 0; i2 < n; i2++) {
       var d = addDays(w.last_date, -(n - 1 - i2));
       if (d.slice(8) === '01') {
@@ -634,8 +657,10 @@
       s += '<line x1="' + xf.toFixed(0) + '" y1="' + Tp + '" x2="' + xf.toFixed(0) + '" y2="' + (H - B) + '" style="stroke:var(--grid)" stroke-width=".5" opacity=".6"/>';
       if (mof % mEveryF === 0 || mEveryF === 1) s += '<text x="' + (xf + 2).toFixed(0) + '" y="' + (H - 10) + '" opacity=".85">' + MONTHS[mof - 1] + (mof === 1 && !S._tight ? " '" + df.slice(2, 4) : '') + '</text>';
     }
-    s += segs(rec.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 1.8, pickOp('all'));
-    s += segs(rec.slice(-30).map(function (v, i) { return [X(n - 30 + i), fin(v) ? Y(v) : NaN]; }), 'var(--nino)', 2.6, pickOp('last30'));
+    s += segs(rec.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 1.8, pickOp('all'), '', 'all');
+    s += segs(rec.slice(-30).map(function (v, i) { return [X(n - 30 + i), fin(v) ? Y(v) : NaN]; }), 'var(--nino)', 2.6, pickOp('last30'), '', 'all');
+    hline({ k: 'all', n: w.label || 'this series', v: rec, X: X, Y: Y, f: fAn,
+      pl: function (i4) { var d = addDays(w.last_date, -(n - 1 - i4)); return MON3[+d.slice(5, 7) - 1] + ' ' + (+d.slice(8, 10)) + ' ' + yy2(d.slice(0, 4)); } });
     // где стоял ряд на прошлом обновлении — линия «было»
     var pv = S.P && S.P.daily && S.P.daily[seriesKey(w)];
     if (fin(pv)) {
@@ -648,15 +673,17 @@
     var ft = freshTail(seriesKey(w));
     if (ft.length && fin(rec[n - 1])) {
       var tp = [[x0, Y(rec[n - 1])]].concat(ft.map(function (p) { return [X(n - 1 + p[0]), Y(p[1])]; }));
-      s += poly(tp, 'var(--ochre)', 1.6, 1, '3 3');
+      var fdR = String(ft[ft.length - 1][2] || '');
+      s += poly(tp, 'var(--ochre)', 1.6, 1, '3 3', { h: 'Fresh, not yet assessed\n' + (fdR.length >= 10 ? MON3[+fdR.slice(5, 7) - 1] + ' ' + (+fdR.slice(8, 10)) + ' · ' : '') + fnum(ft[ft.length - 1][1]) + ' °C, measured after the last assessment' });
       var lastT = tp[tp.length - 1];
       /* Подпись свежего хвоста стояла справа от его конца — там же, где начинаются подписи
          вилки прогноза, и на телефоне все три числа сходились в одну строку. Уводим её ВЛЕВО
          от точки: слева поле пустое, там ей никто не мешает (владелец 09.09). */
       s += freshDot(lastT[0], lastT[1], 4.5) + '<text x="' + (lastT[0] - 6).toFixed(0) + '" y="' + (lastT[1] - 11).toFixed(0) + '" text-anchor="end" font-size="9" style="fill:var(--ochre)">fresh ' + fnum(ft[ft.length - 1][1]) + '</text>';
     }
-    s += '<polygon points="' + x0.toFixed(1) + ',' + Y(f.from).toFixed(1) + ' ' + x1.toFixed(1) + ',' + Y(f.p90).toFixed(1) + ' ' + x1.toFixed(1) + ',' + Y(f.p10).toFixed(1) + '" style="fill:var(--nino)" opacity=".18"/>';
-    s += poly([[x0, Y(f.from)], [x1, Y(f.p50)]], 'var(--nino)', 1.6, 1, '5 3');
+    var fcH = 'Forecast for 14 days ahead\nmiddle ' + fnum(f.p50) + ' °C, eight in ten between ' + fnum(f.p10) + ' and ' + fnum(f.p90);
+    s += '<polygon points="' + x0.toFixed(1) + ',' + Y(f.from).toFixed(1) + ' ' + x1.toFixed(1) + ',' + Y(f.p90).toFixed(1) + ' ' + x1.toFixed(1) + ',' + Y(f.p10).toFixed(1) + '" style="fill:var(--nino)" opacity=".18" data-h="' + esc(fcH) + '"/>';
+    s += poly([[x0, Y(f.from)], [x1, Y(f.p50)]], 'var(--nino)', 1.6, 1, '5 3', { h: fcH });
     /* Три подписи вилки прогноза стоят одна над другой; когда вилка узкая, они сходятся в
        одну кашу (на телефоне это видно всегда). Разводим их не меньше чем на 11 пикселей. */
     var yFor = [Y(f.p90), Y(f.p50), Y(f.p10)];
@@ -993,17 +1020,20 @@
     s += '<line x1="' + X(366).toFixed(0) + '" y1="' + Tp + '" x2="' + X(366).toFixed(0) + '" y2="' + (H - B) + '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="3 3"/>';
     s += '<line x1="' + X(day).toFixed(1) + '" y1="' + Tp + '" x2="' + X(day).toFixed(1) + '" y2="' + (H - B) + '" style="stroke:var(--nino)" stroke-width=".9" stroke-dasharray="1 3" opacity=".8"/>';
     var leg = [], nThin = 0, si = 0;
+    var fmtR = function (v) { return fnum(v) + ' °C a month over ' + winWords(months); };   // число подсказки (06.10)
     years.forEach(function (y) {
       var strong = isStrong(y) || !N._yrs, pts = RS[y].map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; });
-      if (!strong) { nThin++; s += segs(pts, 'var(--soft)', .9, pickOp(y, N._yrs === 'all' ? .28 : .45), '3 3'); return; }
+      hline({ k: y, n: evSpan(y), v: RS[y], X: X, Y: Y, pl: doyPlace(y), f: fmtR });
+      if (!strong) { nThin++; s += segs(pts, 'var(--soft)', .9, pickOp(y, N._yrs === 'all' ? .28 : .45), '3 3', y); return; }
       si++;
-      s += segs(pts, 'var(--a' + y + ')', 1.4, pickOp(y, .9), dashOf(si));
+      s += segs(pts, 'var(--a' + y + ')', 1.4, pickOp(y, .9), dashOf(si), y);
       var v0 = RS[y][day];
       if (fin(v0)) s += '<circle cx="' + X(day).toFixed(1) + '" cy="' + Y(v0).toFixed(1) + '" r="3" style="fill:var(--a' + y + ')" opacity="' + pickOp(y, 1) + '"/>';
       leg.push([y + '→' + String(parseInt(y, 10) + 1).slice(2) + ': ' + fnum(v0) + ' on these days', 'var(--a' + y + ')', 1.6, dashOf(si), y]);
     });
     if (nThin) leg.push([nThin + ' more ' + (N._yrs === 'all' ? 'years' : 'El Niño years') + ', thin and dashed', 'var(--soft)', .9, '3 3']);
-    s += segs(cur.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.6, pickOp('now'));
+    s += segs(cur.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.6, pickOp('now'), '', 'now');
+    hline({ k: 'now', n: String(N.year || 'This year') + ', ' + (N.label || 'Niño 3.4'), v: cur, X: X, Y: Y, pl: doyPlace(N.year), f: fmtR });
     if (fin(now)) {
       s += nowDot(X(day), Y(now), 'var(--nino)', 4.5);
       s += svgT(X(day), Y(now) - 11, fnum(now), 'font-size:13px;font-weight:700;fill:var(--text);paint-order:stroke;stroke:var(--surface);stroke-width:3.2;stroke-linejoin:round', 'middle');
@@ -1044,6 +1074,9 @@
      перестают быть правдой; о том, что принесли 1982–83 и 1997–98, — обычное знание, без чисел. */
   var RISE_Z = ['nino4', 'nino34', 'nino3', 'nino12'];       // запад → восток, как везде на панели
   var RISE_LVL = { nino12: 3.5, nino3: 3.0, nino34: 2.5 };   // «уже так тепло»: с какого 7-дневного уровня сравнивать темп
+  var RISE_EV = ['1982', '1997', '2015', '2023'];             // четыре сильнейших события — ряды и линии всех графиков сцены
+  function yy2(y) { return '’' + String(y).slice(2); }
+  function evSpan(y) { return yy2(y) + '–' + String(+y + 1).slice(2); }
   function riseData(box) {
     var bx = ((S.D.oisst || {}).boxes || {})[box];
     if (!bx || !(bx.dates || []).length || !bx.last_date) return { failed: 'no daily series for this box in today’s data' };
@@ -1135,15 +1168,21 @@
       rows.forEach(function (r, i) {
         var yy = yb + i * rh + (rh - hb) / 2, ty = yy + hb / 2 + 3.5;
         s += svgT(x0, ty, esc(String(r.n)), r.now ? 'font-size:10px;font-weight:700;fill:var(--text)' : 'font-size:10px;fill:var(--soft)');
+        var pk = r.now ? 'now' : String(r.n);   // выбор в расшифровке под графиком гасит остальные ряды (06.10)
         if (r.b && fin(r.b.v)) {
           var ba = X(Math.min(0, r.b.v)), bb = X(Math.max(0, r.b.v));
-          s += '<rect x="' + ba.toFixed(1) + '" y="' + (yy - 1.5).toFixed(1) + '" width="' + Math.max(1, bb - ba).toFixed(1) + '" height="' + (hb + 3).toFixed(1) + '" rx="2" style="fill:none;stroke:' + r.col + '" stroke-width=".9" stroke-dasharray="2 2" opacity=".85"/>';
+          s += '<rect x="' + ba.toFixed(1) + '" y="' + (yy - 1.5).toFixed(1) + '" width="' + Math.max(1, bb - ba).toFixed(1) + '" height="' + (hb + 3).toFixed(1) + '" rx="2" style="fill:none;stroke:' + r.col + '" stroke-width=".9" stroke-dasharray="2 2" opacity="' + pickOp(pk, .85) + '"/>';
         }
         if (fin(r.v)) {
           var xa = X(Math.min(0, r.v)), xb = X(Math.max(0, r.v));
-          s += '<rect x="' + xa.toFixed(1) + '" y="' + yy.toFixed(1) + '" width="' + Math.max(1, xb - xa).toFixed(1) + '" height="' + hb.toFixed(1) + '" rx="2" style="fill:' + r.col + '" opacity="' + (r.now ? .95 : .8) + '"/>';
+          s += '<rect x="' + xa.toFixed(1) + '" y="' + yy.toFixed(1) + '" width="' + Math.max(1, xb - xa).toFixed(1) + '" height="' + hb.toFixed(1) + '" rx="2" style="fill:' + r.col + '" opacity="' + pickOp(pk, r.now ? .95 : .8) + '"/>';
           s += svgT(x0 + pw, ty, fnum(r.v), 'font-size:10px;fill:var(--text)' + (r.now ? ';font-weight:700' : ''), 'end');
         }
+        // подсказка на всю строку: оба числа строки и откуда рамка (06.10)
+        var hs = r.now
+          ? [z.title + ' · ' + yy2(z.year), 'over the last ' + winWords(months) + ': ' + fnum(r.v) + ' °C a month', z.own ? 'its fastest so far this year: ' + fnum(z.own.v) + ' (' + winWords(months) + ' to ' + slotLabel(z.own.i) + ')' : '', (z.rank === 1 ? 'the fastest' : ord(z.rank) + ' fastest') + ' of ' + z.of + ' years on these days']
+          : [z.title + ' · ' + evSpan(r.n), 'on the same days: ' + (fin(r.v) ? fnum(r.v) + ' °C a month' : 'no data'), r.b ? 'its fastest from April to December: ' + fnum(r.b.v) + ' (' + winWords(months) + ' to ' + slotLabel(r.b.i) + ')' : ''];
+        s += '<rect x="' + x0.toFixed(1) + '" y="' + (yb + i * rh).toFixed(1) + '" width="' + pw.toFixed(1) + '" height="' + rh.toFixed(1) + '" class="hv-row" style="fill:transparent" data-h="' + esc(hs.filter(Boolean).join('\n')) + '"/>';
       });
     });
     return s + '</svg>';
@@ -1170,6 +1209,9 @@
         s += '<line x1="' + xr.toFixed(1) + '" y1="' + (yy - 4).toFixed(1) + '" x2="' + xr.toFixed(1) + '" y2="' + (yy + hb + 4).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="2.4"/>' +
           svgT(xr, yy - 6, '’' + String(z.rec7.y).slice(2) + ' ' + fnum(z.rec7.v), 'font-size:9px;fill:var(--nino)', 'middle');
       }
+      s += '<rect class="hv-row" x="' + p1.x + '" y="' + r.y.toFixed(1) + '" width="' + pw.toFixed(1) + '" height="' + r.rh.toFixed(1) + '" style="fill:transparent" data-h="' +
+        esc([z.title + ' · the last 7 days', 'mean ' + fnum(z.level7) + ' °C above normal', z.rec7 ? 'warmest week before this year: ' + fnum(z.rec7.v) + ' (to ' + slotLabel(z.rec7.i) + ' ' + yy2(z.rec7.y) + ')' : '',
+          z.rec7 && fin(z.level7) ? (z.level7 > z.rec7.v ? fnum(z.level7 - z.rec7.v, 2, false) + ' °C above it' : fnum(z.rec7.v - z.level7, 2, false) + ' °C below it') : ''].filter(Boolean).join('\n')) + '"/>';
     });
     // 2) сама вода: против полосы гроз, с нормой на дату и самым тёплым днём ряда
     var aLo = 99, aHi = THR_HI + .5;
@@ -1192,6 +1234,9 @@
       }
       if (fin(z.abs)) s += '<circle cx="' + XB(z.abs).toFixed(1) + '" cy="' + yc.toFixed(1) + '" r="5" style="fill:var(--text)"/>' +
         svgT(XB(z.abs), yc - 9, fnum(z.abs, 2, false), 'font-size:10.5px;font-weight:700;fill:var(--text);paint-order:stroke;stroke:var(--surface);stroke-width:3;stroke-linejoin:round', 'middle');
+      var stormW = !fin(z.abs) ? '' : (z.abs >= THR_HI ? 'above the storm line, 27.5–28 °C' : (z.abs >= THR_LO ? 'inside the storm line, 27.5–28 °C' : fnum(THR_LO - z.abs, 2, false) + ' °C below the storm line'));
+      s += '<rect class="hv-row" x="' + p2.x + '" y="' + r.y.toFixed(1) + '" width="' + pw.toFixed(1) + '" height="' + r.rh.toFixed(1) + '" style="fill:transparent" data-h="' +
+        esc([z.title + ' · the sea itself', 'now ' + fnum(z.abs, 2, false) + ' °C, normal for the date ' + fnum(z.normal, 2, false) + ' °C',z.absRec ? 'warmest day before this year: ' + fnum(z.absRec.v, 2, false) + ' (' + slotLabel(z.absRec.i) + ' ' + yy2(z.absRec.y) + ')' : '', stormW].filter(Boolean).join('\n')) + '"/>';
     });
     return s + '</svg>';
   }
@@ -1206,17 +1251,21 @@
     var X = function (k) { return Lp + (k - i0) / (i1 - i0) * pw; }, Y = function (v) { return Tp + (vmax - v) / (vmax - vmin) * ph; };
     var s = svgOpen(W, H) + '<text class="tt" x="' + Lp + '" y="13">' + esc(z.title) + (R.box === 'nino12' ? ' into the rainy season of the coast' : ' through the season ahead') + ': sea surface °C, ' + esc(R.year) + ' against the four strongest events</text>';
     for (var g = Math.ceil(vmin); g < vmax; g += (vmax - vmin > 7 ? 2 : 1)) s += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (Lp + pw).toFixed(1) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".6"/>' + svgT(Lp - 5, Y(g) + 4, String(g), '', 'end');
-    s += '<rect x="' + Lp + '" y="' + Y(THR_HI).toFixed(1) + '" width="' + pw.toFixed(1) + '" height="' + (Y(THR_LO) - Y(THR_HI)).toFixed(1) + '" style="fill:var(--nino);opacity:.16"/>' +
+    s += '<rect x="' + Lp + '" y="' + Y(THR_HI).toFixed(1) + '" width="' + pw.toFixed(1) + '" height="' + (Y(THR_LO) - Y(THR_HI)).toFixed(1) + '" style="fill:var(--nino);opacity:.16" data-h="' + esc(STORM_H) + '"/>' +
       svgT(Lp + 4, Y(THR_HI) - 3, 'storm line 27.5–28 °C', 'font-size:9px;fill:var(--nino)');
     [[213, 'Aug'], [244, 'Sep'], [274, 'Oct'], [305, 'Nov'], [335, 'Dec'], [366, 'Jan'], [397, 'Feb'], [426, 'Mar'], [457, 'Apr']].forEach(function (m, k) {
       if (W > 420 || k % 2 === 0) s += svgT(X(m[0] + 15), H - 7, m[1], '', 'middle');
     });
     s += '<line x1="' + X(366).toFixed(1) + '" y1="' + Tp + '" x2="' + X(366).toFixed(1) + '" y2="' + (H - B) + '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="3 3"/>';
-    s += segs(norm.map(function (v, k) { return [X(i0 + k), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', 1.3, .9, '5 3');
+    s += segs(norm.map(function (v, k) { return [X(i0 + k), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', 1.3, pickOp('normal', .9), '5 3', 'normal');
+    // для подсказки: те же ряды с индексом от начала окна (август), значения — из данных
+    var Xw = function (k) { return X(i0 + k); }, plW = function (y) { var f = doyPlace(y); return function (k) { return f(i0 + k); }; };
+    hline({ k: 'normal', n: '1991–2020 normal for the day', v: norm, X: Xw, Y: Y, pl: plW(null), f: fAbs });
     var ends = [];
     YRS.forEach(function (y) {
       var a = R.abs[y] || [];
-      s += segs(a.slice(i0, i1 + 1).map(function (v, k) { return [X(i0 + k), fin(v) ? Y(v) : NaN]; }), 'var(--a' + y + ')', 1.4, pickOp(y, .9), yearDash(y));
+      s += segs(a.slice(i0, i1 + 1).map(function (v, k) { return [X(i0 + k), fin(v) ? Y(v) : NaN]; }), 'var(--a' + y + ')', 1.4, pickOp(y, .9), yearDash(y), y);
+      hline({ k: y, n: evSpan(y), v: a.slice(i0, i1 + 1), X: Xw, Y: Y, pl: plW(y), f: fAbs });
       var j = Math.min(i1, a.length - 1); while (j > i0 && !fin(a[j])) j--;
       if (fin(a[j])) ends.push({ y: Y(a[j]), t: '’' + String(+y + 1).slice(2), c: 'var(--a' + y + ')' });
     });
@@ -1225,7 +1274,8 @@
     for (var e = 1; e < ends.length; e++) if (ends[e].y - ends[e - 1].y < 10) ends[e].y = ends[e - 1].y + 10;
     ends.forEach(function (o) { s += svgT(Lp + pw + 4, o.y + 3, o.t, 'font-size:9px;fill:' + o.c); });
     var cur = R.curAbs;
-    s += segs(cur.slice(i0).map(function (v, k) { return [X(i0 + k), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.6, pickOp('now'));
+    s += segs(cur.slice(i0).map(function (v, k) { return [X(i0 + k), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.6, pickOp('now'), '', 'now');
+    hline({ k: 'now', n: String(R.year) + ', ' + z.title, v: cur.slice(i0), X: Xw, Y: Y, pl: plW(R.year), f: fAbs });
     if (fin(cur[R.day])) {
       s += nowDot(X(R.day), Y(cur[R.day]), 'var(--nino)', 4.5);
       s += svgT(X(R.day), Y(cur[R.day]) - 11, fnum(cur[R.day], 2, false), 'font-size:13px;font-weight:700;fill:var(--text);paint-order:stroke;stroke:var(--surface);stroke-width:3.2;stroke-linejoin:round', 'middle');
@@ -1328,23 +1378,27 @@
     for (var g = Math.ceil(vmin); g < vmax; g += st) s += '<line x1="' + Lp + '" y1="' + Y(g).toFixed(1) + '" x2="' + (Lp + pw).toFixed(1) + '" y2="' + Y(g).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".6"/>' + svgT(Lp - 5, Y(g) + 4, String(g), '', 'end');
     if (gulf) s += '<line x1="' + Lp + '" y1="' + Y(thrA).toFixed(1) + '" x2="' + (Lp + pw).toFixed(1) + '" y2="' + Y(thrA).toFixed(1) + '" style="stroke:var(--nino)" stroke-width="1.2" stroke-dasharray="4 3"/>' +
       svgT(Lp + pw - 4, Y(thrA) - 3, '35 °C: the stress line for desalination and fisheries', 'font-size:9.5px;fill:var(--nino)', 'end');
-    else s += '<rect x="' + Lp + '" y="' + Y(THR_HI).toFixed(1) + '" width="' + pw.toFixed(1) + '" height="' + (Y(THR_LO) - Y(THR_HI)).toFixed(1) + '" style="fill:var(--nino);opacity:.16"/>' +
+    else s += '<rect x="' + Lp + '" y="' + Y(THR_HI).toFixed(1) + '" width="' + pw.toFixed(1) + '" height="' + (Y(THR_LO) - Y(THR_HI)).toFixed(1) + '" style="fill:var(--nino);opacity:.16" data-h="' + esc(STORM_H) + '"/>' +
       svgT(Lp + pw - 4, Y(THR_HI) - 3, 'storm line 27.5–28 °C', 'font-size:9.5px;fill:var(--nino)', 'end');
     for (var m = 0; m < 12; m++) if (W > 470 || m % 2 === 0) s += '<text x="' + X((ME[m] + ME[m + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + MONTHS[m] + '</text>';
     for (var m2 = 0; m2 < 4; m2++) if (W > 470) s += '<text x="' + X(366 + (ME[m2] + ME[m2 + 1]) / 2).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle" opacity=".85">' + MONTHS[m2] + '+1</text>';
     s += '<line x1="' + X(366).toFixed(0) + '" y1="' + Tp + '" x2="' + X(366).toFixed(0) + '" y2="' + (H - B) + '" style="stroke:var(--soft)" stroke-width=".8" stroke-dasharray="3 3"/>';
-    s += segs(norm.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', 1.3, pickOp('normal', .9), '6 4');
+    s += segs(norm.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', 1.3, pickOp('normal', .9), '6 4', 'normal');
+    var fmtB = function (v) { return fnum(v, 2, false) + ' °C' + (N._smLabel ? ', ' + N._smLabel : ''); };   // число подсказки (06.10)
+    hline({ k: 'normal', n: '1991–2020 normal for the day', v: norm, X: X, Y: Y, pl: doyPlace(null), f: fmtB });
     var leg = [], nThin = 0, si = 0;
     years.forEach(function (y) {
       var a = N.analogs[y], ser = (a.series || []).concat(a.next || []), strong = isStrong(y) || !N._yrs;
-      if (!strong) { nThin++; s += segs(ser.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', .9, pickOp(y, N._yrs === 'all' ? .28 : .45), '3 3'); return; }
+      hline({ k: y, n: evSpan(y), v: ser, X: X, Y: Y, pl: doyPlace(y), f: fmtB });
+      if (!strong) { nThin++; s += segs(ser.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', .9, pickOp(y, N._yrs === 'all' ? .28 : .45), '3 3', y); return; }
       si++;
-      s += segs(ser.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + y + ')', 1.4, pickOp(y, .9), dashOf(si));
+      s += segs(ser.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + y + ')', 1.4, pickOp(y, .9), dashOf(si), y);
       var d28 = ser.filter(function (v) { return fin(v) && v >= thrA; }).length;
       leg.push([y + '→' + String(parseInt(y, 10) + 1).slice(2) + ': warmest ' + fnum(a.peak, 2, false) + ', ' + d28 + ' days at ' + thrA + ' °C or more', 'var(--a' + y + ')', 1.6, dashOf(si), y]);
     });
     if (nThin) leg.push([nThin + ' more ' + (N._yrs === 'all' ? 'years' : 'El Niño years') + ', thin and dashed', 'var(--soft)', .9, '3 3']);
-    s += segs((N.current_series || []).map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.6, pickOp('now'));
+    s += segs((N.current_series || []).map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.6, pickOp('now'), '', 'now');
+    hline({ k: 'now', n: String(N.year || 'This year') + ', ' + (N.label || 'Niño 3.4'), v: N.current_series || [], X: X, Y: Y, pl: doyPlace(N.year), f: fmtB });
     var pe = N.peak_estimate || {};
     if (fin(pe.hist_ceiling)) s += '<line x1="' + Lp + '" y1="' + Y(pe.hist_ceiling).toFixed(1) + '" x2="' + (Lp + pw).toFixed(1) + '" y2="' + Y(pe.hist_ceiling).toFixed(1) + '" style="stroke:var(--nino)" stroke-width=".9" stroke-dasharray="6 4"/>' +
       svgT(Lp + 4, Y(pe.hist_ceiling) - 4, esc(pe.ceiling_label || '') + ' ' + fnum(pe.hist_ceiling, 2, false), 'fill:var(--nino)');
@@ -1394,26 +1448,31 @@
       var kk = heatYm(m, y0); if (kk < 0 || kk >= nM) return;
       var up = 0, dn = 0, x0 = X(kk) - bw * .38, ww = bw * .76;
       // от глубины к поверхности: у оси самый глубокий слой, наверху столбика — поверхностный, как в море
-      var zz = (T.zj || [])[i] || [];
+      var zz = (T.zj || [])[i] || [], dc = (T.degc || [])[i] || [], tm = (T.total || [])[i];
+      var mw = MON3[+m.slice(5, 7) - 1] + ' ' + yy2(m.slice(0, 4));
       for (var j = zz.length - 1; j >= 0; j--) {
         var v = zz[j];
         if (!fin(v) || v === 0) continue;
         var a = v > 0 ? up : dn, b = a + v;
-        s += '<rect x="' + x0.toFixed(1) + '" y="' + Y(Math.max(a, b)).toFixed(1) + '" width="' + ww.toFixed(1) + '" height="' + Math.max(.5, Math.abs(Y(a) - Y(b))).toFixed(1) + '" style="fill:' + heatColor(1, HEAT_OP[j]) + '" opacity="' + pickOp('l' + j, .95) + '"/>';
+        // подсказка слоя (владелец 06.10: «а что там за layers»): какая глубина, сколько в ней тепла и насколько теплее вода
+        var lh = [mw + ' · the layer ' + (L[j] || '') + ' deep', fnum(Math.abs(v), 1, false) + ' ZJ ' + (v > 0 ? 'more' : 'less') + ' heat than normal',
+          fin(dc[j]) ? 'its water ' + fnum(Math.abs(dc[j]), 2, false) + ' °C ' + (dc[j] >= 0 ? 'warmer' : 'colder') + ' than normal' : '', fin(tm) ? 'the whole store, 0–300 m: ' + fnum(tm, 1, false) + ' ZJ' : ''];
+        s += '<rect x="' + x0.toFixed(1) + '" y="' + Y(Math.max(a, b)).toFixed(1) + '" width="' + ww.toFixed(1) + '" height="' + Math.max(.5, Math.abs(Y(a) - Y(b))).toFixed(1) + '" style="fill:' + heatColor(1, HEAT_OP[j]) + '" opacity="' + pickOp(S.pick === 'now' ? 'now' : 'l' + j, .95) + '" data-h="' + esc(lh.filter(Boolean).join('\n')) + '"/>';   // «этот год» в расшифровке — все слои
         if (v > 0) up = b; else dn = b;
       }
     });
-    var leg = [];
     YRS.forEach(function (y) {
       var pts = AN[y]; if (!pts || !pts.length) return;
-      s += segs(pts.map(function (p) { return [X(p[0]), Y(p[1])]; }), 'var(--a' + y + ')', 1.7, pickOp(y, .95), yearDash(y));
-      var best = pts.reduce(function (a, b) { return b[1] > a[1] ? b : a; });
-      leg.push([y + '→' + String(+y + 1).slice(2) + ': most ' + fnum(best[1], 1, false) + ' ZJ (' + MON3[best[0] % 12] + ' ' + (+y - 1 + Math.floor(best[0] / 12)) + ')', 'var(--a' + y + ')', 1.7, yearDash(y), y]);
+      s += segs(pts.map(function (p) { return [X(p[0]), Y(p[1])]; }), 'var(--a' + y + ')', 1.7, pickOp(y, .95), yearDash(y), y);
+      var vy = []; for (var q = 0; q < nM; q++) vy.push(NaN);
+      pts.forEach(function (p) { vy[p[0]] = p[1]; });
+      hline({ k: y, n: evSpan(y) + ', the whole store 0–300 m', v: vy, X: X, Y: Y,
+        pl: function (kq) { return MON3[kq % 12] + ' ' + yy2(+y - 1 + Math.floor(kq / 12)); }, f: function (v) { return fnum(v, 1, false) + ' ZJ'; } });
     });
     var li = mo.length - 1, lk = heatYm(mo[li], y0), tot = (T.total || [])[li];
     if (fin(tot) && lk >= 0 && lk < nM) s += svgT(X(lk), Y(Math.max(tot, 0)) - 6, fnum(tot, 1, false) + ' ZJ', 'font-size:12px;font-weight:700;fill:var(--text);paint-order:stroke;stroke:var(--surface);stroke-width:3;stroke-linejoin:round', 'middle');
-    var legItems = L.map(function (nm, j) { return [nm + (j === 0 ? ', at the surface' : (j === L.length - 1 ? ', deepest' : '')), heatColor(1, HEAT_OP[j]), 7, '', 'l' + j]; }).concat(leg);
-    s += legend(legItems, W, H, 0, Tp);
+    /* Слои и линии событий расшифрованы под графиком (riseKeyHeat): легенда второго графика сцены
+       в общую кнопку legend не попадала вовсе — та служит только первому (06.10). */
     return s + '</svg>';
   }
   function riseHeatKpis(HL, CH) {
@@ -1466,6 +1525,53 @@
     return el('div', 'note', t);
   }
 
+  /* РАСШИФРОВКА ПОД КАЖДЫМ ГРАФИКОМ СЦЕНЫ (владелец 06.10: «что значат пунктирные квадратики на Rise and fuel;
+     там нигде нет легенд, что значат цвета и линии, мало описания»). Объяснение жило одной длинной подписью
+     в конце сцены, а легенда графика тепла не показывалась вовсе. Теперь у каждого графика строка знаков
+     (штрих тот же, что на линии: владелец различает ряды пунктиром, не цветом) и две-три фразы «как читать».
+     В тексте не опираемся на цвет: «засечка с годом», «пунктирная рамка». */
+  function riseKeyRates(zs, months) {
+    var wl = winWords(months), ty = yy2(zs[0].year);
+    return chartKey([
+      { items: [[ty + ': the rate now, over the last ' + wl, 'var(--text)', 'box', .95, 'now'],
+        ['dashed frame: the fastest that year rose over ' + wl + ' from April to December (' + ty + ': its fastest so far this year)', 'var(--soft)', 'frame']] },
+      { t: 'the four strongest events, on the same calendar days:', items: RISE_EV.map(function (y) { return [yy2(y), 'var(--a' + y + ')', 'box', .8, y]; }) }
+    ], '<b>How to read.</b> One panel per zone. A bar is the slope of a straight line through the daily anomaly of the window, in °C a month: how fast the sea is warming, not how warm it is; a bar to the left of the zero line is cooling. Where the bar of ' + ty + ' reaches past the dashed frame of an event, this year is rising faster now than that event did over any window this long from April to December. The rank in the corner counts every year since 1982 on the same calendar days.');
+  }
+  function riseKeyStand() {
+    return chartKey([
+      { t: '7-day mean anomaly:', items: [['this year: the mean of the last 7 days', 'var(--text)', 'box', .85],
+        ['tick with a year: the warmest 7-day mean of any earlier year', 'var(--nino)', 'tick']] },
+      { t: 'sea surface:', items: [['the sea now, °C', 'var(--text)', 'dot'],
+        ['plain tick: the normal for the date, 1991–2020', 'var(--soft)', 'tick'],
+        ['tick with a year: the warmest single day of any earlier year', 'var(--nino)', 'tick'],
+        ['storm line, 27.5–28 °C', 'var(--nino)', 'band']] }
+    ], '<b>How to read.</b> In the anomaly panel, a bar past the tick with a year means the last 7 days were warmer than any week this zone had before this year. In the sea surface panel the line from the plain tick to the dot is how far above its normal the zone stands today; a dot inside or past the shaded band is water warm enough for tall storm clouds.');
+  }
+  function riseKeyCoast(R, z) {
+    var nm = z.normalMin, nx = z.normalMax;
+    return chartKey([
+      { items: [[yy2(R.year) + ', the dot is the last day', 'var(--text)', 'nowline', '', 'now'],
+        ['the normal for the day, 1991–2020', 'var(--soft)', 1.3, '5 3', 'normal'],
+        ['storm line, 27.5–28 °C', 'var(--nino)', 'band'],
+        ['1 January', 'var(--soft)', 'vdash']] },
+      { t: 'the four strongest events:', items: RISE_EV.map(function (y) { return [evSpan(y), 'var(--a' + y + ')', 1.6, yearDash(y), y]; }) }
+    ], '<b>How to read.</b> The sea itself in °C for the zone picked above, from August to the next April. Each past event runs on its own calendar from August of the year it began; the label at the right edge is the year it ended in. A line inside or above the shaded band is water warm enough for tall storm clouds.' +
+      (nm && nx ? ' The normal of ' + esc(z.title) + ' runs from ' + fnum(nm.v, 1, false) + ' °C (' + esc(slotLabel(nm.i)) + ') to ' + fnum(nx.v, 1, false) + ' °C (' + esc(slotLabel(nx.i)) + '); an El Niño adds its anomaly to that.' : ''));
+  }
+  function riseKeyHeat(HL) {
+    var ev = HL.events || {};
+    var evItems = RISE_EV.filter(function (y) { return ev[y]; }).map(function (y) {
+      var e = ev[y], b = null;
+      (e.total || []).forEach(function (v, k) { if (fin(v) && (!b || v > b.v)) b = { v: v, m: e.months[k] }; });
+      return [evSpan(y) + (b ? ': most ' + fnum(b.v, 1, false) + ' ZJ, ' + MON3[+b.m.slice(5, 7) - 1] + ' ' + yy2(b.m.slice(0, 4)) : ''), 'var(--a' + y + ')', 1.7, yearDash(y), y];
+    });
+    return chartKey([
+      { t: 'this year, by depth:', items: (HL.layers || []).map(function (nm, j) { return [nm, heatColor(1, HEAT_OP[j]), 'box', .95, 'l' + j]; }) },
+      { t: 'the whole store of the four strongest events:', items: evItems }
+    ], '<b>How to read.</b> A bar is one month of this year: the heat above the 1991–2020 normal in the upper 300 m of the strip ' + esc(HL.strip || '') + ', in zettajoules (1 ZJ = 10²¹ J), split by depth. The deepest layer sits on the axis and the surface layer on top, as in the sea; a part below zero is a layer colder than normal. A line is the whole store of one of the four strongest events on the same months of its own calendar, the year it began set over this one. GODAS reanalysis, about six weeks behind.');
+  }
+
   /* ОДНО МЕСТО — NOW (владелец 04.10: «я хотел, чтобы это было на Now, всё в одном месте»). Сцена живёт
      подвкладкой Now «Rise and fuel»; карточка в колонке рисков, адрес #risk/rise и кнопки data-risk="rise"
      ведут туда же. */
@@ -1497,7 +1603,9 @@
     var zs = RISE_Z.map(function (z) { return ZS[z]; }).filter(Boolean);
     var box = el('div', 'rise-box'); body.appendChild(box);
     plot(box, function (w, h) { return chartRiseRates(zs, months, w, h); });
+    box.appendChild(riseKeyRates(zs, months));
     plot(box, function (w, h) { return chartRiseStand(zs, w, h); }); box.lastElementChild.classList.add('rb');
+    box.appendChild(riseKeyStand());
     /* ЗОНА У ГРАФИКА СЕЗОНА (владелец 04.10: «на тех же графиках нарисуй уровни, где грозообразование»):
        любая из четырёх — вода в градусах против полосы гроз, по умолчанию побережье */
     var cz = ZS[S.sub.riseZone] ? S.sub.riseZone : 'nino12', rowC = el('div', 'seg sub');
@@ -1505,15 +1613,18 @@
     RISE_Z.forEach(function (z) { if (!ZS[z]) return; var b = el('button', (cz === z ? 'on' : '') + ' sq', ZS[z].title); b.type = 'button'; b.onclick = function () { S.sub.riseZone = z; render(); }; rowC.appendChild(b); });
     box.appendChild(rowC);
     plot(box, function (w, h) { return chartRiseCoast(ZD[cz], ZS[cz], w, h); }); box.lastElementChild.classList.add('rc');
+    box.appendChild(riseKeyCoast(ZD[cz], ZS[cz]));
     /* ЗАПАС ТЕПЛА: ВСЕГО И ПО СЛОЯМ (владелец 04.10) — heat-layers.json, лениво */
     S.HLY = S.HLY || {};
     var HL = lazyJson(S.HLY, 'v', '/data/enso/heat-layers.json');
     if (HL && !HL.error) {
       plot(box, function (w, h) { return chartRiseHeat(HL, w, h); }); box.lastElementChild.classList.add('rh');
+      box.appendChild(riseKeyHeat(HL));
       var kh = el('div', 'kpis'); kh.innerHTML = riseHeatKpis(HL, S.CH); box.appendChild(kh);
     } else if (HL && HL.error) lazyFailed(box, 'the stored-heat file did not load (' + HL.error + ')', function () { lazyReset(S.HLY, 'v'); render(); });
     else box.appendChild(el('div', 'note', 'Loading the stored heat…'));
-    body.appendChild(el('div', 'cap', 'How fast: the slope of a straight line through the daily anomaly of the last ' + winWords(months) + ', in °C a month; solid bars are the same calendar days, dashed frames the fastest that year rose over a window this long between April and December (for this year: so far); the rank counts every year since 1982. Where each zone stands: the mean of the last 7 days against the warmest 7-day mean of every earlier year (red); the sea in plain degrees with the normal for the date (grey), the warmest single day of every earlier year (red) and the storm band. The season chart: the sea in plain degrees from August into the next April, this year against the four strongest events and the normal, for the zone picked above it. The stored heat: the upper 300 m of the strip 2°S–2°N, 180–100°W in zettajoules (10²¹ J), stacked by layer from the surface (light) to 300 m (dark); the lines are the whole store of the four strongest events on the same months; GODAS reanalysis, monthly, about six weeks behind. Our own daily boxes on the NOAA OISST grid against our 1991–2020 normal of each box, data to ' + esc(slotLabel(n3.day)) + (n3.stale > 1 ? ' (' + n3.stale + ' days behind today)' : '') + '.'));
+    /* Как читать каждый график — в его расшифровке; здесь остались только источники (06.10). */
+    body.appendChild(el('div', 'cap', 'Sources: our own daily boxes on the NOAA OISST grid against our 1991–2020 normal of each box, data to ' + esc(slotLabel(n3.day)) + (n3.stale > 1 ? ' (' + n3.stale + ' days behind today)' : '') + '; the stored heat from the GODAS reanalysis via NOAA PSL against our 1991–2020 monthly normal. A key entry with a year or a layer highlights it on every chart of this scene; a second press brings the rest back.'));
     body.appendChild(riseText(ZS, ZD, months, HL && !HL.error ? HL : null));
   }
 
@@ -1546,8 +1657,9 @@
       for (ib = 0; ib < n; ib++) if (fin(sHi[ib])) pg.push(X(ib).toFixed(1) + ',' + Y(sHi[ib]).toFixed(1));
       for (ib = n - 1; ib >= 0; ib--) if (fin(sLo[ib])) pg.push(X(ib).toFixed(1) + ',' + Y(sLo[ib]).toFixed(1));
       s += '<defs><clipPath id="' + cid + '"><rect x="' + Lp + '" y="' + Tp + '" width="' + pw.toFixed(1) + '" height="' + ph.toFixed(1) + '"/></clipPath></defs>' +
-        '<g clip-path="url(#' + cid + ')"><polygon points="' + pg.join(' ') + '" style="fill:var(--nino);opacity:.12"/>' +
-        segs(sHi.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--nino)', .9, .75, '2 3') + '</g>';
+        '<g clip-path="url(#' + cid + ')"><polygon points="' + pg.join(' ') + '" style="fill:var(--nino);opacity:.12" data-h="' + esc(STORM_H + '\nhere as an anomaly: how much warmer than its normal the water must be to reach it') + '"/>' +
+        segs(sHi.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--nino)', .9, .75, '2 3', 'storm') + '</g>';
+      hline({ k: 'storm', n: 'Storm line: the water at 28 °C', v: sHi, X: X, Y: Y, pl: doyPlace(null), f: function (v) { return 'an anomaly of ' + fnum(v) + ' °C'; }, box: [Tp, Tp + ph] });
       for (ib = 10; ib < n; ib += 5) {                 // подпись — в первом дне, где верх полосы виден в поле
         var yb = fin(sHi[ib]) ? Y(sHi[ib]) : NaN;
         if (yb > Tp + 14 && yb < Tp + ph - 6) { s += svgT(X(ib), yb - 4, 'storm line: water at 27.5–28 °C', 'font-size:9px;fill:var(--nino)'); break; }
@@ -1555,11 +1667,13 @@
     }
     var leg = [];
     var nThin = 0, si = 0;
+    var fmtA = function (v) { return fnum(v) + ' °C' + (N._smLabel ? ', ' + N._smLabel : ''); };   // число подсказки (06.10)
     Object.keys(N.analogs).sort().forEach(function (y) {
       var a = N.analogs[y], ser = a.series.concat(a.next || []), strong = isStrong(y) || !N._yrs;
-      if (!strong) { nThin++; s += segs(ser.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', .9, pickOp(y, N._yrs === 'all' ? .28 : .45), '3 3'); return; }
+      hline({ k: y, n: evSpan(y), v: ser, X: X, Y: Y, pl: doyPlace(y), f: fmtA });
+      if (!strong) { nThin++; s += segs(ser.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', .9, pickOp(y, N._yrs === 'all' ? .28 : .45), '3 3', y); return; }
       si++;
-      s += segs(ser.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + y + ')', 1.4, pickOp(y, .9), dashOf(si));
+      s += segs(ser.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + y + ')', 1.4, pickOp(y, .9), dashOf(si), y);
       // В узкой плитке легенда идёт строкой под заголовком: там помещается только год.
       // пик года — число, а не украшение: он остаётся в подписи на любой ширине (09.09)
       leg.push([y + '→' + String(parseInt(y, 10) + 1).slice(2) + ': peak ' + fnum(a.peak), 'var(--a' + y + ')', 1.6, dashOf(si), y]);
@@ -1571,9 +1685,11 @@
        считается. Продолжение в следующий год — те же дни года. */
     if (M20 && M20.length) {
       var m20full = M20.concat(M20.slice(0, 120));
-      s += segs(m20full.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', 1.2, pickOp('mean20', .75), '6 4');
+      s += segs(m20full.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--soft)', 1.2, pickOp('mean20', .75), '6 4', 'mean20');
+      hline({ k: 'mean20', n: (M20Y ? M20Y[0] + '–' + M20Y[1] : 'The last 20 years') + ': the ordinary level of our days', v: m20full, X: X, Y: Y, pl: doyPlace(null), f: fmtA });
     }
-    s += segs(N.current_series.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.6, pickOp('now'));
+    s += segs(N.current_series.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.6, pickOp('now'), '', 'now');
+    hline({ k: 'now', n: String(N.year || 'This year') + ', ' + (N.label || 'Niño 3.4'), v: N.current_series, X: X, Y: Y, pl: doyPlace(N.year), f: fmtA });
     s += nowDot(X(N.day), Y(N.current_day), 'var(--nino)', 4.5);
     /* ЧИСЛО У МИГАЮЩЕЙ ТОЧКИ. Владелец 09.09: «на телефоне цифры не видны — на now against
        analogs нет текущей у мигающей точки». Её и не было ни на какой ширине: точка стояла
@@ -1581,7 +1697,8 @@
     var ftA = (N.key && N.key !== 'nino34') || N._smLabel ? [] : freshTail('sst_nino34');   // сглаженный вид — без суточного хвоста
     if (ftA.length && fin(N.current_day)) {
       var tpA = [[X(N.day), Y(N.current_day)]].concat(ftA.map(function (p) { return [X(N.day + p[0]), Y(p[1])]; }));
-      s += poly(tpA, 'var(--ochre)', 1.6, 1, '3 3');
+      var fdA = String((ftA[ftA.length - 1] || [])[2] || '');
+      s += poly(tpA, 'var(--ochre)', 1.6, 1, '3 3', { h: 'Fresh, not yet assessed\n' + (fdA.length >= 10 ? MON3[+fdA.slice(5, 7) - 1] + ' ' + (+fdA.slice(8, 10)) + ' · ' : '') + fnum((ftA[ftA.length - 1] || [])[1]) + ' °C, measured after the last assessment' });
       var lA = tpA[tpA.length - 1], fA = ftA[ftA.length - 1];
       s += freshDot(lA[0], lA[1], 4.5);
       /* ЧИСЛО У ПУНКТИРНОЙ ТОЧКИ (владелец 17.09: «вижу пунктирную точку, а значения где
@@ -1630,9 +1747,11 @@
         var Xm = function (i) { return x0 + 4 + i / (n - 1) * (RC - 8); };
         s += '<rect x="' + x0 + '" y="' + top.toFixed(1) + '" width="' + RC + '" height="' + hh.toFixed(1) + '" rx="5" style="fill:var(--ink)" opacity=".04"/>';
         var seq = (a.series || []).concat(a.next || []);
-        s += segs(seq.map(function (v, i) { return [Xm(i), fin(v) ? Ym(v) : NaN]; }), 'var(--a' + y + ')', 1.2, pickOp(y, .95), dashOf(yi + 1));
+        s += segs(seq.map(function (v, i) { return [Xm(i), fin(v) ? Ym(v) : NaN]; }), 'var(--a' + y + ')', 1.2, pickOp(y, .95), dashOf(yi + 1), y);
+        hline({ k: y, n: evSpan(y), v: seq, X: Xm, Y: Ym, pl: doyPlace(y), f: fmtA });
         // наш ряд той же шкалой поверх — видно, где мы против них
-        s += segs((N.current_series || []).map(function (v, i) { return [Xm(i), fin(v) ? Ym(v) : NaN]; }), 'var(--text)', 1, .8, '2 2');
+        s += segs((N.current_series || []).map(function (v, i) { return [Xm(i), fin(v) ? Ym(v) : NaN]; }), 'var(--text)', 1, .8, '2 2', 'now');
+        hline({ k: 'now', n: String(N.year || 'This year') + ', ' + (N.label || 'Niño 3.4'), v: N.current_series || [], X: Xm, Y: Ym, pl: doyPlace(N.year), f: fmtA });
         if (fin(a.peak)) s += '<line x1="' + (x0 + 4) + '" y1="' + Ym(a.peak).toFixed(1) + '" x2="' + (x0 + RC - 4) + '" y2="' + Ym(a.peak).toFixed(1) + '" style="stroke:var(--a' + y + ')" stroke-width=".8" stroke-dasharray="2 2" opacity=".8"/>';
         s += '<text x="' + (x0 + 4) + '" y="' + (top + 10) + '" class="tt" font-size="10" style="fill:var(--a' + y + ')">' + esc(y) + '</text>' +
           '<text x="' + (x0 + RC - 4) + '" y="' + (top + 10) + '" text-anchor="end" font-size="9" style="fill:var(--soft)">peak ' + fnum(a.peak, 1) + '</text>';
@@ -1696,7 +1815,13 @@
         : MONTHS[mi];
       s += '<text x="' + X(i).toFixed(0) + '" y="' + (H - 9) + '" text-anchor="middle">' + lab + '</text>';
     });
-    keys.forEach(function (k) { s += segs(ser.map(function (r, i) { return [X(i), fin(r[k[0]]) ? Y(r[k[0]]) : NaN]; }), k[2], k[0] === 'n34a' ? 2.2 : 1.4, pickOp(k[0]), k[3]); });
+    // подсказка (06.10): неделя NOAA подписана своей датой, число — с одним знаком, как его выпускают
+    var plN = function (rows) { return function (i) { var d = String((rows[i] || {}).date || ''); return d.length >= 10 ? 'week of ' + MON3[+d.slice(5, 7) - 1] + ' ' + (+d.slice(8, 10)) + ' ' + yy2(d.slice(0, 4)) : d; }; };
+    var fmtN = function (v) { return fnum(v, 1) + ' °C'; };
+    keys.forEach(function (k) {
+      s += segs(ser.map(function (r, i) { return [X(i), fin(r[k[0]]) ? Y(r[k[0]]) : NaN]; }), k[2], k[0] === 'n34a' ? 2.2 : 1.4, pickOp(k[0]), k[3], k[0]);
+      hline({ k: k[0], n: k[1] + ', NOAA weekly', v: ser.map(function (r) { return r[k[0]]; }), X: X, Y: Y, pl: plN(ser), f: fmtN });
+    });
     s += legendAt(keys.map(function (k, ki) {
       return [k[1] + ' ' + fnum(NW.latest[k[0]], 1), k[2], k[0] === 'n34a' ? 2.2 : 1.4, k[3], k[0]];
     }), Lp + 8, Tp + 12);
@@ -1711,7 +1836,8 @@
         s += '<rect x="' + x0 + '" y="' + top.toFixed(1) + '" width="' + RC + '" height="' + hh.toFixed(1) + '" rx="5" style="fill:var(--ink)" opacity=".04"/>';
         if (vmin < 0 && vmax > 0) s += '<line x1="' + (x0 + 6) + '" y1="' + Ym(0).toFixed(1) + '" x2="' + (x0 + RC - 6) + '" y2="' + Ym(0).toFixed(1) + '" style="stroke:var(--grid)" stroke-width=".6"/>';
         keys.forEach(function (k, ki) {
-          s += segs(rows.map(function (r, i) { return [Xm(i), fin(r[k[0]]) ? Ym(r[k[0]]) : NaN]; }), k[2], k[0] === 'n34a' ? 1.6 : 1, pickOp(k[0], .95), k[3]);
+          s += segs(rows.map(function (r, i) { return [Xm(i), fin(r[k[0]]) ? Ym(r[k[0]]) : NaN]; }), k[2], k[0] === 'n34a' ? 1.6 : 1, pickOp(k[0], .95), k[3], k[0]);
+          hline({ k: k[0], n: k[1] + ', ' + evSpan(y), v: rows.map(function (r) { return r[k[0]]; }), X: Xm, Y: Ym, pl: plN(rows), f: fmtN });
         });
         var lastRow = rows[m - 1] || {};
         s += '<text x="' + (x0 + 6) + '" y="' + (top + 10) + '" class="tt" font-size="10">' + esc(y) + '</text>' +
@@ -1977,7 +2103,10 @@
       var wid = hot ? 2.6 : (picked ? 1.8 : (name === strongest ? 2 : 1));
       var op = dim ? .12 : (hot || picked ? 1 : (name === strongest ? .95 : (c === 'broke' ? .45 : .38)));
       if (name === strongest && !S.pick && !S.model) col = 'var(--lv4)';
-      s += segs(cols.map(function (cc, k) { var v = valOf(name, cc); return [XK(k), fin(v) ? Y(v) : NaN]; }), col, wid, op);
+      s += segs(cols.map(function (cc, k) { var v = valOf(name, cc); return [XK(k), fin(v) ? Y(v) : NaN]; }), col, wid, op, '', 'm:' + name);
+      // подсказка (06.10): у каждой линии — имя модели и её класс, а не только класс из легенды
+      hline({ k: 'm:' + name, n: name + ({ ok: ', keeping up', caught: ', caught up', lag: ', lagging', hot: ', running high', broke: ', broken' }[c] || ''),
+        v: cols.map(function (cc) { return valOf(name, cc); }), X: XK, Y: Y, pl: function (k) { return (cols[k] || {}).label || ''; }, f: fAn });
     });
     var hist = IRI.history || [];
     if (hist.length > 1 && hist[1].combined) {
@@ -3041,10 +3170,18 @@
         '<text x="' + (Lp + 3) + '" y="' + (Y(LV[y]) - 3).toFixed(1) + '" font-size="9" style="fill:var(--a' + y + ')">after ' + esc(y) + ' ' + fnum(LV[y]) + '</text>';
     });
     var MAN = m.analogs || {}, legM = [['now', 'var(--text)', 2.2, '', 'now']];
+    /* подсказка (06.10): число с единицей ряда и дата; у прошлых событий — в их собственном календаре */
+    var fmtM = function (v) { return fnum(v) + (m.unit && m.unit.length <= 12 ? ' ' + m.unit : ''); };
+    var cyM = dates.length === n && dates[n - 1] ? +String(dates[n - 1]).slice(0, 4) : NaN;
+    var plM = function (y, off) {
+      if (dates.length !== n) return null;
+      return function (i) { var d = String(dates[(off || 0) + i] || ''); if (d.length < 7) return d; var yr = y ? +d.slice(0, 4) - cyM + (+y) : +d.slice(0, 4); return MON3[+d.slice(5, 7) - 1] + (d.length >= 10 ? ' ' + (+d.slice(8, 10)) : '') + ' ' + yy2(yr); };
+    };
     Object.keys(MAN).sort().forEach(function (y, k) {
       var av = MAN[y] || [], off = n - av.length;
       s += segs(av.map(function (v, i) { return [X(off + i), fin(v) ? Y(v) : NaN]; }),
-        'var(--a' + y + ')', 1.3, pickOp(y, .9), dashOf(k + 1));
+        'var(--a' + y + ')', 1.3, pickOp(y, .9), dashOf(k + 1), y);
+      hline({ k: y, n: evSpan(y) + ', the same days', v: av, X: function (i) { return X(off + i); }, Y: Y, pl: plM(y, off), f: fmtM });
       legM.push([y, 'var(--a' + y + ')', 1.3, dashOf(k + 1), y]);
     });
     var step = (vmax - vmin) > 4 ? 1 : ((vmax - vmin) > 1.2 ? .5 : .25);
@@ -3061,13 +3198,15 @@
     ana.forEach(function (a, ai) {
       var off = n - a.values.length;
       legM.push([String(a.year), 'var(--a' + a.year + ')', 1.3, dashOf(ai + 1), String(a.year)]);
-      s += segs(a.values.map(function (v, i) { return [X(off + i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + a.year + ')', 1.3, pickOp(String(a.year), .85), dashOf(ai + 1));
+      s += segs(a.values.map(function (v, i) { return [X(off + i), fin(v) ? Y(v) : NaN]; }), 'var(--a' + a.year + ')', 1.3, pickOp(String(a.year), .85), dashOf(ai + 1), String(a.year));
+      hline({ k: String(a.year), n: evSpan(a.year) + ', the same days', v: a.values, X: function (i) { return X(off + i); }, Y: Y, pl: plM(a.year, off), f: fmtM });
       var li2 = a.values.length - 1; while (li2 > 0 && !fin(a.values[li2])) li2--;
       // Год у конца линии подписываем, только если справа есть поле: в плитке обзора
       // (узкий график, R=26) эти подписи вылезали за картинку — там их заменяет значок.
       if (fin(a.values[li2]) && !S._tight) s += '<text x="' + (X(off + li2) + 4).toFixed(0) + '" y="' + (Y(a.values[li2]) + 4).toFixed(0) + '" style="fill:var(--a' + a.year + ')" font-size="10">' + a.year + '</text>';
     });
-    s += segs(vals.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.2, pickOp('now'));
+    s += segs(vals.map(function (v, i) { return [X(i), fin(v) ? Y(v) : NaN]; }), 'var(--text)', 2.2, pickOp('now'), '', 'now');
+    hline({ k: 'now', n: String(title || m.name || 'This series').split(' — ')[0], v: vals, X: X, Y: Y, pl: plM(null, 0), f: fmtM });
     /* В плитке обзора легенда не помещается и съедает саму картинку: там её заменяет
        значок, а список рядов читатель видит в подсказке плитки (владелец 06.09). */
     if (legM.length > 1) {
@@ -4828,7 +4967,9 @@
   function drawInto(p, draw, w, h) {
     var badge = p.querySelector('.dcal-wrap');
     var keepI = p.querySelector('.plain-i-wrap');   // кнопка «о чём это» — тоже переживает (15.09)
+    S._hv = null;                                   // что оставит для подсказки именно этот график
     p.innerHTML = String(draw(w, h));
+    hoverAttach(p);
     if (badge) p.appendChild(badge);           // значок даты данных переживает перерисовку
     if (keepI) p.appendChild(keepI);
     /* Значок возвращается ДО подгонки заголовка: именно по нему та решает, откуда начинать текст. */
@@ -4838,7 +4979,41 @@
     var col = it[1] || 'var(--soft)';
     if (it[2] === 'dot') return '<svg viewBox="0 0 24 10" width="24" height="10" aria-hidden="true"><circle cx="12" cy="5" r="4" style="fill:' + col + '"/></svg>';
     if (it[2] === 'box') return '<svg viewBox="0 0 24 10" width="24" height="10" aria-hidden="true"><rect x="1" y="1" width="22" height="8" rx="2" style="fill:' + col + '" opacity="' + (it[3] || 1) + '"/></svg>';
+    /* знаки расшифровки под графиком (06.10): пунктирная рамка, засечка, полоса, вертикальный пунктир, линия с точкой */
+    var sv = function (inner) { return '<svg viewBox="0 0 24 12" width="24" height="12" aria-hidden="true">' + inner + '</svg>'; };
+    if (it[2] === 'frame') return sv('<rect x="1.5" y="2" width="21" height="8" rx="2" style="fill:none;stroke:' + col + '" stroke-width="1" stroke-dasharray="2 2"/>');
+    if (it[2] === 'tick') return sv('<line x1="12" y1="0" x2="12" y2="12" style="stroke:' + col + '" stroke-width="2.4"/>');
+    if (it[2] === 'band') return sv('<rect x="1" y="0" width="22" height="12" style="fill:' + col + '" opacity="' + (it[3] || .3) + '"/>');
+    if (it[2] === 'vdash') return sv('<line x1="12" y1="0" x2="12" y2="12" style="stroke:' + col + '" stroke-width="1" stroke-dasharray="3 2"/>');
+    if (it[2] === 'nowline') return sv('<line x1="1" y1="6" x2="16" y2="6" style="stroke:' + col + '" stroke-width="2.6"/><circle cx="19.5" cy="6" r="3.5" style="fill:var(--nino)"/>');
     return '<svg viewBox="0 0 24 10" width="24" height="10" aria-hidden="true"><line x1="1" y1="5" x2="23" y2="5" style="stroke:' + col + '" stroke-width="' + (it[2] || 2) + '"' + (it[3] ? ' stroke-dasharray="' + it[3] + '"' : '') + '/></svg>';
+  }
+  /* РАСШИФРОВКА ПОД ГРАФИКОМ (владелец 06.10: «нет нигде легенд, что значат цвета и линии»). Кнопка legend у сцены
+     одна и служит первому графику (syncLegendBar); на сцене из нескольких графиков у каждого своя строка знаков —
+     всегда на виду, без нажатия — и фразы «как читать». Группа: { t: подпись, items: пункты легенды }. Пункт
+     с ключом (пятый элемент, как в легенде) нажимается и выделяет ряд на всех графиках сцены, где этот ключ есть. */
+  function chartKey(groups, how) {
+    var k = el('div', 'rkey');
+    groups.forEach(function (g) {
+      if (!g || !(g.items || []).length) return;
+      var row = el('div', 'rk-g');
+      if (g.t) row.appendChild(el('span', 'rk-h', esc(g.t)));
+      g.items.forEach(function (it) {
+        var c = el('span', 'rk' + (it[4] ? ' pick' : '') + (it[4] && S.pick === it[4] ? ' on' : ''), legSwatch(it) + '<span>' + esc(String(it[0])) + '</span>');
+        if (it[4]) { c.setAttribute('data-pick', it[4]); c.setAttribute('role', 'button'); c.tabIndex = 0; }
+        row.appendChild(c);
+      });
+      k.appendChild(row);
+    });
+    if (how) k.appendChild(el('div', 'rk-how', how));
+    var pick = function (e) {
+      var g = e.target.closest && e.target.closest('[data-pick]'); if (!g) return;
+      e.preventDefault();
+      var v = g.getAttribute('data-pick'); S.pick = S.pick === v ? null : v; render();
+    };
+    k.addEventListener('click', pick);
+    k.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') pick(e); });
+    return k;
   }
   function syncLegendBar() {
     var head = document.querySelector('.stage'), ci = head && head.querySelector('.ctl-info');
@@ -4885,6 +5060,144 @@
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && S.legOpen) { S.legOpen = false; syncLegendBar(); } });
     }
   }
+  /* Готовая картинка получает то, что график оставил для подсказки; <title> фигур становятся её текстом —
+     родная подсказка браузера всплывала через секунду и выглядела чужой. */
+  function hoverAttach(p) {
+    var reg = S._hv; S._hv = null;
+    if (!HREG) return;
+    [].forEach.call(p.querySelectorAll('svg title'), function (t) {
+      var host = t.parentNode;
+      if (host && host.tagName.toLowerCase() !== 'svg' && !host.getAttribute('data-h')) host.setAttribute('data-h', (t.textContent || '').trim());
+      if (t.parentNode) t.parentNode.removeChild(t);
+    });
+    [].forEach.call(p.querySelectorAll('svg'), function (svg, i) { HREG.set(svg, i ? { ser: [], leg: null } : (reg || { ser: [], leg: null })); });
+  }
+  /* СЛОЙ ПОДСКАЗКИ — один на все графики сцен (плитки обзора не трогает: там свой значок легенды).
+     Что прямо под курсором — точка, засечка, столбик — говорит о себе; иначе отвечает ближайшая линия
+     в десяти пикселях; большие поля (полосы, заливки) — только если линии рядом нет. На телефоне
+     наведения нет: касание графика показывает то же и гаснет само. */
+  (function hoverLayer() {
+    if (!HREG || !document.body) return;
+    var hint = el('div', 'c-hint'); hint.setAttribute('aria-hidden', 'true'); document.body.appendChild(hint);
+    var raf = 0, ev = null, cur = null, tapT = 0, PC = new WeakMap(), NS = 'http://www.w3.org/2000/svg';
+    var SKIP = '[data-pick],[data-legtoggle],.leg-i,[data-src],[data-term]';
+    function unmark() {
+      if (!cur) return;
+      (cur.els || []).forEach(function (n) { n.style.strokeWidth = ''; n.style.opacity = ''; n.classList.remove('hv-on'); });
+      if (cur.dot && cur.dot.parentNode) cur.dot.parentNode.removeChild(cur.dot);
+      cur = null;
+    }
+    function hide() { unmark(); hint.classList.remove('on'); }
+    function place(e) {
+      var pad = 14, w = hint.offsetWidth, h = hint.offsetHeight, x = e.clientX + pad, y = e.clientY + pad;
+      if (x + w > window.innerWidth - 6) x = e.clientX - w - pad;
+      if (y + h > window.innerHeight - 6) y = e.clientY - h - pad;
+      hint.style.left = Math.max(6, x) + 'px'; hint.style.top = Math.max(6, y) + 'px';
+    }
+    function show(html, e) { hint.innerHTML = html; hint.classList.add('on'); place(e); }
+    function textHtml(t) { var ls = String(t || '').split('\n'); return '<b>' + esc(ls[0]) + '</b>' + ls.slice(1).map(function (l) { return '<br>' + esc(l); }).join(''); }
+    function strokeOf(n) { var m = /stroke:\s*([^;"]+)/.exec(n.getAttribute('style') || ''); return m ? m[1].trim() : (n.getAttribute('stroke') || ''); }
+    function legName(reg, k, n) {
+      var L = (reg && reg.leg) || [], i, it;
+      if (k) for (i = 0; i < L.length; i++) { it = L[i]; if (it && it[0] && String(it[4]) === k) return String(it[0]); }
+      if (n) {
+        var c = strokeOf(n), d = n.getAttribute('stroke-dasharray') || '';
+        for (i = 0; i < L.length; i++) { it = L[i]; if (it && it[0] && typeof it[2] === 'number' && it[1] === c && String(it[3] || '') === d) return String(it[0]); }
+      }
+      return '';
+    }
+    function ptsOf(n) {
+      var a = PC.get(n);
+      if (a) return a;
+      a = String(n.getAttribute('points') || '').trim().split(/\s+/).map(function (q) { var c = q.split(','); return [+c[0], +c[1]]; }).filter(function (q) { return fin(q[0]) && fin(q[1]); });
+      PC.set(n, a);
+      return a;
+    }
+    function segD(px, py, ax, ay, bx, by) {      // квадрат расстояния до отрезка и где на нём ближайшая точка
+      var dx = bx - ax, dy = by - ay, L2 = dx * dx + dy * dy, t = L2 ? ((px - ax) * dx + (py - ay) * dy) / L2 : 0;
+      t = t < 0 ? 0 : (t > 1 ? 1 : t);
+      var qx = ax + t * dx - px, qy = ay + t * dy - py;
+      return [qx * qx + qy * qy, t];
+    }
+    function nearest(svg, reg, P, vb) {
+      var best = null, known = {};
+      var inBox = function (x, y) { return x >= vb[0] - 1 && x <= vb[0] + vb[2] + 1 && y >= vb[1] - 1 && y <= vb[1] + vb[3] + 1; };
+      (reg.ser || []).forEach(function (s) {
+        if (s.k) known[s.k] = 1;
+        var prev = null;
+        for (var i = 0; i < s.v.length; i++) {
+          var v = s.v[i], x = fin(v) ? s.X(i) : NaN, y = fin(v) ? s.Y(v) : NaN;
+          if (!fin(x) || !fin(y) || !inBox(x, y) || (s.box && (y < s.box[0] || y > s.box[1]))) { prev = null; continue; }
+          var r = prev ? segD(P.x, P.y, prev[0], prev[1], x, y) : [(x - P.x) * (x - P.x) + (y - P.y) * (y - P.y), 1];
+          if (r[0] < 100 && (!best || r[0] < best.d)) {
+            var near = !prev || r[1] >= .5;      // число — у ближайшей точки ряда, а не между точками
+            best = { d: r[0], s: s, i: near ? i : prev[2], x: near ? x : prev[0], y: near ? y : prev[1] };
+          }
+          prev = [x, y, i];
+        }
+      });
+      [].forEach.call(svg.querySelectorAll('polyline'), function (n) {
+        var k = n.getAttribute('data-k') || '';
+        if ((k && known[k]) || n.closest('[data-pick],defs')) return;
+        var a = ptsOf(n);
+        for (var j = 1; j < a.length; j++) {
+          var r = segD(P.x, P.y, a[j - 1][0], a[j - 1][1], a[j][0], a[j][1]);
+          if (r[0] < 64 && (!best || r[0] < best.d)) best = { d: r[0], n: n, k: k, x: a[j - 1][0] + r[1] * (a[j][0] - a[j - 1][0]), y: a[j - 1][1] + r[1] * (a[j][1] - a[j - 1][1]) };
+        }
+      });
+      return best;
+    }
+    function shape(he, e) {
+      if (!cur || cur.he !== he) { unmark(); he.classList.add('hv-on'); cur = { he: he, els: [he] }; }
+      show(textHtml(he.getAttribute('data-h')), e);
+    }
+    function run() {
+      raf = 0;
+      var e = ev; if (!e) return;
+      var t = e.target, svg = t && t.closest ? t.closest('.plot svg, .rgrid .pcell svg') : null;
+      if (!svg || t.closest(SKIP)) { hide(); return; }
+      var reg = HREG.get(svg) || { ser: [], leg: null };
+      var he = t.closest('[data-h]');
+      if (he && (!svg.contains(he) || he.tagName.toLowerCase() === 'polyline')) he = null;
+      var big = false;
+      if (he) { try { var bb = he.getBBox(); big = he.tagName.toLowerCase() === 'polygon' || bb.width * bb.height > 3000; } catch (x) { big = false; } }
+      if (he && !big) { shape(he, e); return; }
+      var m = svg.getScreenCTM(); if (!m) { hide(); return; }
+      var pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; var P = pt.matrixTransform(m.inverse());
+      var vb = (svg.getAttribute('viewBox') || '0 0 0 0').split(/[\s,]+/).map(Number);
+      var b = nearest(svg, reg, P, vb), html = '', k = '';
+      if (b && b.s) {
+        k = b.s.k;
+        var v = b.s.v[b.i];
+        html = '<b>' + esc(b.s.n || legName(reg, k)) + '</b><br>' + (b.s.pl ? esc(b.s.pl(b.i)) + ' · ' : '') + '<b class="hv">' + esc(b.s.f ? b.s.f(v) : fnum(v)) + '</b>';
+      } else if (b) {
+        k = b.k;
+        var nm = b.n.getAttribute('data-h') || legName(reg, k, b.n) || (/^\d{4}$/.test(k) ? evSpan(k) : '');
+        if (nm) html = textHtml(nm);
+      }
+      if (!html) { if (he) shape(he, e); else hide(); return; }
+      // выделяем все линии этого ряда (на графике и в мини-панели) или одну найденную
+      var els = k ? [].slice.call(svg.querySelectorAll('polyline[data-k="' + k.replace(/["\\]/g, '') + '"]')) : [b.n];
+      if (!cur || cur.key !== (k || b.n)) {
+        unmark();
+        els.forEach(function (n) { n.style.strokeWidth = ((parseFloat(n.getAttribute('stroke-width')) || 1.2) + 1.4) + 'px'; n.style.opacity = '1'; });
+        cur = { key: k || b.n, els: els };
+      }
+      if (!cur.dot) { cur.dot = document.createElementNS(NS, 'circle'); cur.dot.setAttribute('class', 'hv-dot'); cur.dot.setAttribute('r', '4'); }
+      cur.dot.setAttribute('cx', b.x.toFixed(1)); cur.dot.setAttribute('cy', b.y.toFixed(1));
+      cur.dot.style.fill = els[0] ? strokeOf(els[0]) : 'var(--text)';
+      if (cur.dot.parentNode !== svg) svg.appendChild(cur.dot);
+      show(html, e);
+    }
+    document.addEventListener('pointermove', function (e) { if (e.pointerType === 'touch') return; ev = e; if (!raf) raf = requestAnimationFrame(run); }, { passive: true });
+    document.documentElement.addEventListener('mouseleave', hide);
+    window.addEventListener('blur', hide);
+    document.addEventListener('scroll', function () { if (hint.classList.contains('on')) hide(); }, true);
+    document.addEventListener('click', function (e) {
+      if (!(e.pointerType === 'touch' || (window.matchMedia && window.matchMedia('(hover: none)').matches))) return;
+      ev = e; run(); clearTimeout(tapT); tapT = setTimeout(hide, 3500);
+    }, true);
+  })();
   /* ══ ЖУРНАЛ ЗНАЧЕНИЙ НА КИРПИЧЕ ══════════════════════════════════════════════
      Владелец 04.09: «изменение данных не равно времени обновления… на каждом кирпичике
      стрелочка, выросла или снизилась, и дата значения». Панель до сих пор сравнивала с
@@ -7546,11 +7859,13 @@
       // сбой одного поля не должен оставлять оба пустыми и молчать об этом
       if (r.metric) {
         var w1 = Math.max(200, c1.clientWidth), h1 = Math.max(150, c1.clientHeight);
-        try { c1.innerHTML = chartMetric(r.metric, w1, h1, r.metric.name); fitSvgTitles(c1); }
+        S._hv = null;                          // подсказка при наведении (06.10) — и в полях карточки риска
+        try { c1.innerHTML = chartMetric(r.metric, w1, h1, r.metric.name); hoverAttach(c1); fitSvgTitles(c1); }
         catch (e1) { c1.innerHTML = '<div class="note warn">' + esc(String(e1 && e1.message || e1)) + '</div>'; }
       }
       var w2 = Math.max(200, c2.clientWidth), h2 = Math.max(150, c2.clientHeight);
-      try { c2.innerHTML = chartRiskBoard(D.risks || [], S.risk, w2, h2); fitSvgTitles(c2); }
+      S._hv = null;
+      try { c2.innerHTML = chartRiskBoard(D.risks || [], S.risk, w2, h2); hoverAttach(c2); fitSvgTitles(c2); }
       catch (e2) { c2.innerHTML = '<div class="note warn">' + esc(String(e2 && e2.message || e2)) + '</div>'; }
     };
     /* Рисуем СРАЗУ, а не только следующим кадром. Сцену успевает пересобрать поздний render
@@ -8939,7 +9254,7 @@
     ['What is measured here that is not measured elsewhere', 'The daily Niño boxes straight from the NOAA grid, one day behind, with our own climatologies; the water under the equator by mooring, every day, against each mooring\u2019s own record; the westerly wind bursts from daily reanalysis wind; the live-model centre and where we stand inside the season; the comparable core of the risk index for past events, and the same by RONI; the Gulf and Kuwait measured, not quoted.'],
     ['What we do not claim', 'We have no model of our own and forecast nothing. A “broken” model is one below the official value in most verified issues, not a bad model. The risk index is a construction of this page, comparable only with itself; the core and RONI are the fair comparisons across decades. Analogue paths of prices are what happened then, not what will happen. Regional impacts are typical, never guaranteed; the teleconnections for Europe and Russia are weak and the page says so on the row.'],
     ['Reading the charts', 'Every chart with more than one series distinguishes them by dash pattern, not by colour alone; the legend is clickable and lights one series. Past events are drawn on the same days of the year, dashed, in the same order everywhere: 1982, 1997, 2015, 2023, then last year in grey. Negative values on heat maps are hatched. The vertical mark on the plume shows the lived part of the season as a point and the rest as a range.'],
-    ['Changelog', '2026-09-03 — first version: daily series, weekly indices, ONI, the plume, food, regions, risks, the verdict. 2026-09-04 — the value journal, the atmosphere and fuel, satellite layers, commodities by name, models by class, the live centre, the comparable core, contextual links to parsed papers. 2026-09-04, evening, after the first expert review — OISST direct with own climatologies, the moorings and the reanalysis section, daily wind and bursts, the MJO, RONI and the second scale, MEI and the Indian Ocean Dipole, the ocean heat content, the release calendar, the Regions tab with the Gulf measured, commodity paths since onset, dashed series and clickable legends everywhere, this chain and this page. 2026-10-04 — every Niño zone on the Now scene can be read as a 7-day or 30-day mean or as its rate of rise over one to four months against the same days of past years, and a new Now scene, Rise and fuel, with a card on the risk column, not scored, gathers what a rise of this class in the east means: the pace, the records, the storm line and the heat stored below, total and by layer; the same scene shows every zone in plain degrees against the storm line, as does an absolute switch on Now.']
+    ['Changelog', '2026-09-03 — first version: daily series, weekly indices, ONI, the plume, food, regions, risks, the verdict. 2026-09-04 — the value journal, the atmosphere and fuel, satellite layers, commodities by name, models by class, the live centre, the comparable core, contextual links to parsed papers. 2026-09-04, evening, after the first expert review — OISST direct with own climatologies, the moorings and the reanalysis section, daily wind and bursts, the MJO, RONI and the second scale, MEI and the Indian Ocean Dipole, the ocean heat content, the release calendar, the Regions tab with the Gulf measured, commodity paths since onset, dashed series and clickable legends everywhere, this chain and this page. 2026-10-04 — every Niño zone on the Now scene can be read as a 7-day or 30-day mean or as its rate of rise over one to four months against the same days of past years, and a new Now scene, Rise and fuel, with a card on the risk column, not scored, gathers what a rise of this class in the east means: the pace, the records, the storm line and the heat stored below, total and by layer; the same scene shows every zone in plain degrees against the storm line, as does an absolute switch on Now. 2026-10-06 — every chart of Rise and fuel has its own key in view, what each bar, frame, tick, band and line means and a few lines on how to read it; a key entry with a year or a layer highlights it on every chart of the scene, and a switch in the middle of a long scene keeps the reader where they were. The same day, pointing at a chart names the nearest line, thickens it and marks the point; on the main charts (Against analogues in every mode, Rise and fuel, the weekly indices, Dynamics, the risk cards, the model plume) it also gives the value and its date, taken from the data rather than read off the picture; on a phone a tap does the same.']
   ];
   /* РАЗДЕЛ ИСТОРИИ ИЗМЕРЕНИЙ (владелец 06.09): фон, на котором идёт событие, не само событие.
      Данные planet.json (tools/enso/planet.py): газы, лёд, температура, уровень моря. Без модели. */
@@ -12457,6 +12772,12 @@
     /* ВЫБОР В ЛЕГЕНДЕ ЖИВЁТ ТОЛЬКО НА СВОЕЙ СЦЕНЕ. Владелец 05.09: «походил, вернулся на
        Against analogues — всё блёклое, не могу вернуть яркость». Уход со сцены снимает выбор. */
     var scene = S.view + '/' + (S.sub[S.view] || '');
+    /* ПРОКРУТКА СЦЕНЫ ПЕРЕЖИВАЕТ ПЕРЕРИСОВКУ (06.10). Тело сцены собирается заново на каждый render(), и
+       переключатель посреди длинной сцены (зона у графика сезона на Rise and fuel, пункт расшифровки)
+       отбрасывал читателя наверх. На той же сцене прокрутка возвращается; новая сцена начинается сверху. */
+    var scrollK = scene + (S.view === 'risk' ? '|' + S.risk : '') + (S.view === 'regions' ? '|' + S.region : '');   // риск и место — свои сцены
+    var sb0 = document.querySelector('#stage .stage-body'), keepB = S._scrollK === scrollK && sb0 ? sb0.scrollTop : 0;
+    S._scrollK = scrollK;
     if (S._scene !== scene) { S.pick = (scene === 'models/plume' || scene === 'models/stack') ? 'ok' : null; S._scene = scene; }
     if (S.view === 'overview' && S.full == null) S.full = true;   // обзор открывается сразу на весь экран
     var mapScene = S.view === 'now' && (S.sub.now || 'analogs') === 'map';
@@ -12519,7 +12840,9 @@
     applySplit();                            // два в ряд на широкой сцене (20.09)
     // Сцена собрана целиком — только теперь у рамки графика окончательная высота.
     redrawPlot();
-    requestAnimationFrame(redrawPlot);
+    var sb1 = keepB ? document.querySelector('#stage .stage-body') : null;
+    if (sb1) sb1.scrollTop = keepB;
+    requestAnimationFrame(function () { redrawPlot(); if (sb1 && sb1.isConnected && Math.abs(sb1.scrollTop - keepB) > 2) sb1.scrollTop = keepB; });
   }
   /* ПАРЫ ДЛЯ ШИРОКОЙ СЦЕНЫ. Каждый график занимает одну колонку; пара ему — следующий график
      или ближайший ряд карточек (он ложится справа в две колонки). Всё остальное — во всю
