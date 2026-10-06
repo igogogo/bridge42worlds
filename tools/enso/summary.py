@@ -62,7 +62,12 @@ Rules, no exceptions:
    "stays above" a value only if its low path does; otherwise say where its middle path is. The +2.0
    "very strong" threshold belongs to the three-month ONI: never set a daily or weekly value or a forecast
    path against it. Say how early a model forecast was as "issued as the season began" or "N months
-   before the season began" (months_from_issue_to_season_start), never "no lead".
+   before the season began" (months_from_issue_to_season_start), never "no lead", "lead" or "at N months
+   lead"; a mean error is a miss ("1.42 °C below on average"), never "models averaged -1.42". Never draw
+   "no turn is expected" from the forecast range: whether the course turned is judged on measured data
+   (rule 3a), and a low path below today's value means a fall is within the range; say where the middle
+   path is against today's value. A season still under way is "not scored yet"; "provisional" belongs
+   only to a closed season whose official ONI is not out.
 7. The digest has a section on the IRI forecast models. Judge them only on CLOSED seasons: the last
    closed season (its official ONI, or a corridor while the ONI is not out yet; then say it is
    provisional) and the model classes. Never compare a three-month forecast with a weekly value or
