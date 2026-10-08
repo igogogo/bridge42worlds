@@ -474,6 +474,18 @@ def tao(today=None, verbose=False):
         if best.get("record"):
             out["warmest"]["prev_max"] = best["record"]
             out["warmest"]["above_record"] = bool(best["warmest_anom"]["value"] > best["record"]["value"])
+        # РЕКОРД У КАЖДОГО БУЯ, НЕ ТОЛЬКО У САМОГО ТЁПЛОГО (проверка Fable 08.10): 95°W на 80 м стоял выше
+        # всего, что этот буй мерил с 1981-го, но тревога смотрела только на самый тёплый буй — 110°W,
+        # который до своего рекорда не дотянул, — и рекорд 95°W пропал (лёгкий прогон 08.10 его объявил,
+        # полный тем же днём молча снял). Здесь — буй с самым большим запасом над собственным рекордом.
+        brk = [(s["warmest_anom"]["value"] - s["record"]["value"], s) for s in good
+               if s.get("record") and s.get("warmest_anom") and s["warmest_anom"]["value"] > s["record"]["value"]]
+        if brk:
+            m, s = max(brk, key=lambda x: x[0])
+            out["record_mooring"] = {"station": s["label"], **s["warmest_anom"], "date": s["last_date"],
+                                     "prev_max": s["record"], "margin": round(float(m), 2),
+                                     "is_warmest": s["label"] == best["label"]}
+            out["record_moorings"] = [s["label"] for _, s in sorted(brk, key=lambda x: -x[0])]
         east = [s for s in good if s["lon"] >= 235 and s.get("d20") is not None]
         west = [s for s in good if s["lon"] <= 190 and s.get("d20") is not None]
         out["d20_east"] = round(float(np.mean([s["d20"] for s in east])), 1) if east else None
@@ -962,7 +974,8 @@ def risks(SUB):
         lvl = 5 if w["value"] >= 8 else (4 if w["value"] >= 5 else 3)
         de, dw = t.get("d20_east"), t.get("d20_west")
         out.append((
-            f"Water {w['value']:+.1f} °C above normal is sitting at {w['depth']} m under {w['station']}", lvl, "1–3 months",
+            # половина вверх, как toFixed(1) на панели: 12,25 → 12,3, иначе карточка и сцена расходятся (08.10)
+            f"Water {float(__import__('decimal').Decimal(str(w['value'])).quantize(__import__('decimal').Decimal('0.1'), rounding='ROUND_HALF_UP')):+.1f} °C above normal is sitting at {w['depth']} m under {w['station']}", lvl, "1–3 months",
             f"TAO mooring {w['station']}, five-day mean to {w.get('date')}"
             + (f" ({t.get('days_stale')} days old on this run)" if (t.get("days_stale") or 0) > 7 else "")
             + ", against the mooring's own 1991–2020 norm. "

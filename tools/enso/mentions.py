@@ -53,7 +53,10 @@ EDITIONS = {
     "zh": ("厄尔尼诺", "zh-CN", "CN", "CN:zh-Hans", "Chinese"),
     "de": ('"El Niño"', "de", "DE", "DE:de", "German"),
 }
-WIKI = {"en": "El_Niño", "es": "El_Niño", "ar": "النينيو", "ru": "Эль-Ниньо", "fr": "El_Niño", "pt": "El_Niño",
+# Арабская статья — «إل نينيو» (07.10: «النينيو» такой статьи нет, API просмотров отвечал 404, и ряд
+# стоял на старой копии). Заголовки переименовывают — при 404 wiki_views сама ищет имя по ссылке
+# из английской статьи (_wiki_title).
+WIKI = {"en": "El_Niño", "es": "El_Niño", "ar": "إل_نينيو", "ru": "Эль-Ниньо", "fr": "El_Niño", "pt": "El_Niño",
         "id": "El_Niño", "zh": "厄尔尼诺现象", "de": "El_Niño"}
 # Ленты центров и агентств, которые открываются без ключа (проверено 07.09; NOAA CPC, BoM, WMO, ECMWF,
 # Met Office ленты не отдают). Показываем только записи про ENSO; остальное считаем, но не показываем.
@@ -132,14 +135,39 @@ def bing():
     return {"items": _rss(_get(u, tries=1))}
 
 
+def _wiki_title(lang):
+    """Имя статьи в этом языке по межъязыковой ссылке английской: переименованная статья не теряется."""
+    u = ("https://en.wikipedia.org/w/api.php?action=query&format=json&prop=langlinks&lllang="
+         f"{lang}&titles={urllib.parse.quote(WIKI['en'].replace('_', ' '))}")
+    for p in ((json.loads(_get(u, tries=1)).get("query") or {}).get("pages") or {}).values():
+        for ll in p.get("langlinks") or []:
+            if ll.get("*"):
+                return ll["*"]
+    return None
+
+
 def wiki_views(lang):
     end = date.today() - timedelta(days=1)
     start = end - timedelta(days=DAYS_WIKI)
-    title = urllib.parse.quote(WIKI[lang].replace(" ", "_"))
-    u = (f"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/{lang}.wikipedia/all-access/user/"
-         f"{title}/daily/{start.strftime('%Y%m%d')}/{end.strftime('%Y%m%d')}")
-    items = json.loads(_get(u, tries=1)).get("items") or []
-    return {"dates": [x["timestamp"][:8] for x in items], "views": [int(x["views"]) for x in items]}
+
+    def views(name):
+        title = urllib.parse.quote(name.replace(" ", "_"))
+        u = (f"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/{lang}.wikipedia/all-access/user/"
+             f"{title}/daily/{start.strftime('%Y%m%d')}/{end.strftime('%Y%m%d')}")
+        items = json.loads(_get(u, tries=1)).get("items") or []
+        return {"dates": [x["timestamp"][:8] for x in items], "views": [int(x["views"]) for x in items]}
+
+    try:
+        return views(WIKI[lang])
+    except Exception as e:                                       # noqa: BLE001
+        # 404 — такой статьи нет (переименовали): берём нынешнее имя из английской статьи и пробуем раз
+        if getattr(e, "code", None) != 404 or lang == "en":
+            raise
+        name = _wiki_title(lang)
+        if not name or name.replace(" ", "_") == WIKI[lang].replace(" ", "_"):
+            raise
+        print(f"  wiki_{lang}: «{WIKI[lang]}» не найдена, статья теперь «{name}» — поправить WIKI в mentions.py")
+        return views(name)
 
 
 def gdelt_volume():

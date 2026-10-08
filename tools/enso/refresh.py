@@ -413,6 +413,13 @@ def alert_id(title):
     return s[:48] or "alert"
 
 
+def _r1(v):
+    """Одна десятая с округлением «половина вверх», как у toFixed(1) в браузере: 12,25 у Python
+    даёт 12,2, у панели 12,3, и check_ui ловил «показатель с разными числами» (08.10)."""
+    from decimal import Decimal, ROUND_HALF_UP
+    return float(Decimal(str(v)).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP))
+
+
 def new_block_alerts(cur):
     """Сторож по новым рядам: всплеск ветра идёт сейчас; подповерхностная аномалия выше +5;
     Залив выше порога стресса; хвост NRT разошёлся с climatereanalyzer сильнее 0.1."""
@@ -441,9 +448,19 @@ def new_block_alerts(cur):
         else:
             why = "No record comparison for this mooring yet, so the level stays WATCH (from +5 °C)."
         A.append({"level": "SHOUT" if above else "WATCH", "kind": "climate",
-                  "title": f"Water {w['value']:+.1f} °C above normal at {w['depth']} m depth, {w['station']}",
+                  "title": f"Water {_r1(w['value']):+.1f} °C above normal at {w['depth']} m depth, {w['station']}",
                   "detail": f"TAO mooring, five-day mean to {w.get('date')}: the warm layer that will surface is already "
                             f"measured. {why}"})
+    # РЕКОРД ДРУГОГО БУЯ (проверка Fable 08.10): самый тёплый буй может быть ниже своего рекорда, а сосед —
+    # выше своего; правило рекорда — у каждого ряда, не у самого тёплого (subsurface: record_mooring).
+    rm = t.get("record_mooring") or {}
+    if rm.get("value") is not None and not rm.get("is_warmest"):
+        pm = rm.get("prev_max") or {}
+        A.append({"level": "SHOUT", "kind": "climate",
+                  "title": f"Water {_r1(rm['value']):+.1f} °C above normal at {rm['depth']} m depth, {rm['station']}: above this mooring's own record",
+                  "detail": f"TAO mooring, five-day mean to {rm.get('date')}: not the warmest mooring of the array today, but above "
+                            f"anything this mooring measured before this event — its previous maximum was {pm.get('value'):+.1f} °C "
+                            f"at {pm.get('depth')} m on {pm.get('date')} (record from {pm.get('from')})."})
     g = (cur.get("gulf") or {}).get("sea") or {}
     if g.get("last_sst") is not None and g["last_sst"] >= 35.0:
         A.append({"level": "WATCH", "kind": "climate", "title": f"The Gulf is at {g['last_sst']:.1f} °C, above the desalination stress line",

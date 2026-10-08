@@ -134,8 +134,10 @@ def check_verdict(D):
                 v = float(x)
             except ValueError:
                 continue
+            # округление и «половиной вверх» (12,25 → 12,3): панель так и показывает, toFixed (08.10)
             ok = any(abs(v - p) < 0.0051 for p in pool) or any(abs(v - round(p, 1)) < 1e-9 for p in pool) \
-                or any(abs(v - round(p)) < 1e-9 for p in pool)
+                or any(abs(v - round(p)) < 1e-9 for p in pool) \
+                or any(abs(v - (int(p * 10 + (0.5 if p >= 0 else -0.5)) / 10)) < 1e-9 for p in pool)
             if not ok:
                 flag(f"summary.{where}", f"число {x} не найдено в дайджесте")
         low = t.lower()
@@ -379,8 +381,17 @@ def check_independent(D):
         pm = wm.get("prev_max") or {}
         print(f"  буй {wm.get('station')}: {wm.get('value')} °C на {wm.get('depth')} м; рекорд до 2026: "
               f"{pm.get('value', 'нет')} °C {pm.get('depth', '')} м {pm.get('date', '')}; above_record={wm.get('above_record')}")
+        # буй выше СОБСТВЕННОГО рекорда, не самый тёплый (record_mooring, 08.10) — своя тревога с «own record»
+        rm = ((D.get("subsurface") or {}).get("tao") or {}).get("record_mooring") or {}
+        if rm:
+            print(f"  буй выше своего рекорда: {rm.get('station')} {rm.get('value')} °C на {rm.get('depth')} м, "
+                  f"запас {rm.get('margin')}; самый тёплый — {'да' if rm.get('is_warmest') else 'нет'}")
         for a in D.get("alerts") or []:
             if (a.get("id") or "").startswith("water_above_normal"):
+                if "own record" in (a.get("title") or ""):
+                    if not rm or rm.get("is_warmest"):
+                        flag(f"alert {a.get('id')}", "тревога о рекорде другого буя, а record_mooring пуст или это самый тёплый буй")
+                    continue
                 if a.get("level") == "SHOUT" and not wm.get("above_record"):
                     flag(f"alert {a.get('id')}", "SHOUT, а аномалия не выше рекорда буя")
                 if a.get("level") == "WATCH" and wm.get("above_record"):

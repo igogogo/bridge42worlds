@@ -416,8 +416,12 @@ def _round(v, digits):
     if v is None or isinstance(v, str):
         return v
     try:
-        return int(round(float(v))) if digits == 0 else round(float(v), digits)
-    except (TypeError, ValueError):
+        # половина вверх, как toFixed на панели: round(12.25, 1) у Python даёт 12.2, а сцена показывала 12.3,
+        # и check_ui ловил «показатель с разными числами» на кирпиче журнала (08.10)
+        from decimal import Decimal, ROUND_HALF_UP
+        q = Decimal(str(float(v))).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP)
+        return int(q) if digits == 0 else float(q)
+    except (TypeError, ValueError, ArithmeticError):
         return None
 
 

@@ -175,6 +175,7 @@ def _deep_facts(cur):
     t = ((cur.get("subsurface") or {}).get("tao") or {})
     if t and not t.get("error"):
         out["moorings"] = {"live": t.get("n_live"), "warmest_anomaly": t.get("warmest"),
+                           "mooring_above_its_own_record": t.get("record_mooring"),   # рекорд у каждого буя (08.10)
                            "thermocline_20C_depth_m": {"west": t.get("d20_west"), "east": t.get("d20_east")},
                            "data_until": t.get("last_date")}
     g = ((cur.get("subsurface") or {}).get("godas") or {})
