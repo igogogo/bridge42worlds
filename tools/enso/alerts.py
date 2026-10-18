@@ -12,6 +12,15 @@
 import re
 
 SHOUT, WATCH = "SHOUT", "WATCH"
+# поворот хода (владелец 18.10): SHOUT, если спад за 14 дней на TURN_PCT-м процентиле сезона и ниже
+# или держится TURN_HOLD дней подряд; иначе WATCH «the rise has stalled»
+TURN_PCT, TURN_HOLD = 10, 7
+
+
+def _ord(n):
+    """41 → 41st, 12 → 12th: процентиль словами без «41th» (18.10)."""
+    n = int(round(n))
+    return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
 
 # РАЗОВЫЕ ТРЕВОГИ (04.10). «ONI crossed +2.0» — событие, а не состояние: оно срабатывает один раз, в
 # прогоне, где порог перейдён, и следующий прогон его не повторяет. Свежий слой и лента новостей
@@ -91,10 +100,29 @@ def detect(cur, prev=None):
                  f"slope {s['now']:+.2f} °C, {s['pct']:.0f}th percentile, at a record level")
 
     # ---- 2. разворот хода события
+    # ПОВОРОТ — SHOUT, ТОЛЬКО ЕСЛИ ОН НЕОБЫЧЕН ИЛИ ДЕРЖИТСЯ (владелец 18.10). SHOUT по определению — «такого не
+    # было» (06.09), а поворот 14-дневного наклона сработал 18.10 на −0,08 за 14 дней — 41-й процентиль сезона,
+    # обычная просадка у вершины, и читался как «пик пройден». Теперь SHOUT «turned», если спад необычен для
+    # сезона (TURN_PCT-й процентиль и ниже) или держится (изменение за 14 дней ниже −0,05 TURN_HOLD дней подряд —
+    # «два разбора подряд» мерим днями: разборы идут то дважды в день, то раз в десять дней); иначе WATCH
+    # «the rise has stalled». Масштаб и срок — в тексте тревоги: читатель видит, почему уровень такой.
     s = n34["slope14"]
     if s["prev"] is not None and s["prev"] > 0.15 and s["now"] < -0.05 and n34["level30"]["anom"] > 1.5:
-        _lvl(A, SHOUT, "Niño 3.4 turned: rise became fall",
-             f"14-day slope {s['prev']:+.2f} → {s['now']:+.2f} °C at a level of {n34['level30']['anom']:+.2f}")
+        held = 0
+        for v in reversed(n34.get("slope14_path") or []):
+            if v is None or v >= -0.05:
+                break
+            held += 1
+        pct = s.get("pct")
+        what = (f"14-day change {s['prev']:+.2f} → {s['now']:+.2f} °C at a level of {n34['level30']['anom']:+.2f}"
+                + (f"; a fall this size is at the {_ord(pct)} percentile for the season" if pct is not None else "")
+                + f"; below −0.05 for {held} day{'' if held == 1 else 's'} in a row")
+        if (pct is not None and pct <= TURN_PCT) or held >= TURN_HOLD:
+            _lvl(A, SHOUT, "Niño 3.4 turned: rise became fall",
+                 what + f"; past the turn threshold: the {_ord(TURN_PCT)} percentile or {TURN_HOLD} days in a row")
+        else:
+            _lvl(A, WATCH, "Niño 3.4: the rise has stalled",
+                 what + f"; it counts as a turn at the {_ord(TURN_PCT)} percentile or after {TURN_HOLD} days in a row")
     ser = NW["series"]
     if len(ser) >= 3:
         d2w = ser[-1]["n34a"] - ser[-3]["n34a"]

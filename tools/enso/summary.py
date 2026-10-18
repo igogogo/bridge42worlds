@@ -40,7 +40,9 @@ Rules, no exceptions:
    ended, CUSUM turned down. A new record or a SHOUT alert is NOT a turning point; while the 14-day
    change is positive and the record run is intact, answer false. The record run is the run of days above
    the historical maximum for that calendar day; it ends on a day below that day's maximum, not when the
-   value falls back below the record of the whole series.
+   value falls back below the record of the whole series. The WATCH alert "the rise has stalled" is NOT a
+   turning point: answer false and say the rise has stalled, with the size of the dip as its alert gives it;
+   only the SHOUT "turned: rise became fall" (a fall unusual for the season, or one that has held) is a turn.
 4a. Units are in the "units" section of the digest. The 14-day change is a TOTAL over the last 14 days;
    never write "per day". Quote alert titles as they are; do not stretch "highest since <date>" into
    "highest in N years" or the reverse.
