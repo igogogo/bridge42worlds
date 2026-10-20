@@ -232,6 +232,10 @@ def main(fetch=True, llm=True, light=False):
         for _k, _a in _now.items():
             if _k not in _was:
                 cur["diff"].append(f"New {_a.get('level')} alert: {_a.get('title')}.")
+            # смена уровня у той же тревоги (проверка 20.10: буй 95°W WATCH → SHOUT свежий слой видел триггером
+            # high, а «что изменилось» для модели — нет, и вердикт о нём промолчал)
+            elif _was[_k].get("level") != _a.get("level"):
+                cur["diff"].append(f"Alert level {_was[_k].get('level')} → {_a.get('level')}: {_a.get('title')}.")
         for _k, _a in _was.items():
             if _k not in _now and not A.is_edge(_a):
                 cur["diff"].append(f"Alert gone: {_a.get('title')}.")
